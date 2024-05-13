@@ -5,91 +5,19 @@ import { BgContainer } from './component/hospitalImg'
 import { DrawerMenu, Button } from './component/core'
 import { DrawerClose } from './component/core/Drawer'
 import { cn } from './component/utils/classNames'
+import { LandingHeader } from './component/layout/landingheader'
 export default function page() {
   return (
     <>
 
       <main className=' bg-[#080D27] text-white w-full h-full py-5 px-6 md:px-[120px]'>
-        <header>
-          <section className=''>
-            <div className='  flex items-center justify-between'>
-              <div>
-                <Link href='/' className='flex justify-start font-semibold text-lg'>Liberty Life</Link>
-                <p className=' font-light text-[10px]'>by LibertyAssured</p>
-              </div>
-              <ul className='hidden md:flex items-center justify-center space-x-5 text-xs'>
-                <li>
-                  <Link href='/'>Home</Link>
-                </li>
-                <li>
-                  <Link href='/'>Plan</Link>
-                </li>
-                <li>
-                  <Link href='/'>About us</Link>
-                </li>
-                <li>
-                  <Link href='/'>FAQs</Link>
-                </li>
-                <li>
-                  <Link href='/'>Contact us</Link>
-                </li>
-              </ul>
-              <ul className='hidden md:flex justify-end items-center space-x-5'>
-                <li>
-                  <Link href='/'>login</Link>
-                </li>
-                <button className='flex justify-between items-center bg-white text-blue-950 bg rounded-full text-xs py-1 pl-5 pr-2 gap-[18px]'>
-                  Get insurance
-                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="15" cy="15" r="15" fill="#032282" />
-                    <path d="M10.9168 19.6171C11.0334 19.6171 11.1501 19.5587 11.2084 19.5004L19.3751 11.3337C19.5501 11.1587 19.5501 10.9254 19.3751 10.7504C19.2001 10.5754 18.9084 10.5754 18.7334 10.7504L10.5668 18.9171C10.3918 19.0921 10.3918 19.3837 10.5668 19.5587C10.6834 19.6171 10.8001 19.6171 10.9168 19.6171Z" fill="white" />
-                    <path d="M19.0834 17.4585C19.3167 17.4585 19.55 17.2835 19.55 16.9919V11.0419C19.55 10.8085 19.375 10.5752 19.0834 10.5752H13.075C12.8417 10.5752 12.6084 10.7502 12.6084 11.0419C12.6084 11.3335 12.7834 11.5085 13.075 11.5085H18.6167V17.0502C18.6167 17.2835 18.85 17.4585 19.0834 17.4585Z" fill="white" />
-                  </svg>
-
-                </button>
-              </ul>
-              <DrawerMenu
-                trigger={
-                  <Button className={cn("md:hidden bg-white/10 px-5 py-2.5 rounded-full", "font-display")}>
-                    Menu
-                  </Button>
-                }
-                contentClass="bg-main border-main"
-              >
-                <div className="text-white p-5 pb-0 gap-5">
-                  <header className="flex items-center justify-between">
-                    <h6 className="font-semibold text-lg">Menu Content</h6>
-                    <DrawerClose className={cn("bg-white/10 h-8 w-8 rounded-full text-white/50 rotate-12 text-lg hover:text-white", "font-display")}>x</DrawerClose>
-                  </header>
-
-
-                  <ul className={cn("font-display", "flex flex-col gap-8 font-normal mt-10")}>
-                    <li className="border-b-[0.15px] border-b-white/30 p-2">
-                      <Link href='/'>Home</Link>
-                    </li>
-                    <li className="border-b-[0.15px] border-b-white/30 p-2">
-                      <Link href='/'>Products</Link>
-                    </li>
-                    <li className="border-b-[0.15px] border-b-white/30 p-2">
-                      <Link href='/'>Company</Link>
-                    </li>
-                    <li className="border-b-[0.15px] border-b-white/30 p-2">
-                      <Link href='/'>About us</Link>
-                    </li>
-                    <li className="border-b-[0.15px] border-b-white/30 p-2">
-                      <Link href='/'>Contact us</Link>
-                    </li>
-                  </ul>
-                </div>
-              </DrawerMenu>
-            </div>
-            <div className='flex flex-col md:flex-row justify-between items-center gap-8'>
+        <LandingHeader/>
+      <div className='flex flex-col md:flex-row justify-between items-center gap-8'>
               <p>
                 <button className='flex items-center rounded-full font-semibold bg-[#34307A] bg-opacity-[20%] text-[14px] md:text-[10px] pr-[49px] pl-4  md:px-6
              py-3 gap-2  space mt-20'><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M7.93243 1.11687C8.32897 0.876876 8.78364 0.75 9.24716 0.75C9.71067 0.75 10.1653 0.876876 10.5619 1.11687L11.4955 1.68796C12.8054 2.48867 14.2973 2.66696 15.7961 2.84662C16.2805 2.90483 16.7654 2.96258 17.2453 3.04187C17.2453 3.04187 17.2558 3.88246 17.2448 4.26379L17.1491 7.54133C17.0666 10.3523 15.8167 13.0175 13.6726 14.9544C12.6611 15.8679 11.6147 16.6933 10.4125 17.379C10.0581 17.5793 9.6609 17.6915 9.25416 17.7065C8.84741 17.7214 8.44303 17.6385 8.07497 17.4647C6.68668 16.8047 5.45743 15.9678 4.33497 14.9544C2.19089 13.0175 0.941012 10.3523 0.858971 7.54133L0.763638 4.27433C0.752179 3.8875 0.763638 3.04187 0.763638 3.04187C1.15322 2.99604 1.55014 2.958 1.95026 2.91996C3.71622 2.75221 5.54085 2.57896 7.03776 1.66412L7.93243 1.11687ZM8.08322 8.08354V4.87521H9.91656V8.08354H13.1249V9.91687H9.91656V13.1252H8.08322V9.91687H4.87489V8.08354H8.08322Z" fill="white" />
                   </svg> Welcome to LibertyLife
-
                 </button>
                 <p className=' md:text-5xl font-semibold text-[24px] font-display capitalize  md:font-bold py-3 md:max-w-[720px]'>standard health <span className=' text-lime-600'>insurance </span>
                   for you and your family.</p>
@@ -117,8 +45,6 @@ export default function page() {
                 <BgContainer />
               </div>
             </div>
-          </section>
-        </header>
       </main>
       <section className='xl:px-[112px] px-6 bg-[#080D27]'>
       <div className='flex flex-col lg:flex-row py-10 gap-4 w-full'>
@@ -151,17 +77,36 @@ export default function page() {
                   <span className=' bg-[#161D42] rounded-xl py-2 border-[#4760FD] px-6'>
                     <p className='capitalize font-bold text-center whitespace-nowrap'>lifetime rewards</p>
                     <p className=' text-[10px] font-medium opacity-[70%]  mt-3 text-center text-[#CAC9D4]'>For every insurance plan you buy, you stand a chance to get a lifetime reward.</p>
+                    <p className='md:flex hidden justify-center items-center mt-2'>
+                      <button className='text-[12px]'>learn more</button>
+                      <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.8929 6.52743C14.951 7.60212 14.9863 9.32226 13.9987 10.44L13.8929 10.5534L11.0062 13.3139C10.7325 13.5918 10.2888 13.5918 10.0152 13.3139C9.76258 13.0573 9.74315 12.6536 9.95689 12.3744L10.0152 12.3074L12.9019 9.54691C13.4204 9.0203 13.4477 8.18371 12.9838 7.62446L12.9019 7.53393L10.0152 4.77348C9.74153 4.49554 9.74153 4.04492 10.0152 3.76698C10.2678 3.51043 10.6653 3.49069 10.9402 3.70778L11.0062 3.76698L13.8929 6.52743Z" fill="white"/>
+                        <g opacity="0.3">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.68879 6.52743C10.7469 7.60212 10.7822 9.32226 9.7946 10.44L9.68879 10.5534L6.8021 13.3139C6.52844 13.5918 6.08475 13.5918 5.81109 13.3139C5.55848 13.0573 5.53905 12.6536 5.75279 12.3744L5.81109 12.3074L8.69778 9.54691C9.21629 9.0203 9.24358 8.18371 8.77965 7.62446L8.69778 7.53393L5.81109 4.77348C5.53743 4.49554 5.53743 4.04492 5.81109 3.76698C6.0637 3.51043 6.46118 3.49069 6.73608 3.70778L6.8021 3.76698L9.68879 6.52743Z" fill="white"/>
+                        </g>
+                      </svg>
+                    </p>
                   </span>
                   <span className=' bg-[#161D42] rounded-xl py-2 border-[#4760FD] px-6'>
                     <p className='capitalize font-bold text-center whitespace-nowrap'>standard Hospitals</p>
                     <p className=' text-[10px] font-medium opacity-[70%] mt-3  text-center text-[#CAC9D4]'>We give you a standard hospitals in your preferred local government.</p>
+                    <p className='md:flex hidden justify-center items-center mt-2'>
+                      <Link href='/learn-more'>
+                      <button className='text-[12px]'>learn more</button>
+                      </Link>
+                      <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.8929 6.52743C14.951 7.60212 14.9863 9.32226 13.9987 10.44L13.8929 10.5534L11.0062 13.3139C10.7325 13.5918 10.2888 13.5918 10.0152 13.3139C9.76258 13.0573 9.74315 12.6536 9.95689 12.3744L10.0152 12.3074L12.9019 9.54691C13.4204 9.0203 13.4477 8.18371 12.9838 7.62446L12.9019 7.53393L10.0152 4.77348C9.74153 4.49554 9.74153 4.04492 10.0152 3.76698C10.2678 3.51043 10.6653 3.49069 10.9402 3.70778L11.0062 3.76698L13.8929 6.52743Z" fill="white"/>
+                        <g opacity="0.3">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.68879 6.52743C10.7469 7.60212 10.7822 9.32226 9.7946 10.44L9.68879 10.5534L6.8021 13.3139C6.52844 13.5918 6.08475 13.5918 5.81109 13.3139C5.55848 13.0573 5.53905 12.6536 5.75279 12.3744L5.81109 12.3074L8.69778 9.54691C9.21629 9.0203 9.24358 8.18371 8.77965 7.62446L8.69778 7.53393L5.81109 4.77348C5.53743 4.49554 5.53743 4.04492 5.81109 3.76698C6.0637 3.51043 6.46118 3.49069 6.73608 3.70778L6.8021 3.76698L9.68879 6.52743Z" fill="white"/>
+                        </g>
+                      </svg>
+                    </p>
                   </span>
                   {/* <span className=' bg-[#161D42] rounded-xl py-2 border-[#4760FD] px-8'>
                     <p className='capitalize font-bold text-center whitespace-nowrap'>premium health policy</p>
                     <p className=' text-[10px] font-medium opacity-[70%] mt-3  text-center text-[#CAC9D4]'>Liberty life provides premium healthcare services to every insurred persons.</p>
                   </span> */}
                 </div>
-                <button className=''>learn more</button>
               </div>
             </div>
       </section>
