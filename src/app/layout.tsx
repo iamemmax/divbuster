@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
-import { Inter, Outfit, Wix_Madefor_Display } from "next/font/google";
+import { Inter, Outfit, Wix_Madefor_Display, DM_Sans } from "next/font/google";
 import "./globals.css";
-import { cn } from "./utils/classNames";
+import { cn } from "./component/utils/classNames";
+
 
 const inter = Inter({ subsets: ["latin"] });
+
+const sans = DM_Sans({ 
+  subsets: ["latin"] ,
+  variable: '--font-sans',
+  display: 'swap'
+});
 
 const display = Wix_Madefor_Display({
   subsets: ["latin"],
@@ -23,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(display.variable )}>{children}</body>
+      <body className={cn('font-display',display.variable, sans.variable )}>{children}</body>
     </html>
   );
 }
