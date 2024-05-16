@@ -26,7 +26,7 @@ const AddEmployee = () => {
           <path d="M9 4.20718L0 4.20718" stroke="#fff" strokeWidth={0.7} />
         </svg>
       </div>
-      <p className="text-sm text-white">Add Employee</p>
+      <p className="text-sm text-white">Add Employees</p>
     </Button>
   );
 };
