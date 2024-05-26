@@ -13,7 +13,7 @@ export default function page() {
       <main className=' bg-[#080D27] text-white w-full h-full py-5 px-6 md:px-[120px]'>
         <LandingHeader/>
       <div className='flex flex-col md:flex-row justify-between items-center gap-8'>
-              <p>
+              <div>
                 <button className='flex items-center rounded-full font-semibold bg-[#34307A] bg-opacity-[20%] text-[14px] md:text-[10px] pr-[49px] pl-4  md:px-6
              py-3 gap-2  space mt-20'><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M7.93243 1.11687C8.32897 0.876876 8.78364 0.75 9.24716 0.75C9.71067 0.75 10.1653 0.876876 10.5619 1.11687L11.4955 1.68796C12.8054 2.48867 14.2973 2.66696 15.7961 2.84662C16.2805 2.90483 16.7654 2.96258 17.2453 3.04187C17.2453 3.04187 17.2558 3.88246 17.2448 4.26379L17.1491 7.54133C17.0666 10.3523 15.8167 13.0175 13.6726 14.9544C12.6611 15.8679 11.6147 16.6933 10.4125 17.379C10.0581 17.5793 9.6609 17.6915 9.25416 17.7065C8.84741 17.7214 8.44303 17.6385 8.07497 17.4647C6.68668 16.8047 5.45743 15.9678 4.33497 14.9544C2.19089 13.0175 0.941012 10.3523 0.858971 7.54133L0.763638 4.27433C0.752179 3.8875 0.763638 3.04187 0.763638 3.04187C1.15322 2.99604 1.55014 2.958 1.95026 2.91996C3.71622 2.75221 5.54085 2.57896 7.03776 1.66412L7.93243 1.11687ZM8.08322 8.08354V4.87521H9.91656V8.08354H13.1249V9.91687H9.91656V13.1252H8.08322V9.91687H4.87489V8.08354H8.08322Z" fill="white" />
@@ -40,7 +40,7 @@ export default function page() {
                     </svg>
                   </button>
                 </p>
-              </p>
+              </div>
               <div >
                 <BgContainer />
               </div>

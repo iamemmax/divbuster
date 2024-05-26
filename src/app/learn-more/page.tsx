@@ -39,6 +39,19 @@ export default function page() {
                     <p className='text-[12px] font-normal w-[438px]'>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
                 </span>
             </div>
+            <div className='flex bg-[#080D27]'>
+                <p>
+                     Welcome to Liberty life, where your health and wealth is paramount to us. Enjoy health and wealth!
+                </p>
+                <button className='flex justify-between items-center bg-white text-blue-950 bg rounded-full text-xs py-1 pl-5 pr-2 gap-[18px]'>
+                    Get insurance
+                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="15" cy="15" r="15" fill="#032282" />
+                      <path d="M10.9168 19.6171C11.0334 19.6171 11.1501 19.5587 11.2084 19.5004L19.3751 11.3337C19.5501 11.1587 19.5501 10.9254 19.3751 10.7504C19.2001 10.5754 18.9084 10.5754 18.7334 10.7504L10.5668 18.9171C10.3918 19.0921 10.3918 19.3837 10.5668 19.5587C10.6834 19.6171 10.8001 19.6171 10.9168 19.6171Z" fill="white" />
+                      <path d="M19.0834 17.4585C19.3167 17.4585 19.55 17.2835 19.55 16.9919V11.0419C19.55 10.8085 19.375 10.5752 19.0834 10.5752H13.075C12.8417 10.5752 12.6084 10.7502 12.6084 11.0419C12.6084 11.3335 12.7834 11.5085 13.075 11.5085H18.6167V17.0502C18.6167 17.2835 18.85 17.4585 19.0834 17.4585Z" fill="white" />
+                    </svg>
+                  </button>
+            </div>
         </div>
     </main>
   )
