@@ -5,15 +5,55 @@ import Image from "next/image";
 
 import { cn } from "@/utils/classNames";
 import { RightUpArrow } from "@/icons/core";
-import { Button, DrawerMenu, LinkButton } from "@/components/core";
+import { Button, ClientOnly, Dialog, DialogBody, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DrawerMenu, Input, LinkButton } from "@/components/core";
 import { DrawerClose } from "@/components/core/Drawer";
 
 import { CheckStar } from "./misc/icons";
 import { StackingCards, WhyMoveSection, FooterSection, TestimonalSection, HeroCarousel, HowToSection, HospitalImage } from "./misc/components";
+import { useState } from "react";
 
+import toast from "react-hot-toast";
+import RemitaDetails from "@/components/RemitaDetails";
+import { useRouter } from "next/navigation";
+import { DetailsRequest } from "./details-request/page";
+import { useBooleanStateControl } from "@/hooks";
 
 
 export default function Home() {
+
+
+
+
+
+
+  
+
+  // const [openDetailsRequest, setOpenDetailsRequest] = useState(false);
+
+  // const [openRemitaDetails, setOpenRemitaDetails] = useState(false);
+
+  // const router = useRouter();
+  
+
+  // const handleOpenRemitaDetails = () => {
+  //   setOpenRemitaDetails(true);
+  // };
+
+  // const handleCloseRemitaDetails = () => {
+  //   setOpenRemitaDetails(false);
+  // };
+  
+  
+
+  const {
+    state: isSuccessDetailRequestModalOpen,
+    setState: setSuccessDetailRequestModalState,
+    setTrue: openSuccessModal,
+  } = useBooleanStateControl();
+
+
+
+
   return (
     <main className="wax-w-screen md:pb-20  bg-main min-h-[100vh]">
       <section className="bg-main  !mb-0 text-white shadow-sm">
@@ -47,13 +87,126 @@ export default function Home() {
               </span>
             </p>
 
-            <LinkButton href="/" target="_blank" variant="white" className={cn("flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-7 rounded-full max-w-max", "font-display")}>
+
+            {/* <ClientOnly>
+
+            <Dialog open ={openDetailsRequest} onOpenChange = {setOpenDetailsRequest}>
+
+
+
+              <DialogTrigger className="bg-white text-black flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-7 rounded-full max-w-max font-display">
+
               Get insurance
               <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
                 <RightUpArrow className="" width={12} height={12} />
               </span>
-            </LinkButton>
+              </DialogTrigger>
+
+              <DialogContent>
+
+            <DialogHeader className="bg-[#1B1687] ">
+
+              <DialogTitle className="text-[#fff]">
+                Details Request
+              </DialogTitle>
+
+             <DialogClose><button onClick={() => router.back()}>close</button></DialogClose>
+
+            </DialogHeader>
+
+            <DialogBody className="bg-[#34307A] w-full ">
+
+              <div className="py-1">
+
+              <div className="text-[#fff] font-light">
+                      Kindly enter your phone number to process your application
+                    </div>
+
+                    <div className="my-5">
+                    <form action="">
+                        <div className="flex flex-col gap-1">
+                          <p className="text-[#FFFFFF]">Phone number</p>
+                          <Input className="text-[#FFFFFF]"
+                          placeholder="Enter your phone number"
+                          />
+
+                        </div>
+                        <div className="mt-6 md:mt-12">
+
+                          <Button
+                            type="submit"
+                            className="font-display focus:shadow-outline w-full rounded-lg bg-[#fff] p-4 py-3 font-semibold tracking-wide
+                shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                             onClick={() => setOpenRemitaDetails(true)}
+                          >
+                            Continue
+                          </Button>
+                       
+                        </div>
+                      </form>
+                    </div>
+
+                   
+
+
+              </div>
+
+            </DialogBody>
+
+
+              </DialogContent>
+
+
+            </Dialog>
+            </ClientOnly> */}
+
+
+
+            <DetailsRequest
+           
+              closeButtonReplacement=
+              {
+              <LinkButton
+                className="ml-auto block bg-[#2D4696] px-6 py-2"
+                href={`../(main)/details-request`}
+                size="unstyled"
+                variant="unstyled"
+              >
+                close
+              </LinkButton>}
+              heading="Company created successfully"
+              isDetailsRequestOpen={isSuccessDetailRequestModalOpen}
+              setDetailsRequest={setSuccessDetailRequestModalState}
+
+              subheading="You can now go ahead to add employees your company or create a payroll." 
+              inputTitle={""}           >
+             <div className="flex gap-3 rounded-2xl bg-dash-light-bg px-8 py-6">
+               <LinkButton
+                 className="grow text-base"
+                 href={`../(main)/details-request`}
+                 size="lg"
+                 variant="outlined"
+               >
+                 Create employees
+               </LinkButton>
+     
+               <Button
+                 className="flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-7 rounded-full max-w-max font-display"
+                 size="lg"
+                 onClick={openSuccessModal}
+               >
+                 Get Insurance
+
+                <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
+                <RightUpArrow className="" width={12} height={12} />
+              </span>
+               </Button>
+             </div>
+           </DetailsRequest>
+     
+            
           </div>
+
 
           <div className={cn("relative  flex items-center justify-center w-full h-full overflow-hidden",)}>
             <HospitalImage />
@@ -181,3 +334,6 @@ export default function Home() {
 
   );
 }
+
+
+
