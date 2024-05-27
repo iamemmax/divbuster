@@ -26,7 +26,7 @@ export const LandingHeader = () => {
                                 <Link href='/'>About us</Link>
                             </li>
                             <li>
-                                <Link href='/'>FAQs</Link>
+                                <Link href='/faqs'>FAQs</Link>
                             </li>
                             <li>
                                 <Link href='/'>Contact us</Link>

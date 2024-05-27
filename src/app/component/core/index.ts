@@ -2,6 +2,8 @@
 export * from './Button';
 
 // Named export used in place of star exports below to avoid conflicts.
+export { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./Collapsible"
+
 
 export {
   Dialog,
@@ -48,7 +50,8 @@ export {
 
 export { default as DrawerMenu } from './DrawerMenu'
 
-
+export { Popover, PopoverTrigger, PopoverContent } from "./PopoverPrimitives"
+export { default as CustomPopover } from "./Popover"
 
 
 
