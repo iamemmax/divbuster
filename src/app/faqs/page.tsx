@@ -1,10 +1,11 @@
 "use client"
 import React, { useState } from 'react'
-import { LandingHeader } from '../component/layout/landingheader'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../component/core'
+import { LandingHeader } from '@/components/layout/landingheader'
+import { Collapsible, CollapsibleContent,CollapsibleTrigger } from '@/components/core'
 import { CaretDown } from '../component/icons'
 import Image from 'next/image'
-import { cn } from '../component/utils/classNames'
+import { cn } from '@/utils/classNames'
+
 
 
 export default function page() {

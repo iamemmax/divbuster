@@ -1,5 +1,5 @@
 import React from 'react'
-import { LandingHeader } from '../component/layout/landingheader'
+import { LandingHeader } from '@/components/layout/landingheader';
 import { FaSquareXTwitter, FaLinkedin, FaYoutube, FaFacebookF, FaInstagram } from "react-icons/fa6";
 import { AboutIcon } from '../component/icons';
 

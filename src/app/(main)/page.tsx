@@ -13,22 +13,22 @@ import Marquee from "./misc/components/Marquee";
 
 export default function Home() {
   return (
-    <main className="wax-w-screen md:pb-20  bg-main min-h-screen">
-      <section className="bg-main  !mb-0 text-white shadow-sm">
+    <main className="max-w-max md:pb-20 w-full bg-main min-h-screen">
+      <section className="bg-main w-full !mb-0 text-white shadow-sm">
 
         <section className="flex  flex-col md:grid grid-cols-2 items-center justify-between sm:max-lg:px-6 md:pt-12 md:pb-6 ">
 
           <div className="flex flex-col gap-4  md:gap-6 justify-self-center max-md:px-6 max-md:py-10">
-            <h6 className={cn("font-display", "flex items-center text-[0.825rem] w-max font-semibold gap-1.5 px-5 py-1.5 md:py-2 mb-2.5 rounded-full bg-[#34307A]/30")}>
+            <h6 className={cn("font-display", "flex items-center text-[0.825rem] w-max font-semibold gap-1.5 px-5 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#34307A]/30")}>
               <span><CheckStar /></span>
               Welcome to Liberty Life
             </h6>
-            <h1 className={cn("font-display", "flex flex-col font-bold text-3xl md:text-4xl xl:text-[54px] gap-2")}>
-              <span className="flex items-center gap-2">
+            <h1 className={cn("font-display", "flex flex-col font-semibold md:font-bold text-xl md:text-4xl xl:text-[54px] gap-2")}>
+              <span className="flex items-center leading-tight md:leading-none gap-2">
                 Standard Health
                 <span className="text-[#AFD85B]">Insurance</span>
               </span>
-              <span className="mt-3">
+              <span className=" mt-0 md:mt-3">
                 for you and your family.
               </span>
             </h1>
@@ -60,20 +60,20 @@ export default function Home() {
         </section>
 
 
-        <section className="w-full xl:px-[120px] xl:my-12">
+        <section className="xl:px-[120px] xl:my-12">
 
-          <div className={cn("w-full xl:px-[113px] flex flex-col items-center lg:flex-row gap-8 rounded-[20px] xl:py-8 bg-[#FFFFFF08]",)}>
+          <div className={cn("px-3 xl:px-[113px] flex flex-col items-center lg:flex-row gap-8 rounded-[20px] xl:py-8 bg-[#FFFFFF08]",)}>
 
-            <div className={cn("bg-[#1E2954] basis-2/5  h-full rounded-[20px] py-8 px-6 flex items-center flex-col md:flex-row gap-8",)}>
+            <div className={cn("bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-3 md:px-6 flex items-center md:flex-row gap-4 md:gap-8",)}>
 
-              <div className="basis-1/2  flex flex-col items-center justify-center">
+              <div className="basis-1/2 flex flex-col items-center justify-center">
                 <svg className="z-40" fill="none" height="42" viewBox="0 0 42 42" width="42" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="21" cy="21" fill="#161D42" r="20.85" stroke="#4760FD" strokeWidth="0.3" />
                   <path d="M20.25 25.5H21.75V21.75H25.5V20.25H21.75V16.5H20.25V20.25H16.5V21.75H20.25V25.5ZM14.615 29C14.155 29 13.771 28.846 13.463 28.538C13.155 28.23 13.0007 27.8457 13 27.385V14.615C13 14.155 13.1543 13.771 13.463 13.463C13.7717 13.155 14.1557 13.0007 14.615 13H27.385C27.845 13 28.229 13.1543 28.537 13.463C28.845 13.7717 28.9993 14.1557 29 14.615V27.385C29 27.845 28.846 28.229 28.538 28.537C28.23 28.845 27.8457 28.9993 27.385 29H14.615ZM14.615 28H27.385C27.5383 28 27.6793 27.936 27.808 27.808C27.9367 27.68 28.0007 27.539 28 27.385V14.615C28 14.4617 27.936 14.3207 27.808 14.192C27.68 14.0633 27.539 13.9993 27.385 14H14.615C14.4617 14 14.3207 14.064 14.192 14.192C14.0633 14.32 13.9993 14.461 14 14.615V27.385C14 27.5383 14.064 27.6793 14.192 27.808C14.32 27.9367 14.461 28.0007 14.615 28Z" fill="white" />
                 </svg>
 
-                <div className="border-[0.3px] h-[120px] rounded-lg pt-[33px] px-[17px] pb-5 border-[#475ffd54] bg-main -mt-5 w-full">
-                  <p className="text-xs  text-center">Over 1000+ Hospitals
+                <div className="border-[0.3px] rounded-xl px-2 md:px-5 py-6 md:py-8 border-[#475ffd54] bg-[#161D42] -mt-5">
+                  <p className="text-xs text-center">Over 1000+ Hospitals
                     readily available based
                     on your proximity.</p>
                 </div>
@@ -87,7 +87,7 @@ export default function Home() {
                 </svg>
 
 
-                <div className="border-[0.3px]  h-[120px] rounded-lg pt-[33px] px-[17px] pb-5 border-[#475ffd54] bg-main -mt-5 w-full">
+                <div className="border-[0.3px] rounded-xl py-6 md:py-8 px-4 md:px-[17px] border-[#475ffd54] bg-[#161D42] -mt-5">
                   <p className="text-xs text-center">Premium health cover
                     for both corporate and
                     individuals users.</p>
@@ -97,46 +97,16 @@ export default function Home() {
             </div>
 
 
-            <div className={cn("bg-[#1E2954] basis-full  h-full rounded-[20px] py-8 px-6 flex items-center flex-col md:flex-row gap-8",)}>
+            <div className={cn("bg-[#1E2954] basis-full rounded-[20px] py-4 md:py-8 px-4 md:px-8 flex items-center flex-col md:flex-row gap-4 md:gap-8",)}>
 
-              <div className="basis-1/2  flex flex-col items-center justify-center">
-                <div className="border-[0.3px] flex flex-col items-center rounded-lg py-4 px-[17px] border-[#475ffd54] bg-main  w-full">
-                  <h3 className="font-sans font-semibold text-white">Lifetime  Rewards</h3>
-                  <p className="text-xs  text-center mt-2 font-sans text-[#CAC9D4]">
+              <div className="basis-1/2 flex flex-col items-center justify-center">
+                <div className="border-[0.3px] flex flex-col items-center rounded-xl py-2 px-[17px] border-[#475ffd54] bg-[#161D42]">
+                  <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">Lifetime  Rewards</h3>
+                  <p className="text-xs text-center mt-2 font-sans text-[#CAC9D4]">
                     For every insurance plan you buy, you
                     stand a chance to get a lifetime reward.
                   </p>
-
-                  <div className="flex gap-3 mt-4">
-                    <LinkButton
-                      className="text bg-transparent px-3 py-2.5 text-white"
-                      color="#ffffff"
-                      href={`/`}
-                    >
-                      Learn more{' '}
-                      <svg fill="none" height="18" viewBox="0 0 22 18" width="22" xmlns="http://www.w3.org/2000/svg">
-                        <path clipRule="evenodd" d="M13.8929 6.52743C14.9511 7.60212 14.9864 9.32226 13.9988 10.44L13.8929 10.5534L11.0063 13.3139C10.7326 13.5918 10.2889 13.5918 10.0152 13.3139C9.76264 13.0573 9.74321 12.6536 9.95695 12.3744L10.0152 12.3074L12.9019 9.54691C13.4205 9.0203 13.4477 8.18371 12.9838 7.62446L12.9019 7.53393L10.0152 4.77348C9.74159 4.49554 9.74159 4.04492 10.0152 3.76698C10.2679 3.51043 10.6653 3.49069 10.9402 3.70778L11.0063 3.76698L13.8929 6.52743Z" fill="white" fillRule="evenodd" />
-                        <g opacity="0.3">
-                          <path clipRule="evenodd" d="M9.68885 6.52743C10.747 7.60212 10.7823 9.32226 9.79466 10.44L9.68885 10.5534L6.80216 13.3139C6.5285 13.5918 6.08481 13.5918 5.81115 13.3139C5.55854 13.0573 5.53911 12.6536 5.75285 12.3744L5.81115 12.3074L8.69784 9.54691C9.21635 9.0203 9.24364 8.18371 8.77971 7.62446L8.69784 7.53393L5.81115 4.77348C5.53749 4.49554 5.53749 4.04492 5.81115 3.76698C6.06376 3.51043 6.46124 3.49069 6.73614 3.70778L6.80216 3.76698L9.68885 6.52743Z" fill="white" fillRule="evenodd" />
-                        </g>
-                      </svg>
-
-                    </LinkButton>
-                  </div>
-
-                </div>
-              </div>
-
-              <div className="basis-1/2  flex flex-col items-center justify-center">
-                <div className="border-[0.3px]  flex flex-col items-center rounded-lg py-4 px-[17px] border-[#475ffd54] bg-main  w-full">
-                  <h3 className="font-sans font-semibold text-white">Standard Hospitals</h3>
-                  <p className="text-xs  text-center mt-2 font-sans text-[#CAC9D4]">
-                    For every insurance plan you buy, you
-                    stand a chance to get a lifetime reward.
-                  </p>
-
-
-                  <div className="flex gap-3 mt-4">
+                  <div className="hidden md:flex gap-3 mt-4">
                     <LinkButton
                       className="text bg-transparent px-3 py-2.5 text-white"
                       color="#ffffff"
@@ -154,9 +124,44 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-
+              <div className="basis-1/2 flex flex-col items-center justify-center">
+                <div className="border-[0.3px] flex flex-col items-center rounded-xl py-2 px-[17px] border-[#475ffd54] bg-[#161D42]">
+                  <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">Standard Hospitals</h3>
+                  <p className="text-xs  text-center mt-2 font-sans text-[#CAC9D4]">
+                    For every insurance plan you buy, you
+                    stand a chance to get a lifetime reward.
+                  </p>
+                  <div className="hidden md:flex gap-3 mt-4">
+                    <LinkButton
+                      className="text bg-transparent px-3 py-2.5 text-white"
+                      color="#ffffff"
+                      href={`/`}>
+                      Learn more{' '}
+                      <svg fill="none" height="18" viewBox="0 0 22 18" width="22" xmlns="http://www.w3.org/2000/svg">
+                        <path clipRule="evenodd" d="M13.8929 6.52743C14.9511 7.60212 14.9864 9.32226 13.9988 10.44L13.8929 10.5534L11.0063 13.3139C10.7326 13.5918 10.2889 13.5918 10.0152 13.3139C9.76264 13.0573 9.74321 12.6536 9.95695 12.3744L10.0152 12.3074L12.9019 9.54691C13.4205 9.0203 13.4477 8.18371 12.9838 7.62446L12.9019 7.53393L10.0152 4.77348C9.74159 4.49554 9.74159 4.04492 10.0152 3.76698C10.2679 3.51043 10.6653 3.49069 10.9402 3.70778L11.0063 3.76698L13.8929 6.52743Z" fill="white" fillRule="evenodd" />
+                        <g opacity="0.3">
+                          <path clipRule="evenodd" d="M9.68885 6.52743C10.747 7.60212 10.7823 9.32226 9.79466 10.44L9.68885 10.5534L6.80216 13.3139C6.5285 13.5918 6.08481 13.5918 5.81115 13.3139C5.55854 13.0573 5.53911 12.6536 5.75285 12.3744L5.81115 12.3074L8.69784 9.54691C9.21635 9.0203 9.24364 8.18371 8.77971 7.62446L8.69784 7.53393L5.81115 4.77348C5.53749 4.49554 5.53749 4.04492 5.81115 3.76698C6.06376 3.51043 6.46124 3.49069 6.73614 3.70778L6.80216 3.76698L9.68885 6.52743Z" fill="white" fillRule="evenodd" />
+                        </g>
+                      </svg>
+                    </LinkButton>
+                  </div>
+                </div>
+              </div>
+              <div className="flex md:hidden gap-3 mt-4">
+                <LinkButton
+                  className="text bg-transparent px-3 py-2.5 text-white"
+                  color="#ffffff"
+                  href={`/`}>
+                  Learn more{' '}
+                  <svg fill="none" height="18" viewBox="0 0 22 18" width="22" xmlns="http://www.w3.org/2000/svg">
+                    <path clipRule="evenodd" d="M13.8929 6.52743C14.9511 7.60212 14.9864 9.32226 13.9988 10.44L13.8929 10.5534L11.0063 13.3139C10.7326 13.5918 10.2889 13.5918 10.0152 13.3139C9.76264 13.0573 9.74321 12.6536 9.95695 12.3744L10.0152 12.3074L12.9019 9.54691C13.4205 9.0203 13.4477 8.18371 12.9838 7.62446L12.9019 7.53393L10.0152 4.77348C9.74159 4.49554 9.74159 4.04492 10.0152 3.76698C10.2679 3.51043 10.6653 3.49069 10.9402 3.70778L11.0063 3.76698L13.8929 6.52743Z" fill="white" fillRule="evenodd" />
+                    <g opacity="0.3">
+                      <path clipRule="evenodd" d="M9.68885 6.52743C10.747 7.60212 10.7823 9.32226 9.79466 10.44L9.68885 10.5534L6.80216 13.3139C6.5285 13.5918 6.08481 13.5918 5.81115 13.3139C5.55854 13.0573 5.53911 12.6536 5.75285 12.3744L5.81115 12.3074L8.69784 9.54691C9.21635 9.0203 9.24364 8.18371 8.77971 7.62446L8.69784 7.53393L5.81115 4.77348C5.53749 4.49554 5.53749 4.04492 5.81115 3.76698C6.06376 3.51043 6.46124 3.49069 6.73614 3.70778L6.80216 3.76698L9.68885 6.52743Z" fill="white" fillRule="evenodd" />
+                    </g>
+                  </svg>
+                </LinkButton>
+              </div>
             </div>
-
           </div>
         </section>
       </section>
