@@ -1,0 +1,166 @@
+"use client"
+import React, { useState } from 'react'
+import { LandingHeader } from '../component/layout/landingheader'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../component/core'
+import { CaretDown } from '../component/icons'
+import Image from 'next/image'
+import { cn } from '../component/utils/classNames'
+
+
+export default function page() {
+
+  const FAQs = [
+    {
+      question: "What is Liberty Life?",
+      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+    },
+    {
+      question: "How many people can use the family plan?",
+      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+    },
+    {
+      question: "What payment methods are accepted?",
+      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+    },
+    {
+      question: "What is Liberty Life?",
+      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+    },
+    {
+      question: "What is Liberty Life?",
+      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+    },
+    {
+      question: "What is Liberty Life?",
+      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+    },
+    {
+      question: "What is Liberty Life?",
+      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+    },
+    {
+      question: "What is Liberty Life?",
+      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+    },
+    {
+      question: "What is Liberty Life?",
+      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+    },
+    {
+      question: "What is Liberty Life?",
+      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+    },
+  ]
+
+
+  return (
+    <main className='bg-[#080D27] text-white w-full h-full py-5 px-6 md:max-lg:px-16 lg:px-12 xl:px-[120px]'>
+      <LandingHeader />
+      <div className='flex flex-col lg:flex-row justify-between mt-16'>
+        <div className='md:basis-1/2'>
+          <button className='capitalize flex justify-center items-center rounded-full pl-6 pr-[78px] py-4 bg-[#34307A] bg-opacity-[20%] text-[14px] font-semibold gap-2'>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_1677_2985)">
+                <path d="M8 0C6.95385 0 6.15385 0.8 6.15385 1.84615V5.53846C6.15385 6.58462 6.95385 7.38462 8 7.38462H11.6923L14.1538 9.84615V7.38462C15.2 7.38462 16 6.58462 16 5.53846V1.84615C16 0.8 15.2 0 14.1538 0H8ZM10.5772 1.84615H11.6345L12.6732 5.53846H11.7502L11.4997 4.61538H10.5766L10.3465 5.53846H9.53846L10.5772 1.84615ZM11.0769 2.46154C11.0154 2.70769 10.9465 3.008 10.8843 3.19262L10.712 4H11.4425L11.2689 3.192C11.1465 3.008 11.0769 2.70769 11.0769 2.46154ZM1.84615 6.15385C0.8 6.15385 0 6.95385 0 8V11.6923C0 12.7385 0.8 13.5385 1.84615 13.5385V16L4.30769 13.5385H8C9.04615 13.5385 9.84615 12.7385 9.84615 11.6923V8H8C6.83077 8 5.904 7.2 5.59631 6.15385H1.84615ZM4.67323 7.94215C5.71938 7.94215 6.21169 8.80369 6.21169 9.78831C6.21169 10.6498 5.91569 11.1963 5.42338 11.4425C5.66954 11.5655 5.96123 11.6308 6.26892 11.6923L6.03877 12.3077C5.608 12.1846 5.16123 11.9926 4.73046 11.8074C4.66892 11.7458 4.56123 11.7502 4.49969 11.7502C3.76123 11.6886 3.07692 11.0769 3.07692 9.84615C3.07692 8.8 3.68862 7.94215 4.67323 7.94215ZM4.67323 8.61539C4.18092 8.61539 3.94215 9.16923 3.94215 9.84615C3.94215 10.5846 4.18092 11.0769 4.67323 11.0769C5.16554 11.0769 5.42277 10.5231 5.42277 9.84615C5.42277 9.16923 5.16554 8.61539 4.67323 8.61539Z" fill="white" />
+              </g>
+              <defs>
+                <clipPath id="clip0_1677_2985">
+                  <rect width="16" height="16" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+
+            FAQs
+          </button>
+          <div className='gap-3 sm:mt-5 mt-10'>
+            <p className='text-2xl sm:text-[40px] font-medium w-full max-w-[625px] sm:leading-normal'>
+              Get quick help and answers to frequently asked questions.
+            </p>
+            <p className='max-w-[572px] sm:leading-7 text-xs pt-5 md:text-[19px] text-[#CAC9D4] font-sans'>
+              Get answers to everything you need to know about Liberty life.
+              Can't find the answer you are looking for? Please contact us.
+            </p>
+          </div>
+        </div>
+        <div className=' md:basis-1/2 overflow-hidden max-md:mt-6 max-md:max-w-[400px]'>
+          <Image
+            src="/images/faqs/box-gradient.png"
+            className='scale-[1.5] max-md:hidden'
+            width={500}
+            height={500}
+            alt=''
+            objectFit='contain'
+          />
+          <Image
+            src="/images/faqs/mobile-box-gradient.png "
+            className='md:hidden'
+            width={500}
+            height={150}
+            alt=''
+          />
+        </div>
+      </div>
+      <div className='mt-10 md:-mt-10 flex flex-col md:flex-row gap-4'>
+        <ul className='flex flex-col gap-3 basis-1/2'>
+          {
+            FAQs.slice(0, 5).map((faq, index) => {
+              const [isOpen, setIsOpen] = useState(false)
+              
+              return (
+                <Collapsible key={index}>
+                  <CollapsibleTrigger onClick={() => setIsOpen(!isOpen)} className='flex items-center text-left justify-between bg-[#FFFFFF1A] p-4 md:p-7 rounded-lg text-xs md:text-[15px] font-normal w-full font-sans '>
+                    {faq.question}
+                    <CaretDown className={cn(isOpen && "rotate-180")} />
+                  </CollapsibleTrigger>
+
+                  <CollapsibleContent className='bg-white text-black md:pt-5 py-2 md:pb-6 pl-4 md:pl-8 pr-5 md:pr-11 rounded-lg text-sm text-[#242424CC] font-sans'>
+                    {faq.answer}
+                  </CollapsibleContent>
+                </Collapsible>
+              )
+            })
+          }
+
+        </ul>
+        <ul className='flex flex-col gap-3 basis-1/2'>
+          {
+            FAQs.slice(5, 10).map((faq, index) => {
+              const [isOpen, setIsOpen] = useState(false)
+
+              return (
+                <Collapsible key={index} open={isOpen}>
+                  <CollapsibleTrigger onClick={() => setIsOpen(!isOpen)} className='flex items-center text-left justify-between bg-[#FFFFFF1A] p-4 md:p-7 rounded-lg text-xs md:text-[15px] font-normal w-full font-sans '>
+                    {faq.question}
+                    <CaretDown className={cn(isOpen && "rotate-180")} />
+                  </CollapsibleTrigger>
+
+                  <CollapsibleContent className='bg-white text-black md:pt-5 py-2 md:pb-6 pl-4 md:pl-8 pr-5 md:pr-11 rounded-lg text-sm text-[#242424CC] font-sans'>
+                    {faq.answer}
+                  </CollapsibleContent>
+                </Collapsible>
+              )
+            })
+          }
+
+        </ul>
+      </div>
+
+      <div className='pt-[72px]'>
+        <div className='md:flex flex-row bg-[#FFFFFF0D] gap-36 pt-4 pb-6 sm:py-3 items-center justify-center pr-16 pl-6 rounded-lg'>
+          <p className='text-xs md:text-[14px] lg:text[16px] text-[#FFFFFFCC] md:pb-0 pb-4'>
+            Can't find answers you are looking for?, Please kindly get in touch with our support team.
+          </p>
+          <button className='flex justify-between items-center bg-white text-blue-950 bg rounded-full text-xs py-1 pl-5 pr-2 gap-[18px]'>
+            Get insurance
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="15" cy="15" r="15" fill="#032282" />
+              <path d="M10.9168 19.6171C11.0334 19.6171 11.1501 19.5587 11.2084 19.5004L19.3751 11.3337C19.5501 11.1587 19.5501 10.9254 19.3751 10.7504C19.2001 10.5754 18.9084 10.5754 18.7334 10.7504L10.5668 18.9171C10.3918 19.0921 10.3918 19.3837 10.5668 19.5587C10.6834 19.6171 10.8001 19.6171 10.9168 19.6171Z" fill="white" />
+              <path d="M19.0834 17.4585C19.3167 17.4585 19.55 17.2835 19.55 16.9919V11.0419C19.55 10.8085 19.375 10.5752 19.0834 10.5752H13.075C12.8417 10.5752 12.6084 10.7502 12.6084 11.0419C12.6084 11.3335 12.7834 11.5085 13.075 11.5085H18.6167V17.0502C18.6167 17.2835 18.85 17.4585 19.0834 17.4585Z" fill="white" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </main>
+  )
+}
+ 
