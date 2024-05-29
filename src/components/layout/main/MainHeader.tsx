@@ -186,7 +186,7 @@ export function MainHeader() {
         </ul> */}
 
         <div className="flex items-center gap-[31px]">
-          <LinkButton href="https://fedwk.libertyng.com/" target="_blank" variant="white" className={cn("hidden md:flex items-center justify-between text-base text-white text-left p-0 bg-transparent rounded-full max-w-max", "font-display")}>
+          <LinkButton href="/login" target="_blank" variant="white" className={cn("hidden md:flex items-center justify-between text-base text-white text-left p-0 bg-transparent rounded-full max-w-max", "font-display")}>
             Login
           </LinkButton>
 

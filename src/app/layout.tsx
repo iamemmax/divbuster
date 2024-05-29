@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { Inter, DM_Sans, Wix_Madefor_Display } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/utils/classNames";
+import { Suspense } from "react";
+import ReactQueryProvider from "@/lib/reactQuery";
+import { AuthProvider } from "@/contexts/authentication";
+import ProtectedRouteGuard from "./(auth)/(onboarding)/misc/components/ProtectedRouteGuard";
+import { Wrapper } from "./(auth)/(onboarding)/misc/components/Wrapper";
 
 
 const sans = DM_Sans({
@@ -27,7 +32,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={cn(sans.variable, display.variable)}>
-      <body >{children}</body>
+      <body >
+
+        <ReactQueryProvider>
+          <AuthProvider>
+            <ProtectedRouteGuard>
+              <Suspense fallback={
+                <></>
+              }>
+                <Wrapper>
+                  {children}
+                </Wrapper>
+              </Suspense>
+            </ProtectedRouteGuard>
+          </AuthProvider>
+        </ReactQueryProvider>
+      </body>
     </html>
   );
 }

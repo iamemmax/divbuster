@@ -1,15 +1,13 @@
 "use client"
 
-import Link from "next/link";
-import Image from "next/image";
-
 import { cn } from "@/utils/classNames";
 import { RightUpArrow } from "@/icons/core";
-import { Button, DrawerMenu, LinkButton } from "@/components/core";
-import { DrawerClose } from "@/components/core/Drawer";
+import { LinkButton } from "@/components/core";
+
 
 import { CheckStar } from "./misc/icons";
-import { StackingCards, WhyMoveSection, FooterSection, TestimonalSection, HeroCarousel, HowToSection, HospitalImage } from "./misc/components";
+import { HospitalImage } from "./misc/components";
+import Marquee from "./misc/components/Marquee";
 
 
 
@@ -176,78 +174,7 @@ export default function Home() {
         </ul>
       </section> */}
 
-      <section className={cn("marquee fixed bottom-0 w-full z-20 bg-[#161D42] hover:!opacity-100 text-main py-4 !rounded-none text-lg", "font-display")}>
-        <div className="marquee-content">
-          <ul className="marquee-list font-clash flex items-center justify-between xl:py-5 xl:text-xl">
-            <li className="marquee-item text-white opacity-50">Liberty Assured</li>
-            <li className="marquee-item text-white opacity-50">Paybox360</li>
-            <li className="marquee-item text-white opacity-50">VisualPlus</li>
-            <li className="marquee-item text-white opacity-50">WhisperSMS</li>
-            <li className="marquee-item text-white opacity-50">WinWise</li>
-            <li className="marquee-item text-white opacity-50">Getlinked</li>
-            <li className="marquee-item text-white opacity-50">Liberty Assured</li> {/* Duplicate items */}
-            <li className="marquee-item text-white opacity-50">Paybox360</li>
-            <li className="marquee-item text-white opacity-50">VisualPlus</li>
-            <li className="marquee-item text-white opacity-50">WhisperSMS</li>
-            <li className="marquee-item text-white opacity-50">WinWise</li>
-            <li className="marquee-item text-white opacity-50">Getlinked</li>
-          </ul>
-        </div>
-        <style jsx>{`
-        .marquee {
-          overflow: hidden;
-          position: fixed;
-          bottom: 0;
-          width: 100%;
-          z-index: 20;
-          background-color: #161D42;
-          padding: 16px 0;
-          text-align: center;
-        }
-
-        .marquee-content {
-          display: flex;
-          width: 100%;
-          animation: marquee 15s linear infinite;
-        }
-        .marquee-content:hover {
-          animation: marquee 40s linear infinite;
-        }
-        .marquee-list {
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
-          white-space: nowrap;
-        }
-
-        .marquee-item {
-          flex: 1 0 auto;
-          margin: 0 20px;
-          color: white;
-          opacity: 0.5;
-        }
-
-        @keyframes marquee {
-          0% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-
-        @media (max-width: 640px) {
-          .marquee-list {
-            padding: 0 20px;
-          }
-
-          .marquee-item {
-            margin: 0 10px;
-          }
-        }
-      `}</style>
-      </section>
-
+      <Marquee />
     </main>
 
 
