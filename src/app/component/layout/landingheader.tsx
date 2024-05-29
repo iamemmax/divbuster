@@ -29,7 +29,7 @@ export const LandingHeader = () => {
                                 <Link href='/faqs'>FAQs</Link>
                             </li>
                             <li>
-                                <Link href='/'>Contact us</Link>
+                                <Link href='/contact-us'>Contact us</Link>
                             </li>
                         </ul>
                         <ul className='hidden md:flex justify-end items-center space-x-5'>
