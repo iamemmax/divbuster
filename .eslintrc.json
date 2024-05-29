@@ -1,3 +1,74 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:tailwindcss/recommended"
+  ],
+  "plugins": ["check-file"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/no-use-before-define": "error",
+    "check-file/filename-blocklist": [
+      "error",
+      {
+        "**/*.model.ts": "*.models.ts",
+        "**/*.util.ts": "*.utils.ts"
+      }
+    ],
+    "check-file/filename-naming-convention": [
+      "error",
+      {
+        "src/**/*.{js,ts}": "CAMEL_CASE",
+        "src/**/*.{jsx,tsx}": "+(+([a-z0-9])|*([A-Z]*([a-z0-9])))" // Lowercase or pascal case
+      }
+    ],
+    "check-file/folder-match-with-fex": [
+      "error",
+      {
+        "*.styled.{jsx,tsx}": "**/pages/",
+        "*.test.{js,jsx,ts,tsx}": "**/__tests__/"
+      }
+    ],
+    "check-file/folder-naming-convention": [
+      "error",
+      {
+        "mocks/*/": "KEBAB_CASE"
+      }
+    ],
+    "no-console": [
+      "error",
+      {
+        "allow": ["error"]
+      }
+    ],
+    "no-unused-vars": "off",
+    "prefer-const": "error",
+    "react/jsx-sort-props": [
+      2,
+      {
+        "callbacksLast": true,
+        "ignoreCase": true,
+        "noSortAlphabetically": false,
+        "shorthandFirst": false,
+        "shorthandLast": true
+      }
+    ],
+    "react/no-unknown-property": [
+      2,
+      {
+        "ignore": ["jsx"]
+      }
+    ],
+    "tailwindcss/classnames-order": "off",
+    "tailwindcss/no-custom-classname": "off"
+  }
 }

@@ -45,7 +45,7 @@ export function InActivityModal({
             <DialogDescription className="">{subheading}</DialogDescription>
           </div> */}
 
-          <div className="flex flex-col px-8 pb-6 pt-10 items-center justify-center rounded-xl bg-[#fff] p-4">
+          <div className="flex flex-col px-8 pb-6 pt-10 items-center justify-center rounded-xl bg-white p-4">
             <div className="caution">
               <svg
                 fill="none"

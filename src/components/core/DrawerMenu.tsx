@@ -54,13 +54,13 @@ const DrawerMenu: React.FC<DrawerProps> = ({
 
     return (
         <Drawermenu
-            shouldScaleBackground={shouldScaleBackground}
             direction={direction}
+            shouldScaleBackground={shouldScaleBackground}
             {...snapPointsProps}
         >
             {
                 trigger &&
-                <DrawerTrigger asChild className={triggerClass}>
+                <DrawerTrigger className={triggerClass} asChild>
                     {trigger}
                 </DrawerTrigger>
             }

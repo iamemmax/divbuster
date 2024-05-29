@@ -192,19 +192,18 @@ export type AuthState = {
 };
 
 export type AuthAction =
-  | { type: 'LOGIN'; payload: UserEntities }
-  | { type: 'LOGOUT' }
-  | { type: 'STOP_LOADING' };
+  | { type: "LOGIN"; payload: UserEntities }
+  | { type: "LOGOUT" }
+  | { type: "STOP_LOADING" };
 
 export type AuthDispatch = React.Dispatch<AuthAction> | null;
 
 export type LoginDto = {
-  email: string;
-  password: string;
+  phone: string;
 };
 
 export type LoginOtpDto = {
-  phone_number: string
-      otp: string
-      referal_code: string | null
+  phone_number: string;
+  otp: string;
+  referal_code: string | null;
 };

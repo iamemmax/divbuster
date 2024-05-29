@@ -7,7 +7,7 @@ export function ScrollingFeatures() {
   return (
     <motion.svg
       animate={{ rotate: 360 }}
-      className="pointer-events-none z-10 mx-auto h-[11.5rem] w-[11.5rem] rounded-full xl:h-[30.375rem] xl:w-[30.375rem]"
+      className="pointer-events-none z-10 mx-auto size-[11.5rem] rounded-full xl:size-[30.375rem]"
       fill="none"
       height={487}
       initial={{ rotate: 0 }}

@@ -53,7 +53,7 @@ const HowToWebTimeline = () => {
                 steps.map((step, i) => {
 
                     return (
-                        <div className='grid grid-cols-[subgrid] col-span-2 sm:col-span-3' key={i} >
+                        <div className='grid grid-cols-subgrid col-span-2 sm:col-span-3' key={i} >
                             <div
                                 className={cn(
                                     'sm:order-1 hidden sm:flex justify-end sm:px-[20%]',
@@ -61,19 +61,19 @@ const HowToWebTimeline = () => {
                                 )}
                             >
                                 <Image
-                                    src={step.image}
                                     alt={step.description}
-                                    width={500}
-                                    height={500}
                                     className="rounded-lg max-w-[200px]"
+                                    height={500}
+                                    src={step.image}
+                                    width={500}
                                 />
                             </div>
 
                             <div className="flex flex-col items-center sm:order-2 max-sm:pl-6">
                                 <div className={cn('h-6 w-6 rounded-full bg-main-light transition-colors', i + 1 >= currentStep  ? "opacity-20" : "opacity-100")}></div>
                                 <div className={'relative grow w-1.5 bg-[#03228233] '}>
-                                    <motion.div className='absolute w-full bg-main-light     top-0 left-0 right-0'
-                                        animate={{ height: i + 1 >= currentStep ? "0%" : "100%", bottom: i + 1 >= currentStep ? "0%" : "100%"}}
+                                    <motion.div animate={{ height: i + 1 >= currentStep ? "0%" : "100%", bottom: i + 1 >= currentStep ? "0%" : "100%"}}
+                                        className='absolute w-full bg-main-light     top-0 inset-x-0'
                                         initial={{height: '0%', bottom: "100%"}}
                                     >
                                     </motion.div>

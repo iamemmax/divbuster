@@ -82,8 +82,8 @@ const WhyMoveSection = () => {
                         {
                             cardsArray.slice(0, 2).map((card, index) => (
                                 <WhyMoveCard
-                                    key={index}
                                     card={card}
+                                    key={index}
                                     titleclass={cn(card.i == 2 && "max-w-[200px]")}
                                 />
                             ))
@@ -95,8 +95,8 @@ const WhyMoveSection = () => {
                     {
                         cardsArray.slice(2, 6).map((card, index) => (
                             <WhyMoveCard
-                                key={index}
                                 card={card}
+                                key={index}
                                 titleclass={cn(card.i == 2 && "max-w-[200px]")}
                             />
                         ))

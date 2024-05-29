@@ -59,35 +59,35 @@ const HeroCarousel = () => {
             ref={ref}
         >
             <Image
-                src="/images/landing-page/hero-phone-mockup.png"
                 alt="hero"
                 className="max-w-[200px] lg:max-w-[300px] xl:max-w-[350px]"
-                width={200}
                 height={200}
                 layout="responsive"
+                src="/images/landing-page/hero-phone-mockup.png"
+                width={200}
             />
             <div
                 className="absolute left-[-8%] h-full w-28 max-md:hidden bg-gradient-to-r from-main via-[rgba(4,3,32,0.9)] to-[rgba(4,3,32,0.7)] z-20  blur-md"
             ></div>
             <motion.div className={cn("flex absolute left-0 top-0 min-w-max w-full h-full gap-4",)}
                 style={{ x }}
-                onHoverStart={() => {
-                    setWait(true)
-                    setSpeed(SLOW_SPEED)
-                }}
                 onHoverEnd={() => {
                     setWait(true)
                     setSpeed(OG_SPEED)
                 }}
+                onHoverStart={() => {
+                    setWait(true)
+                    setSpeed(SLOW_SPEED)
+                }}
             >
                 {[...images, ...images].map((image, index) => (
-                    <div key={index} className='relative min-w-[50%]'>
+                    <div className='relative min-w-[50%]' key={index}>
                         <Image
-                            src={image}
                             alt={`image-${index}`}
                             className='w-full h-[200px]'
                             layout="fill"
                             objectFit="contain"
+                            src={image}
                         />
                     </div>
                 ))}

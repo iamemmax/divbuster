@@ -41,22 +41,22 @@ const HowToSection = () => {
                         <TabsTrigger className='!px-6 !py-2.5 rounded-full hover:bg-[#03228246] transition-colors duration-300' value="agent">Agent option</TabsTrigger>
                     </TabsList>
 
-                    <TabsContent value='web' className='w-full'>
+                    <TabsContent className='w-full' value='web'>
                         <HowToWebTimeline />
                     </TabsContent>
-                    <TabsContent value='ussd' className='w-full'>
+                    <TabsContent className='w-full' value='ussd'>
                         <HowToWebTimeline />
                     </TabsContent>
-                    <TabsContent value='agent' className='w-full'>
+                    <TabsContent className='w-full' value='agent'>
                         <HowToWebTimeline />
                     </TabsContent>
                 </Tabs>
             </div>
 
-            <LinkButton href="/" target="_blank" variant="default" className={cn("flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-16 rounded-full max-w-max bg-main-light", "font-display")}>
+            <LinkButton className={cn("flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-16 rounded-full max-w-max bg-main-light", "font-display")} href="/" target="_blank" variant="default">
               Get loan
               <span className="flex items-center justify-center p-2 rounded-full bg-white text-main-light ml-10">
-                <RightUpArrow fill="#000" width={12} height={12} />
+                <RightUpArrow fill="#000" height={12} width={12} />
               </span>
             </LinkButton>
         </section>

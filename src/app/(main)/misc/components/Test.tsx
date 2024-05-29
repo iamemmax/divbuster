@@ -50,7 +50,7 @@ export default function TestHome() {
     //   })
 
     return (
-        <main ref={container} className="mt-[50vh] relative">
+        <main className="mt-[50vh] relative" ref={container}>
             {
                 projects.map((project, i) => {
                     const targetScale = 1 - ((projects.length - i) * 0.05);

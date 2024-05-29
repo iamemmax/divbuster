@@ -30,7 +30,7 @@ export const BottomSheetVault = ({
       </Drawer.Trigger> */}
       <Drawer.Overlay className="fixed inset-0 bg-black/40" />
       <Drawer.Portal>
-        <Drawer.Content className="border-b-none fixed inset-x-0 bottom-0 mx-[-1px] flex h-full max-h-[96%] flex-col rounded-t-[10px] border border-gray-200 bg-white">
+        <Drawer.Content className="border-b-none fixed inset-x-0 bottom-0 -mx-px flex h-full max-h-[96%] flex-col rounded-t-[10px] border border-gray-200 bg-white">
           <div className="mx-auto my-4 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300" />
 
           <div

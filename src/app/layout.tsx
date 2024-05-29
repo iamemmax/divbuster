@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn(sans.variable, display.variable)}>
+    <html className={cn(sans.variable, display.variable)} lang="en">
       <body >
 
         <ReactQueryProvider>
