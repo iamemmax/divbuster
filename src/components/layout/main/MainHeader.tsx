@@ -14,7 +14,7 @@ import { RightUpArrow } from '@/icons/core';
 
 const _OldHeaderButtons: React.FunctionComponent = () => {
   return (
-    <ul className="hidden items-center gap-2 md:flex lg:gap-4">
+    <ul className="hidden items-center gap-2 xl:flex lg:gap-4">
       <li>
         <Button
           className="rounded-lg border-0 px-0 text-sm font-semibold text-[#344051] md:px-3 lg:inline-flex lg:border-[.0313rem] lg:border-main-solid-light xl:min-w-[9.375rem] xl:px-6 xl:py-3"
@@ -41,7 +41,7 @@ const _OldHeaderButtons: React.FunctionComponent = () => {
   );
 };
 
-const pagesWithColoredBg = ['/'];
+const pagesWithColoredBg = ['/', '/faqs', '/contact-us'];
 
 export function MainHeader() {
   const pathname = usePathname();
@@ -51,7 +51,7 @@ export function MainHeader() {
     <div className={cn(isColored && 'bg-main')}>
       <header
         className={cn(
-          'px-[120px] flex items-center justify-between gap-4 py-4 font-wix-display md:gap-2 md:py-8 lg:gap-4',
+          'max-w-screen px-8 md:max-lg:px-[30px] lg:px-[120px] overflow-x-hidden flex items-center justify-between gap-4 py-4 font-wix-display md:gap-2 md:py-8 lg:gap-4',
           isColored && 'bg-main'
         )}
       >
@@ -61,6 +61,7 @@ export function MainHeader() {
 
             <svg
               fill="none"
+              className="max-sm:max-w-[100px]"
               height={40}
               viewBox="0 0 155 40"
               width={155}
@@ -101,98 +102,15 @@ export function MainHeader() {
 
         <DesktopMenuBar isColored={isColored} />
 
-        {/* <ul className="hidden items-center gap-3 md:flex lg:gap-6">
-          <li className="flex items-center">
-            <LinkButton
-              className="whitespace-nowrap text-base text-main-solid 2xl:text-xl"
-              href={false ? '/dashboard' : '/login'}
-              size="unstyled"
-              variant="unstyled"
-            >
-              {false ? (
-                <svg
-                  fill="none"
-                  height={40}
-                  viewBox="0 0 40 40"
-                  width={40}
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx={20}
-                    cy={20}
-                    fill={isColored ? '#FFFFFF' : '#ECF1FF'}
-                    r={20}
-                  />
-                  <path
-                    d="M25.833 18.958h-1.666c-2.017 0-3.125-1.109-3.125-3.125v-1.667c0-2.017 1.108-3.125 3.125-3.125h1.666c2.017 0 3.125 1.108 3.125 3.125v1.667c0 2.016-1.108 3.125-3.125 3.125Zm-1.666-6.667c-1.317 0-1.875.558-1.875 1.875v1.667c0 1.316.558 1.875 1.875 1.875h1.666c1.317 0 1.875-.559 1.875-1.875v-1.667c0-1.317-.558-1.875-1.875-1.875h-1.666Zm-8.334 16.667h-1.666c-2.017 0-3.125-1.109-3.125-3.125v-1.667c0-2.017 1.108-3.125 3.125-3.125h1.666c2.017 0 3.125 1.108 3.125 3.125v1.667c0 2.016-1.108 3.125-3.125 3.125Zm-1.666-6.667c-1.317 0-1.875.558-1.875 1.875v1.667c0 1.316.558 1.875 1.875 1.875h1.666c1.317 0 1.875-.559 1.875-1.875v-1.667c0-1.317-.558-1.875-1.875-1.875h-1.666ZM15 18.958a3.962 3.962 0 0 1-3.958-3.959A3.962 3.962 0 0 1 15 11.041a3.962 3.962 0 0 1 3.958 3.958A3.962 3.962 0 0 1 15 18.958Zm0-6.667a2.714 2.714 0 0 0-2.708 2.708A2.714 2.714 0 0 0 15 17.708a2.714 2.714 0 0 0 2.708-2.709A2.714 2.714 0 0 0 15 12.291Zm10 16.667a3.962 3.962 0 0 1-3.958-3.959A3.962 3.962 0 0 1 25 21.041a3.962 3.962 0 0 1 3.958 3.958A3.962 3.962 0 0 1 25 28.958Zm0-6.667a2.714 2.714 0 0 0-2.708 2.708A2.714 2.714 0 0 0 25 27.708a2.714 2.714 0 0 0 2.708-2.709A2.714 2.714 0 0 0 25 22.291Z"
-                    fill="#032282"
-                  />
-                </svg>
-              ) : (
-                ' Log in'
-              )}
-            </LinkButton>
-          </li>
-
-          <li>
-            <ul className="items-center gap-1 rounded-full bg-[#B7D2FF] p-1 md:flex">
-              <li>
-                <Button
-                  className="rounded-full border-0 px-0 text-xs font-normal md:px-3 lg:inline-flex lg:border-[.0313rem] lg:border-main-solid-light xl:px-4 xl:py-3"
-                  disabled
-                >
-                  <span>
-                    <span>Watch </span>
-                    <span> video</span>
-                  </span>
-                </Button>
-              </li>
-
-              <li>
-                <LinkButton
-                  className="rounded-full text-xs font-normal text-black md:px-3 lg:flex lg:items-center lg:gap-1 xl:px-4 xl:py-3"
-                  href="/request-early-access"
-                  variant="white"
-                >
-                  <span>
-                    <span>Request </span>
-                    <span className="hidden lg:inline">early</span>
-                    <span> access</span>
-                  </span>
-
-                  <span>
-                    <svg
-                      className="hidden lg:inline"
-                      fill="none"
-                      height={14}
-                      viewBox="0 0 14 14"
-                      width={14}
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M2.917 10.617a.446.446 0 0 0 .291-.117l8.167-8.166c.175-.175.175-.409 0-.584a.458.458 0 0 0-.642 0L2.567 9.917a.458.458 0 0 0 0 .642c.116.058.233.058.35.058Z"
-                        fill="#292D32"
-                      />
-                      <path
-                        d="M11.083 8.459a.46.46 0 0 0 .467-.467v-5.95a.46.46 0 0 0-.467-.467H5.075a.46.46 0 0 0-.467.467c0 .292.175.467.467.467h5.542V8.05c0 .234.233.409.466.409Z"
-                        fill="#292D32"
-                      />
-                    </svg>
-                  </span>
-                </LinkButton>
-              </li>
-            </ul>
-          </li>
-        </ul> */}
 
         <div className="flex items-center gap-[31px]">
-          <LinkButton className={cn("hidden md:flex items-center justify-between text-base text-white text-left p-0 bg-transparent rounded-full max-w-max", "font-display")} href="/login" target="_blank" variant="white">
+          <LinkButton className={cn("hidden md:flex items-center justify-between md:max-lg:text-sm lg:text-base text-white text-left p-0 bg-transparent rounded-full max-w-max", "font-display")} href="/login" target="_blank" variant="white">
             Login
           </LinkButton>
 
-          <LinkButton className={cn("hidden md:flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 rounded-full max-w-max", "font-display")} href="https://fedwk.libertyng.com/" target="_blank" variant="white">
+          <LinkButton className={cn("hidden md:flex items-center justify-between min-w-max lg:text-[0.865rem] text-left md:max-lg:py-1 py-1.5 md:max-lg:pr-1 pr-1.5 pl-4 rounded-full max-w-max", "font-display")} href="https://fedwk.libertyng.com/" target="_blank" variant="white">
             Get insurance
-            <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-10">
+            <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-5">
               <RightUpArrow className="" height={12} width={12} />
             </span>
           </LinkButton>
@@ -210,41 +128,7 @@ export function MainHeader() {
           </LinkButton>
 
           <MobileMenuDialog />
-          {/* 
-          <DrawerMenu
-            trigger={
-              <Button className={cn("md:hidden bg-white/10 px-5 py-2.5 rounded-full", "font-display")}>
-                Menu
-              </Button>
-            }
-            contentClass="bg-main border-main"
-          >
-            <div className="text-white p-5 pb-0 gap-5">
-              <header className="flex items-center justify-between">
-                <h6 className="font-semibold text-lg">Menu Content</h6>
-                <DrawerClose className={cn("bg-white/10 h-8 w-8 rounded-full text-white/50 rotate-12 text-lg hover:text-white", "font-display")}>x</DrawerClose>
-              </header>
-
-
-              <ul className={cn("font-display", "flex flex-col gap-8 font-normal mt-10")}>
-                <li className="border-b-[0.15px] border-b-white/30 p-2">
-                  <Link href='/'>Home</Link>
-                </li>
-                <li className="border-b-[0.15px] border-b-white/30 p-2">
-                  <Link href='/'>Products</Link>
-                </li>
-                <li className="border-b-[0.15px] border-b-white/30 p-2">
-                  <Link href='/'>Company</Link>
-                </li>
-                <li className="border-b-[0.15px] border-b-white/30 p-2">
-                  <Link href='/'>About us</Link>
-                </li>
-                <li className="border-b-[0.15px] border-b-white/30 p-2">
-                  <Link href='/'>Contact us</Link>
-                </li>
-              </ul>
-            </div>
-          </DrawerMenu> */}
+         
         </div>
       </header>
     </div>

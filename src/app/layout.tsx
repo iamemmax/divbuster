@@ -1,5 +1,4 @@
-import type { Metadata } from "next";
-import { Inter, DM_Sans, Wix_Madefor_Display } from "next/font/google";
+import {  DM_Sans, Wix_Madefor_Display } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/utils/classNames";
 import { Suspense } from "react";

@@ -57,7 +57,7 @@
       {
         "callbacksLast": true,
         "ignoreCase": true,
-        "noSortAlphabetically": false,
+        "noSortAlphabetically": true,
         "shorthandFirst": false,
         "shorthandLast": true
       }

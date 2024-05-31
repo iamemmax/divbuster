@@ -1,12 +1,10 @@
 import React from 'react'
-import { LandingHeader } from '@/components/layout/landingheader';
 import { FaSquareXTwitter, FaLinkedin, FaYoutube, FaFacebookF, FaInstagram } from "react-icons/fa6";
-import { AboutIcon } from '../component/icons';
+import { AboutIcon } from '@/components/icons';
 
 export default function page() {
     return (
-        <main className='bg-[#080D27] text-white w-full h-full py-5 px-6 md:px-[120px]'>
-            <LandingHeader />
+        <main className='bg-main text-white size-full py-5 px-6 md:px-[120px]'>
             <div className='mt-20'>
                 <button className='capitalize flex justify-center items-center rounded-full pl-6 pr-11 py-[14px] bg-[#34307A] bg-opacity-[20%] text-[14px] font-semibold gap-2'>
                     <AboutIcon />
@@ -19,10 +17,10 @@ export default function page() {
                                 Have questions or want to get in touch with us?
                             </h1>
                             <h2 className='text-[#CAC9D4] text-sm mt-2 md:text-lg'>
-                                We'd love to hear from you! Feel free to reach out to us.
+                                We&apos;d love to hear from you! Feel free to reach out to us.
                             </h2>
                         </div>
-                        <form className='flex flex-col font-sans border-[0.3px] border-[#407cff59] mt-5 md:mt-0 py-6 pl-8 pr-12 rounded-xl [grid-area:c]'>
+                        <form className='flex flex-col font-sans border-[0.3px] border-[#407cff59] mt-5 lg:mt-0 py-6 pl-8 pr-12 rounded-xl [grid-area:c]'>
                             <p className='text-[#CAC9D4]'>Get in touch</p>
 
                             <input type="text" placeholder='Full name' className='bg-[#FFFFFF1A] required: py-4 px-7 text-sm rounded-lg mt-4' />
