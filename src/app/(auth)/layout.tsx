@@ -15,7 +15,7 @@ export default function OnboardingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen justify-between overflow-auto bg-[#080D27] md:flex md:flex-row-reverse md:justify-normal md:pb-0">
+    <div className="min-h-screen justify-between overflow-auto bg-[#080D27] md:flex flex-row-reverse md:flex-row-reverse md:justify-normal md:pb-0">
       <div className="relative bg-[radial-gradient(circle_at_center,_#202A57_0%,_#080D27_100%)] border border-[#4760FD] rounded-[20px] md:flex md:basis-1/2 md:flex-col md:justify-center md:overflow-y-auto md:py-8 md:[@media(min-height:520px)]:items-center">
         <div
           className="absolute inset-y-0 left-[-10%] right-0 md:fixed md:left-auto md:w-[50vw]"
