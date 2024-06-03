@@ -23,7 +23,7 @@ export default function Home() {
               <span><CheckStar /></span>
               Welcome to Liberty Life
             </h6>
-            <h1 className={cn("font-display", "flex flex-col font-semibold md:font-bold text-xl md:text-4xl xl:text-[54px] gap-2")}>
+            <h1 className={cn("font-display", "flex flex-col font-semibold md:font-bold text-xl md:text-3xl xl:text-4xl gap-2")}>
               <span className="flex items-center flex-wrap leading-tight md:leading-none gap-2">
                 Standard Health
                 <span className="text-[#AFD85B]">Insurance</span>
@@ -53,13 +53,13 @@ export default function Home() {
             </LinkButton>
           </div>
 
-          <div className={cn("relative flex items-center justify-center w-full h-full overflow-hidden",)}>
+          <div className={cn("relative flex items-center justify-center w-[400px] overflow-hiddenn ml-16",)}>
             {/* <HospitalImage /> */}
             <Image
               alt=""
-              className="w-full px-4 pb-1  max-lg:max-w-[400px]"
-              height={700}
-              width={700}
+              className="w-full px-4 pb-1"
+              height={600}
+              width={600}
               src='/images/landing-page/hospital-room.png'
             />
           </div>
@@ -79,7 +79,7 @@ export default function Home() {
                   <path d="M20.25 25.5H21.75V21.75H25.5V20.25H21.75V16.5H20.25V20.25H16.5V21.75H20.25V25.5ZM14.615 29C14.155 29 13.771 28.846 13.463 28.538C13.155 28.23 13.0007 27.8457 13 27.385V14.615C13 14.155 13.1543 13.771 13.463 13.463C13.7717 13.155 14.1557 13.0007 14.615 13H27.385C27.845 13 28.229 13.1543 28.537 13.463C28.845 13.7717 28.9993 14.1557 29 14.615V27.385C29 27.845 28.846 28.229 28.538 28.537C28.23 28.845 27.8457 28.9993 27.385 29H14.615ZM14.615 28H27.385C27.5383 28 27.6793 27.936 27.808 27.808C27.9367 27.68 28.0007 27.539 28 27.385V14.615C28 14.4617 27.936 14.3207 27.808 14.192C27.68 14.0633 27.539 13.9993 27.385 14H14.615C14.4617 14 14.3207 14.064 14.192 14.192C14.0633 14.32 13.9993 14.461 14 14.615V27.385C14 27.5383 14.064 27.6793 14.192 27.808C14.32 27.9367 14.461 28.0007 14.615 28Z" fill="white" />
                 </svg>
 
-                <div className="border-[0.3px] rounded-xl px-2 md:px-5 py-6 md:py-8 grow border-[#475ffd54] bg-[#161D42] -mt-5">
+                <div className="border-[0.3px] rounded-xl px-2 md:px-5 py-6 md:py-8 grow lg:grow-0 border-[#475ffd54] bg-[#161D42] -mt-5">
                   <p className="text-xs text-center">Over 1000+ Hospitals
                     readily available based
                     on your proximity.</p>
@@ -172,19 +172,6 @@ export default function Home() {
           </div>
         </section>
       </section>
-
-
-
-      {/* <section className={cn("fixed bottom-0 w-full z-20 bg-[#161D42] hover:!opacity-100 text-main py-4 !rounded-none text-lg", "font-display")}>
-        <ul className="px-[120px] grid grid-cols-2 gap-x-8 gap-y-2 py-3.5 font-clash sm:flex sm:items-center sm:justify-between xl:py-5 xl:text-xl">
-          <li className="w-max text-white opacity-50">Liberty Assured</li>
-          <li className="w-max text-white opacity-50">Paybox360</li>
-          <li className="w-max text-white opacity-50">VisualPlus</li>
-          <li className="w-max text-white opacity-50">WhisperSMS</li>
-          <li className="w-max text-white opacity-50">WinWise</li>
-          <li className="w-max text-white opacity-50">Getlinked</li>
-        </ul>
-      </section> */}
 
       <Marquee />
     </main>
