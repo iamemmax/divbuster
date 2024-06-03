@@ -53,7 +53,7 @@ export default function Home() {
             </LinkButton>
           </div>
 
-          <div className={cn("relative flex items-center justify-center w-[400px] overflow-hiddenn ml-16",)}>
+          <div className={cn("relative flex items-center justify-center w-full  md:max-w-[400px] overflow-hiddenn md:ml-16",)}>
             {/* <HospitalImage /> */}
             <Image
               alt=""
