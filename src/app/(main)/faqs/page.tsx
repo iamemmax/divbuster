@@ -57,7 +57,6 @@ export default function page() {
 
   return (
     <main className='bg-main text-white size-full py-5 px-6 md:max-lg:px-16 lg:px-12 xl:px-[120px]'>
-      {/* <LandingHeader /> */}
       <div className='flex flex-col lg:flex-row justify-between mt-16'>
         <div className='md:basis-1/2'>
           <button className='capitalize flex justify-center items-center rounded-full pl-6 pr-[78px] py-4 bg-[#34307A] bg-opacity-[20%] text-[14px] font-semibold gap-2'>
@@ -65,7 +64,7 @@ export default function page() {
             FAQs
           </button>
           <div className='gap-3 sm:mt-5 mt-10'>
-            <p className='text-2xl sm:text-[40px] font-medium w-full max-w-[625px] sm:leading-normal'>
+            <p className='text-2xl sm:text-[40px] font-medium w-full max-w-[625px] sm:leading-snug'>
               Get quick help and answers to frequently asked questions.
             </p>
             <p className='max-w-[572px] sm:leading-7 text-xs pt-5 md:text-[19px] text-[#CAC9D4] font-sans'>
@@ -77,7 +76,7 @@ export default function page() {
         <div className=' md:basis-1/2 overflow-hidden max-md:mt-6 max-md:max-w-[400px]'>
           <Image
             src="/images/faqs/box-gradient.png"
-            className='scale-[1.5] max-md:hidden'
+            className='scale-150 max-md:hidden'
             width={500}
             height={500}
             alt=''

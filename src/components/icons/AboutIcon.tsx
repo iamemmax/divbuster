@@ -1,3 +1,4 @@
+import { cn } from "@/utils/classNames";
 import * as React from "react";
 import { SVGProps } from "react";
 const SVGComponent = (props: SVGProps<SVGSVGElement>) => (

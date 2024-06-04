@@ -117,7 +117,7 @@ export default function Home() {
                     <LinkButton
                       className="text bg-transparent px-3 py-2.5 text-white"
                       color="#ffffff"
-                      href={`/`}
+                      href={`/learn-more`}
                     >
                       Learn more{' '}
                       <svg fill="none" height="18" viewBox="0 0 22 18" width="22" xmlns="http://www.w3.org/2000/svg">
@@ -142,7 +142,7 @@ export default function Home() {
                     <LinkButton
                       className="text bg-transparent px-3 py-2.5 text-white"
                       color="#ffffff"
-                      href={`/`}>
+                      href={`/learn-more`}>
                       Learn more{' '}
                       <svg fill="none" height="18" viewBox="0 0 22 18" width="22" xmlns="http://www.w3.org/2000/svg">
                         <path clipRule="evenodd" d="M13.8929 6.52743C14.9511 7.60212 14.9864 9.32226 13.9988 10.44L13.8929 10.5534L11.0063 13.3139C10.7326 13.5918 10.2889 13.5918 10.0152 13.3139C9.76264 13.0573 9.74321 12.6536 9.95695 12.3744L10.0152 12.3074L12.9019 9.54691C13.4205 9.0203 13.4477 8.18371 12.9838 7.62446L12.9019 7.53393L10.0152 4.77348C9.74159 4.49554 9.74159 4.04492 10.0152 3.76698C10.2679 3.51043 10.6653 3.49069 10.9402 3.70778L11.0063 3.76698L13.8929 6.52743Z" fill="white" fillRule="evenodd" />
@@ -158,7 +158,7 @@ export default function Home() {
                 <LinkButton
                   className="text bg-transparent px-3 py-2.5 text-white"
                   color="#ffffff"
-                  href={`/`}>
+                  href={`/learn-more`}>
                   Learn more{' '}
                   <svg fill="none" height="18" viewBox="0 0 22 18" width="22" xmlns="http://www.w3.org/2000/svg">
                     <path clipRule="evenodd" d="M13.8929 6.52743C14.9511 7.60212 14.9864 9.32226 13.9988 10.44L13.8929 10.5534L11.0063 13.3139C10.7326 13.5918 10.2889 13.5918 10.0152 13.3139C9.76264 13.0573 9.74321 12.6536 9.95695 12.3744L10.0152 12.3074L12.9019 9.54691C13.4205 9.0203 13.4477 8.18371 12.9838 7.62446L12.9019 7.53393L10.0152 4.77348C9.74159 4.49554 9.74159 4.04492 10.0152 3.76698C10.2679 3.51043 10.6653 3.49069 10.9402 3.70778L11.0063 3.76698L13.8929 6.52743Z" fill="white" fillRule="evenodd" />
