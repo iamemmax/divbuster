@@ -16,7 +16,7 @@ export default function ProtectedRouteGuard({ children }: ProtectedRouteProps) {
   const pathname = usePathname();
   const { authState } = useAuth();
 
-  const protectedRoutes = ['/dashboard']; // Define your protected routes here
+  const protectedRoutes = ['/test']; // Define your protected routes here
 
   const { isAuthenticated, isLoading } = authState;
 
