@@ -55,7 +55,7 @@
     "react/jsx-sort-props": [
       2,
       {
-        "callbacksLast": true,
+        "callbacksLast": false,
         "ignoreCase": true,
         "noSortAlphabetically": true,
         "shorthandFirst": false,
@@ -69,6 +69,6 @@
       }
     ],
     "tailwindcss/classnames-order": "off",
-    "tailwindcss/no-custom-classname": "off"
+    "tailwindcss/no-custom-classname": "off",
   }
 }
