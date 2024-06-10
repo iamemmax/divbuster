@@ -7,13 +7,14 @@ import Image from 'next/image'
 
 const OTPInput= () => {
     const {
-        register,
         handleSubmit,
-        formState: { errors }
       } = useForm();
     
       const onSubmit = (data: any) => {
-        console.log(data);
+        //console.log(data);
+       if(data){
+        //
+       }
       };
 
 return(

@@ -1,17 +1,10 @@
 "use client"
 
-import Home from "@/app/(main)/page";
-import { Button, ClientOnly, Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, FormError, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/core";
-import { Input2 } from "@/components/core/Input2";
+import { ClientOnly, Dialog, DialogBody, DialogClose, DialogContent, DialogHeader, DialogTitle, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/core";
 
-import { useBooleanStateControl } from "@/hooks";
-import { RightUpArrow } from "@/icons/core";
 import { useRouter } from "next/navigation";
-import { ReactNode, useState } from "react";
-import DisplayedRemitaDetails from "../DisplayedRemitaDetails";
 import { Label } from '@radix-ui/react-label';
 import { Controller, useForm } from "react-hook-form";
-import { convertKebabAndSnakeToTitleCase } from "@/utils/strings";
 
 
 export interface stateOptions {
@@ -28,7 +21,7 @@ interface UseBooleanStateControlProps {
     heading: string;
     subheading: string;
     statedroplist?: stateOptions;
-    children?: React.ReactNode;
+    
 
 
 
@@ -43,7 +36,7 @@ function UserDetailsModal({
     heading,
     subheading,
     statedroplist,
-    children,
+    
 
 }: UseBooleanStateControlProps) {
 
@@ -52,13 +45,15 @@ function UserDetailsModal({
     const {
         control,
         handleSubmit,
-        register,
-        formState: { errors },
+    
+        // formState: { errors },
     } = useForm();
 
 
     const onCreateCompanySubmit = async (data: any) => {
-        console.log(data)
+        if(data){
+            //
+        }
     }
 
 

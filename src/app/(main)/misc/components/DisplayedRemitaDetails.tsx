@@ -1,6 +1,6 @@
 "use client";
 
-import { shortenNumber } from "@/utils/numbers";
+
 import * as React from "react";
 
 interface DisplayedRemitaDetailsProps {
@@ -12,9 +12,9 @@ interface DisplayedRemitaDetailsProps {
 }
 
 const DisplayedRemitaDetails: React.FunctionComponent<DisplayedRemitaDetailsProps> = ({
-  name,
-  Ministry,
-  State,
+  // name,
+  // Ministry,
+  // State,
   
 }) => {
   return (

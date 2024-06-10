@@ -1,23 +1,18 @@
 "use client"
 
-import Home from "@/app/(main)/page";
 import {
-    Button,
     ClientOnly,
-
-    DialogTrigger,
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger
 } from "@/components/core";
 import { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/core/DialogClone";
-import { Input2 } from "@/components/core/Input2";
-import { useBooleanStateControl } from "@/hooks";
-import { RightUpArrow } from "@/icons/core";
+
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Image from 'next/image';
+
 import Link from "next/link";
 import SixMonthIndividualPlanModal from "./SixMonthIndividualPlanModal";
 import DeductionModal from "./DeductionModal";
@@ -74,7 +69,7 @@ function IndividualModal({
     familydurationplantwo,
     familyamountplanone,
     familyamountplantwo,
-    children,
+    
 
 }: UseBooleanStateControlProps) {
 
@@ -254,7 +249,7 @@ const [seventhModal, setSeventhModal] =useState(false);
 
                                                 <div className="">
 
-                                                    <div className="border-[0.3px]  border-[#407BFF]  rounded-lg  border-[#475ffd54] bg-[#1A234c] -mt-5  ">
+                                                    <div className="border-[0.3px]  border-[#407BFF]  rounded-lg   bg-[#1A234c] -mt-5  ">
 
                                                         <div className="pt-[33px] px-[17px] pb-5">
 
@@ -332,7 +327,7 @@ const [seventhModal, setSeventhModal] =useState(false);
 
                                                 <div className="">
 
-                                                    <div className="border-[0.3px]  border-[#407BFF]  rounded-lg  border-[#475ffd54] bg-[#1A234c] -mt-5  ">
+                                                    <div className="border-[0.3px]  border-[#407BFF]  rounded-lg   bg-[#1A234c] -mt-5  ">
 
                                                         <div className="pt-[33px] px-[17px] pb-5">
 
@@ -459,7 +454,7 @@ const [seventhModal, setSeventhModal] =useState(false);
 
                                                 <div className="">
 
-                                                    <div className="border-[0.3px]  border-[#407BFF]  rounded-lg  border-[#475ffd54] bg-[#1A234c] -mt-5  ">
+                                                    <div className="border-[0.3px]  border-[#407BFF]  rounded-lg   bg-[#1A234c] -mt-5  ">
 
                                                         <div className="pt-[33px] px-[17px] pb-5">
 
@@ -555,7 +550,7 @@ const [seventhModal, setSeventhModal] =useState(false);
 
                                                 <div className="">
 
-                                                    <div className="border-[0.3px]  border-[#407BFF]  rounded-lg  border-[#475ffd54] bg-[#1A234c] -mt-5  ">
+                                                    <div className="border-[0.3px]  border-[#407BFF]  rounded-lg  bg-[#1A234c] -mt-5  ">
 
                                                         <div className="pt-[33px] px-[17px] pb-5">
 

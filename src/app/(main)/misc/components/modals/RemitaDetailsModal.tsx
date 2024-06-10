@@ -1,12 +1,8 @@
 "use client"
 
-import Home from "@/app/(main)/page";
-import { Button, ClientOnly, Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/core";
-import { Input2 } from "@/components/core/Input2";
+
+import {  ClientOnly, Dialog, DialogBody, DialogClose, DialogContent,  DialogHeader, DialogTitle} from "@/components/core";
  
-import { useBooleanStateControl } from "@/hooks";
-import { RightUpArrow } from "@/icons/core";
-import { useState } from "react";
 import DisplayedRemitaDetails from "../DisplayedRemitaDetails";
 import OTPInput from "../OtpInput";
 import { useRouter } from "next/navigation";
@@ -41,8 +37,8 @@ interface UseBooleanStateControlProps {
     subheading,
     description,
     subdescription,
-    otp,
-    children,
+    // otp,
+    // children,
 }: UseBooleanStateControlProps) {
 
 

@@ -3,7 +3,7 @@
 
 "use client"
 import React, { ReactNode } from 'react'
-import { Button, ClientOnly, Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/core";
+import { ClientOnly, Dialog, DialogContent } from "@/components/core";
 import { DialogBody } from '@/components/core/DialogClone';
 
 
@@ -33,7 +33,7 @@ function AppSuccessfulModal({
     heading,
     description,
     subdescription,
-    children,
+    // children,
     
 
 }: UseBooleanStateControlProps) {

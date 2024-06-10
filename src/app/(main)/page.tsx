@@ -109,8 +109,8 @@ export default function Home() {
             </p>
 
             <Button
-              className={cn("flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max", "font-display")}
-              onClick={() => setFirstModal(true)} variant="white"
+              className={cn("flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max", "font-display")} variant="white"
+              onClick={() => setFirstModal(true)}
             >
               Get insurance
               <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
@@ -284,7 +284,7 @@ export default function Home() {
 
           subheading="Kindly enter the details below and select the hospitals around you."
           heading="User Details"
-          //@ts-ignore
+          //@ts-expect-error bhyuy
           statedroplist={stateOptions}
           isUserDetailsModalOpen={thirdModal}
           setUserDetailsModal={setThirdModal}

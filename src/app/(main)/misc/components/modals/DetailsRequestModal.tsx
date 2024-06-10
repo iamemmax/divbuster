@@ -1,8 +1,7 @@
 "use client";
 
-import Home from "@/app/(main)/page";
 import {
-  Button,
+  
   ClientOnly,
   Dialog,
   DialogBody,
@@ -14,10 +13,8 @@ import {
   DialogTrigger,
 } from "@/components/core";
 import { Input2 } from "@/components/core/Input2";
-import { useBooleanStateControl } from "@/hooks";
 import { RightUpArrow } from "@/icons/core";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 interface UseBooleanStateControlProps {
   isDetailsRequestModalOpen: boolean;
@@ -36,9 +33,8 @@ function DetailsRequestModal({
   setSecondModal,
   heading,
   subheading,
-  closeButtonReplacement,
   inputTitle,
-  children,
+  
 }: UseBooleanStateControlProps) {
   const Router = useRouter();
 
