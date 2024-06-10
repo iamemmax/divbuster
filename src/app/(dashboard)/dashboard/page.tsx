@@ -7,6 +7,7 @@ import { CaretDown } from '@/components/icons'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { MockTreatmentRecords, TreatmentRecord } from './misc/mock'
 import React from 'react'
+import VisitationChart from '../comp/components/chart'
 // import { useState } from 'react'
 
 export default function page() {
@@ -191,7 +192,7 @@ export default function page() {
             <div className='mt-4 gap-4 flex '>
               <div className='bg-white rounded-10 pt-6 pb-9 pl-6 pr-9 grow'>
                 <TabsContent value='individual'>
-                  Individual
+                  <VisitationChart/>
                 </TabsContent>
                 <TabsContent value='family'>
                   family
