@@ -12,7 +12,6 @@ export default function MainLayout({
   return (
     <>
       <MainHeader />
-
       <main className="relative font-wix-display">{children}</main>
     </>
   );

@@ -11,6 +11,10 @@ interface DesktopMenuLinkProps {
   text: string;
   disabled: boolean;
   isExternal: boolean;
+<<<<<<< HEAD
+=======
+  className?:string
+>>>>>>> c5e893c155537ff82bef4dad7f3880e94da312e8
 }
 
 export function DesktopMenuLink({
@@ -18,6 +22,10 @@ export function DesktopMenuLink({
   link,
   disabled,
   isExternal,
+<<<<<<< HEAD
+=======
+  className
+>>>>>>> c5e893c155537ff82bef4dad7f3880e94da312e8
 }: DesktopMenuLinkProps) {
   const pathname = usePathname();
   const isSelected = pathname === link;
@@ -25,7 +33,11 @@ export function DesktopMenuLink({
   if (isExternal) {
     return (
       <a
+<<<<<<< HEAD
         className="inline-block px-3 py-2.5 text-sm text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 xl:px-6 xl:py-[1.375rem] xl:text-base"
+=======
+        className={cn("inline-block px-3 py-2.5 text-sm min-w-max text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 xl:px-6 xl:py-[1.375rem] xl:text-base, className")}
+>>>>>>> c5e893c155537ff82bef4dad7f3880e94da312e8
         href={link}
         rel="noopener noreferrer"
         target="_blank"
@@ -38,8 +50,13 @@ export function DesktopMenuLink({
   return disabled ? (
     <button
       className={cn(
+<<<<<<< HEAD
         'inline-block cursor-not-allowed px-3 py-2.5 text-sm text-white opacity-50 xl:px-6 xl:py-[1.375rem] xl:text-base',
         isSelected && 'font-bold'
+=======
+        'inline-block cursor-not-allowed px-3 py-2.5 text-sm min-w-max text-white opacity-50 xl:px-6 xl:py-[1.375rem] xl:text-base',
+        isSelected && 'font-bold', className
+>>>>>>> c5e893c155537ff82bef4dad7f3880e94da312e8
       )}
       disabled
     >
@@ -48,8 +65,13 @@ export function DesktopMenuLink({
   ) : (
     <Link
       className={cn(
+<<<<<<< HEAD
         'inline-block px-3 py-2.5 text-sm text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 xl:px-6 xl:py-[1.375rem] xl:text-base',
         isSelected && 'font-bold'
+=======
+        'inline-block px-3 py-2.5 text-sm text-white transition-all min-w-max duration-300 ease-in-out hover:-translate-y-0.5 xl:px-6 xl:py-[1.375rem] xl:text-base',
+        isSelected && 'font-bold', className
+>>>>>>> c5e893c155537ff82bef4dad7f3880e94da312e8
       )}
       href={link}
     >
@@ -124,6 +146,10 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
                 isExternal={isExternal}
                 link={link}
                 text={text}
+<<<<<<< HEAD
+=======
+                className="!text-xs"
+>>>>>>> c5e893c155537ff82bef4dad7f3880e94da312e8
               />
             </li>
           );

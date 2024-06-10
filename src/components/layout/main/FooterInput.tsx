@@ -19,7 +19,11 @@ export const FooterInput: React.FunctionComponent = () => {
   };
 
   return (
+<<<<<<< HEAD
     <div className="mt-1 flex flex-col md:basis-1/2 md:pl-5  lg:ml-[0px]">
+=======
+    <div className="mt-1 flex flex-col md:basis-1/2 md:pl-5  lg:ml-0">
+>>>>>>> c5e893c155537ff82bef4dad7f3880e94da312e8
      
         
           <p className=" mt-12 font-sans text-xl font-normal text-white ">
@@ -32,7 +36,11 @@ export const FooterInput: React.FunctionComponent = () => {
        
     
       <form
+<<<<<<< HEAD
         className="mb-8 flex max-w-[100px] items-stretch rounded-lg transition duration-300 ease-in-out focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 md:max-w-[27.4375rem] md:flex-row md:gap-[0px] lg:gap-[0px]"
+=======
+        className="mb-8 flex max-w-[100px] items-stretch rounded-lg transition duration-300 ease-in-out focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 md:max-w-[27.4375rem] md:flex-row md:gap-0 lg:gap-0"
+>>>>>>> c5e893c155537ff82bef4dad7f3880e94da312e8
         onSubmit={handleSubmit}
       >
         <Input

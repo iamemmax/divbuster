@@ -15,27 +15,27 @@ const FooterSection = () => {
                 <section className='flex flex-col md:flex-row md:items-center gap-6 w-full max-w-[1000px] text-white bg-white/10 p-4 md:px-8 rounded-lg'>
                     <div className='max-md:hidden'>
                         <Image
-                            width={50}
+                            alt='footer-icon'
                             height={50}
                             src='/images/landing-page/footer-icon.png'
-                            alt='footer-icon'
+                            width={50}
 
                         />
                     </div>
                     <div>
                         <h6 className='flex items-center gap-2 md:text-lg'>
                             <Image
-                                width={30}
-                                height={30}
-                                src='/images/landing-page/footer-icon.png'
                                 alt='footer-icon'
                                 className='md:hidden'
+                                height={30}
+                                src='/images/landing-page/footer-icon.png'
+                                width={30}
                             />
                             Need to get in contact with us ?
                         </h6>
-                        <p className='text-helper-dark text-xs md:text-sm'>For direct assistance and support, contact us via phone call on <Link href="tel:02013300170" className='text-white'>02013300170.</Link> or send an email</p>
+                        <p className='text-helper-dark text-xs md:text-sm'>For direct assistance and support, contact us via phone call on <Link className='text-white' href="tel:02013300170">02013300170.</Link> or send an email</p>
                     </div>
-                    <Button variant='white' className='w-max md:ml-auto !outline-[1.5px] outline-white outline-offset-4 '>
+                    <Button className='w-max md:ml-auto !outline-[1.5px] outline-white outline-offset-4 ' variant='white'>
                         Send an email
                         <DoubleArrow />
                     </Button>
@@ -86,44 +86,44 @@ const FooterSection = () => {
 
 
                 <section className='flex items-center justify-start gap-4 w-full max-w-[1000px] max-md:px-6 md:mt-6'>
-                    <Link href="https://www.twitter.com/" className='p-1 rounded-md bg-white/20'>
+                    <Link className='p-1 rounded-md bg-white/20' href="https://www.twitter.com/">
                         <Image
-                            width={22}
+                            alt='twitter'
                             height={22}
                             src='/images/landing-page/socials-twitter.png'
-                            alt='twitter'
+                            width={22}
                         />
                     </Link>
-                    <Link href="https://linkedin.com/" className='p-1 rounded-md bg-white/20'>
+                    <Link className='p-1 rounded-md bg-white/20' href="https://linkedin.com/">
                         <Image
-                            width={22}
+                            alt='linkedin'
                             height={22}
                             src='/images/landing-page/socials-linkedin.png'
-                            alt='linkedin'
+                            width={22}
                         />
                     </Link>
-                    <Link href="https://youtube.com/" className='p-1 rounded-md bg-white/20'>
+                    <Link className='p-1 rounded-md bg-white/20' href="https://youtube.com/">
                         <Image
-                            width={22}
+                            alt='linkedin'
                             height={22}
                             src='/images/landing-page/socials-youtube.png'
-                            alt='linkedin'
+                            width={22}
                         />
                     </Link>
-                    <Link href="https://facebook.com/" className='p-1 rounded-md bg-white/20'>
+                    <Link className='p-1 rounded-md bg-white/20' href="https://facebook.com/">
                         <Image
-                            width={22}
+                            alt='facebook'
                             height={22}
                             src='/images/landing-page/socials-facebook.png'
-                            alt='facebook'
+                            width={22}
                         />
                     </Link>
-                    <Link href="https://instagram.com/" className='p-1 rounded-md bg-white/20'>
+                    <Link className='p-1 rounded-md bg-white/20' href="https://instagram.com/">
                         <Image
-                            width={22}
+                            alt='instagram'
                             height={22}
                             src='/images/landing-page/socials-instagram.png'
-                            alt='instagram'
+                            width={22}
                         />
                     </Link>
 
@@ -137,10 +137,10 @@ const FooterSection = () => {
                         Copyright &copy; 2024 Liberty assured. All rights reserved
                     </small>
                     <div className='flex items-center gap-4 lg:gap-12 text-white/80 text-sm'>
-                        <Link href="#" className='underline'>
+                        <Link className='underline' href="#">
                             Privacy Policy
                         </Link>
-                        <Link href="#" className='underline'>
+                        <Link className='underline' href="#">
                             Terms &amp; Conditions
                         </Link>
 
@@ -150,14 +150,14 @@ const FooterSection = () => {
 
 
             <div className="relative h-[12.5vh] max-h-[205px] w-screen mt-4 md:mt-8 md:border-t-[0.15px] border-t-white/30 ">
-                <div className="absolute w-full top-0 left-0 bottom-0 right-0">
+                <div className="absolute w-full inset-0">
                     <Image
-                        src='/images/landing-page/footer-pattern.svg'
+                        alt='footer-pattern'
+                        className='py-2 md:py-3'
                         layout="fill"
                         objectFit="cover"
                         quality={100}
-                        alt='footer-pattern'
-                        className='py-2 md:py-3'
+                        src='/images/landing-page/footer-pattern.svg'
                     />
                 </div>
             </div>

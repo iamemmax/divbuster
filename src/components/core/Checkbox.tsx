@@ -21,7 +21,7 @@ const Checkbox = React.forwardRef<
       className={cn('flex items-center justify-center text-current')}
     >
       <svg
-        className="h-3 w-3"
+        className="size-3"
         viewBox="0 0 256 256"
         xmlns="http://www.w3.org/2000/svg"
       >

@@ -15,10 +15,6 @@ const config: Config = {
         sans: ['var(--font-sans)'],
         heading: ['var(--font-heading)'],
         display: ['var(--font-display)'],
-        DMSans: ['var(--font-display)'],
-
-
-
       },
       fontSize: {
         xxs: '.625rem',

@@ -272,3 +272,11 @@ body {
   border-bottom: 50px solid transparent; /* Adjust the bottom-right corner angle */
   width: 0;
 }
+
+.marquee {
+  animation: scroll 15s linear infinite;
+}
+
+.marquee-container:hover .marquee {
+  animation-play-state: paused;
+}

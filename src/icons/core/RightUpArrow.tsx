@@ -2,11 +2,11 @@ import * as React from "react";
 import { SVGProps } from "react";
 const RightUpArrow = (props: SVGProps<SVGSVGElement>) => (
     <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={15}
+        fill="none"
         height={16}
         viewBox="0 0 15 16"
-        fill="none"
+        width={15}
+        xmlns="http://www.w3.org/2000/svg"
         {...props}
     >
         <path

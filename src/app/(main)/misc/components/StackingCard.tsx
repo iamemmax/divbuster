@@ -48,21 +48,21 @@ const StackingCard: React.FC<TestCardProps> = ({ i, title, content, image, link,
 
     return (
 
-        <div ref={container} className="h-screen flex items-center justify-center sticky top-0">
+        <div className="h-screen flex items-center justify-center sticky top-0" ref={container}>
             <motion.div
+                className="flex max-md:flex-col max-md:mx-2.5 relative -top-1/4 h-[500px] md:h-[480px] w-[1000px] xl:w-[1100px] rounded-[3rem] px-2.5 md:px-10 origin-top"
                 style={{ backgroundColor: color, scale, top: `calc(-5vh + ${i * 25}px)` }}
-                className="flex max-md:flex-col max-md:mx-2.5 relative top-[-25%] h-[500px] md:h-[480px] w-[1000px] xl:w-[1100px] rounded-[3rem] px-2.5 md:px-10 transform origin-top"
             >
                 <div className='flex flex-col gap-6 text-white py-8 lg:py-16 px-10 md:pl-20 xl:pl-24 h-full max-h-[30rem]'>
                     <h3 className={cn("font-display", "text-3xl lg:text-[2.35rem] font-semibold max-w-[12ch]")}>{title}</h3>
                     <p className={cn('text-[#BACAFC] text-xs md:text-sm xl:text-base', i == 1 && "text-white",)}>{content}</p>
-                    <LinkButton href={link} target="_blank"
+                    <LinkButton className={cn("flex items-center justify-between mt-auto text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 rounded-full max-w-max", "font-display")} href={link}
+                        target="_blank"
                         variant={i == 1 ? "default" : "white"}
-                        className={cn("flex items-center justify-between mt-auto text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 rounded-full max-w-max", "font-display")}
                     >
                         Get loan
                         <span className={cn("flex items-center justify-center p-2 rounded-full bg-main-light ml-10", i == 1 && "bg-white")}>
-                            <RightUpArrow width={12} height={12} fill={i == 1 ? "dark-blue" : "white"} />
+                            <RightUpArrow fill={i == 1 ? "dark-blue" : "white"} height={12} width={12} />
                         </span>
                     </LinkButton>
                 </div>
@@ -73,10 +73,10 @@ const StackingCard: React.FC<TestCardProps> = ({ i, title, content, image, link,
                     i == 2 && "md:translate-y-[5%] md:scale-[0.86] ",
                 )}>
                     <Image
-                        src={image}
                         alt={title}
-                        width={200}
                         height={600}
+                        src={image}
+                        width={200}
                         layout="responsive"
                     // className='object-cover'
                     />

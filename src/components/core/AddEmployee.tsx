@@ -9,7 +9,7 @@ interface AddPayDetailsProps {
 const AddEmployee = () => {
   return (
     <Button className="flex w-full flex-row items-center justify-center rounded-lg bg-main-solid px-3 py-2 md:w-44">
-      <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-full border border-dashed border-white">
+      <div className="mr-2 flex size-6 items-center justify-center rounded-full border border-dashed border-white">
         <svg
           fill="none"
           height={9}
@@ -36,7 +36,7 @@ const AddPayDetails = ({ onClickAddPay }: AddPayDetailsProps) => {
       className="flex w-full flex-row items-center justify-center rounded-lg border-[0.5px] border-[#032282] px-3 py-2 md:w-44"
       onClick={onClickAddPay}
     >
-      <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-full border border-dashed border-main-solid">
+      <div className="mr-2 flex size-6 items-center justify-center rounded-full border border-dashed border-main-solid">
         <svg
           fill="none"
           height={9}

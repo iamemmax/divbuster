@@ -19,7 +19,7 @@ export function ComingSoon() {
 
     return (
         <>
-            <div className='absolute w-full h-full bg-black/80 backdrop-blur-md z-50'>
+            <div className='absolute size-full bg-black/80 backdrop-blur-md z-50'>
                 <AnimatePresence>
                     <div className='flex flex-col items-center h-full justify-center'>
                         <motion.div
