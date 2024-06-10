@@ -8,6 +8,7 @@ import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { MockTreatmentRecords, TreatmentRecord } from './misc/mock'
 import React from 'react'
 import VisitationChart from '../comp/components/chart'
+import Link from 'next/link'
 // import { useState } from 'react'
 
 export default function page() {
@@ -156,13 +157,13 @@ export default function page() {
                 <div>
                   <h1 className='flex justify-center items-center text-lg font-medium'>1</h1>
                   <p className='mt-2 mb-0.5 text-[#FFFFFFCC] font-sans font-light flex justify-center text-xxs items-center '>Individual Plan</p>
-                  <button className='rounded-full px-5 py-2 bg-[#FFFFFF4D]'>View details</button>
+                  <Link href='/plan-details'> <button className='rounded-full px-5 py-2 bg-[#FFFFFF4D]'>View details</button></Link>
                 </div>
                 <div className='border-[.0496px] border-[#D6D6D6] h-16'></div>
                 <div>
                   <h1 className='flex justify-center items-center text-lg font-medium'>0</h1>
                   <p className='mt-2 mb-0.5 text-[#FFFFFFCC] font-sans font-light flex justify-center text-xxs items-center '>Family Plan</p>
-                  <button className='rounded-full px-5 py-2 bg-[#FFFFFF4D]'>View details</button>
+                  <Link href='/plan-details'> <button className='rounded-full px-5 py-2 bg-[#FFFFFF4D]'>View details</button></Link>
                 </div>
               </div>
               <div className='bg-[#19224A] rounded-10 gap-4 pl-6 py-9 flex pr-[26px]'>
@@ -192,7 +193,7 @@ export default function page() {
             <div className='mt-4 gap-4 flex '>
               <div className='bg-white rounded-10 pt-6 pb-9 pl-6 pr-9 grow'>
                 <TabsContent value='individual'>
-                  <VisitationChart/>
+                  <VisitationChart />
                 </TabsContent>
                 <TabsContent value='family'>
                   family
@@ -262,7 +263,7 @@ export default function page() {
               </div>
               <div className='flex text-[#1B1687] py-3 pl-4 border-[.2992px] border-[#1B1687] rounded-lg '>
                 <p className='font-sans font-medium '>Filter</p>
-                <CaretDown className="-rotate-180" />
+                <CaretDown />
               </div>
             </div>
             <button className='rounded-full capitalize bg-[#1B1687] text-white py-3 px-12'>export</button>

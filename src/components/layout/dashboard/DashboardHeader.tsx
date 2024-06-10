@@ -4,6 +4,7 @@
 import Home from '@/app/(dashboard)/comp/icons/home';
 import Logo from '@/app/(dashboard)/comp/icons/logo';
 import Notifications from '@/app/(dashboard)/comp/icons/notification';
+import Link from 'next/link';
 
 import * as React from 'react';
 
@@ -23,9 +24,9 @@ export function DashboardHeader() {
         </div>
         <div className='flex'>
           <div className='flex gap-3 pr-6'>
-            <div className='rounded-full bg-[#FFFFFF4D] p-2'>
+            <Link href='/' className='rounded-full bg-[#FFFFFF4D] p-2'>
               <Home />
-            </div>
+            </Link>
             <div className='rounded-full bg-[#FFFFFF4D] p-2'>
               <Notifications />
             </div>
