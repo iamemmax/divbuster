@@ -10,6 +10,9 @@ interface UseBooleanStateControlProps {
   setSixMonthIndividualPlanModal: React.Dispatch<
     React.SetStateAction<boolean>
   >;
+  
+  setSeventhModal:React.Dispatch<React.SetStateAction<boolean>>
+  
 
   heading: string;
   description: string;
@@ -25,6 +28,8 @@ function SixMonthIndividualPlanModal({
 
   isSixMonthIndividualPlanModalOpen,
   setSixMonthIndividualPlanModal,
+  setSeventhModal,
+
   heading,
   description,
   subdescription,
@@ -36,7 +41,7 @@ function SixMonthIndividualPlanModal({
 
   return (
 
-    <div className="rounded-xl">
+    <div className="rounded-xl" >
 
 
 
@@ -82,17 +87,36 @@ function SixMonthIndividualPlanModal({
                   </div>
 
 
-                  <div className=''>
 
-                    <div className="">
 
-                      {children} 
+<div className='w-full flex justify-center items-center gap-[1rem] mt-[1rem] text-sm'>
 
-                    </div>
+ <button
+          className="rounded-3xl border-[0.3px] text-[#fff]  py-[0.9rem] w-[10rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none"
+          onClick={()=>{
+            setSixMonthIndividualPlanModal(false)
+            
+          
+          }}
+        >
+          Decline
+        </button>
 
-                   
 
-                  </div>
+
+        <button
+          className="rounded-3xl bg-[#fff] text-[#1B1687]  py-[0.9rem] w-[10rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none "
+          onClick={()=>{
+          
+           setSeventhModal(true)
+          
+          }}
+        >
+          Accept
+        </button>
+
+        </div>
+
 
 
                 </div>

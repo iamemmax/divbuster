@@ -16,17 +16,69 @@ import toast from "react-hot-toast";
 // import RemitaDetails from "@/components/RemitaDetails";
 import { useRouter } from "next/navigation";
 import { useBooleanStateControl } from "@/hooks";
+import RemitaDetailsModal from "./misc/components/modals/RemitaDetailsModal";
+import UserDetailsModal from "./misc/components/modals/UserDetailsModal";
+import IndividualModal from "./misc/components/modals/IndividualPlanModal";
 
 
 export default function Home() {
 
 
 
-  const {
-    state: isSuccessDetailRequestModalOpen,
-    setState: setSuccessDetailRequestModalState,
-    setTrue: openSuccessModal,
-  } = useBooleanStateControl();
+  
+  const [firstModal, setFirstModal] = useState(false)
+  const [secondModal, setSecondModal] = useState(false)
+  const [thirdModal, setThirdModal] = useState(false);
+  const [fourthModal, setFourthModal] = useState(false);
+  
+
+  const stateOptions = [
+    {
+      name: '1',
+      value: "Lagos",
+
+    },
+
+    {
+      name: '2',
+      value: "Ekiti",
+
+
+    },
+
+    {
+      name: '3',
+      value: "Osun",
+
+    },
+
+    {
+      name: '4',
+      value: "Arizona",
+
+    },
+
+    {
+      name: '5',
+      value: "Oyo",
+
+    },
+
+    {
+      name: '6',
+      value: "Ogun",
+
+    },
+
+    {
+      name: '7',
+      value: "Abuja",
+
+
+    }
+
+
+  ];
 
   return (
     <main className="wax-w-screen md:pb-20  bg-main min-h-[100vh]">
@@ -61,29 +113,22 @@ export default function Home() {
               </span>
             </p>
 
+            <div className="mt-6 md:mt-12">
+              {/* {children} */}
+              <button
+                className=" flex bg-[#fff]  text-[#032282] items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max font-display"
+                onClick={() => setFirstModal(true)}
+              >
+                Get Insurance
 
-            <DetailsRequestModal
-              subheading="Kindly enter your Phone number to process your appplication"
-              inputTitle={""}
-              heading="Details Request"
-              isDetailsRequestModalOpen={isSuccessDetailRequestModalOpen}
-              setDetailsRequestModal={setSuccessDetailRequestModalState}
-            >
-             <Link 
-             href="/remita-details/"
-             >
-         
-        <button 
-        className=" font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
-        shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
-    >
-          Continue
-        </button>
-      
-           </Link>
+            <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
+                <RightUpArrow className="" height={12} width={12} />
+              </span>
+                
+              </button>
+            </div>
 
-              
-            </DetailsRequestModal>
+
 
 
           </div>
@@ -200,16 +245,82 @@ export default function Home() {
 
 
 
-      {/* <section className={cn("fixed bottom-0 w-full z-20 bg-[#161D42] hover:!opacity-100 text-main py-4 !rounded-none text-lg", "font-display")}>
-        <ul className="px-[120px] grid grid-cols-2 gap-x-8 gap-y-2 py-3.5 font-clash sm:flex sm:items-center sm:justify-between xl:py-5 xl:text-xl">
-          <li className="w-max text-white opacity-50">Liberty Assured</li>
-          <li className="w-max text-white opacity-50">Paybox360</li>
-          <li className="w-max text-white opacity-50">VisualPlus</li>
-          <li className="w-max text-white opacity-50">WhisperSMS</li>
-          <li className="w-max text-white opacity-50">WinWise</li>
-          <li className="w-max text-white opacity-50">Getlinked</li>
-        </ul>
-      </section> */}
+
+      {firstModal &&
+        <DetailsRequestModal
+          subheading="Kindly enter your Phone number to process your appplication"
+          inputTitle={""}
+          heading="Details Request"
+          isDetailsRequestModalOpen={firstModal}
+          setDetailsRequestModal={setFirstModal}
+          setSecondModal={setSecondModal}
+        />}
+
+
+
+      {secondModal &&
+
+        <RemitaDetailsModal
+
+          subheading="Kindly confirm your remita details and dial the USSD code for OTP verification"
+          heading="Remita Details"
+          description="Kindly dial *123*304# on your phone to get an OTP."
+          subdescription="Kindly enter the OTP code has sent to your number 0814****754."
+          isRemitaDetailsModalOpen={secondModal}
+          setRemitaDetailsModal={setSecondModal}
+          setThirdModal={setThirdModal}
+          otp={0}
+        />
+
+
+      }
+
+
+      {thirdModal &&
+
+        <UserDetailsModal
+
+
+          subheading="Kindly enter the details below and select the hospitals around you."
+          heading="User Details"
+          //@ts-ignore
+          statedroplist={stateOptions}
+          isUserDetailsModalOpen={thirdModal}
+          setUserDetailsModal={setThirdModal}
+          setFourthModal={setFourthModal}
+
+        >
+
+
+        </UserDetailsModal>
+      }
+
+
+      {fourthModal &&
+
+        <IndividualModal
+
+          subheading="Choose Your Plan"
+          heading="Choose your Plan"
+          description="Individual plan gives you access to health cover for you only while the family plan covers for you and your family"
+          Tab1="Individual"
+          Tab2="Family"
+          individualdurationplanone="6-Month Plan"
+          individualamountplanone="₦3,000"
+          individualamountplantwo="₦12,000"
+          individualdurationplantwo="12-Month Plan"
+          familydurationplanone="6-Month Plan"
+          familydurationplantwo="12-Month Plan"
+          familyamountplanone="₦3,000"
+          familyamountplantwo="₦12,000"
+          isIndividualModalOpen={fourthModal}
+          setIndividualModal={setFourthModal}
+        
+        >
+        </IndividualModal>
+
+      }
+
     </main>
 
 

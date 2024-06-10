@@ -19,6 +19,7 @@ interface UseBooleanStateControlProps {
     setRemitaDetailsModal: React.Dispatch<
         React.SetStateAction<boolean>
     >;
+    setThirdModal: React.Dispatch<React.SetStateAction<boolean>>;
     heading: string;
     subheading: string;
     description: string;
@@ -35,6 +36,7 @@ interface UseBooleanStateControlProps {
 
     isRemitaDetailsModalOpen,
     setRemitaDetailsModal,
+    setThirdModal,
     heading,
     subheading,
     description,
@@ -79,10 +81,6 @@ onOpenChange = {setRemitaDetailsModal}>
   <DialogTitle className="text-[#fff]">
     {heading}
   </DialogTitle>
-
- {/* <DialogClose className="" onClick={()=>setRemitaDetailsModal(false)}>Close</DialogClose> */}
-
- {/* <DialogClose>Close</DialogClose> */}
 
 <DialogClose className="rounded-full">
   <button onClick={handleClose}>close</button>
@@ -136,11 +134,26 @@ onOpenChange = {setRemitaDetailsModal}>
 </div>
 
 
-<div className="mt-6 md:mt-12">
+{/* <div className="mt-6 md:mt-12">
 
 {children}
 
-</div>
+</div> */}
+
+
+<button 
+        className=" mt-10 font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
+        shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+
+        onClick={() => {
+setThirdModal(true)
+setRemitaDetailsModal(false)
+
+
+        }}
+    >
+          Continue
+        </button>
 
 
 

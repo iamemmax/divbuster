@@ -24,10 +24,11 @@ interface UseBooleanStateControlProps {
     setUserDetailsModal: React.Dispatch<
         React.SetStateAction<boolean>
     >;
+    setFourthModal: React.Dispatch<React.SetStateAction<boolean>>;
     heading: string;
     subheading: string;
     statedroplist?: stateOptions;
-    children?:React.ReactNode;
+    children?: React.ReactNode;
 
 
 
@@ -38,6 +39,7 @@ function UserDetailsModal({
 
     isUserDetailsModalOpen,
     setUserDetailsModal,
+    setFourthModal,
     heading,
     subheading,
     statedroplist,
@@ -113,25 +115,25 @@ function UserDetailsModal({
         { name: 'AdeKunle', value: 'ADEKUNLE' },
         { name: 'Etiosa', value: 'ETIOSA' },
         { name: 'Yaba', value: 'YABA' },
-      ];
+    ];
 
 
-      const hosipitalOptions = [
+    const hosipitalOptions = [
         { name: 'Saint Luke Hospital', value: 'SAINT-LUKE-HOSPITAL' },
         { name: 'Saint Patriach Hospital', value: 'SAINT-PATRIACH-HOSPITAL' },
         { name: 'Yaba Hospital', value: 'YABA-HOSPITAL' },
         { name: 'Mushin Hospital', value: 'Mushin-HOSPITAL' },
-      ];
+    ];
 
-     
-const Router = useRouter();
 
-const handleClose =()=> {
+    const Router = useRouter();
 
-setUserDetailsModal(false)
-Router.back();
+    const handleClose = () => {
 
-}
+        setUserDetailsModal(false)
+        Router.back();
+
+    }
 
 
     return (
@@ -155,11 +157,10 @@ Router.back();
                                 {heading}
                             </DialogTitle>
 
-                            {/* <DialogClose className="" onClick={() => setUserDetailsModal(false)}>Close</DialogClose> */}
 
                             <DialogClose className="rounded-full">
                                 <button onClick={handleClose}>close</button>
-                               </DialogClose>
+                            </DialogClose>
 
                         </DialogHeader>
 
@@ -188,7 +189,7 @@ Router.back();
                                             State
                                         </Label>
 
-                                        <Controller 
+                                        <Controller
                                             control={control}
                                             name="state"
                                             render={({ field: { onChange, value, ref } }) => (
@@ -200,7 +201,7 @@ Router.back();
                                                         {stateOptions?.map(({ name, value }) => {
 
                                                             return (
-                                                                
+
                                                                 <SelectItem key={name} value={value}>
                                                                     {value}
                                                                 </SelectItem>
@@ -228,11 +229,11 @@ Router.back();
                                         </Label>
 
                                         <Controller
-                                        
+
                                             control={control}
                                             name="L.G.A"
-                                            render={({ field: { onChange, value, ref  } }) => (
-                                                <Select  value={value} onValueChange={onChange} >
+                                            render={({ field: { onChange, value, ref } }) => (
+                                                <Select value={value} onValueChange={onChange} >
                                                     <SelectTrigger id="lga" ref={ref} className="bg-[#2D3456] text-[#fff]">
                                                         <SelectValue placeholder="Enter L.G.A" />
                                                     </SelectTrigger>
@@ -291,12 +292,25 @@ Router.back();
 
                             </form>
 
-                            <div className="mt-6 md:mt-12">
+                            {/* <div className="mt-6 md:mt-12">
 
                             {children}
 
-                            </div>
-                            
+                            </div> */}
+
+                            <button
+                                className=" mt-10 font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
+        shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+
+                                onClick={() => {
+
+                                    setFourthModal(true);
+                                    setUserDetailsModal(false);
+                                }}
+                            >
+                                Continue
+                            </button>
+
                         </DialogBody>
 
 

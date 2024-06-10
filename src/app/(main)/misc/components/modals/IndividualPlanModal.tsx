@@ -19,6 +19,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from 'next/image';
 import Link from "next/link";
+import SixMonthIndividualPlanModal from "./SixMonthIndividualPlanModal";
+import DeductionModal from "./DeductionModal";
+import AppSuccessfulModal from "./AppSuccessfulModal";
 
 
 
@@ -60,6 +63,7 @@ function IndividualModal({
     heading,
     subheading,
     description,
+    
     Tab1,
     Tab2,
     individualdurationplanone,
@@ -73,6 +77,11 @@ function IndividualModal({
     children,
 
 }: UseBooleanStateControlProps) {
+
+const [fifthModal, setFifthModal] = useState(false);
+const [sixthModal, setSixthModal] =useState(false);
+const [seventhModal, setSeventhModal] =useState(false);
+
 
 
     const firstMonthPlan = [
@@ -141,7 +150,7 @@ function IndividualModal({
 
 
 
-    const handleClose =() =>{
+    const handleClose = () => {
 
         setIndividualModal(false);
 
@@ -178,22 +187,9 @@ function IndividualModal({
                                 </DialogTitle>
 
 
-
-                                {/* <DialogClose className="rounded-full" onClick={() => setIndividualModal(false)}>
-                                    Close
-                                </DialogClose> */}
-
-                                {/* <DialogClose><button onClick={() => router.back()}></button></DialogClose> */}
-
-                                {/* <DialogClose className="rounded-full" onClick={() => {setIndividualModal(false) 
-                                console.log("close button clicked")
-
-                                }}>Close</DialogClose> */}
-
-
-                               <DialogClose className="rounded-full">
-                                <button onClick={handleClose}>close</button>
-                               </DialogClose>
+                                <DialogClose className="rounded-full">
+                                    <button onClick={handleClose}>close</button>
+                                </DialogClose>
 
                             </DialogHeader>
                         </div>
@@ -297,13 +293,21 @@ function IndividualModal({
                                                         <div className="border border-[#407BFF] rounded-10 mt-5 flex justify-center items-center w-full py-5 ">
 
 
-                                                            <div className="">
-
-                                                                {children}
-
-                                                            </div>
-
                                                           
+
+                                                            <button
+                                                                className=" rounded-3xl font-display focus:shadow-outline w-[10rem]  bg-[#fff] p-4 py-2 font-semibold tracking-wide
+            shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                                                                onClick={() => {
+                                                                    setFifthModal(true)
+                                                                
+
+                                                                }}
+                                                            >
+                                                                Get Insurance
+                                                            </button>
+
+
                                                         </div>
 
 
@@ -369,15 +373,25 @@ function IndividualModal({
                                                         <div className="border border-[#407BFF] rounded-10 mt-5 flex justify-center items-center w-full py-5 ">
 
 
-                                                            <div className="">
+                                                            {/* <div className="">
 
                                                                 {children}
 
-                                                            </div>
+                                                            </div> */}
 
 
+                                                            <button
+                                                                className=" rounded-3xl font-display focus:shadow-outline w-[10rem]  bg-[#fff] p-4 py-2 font-semibold tracking-wide
+            shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                                                                onClick={() => {
+                                                                    setFifthModal(true)
+                                                                 
+                                                                }}
+                                                            >
+                                                                Get Insurance
+                                                            </button>
 
-                                                          
+
 
                                                         </div>
 
@@ -493,11 +507,23 @@ function IndividualModal({
 
 
 
-                                                            <div className="">
+                                                            {/* <div className="">
 
                                                                 {children}
 
-                                                            </div>
+                                                            </div> */}
+
+                                                            <button
+                                                                className=" rounded-3xl font-display focus:shadow-outline w-[10rem]  bg-[#fff] p-4 py-2 font-semibold tracking-wide
+            shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                                                                onClick={() => {
+                                                                    setFifthModal(true)
+                                                                    
+
+                                                                }}
+                                                            >
+                                                                Get Insurance
+                                                            </button>
 
 
 
@@ -568,11 +594,24 @@ function IndividualModal({
                                                         <div className="border border-[#407BFF] rounded-10 mt-5 flex justify-center items-center w-full py-5 ">
 
 
-                                                            <div className="">
+                                                            {/* <div className="">
 
                                                                 {children}
 
-                                                            </div>
+                                                            </div> */}
+
+
+                                                            <button
+                                                                className=" rounded-3xl font-display focus:shadow-outline w-[10rem]  bg-[#fff] p-4 py-2 font-semibold tracking-wide
+            shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                                                                onClick={() => {
+                                                                    setFifthModal(true)
+                                                                    
+
+                                                                }}
+                                                            >
+                                                                Get Insurance
+                                                            </button>
 
 
                                                             {/* <button
@@ -643,6 +682,75 @@ shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outli
 
                 </Dialog>
             </ClientOnly>
+
+
+
+
+            {fifthModal && 
+
+<SixMonthIndividualPlanModal
+
+heading="6-Month Individual Plan"
+description="You have selected a 6-Month health cover."
+subdescription="A monthly premium of "
+amount="₦3,000"
+isSixMonthIndividualPlanModalOpen={fifthModal}
+setSixMonthIndividualPlanModal={setFifthModal}
+ setSeventhModal={setSixthModal}
+
+
+
+
+
+/>
+ }
+
+{sixthModal && 
+
+
+
+<DeductionModal
+
+
+heading="Deduction Acknowledgment"
+
+description={
+  <>
+    Kindly know that a <span style={{ color: "white" }}>₦3,000 </span>
+
+    monthly premium will be auto-deducted from your salary for your health insurance package
+  </>
+}
+
+subdescription="This also qualifies you for the lifestyle reward of N5m"
+isDeductionModalOpen={sixthModal}
+setDeductionModal={setSixthModal}
+ setSeventhModal={setSeventhModal}
+ 
+
+
+
+/>
+
+}
+
+
+{seventhModal && 
+
+<AppSuccessfulModal
+
+heading="Application Successful"
+description="Your insurance application has been received and is being processed. You will soon receive an insurance code for use at clinics, pharmarcies, or hospitals"
+subdescription="Thank you for choosing Liberty life."
+isAppSuccessfulModalOpen={seventhModal}
+setAppSuccessfulModal={setSeventhModal}
+
+/>
+
+
+}
+
+
 
 
         </div >
