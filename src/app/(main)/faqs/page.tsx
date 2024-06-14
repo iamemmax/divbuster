@@ -99,7 +99,7 @@ export default function page() {
               
               return (
                 <Collapsible key={index}>
-                  <CollapsibleTrigger className='flex items-center text-left justify-between bg-[#FFFFFF1A] p-4 md:p-7 rounded-lg text-xs md:text-[15px] font-normal w-full font-sans 'onClick={() => setIsOpen(!isOpen)} >
+                  <CollapsibleTrigger className='flex items-center text-left justify-between bg-[#FFFFFF1A] opacity-[] p-4 md:p-7 rounded-lg text-xs md:text-[15px] font-normal w-full font-sans 'onClick={() => setIsOpen(!isOpen)} >
                     {faq.question}
                     <CaretDown className={cn(isOpen && "rotate-180")} />
                   </CollapsibleTrigger>

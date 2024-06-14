@@ -131,11 +131,11 @@ const VisitationChart = () => {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem>
-                            <div className='border-[0.2px] border-[#1D1888] rounded-10 p-3 leading-10'>
-                                <p className='rounded-full bg-[#F0F4FF]  pl-6 pr-16'>Today</p>
-                                <p>This week</p>
-                                <p>This month</p>
-                                <p>This year</p>
+                            <div className='border-[0.2px] border-[#1D1888] rounded-10 p-3 leading-7'>
+                                <p className='rounded-full bg-[#F0F4FF]  pl-6 pr-16 text-xxs'>Today</p>
+                                <p className='text-xxs'>This week</p>
+                                <p className='text-xxs'>This month</p>
+                                <p className='text-xxs'>This year</p>
                             </div>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
