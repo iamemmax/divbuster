@@ -21,7 +21,6 @@ interface GetStartedProps {
 }
 
 
-
 export function PhoneLoginForm({ }: GetStartedProps) {
   const router = useRouter();
   const { state: isLoaderModalOpen, setTrue: _openLoaderModal } =
