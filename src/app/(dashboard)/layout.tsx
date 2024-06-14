@@ -11,7 +11,7 @@ export default function MainLayout({
   return (
     <>
       <DashboardHeader />
-      <main className="relative bg-main font-wix-display px-12">{children}</main>
+      <main className="relative bg-main font-wix-display px-5 md:px-12">{children}</main>
     </>
   );
 }

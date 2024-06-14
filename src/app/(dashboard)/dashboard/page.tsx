@@ -144,26 +144,26 @@ export default function page() {
 
   return (
     <main className=''>
-      <div className='bg-[#171F45] px-5 rounded-lg py-8'>
-        <div className='bg-[#FFFFFF26] rounded-10 py-4 px-6'>
-          <div className='bg-white rounded-10 flex py-1 pl-8 gap-3'>
-            <div className='py-12 font-sans pr-8'>
-              <p className='text-black text-xl font-bold'>Hello, <span className='text-[#1B1687]'>Abdulramon Keulere</span></p>
-              <p className='text-base'>Enrollment Number:<span className='font-bold text-[#1B1687]'>330990663047</span></p>
+      <div className='bg-[#171F45] px-2.5 md:px-5 rounded-lg py-4 md:py-8'>
+        <div className='bg-[#FFFFFF26] rounded-10 py-4 px-2 md:px-6'>
+          <div className='bg-white rounded-10 flex flex-col lg:flex-row py-1 md:pl-8 md:gap-3'>
+            <div className='py-6 md:py-12 font-sans px-2 lg:pr-8'>
+              <p className='text-black text-base md:text-xl font-bold '>Hello, <span className='text-[#1B1687]'>Abdulramon Keulere</span></p>
+              <p className=' text-sm md:text-base tracking-tight'>Enrollment Number:<span className='font-bold text-[#1B1687]'>330990663047</span></p>
             </div>
             <div className='border-[.2992px] border-[#bbb8ef] mr-5'></div>
-            <div className='flex py-5 gap-6'>
-              <div className='bg-[#19224A] rounded-10 text-white py-3 px-4 flex gap-4'>
+            <div className='flex flex-col lg:flex-row items-center py-3 px-3 gap-6'>
+              <div className='bg-[#19224A] rounded-10 text-white py-3 px-12 md:px-4 flex flex-col md:flex-row gap-4'>
                 <div>
                   <h1 className='flex justify-center items-center text-lg font-medium'>1</h1>
                   <p className='mt-2 mb-0.5 text-[#FFFFFFCC] font-sans font-light flex justify-center text-xxs items-center '>Individual Plan</p>
-                  <Link href='/plan-details'> <button className='rounded-full px-5 py-2 bg-[#FFFFFF4D]'>View details</button></Link>
+                  <Link href='/plan-details'> <button className='rounded-full px-5 py-3 bg-[#FFFFFF4D] text-xs whitespace-nowrap'>View details</button></Link>
                 </div>
-                <div className='border-[.0496px] border-[#D6D6D6] h-16'></div>
+                <div className='md:border-[.0496px] md:border-[#D6D6D6] lg:h-16'></div>
                 <div>
                   <h1 className='flex justify-center items-center text-lg font-medium'>0</h1>
                   <p className='mt-2 mb-0.5 text-[#FFFFFFCC] font-sans font-light flex justify-center text-xxs items-center '>Family Plan</p>
-                  <Link href='/plan-details'> <button className='rounded-full px-5 py-2 bg-[#FFFFFF4D]'>View details</button></Link>
+                  <Link href='/plan-details'> <button className='rounded-full px-5 py-3 bg-[#FFFFFF4D] text-xs whitespace-nowrap'>View details</button></Link>
                 </div>
               </div>
               <div className='bg-[#19224A] rounded-10 gap-4 pl-6 py-9 flex pr-[26px]'>
@@ -190,12 +190,12 @@ export default function page() {
               <LineTabsTrigger className='' value="individual">Individual Insurance Plan</LineTabsTrigger>
               <LineTabsTrigger value="family">Family Insurance Plan</LineTabsTrigger>
             </TabsList>
-            <div className='mt-4 gap-4 flex '>
+            <div className='mt-4 gap-4 flex flex-col md:flex-row '>
               <div className='bg-white rounded-10 pt-6 pb-9 pl-6 pr-9 grow'>
                 <TabsContent value='individual'>
                   <VisitationChart />
                 </TabsContent>
-                <TabsContent value='family'>
+                <TabsContent value='family' className='hidden'>
                   family
                 </TabsContent>
               </div>
@@ -255,18 +255,18 @@ export default function page() {
         </div>
         <div className='bg-white rounded-10 my-4 pl-10 pr-16 pt-4 pb-2 '>
           <p className='text-[#1B1687] font-bold text-base'>Visitation History</p>
-          <div className='flex justify-between'>
-            <div className='pt-1 flex gap-4'>
+          <div className='flex flex-col md:flex-row justify-between'>
+            <div className='pt-1 flex flex-col md:flex-row gap-4'>
               <div className='flex justify-center items-center border-[.2992px] border-[#D6D6D6] pl-4 py-2 w-max rounded-lg gap-[10px]'>
                 <Search />
                 <input type="text" placeholder='Search' className='outline-none' />
               </div>
-              <div className='flex text-[#1B1687] py-3 pl-4 border-[.2992px] border-[#1B1687] rounded-lg '>
+              <div className='flex justify-center items-center text-[#1B1687] py-3 md:pl-4 border-[.2992px] border-[#1B1687] rounded-lg '>
                 <p className='font-sans font-medium '>Filter</p>
                 <CaretDown />
               </div>
             </div>
-            <button className='rounded-full capitalize bg-[#1B1687] text-white py-3 px-12'>export</button>
+            <button className='rounded-full capitalize bg-[#1B1687] text-white mt-2 md:mt-0 py-3 px-12'>export</button>
           </div>
         </div>
         <DataTable

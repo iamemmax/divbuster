@@ -123,11 +123,11 @@ const VisitationChart = () => {
     }
     return (
         <div className='h-[300px] max-h-[500px]'>
-            <div className='flex justify-between items-center font-sans'>
+            <div className='flex flex-col md:flex-row justify-between items-center font-sans'>
                 <p className='text-[#080D27]'>Visitation comparatives</p>
                 <DropdownMenu>
                     <DropdownMenuTrigger>
-                        <p className='rounded-full py-2 px-4 flex justify-center items-center gap-1 bg-[#1B1687] text-white'>This week <FilterIcon /> </p>
+                        <p className='rounded-full py-2 px-4 flex justify-center mt-2 md:mt-0 items-center gap-1 bg-[#1B1687] text-white'>This week <FilterIcon /> </p>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem>
