@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react'
 // import { LandingHeader } from '@/components/layout/landingheader'
-import { Collapsible, CollapsibleContent,CollapsibleTrigger } from '@/components/core'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/core'
 
 import Image from 'next/image'
 import { cn } from '@/utils/classNames'
@@ -60,7 +60,7 @@ export default function page() {
       <div className='flex flex-col lg:flex-row justify-between mt-16'>
         <div className='md:basis-1/2'>
           <button className='capitalize flex justify-center items-center rounded-full pl-6 pr-[78px] py-4 bg-[#34307A] bg-opacity-[20%] text-[14px] font-semibold gap-2'>
-          <Icon/>
+            <Icon />
             FAQs
           </button>
           <div className='gap-3 sm:mt-5 mt-10'>
@@ -96,10 +96,10 @@ export default function page() {
           {
             FAQs.slice(0, 5).map((faq, index) => {
               const [isOpen, setIsOpen] = useState(false)
-              
+
               return (
                 <Collapsible key={index}>
-                  <CollapsibleTrigger className='flex items-center text-left justify-between bg-[#FFFFFF1A] p-4 md:p-7 rounded-lg text-xs md:text-[15px] font-normal w-full font-sans 'onClick={() => setIsOpen(!isOpen)} >
+                  <CollapsibleTrigger className='flex items-center text-left justify-between bg-[#ffffff11] p-4 md:p-7 rounded-lg text-xs md:text-[15px] font-normal w-full font-sans ' onClick={() => setIsOpen(!isOpen)} >
                     {faq.question}
                     <CaretDown className={cn(isOpen && "rotate-180")} />
                   </CollapsibleTrigger>
@@ -120,9 +120,9 @@ export default function page() {
 
               return (
                 <Collapsible key={index} open={isOpen}>
-                  <CollapsibleTrigger 
-                  className='flex items-center text-left justify-between bg-[#FFFFFF1A] p-4 md:p-7 rounded-lg text-xs md:text-[15px] font-normal w-full font-sans '
-                  onClick={() => setIsOpen(!isOpen)} 
+                  <CollapsibleTrigger
+                    className='flex items-center text-left justify-between bg-[#ffffff11] p-4 md:p-7 rounded-lg text-xs md:text-[15px] font-normal w-full font-sans '
+                    onClick={() => setIsOpen(!isOpen)}
                   >
                     {faq.question}
                     <CaretDown className={cn(isOpen && "rotate-180")} />
@@ -157,4 +157,3 @@ export default function page() {
     </main>
   )
 }
- 
