@@ -37,7 +37,7 @@ const DialogClose = ({
   return (
     <DialogPrimitive.Close
       className={cn(
-        'bg-[#2D4696] px-6 py-2',
+        'bg-[#2D4696] px-6 py-2 ',
         buttonVariants({ variant: 'unstyled', size: 'unstyled', className })
       )}
       {...props}
@@ -70,14 +70,14 @@ const DialogOverlay = React.forwardRef<
   return (
     <DialogPrimitive.Overlay
       className={cn(
-        'fixed inset-0 z-50 bg-black/50 backdrop-blur-md transition-all duration-100 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+        'fixed inset-0 z-50 bg-black/80 backdrop-blur-md transition-all duration-100 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
         className
       )}
       {...props}
       ref={ref}
     />
   );
-})
+});
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 interface CustomDialogContentProps {
@@ -99,7 +99,7 @@ const DialogContent = React.forwardRef<
       >
         <DialogPrimitive.Content
           className={cn(
-            'fixed bottom-0 z-50 h-max max-h-modal-content w-full gap-4  rounded-t-[1.125rem] bg-white animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:static sm:bottom-auto sm:my-[5vh] sm:max-h-none sm:max-w-[28rem] sm:overflow-visible sm:rounded-[1.125rem] sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0',
+            'fixed bottom-0 z-50  h-max max-h-modal-content  gap-4  rounded-t-[2.125rem]  animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:static sm:bottom-auto sm:my-[5vh] sm:max-h-none sm:max-w-[50rem] sm:overflow-visible sm:rounded-[1.125rem] sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0',
             className
           )}
           ref={ref}
@@ -120,7 +120,7 @@ const DialogHeader = ({
   return (
     <div
       className={cn(
-        'flex items-center justify-between gap-4 rounded-t-[1.125rem] bg-main-solid px-8 py-4 text-white',
+        'flex w-full items-center justify-between gap-4  rounded-t-[1.125rem] bg-main-solid px-8 py-4 text-white',
         className
       )}
       {...props}
@@ -136,7 +136,7 @@ const DialogBody = ({
   return (
     <div
       className={cn(
-        'max-h-modal-body overflow-y-auto px-8 py-6 sm:max-h-none sm:overflow-y-visible',
+        'max-h-full overflow-y-auto py-6 sm:h-full sm:overflow-y-visible',
         className
       )}
       {...props}
