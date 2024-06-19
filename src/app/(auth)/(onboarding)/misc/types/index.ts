@@ -199,7 +199,8 @@ export type AuthAction =
 export type AuthDispatch = React.Dispatch<AuthAction> | null;
 
 export type LoginDto = {
-  phone: string;
+  phone_number: string;
+  password: string;
 };
 
 export type LoginOtpDto = {

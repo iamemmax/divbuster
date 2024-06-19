@@ -1,23 +1,16 @@
-import Axios from 'axios';
-import type { AxiosInstance } from 'axios';
+import Axios from "axios";
+import type { AxiosInstance } from "axios";
 
-const ADMIN_LOAN_API_BASE_URL = process.env
-  .NEXT_PUBLIC_AJO_LOAN_API_BASE_URL as string;
+const ADMIN_API_BASE_URL = process.env
+  .NEXT_PUBLIC_LIFE_SAVINGS_API_BASE_URL as string;
 
-  const SAVINGS_API_BASE_URL = process.env
-  .NEXT_PUBLIC_SAVINGS_API_BASE_URL as string;
-
-export const adminLoanAxios = Axios.create({
-  baseURL: ADMIN_LOAN_API_BASE_URL,
-});
-
-export const savingsAxios = Axios.create({
-  baseURL: SAVINGS_API_BASE_URL,
+export const adminAxios = Axios.create({
+  baseURL: ADMIN_API_BASE_URL,
 });
 
 export const setAxiosDefaultToken = (
   token: string,
-  axiosInstance: AxiosInstance,
+  axiosInstance: AxiosInstance
   // axios_Instance: AxiosInstance,
 ) => {
   axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -25,5 +18,5 @@ export const setAxiosDefaultToken = (
 };
 
 export const deleteAxiosDefaultToken = () => {
-  delete adminLoanAxios.defaults.headers.common.Authorization;
+  delete adminAxios.defaults.headers.common.Authorization;
 };
