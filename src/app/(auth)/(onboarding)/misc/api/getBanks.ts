@@ -1,5 +1,5 @@
 
-import { adminLoanAxios } from '@/lib/axios';
+import { adminAxios } from '@/lib/axios';
 
 import { useQuery } from 'react-query';
 
@@ -22,7 +22,7 @@ export interface BankEntity {
 }
 
 export const getBanks = async (): Promise<BankLists> => {
-  const { data } = await adminLoanAxios.get('accounts/bank_list/');
+  const { data } = await adminAxios.get('accounts/bank_list/');
   return data;
 };
 
