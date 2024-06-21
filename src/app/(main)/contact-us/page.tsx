@@ -32,7 +32,7 @@ export default function page() {
                                 Send Message
                             </button>
                         </form>
-                        <div className='border-[0.3px] border-[#407cff59] py-2 md:py-6 px-3 md:pl-8 md:pr-16 rounded-xl mt-5 font-sans text-xs md:text-base [grid-area:b]'>
+                        <div className='border-[0.3px] border-[#407cff59] py-2 md:py-6 px-3 md:pl-8 md:pr-16 rounded-xl mt-5 font-sans text-xs md:text-sm [grid-area:b]'>
                             <div className='bg-[#FFFFFF0D] py-4 pl-4 md:pl-8 rounded-lg mt-3'>
                                 <p className='text-[#CAC9D4]'>Give us a call on</p>
                                 <p className='font-medium'>014567893</p>

@@ -16,7 +16,7 @@ export default function Home() {
     <main className="max-w-max md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm ">
 
-        <section className="flex flex-col lg:grid grid-cols-2 items-center justify-between sm:max-lg:px-6 md:pt-12 md:pb-6 md:px-[120px] ">
+        <section className="flex flex-col lg:grid grid-cols-2 items-center justify-between sm:max-lg:px-2 md:pt-12 md:pb-6 md:pl-[30px] ">
 
           <div className="flex flex-col  gap-4  md:gap-6 justify-self-center max-md:px-6 max-md:py-10">
             <h6 className={cn("font-display", "flex items-center text-[0.825rem] w-max font-semibold gap-1.5 px-5 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#34307A]/30")}>
@@ -53,7 +53,7 @@ export default function Home() {
             </LinkButton>
           </div>
 
-          <div className={cn("relative flex items-center justify-center w-full  md:max-w-[400px] overflow-hiddenn md:ml-16",)}>
+          <div className={cn("relative flex items-center justify-center w-full  md:max-w-[400px] overflow-hiddenn md:ml-28",)}>
             {/* <HospitalImage /> */}
             <Image
               alt=""
