@@ -186,17 +186,18 @@ export default function page() {
 
         <div className='mt-4 w-full font-sans'>
           <Tabs defaultValue='individual'>
-            <TabsList className="flex w-full items-center justify-start pt-8 pb-3 pl-12 bg-white">
+            <TabsList className="flex flex-col md:flex-row md:w-full items-center justify-center md:justify-start pt-8 pb-3 md:pl-12 bg-white">
               <LineTabsTrigger className='' value="individual">Individual Insurance Plan</LineTabsTrigger>
-              <LineTabsTrigger value="family">Family Insurance Plan</LineTabsTrigger>
+              <LineTabsTrigger value="family" className='hidden md:block'>Family Insurance Plan</LineTabsTrigger>
+              <LineTabsTrigger value="family" className='block md:hidden'>Family Insurance Plan</LineTabsTrigger>
             </TabsList>
-            <div className='mt-4 gap-4 flex flex-col md:flex-row '>
+            <div className='mt-4 gap-4 flex flex-col lg:flex-row '>
               <div className='bg-white rounded-10 pt-6 pb-9 pl-6 pr-9 grow'>
                 <TabsContent value='individual'>
                   <VisitationChart />
                 </TabsContent>
-                <TabsContent value='family' className='hidden'>
-                  family
+                <TabsContent value='family' className=''>
+                  <VisitationChart />
                 </TabsContent>
               </div>
               <div className='flex flex-col'>
@@ -253,20 +254,20 @@ export default function page() {
             </div>
           </Tabs>
         </div>
-        <div className='bg-white rounded-10 my-4 pl-10 pr-16 pt-4 pb-2 '>
-          <p className='text-[#1B1687] font-bold text-base'>Visitation History</p>
+        <div className='bg-white rounded-10 my-4 pl-10 pr-16 pt-3 pb-2 '>
+          <p className='text-[#1B1687] font-bold text-sm'>Visitation History</p>
           <div className='flex flex-col md:flex-row justify-between'>
             <div className='pt-1 flex flex-col md:flex-row gap-4'>
-              <div className='flex justify-center items-center border-[.2992px] border-[#D6D6D6] pl-4 py-2 w-max rounded-lg gap-[10px]'>
+              <div className='flex justify-center items-center border-[.2992px] border-[#D6D6D6] pl-4 py-1.5 w-max rounded-lg gap-[10px]'>
                 <Search />
-                <input type="text" placeholder='Search' className='outline-none' />
+                <input type="text" placeholder='Search' className='outline-none w-28 sm:w-auto' />
               </div>
-              <div className='flex justify-center items-center text-[#1B1687] py-3 md:pl-4 border-[.2992px] border-[#1B1687] rounded-lg '>
+              <div className='flex justify-center items-center text-[#1B1687] py-1.5 md:pl-4 border-[.2992px] border-[#1B1687] rounded-lg '>
                 <p className='font-sans font-medium '>Filter</p>
                 <CaretDown />
               </div>
             </div>
-            <button className='rounded-full capitalize bg-[#1B1687] text-white mt-2 md:mt-0 py-3 px-12'>export</button>
+            <button className='rounded-full capitalize bg-[#1B1687] text-white mt-2 md:mt-0 py-2 px-12'>export</button>
           </div>
         </div>
         <DataTable
