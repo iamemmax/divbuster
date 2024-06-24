@@ -1,10 +1,9 @@
 
-
-
 "use client"
 import React, { ReactNode } from 'react'
 import { ClientOnly, Dialog, DialogContent } from "@/components/core";
 import { DialogBody } from '@/components/core/DialogClone';
+import Link from 'next/link';
 
 
 
@@ -37,6 +36,9 @@ function AppSuccessfulModal({
     
 
 }: UseBooleanStateControlProps) {
+
+
+    
 
 
     return (
@@ -107,16 +109,27 @@ function AppSuccessfulModal({
                                     >
                                         Done
                                     </button>
+
+
+
+
+                                    <Link
+                                    
+                                    href={`/create-password`}
+                                    
+                                    >
+
                                     <button
                                         className="rounded-3xl bg-[#fff] text-[#1B1687]  py-[0.9rem] w-[10rem] shadow-lg font-normal transition-colors delay-150 ease-in-out focus:outline-none "
                                         onClick={() => {
-
-                                           
-
                                         }}
                                     >
                                         create password
                                     </button>
+                                    
+                                    
+                                    </Link>
+                                    
 
 
                                 </div>

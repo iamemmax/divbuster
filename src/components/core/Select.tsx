@@ -38,7 +38,7 @@ const SelectTrigger = React.forwardRef<
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              className={cn('fill-label-text', iconClassName)}
+              className={cn('fill-current text-[#fff]', iconClassName)}
               clipRule="evenodd"
               d="M8.357 5.522a3.333 3.333 0 0 1-4.581.126l-.133-.126L.41 2.089A.833.833 0 0 1 1.51.84l.078.07L4.82 4.342c.617.617 1.597.65 2.251.098l.106-.098L10.411.91a.833.833 0 0 1 1.248 1.1l-.07.079-3.232 3.433Z"
               fillRule="evenodd"

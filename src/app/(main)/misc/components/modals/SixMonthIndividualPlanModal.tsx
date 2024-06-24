@@ -103,7 +103,7 @@ function SixMonthIndividualPlanModal({
 
 
 
-                  <div className='w-full flex justify-center items-center gap-[1rem] mt-[1rem] text-sm'>
+                  <div className='w-full flex justify-center items-center gap-[1rem] mt-[4rem] text-sm mb-[1.5rem]'>
 
                     <button
                       className="rounded-3xl border-[0.3px] text-[#fff]  py-[0.9rem] w-[10rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none"

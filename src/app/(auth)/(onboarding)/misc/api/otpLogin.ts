@@ -1,4 +1,5 @@
-import { savingsAxios, setAxiosDefaultToken } from '@/lib/axios';
+import {  adminAxios, setAxiosDefaultToken } from '@/lib/axios';
+
 import { useAuth } from '@/contexts/authentication';
 
 import { useMutation } from 'react-query';
@@ -14,7 +15,7 @@ interface TokenResponse {
   access: string;
 }
 
-const postOtpLogin = (loginOtpDto: LoginOtpDto): Promise<AxiosResponse<TokenResponse>> => savingsAxios.post('/accounts/login_with_otp/', loginOtpDto);
+const postOtpLogin = (loginOtpDto: LoginOtpDto): Promise<AxiosResponse<TokenResponse>> => adminAxios.post('/accounts/login_with_otp/', loginOtpDto);
 
 export const usePostOtpLogin = () => {
   const { authDispatch } = useAuth();
@@ -24,7 +25,7 @@ export const usePostOtpLogin = () => {
       const { access: token } = data;
 
       tokenStorage.setToken(token);
-      setAxiosDefaultToken(token, savingsAxios);
+      setAxiosDefaultToken(token, adminAxios);
 
       const user = await getAuthenticatedUser();
 

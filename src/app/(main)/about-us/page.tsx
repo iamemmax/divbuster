@@ -41,19 +41,19 @@ export default function page() {
                     <div className=' flex flex-col md:grid md:grid-cols-2 mt-8 gap-3 border-[0.3px] md:border-0 p-4 md:p-0 rounded-xl border-[#407cff59]'> 
                         <span className='bg-[#080D27] md:border-[0.3px] rounded-[10px]  p-6 md:border-[#407cff59]'>
                             <p className='flex gap-4 text-3xl md:text-[38px] font-bold'>01<span className='text-center text-xs md:text-[15px] font-medium py-2 md:py-4'>premium hospital</span></p>
-                            <p className='text-[10px] md:text-[12px] text-[#CAC9D4] font-normal md:max-w-[438px]'>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
+                            <p className='text-[10px] md:text-[0.9rem] text-[#CAC9D4] font-normal md:max-w-[438px]'>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
                         </span>
                         <span className='bg-[#080D27] md:border-[0.3px] rounded-[10px]  p-6 md:border-[#407cff59]'>
                             <p className='flex gap-4 text-3xl md:text-[38px] font-bold'>02<span className='text-center text-xs md:text-[15px] font-medium py-2 md:py-4'>Lifestyle Reward</span></p>
-                            <p className='text-[10px] md:text-[12px] text-[#CAC9D4] font-normal md:max-w-[438px]'>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
+                            <p className='text-[10px] md:text-[0.9rem] text-[#CAC9D4] font-normal md:max-w-[438px]'>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
                         </span>
                         <span className='bg-[#080D27] md:border-[0.3px] rounded-[10px]  p-6 md:border-[#407cff59]'>
                             <p className='flex gap-4 text-3xl md:text-[38px] font-bold'>03<span className='text-center text-xs md:text-[15px] font-medium py-2 md:py-4'>Premium Health Policy</span></p>
-                            <p className='text-[10px] md:text-[12px] text-[#CAC9D4] font-normal md:max-w-[438px] '>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
+                            <p className='text-[10px] md:text-[0.9rem] text-[#CAC9D4] font-normal md:max-w-[438px] '>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
                         </span>
                         <span className='bg-[#080D27] md:border-[0.3px] rounded-[10px]  p-6 md:border-[#407cff59]'>
                             <p className='flex gap-4 text-3xl md:text-[38px] font-bold'>04<span className='text-center text-xs md:text-[15px] font-medium py-2 md:py-4'>Affordable Plan</span></p>
-                            <p className='text-[10px] md:text-[12px] text-[#CAC9D4] font-normal md:max-w-[438px]'>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
+                            <p className='text-[10px] md:text-[0.9rem] text-[#CAC9D4] font-normal md:max-w-[438px]'>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
                         </span>
                     </div>
                 <div className='pt-[72px]'>

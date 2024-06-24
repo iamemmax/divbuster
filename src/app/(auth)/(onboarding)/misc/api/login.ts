@@ -1,5 +1,5 @@
-import { adminAxios, setAxiosDefaultToken } from "@/lib/axios";
-import { useAuth } from "@/contexts/authentication";
+import { adminAxios, setAxiosDefaultToken } from '@/lib/axios';
+import { useAuth } from '@/contexts/authentication';
 
 import { useMutation } from "react-query";
 
