@@ -1,16 +1,22 @@
 "use client"
 
-import { ClientOnly, Dialog, DialogBody, DialogClose, DialogContent, DialogHeader, DialogTitle, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/core";
+import { ClientOnly, Dialog, DialogBody, DialogClose, DialogContent, DialogHeader, DialogTitle, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, FormError, ErrorModal, } from "@/components/core";
 
 import { useRouter } from "next/navigation";
 import { Label } from '@radix-ui/react-label';
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { useStateListData } from "@/app/(auth)/(onboarding)/misc/api/getNigerianStates";
+import { useState } from "react";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useErrorModalState } from "@/hooks";
+import { useHospitalListData } from "@/app/(auth)/(onboarding)/misc/api/getHospitalByStates";
 
 
-export interface stateOptions {
-    name: string;
-    value: string;
-}[]
+// export interface stateOptions {
+//     name: string;
+//     value: string;
+// }[]
 
 interface UseBooleanStateControlProps {
     isUserDetailsModalOpen: boolean;
@@ -20,10 +26,7 @@ interface UseBooleanStateControlProps {
     setFourthModal: React.Dispatch<React.SetStateAction<boolean>>;
     heading: string;
     subheading: string;
-    statedroplist?: stateOptions;
-    
-
-
+    statedroplist?: string[];
 
 }
 
@@ -36,99 +39,112 @@ function UserDetailsModal({
     heading,
     subheading,
     statedroplist,
-    
+
 
 }: UseBooleanStateControlProps) {
 
+    const GetStartedFormSchema = z.object({
+        
+hospitaldata:z.object({
+    state: z
+    .string({ required_error: 'Please select a state.' })
+    .trim()
+    .min(1, { message: 'Please select a state.' }),
+
+hospital: z
+    .string({ required_error: 'Please select a hospital.'})
+    .trim()
+    .min(1, { message: 'Please select a hosiptal.' }),
+
+})
+        
+
+    });
+
+    type GetStartedFormValues = z.infer<typeof GetStartedFormSchema>;
 
 
     const {
         control,
         handleSubmit,
-    
-        // formState: { errors },
-    } = useForm();
+        register,
+        formState: { errors },
+        setValue
+    } = useForm<GetStartedFormValues>({
+        resolver: zodResolver(GetStartedFormSchema),
+    });
 
 
-    const onCreateCompanySubmit = async (data: any) => {
-        if(data){
-            //
-        }
-    }
+    const {
+        isErrorModalOpen,
+        setErrorModalState,
+        closeErrorModal,
+        openErrorModalWithMessage,
+        errorModalMessage,
+    } = useErrorModalState();
 
 
-    const stateOptions = [
-        {
-            name: '1',
-            value: "Lagos",
-
-        },
-
-        {
-            name: '2',
-            value: "Ekiti",
-
-
-        },
-
-        {
-            name: '3',
-            value: "Osun",
-
-        },
-
-        {
-            name: '4',
-            value: "Arizona",
-
-        },
-
-        {
-            name: '5',
-            value: "Oyo",
-
-        },
-
-        {
-            name: '6',
-            value: "Ogun",
-
-        },
-
-        {
-            name: '7',
-            value: "Abuja",
-
-
-        }
-
-
-    ];
-
-    const lgaOptions = [
-        { name: 'Shomolu', value: 'SHOMOLU' },
-        { name: 'AdeKunle', value: 'ADEKUNLE' },
-        { name: 'Etiosa', value: 'ETIOSA' },
-        { name: 'Yaba', value: 'YABA' },
-    ];
-
-
-    const hosipitalOptions = [
-        { name: 'Saint Luke Hospital', value: 'SAINT-LUKE-HOSPITAL' },
-        { name: 'Saint Patriach Hospital', value: 'SAINT-PATRIACH-HOSPITAL' },
-        { name: 'Yaba Hospital', value: 'YABA-HOSPITAL' },
-        { name: 'Mushin Hospital', value: 'Mushin-HOSPITAL' },
-    ];
-
-
-    const Router = useRouter();
+    const router = useRouter();
 
     const handleClose = () => {
 
         setUserDetailsModal(false)
-        Router.back();
+        router.back();
 
     }
+
+
+    const selectedState = useWatch({
+        control,
+        name: 'hospitaldata'
+
+    })
+
+    
+
+
+
+
+    const { data: stateListData, isLoading } = useStateListData();
+    // const { data: stateListData } = useStateListData(selectedState as string, selectedState.trim !== "");
+
+    console.log(stateListData)
+
+
+
+
+    const {data: hospitalListData} = useHospitalListData(selectedState?.state);
+        console.log(hospitalListData);
+
+
+    // const {
+    //     mutate: registerUserDetails,
+    //     isLoading: isRegisterUserDetailsLoading,
+    //   } = useRegisterUserDetails();
+
+    const onUserDetailsSubmit = (submittedData: GetStartedFormValues) => {
+        // registerUserDetails(
+        //   { ...submittedData, list_STATES: 'AGENT', source: 'PAYBOX' },
+        //   {
+        //     onSuccess: () => {
+        //       openLoaderModal();
+        //       router.push(
+        //         `/sign-up/email-otp/?email=${submittedData.email}&phone=${submittedData.phone_number}`
+        //       );
+        //     },
+
+        //     onError: (error: unknown) => {
+        //       const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+        //       openErrorModalWithMessage(errorMessage);
+        //     },
+        //   }
+        // );
+    };
+
+
+
+
+
 
 
     return (
@@ -172,7 +188,7 @@ function UserDetailsModal({
 
                             <form
                                 className="space-y-8"
-                                onSubmit={handleSubmit(onCreateCompanySubmit)}
+                                onSubmit={handleSubmit(onUserDetailsSubmit)}
                             >
 
                                 {statedroplist && (
@@ -186,19 +202,25 @@ function UserDetailsModal({
 
                                         <Controller
                                             control={control}
-                                            name="state"
+                                            name="hospitaldata.state"
                                             render={({ field: { onChange, value, ref } }) => (
                                                 <Select value={value} onValueChange={onChange}>
                                                     <SelectTrigger id="state" ref={ref} className="bg-[#2D3456] text-[#fff]">
                                                         <SelectValue placeholder="Enter State" />
                                                     </SelectTrigger>
                                                     <SelectContent >
-                                                        {stateOptions?.map(({ name, value }) => {
+                                                        {
+                                                            isLoading &&
+                                                            <SelectItem value={"loading"} disabled>
+                                                                Loading...
+                                                            </SelectItem>
+                                                        }
+                                                        {stateListData?.map((state_name) => {
 
                                                             return (
 
-                                                                <SelectItem key={name} value={value}>
-                                                                    {value}
+                                                                <SelectItem key={state_name} value={state_name}>
+                                                                    {state_name}
                                                                 </SelectItem>
                                                             );
                                                         })}
@@ -207,14 +229,23 @@ function UserDetailsModal({
                                             )}
                                         />
 
+                                        {errors?.hospitaldata?.state && (
+                                            <FormError
+                                                className="bg-red-900/40 text-white"
+                                                errorMessage={errors?.hospitaldata?.state.message}
+                                            />
+                                        )}
+
                                     </div>
                                 )}
 
 
+                                {
+                                    // stateListData && stateListData.map()
+                                }
 
 
-
-                                {statedroplist && (
+                                {/* {statedroplist && (
                                     <div>
                                         <Label
                                             className="mb-1 block text-xs  text-[#fff]"
@@ -246,7 +277,15 @@ function UserDetailsModal({
                                         />
 
                                     </div>
-                                )}
+                                )} */}
+
+
+
+
+
+
+
+                                {/* Hospital dropdownList */}
 
 
                                 {statedroplist && (
@@ -260,17 +299,17 @@ function UserDetailsModal({
 
                                         <Controller
                                             control={control}
-                                            name="Hospital"
+                                            name="hospitaldata.hospital"
                                             render={({ field: { onChange, value, ref } }) => (
-                                                <Select value={value} onValueChange={onChange}>
+                                                <Select value={value} onValueChange={onChange} disabled={!selectedState}>
                                                     <SelectTrigger id="hospital" ref={ref} className="bg-[#2D3456] text-[#fff]">
                                                         <SelectValue placeholder="Select Hospital" />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        {hosipitalOptions?.map(({ name, value }) => {
+                                                        {hospitalListData?.map((hospital:string, index:number) => {
                                                             return (
-                                                                <SelectItem key={name} value={value}>
-                                                                    {value}
+                                                                <SelectItem key={index} value={hospital}>
+                                                                    {hospital}
                                                                 </SelectItem>
                                                             );
                                                         })}
@@ -287,15 +326,30 @@ function UserDetailsModal({
 
                             </form>
 
-                            {/* <div className="mt-6 md:mt-12">
 
-                            {children}
+                            <ErrorModal
+                                isErrorModalOpen={isErrorModalOpen}
+                                setErrorModalState={setErrorModalState}
+                                subheading={
+                                    errorModalMessage || 'Please check your inputs and try again.'
+                                }
+                            >
+                                <div className="flex gap-3 rounded-2xl bg-red-50 px-8 py-6">
+                                    <button
+                                        className="grow bg-red-950 px-1.5 sm:text-sm md:px-6"
+                                        type="button"
+                                        onClick={closeErrorModal}
+                                    >
+                                        Okay
+                                    </button>
+                                </div>
+                            </ErrorModal>
 
-                            </div> */}
 
                             <button
-                                className="mt-[5rem] font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
+                                className="mt-[5.8rem] mb-[2rem] font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
         shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                                disabled={!selectedState}
 
                                 onClick={() => {
 

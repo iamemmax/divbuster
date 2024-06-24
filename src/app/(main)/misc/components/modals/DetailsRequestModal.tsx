@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  
+
   ClientOnly,
   Dialog,
   DialogBody,
@@ -11,10 +11,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  ErrorModal,
+  FormError,
 } from "@/components/core";
 import { Input2 } from "@/components/core/Input2";
-import { RightUpArrow } from "@/icons/core";
+import { RightUpArrow, SmallSpinner } from "@/icons/core";
 import { useRouter } from "next/navigation";
+import { Label } from '@radix-ui/react-label';
+import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useErrorModalState } from "@/hooks";
+import { useState } from "react";
 
 interface UseBooleanStateControlProps {
   isDetailsRequestModalOpen: boolean;
@@ -34,7 +42,7 @@ function DetailsRequestModal({
   heading,
   subheading,
   inputTitle,
-  
+
 }: UseBooleanStateControlProps) {
   const Router = useRouter();
 
@@ -42,6 +50,60 @@ function DetailsRequestModal({
     setDetailsRequestModal(false);
     Router.back();
   };
+
+
+  const contactSchema = z.object({
+
+    contact: z.object({
+
+      phone_number: z
+        .string({ required_error: 'Enter your phone number' })
+        .trim()
+        .min(7, { message: 'Phone number should be at least 7 digits' })
+
+    })
+
+
+  })
+
+  type contactinfoProps = z.infer<typeof contactSchema>;
+
+  const {
+    register,
+    // handleSubmit,
+    formState: { errors },
+  } = useForm<contactinfoProps>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      contact: {
+        phone_number: ""
+      }
+    },
+
+    mode: "onChange",
+  })
+
+
+
+
+  const {
+    isErrorModalOpen,
+    setErrorModalState,
+    closeErrorModal,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
+
+
+  const onSubmit = () => {
+   
+    // setIsLoading(true);
+    setSecondModal(true);
+     setDetailsRequestModal(false);
+  };
+
+
+  // const [isLoading, setIsLoading] = useState(false)
 
   return (
     <div className="">
@@ -61,7 +123,6 @@ function DetailsRequestModal({
             <DialogHeader className="bg-[#1B1687] ">
               <DialogTitle className="text-[#fff]">{heading}</DialogTitle>
 
-              
 
               <DialogClose className="rounded-full">
                 <button onClick={handleClose}>close</button>
@@ -74,30 +135,94 @@ function DetailsRequestModal({
                   <DialogDescription>{subheading}</DialogDescription>
                 </div>
 
-                <div className="my-5">
+                <div className="my-5 ">
                   <form action="">
                     <div className="flex flex-col gap-1 ">
                       <p className="text-[#FFFFFF]">{inputTitle}</p>
-                      <Input2
-                        className="text-[#fff]"
-                        placeholder="Enter your phone number"
-                      />
+
+
+
+
+                      <div className="w-full mt-[1rem] text-sm font-normal">
+
+                        <Label
+                          className="mb-1 block text-xs  text-[#fff]"
+                          htmlFor="Phone number"
+                        >
+                          Phone Number
+                        </Label>
+
+                        {/* <Input2
+                          className="text-[#fff]"
+                          placeholder="Enter your phone number"
+                        />
+
+                    <div className="absolute  top-1/2 ">
+
+                    <SmallSpinner className=" animate-spin" color="#fff" />
+
+                    </div> */}
+
+                        <div className="relative">
+                          <Input2
+                            className="text-[#fff]"
+                            placeholder="Enter your phone number"
+                            type="number"
+                            id="phone"
+                            {...register("contact.phone_number")}
+                          />
+
+                          {errors?.contact?.phone_number && (
+                            <FormError
+                              className="bg-red-900/40 text-white"
+                              errorMessage={errors?.contact.phone_number?.message}
+                            />
+                          )}
+                          {/* {isLoading && 
+                          <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
+                             <SmallSpinner className="" color="#fff" />
+
+                          </div>
+                          } */}
+                        </div>
+
+
+
+                      </div>
+
                     </div>
                     <div className="mt-6 md:mt-12">
-                    
-                      <button
-                        className=" font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
-        shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
-        onClick={()=>{
-            setSecondModal(true)
-            setDetailsRequestModal(false)
 
-        }}
-                      >
-                        Continue
+                  
+
+                      <button
+                        className=" mt-[2rem] font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
+        shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                        type="button"
+                        onClick={onSubmit}
+                      > 
+                            Continue
                       </button>
                     </div>
                   </form>
+
+                  {/* <ErrorModal
+                    isErrorModalOpen={isErrorModalOpen}
+                    setErrorModalState={setErrorModalState}
+                    subheading={
+                      errorModalMessage || 'Please check your inputs and try again.'
+                    }
+                  >
+                    <div className="flex gap-3 rounded-2xl bg-red-50 px-8 py-6">
+                      <button
+                        className="grow bg-red-950 px-1.5 sm:text-sm md:px-6"
+                        type="button"
+                        onClick={closeErrorModal}
+                      >
+                        Okay
+                      </button>
+                    </div>
+                  </ErrorModal> */}
                 </div>
               </div>
             </DialogBody>

@@ -106,6 +106,8 @@ export { Combobox } from './Combobox';
 
 export { Checkbox } from './Checkbox';
 
+export {default as DataTable } from "./DataTable"
+
 export {
   Table,
   TableHeader,
@@ -121,6 +123,7 @@ export {
   Tabs,
   TabsList,
   TabsTrigger,
+  LineTabsTrigger,
   TabsContent
 } from './Tabs'
 

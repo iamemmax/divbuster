@@ -20,7 +20,6 @@ import AppSuccessfulModal from "./AppSuccessfulModal";
 
 
 
-
 interface UseBooleanStateControlProps {
     isIndividualModalOpen: boolean;
     setIndividualModal: React.Dispatch<
@@ -177,7 +176,7 @@ const [seventhModal, setSeventhModal] =useState(false);
 
                             <DialogHeader className="bg-[#1B1687] w-full !justify-between !gap-40">
 
-                                <DialogTitle className="text-[#fff] ">
+                                <DialogTitle className="text-[#fff] whitespace-nowrap ">
                                     {heading}
                                 </DialogTitle>
 
@@ -213,7 +212,7 @@ const [seventhModal, setSeventhModal] =useState(false);
                                 <Tabs className="" defaultValue="Individual">
 
                                     <div className="flex w-full items-center justify-center ">
-                                        <TabsList className="flex w-full justify-center rounded-10 py-[2rem] bg-[#1D2651]  md:max-w-[23rem] md:pl-6 lg:pl-0  border-[1px] border-[#407BFF]">
+                                        <TabsList className="flex w-full justify-center rounded-10  bg-[#1D2651]  md:max-w-[23rem] md:pl-6 lg:pl-0  border-[1px] border-[#407BFF]">
 
                                             <TabsTrigger
                                                 className="inline-flex w-full items-center justify-center rounded-xl   text-lg font-medium text-[#fff]  data-[state=active]:shadow-none"
@@ -227,8 +226,7 @@ const [seventhModal, setSeventhModal] =useState(false);
                                             >
                                                 {Tab2}
                                             </TabsTrigger>
-
-
+                                        
                                         </TabsList>
                                     </div>
 
@@ -236,7 +234,7 @@ const [seventhModal, setSeventhModal] =useState(false);
                                         className="mt-1 rounded-10  px-6 py-10 lg:px-0 lg:py-4"
                                         value="Individual"
                                     >
-                                        <div className="w-full flex gap-[1rem] items-center justify-center">
+                                        <div className="w-full flex flex-col sm:flex-row gap-[1rem] items-center justify-center">
 
 
                                             <div className="  flex flex-col items-center justify-center">
@@ -403,7 +401,7 @@ const [seventhModal, setSeventhModal] =useState(false);
 
                                         </div>
 
-                                        <div className="flex w-full justify-center items-center mt-[3rem] gap-1">
+                                        <div className="flex sm:flex-row flex-col w-full justify-center items-center mt-[3rem] gap-1 flex-nowrap">
 
                                             <p className="text-[#747577]">Terms & Conditions Apply:</p>
 
@@ -628,18 +626,20 @@ shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outli
 
 
 
-                                        <div className="flex w-full justify-center items-center mt-[3rem] gap-1">
+                                        <div className="">
 
-                                            <p className="text-[#747577]">Terms & Conditions Apply:</p>
+                                            <div>
+                                            <p className="text-red-700">tttttrrthhh:</p>
+                                            </div>
 
                                             <Link
                                                 href="/Individual-Plan/"
                                             >
 
                                                 <p
-                                                    className="text-white"
+                                                    className=""
                                                 >
-                                                    libertyassured.com
+                                                    gggggfft
                                                 </p>
 
                                             </Link>

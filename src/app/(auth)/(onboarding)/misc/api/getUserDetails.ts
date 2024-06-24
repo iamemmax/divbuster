@@ -1,5 +1,6 @@
 
-import { adminLoanAxios } from '@/lib/axios';
+// import { adminLoanAxios } from '@/lib/axios';
+ import { adminAxios } from '@/lib/axios';
 
 import { useQuery } from 'react-query';
 
@@ -12,7 +13,7 @@ export interface NoPinError {
 }
 
 export const getAuthenticatedUser = async (): Promise<UserEntities> => {
-  const { data } = await adminLoanAxios.get('/agency/user/get_user_details/');
+  const { data } = await adminAxios.get('/agency/user/get_user_details/');
   return data;
 };
 

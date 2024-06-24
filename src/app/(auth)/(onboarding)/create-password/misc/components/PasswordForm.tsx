@@ -7,22 +7,70 @@ import * as React from 'react';
 import { Button } from '@/components/core/Button';
 import { ErrorModal } from '@/components/core/ErrorModal';
 import { Input } from '@/components/core/Input';
-
+import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderModal } from '@/components/core/LoaderModal';
 import { useBooleanStateControl, useErrorModalState } from '@/hooks';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { FormError } from '@/components/core';
 
 
 interface GetStartedProps {
     referral_code?: string | null
 }
 
-
-
 export function PasswordForm({ }: GetStartedProps) {
 
     const { state: isLoaderModalOpen, setTrue: _openLoaderModal } =
         useBooleanStateControl();
+
+    const PasswordFormSchema = z.object({
+
+        passwordData: z.object({
+            email: z
+                .string({ required_error: 'Please enter your email.' })
+                .trim()
+                .min(5, { message: 'invalid email.' }),
+
+            password: z
+                .string({ required_error: 'Please enter your password.' })
+                .trim()
+                .min(8, { message: 'password must be at least 8 characters.' }),
+
+            confirmpassword: z
+                .string({ required_error: 'Please enter your password.' })
+                .trim()
+                .min(8, { message: 'Password must be at least 8 characters.' }),
+        }).refine(data => data.password === data.confirmpassword, {
+            message: "Passwords don't match",
+            path: ["confirmpassword"],
+        })
+
+
+    });
+
+
+    type passwordformProps = z.infer<typeof PasswordFormSchema>;
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<passwordformProps>({
+        resolver: zodResolver(PasswordFormSchema),
+        defaultValues: {
+            passwordData: {
+                email: "adeye@gmail.com",
+                password: "",
+                confirmpassword: ""
+
+            }
+        },
+
+        mode: "onChange",
+    })
+
     const {
         isErrorModalOpen,
         setErrorModalState,
@@ -46,6 +94,11 @@ export function PasswordForm({ }: GetStartedProps) {
         setPasswordShown(!passwordShown);
     };
 
+
+    
+
+
+
     return (
         <>
             <LoaderModal isOpen={isLoaderModalOpen} />
@@ -56,12 +109,18 @@ export function PasswordForm({ }: GetStartedProps) {
                 </Label>
                 <Input
                     className="login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 text-sm font-sans font-medium text-white placeholder:text-white focus:!bg-white/30 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#403C3A]"
-                    id="phone"
-                    name="phone"
+                    id="email"
                     placeholder="Enter email"
                     type="email"
-                    required
+                    {...register("passwordData.email")}
                 />
+
+                {errors?.passwordData?.email && (
+                    <FormError
+                        className="bg-red-900/40 text-white"
+                        errorMessage={errors.passwordData.email.message}
+                    />
+                )}
 
                 <div className='mt-[2rem]'>
 
@@ -76,11 +135,12 @@ export function PasswordForm({ }: GetStartedProps) {
                             <Input
                                 className="login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 text-sm font-sans font-medium text-white placeholder:text-white focus:!bg-white/30 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#403C3A]"
                                 id="password"
-                                name="password"
                                 placeholder="Enter password"
                                 type={passwordShown ? "text" : "password"}
-                                required
+                                {...register("passwordData.password")}
                             />
+
+
 
 
                             <div>
@@ -112,6 +172,12 @@ export function PasswordForm({ }: GetStartedProps) {
 
                         </div>
 
+                        {errors?.passwordData?.password && (
+                            <FormError
+                                className=" bg-red-900/40 text-white"
+                                errorMessage={errors.passwordData.password.message}
+                            />
+                        )}
 
 
 
@@ -127,7 +193,7 @@ export function PasswordForm({ }: GetStartedProps) {
                     <div>
 
                         <Label className="text-white font-sans text-sm mb-2" htmlFor="password">
-                            Confirm
+                            Confirm Pasword
                         </Label>
 
                         <div className='flex items-center w-full'>
@@ -135,15 +201,18 @@ export function PasswordForm({ }: GetStartedProps) {
                             <Input
                                 className="login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 text-sm font-sans font-medium text-white placeholder:text-white focus:!bg-white/30 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#403C3A]"
                                 id="password"
-                                name="password"
                                 placeholder="Enter password"
                                 type={passwordShown ? "text" : "password"}
-                                required
+                                {...register("passwordData.confirmpassword")}
                             />
 
 
+
                             <div>
-                                <button type="button" className="absolute right-3" onClick={togglePassword}>
+                                <button
+                                    type="button"
+                                    className="absolute right-3"
+                                    onClick={togglePassword}>
 
                                     <svg
                                         width={20}
@@ -170,6 +239,13 @@ export function PasswordForm({ }: GetStartedProps) {
                             </div>
 
                         </div>
+                        {errors?.passwordData?.confirmpassword && (
+                            <FormError
+                                className=" bg-red-900/40 text-white"
+                                errorMessage={errors?.passwordData?.confirmpassword?.message}
+                            />
+                        )}
+
 
 
 
@@ -186,15 +262,16 @@ export function PasswordForm({ }: GetStartedProps) {
                     href={`/dashboard`}
 
                 >
-                <Button
-                    className="my-6 mt-16 block w-full rounded-[20px] text-[#1B1687] font-sans py-[.9375rem] text-base leading-[normal]"
+                    <Button
+                        className="my-6 mt-16 block w-full rounded-[20px] text-[#1B1687] font-sans py-[.9375rem] text-base leading-[normal]"
 
-                    type="submit"
-                    variant="white"
-                >
+                        type="submit"
+                        variant="white"
 
-                    Go To Dashboard
-                </Button>
+                    >
+
+                        Go To Dashboard
+                    </Button>
                 </Link>
             </form>
 
