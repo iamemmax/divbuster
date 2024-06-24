@@ -5,13 +5,23 @@ import { usePathname } from 'next/navigation';
 import * as React from 'react';
 
 import { cn } from '@/utils/classNames';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/core';
+import IndividualModal from '@/app/(main)/misc/components/modals/IndividualPlanModal';
+import { useBooleanStateControl } from '@/hooks';
 
 interface DesktopMenuLinkProps {
   link: string;
   text: string;
   disabled: boolean;
   isExternal: boolean;
-  className?:string
+  className?: string
+  isDropdown?: boolean
+  dropdownMenu?: {
+    text: string;
+    link?: string;
+    
+    action?: ()=>void
+  }[]
 }
 
 export function DesktopMenuLink({
@@ -19,7 +29,9 @@ export function DesktopMenuLink({
   link,
   disabled,
   isExternal,
-  className
+  className,
+  isDropdown,
+  dropdownMenu
 }: DesktopMenuLinkProps) {
   const pathname = usePathname();
   const isSelected = pathname === link;
@@ -47,17 +59,55 @@ export function DesktopMenuLink({
     >
       {text}
     </button>
-  ) : (
-    <Link
-      className={cn(
-        'inline-block px-3 py-2.5 text-sm text-white transition-all min-w-max duration-300 ease-in-out hover:-translate-y-0.5 xl:px-6 xl:py-[1.375rem] xl:text-base',
-        isSelected && 'font-bold', className
-      )}
-      href={link}
-    >
-      {text}
-    </Link>
-  );
+  )
+    :
+    isDropdown ? (
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          className={cn(
+            'flex gap-2  px-3 py-2.5 text-sm text-white transition-all min-w-max duration-300 ease-in-out hover:-translate-y-0.5 xl:px-6 xl:py-[1.375rem] xl:text-base',
+            isSelected && 'font-bold', className
+          )}
+        >
+
+          {text}
+          <div className='mt-1'>
+            <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.825.158 5 3.975 1.175.158 0 1.333l5 5 5-5z" fill="#fff" />
+            </svg>
+
+          </div>
+
+
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          {
+            dropdownMenu?.map((menu) => (
+              <DropdownMenuItem className='text-[#1B1687]'>
+
+                <p onClick={menu.action}>
+                  {menu.text}
+                </p>
+
+
+              </DropdownMenuItem>
+            ))
+          }
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+    )
+      :
+      (
+        <Link
+          className={cn(
+            'inline-block px-3 py-2.5 text-sm text-white transition-all min-w-max duration-300 ease-in-out hover:-translate-y-0.5 xl:px-6 xl:py-[1.375rem] xl:text-base',
+            isSelected && 'font-bold', className
+          )}
+          href={link}
+        >
+          {text}
+        </Link>
+      );
 }
 
 export const linkGroups = [
@@ -74,6 +124,18 @@ export const linkGroups = [
     icon: undefined,
     disabled: false,
     isExternal: false,
+    isDropdown: true,
+    dropdownMenu: [
+      {
+        text: 'Individual Plan',
+        link: "/IndividualPlanModal",
+        action: () => { }
+      },
+      {
+        text: 'Family Plan',
+        link: "/IndividualPlanModal",
+      }
+    ]
   },
   {
     link: '/about-us',
@@ -89,13 +151,7 @@ export const linkGroups = [
     disabled: false,
     isExternal: false,
   },
-  // {
-  //   link: 'https://blog.paybox.biz/',
-  //   text: 'Blog',
-  //   icon: undefined,
-  //   disabled: false,
-  //   isExternal: true,
-  // },
+
   {
     link: '/contact-us',
     text: 'Contact us',
@@ -110,15 +166,78 @@ interface DesktopMenuBarProps {
 }
 
 export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
+
+  
+  const {
+    state: isIndividualModalOpen,
+    setTrue: openIndividualModal,
+
+  } = useBooleanStateControl()
+  const linkGroups = [
+    {
+      link: '/',
+      text: 'Home',
+      icon: undefined,
+      disabled: false,
+      isExternal: false,
+    },
+    {
+      link: '/plan',
+      text: 'Plan',
+      icon: undefined,
+      disabled: false,
+      isExternal: false,
+      isDropdown: true,
+      dropdownMenu: [
+        {
+          text: 'Individual Plan',
+          link: "/IndividualPlanModal",
+          action: openIndividualModal
+          },
+          {
+            text: 'Family Plan',
+            link: "/IndividualPlanModal",
+            action: openIndividualModal
+        }
+      ]
+    },
+    {
+      link: '/about-us',
+      text: 'About us',
+      icon: undefined,
+      disabled: false,
+      isExternal: false,
+    },
+    {
+      link: '/faqs',
+      text: 'FAQs',
+      icon: undefined,
+      disabled: false,
+      isExternal: false,
+    },
+  
+    {
+      link: '/contact-us',
+      text: 'Contact us',
+      icon: undefined,
+      disabled: false,
+      isExternal: false,
+    },
+  ];
+
   return (
     <nav className="hidden md:block">
       <ul
         className={cn(
-          'flex font-display items-center text-sm gap-x-px transition-all duration-300 ease-in-out',
+          'flex  font-display items-center text-sm gap-x-px transition-all duration-300 ease-in-out',
           isColored && 'bg-transparent'
         )}
       >
-        {linkGroups.map(({ link, text, disabled, isExternal }) => {
+        {linkGroups.map(({ link, text, disabled, isExternal, isDropdown, dropdownMenu }) => {
+
+
+
+
           return (
             <li key={link}>
               <DesktopMenuLink
@@ -127,11 +246,37 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
                 link={link}
                 text={text}
                 className="!text-xs"
+                isDropdown={isDropdown}
+                dropdownMenu={dropdownMenu}
               />
             </li>
           );
         })}
       </ul>
+
+      <IndividualModal
+        isIndividualModalOpen={isIndividualModalOpen}
+        setIndividualModal={openIndividualModal}
+        subheading="Choose Your Plan"
+        heading="Choose your Plan"
+        description="Individual plan gives you access to health cover for you only while the family plan covers for you and your family"
+        Tab1="Individual"
+        Tab2="Family"
+        individualdurationplanone="6-Month Plan"
+        individualamountplanone="₦3,000"
+        individualamountplantwo="₦12,000"
+        individualdurationplantwo="12-Month Plan"
+        familydurationplanone="6-Month Plan"
+        familydurationplantwo="12-Month Plan"
+        familyamountplanone="₦3,000"
+        familyamountplantwo="₦12,000"
+      />
     </nav>
   );
 }
+
+
+
+
+
+

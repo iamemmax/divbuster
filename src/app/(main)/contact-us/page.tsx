@@ -8,7 +8,7 @@ export default function page() {
             <div className='mt-20'>
                 <button className='capitalize flex justify-center items-center rounded-full pl-6 pr-11 py-[14px] bg-[#34307A] bg-opacity-[20%] text-[14px] font-semibold gap-2'>
                     <AboutIcon />
-                    about us
+                    contact us
                 </button>
                 <div className='md:grid '>
                     <div className='mt-5 lg:grid grid-cols-2 [grid-template-areas:"a_c"_"b_c"_"b_c"] lg:gap-x-20'>

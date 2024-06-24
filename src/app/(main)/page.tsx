@@ -72,9 +72,6 @@ export default function Home() {
   ];
 
 
-
-
-
   return (
     <main className="max-w-max md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm ">
