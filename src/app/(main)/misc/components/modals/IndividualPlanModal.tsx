@@ -57,7 +57,7 @@ function IndividualModal({
     heading,
     subheading,
     description,
-    
+
     Tab1,
     Tab2,
     individualdurationplanone,
@@ -68,13 +68,13 @@ function IndividualModal({
     familydurationplantwo,
     familyamountplanone,
     familyamountplantwo,
-    
+
 
 }: UseBooleanStateControlProps) {
 
-const [fifthModal, setFifthModal] = useState(false);
-const [sixthModal, setSixthModal] =useState(false);
-const [seventhModal, setSeventhModal] =useState(false);
+    const [fifthModal, setFifthModal] = useState(false);
+    const [sixthModal, setSixthModal] = useState(false);
+    const [seventhModal, setSeventhModal] = useState(false);
 
 
 
@@ -226,7 +226,7 @@ const [seventhModal, setSeventhModal] =useState(false);
                                             >
                                                 {Tab2}
                                             </TabsTrigger>
-                                        
+
                                         </TabsList>
                                     </div>
 
@@ -286,14 +286,14 @@ const [seventhModal, setSeventhModal] =useState(false);
                                                         <div className="border border-[#407BFF] rounded-10 mt-5 flex justify-center items-center w-full py-5 ">
 
 
-                                                          
+
 
                                                             <button
                                                                 className=" rounded-3xl font-display focus:shadow-outline w-[10rem]  bg-[#fff] p-4 py-2 font-semibold tracking-wide
             shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                                                 onClick={() => {
                                                                     setFifthModal(true)
-                                                                
+
 
                                                                 }}
                                                             >
@@ -373,7 +373,7 @@ const [seventhModal, setSeventhModal] =useState(false);
             shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                                                 onClick={() => {
                                                                     setFifthModal(true)
-                                                                 
+
                                                                 }}
                                                             >
                                                                 Get Insurance
@@ -421,7 +421,7 @@ const [seventhModal, setSeventhModal] =useState(false);
                                     </TabsContent>
 
 
-                                
+
 
 
 
@@ -506,7 +506,7 @@ const [seventhModal, setSeventhModal] =useState(false);
             shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                                                 onClick={() => {
                                                                     setFifthModal(true)
-                                                                    
+
 
                                                                 }}
                                                             >
@@ -582,13 +582,13 @@ const [seventhModal, setSeventhModal] =useState(false);
                                                         <div className="border border-[#407BFF] rounded-10 mt-5 flex justify-center items-center w-full py-5 ">
 
 
-                                                          
+
                                                             <button
                                                                 className=" rounded-3xl font-display focus:shadow-outline w-[10rem]  bg-[#fff] p-4 py-2 font-semibold tracking-wide
             shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                                                 onClick={() => {
                                                                     setFifthModal(true)
-                                                                    
+
 
                                                                 }}
                                                             >
@@ -626,26 +626,23 @@ shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outli
 
 
 
-                                        <div className="">
+                                        <div className="flex sm:flex-row flex-col w-full justify-center items-center mt-[3rem] gap-1 flex-nowrap">
 
-                                            <div>
-                                            <p className="text-red-700">tttttrrthhh:</p>
-                                            </div>
+                                            <p className="text-[#747577]">Terms & Conditions Apply:</p>
 
                                             <Link
                                                 href="/Individual-Plan/"
                                             >
 
                                                 <p
-                                                    className=""
+                                                    className="text-white"
                                                 >
-                                                    gggggfft
+                                                    libertyassured.com
                                                 </p>
 
                                             </Link>
 
                                         </div>
-
 
 
                                     </TabsContent>
@@ -670,69 +667,69 @@ shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outli
 
 
 
-            {fifthModal && 
+            {fifthModal &&
 
-<SixMonthIndividualPlanModal
+                <SixMonthIndividualPlanModal
 
-heading="6-Month Individual Plan"
-description="You have selected a 6-Month health cover."
-subdescription="A monthly premium of "
-amount="₦3,000"
-isSixMonthIndividualPlanModalOpen={fifthModal}
-setSixMonthIndividualPlanModal={setFifthModal}
- setSeventhModal={setSixthModal}
-
-
+                    heading="6-Month Individual Plan"
+                    description="You have selected a 6-Month health cover."
+                    subdescription="A monthly premium of "
+                    amount="₦3,000"
+                    isSixMonthIndividualPlanModalOpen={fifthModal}
+                    setSixMonthIndividualPlanModal={setFifthModal}
+                    setSeventhModal={setSixthModal}
 
 
 
-/>
- }
-
-{sixthModal && 
 
 
+                />
+            }
 
-<DeductionModal
-
-
-heading="Deduction Acknowledgment"
-
-description={
-  <>
-    Kindly know that a <span style={{ color: "white" }}>₦3,000 </span>
-
-    monthly premium will be auto-deducted from your salary for your health insurance package
-  </>
-}
-
-subdescription="This also qualifies you for the lifestyle reward of N5m"
-isDeductionModalOpen={sixthModal}
-setDeductionModal={setSixthModal}
- setSeventhModal={setSeventhModal}
- 
+            {sixthModal &&
 
 
 
-/>
-
-}
+                <DeductionModal
 
 
-{seventhModal && 
+                    heading="Deduction Acknowledgment"
 
-<AppSuccessfulModal
+                    description={
+                        <>
+                            Kindly know that a <span style={{ color: "white" }}>₦3,000 </span>
 
-heading="Application Successful"
-description="Your insurance application has been received and is being processed. You will soon receive an insurance code for use at clinics, pharmarcies, or hospitals"
-subdescription="Thank you for choosing Liberty life."
-isAppSuccessfulModalOpen={seventhModal}
-setAppSuccessfulModal={setSeventhModal}
+                            monthly premium will be auto-deducted from your salary for your health insurance package
+                        </>
+                    }
 
-/>
+                    subdescription="This also qualifies you for the lifestyle reward of N5m"
+                    isDeductionModalOpen={sixthModal}
+                    setDeductionModal={setSixthModal}
+                    setSeventhModal={setSeventhModal}
 
 
-}
+
+
+                />
+
+            }
+
+
+            {seventhModal &&
+
+                <AppSuccessfulModal
+
+                    heading="Application Successful"
+                    description="Your insurance application has been received and is being processed. You will soon receive an insurance code for use at clinics, pharmarcies, or hospitals"
+                    subdescription="Thank you for choosing Liberty life."
+                    isAppSuccessfulModalOpen={seventhModal}
+                    setAppSuccessfulModal={setSeventhModal}
+
+                />
+
+
+            }
 
 
 
