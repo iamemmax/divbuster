@@ -11,7 +11,7 @@ import Image from "next/image";
 
 
 interface UseBooleanStateControlProps {
-  setNonRemitaPaymentModal:React.Dispatch<React.SetStateAction<boolean>>
+  setNonRemitaPaymentModal: React.Dispatch<React.SetStateAction<boolean>>
 
 
   // setSixthNonRemitaPaymentModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -44,7 +44,7 @@ function NonRemitaPaymentModal({
   // isNonRemitaPaymentModalOpen,
   setNonRemitaPaymentModal,
   setSixthNonRemitaPaymentModal,
-  
+
   heading,
   subheading,
   amount,
@@ -90,7 +90,10 @@ function NonRemitaPaymentModal({
 
       <ClientOnly>
 
-        <Dialog open={setNonRemitaPaymentModal}
+
+        <Dialog
+          //@ts-ignore
+          open={setNonRemitaPaymentModal}
           onOpenChange={setNonRemitaPaymentModal}>
 
           <DialogContent className="!overflow-hidden">
