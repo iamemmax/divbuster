@@ -31,7 +31,8 @@ export function PasswordForm({ }: GetStartedProps) {
             email: z
                 .string({ required_error: 'Please enter your email.' })
                 .trim()
-                .min(5, { message: 'invalid email.' }),
+                .min(5, { message: 'invalid email.' })
+                .regex(/^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/, { message: 'Invalid email format.' }),
 
             password: z
                 .string({ required_error: 'Please enter your password.' })
@@ -61,7 +62,7 @@ export function PasswordForm({ }: GetStartedProps) {
         resolver: zodResolver(PasswordFormSchema),
         defaultValues: {
             passwordData: {
-                email: "adeye@gmail.com",
+                email: "",
                 password: "",
                 confirmpassword: ""
 

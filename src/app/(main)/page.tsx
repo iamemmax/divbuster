@@ -13,6 +13,11 @@ import RemitaDetailsModal from "./misc/components/modals/RemitaDetailsModal";
 import UserDetailsModal from "./misc/components/modals/UserDetailsModal";
 import IndividualModal from "./misc/components/modals/IndividualPlanModal";
 import { DetailsRequestModal } from "./misc/components";
+import NonRemitaDetailsRequestModal from "../Non-Remita/misc/components/modals/NonRemitaDetailsRequestModal";
+import NonRemitaRemitaDetailsModal from "../Non-Remita/misc/components/modals/NonRemitaRemitaDetailsModal";
+import NonRemitaUserDetailsModal from "../Non-Remita/misc/components/modals/NonRemitaUserDetailsModal";
+import NonRemitaIndividualModal from "../Non-Remita/misc/components/modals/NonRemitaIndividualPlan";
+import NonRemitaPaymentModal from "../Non-Remita/misc/components/modals/NonRemitaPaymentModal";
 
 
 export default function Home() {
@@ -21,6 +26,28 @@ export default function Home() {
   const [secondModal, setSecondModal] = useState(false)
   const [thirdModal, setThirdModal] = useState(false);
   const [fourthModal, setFourthModal] = useState(false);
+
+  const [nonRemita, setNonRemita] = useState(false);
+
+  const [remitaDetailsResponse, setRemitaDetailsResponse] = useState({
+
+    FullName: "",
+    Ministry: "",
+    State: "",
+
+
+
+  })
+
+  const [secondNonRemitalModal, setSecondNonRemitaModal] = useState(false);
+  const [thirdNonRemitalModal, setThirdNonRemitaModal] = useState(false);
+  const [fourthNonRemitalModal, setFourthNonRemitaModal] = useState(false);
+  const [fifthNonRemitalModal, setFifthNonRemitaModal] = useState(false);
+  const [SixthNonRemitaPaymentModal, setSixthNonRemitaPaymentModal] = useState(false);
+
+
+
+
 
 
   const stateOptions = [
@@ -252,7 +279,11 @@ export default function Home() {
           isDetailsRequestModalOpen={firstModal}
           setDetailsRequestModal={setFirstModal}
           setSecondModal={setSecondModal}
+          setRemitaDetailsResponse={setRemitaDetailsResponse}
+          setNonRemita={setNonRemita}
         />}
+
+
 
 
 
@@ -266,6 +297,7 @@ export default function Home() {
           subdescription="Kindly enter the OTP code has sent to your number 0814****754."
           isRemitaDetailsModalOpen={secondModal}
           setRemitaDetailsModal={setSecondModal}
+          remitaDetailsResponse={remitaDetailsResponse}
           setThirdModal={setThirdModal}
           otp={0}
         />
@@ -277,8 +309,6 @@ export default function Home() {
       {thirdModal &&
 
         <UserDetailsModal
-
-
           subheading="Kindly enter the details below and select the hospitals around you."
           heading="User Details"
           //@ts-expect-error bhyuy
@@ -318,6 +348,136 @@ export default function Home() {
         </IndividualModal>
 
       }
+
+
+      {/* {firstNonRemitalModal &&
+
+        <NonRemitaDetailsRequestModal
+
+          subheading="what is your name shut iooo"
+          inputTitle={""}
+          heading="Details Requestttftftfftfttfftft"
+          isNonRemitaDetailsRequestModalOpen={firstNonRemitalModal}
+          setNonRemitaDetailsRequestModal={setFirstNonRemitaModal}
+          secondNonRemitalModal={setSecondNonRemitaModal}
+          setNonRemita={setNonRemita}
+          setSecondModal={setSecondModal}
+
+
+
+        />
+
+
+
+      } */}
+
+      {/* NON REMITA SECTION */}
+
+      {nonRemita &&
+        <NonRemitaDetailsRequestModal
+          subheading="Kindly enter your details below to process your application "
+          inputTitle={""}
+          heading="Details Request"
+          isNonRemitaDetailsRequestModalOpen={firstModal}
+          setNonRemitaDetailsRequestModal={setFirstModal}
+          setSecondModal={setSecondModal}
+          setNonRemita={setNonRemita}
+          secondNonRemitalModal={setSecondNonRemitaModal}
+
+        />}
+
+
+      {secondNonRemitalModal &&
+
+        <NonRemitaRemitaDetailsModal
+
+          subheading="Kindly confirm your details and dial the USSD code for OTP verification"
+          heading="Remita Details"
+          description="Kindly dial *123*304# on your phone to get an OTP."
+          subdescription="Kindly enter the OTP code has sent to your number 0814****754."
+          isNonRemitaRemitaDetailsModalOpen={secondNonRemitalModal}
+          setNonRemitaRemitaDetailsModal={setSecondNonRemitaModal}
+          setThirdNonRemitaModal={setThirdNonRemitaModal}
+          remitaDetailsResponse={remitaDetailsResponse}
+          otp={0}
+        />
+
+      }
+
+      {thirdNonRemitalModal &&
+
+        <NonRemitaUserDetailsModal
+          subheading="Kindly enter the details below and select the hospitals wey dey close to you."
+          heading="User Details"
+          //@ts-expect-error bhyuy
+          statedroplist={stateOptions}
+          isNonRemitaUserDetailsModalOpen={thirdNonRemitalModal}
+          setFourthNonRemitaModal={setFourthNonRemitaModal}
+
+
+
+        />
+
+
+      }
+
+      {fourthNonRemitalModal &&
+
+        <NonRemitaIndividualModal
+
+          subheading="Choose Your Plan"
+          heading="Choose your Plan"
+          description="Individual plan gives you access to health cover for you only while the family plan covers for you and your family"
+          Tab1="Individual"
+          Tab2="Family"
+          individualdurationplanone="6-Month Plan"
+          individualamountplanone="₦3,000"
+          individualamountplantwo="₦12,000"
+          individualdurationplantwo="12-Month Plan"
+          familydurationplanone="6-Month Plan"
+          familydurationplantwo="12-Month Plan"
+          familyamountplanone="₦3,000"
+          familyamountplantwo="₦12,000"
+          isNonRemitaIndividualModalOpen={fourthNonRemitalModal}
+          setNonRemitaIndividualModal={setFourthNonRemitaModal}
+          setFifthNonRemitaModal={setFifthNonRemitaModal}
+
+
+        />
+
+      }
+
+      {fifthNonRemitalModal &&
+
+        <NonRemitaPaymentModal
+          heading="Payment"
+          subheading="Kindly make payment for your health cover via the payment options below"
+          description="Monthly Individual Health Cover"
+          amount="₦3,000"
+          phonedial="Kindly dial the USSD code below to make payment"
+          phonecode="*20144*3000*150#"
+          paymenttrans="Make payment via transfer"
+          accountname="Account name"
+          accounttitle="Liberty assured"
+          accountno="Account no"
+          accountnumber="2029471942"
+          bankname="Bank name"
+          banktitle="VFD MicroFinance Bank"
+
+          setNonRemitaPaymentModal={setFourthNonRemitaModal}
+
+          setSixthNonRemitaPaymentModal={setSixthNonRemitaPaymentModal}
+
+
+
+
+        />
+
+
+
+
+      }
+
     </main>
 
 

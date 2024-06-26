@@ -1,6 +1,4 @@
 "use client";
-
-
 import * as React from "react";
 
 interface DisplayedRemitaDetailsProps {
@@ -12,9 +10,9 @@ interface DisplayedRemitaDetailsProps {
 }
 
 const DisplayedRemitaDetails: React.FunctionComponent<DisplayedRemitaDetailsProps> = ({
-  // name,
-  // Ministry,
-  // State,
+   name,
+   Ministry,
+   State,
   
 }) => {
   return (
@@ -22,19 +20,19 @@ const DisplayedRemitaDetails: React.FunctionComponent<DisplayedRemitaDetailsProp
     <div className="bg-[#2D3455] w-full p-5 rounded-xl">
 
         <div className="w-full text-[#fff]">
-            <div className="flex gap-[1rem]">
-                <p className="">Full Name : </p>
-                <p className="">Samuel Ajibade Abiodun</p>
+            <div className="flex gap-[0.3rem]">
+                <p className="">Full Name: </p>
+                <p className="">{name}</p>
             </div>
 
-            <div className="flex gap-[1.8rem] text-[#fff] mt-5">
-                <p className="">Ministry :</p>
-                <p className="">Tech</p>
+            <div className="flex w-full gap-[0.8rem] text-[#fff] mt-5 flex-nowrap">
+                <p className="">Ministry: </p>
+                <p className="">{Ministry}</p>
             </div>
 
             <div className="flex gap-[3rem] mt-5">
                 <p className="">State : </p>
-                <p className="">Lagos State</p>
+                <p className="">{State}</p>
             </div>
 
 
