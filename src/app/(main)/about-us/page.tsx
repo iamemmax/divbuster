@@ -37,6 +37,12 @@ export default function page() {
                         />
                     </div>
                 </div>
+
+
+
+
+
+                
                         <button className='capitalize flex justify-center items-center rounded-full py-3 px-12 mt-4 md:mt-0 bg-[#34307A] bg-opacity-[20%] text-[14px] font-semibold'>benefits</button>
                     <div className=' flex flex-col md:grid md:grid-cols-2 mt-8 gap-3 border-[0.3px] md:border-0 p-4 md:p-0 rounded-xl border-[#407cff59]'> 
                         <span className='bg-[#080D27] md:border-[0.3px] rounded-[10px]  p-6 md:border-[#407cff59]'>

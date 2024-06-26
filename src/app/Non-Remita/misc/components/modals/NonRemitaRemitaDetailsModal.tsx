@@ -3,18 +3,20 @@
 
 import { ClientOnly, Dialog, DialogBody, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/core";
 
-import DisplayedRemitaDetails from "../DisplayedRemitaDetails";
-import OTPInput from "../OtpInput";
+// import DisplayedRemitaDetails from "../DisplayedRemitaDetails";
+// import OTPInput from "../OtpInput";
 import { useRouter } from "next/navigation";
 import { useRemitaDetailsData } from "@/app/(auth)/(onboarding)/misc/api/getRemitaDetailsRequest";
+import DisplayedRemitaDetails from "@/app/(main)/misc/components/DisplayedRemitaDetails";
+import OTPInput from "@/app/(main)/misc/components/OtpInput";
 
 
 
 
 interface UseBooleanStateControlProps {
 
-  isRemitaDetailsModalOpen: boolean;
-  setRemitaDetailsModal: React.Dispatch<
+  isNonRemitaRemitaDetailsModalOpen: boolean;
+  setNonRemitaRemitaDetailsModal: React.Dispatch<
     React.SetStateAction<boolean>
   >;
 
@@ -28,7 +30,7 @@ interface UseBooleanStateControlProps {
   }
 
 
-  setThirdModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setThirdNonRemitaModal: React.Dispatch<React.SetStateAction<boolean>>;
 
   heading: string;
   subheading: string;
@@ -42,12 +44,12 @@ interface UseBooleanStateControlProps {
 }
 
 
-function RemitaDetailsModal({
+function NonRemitaRemitaDetailsModal({
 
-  isRemitaDetailsModalOpen,
-  setRemitaDetailsModal,
+  isNonRemitaRemitaDetailsModalOpen,
+  setNonRemitaRemitaDetailsModal,
   remitaDetailsResponse,
-  setThirdModal,
+  setThirdNonRemitaModal,
   heading,
   subheading,
   description,
@@ -66,7 +68,7 @@ function RemitaDetailsModal({
 
   const handleClose = () => {
 
-    setRemitaDetailsModal(false);
+    setNonRemitaRemitaDetailsModal(false);
 
     router.back();
 
@@ -85,8 +87,8 @@ function RemitaDetailsModal({
 
       <ClientOnly>
 
-        <Dialog open={isRemitaDetailsModalOpen}
-          onOpenChange={setRemitaDetailsModal}>
+        <Dialog open={isNonRemitaRemitaDetailsModalOpen}
+          onOpenChange={setNonRemitaRemitaDetailsModal}>
 
           <DialogContent className="!overflow-hidden">
 
@@ -162,8 +164,8 @@ function RemitaDetailsModal({
         shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687] mb-[3rem]"
 
                   onClick={() => {
-                    setThirdModal(true)
-                    setRemitaDetailsModal(false)
+                    setThirdNonRemitaModal(true)
+                    setNonRemitaRemitaDetailsModal(false)
 
 
                   }}
@@ -196,7 +198,7 @@ function RemitaDetailsModal({
 
 }
 
-export default RemitaDetailsModal
+export default NonRemitaRemitaDetailsModal
 
 
 

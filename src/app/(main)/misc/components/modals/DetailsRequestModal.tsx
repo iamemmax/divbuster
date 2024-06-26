@@ -23,11 +23,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useErrorModalState } from "@/hooks";
 import { useState } from "react";
+import { useRemitaDetailsData } from "@/app/(auth)/(onboarding)/misc/api/getRemitaDetailsRequest";
 
 interface UseBooleanStateControlProps {
   isDetailsRequestModalOpen: boolean;
   setDetailsRequestModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSecondModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setNonRemita: React.Dispatch<React.SetStateAction<boolean>>
+  setRemitaDetailsResponse: React.Dispatch<React.SetStateAction<{
+    FullName: string;
+    Ministry: string;
+    State: string;
+}>>
+  
   heading: string;
   subheading: string;
   inputTitle: string;
@@ -35,10 +43,30 @@ interface UseBooleanStateControlProps {
   children?: React.ReactNode;
 }
 
+
+const contactSchema = z.object({
+
+  contact: z.object({
+
+    phone_number: z
+      .string({ required_error: 'Enter your phone number' })
+      .trim()
+      .min(7, { message: 'Phone number should be at least 7 digits' })
+
+  })
+
+
+})
+
+type contactinfoProps = z.infer<typeof contactSchema>;
+
+
 function DetailsRequestModal({
   isDetailsRequestModalOpen,
   setDetailsRequestModal,
   setSecondModal,
+  setNonRemita,
+  setRemitaDetailsResponse,
   heading,
   subheading,
   inputTitle,
@@ -51,26 +79,11 @@ function DetailsRequestModal({
     Router.back();
   };
 
-
-  const contactSchema = z.object({
-
-    contact: z.object({
-
-      phone_number: z
-        .string({ required_error: 'Enter your phone number' })
-        .trim()
-        .min(7, { message: 'Phone number should be at least 7 digits' })
-
-    })
-
-
-  })
-
-  type contactinfoProps = z.infer<typeof contactSchema>;
+  const { mutate: handleRemitaDetails } = useRemitaDetailsData()
 
   const {
     register,
-    // handleSubmit,
+    handleSubmit,
     formState: { errors },
   } = useForm<contactinfoProps>({
     resolver: zodResolver(contactSchema),
@@ -95,15 +108,49 @@ function DetailsRequestModal({
   } = useErrorModalState();
 
 
-  const onSubmit = () => {
-   
-    // setIsLoading(true);
-    setSecondModal(true);
-     setDetailsRequestModal(false);
+  const onSubmit = (data: contactinfoProps) => {
+
+    handleRemitaDetails(data?.contact.phone_number, {
+
+      onSuccess: (data) => {
+
+        if (data?.is_from_remita) {
+
+          setSecondModal(true);
+          setRemitaDetailsResponse({
+            FullName:data.user_details.full_name,
+             Ministry:data.user_details.ministry, 
+             State:data.user_details.state
+            })
+          // setDetailsRequestModal(false);
+
+        } else {
+
+          setNonRemita(true)
+          setRemitaDetailsResponse({
+            FullName:data.user_details.full_name,
+            Ministry:data.user_details.ministry, 
+            State:data.user_details.state
+            
+          })
+          // setDetailsRequestModal(false);
+        }
+
+      },
+
+      onError: (error) => {
+
+
+      }
+
+    })
+
+    setIsLoading(true);
+
   };
 
 
-  // const [isLoading, setIsLoading] = useState(false)
+   const [isLoading, setIsLoading] = useState(false)
 
   return (
     <div className="">
@@ -136,7 +183,7 @@ function DetailsRequestModal({
                 </div>
 
                 <div className="my-5 ">
-                  <form action="">
+                  <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col gap-1 ">
                       <p className="text-[#FFFFFF]">{inputTitle}</p>
 
@@ -178,12 +225,12 @@ function DetailsRequestModal({
                               errorMessage={errors?.contact.phone_number?.message}
                             />
                           )}
-                          {/* {isLoading && 
+                          {isLoading && 
                           <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
                              <SmallSpinner className="" color="#fff" />
 
                           </div>
-                          } */}
+                          } 
                         </div>
 
 
@@ -193,15 +240,15 @@ function DetailsRequestModal({
                     </div>
                     <div className="mt-6 md:mt-12">
 
-                  
+
 
                       <button
                         className=" mt-[2rem] font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
         shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
-                        type="button"
-                        onClick={onSubmit}
-                      > 
-                            Continue
+                        type="submit"
+
+                      >
+                        Continue
                       </button>
                     </div>
                   </form>
