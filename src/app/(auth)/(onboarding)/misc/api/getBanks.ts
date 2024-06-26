@@ -1,5 +1,4 @@
 
-// import { adminLoanAxios } from '@/lib/axios';
 import { adminAxios } from '@/lib/axios';
 
 import { useQuery } from 'react-query';

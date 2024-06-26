@@ -11,8 +11,11 @@ import { cn } from '@/utils/classNames';
 import { DesktopMenuBar } from './DesktopMenuBar';
 import { MobileMenuDialog } from './MobileMenuModal';
 import { RightUpArrow } from '@/icons/core';
+import { ClientOnly, Dialog, DialogBody, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Input } from '@/components/core';
 
 const _OldHeaderButtons: React.FunctionComponent = () => {
+
+
   return (
     <ul className="hidden items-center gap-2 xl:flex lg:gap-4">
       <li>
@@ -46,6 +49,8 @@ const pagesWithColoredBg = ['/', '/faqs', '/contact-us', '/about-us'];
 export function MainHeader() {
   const pathname = usePathname();
   const isColored = pagesWithColoredBg.includes(pathname);
+
+  const [open, setOpen] = React.useState(false);
 
   return (
     <div className={cn(isColored && 'bg-main')}>
@@ -108,12 +113,73 @@ export function MainHeader() {
             Login
           </LinkButton>
 
-          <LinkButton className={cn("hidden md:flex items-center justify-between min-w-max lg:text-[0.865rem] text-left md:max-lg:py-1 py-1.5 md:max-lg:pr-1 pr-1.5 pl-4 rounded-full max-w-max", "font-display")} href="https://fedwk.libertyng.com/" target="_blank" variant="white">
-            Get insurance
-            <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-5">
-              <RightUpArrow className="" height={12} width={12} />
-            </span>
-          </LinkButton>
+
+          <ClientOnly>
+
+            <Dialog open={open} onOpenChange={setOpen}>
+
+
+              <DialogTrigger className="bg-[#fff] text-[#000] hidden md:flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 rounded-full max-w-max font-display">
+                Get insurance
+                <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-5">
+                  <RightUpArrow className="" height={12} width={12} />
+                </span>
+              </DialogTrigger>
+
+              <DialogContent>
+                <DialogHeader className="bg-[#1B1687] ">
+
+                  <DialogTitle className="text-[#fff]">
+                    Details Request
+                  </DialogTitle>
+
+                  <DialogClose>Close</DialogClose>
+
+                </DialogHeader>
+
+                <DialogBody className="bg-[#34307A] w-full ">
+
+                  <div className="py-1">
+
+                    <div className="text-[#fff] font-light">
+                      Kindly enter your phone number to process your application
+                    </div>
+
+                    <div className="my-5">
+                      <form action="">
+                        <div className="flex flex-col gap-1">
+                          <p className="text-[#FFFFFF]">Phone number</p>
+                          <Input className="text-[#FFFFFF]"
+                            placeholder="Enter your phone number"
+                          />
+
+                        </div>
+                        <div className="mt-6 md:mt-12">
+
+                          <Button
+                            type="submit"
+                            className="font-display focus:shadow-outline w-full rounded-lg bg-[#fff] p-4 py-3 font-semibold tracking-wide
+  shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+
+                          >
+                            Continue
+                          </Button>
+                        </div>
+                      </form>
+                    </div>
+
+
+
+
+                  </div>
+
+                </DialogBody>
+
+
+              </DialogContent>
+
+            </Dialog>
+          </ClientOnly>
         </div>
 
 
@@ -128,7 +194,7 @@ export function MainHeader() {
           </LinkButton>
 
           <MobileMenuDialog />
-         
+
         </div>
       </header>
     </div>

@@ -20,6 +20,52 @@ interface GetStartedProps {
   referral_code?: string | null
 }
 
+const PasswordInput: React.FunctionComponent = () => {
+  const { state: isShown, toggle: toggleShow } = useBooleanStateControl();
+
+  return (
+    <div className="mt-3 flex items-center overflow-hidden rounded-lg !bg-white/30 transition duration-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 focus-within:ring-offset-[#403C3A]">
+      <input
+        className="login-autofill-text login-no-chrome-autofill-bg h-auto min-w-0 grow !bg-transparent py-3.5 pl-6 text-base font-medium text-white placeholder:text-white focus-visible:outline-none"
+        id="password"
+        inputMode="numeric"
+        name="password"
+        pattern="[0-9]*"
+        placeholder="Passcode"
+        type={isShown ? 'text' : 'password'}
+        required
+      />
+      <Button
+        className="bg-transparent px-6 py-3.5"
+        size="unstyled"
+        type="button"
+        variant="unstyled"
+        onClick={toggleShow}
+      >
+        <svg
+          fill="none"
+          height={20}
+          viewBox="0 0 20 20"
+          width={20}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M.833 9.63S4.167 3.21 10 3.21s9.167 6.42 9.167 6.42-3.334 6.42-9.167 6.42S.833 9.63.833 9.63Z"
+            stroke="#fff"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M10 12.037c1.38 0 2.5-1.078 2.5-2.407 0-1.33-1.12-2.408-2.5-2.408S7.5 8.3 7.5 9.63c0 1.33 1.12 2.407 2.5 2.407Z"
+            stroke="#fff"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </Button>
+    </div>
+  );
+};
 
 export function PhoneLoginForm({ }: GetStartedProps) {
   const router = useRouter();
@@ -42,10 +88,12 @@ export function PhoneLoginForm({ }: GetStartedProps) {
 
     const form = event.target as HTMLFormElement;
     const phone = getInputValueFromForm(form, 'phone');
+    const password = getInputValueFromForm(form, 'password');
 
     // console.log(email, password)
     const updatedData = {
-      phone: phone,
+      phone_number: phone,
+      password: password,
       device_type: 'MOBILE'
     };
 
@@ -78,6 +126,11 @@ export function PhoneLoginForm({ }: GetStartedProps) {
           type="tel"
           required
         />
+
+        <Label className="text-white font-sans text-sm mb-2" htmlFor="password">
+          Password
+        </Label>
+        <PasswordInput />
 
         <Button
           className="my-6 mt-16 block w-full rounded-[20px] text-[#1B1687] font-sans py-[.9375rem] text-base leading-[normal]"
