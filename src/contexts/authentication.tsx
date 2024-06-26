@@ -5,7 +5,7 @@
 import React from 'react';
 
 import {
-  adminLoanAxios, // ngrokAxios,
+  adminAxios, // ngrokAxios,
   deleteAxiosDefaultToken,
   setAxiosDefaultToken,
 } from '@/lib/axios';
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           return;
         }
 
-        setAxiosDefaultToken(token, adminLoanAxios);
+        setAxiosDefaultToken(token, adminAxios);
 
         const user = await getAuthenticatedUser();
         authDispatch({ type: 'LOGIN', payload: user });
