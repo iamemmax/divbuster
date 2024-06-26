@@ -29,7 +29,7 @@ export default function page() {
                             objectFit='contain'
                         />
                         <Image
-                            src="/images/faqs/mobile-box-gradient.png "
+                            src="/images/faqs/mobile-box-gradient.png"
                             className='md:hidden'
                             width={500}
                             height={150}
