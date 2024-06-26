@@ -1,4 +1,4 @@
-import { adminLoanAxios, setAxiosDefaultToken } from '@/lib/axios';
+import { adminAxios, setAxiosDefaultToken } from '@/lib/axios';
 import { useAuth } from '@/contexts/authentication';
 
 import { useMutation } from 'react-query';
@@ -15,7 +15,7 @@ interface TokenResponse {
   refresh: string;
 }
 
-const login = (loginDto: LoginDto): Promise<AxiosResponse<TokenResponse>> => adminLoanAxios.post('/user/login/create/', loginDto);
+const login = (loginDto: LoginDto): Promise<AxiosResponse<TokenResponse>> => adminAxios.post('/user/login/create/', loginDto);
 
 export const useLogin = () => {
   const { authDispatch } = useAuth();
@@ -25,7 +25,7 @@ export const useLogin = () => {
       const { access: token } = data;
 
       tokenStorage.setToken(token);
-      setAxiosDefaultToken(token, adminLoanAxios);
+      setAxiosDefaultToken(token, adminAxios);
 
       const user = await getAuthenticatedUser();
 

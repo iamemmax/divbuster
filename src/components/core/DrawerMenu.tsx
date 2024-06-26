@@ -3,7 +3,7 @@ import { cn } from '@/utils/classNames';
 import { Drawer as Drawermenu, DrawerContent as DrawerMenuContent, DrawerTrigger } from './Drawer';
 
 type DrawerDirection = 'top' | 'right' | 'bottom' | 'left';
-type SnapPoint = number | (string & {});
+type SnapPoint = number | (string & any);
 
 interface DrawerProps {
     shouldScaleBackground?: boolean;

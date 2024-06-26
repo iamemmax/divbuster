@@ -2,16 +2,76 @@
 
 import { cn } from "@/utils/classNames";
 import { RightUpArrow } from "@/icons/core";
-import { LinkButton } from "@/components/core";
+import { Button, LinkButton } from "@/components/core";
 
 
 import { CheckStar } from "./misc/icons";
 import Marquee from "./misc/components/Marquee";
 import Image from "next/image";
-
+import { useState } from "react";
+import RemitaDetailsModal from "./misc/components/modals/RemitaDetailsModal";
+import UserDetailsModal from "./misc/components/modals/UserDetailsModal";
+import IndividualModal from "./misc/components/modals/IndividualPlanModal";
+import { DetailsRequestModal } from "./misc/components";
 
 
 export default function Home() {
+
+  const [firstModal, setFirstModal] = useState(false)
+  const [secondModal, setSecondModal] = useState(false)
+  const [thirdModal, setThirdModal] = useState(false);
+  const [fourthModal, setFourthModal] = useState(false);
+
+
+  const stateOptions = [
+    {
+      name: '1',
+      value: "Lagos",
+
+    },
+
+    {
+      name: '2',
+      value: "Ekiti",
+
+
+    },
+
+    {
+      name: '3',
+      value: "Osun",
+
+    },
+
+    {
+      name: '4',
+      value: "Arizona",
+
+    },
+
+    {
+      name: '5',
+      value: "Oyo",
+
+    },
+
+    {
+      name: '6',
+      value: "Ogun",
+
+    },
+
+    {
+      name: '7',
+      value: "Abuja",
+
+
+    }
+
+
+  ];
+
+
   return (
     <main className="max-w-max md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm ">
@@ -45,12 +105,15 @@ export default function Home() {
               </span>
             </p>
 
-            <LinkButton className={cn("flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max", "font-display")} href="/" target="_blank" variant="white">
+            <Button
+              className={cn("flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max", "font-display")} variant="white"
+              onClick={() => setFirstModal(true)}
+            >
               Get insurance
               <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
                 <RightUpArrow className="" height={12} width={12} />
               </span>
-            </LinkButton>
+            </Button>
           </div>
 
           <div className={cn("relative flex items-center justify-center w-full  md:max-w-[400px] overflow-hiddenn md:ml-28",)}>
@@ -174,6 +237,87 @@ export default function Home() {
       </section>
 
       <Marquee />
+
+
+
+
+
+
+
+      {firstModal &&
+        <DetailsRequestModal
+          subheading="Kindly enter your Phone number to process your appplication"
+          inputTitle={""}
+          heading="Details Request"
+          isDetailsRequestModalOpen={firstModal}
+          setDetailsRequestModal={setFirstModal}
+          setSecondModal={setSecondModal}
+        />}
+
+
+
+      {secondModal &&
+
+        <RemitaDetailsModal
+
+          subheading="Kindly confirm your remita details and dial the USSD code for OTP verification"
+          heading="Remita Details"
+          description="Kindly dial *123*304# on your phone to get an OTP."
+          subdescription="Kindly enter the OTP code has sent to your number 0814****754."
+          isRemitaDetailsModalOpen={secondModal}
+          setRemitaDetailsModal={setSecondModal}
+          setThirdModal={setThirdModal}
+          otp={0}
+        />
+
+
+      }
+
+
+      {thirdModal &&
+
+        <UserDetailsModal
+
+
+          subheading="Kindly enter the details below and select the hospitals around you."
+          heading="User Details"
+          //@ts-expect-error bhyuy
+          statedroplist={stateOptions}
+          isUserDetailsModalOpen={thirdModal}
+          setUserDetailsModal={setThirdModal}
+          setFourthModal={setFourthModal}
+
+        >
+
+
+        </UserDetailsModal>
+      }
+
+
+      {fourthModal &&
+
+        <IndividualModal
+
+          subheading="Choose Your Plan"
+          heading="Choose your Plan"
+          description="Individual plan gives you access to health cover for you only while the family plan covers for you and your family"
+          Tab1="Individual"
+          Tab2="Family"
+          individualdurationplanone="6-Month Plan"
+          individualamountplanone="₦3,000"
+          individualamountplantwo="₦12,000"
+          individualdurationplantwo="12-Month Plan"
+          familydurationplanone="6-Month Plan"
+          familydurationplantwo="12-Month Plan"
+          familyamountplanone="₦3,000"
+          familyamountplantwo="₦12,000"
+          isIndividualModalOpen={fourthModal}
+          setIndividualModal={setFourthModal}
+
+        >
+        </IndividualModal>
+
+      }
     </main>
 
 

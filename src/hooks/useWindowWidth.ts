@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useLayoutEffect } from 'react'
 
 const useWindowWidth = () => {
     const [size, setSize] = useState(0);
