@@ -77,3 +77,13 @@ export const getPageInitials = (string: string) => {
 
   return initials;
 };
+
+export const  maskPhoneNumber = (phoneNumber:string)=> {
+     if (phoneNumber.length < 7) {
+        return phoneNumber; // Return the original number if it's too short to mask
+    }
+
+    const start = phoneNumber.slice(0, 4);
+    const end = phoneNumber.slice(-3);
+    return start + '****' + end;
+}
