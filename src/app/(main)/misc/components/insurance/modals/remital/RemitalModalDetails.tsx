@@ -12,7 +12,7 @@ import {
 } from "@/components/core";
 import { convertToTitleCase, maskPhoneNumber } from "@/utils/strings";
 import PinInput from "react-pin-input";
-import REsetOtpIcon from "./icons/ResentOtpIcon";
+import REsetOtpIcon from "../../icons/ResentOtpIcon";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
