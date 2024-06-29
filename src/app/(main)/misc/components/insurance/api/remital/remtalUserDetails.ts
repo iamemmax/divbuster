@@ -2,24 +2,13 @@ import { adminAxios } from '@/lib/axios';
 import { useMutation, useQuery } from 'react-query';
 
 
-export interface StateLists {
-    state: string[];
-  }
-
-  export interface StateEntity {
-    state_name: string;
-    
-  }
-
 export const fetchStateList = async () => {
-
     const {data} = await adminAxios.get( `life-insurance/states/`);
     return data as string[]
 };
 
 export const fetchHospitalListByState = async ( state: string) => {
-    const {data} = await adminAxios.get(`life-insurance/hospitals/?state=${state}`
-     );
+    const {data} = await adminAxios.get(`life-insurance/hospitals/?state=${state}`);
     return data as string[]
      
 };

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   ClientOnly,
   Tabs,
@@ -18,15 +18,20 @@ import {
 import RemitalListIcon from "../../icons/RemitalListIcon";
 import UserIcons from "../../icons/Usericon";
 import Link from "next/link";
+import PlanComfirmationModal from "./PlanComfirmationModal";
+import PlanPayment from "./PlanPayment";
+import RemitalSuccessModal from "./RemitalSuccessModal";
 
 interface Prop {
   setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>;
   openRemitalPlan: true;
+  verifiedPhoneNumber: string;
 }
 
 const RemitalPlanModal = ({
   openRemitalPlan,
   setOpenShowRemitalPlan,
+  verifiedPhoneNumber,
 }: Prop) => {
   const list = [
     "Telemedicine",
@@ -36,32 +41,53 @@ const RemitalPlanModal = ({
   ];
   const plans = [
     {
-      plan: "6 Month Plan",
+      plan: "1 Month Plan",
       amount: 3000,
       plan_duration: "ONE",
+      duration: 1,
     },
     {
       plan: "6 Month Plan",
       amount: 18000,
       plan_duration: "SIX",
+      duration: 6,
     },
     {
       plan: "12 Month Plan",
       amount: 36000,
       plan_duration: "TWElVE",
+      duration: 12,
     },
   ];
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const [planData, setPlanData] = useState<{
+    plan_type: string;
+    plan_duration: string;
+    plan_amount: number;
+    type: string;
+    duration: number;
+  }>({
+    plan_type: "",
+    plan_duration: "",
+    plan_amount: 0,
+    type: "",
+    duration: 1,
+  });
+
   return (
-    <ClientOnly>
+    <div>
       <Dialog open={openRemitalPlan}>
-        <DialogContent className="!overflow-hidden w-full h-[55rem]">
-          <div className="w-full flex justify-between items-center gap-16">
-            <DialogHeader className="bg-[#1B1687] w-full !justify-between !gap-40">
+        <DialogContent className="!overflow-hidden w-[98%] max-h-[97vh] px-4 md:w-full md:h-[55rem]">
+          <div className=" md:w-full flex justify-between items-center ">
+            <DialogHeader className="bg-[#1B1687] w-full !justify-between ">
               <DialogTitle className="text-[#fff] whitespace-nowrap ">
                 Individual Plan
               </DialogTitle>
 
-              <DialogClose className="rounded-full">
+              <DialogClose className="rounded-lg">
                 <button onClick={() => setOpenShowRemitalPlan(false)}>
                   Close
                 </button>
@@ -69,7 +95,7 @@ const RemitalPlanModal = ({
             </DialogHeader>
           </div>
 
-          <DialogBody className="bg-[#151D42] w-full ">
+          <DialogBody className="bg-[#151D42] w-full h-full ">
             <div className="py-1">
               <div className="text-[#fff]  text-center font-semibold text-3xl">
                 <DialogDescription className="text-3xl">
@@ -85,10 +111,10 @@ const RemitalPlanModal = ({
               </p>
             </div>
 
-            <div className="h-[409px] w-full  mt-10 ">
+            <div className="max-h-[60vh] md:h-[409px] md:w-full  mt-10 ">
               <Tabs className="" defaultValue="Individual">
-                <div className="flex w-full items-center justify-center ">
-                  <TabsList className="flex w-full justify-center rounded-[.75rem]  bg-[#1D2651]  md:max-w-[23rem] md:pl-6 lg:pl-0  border border-[#407BFF]">
+                <div className="flex w-full  px-6  items-center justify-center ">
+                  <TabsList className="flex w-[98%] justify-center rounded-[.75rem]  bg-[#1D2651]  md:max-w-[23rem] md:pl-6 lg:pl-0  border border-[#407BFF]">
                     <TabsTrigger
                       className="inline-flex w-full items-center justify-center rounded-xl   text-lg font-medium text-[#fff]  data-[state=active]:shadow-none"
                       value="Individual"
@@ -149,7 +175,17 @@ const RemitalPlanModal = ({
                             <div className="border-[.0313rem] border-[#4760FD] rounded-10 mt-5 flex justify-center items-center w-full py-5 ">
                               <button
                                 className=" rounded-3xl font-display focus:shadow-outline w-[10rem]  bg-[#fff] p-4 py-2 font-semibold tracking-wide
-            shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                                  shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                                onClick={() => {
+                                  setShowConfirmation(true);
+                                  setPlanData({
+                                    plan_duration: plan?.plan_duration,
+                                    plan_amount: Number(plan?.amount),
+                                    plan_type: plan?.plan,
+                                    type: "INDIVIDUAL",
+                                    duration: plan?.duration,
+                                  });
+                                }}
                               >
                                 Get Insurance
                               </button>
@@ -186,7 +222,30 @@ const RemitalPlanModal = ({
           </DialogBody>
         </DialogContent>
       </Dialog>
-    </ClientOnly>
+
+      {showConfirmation && (
+        <PlanComfirmationModal
+          showConfirmation={showConfirmation}
+          setShowConfirmation={setShowConfirmation}
+          planData={planData}
+          verifiedPhoneNumber={verifiedPhoneNumber}
+          setShowPaymentModal={setShowPaymentModal}
+        />
+      )}
+      {showPaymentModal && (
+        <PlanPayment
+          showPaymentModal={showPaymentModal}
+          setShowPaymentModal={setShowPaymentModal}
+          verifiedPhoneNumber={verifiedPhoneNumber}
+          planData={planData}
+          setShowSuccessModal={setShowSuccessModal}
+        />
+      )}
+      <RemitalSuccessModal
+        showSuccessModal={showSuccessModal}
+        setShowSuccessModal={setShowSuccessModal}
+      />
+    </div>
   );
 };
 

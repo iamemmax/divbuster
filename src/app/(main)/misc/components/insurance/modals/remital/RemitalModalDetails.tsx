@@ -18,6 +18,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Countdown from "../../util/Countdown";
 import { useCheckRemitalOtp } from "../../api/remital/remitalDetails";
+import useIsMobile from "../../util/UseMobile";
 
 interface prop {
   setOpenRemitalDetailModal: Dispatch<SetStateAction<boolean>>;
@@ -68,12 +69,13 @@ const RemitalModalDetails = ({
       onSuccess: () => {},
     });
   };
+  const isMobile = useIsMobile();
   return (
     <Dialog
       open={openRemitalDetailModal}
       // onOpenChange={setRemitaDetailsModal}
     >
-      <DialogContent className="!overflow-hidden sm:w-[28.75rem]">
+      <DialogContent className="!overflow-hidden max-h-[94vh]  md:w-[28.75rem]">
         <DialogHeader className="bg-[#1B1687] ">
           <DialogTitle className="text-[#fff]">Remita Details</DialogTitle>
 
@@ -84,8 +86,8 @@ const RemitalModalDetails = ({
           </DialogClose>
         </DialogHeader>
 
-        <DialogBody className="bg-[#141B3f] w-full">
-          <div className="py-1">
+        <DialogBody className="bg-[#141B3f]  md:w-full">
+          <div className="py-1   overflow-y-auto">
             <div className="text-[#fff] font-light text-sm font-sans">
               Kindly confirm your remita details and dial the USSD code for OTP
               verification.
@@ -149,14 +151,16 @@ const RemitalModalDetails = ({
                           background: "#ffffff",
                           borderRadius: "10px",
                           border: "transparent",
-                          fontSize: ".875rem",
+                          fontSize: isMobile ? "0.75rem" : "0.875rem",
                           transition: "all 0.45s ease-in-out",
+                          width: isMobile ? "1.8rem" : "2.5rem",
+                          height: isMobile ? "1.8rem" : "2.5rem",
                         }}
                         length={6}
                         style={{
                           display: "flex",
                           flexWrap: "nowrap",
-                          gap: ".625rem",
+                          gap: isMobile ? "0.4rem" : "0.625rem",
                           margin: "auto",
                         }}
                         type="numeric"
@@ -164,11 +168,11 @@ const RemitalModalDetails = ({
                       />
                     )}
                   />
-                  {errors?.pin && (
+                  {/* {errors?.pin && (
                     <p className="text-red-500 mt-4 text-xs">
                       {errors.pin.message}
                     </p>
-                  )}
+                  )} */}
                 </div>
 
                 <div className="flex w-full mt-3 items-center justify-between px-4">
@@ -182,7 +186,7 @@ const RemitalModalDetails = ({
 
                 <div className="">
                   <button
-                    className="mt-[5rem] font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
+                    className="md:mt-[5rem] mt-4 font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
                     shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687] mb-[3rem]"
                     type="submit"
                   >

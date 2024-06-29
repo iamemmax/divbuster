@@ -572,6 +572,7 @@ export default function Home() {
         <RemitalPlanModal
           openRemitalPlan={openRemitalPlan}
           setOpenShowRemitalPlan={setOpenShowRemitalPlan}
+          verifiedPhoneNumber={verifiedPhoneNumber}
         />
       )}
     </main>
