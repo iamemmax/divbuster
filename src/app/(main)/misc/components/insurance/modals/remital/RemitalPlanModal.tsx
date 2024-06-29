@@ -24,7 +24,7 @@ import RemitalSuccessModal from "./RemitalSuccessModal";
 
 interface Prop {
   setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>;
-  openRemitalPlan: true;
+  openRemitalPlan: boolean;
   verifiedPhoneNumber: string;
 }
 
@@ -244,6 +244,7 @@ const RemitalPlanModal = ({
       <RemitalSuccessModal
         showSuccessModal={showSuccessModal}
         setShowSuccessModal={setShowSuccessModal}
+        verifiedPhoneNumber={verifiedPhoneNumber}
       />
     </div>
   );

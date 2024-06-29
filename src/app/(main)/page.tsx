@@ -8,86 +8,17 @@ import { CheckStar } from "./misc/icons";
 import Marquee from "./misc/components/Marquee";
 import Image from "next/image";
 import { useState } from "react";
-import RemitaDetailsModal from "./misc/components/modals/RemitaDetailsModal";
-import UserDetailsModal from "./misc/components/modals/UserDetailsModal";
-import IndividualModal from "./misc/components/modals/IndividualPlanModal";
-import { DetailsRequestModal } from "./misc/components";
-import NonRemitaDetailsRequestModal from "../Non-Remita/misc/components/modals/NonRemitaDetailsRequestModal";
-import NonRemitaRemitaDetailsModal from "../Non-Remita/misc/components/modals/NonRemitaRemitaDetailsModal";
-import NonRemitaUserDetailsModal from "../Non-Remita/misc/components/modals/NonRemitaUserDetailsModal";
-import NonRemitaIndividualModal from "../Non-Remita/misc/components/modals/NonRemitaIndividualPlan";
-import NonRemitaPaymentModal from "../Non-Remita/misc/components/modals/NonRemitaPaymentModal";
+
 import CheckPhoneNumber from "./misc/components/insurance/modals/CheckPhoneNumber";
-import RemitaDetails from "@/components/RemitaDetails";
 import RemitalModalDetails from "./misc/components/insurance/modals/remital/RemitalModalDetails";
 import RemitalUserDetails from "./misc/components/insurance/modals/remital/RemitalUserDetails";
 import RemitalPlanModal from "./misc/components/insurance/modals/remital/RemitalPlanModal";
+import NonRemitalModal from "./misc/components/insurance/modals/non-remital/NonRemitalModal";
 
 export default function Home() {
-  const [firstModal, setFirstModal] = useState(false);
-  const [secondModal, setSecondModal] = useState(false);
-  const [thirdModal, setThirdModal] = useState(false);
-  const [fourthModal, setFourthModal] = useState(false);
-
-  const [nonRemita, setNonRemita] = useState(false);
-
-  const [remitaDetailsResponse, setRemitaDetailsResponse] = useState({
-    FullName: "",
-    Ministry: "",
-    State: "",
-  });
-
-  const [secondNonRemitalModal, setSecondNonRemitaModal] = useState(false);
-  const [thirdNonRemitalModal, setThirdNonRemitaModal] = useState(false);
-  const [fourthNonRemitalModal, setFourthNonRemitaModal] = useState(false);
-  const [fifthNonRemitalModal, setFifthNonRemitaModal] = useState(false);
-  const [SixthNonRemitaPaymentModal, setSixthNonRemitaPaymentModal] =
-    useState(false);
-
-  const stateOptions = [
-    {
-      name: "1",
-      value: "Lagos",
-    },
-
-    {
-      name: "2",
-      value: "Ekiti",
-    },
-
-    {
-      name: "3",
-      value: "Osun",
-    },
-
-    {
-      name: "4",
-      value: "Arizona",
-    },
-
-    {
-      name: "5",
-      value: "Oyo",
-    },
-
-    {
-      name: "6",
-      value: "Ogun",
-    },
-
-    {
-      name: "7",
-      value: "Abuja",
-    },
-  ];
-
-  // ..............................................................emmax ............................................................
-
   const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
     useState(false);
   const [openRemitalDetailModal, setOpenRemitalDetailModal] = useState(false);
-  const [openNonRemitalDetailModal, setOpenNonRemitalDetailModal] =
-    useState(false);
   const [phoneNumberCheckResponse, setPhoneNumberCheckResponse] = useState({
     full_name: "",
     ministry: "",
@@ -97,11 +28,14 @@ export default function Home() {
 
   const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
   const [openRemitalPlan, setOpenShowRemitalPlan] = useState(false);
+  const [openNonRemitalDetailModal, setOpenNonRemitalDetailModal] =
+    useState(false);
+
   return (
     <main className="max-w-max md:pb-20 w-full bg-main min-h-screen">
-      <section className="bg-main w-full !mb-0 text-white shadow-sm ">
+      <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
         <section className="flex flex-col lg:grid grid-cols-2 items-center justify-between sm:max-lg:px-2 md:pt-12 md:pb-6 md:pl-[30px] ">
-          <div className="flex flex-col  gap-4  md:gap-6 justify-self-center max-md:px-6 max-md:py-10">
+          <div className="flex flex-col  gap-4  md:gap-6 px-[6rem] max-md:px-6 max-md:py-10">
             <h6
               className={cn(
                 "font-display",
@@ -269,11 +203,11 @@ export default function Home() {
               )}
             >
               <div className="basis-1/2 flex flex-col items-center justify-center">
-                <div className="border-[0.3px] flex flex-col items-center rounded-xl py-2 px-[17px] border-[#475ffd54] bg-[#161D42]">
+                <div className="border-[0.3px] flex flex-col items-center rounded-xl py-5 px-[22px] border-[#475ffd54] bg-[#161D42]">
                   <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
                     Lifetime Rewards
                   </h3>
-                  <p className="text-xs text-center mt-2 font-sans text-[#CAC9D4]">
+                  <p className="text-sm text-center mt-2 font-sans text-[#CAC9D4]">
                     For every insurance plan you buy, you stand a chance to get
                     a lifetime reward.
                   </p>
@@ -311,11 +245,11 @@ export default function Home() {
                 </div>
               </div>
               <div className="basis-1/2 flex flex-col items-start justify-center">
-                <div className="border-[0.3px] flex flex-col items-center rounded-xl py-2 px-[17px] border-[#475ffd54] bg-[#161D42]">
+                <div className="border-[0.3px] flex flex-col items-center rounded-xl py-5 px-[22px] border-[#475ffd54] bg-[#161D42]">
                   <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
                     Standard Hospitals
                   </h3>
-                  <p className="text-xs  text-center mt-2 font-sans text-[#CAC9D4]">
+                  <p className="text-sm  text-center mt-2 font-sans text-[#CAC9D4]">
                     For every insurance plan you buy, you stand a chance to get
                     a lifetime reward.
                   </p>
@@ -388,156 +322,6 @@ export default function Home() {
         </section>
       </section>
       <Marquee />
-      {firstModal && (
-        <DetailsRequestModal
-          subheading="Kindly enter your Phone number to process your appplication"
-          inputTitle={""}
-          heading="Details Request"
-          isDetailsRequestModalOpen={firstModal}
-          setDetailsRequestModal={setFirstModal}
-          setSecondModal={setSecondModal}
-          setRemitaDetailsResponse={setRemitaDetailsResponse}
-          setNonRemita={setNonRemita}
-        />
-      )}
-      {secondModal && (
-        <RemitaDetailsModal
-          subheading="Kindly confirm your remita details and dial the USSD code for OTP verification"
-          heading="Remita Details"
-          description="Kindly dial *123*304# on your phone to get an OTP."
-          subdescription="Kindly enter the OTP code has sent to your number 0814****754."
-          isRemitaDetailsModalOpen={secondModal}
-          setRemitaDetailsModal={setSecondModal}
-          remitaDetailsResponse={remitaDetailsResponse}
-          setThirdModal={setThirdModal}
-          otp={0}
-        />
-      )}
-      {thirdModal && (
-        <UserDetailsModal
-          subheading="Kindly enter the details below and select the hospitals around you."
-          heading="User Details"
-          //@ts-expect-error bhyuy
-          statedroplist={stateOptions}
-          isUserDetailsModalOpen={thirdModal}
-          setUserDetailsModal={setThirdModal}
-          setFourthModal={setFourthModal}
-        ></UserDetailsModal>
-      )}
-      {fourthModal && (
-        <IndividualModal
-          subheading="Choose Your Plan"
-          heading="Choose your Plan"
-          description="Individual plan gives you access to health cover for you only while the family plan covers for you and your family"
-          Tab1="Individual"
-          Tab2="Family"
-          individualdurationplanone="6-Month Plan"
-          individualamountplanone="₦3,000"
-          individualamountplantwo="₦12,000"
-          individualdurationplantwo="12-Month Plan"
-          familydurationplanone="6-Month Plan"
-          familydurationplantwo="12-Month Plan"
-          familyamountplanone="₦3,000"
-          familyamountplantwo="₦12,000"
-          isIndividualModalOpen={fourthModal}
-          setIndividualModal={setFourthModal}
-        ></IndividualModal>
-      )}
-      {/* {firstNonRemitalModal &&
-
-        <NonRemitaDetailsRequestModal
-
-          subheading="what is your name shut iooo"
-          inputTitle={""}
-          heading="Details Requestttftftfftfttfftft"
-          isNonRemitaDetailsRequestModalOpen={firstNonRemitalModal}
-          setNonRemitaDetailsRequestModal={setFirstNonRemitaModal}
-          secondNonRemitalModal={setSecondNonRemitaModal}
-          setNonRemita={setNonRemita}
-          setSecondModal={setSecondModal}
-
-
-
-        />
-
-
-
-      } */}
-      {/* NON REMITA SECTION */}
-      {nonRemita && (
-        <NonRemitaDetailsRequestModal
-          subheading="Kindly enter your details below to process your application "
-          inputTitle={""}
-          heading="Details Request"
-          isNonRemitaDetailsRequestModalOpen={firstModal}
-          setNonRemitaDetailsRequestModal={setFirstModal}
-          setSecondModal={setSecondModal}
-          setNonRemita={setNonRemita}
-          secondNonRemitalModal={setSecondNonRemitaModal}
-        />
-      )}
-      {secondNonRemitalModal && (
-        <NonRemitaRemitaDetailsModal
-          subheading="Kindly confirm your details and dial the USSD code for OTP verification"
-          heading="Remita Details"
-          description="Kindly dial *123*304# on your phone to get an OTP."
-          subdescription="Kindly enter the OTP code has sent to your number 0814****754."
-          isNonRemitaRemitaDetailsModalOpen={secondNonRemitalModal}
-          setNonRemitaRemitaDetailsModal={setSecondNonRemitaModal}
-          setThirdNonRemitaModal={setThirdNonRemitaModal}
-          remitaDetailsResponse={remitaDetailsResponse}
-          otp={0}
-        />
-      )}
-      {thirdNonRemitalModal && (
-        <NonRemitaUserDetailsModal
-          subheading="Kindly enter the details below and select the hospitals wey dey close to you."
-          heading="User Details"
-          //@ts-expect-error bhyuy
-          statedroplist={stateOptions}
-          isNonRemitaUserDetailsModalOpen={thirdNonRemitalModal}
-          setFourthNonRemitaModal={setFourthNonRemitaModal}
-        />
-      )}
-      {fourthNonRemitalModal && (
-        <NonRemitaIndividualModal
-          subheading="Choose Your Plan"
-          heading="Choose your Plan"
-          description="Individual plan gives you access to health cover for you only while the family plan covers for you and your family"
-          Tab1="Individual"
-          Tab2="Family"
-          individualdurationplanone="6-Month Plan"
-          individualamountplanone="₦3,000"
-          individualamountplantwo="₦12,000"
-          individualdurationplantwo="12-Month Plan"
-          familydurationplanone="6-Month Plan"
-          familydurationplantwo="12-Month Plan"
-          familyamountplanone="₦3,000"
-          familyamountplantwo="₦12,000"
-          isNonRemitaIndividualModalOpen={fourthNonRemitalModal}
-          setNonRemitaIndividualModal={setFourthNonRemitaModal}
-          setFifthNonRemitaModal={setFifthNonRemitaModal}
-        />
-      )}
-      {fifthNonRemitalModal && (
-        <NonRemitaPaymentModal
-          heading="Payment"
-          subheading="Kindly make payment for your health cover via the payment options below"
-          description="Monthly Individual Health Cover"
-          amount="₦3,000"
-          phonedial="Kindly dial the USSD code below to make payment"
-          phonecode="*20144*3000*150#"
-          paymenttrans="Make payment via transfer"
-          accountname="Account name"
-          accounttitle="Liberty assured"
-          accountno="Account no"
-          accountnumber="2029471942"
-          bankname="Bank name"
-          banktitle="VFD MicroFinance Bank"
-          setNonRemitaPaymentModal={setFourthNonRemitaModal}
-          setSixthNonRemitaPaymentModal={setSixthNonRemitaPaymentModal}
-        />
-      )}
 
       {openCheckPhoneNumberModal && (
         <CheckPhoneNumber
@@ -547,6 +331,7 @@ export default function Home() {
           setOpenRemitalDetailModal={setOpenRemitalDetailModal}
           setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
           setVerifiedPhoneNumber={setVerifiedPhoneNumber}
+          // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
         />
       )}
       {/* remitals .................................................................. remita.................... */}
@@ -573,6 +358,15 @@ export default function Home() {
           openRemitalPlan={openRemitalPlan}
           setOpenShowRemitalPlan={setOpenShowRemitalPlan}
           verifiedPhoneNumber={verifiedPhoneNumber}
+        />
+      )}
+      {openNonRemitalDetailModal && (
+        <NonRemitalModal
+          verifiedPhoneNumber={verifiedPhoneNumber}
+          setPhoneNumberCheckResponse={setPhoneNumberCheckResponse}
+          openNonRemitalDetailModal={openNonRemitalDetailModal}
+          setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
+          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
         />
       )}
     </main>

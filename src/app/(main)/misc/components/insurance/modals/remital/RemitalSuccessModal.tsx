@@ -8,10 +8,12 @@ import Link from "next/link";
 interface prop {
   setShowSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
   showSuccessModal: boolean;
+  verifiedPhoneNumber: string;
 }
 const RemitalSuccessModal = ({
   setShowSuccessModal,
   showSuccessModal,
+  verifiedPhoneNumber,
 }: prop) => {
   return (
     <Dialog open={showSuccessModal}>
@@ -74,7 +76,7 @@ const RemitalSuccessModal = ({
                 </button>
               </Link>
 
-              <Link href={`/create-password`}>
+              <Link href={`/create-password?phone=${verifiedPhoneNumber}`}>
                 <button className="rounded-3xl bg-[#fff] text-[#1B1687]  py-[0.9rem] w-[10rem] shadow-lg font-normal transition-colors delay-150 ease-in-out focus:outline-none ">
                   Create password
                 </button>
