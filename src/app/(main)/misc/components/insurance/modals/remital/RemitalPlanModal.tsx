@@ -67,13 +67,13 @@ const RemitalPlanModal = ({
 
   const [planData, setPlanData] = useState<{
     plan_type: string;
-    plan_duration: string;
+    plan_duration: number;
     plan_amount: number;
     type: string;
     duration: number;
   }>({
     plan_type: "",
-    plan_duration: "",
+    plan_duration: 0,
     plan_amount: 0,
     type: "",
     duration: 1,
@@ -142,7 +142,7 @@ const RemitalPlanModal = ({
                   value="Individual"
                 >
                   <div className="w-full flex flex-col md:flex-row gap-[1rem] px-6  items-center justify-center">
-                    {plans?.map((plan, idx: number) => (
+                    {plansData?.map((plan, idx: number) => (
                       <div
                         className="  flex flex-col w-full  items-center justify-center"
                         key={idx}
@@ -155,7 +155,7 @@ const RemitalPlanModal = ({
                               </div>
                               <div className="py-3">
                                 <p className=" text-base text-[#D1D3DB] font-normal">
-                                  {plan?.plan}
+                                  {plan?.duration}
                                 </p>
                                 <h1 className="text-white text-[2.25rem] font-bold">
                                   ₦{plan?.amount}
@@ -186,9 +186,9 @@ const RemitalPlanModal = ({
                                 onClick={() => {
                                   setShowConfirmation(true);
                                   setPlanData({
-                                    plan_duration: plan?.plan_duration,
+                                    plan_duration: Number(plan?.duration),
                                     plan_amount: Number(plan?.amount),
-                                    plan_type: plan?.plan,
+                                    plan_type: "pla",
                                     type: "INDIVIDUAL",
                                     duration: plan?.duration,
                                   });
