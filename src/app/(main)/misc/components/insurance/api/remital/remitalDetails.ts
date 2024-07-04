@@ -1,13 +1,16 @@
 import { adminAxios } from "@/lib/axios";
 import { useMutation } from "react-query";
-import { pinType } from "../../modals/remital/RemitalModalDetails";
 
+interface Prop{
+  verifiedPhoneNumber:string, pin:string
+}
 
-export const checkRemitalOtp = async ({ pin }: pinType) => {
+export const checkRemitalOtp = async ({verifiedPhoneNumber,pin}:Prop) => {
   
     
-    const response = await adminAxios.post(`life-insurance/check-remita-user/`, {
-        pin
+    const response = await adminAxios.post(`user/auth/verify/`, {
+      recipient: verifiedPhoneNumber,
+      otp:pin
     });
     return response?.data;
 };

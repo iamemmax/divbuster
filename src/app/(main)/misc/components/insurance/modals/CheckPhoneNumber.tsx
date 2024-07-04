@@ -24,14 +24,26 @@ interface Prop {
   openCheckPhoneNumberModal: boolean;
   setPhoneNumberCheckResponse: Dispatch<
     SetStateAction<{
+      id: string;
+      phone_number: string;
       full_name: string;
       ministry: string;
       state: string;
     }>
   >;
+  setUserId: Dispatch<SetStateAction<string>>;
   setVerifiedPhoneNumber: Dispatch<SetStateAction<string>>;
   setOpenRemitalDetailModal: Dispatch<SetStateAction<boolean>>;
   setOpenNonRemitalDetailModal: Dispatch<SetStateAction<boolean>>;
+  setOpenRemitalUserDetail: Dispatch<SetStateAction<boolean>>;
+  setVerifyResponse: Dispatch<
+    SetStateAction<{
+      nin: string;
+      address: string;
+      email: string;
+      id: string;
+    }>
+  >;
 }
 
 const contactSchema = z.object({
@@ -42,16 +54,25 @@ const contactSchema = z.object({
 });
 
 interface successResponseType {
-  existing_user: boolean;
-  is_from_remita: boolean;
-  user_details: Userdetails;
+  is_eligible: boolean;
+  "user:": User;
 }
 
-interface Userdetails {
-  full_name: string;
-  ministry: string;
-  state: string;
+interface User {
+  id: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  organization: string;
+  gender: string;
+  has_set_password: boolean;
+  hospital: string;
+  phone_verified: boolean;
+  nin: string;
+  email: string;
+  address: string;
 }
+
 export type detailRequestType = z.infer<typeof contactSchema>;
 
 const CheckPhoneNumber = ({
@@ -59,8 +80,11 @@ const CheckPhoneNumber = ({
   setOpenCheckPhoneNumberModal,
   setPhoneNumberCheckResponse,
   setOpenNonRemitalDetailModal,
+  setOpenRemitalUserDetail,
   setOpenRemitalDetailModal,
   setVerifiedPhoneNumber,
+  setUserId,
+  setVerifyResponse,
 }: Prop) => {
   const {
     register,
@@ -78,19 +102,59 @@ const CheckPhoneNumber = ({
   const onsubmit = (data: detailRequestType) => {
     setVerifiedPhoneNumber(data?.phone_number);
     handleCheckNumber(data, {
-      onSuccess: (data: successResponseType) => {
+      onSuccess: (result) => {
+        const { status, data: mydata } = result;
+        // console.log(status);
+        let data: successResponseType = mydata;
         setPhoneNumberCheckResponse({
-          full_name: data?.user_details?.full_name,
-          ministry: data?.user_details?.ministry,
-          state: data?.user_details?.state,
+          full_name:
+            `${data?.["user:"]?.first_name ?? ""} ${data?.["user:"]?.last_name ?? ""}`.trim() ||
+            "",
+          ministry: "",
+          state: data?.["user:"].organization ?? "",
+          id: data?.["user:"].id,
+          phone_number: data?.["user:"]?.phone_number,
         });
 
-        if (data?.is_from_remita) {
-          setOpenRemitalDetailModal(true);
+        setVerifyResponse({
+          address: data?.["user:"]?.address ?? "",
+          nin: data?.["user:"]?.nin ?? "",
+          email: data?.["user:"]?.email ?? "",
+          id: data?.["user:"]?.id ?? "",
+        });
+
+        const userData = data?.["user:"];
+        if (data?.is_eligible) {
+          setUserId(data?.["user:"]?.id);
+          if (!userData?.nin || !userData?.email || !userData?.address) {
+            // One or more fields are empty
+            setOpenNonRemitalDetailModal(true);
+
+            // Perform actions for the case where fields are missing
+          } else {
+            // All fields are present
+            setOpenRemitalUserDetail(true);
+            // Perform actions for the case where all fields are present
+          }
+          setOpenCheckPhoneNumberModal(false);
         } else {
-          setOpenNonRemitalDetailModal(true);
+          setUserId(data?.["user:"]?.id);
+          // data.is_eligible is false
+          if (status === 200) {
+            // Check if any of the required fields (nin, email, address) are missing
+            if (!userData?.nin || !userData?.email || !userData?.address) {
+              setOpenNonRemitalDetailModal(true);
+            } else {
+              if (userData?.phone_verified) {
+                setOpenRemitalUserDetail(true);
+              } else {
+                setOpenRemitalDetailModal(true);
+              }
+            }
+            setOpenCheckPhoneNumberModal(false);
+          }
+          // Perform actions for the case where user is not eligible
         }
-        setOpenCheckPhoneNumberModal(false);
       },
     });
   };

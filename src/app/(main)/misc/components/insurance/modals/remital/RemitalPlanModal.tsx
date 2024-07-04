@@ -21,6 +21,8 @@ import Link from "next/link";
 import PlanComfirmationModal from "./PlanComfirmationModal";
 import PlanPayment from "./PlanPayment";
 import RemitalSuccessModal from "./RemitalSuccessModal";
+import { useQuery } from "react-query";
+import { getPlan } from "../../api/plan/getPlan";
 
 interface Prop {
   setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>;
@@ -75,6 +77,11 @@ const RemitalPlanModal = ({
     plan_amount: 0,
     type: "",
     duration: 1,
+  });
+
+  const { data: plansData } = useQuery({
+    queryFn: getPlan,
+    queryKey: ["get-plans"],
   });
 
   return (

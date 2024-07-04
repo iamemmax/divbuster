@@ -23,38 +23,58 @@ interface Prop {
   openNonRemitalDetailModal: boolean;
   setPhoneNumberCheckResponse: Dispatch<
     SetStateAction<{
+      id: string;
+      phone_number: string;
       full_name: string;
       ministry: string;
       state: string;
     }>
   >;
+
   setOpenNonRemitalDetailModal: Dispatch<SetStateAction<boolean>>;
   setOpenRemitalUserDetail: Dispatch<SetStateAction<boolean>>;
+  setOpenRemitalDetailModal: Dispatch<SetStateAction<boolean>>;
   verifiedPhoneNumber: string;
+  userId: string;
+  verifyResponse: {
+    nin: string;
+    address: string;
+    email: string;
+    id: string;
+  };
 }
 
 const contactSchema = z.object({
-  phone_number: z
+  address: z
     .string({ required_error: "Enter your phone number" })
     .trim()
-    .min(10, { message: "Phone number should be at least 11 digits" }),
+    .min(2, { message: "Enter Address" }),
   nin: z
     .string()
     .trim()
     .min(10, { message: "Nin should be at least 11 digits" }),
   email: z.string().email().min(1, { message: "Enter email" }),
+  //   id: z.string().optional(),
 });
 
 interface successResponseType {
-  existing_user: boolean;
-  is_from_remita: boolean;
-  user_details: Userdetails;
+  "user:": User;
+  sms_sent: boolean;
 }
 
-interface Userdetails {
-  full_name: string;
-  ministry: string;
-  state: string;
+interface User {
+  id: string;
+  first_name: null;
+  last_name: null;
+  phone_number: string;
+  organization: null;
+  gender: string;
+  has_set_password: boolean;
+  hospital: null;
+  phone_verified: boolean;
+  nin: string;
+  email: string;
+  address: string;
 }
 export type detailRequestNiNType = z.infer<typeof contactSchema>;
 
@@ -64,6 +84,10 @@ const NonRemitalModal = ({
   setOpenNonRemitalDetailModal,
   setPhoneNumberCheckResponse,
   setOpenRemitalUserDetail,
+  setOpenRemitalDetailModal,
+
+  verifyResponse,
+  userId,
 }: Prop) => {
   const {
     register,
@@ -72,32 +96,45 @@ const NonRemitalModal = ({
   } = useForm<detailRequestNiNType>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
-      phone_number: verifiedPhoneNumber,
-      email: "",
-      nin: "",
+      address: verifyResponse?.address,
+      email: verifyResponse?.email,
+      nin: verifyResponse?.nin,
     },
 
     mode: "onChange",
   });
   const { mutate: handleCheckNin, isLoading } = useCheckNinUser();
   const onsubmit = (data: detailRequestNiNType) => {
-    handleCheckNin(data, {
-      onSuccess: (data: successResponseType) => {
-        // console.log(data);
-
-        setPhoneNumberCheckResponse({
-          full_name: data?.user_details?.full_name,
-          ministry: data?.user_details?.ministry,
-          state: data?.user_details?.state,
-        });
-        // if (data?.is_from_remita) {
-        setOpenRemitalUserDetail(true);
-        // } else {
-        //   setOpenNonRemitalDetailModal(true);
-        // }
-        setOpenNonRemitalDetailModal(false);
+    handleCheckNin(
+      {
+        userId,
+        email: data?.email,
+        address: data?.address,
+        nin: data?.nin,
       },
-    });
+      {
+        onSuccess: (data: successResponseType) => {
+          // console.log(data);
+
+          setPhoneNumberCheckResponse({
+            full_name: `${data?.["user:"]?.first_name} ${data?.["user:"]?.last_name}`,
+            ministry: "",
+            state: data?.["user:"]?.organization ?? "",
+            id: data?.["user:"]?.id,
+            phone_number: data?.["user:"]?.phone_number,
+          });
+          if (data?.["user:"]?.phone_verified) {
+            setOpenRemitalUserDetail(true);
+            setOpenNonRemitalDetailModal(false);
+          } else {
+            setOpenRemitalDetailModal(true);
+            setOpenNonRemitalDetailModal(false);
+          }
+
+          setOpenNonRemitalDetailModal(false);
+        },
+      }
+    );
   };
 
   return (
@@ -136,17 +173,17 @@ const NonRemitalModal = ({
                     className="mb-1 block text-xs  text-[#fff]"
                     htmlFor="phone"
                   >
-                    Phone Number
+                    Address
                   </Label>
 
                   <div className={`relative mt-[.25rem] `}>
                     <Input2
-                      className={`${errors?.phone_number?.message ? "border border-red-700" : ""} text-[#fff]`}
-                      placeholder="Enter your phone number"
-                      type="number"
+                      className={`${errors?.address?.message ? "border border-red-700" : ""} text-[#fff]`}
+                      placeholder="Enter your address"
+                      type="text"
                       id="phone"
-                      disabled
-                      {...register("phone_number")}
+                      //   disabled
+                      {...register("address")}
                     />
                   </div>
                 </div>
@@ -155,13 +192,13 @@ const NonRemitalModal = ({
                     className="mb-1 block text-xs  text-[#fff]"
                     htmlFor="nin"
                   >
-                    (Dial *346# on your phone to get your NIN)
+                    (Dial *346# on your phone to get your nin)
                   </Label>
 
                   <div className={`relative mt-[.25rem] `}>
                     <Input2
                       className={`${errors?.nin?.message ? "border border-red-700" : ""} text-[#fff]`}
-                      placeholder="Enter  NIN"
+                      placeholder="Enter  nin"
                       type="number"
                       id="nin"
                       {...register("nin")}

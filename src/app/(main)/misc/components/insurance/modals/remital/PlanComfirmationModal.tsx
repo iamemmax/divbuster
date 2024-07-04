@@ -12,7 +12,7 @@ interface prop {
   setShowPaymentModal: React.Dispatch<React.SetStateAction<boolean>>;
   planData: {
     plan_type: string;
-    plan_duration: string;
+    plan_duration: number;
     plan_amount: number;
     type: string;
     duration: number;
@@ -25,7 +25,7 @@ interface successMsgType {
   id: string;
   enrolee: string;
   plan_type: string;
-  plan_duration: string;
+  plan_duration: number;
   is_active: boolean;
   medi_response: null;
   payment_response: null;
@@ -48,7 +48,7 @@ const PlanComfirmationModal = ({
       {
         verifiedPhoneNumber,
         plan_type: planData?.type,
-        plan_duration: planData?.plan_duration,
+        plan_duration: String(planData?.plan_duration),
       },
       {
         onSuccess: (data: successMsgType) => {

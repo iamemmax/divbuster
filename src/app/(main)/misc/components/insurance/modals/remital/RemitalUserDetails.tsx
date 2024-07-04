@@ -23,10 +23,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "react-query";
 import {
   fetchHospitalListByState,
+  fetchRegionByState,
   fetchStateList,
   useUserHospitalChoice,
 } from "../../api/remital/remtalUserDetails";
-import { SmallSpinner } from "@/icons/core";
+import { SmallSpinner, Spinner } from "@/icons/core";
 
 interface Prop {
   setOpenRemitalUserDetail: Dispatch<SetStateAction<boolean>>;
@@ -38,6 +39,10 @@ interface Prop {
 const formValues = z.object({
   hospitaldata: z.object({
     state: z
+      .string({ required_error: "Please select a state." })
+      .trim()
+      .min(1, { message: "Please select a state." }),
+    region: z
       .string({ required_error: "Please select a state." })
       .trim()
       .min(1, { message: "Please select a state." }),
@@ -64,6 +69,13 @@ const RemitalUserDetails = ({
     setValue,
   } = useForm<formValues>({
     resolver: zodResolver(formValues),
+    defaultValues: {
+      hospitaldata: {
+        hospital: "",
+        region: "",
+        state: "",
+      },
+    },
   });
 
   // track selected state.............................
@@ -71,17 +83,27 @@ const RemitalUserDetails = ({
     control,
     name: "hospitaldata.state",
   });
+  const selectedRegion = useWatch({
+    control,
+    name: "hospitaldata.region",
+  });
 
   // fetch hospital list.....................................................................
   const { data: stateList } = useQuery({
     queryFn: fetchStateList,
     queryKey: ["fetch-state-list"],
   });
+  const { data: regionList, isLoading: loadingRegion } = useQuery({
+    queryFn: () => fetchRegionByState(selectedState),
+    queryKey: ["fetch-region-list", selectedState],
+  });
+  // Remove duplicates states
+  const uniqueStates = Array.from(new Set(stateList));
 
   // fetching hostipal list
-  const { data: hospitalList } = useQuery({
-    queryFn: () => fetchHospitalListByState(selectedState),
-    queryKey: ["fetch-hospital-list", selectedState],
+  const { data: hospitalList, isLoading: loadingHospital } = useQuery({
+    queryFn: () => fetchHospitalListByState(selectedState, selectedRegion),
+    queryKey: ["fetch-hospital-list", selectedRegion],
   });
   // console.log(stateList);
 
@@ -148,16 +170,58 @@ const RemitalUserDetails = ({
                         ref={ref}
                         className="bg-[#2D3456] text-[#fff]"
                       >
-                        <SelectValue placeholder="Enter State" />
+                        <SelectValue placeholder="Select State" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value={"loading"} disabled></SelectItem>
 
-                        {stateList?.map((state_name, idx: number) => (
+                        {uniqueStates?.map((state_name, idx: number) => (
                           <SelectItem key={idx} value={state_name}>
                             {state_name}
                           </SelectItem>
                         ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
+              <div className="">
+                <Label
+                  className="mt-10 mb-1 block text-xs text-[#fff]"
+                  htmlFor="State"
+                >
+                  LG
+                </Label>
+
+                <Controller
+                  control={control}
+                  name="hospitaldata.region"
+                  render={({ field: { onChange, value, ref } }) => (
+                    <Select value={value} onValueChange={onChange}>
+                      <SelectTrigger
+                        id="state"
+                        ref={ref}
+                        className="bg-[#2D3456] text-[#fff]"
+                      >
+                        <SelectValue placeholder="select region" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {loadingRegion ? (
+                          <SelectItem
+                            value="loading"
+                            disabled
+                            className="w-full flex justify-center items-center"
+                          >
+                            <Spinner color="blue" className="w-4 h-4" />{" "}
+                            {/* Show spinner while loading */}
+                          </SelectItem>
+                        ) : (
+                          regionList?.map((region, idx) => (
+                            <SelectItem key={idx} value={region.region}>
+                              {region.region}
+                            </SelectItem>
+                          ))
+                        )}
                       </SelectContent>
                     </Select>
                   )}
@@ -196,16 +260,20 @@ const RemitalUserDetails = ({
                         ref={ref}
                         className="bg-[#2D3456] text-[#fff]"
                       >
-                        <SelectValue placeholder="Select Hospital" />
+                        {loadingHospital ? (
+                          <div className="border rounded-full w-4 h-4 flex justify-center items-center animate-spin">
+                            <Spinner color="red" className="w-4 h-4" />
+                          </div>
+                        ) : (
+                          <SelectValue placeholder="Select Hospital" />
+                        )}
                       </SelectTrigger>
                       <SelectContent>
-                        {hospitalList?.map(
-                          (hospital: string, index: number) => (
-                            <SelectItem key={index} value={hospital}>
-                              {hospital}
-                            </SelectItem>
-                          )
-                        )}
+                        {hospitalList?.map((clinic, index: number) => (
+                          <SelectItem key={index} value={clinic?.hospital}>
+                            {clinic?.hospital}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   )}

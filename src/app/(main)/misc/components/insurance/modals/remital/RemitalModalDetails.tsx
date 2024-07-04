@@ -32,6 +32,11 @@ interface prop {
   setOpenRemitalUserDetail: Dispatch<SetStateAction<boolean>>;
 }
 
+interface successprop {
+  status: string;
+  message: string;
+}
+
 // Define the Zod schema
 const schema = z.object({
   pin: z
@@ -63,13 +68,24 @@ const RemitalModalDetails = ({
 
   const { mutate: handleVerifyOtp } = useCheckRemitalOtp();
   const onSubmit = (data: pinType) => {
-    setOpenRemitalUserDetail(true);
-    setOpenRemitalDetailModal(false);
-    handleVerifyOtp(data, {
-      onSuccess: () => {},
-    });
+    handleVerifyOtp(
+      {
+        pin: data?.pin,
+        verifiedPhoneNumber,
+      },
+      {
+        onSuccess: (data: successprop) => {
+          if (data?.status) {
+            setOpenRemitalUserDetail(true);
+            // setOpenRemitalDetailModal(false);
+          }
+        },
+      }
+    );
   };
   const isMobile = useIsMobile();
+  // console.log(phoneNumberCheckResponse);
+
   return (
     <Dialog
       open={openRemitalDetailModal}
@@ -93,28 +109,38 @@ const RemitalModalDetails = ({
               verification.
             </div>
 
-            <div className="bg-[#2D3455] w-full p-6 mt-6 flex flex-col text-white space-y-3  rounded-xl">
-              <div className="flex gap-[0.3rem] font-sans">
-                <p className=" text-sm">Full Name: </p>
-                <p className="capitalize text-sm">
-                  {convertToTitleCase(phoneNumberCheckResponse?.full_name)}
-                </p>
-              </div>
+            {phoneNumberCheckResponse?.full_name ||
+            phoneNumberCheckResponse?.ministry ||
+            phoneNumberCheckResponse?.state ? (
+              <div className="bg-[#2D3455] w-full p-6 mt-6 flex flex-col text-white space-y-3 rounded-xl">
+                {phoneNumberCheckResponse?.full_name && (
+                  <div className="flex gap-[0.3rem] font-sans">
+                    <p className="text-sm">Full Name: </p>
+                    <p className="capitalize text-sm">
+                      {convertToTitleCase(phoneNumberCheckResponse?.full_name)}
+                    </p>
+                  </div>
+                )}
 
-              <div className="flex w-full gap-[0.8rem] text-[#fff] font-sans flex-nowrap">
-                <p className=" text-sm">Ministry: </p>
-                <p className="capitalize text-sm">
-                  {convertToTitleCase(phoneNumberCheckResponse?.ministry)}
-                </p>
-              </div>
+                {phoneNumberCheckResponse?.ministry && (
+                  <div className="flex w-full gap-[0.8rem] text-[#fff] font-sans flex-nowrap">
+                    <p className="text-sm">Ministry: </p>
+                    <p className="capitalize text-sm">
+                      {convertToTitleCase(phoneNumberCheckResponse?.ministry)}
+                    </p>
+                  </div>
+                )}
 
-              <div className="flex gap-[3rem]">
-                <p className=" text-sm">State : </p>
-                <p className="capitalize text-sm">
-                  {convertToTitleCase(phoneNumberCheckResponse?.state)}
-                </p>
+                {phoneNumberCheckResponse?.state && (
+                  <div className="flex gap-[3rem]">
+                    <p className="text-sm">State: </p>
+                    <p className="capitalize text-sm">
+                      {convertToTitleCase(phoneNumberCheckResponse?.state)}
+                    </p>
+                  </div>
+                )}
               </div>
-            </div>
+            ) : null}
 
             <div className="mt-4 bg-[#2B3151] text-[#fff]  rounded-lg">
               <p className="text-[.8125rem]  py-4 px-6 font-sans font-medium">

@@ -18,8 +18,10 @@ export function isStringOrArrayOfStrings(
  * KPONGETTE becomes Kpongette
  * https://stackoverflow.com/a/196991/15063835
  */
-export function convertToTitleCase(string: string) {
-  return string.replace(/\w\S*/g, function (txt) {
+export function convertToTitleCase(string: string | undefined | null): string {
+  if (!string) return ""; // Return empty string if string is null or undefined
+  
+  return string.replace(/\w\S*/g, function(txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 }

@@ -20,16 +20,26 @@ export default function Home() {
     useState(false);
   const [openRemitalDetailModal, setOpenRemitalDetailModal] = useState(false);
   const [phoneNumberCheckResponse, setPhoneNumberCheckResponse] = useState({
+    id: "",
+    phone_number: "",
     full_name: "",
     ministry: "",
     state: "",
   });
   const [OpenRemitalUserDetail, setOpenRemitalUserDetail] = useState(false);
-
+  const [userId, setUserId] = useState("");
   const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
   const [openRemitalPlan, setOpenShowRemitalPlan] = useState(false);
   const [openNonRemitalDetailModal, setOpenNonRemitalDetailModal] =
     useState(false);
+
+  const [verifyResponse, setVerifyResponse] = useState({
+    nin: "",
+    address: "",
+    email: "",
+    id: "",
+  });
+  // console.log(phoneNumberCheckResponse);
 
   return (
     <main className="max-w-max md:pb-20 w-full bg-main min-h-screen">
@@ -331,6 +341,9 @@ export default function Home() {
           setOpenRemitalDetailModal={setOpenRemitalDetailModal}
           setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
           setVerifiedPhoneNumber={setVerifiedPhoneNumber}
+          setUserId={setUserId}
+          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
+          setVerifyResponse={setVerifyResponse}
           // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
         />
       )}
@@ -365,8 +378,11 @@ export default function Home() {
           verifiedPhoneNumber={verifiedPhoneNumber}
           setPhoneNumberCheckResponse={setPhoneNumberCheckResponse}
           openNonRemitalDetailModal={openNonRemitalDetailModal}
+          setOpenRemitalDetailModal={setOpenRemitalDetailModal}
           setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
           setOpenRemitalUserDetail={setOpenRemitalUserDetail}
+          userId={userId}
+          verifyResponse={verifyResponse}
         />
       )}
     </main>

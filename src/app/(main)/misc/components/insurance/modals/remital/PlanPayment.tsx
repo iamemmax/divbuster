@@ -13,7 +13,7 @@ interface Prop {
   verifiedPhoneNumber: string;
   planData: {
     plan_type: string;
-    plan_duration: string;
+    plan_duration: number;
     plan_amount: number;
     type: string;
     duration: number;
