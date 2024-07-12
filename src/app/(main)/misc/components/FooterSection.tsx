@@ -46,7 +46,7 @@ const FooterSection = () => {
                     <div className='lg:w-[82%]'>
                         <h4 className={cn(" font-bold text-xl lg:text-2xl text-white")}>Liberty assured</h4>
                         <p>
-                            We seek to bring Financial Liberty and Freedom by filling the void within the business sector ranging from Nano-Micro businesses to SME and personal finances.
+                            We seek to bring Financial Liberty and Freedom by filling the void within the business sector ranging from Nano-Micro businesses to SME and personal finances
                         </p>
                     </div>
 
@@ -161,7 +161,7 @@ const FooterSection = () => {
                     />
                 </div>
             </div>
-            
+
         </footer>
     )
 }
