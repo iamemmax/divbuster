@@ -344,10 +344,10 @@ export default function Home() {
           setUserId={setUserId}
           setOpenRemitalUserDetail={setOpenRemitalUserDetail}
           setVerifyResponse={setVerifyResponse}
-          // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
+        // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
         />
       )}
-      {/* remitals .................................................................. remita.................... */}
+      {/* remitals ............................................................... remita.................... */}
       {openRemitalDetailModal && (
         <RemitalModalDetails
           setOpenRemitalDetailModal={setOpenRemitalDetailModal}
