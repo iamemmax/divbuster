@@ -7,7 +7,7 @@ interface prop {
 import { useState, useEffect } from "react";
 
 const Countdown = ({ onTimeUp, reset }: prop) => {
-  const [timeLeft, setTimeLeft] = useState(5 * 60 + 51);
+  const [timeLeft, setTimeLeft] = useState(1 * 10 + 1);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
