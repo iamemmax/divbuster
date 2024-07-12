@@ -1,8 +1,6 @@
 "use client";
 
-import HomeIcon from "@/app/(dashboard)/comp/icons/Home";
-import Logo from "@/app/(dashboard)/comp/icons/Logo";
-import Notifications from "@/app/(dashboard)/comp/icons/Notification";
+
 import { Button, DrawerMenu } from "@/components/core";
 import { DrawerClose } from "@/components/core/Drawer";
 import { cn } from "@/utils/classNames";
@@ -10,6 +8,9 @@ import Link from "next/link";
 
 import * as React from "react";
 import CaretDown from "./CaretDown";
+import Logo from "@/app/(dashboard)/comp/icons/logo";
+import HomeIcon from "@/app/(dashboard)/comp/icons/home";
+import Notifications from "@/app/(dashboard)/comp/icons/notification";
 
 export function DashboardHeader() {
   const navLinks = [
