@@ -100,7 +100,7 @@ export default function Home() {
 
             <Button
               className={cn(
-                "flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
+                "flex items-center cursor-pointer justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
                 "font-display"
               )}
               variant="white"
@@ -361,7 +361,7 @@ export default function Home() {
         <RemitalUserDetails
           setOpenRemitalUserDetail={setOpenRemitalUserDetail}
           OpenRemitalUserDetail={OpenRemitalUserDetail}
-          verifiedPhoneNumber={verifiedPhoneNumber}
+          userId={userId}
           setOpenShowRemitalPlan={setOpenShowRemitalPlan}
         />
       )}
@@ -370,7 +370,7 @@ export default function Home() {
         <RemitalPlanModal
           openRemitalPlan={openRemitalPlan}
           setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-          verifiedPhoneNumber={verifiedPhoneNumber}
+          userId={userId}
         />
       )}
       {openNonRemitalDetailModal && (

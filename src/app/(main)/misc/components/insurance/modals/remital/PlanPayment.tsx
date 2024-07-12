@@ -4,119 +4,114 @@ import {
   DialogBody,
   DialogContent,
 } from "@/components/core/DialogClone";
-import { useMakeRemitalPayment } from "../../api/remital/remitalpayment";
+// import { useMakeRemitalPayment } from "../../api/remital/remitalpayment";
 import { SmallSpinner } from "@/icons/core";
+import { PaymentSuccessMsg } from "./RemitalPlanModal";
+import {
+  Button,
+  DialogClose,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/core";
+import CopyIcon from "@/app/(dashboard)/comp/icons/CopyIcon";
+import PayStatckIcon from "../../icons/PayStackIcon";
+import Link from "next/link";
 
 interface Prop {
   setShowPaymentModal: React.Dispatch<React.SetStateAction<boolean>>;
   showPaymentModal: boolean;
-  verifiedPhoneNumber: string;
-  planData: {
-    plan_type: string;
-    plan_duration: number;
-    plan_amount: number;
-    type: string;
-    duration: number;
-  };
+  userId: string;
+  PaymentInfo: PaymentSuccessMsg | undefined;
   setShowSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
+  duration: number | undefined;
 }
 
 const PlanPayment = ({
   setShowPaymentModal,
   showPaymentModal,
-  planData,
-  verifiedPhoneNumber,
+  PaymentInfo,
+  duration,
+  userId,
   setShowSuccessModal,
 }: Prop) => {
-  const { mutate: handlePaymentRequest, isLoading } = useMakeRemitalPayment();
-  const handlePayment = () => {
-    handlePaymentRequest(
-      {
-        amount: planData?.plan_amount,
-        duration: planData?.duration,
-        verifiedPhoneNumber,
-      },
-      {
-        onSuccess: (data) => {
-          console.log(data);
-        },
-      }
-    );
-    setShowSuccessModal(true);
-    setShowPaymentModal(false);
-  };
+  // const { mutate: handlePaymentRequest, isLoading } = useMakeRemitalPayment();
+
   return (
     <div>
-      <Dialog open={showPaymentModal}>
-        <DialogContent className="!overflow-hidden md:w-[26.0625rem] border-opacity-70 border border-[#407BFF]">
-          <DialogBody className="bg-[#141B3f]  w-full border-[0.01px] border-opacity-70 border-[#407BFF]">
-            <div className="py-1 pb-4">
-              <div className="">
-                <div className="flex items-center justify-center w-full">
-                  <svg
-                    width={101}
-                    height={101}
-                    viewBox="0 0 101 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect
-                      width={100.32}
-                      height={100.32}
-                      rx={50.16}
-                      fill="#fff"
-                    />
-                    <path
-                      d="M47 34a3 3 0 0 1 6 0v22a3 3 0 0 1-6 0zm0 32a3 3 0 1 1 6 0 3 3 0 0 1-6 0Z"
-                      stroke="#1B1687"
-                      strokeWidth={2}
-                    />
-                  </svg>
-                </div>
+      <Dialog
+        open={showPaymentModal}
+        // onOpenChange={setRemitaDetailsModal}
+      >
+        <DialogContent className="!overflow-hidden max-h-[94vh]  md:w-[28.75rem]">
+          <DialogHeader className="bg-[#1B1687] ">
+            <DialogTitle className="text-[#fff]">Payment</DialogTitle>
 
-                <div className="flex justify-center items-center w-full mt-[1rem]">
-                  <p className="text-xl  'font-DMSans' font-semibold text-[#fff]">
-                    Deduction Acknowledgment.
+            <DialogClose className="rounded-full">
+              <button onClick={() => setShowPaymentModal(false)}>Close</button>
+            </DialogClose>
+          </DialogHeader>
+
+          <DialogBody className="bg-[#141B3f]  md:w-full px-8">
+            <div className="py-1  ">
+              <div className="text-[#fff] font-light text-sm font-sans">
+                Kindly make payment for your health cover via the payment
+                options below.
+              </div>
+
+              <div className="mt-4 bg-[#2B3151] flex justify-center py-4 items-center flex-col text-[#fff]  rounded-lg">
+                <p className="text-sm text-white font-sans font-medium">
+                  {duration} Month Individual Health Cover
+                </p>
+                <h2 className="text-white text-2xl font-bold py-1">
+                  {PaymentInfo?.amount}
+                </h2>
+              </div>
+
+              <div className="mt-6 bg-[#141B3f] px-6 py-4 rounded-2xl">
+                <div className="border-b border-[#eee] border-opacity-20 py-4 w-full">
+                  <p className="text-sm text-white">
+                    Make payment via transfer
                   </p>
                 </div>
-
-                <div className="text-center px-[3rem] mt-[0.65rem] ">
-                  <p className="text-xs text-[#94a3b8] font-normal 'font-DMSans' ">
-                    Kindly know that a
-                    <span className="pl-1 text-white font-bold">
-                      ₦{planData?.plan_amount}
-                    </span>{" "}
-                    monthly premium will be auto-deducted from your salary for
-                    your health insurance package.
-                  </p>
-                </div>
-
-                <div className="bg-[#272D4A] mt-[2.1875rem] w-full flex items-center justify-center">
+                <div className="grid grid-cols-2 gap-4 items-start mt-5">
                   <div className="">
-                    <p className="text-[#fff] py-[1rem] text-xs font-medium 'font-DMSans' ">
-                      This also qualifies you for the lifestyle reward of N5m,
+                    <p className="text-xs text-white text-opacity-70">
+                      Account name
                     </p>
+                    <h2 className="text-white font-semibold textbase">
+                      {PaymentInfo?.account_name}
+                    </h2>
+                  </div>
+                  <div className="">
+                    <p className="text-xs text-white text-opacity-70">
+                      Account no
+                    </p>
+                    <h2 className="text-white gap-x-3 flex font-semibold textbase">
+                      {" "}
+                      {PaymentInfo?.account_no} <CopyIcon />
+                    </h2>
+                  </div>
+                  <div className="">
+                    <p className="text-xs text-white text-opacity-70">
+                      Bank name
+                    </p>
+                    <h2 className="text-white font-semibold textbase">
+                      {PaymentInfo?.bank_name}
+                    </h2>
                   </div>
                 </div>
               </div>
-
-              <div className="w-full flex justify-center items-center  gap-[1rem] mt-[1rem] text-sm">
-                <button
-                  className="rounded-3xl border-[0.3px] text-[#fff]  py-[0.9rem] w-[10rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none"
-                  onClick={() => {
-                    setShowPaymentModal(false);
-                  }}
-                >
-                  Decline
-                </button>
-
-                <button
-                  className="rounded-3xl bg-[#fff] flex justify-center items-center gap-x-2 text-[#1B1687]  py-[0.9rem] w-[10rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none"
-                  onClick={handlePayment}
-                >
-                  Agree & Proceed
-                  {isLoading && <SmallSpinner className="" color="#1B1687" />}
-                </button>
+              <div className="my-10 flex flex-col space-y-5">
+                <Link href={String(PaymentInfo?.paystack_link)}>
+                  <Button className="w-full rounded-10 text-sm bg-transparent py-4 font-bold text-white flex justify-center items-center gap-x-2 border border-[#1B1687]">
+                    <PayStatckIcon /> Pay with paystack{" "}
+                  </Button>
+                </Link>
+                <Link href={"/login"}>
+                  <Button className="w-full bg-white py-4 rounded-10 text-sm font-bold text-[#1B1687] flex justify-center items-center">
+                    Continue
+                  </Button>
+                </Link>
               </div>
             </div>
           </DialogBody>

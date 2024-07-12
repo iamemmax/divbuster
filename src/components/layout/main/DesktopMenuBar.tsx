@@ -254,7 +254,7 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
 
       {openIndividualModal && (
         <RemitalPlanModal
-          verifiedPhoneNumber=""
+          userId=""
           openRemitalPlan={isIndividualModalOpen}
           setOpenShowRemitalPlan={openIndividualModal}
         />

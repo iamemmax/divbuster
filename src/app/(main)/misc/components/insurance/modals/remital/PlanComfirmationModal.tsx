@@ -6,59 +6,23 @@ import {
 } from "@/components/core/DialogClone";
 import { useCreatePlanRequest } from "../../api/remital/createPlan";
 import { SmallSpinner } from "@/icons/core";
+import { useMakeRemitalPayment } from "../../api/remital/remitalpayment";
+import Link from "next/link";
+import { Button, LinkButton } from "@/components/core";
 
 interface prop {
   setShowConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
   setShowPaymentModal: React.Dispatch<React.SetStateAction<boolean>>;
-  planData: {
-    plan_type: string;
-    plan_duration: number;
-    plan_amount: number;
-    type: string;
-    duration: number;
-  };
-  verifiedPhoneNumber: string;
-  showConfirmation: true;
-}
-
-interface successMsgType {
-  id: string;
-  enrolee: string;
-  plan_type: string;
-  plan_duration: number;
-  is_active: boolean;
-  medi_response: null;
-  payment_response: null;
-  amount_paid: number;
-  is_deleted: boolean;
-  date_created: string;
-  date_updated: string;
+  showConfirmation: boolean;
+  ConfirmationMessage: string;
+  checkUserHasPassword: boolean | undefined;
 }
 
 const PlanComfirmationModal = ({
-  planData,
+  ConfirmationMessage,
   showConfirmation,
-  setShowConfirmation,
-  setShowPaymentModal,
-  verifiedPhoneNumber,
+  checkUserHasPassword,
 }: prop) => {
-  const { mutate: handleCreatePlan, isLoading } = useCreatePlanRequest();
-  const handleSubmit = () => {
-    handleCreatePlan(
-      {
-        verifiedPhoneNumber,
-        plan_type: planData?.type,
-        plan_duration: String(planData?.plan_duration),
-      },
-      {
-        onSuccess: (data: successMsgType) => {
-          setShowPaymentModal(true);
-          setShowConfirmation(false);
-        },
-      }
-    );
-  };
-
   return (
     <Dialog
       open={showConfirmation}
@@ -84,44 +48,16 @@ const PlanComfirmationModal = ({
               </svg>
             </div>
 
-            <div className="flex justify-center items-center w-full mt-[1rem]">
-              <p className="text-sm md:text-xl font-sans font-semibold text-[#fff]">
-                {planData?.plan_type} Individual Plan
-              </p>
+            <div className="py-5">
+              <p className="text-white text-sm">{ConfirmationMessage}</p>
             </div>
-
-            <div className="w-full flex justify-center items-center">
-              <p className="text-xs md:text-sm text-[#94a3b8] font-normal text-center font-sans ">
-                You have selected {planData?.plan_type} health cover. <br /> A
-                monthly premium of{" "}
-                <span className="text-white">₦{planData?.plan_amount}</span>
-              </p>
-            </div>
-
-            <div className="w-full flex items-center justify-center gap-[0.3rem]">
-              <p className=" text-sm font-normal  text-[#94a3b8] font-sans">
-                {/* {subdescription} */}
-              </p>
-              {/* <p className="text-[#fff]">{amount}</p> */}
-            </div>
-
-            <div className="w-full flex justify-center items-center gap-[1rem] mt-[4rem] text-sm mb-[1.5rem]">
-              <button
-                className="rounded-3xl border-[0.3px] text-[#fff]  py-[0.9rem] w-[10rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none"
-                onClick={() => {
-                  setShowConfirmation(false);
-                }}
+            <div className="py-3 mt-2">
+              <LinkButton
+                href={checkUserHasPassword ? "/login" : "/create-password"}
+                className="w-full bg-white py-4 rounded-10 text-sm font-bold text-[#1B1687] flex justify-center items-center"
               >
-                Decline
-              </button>
-
-              <button
-                className="rounded-3xl bg-[#fff] text-[#1B1687] flex justify-center items-center gap-4 py-[0.9rem] w-[10rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none "
-                onClick={handleSubmit}
-              >
-                Accept
-                {isLoading && <SmallSpinner className="" color="#1B1687" />}
-              </button>
+                {checkUserHasPassword ? "Contine" : "Create Password"}
+              </LinkButton>
             </div>
           </div>
         </DialogBody>

@@ -1,8 +1,6 @@
-import * as React from 'react';
+import * as React from "react";
 
-import {
-  MainHeader,
-} from '@/components/layout/main';
+import { MainHeader } from "@/components/layout/main";
 
 export default function MainLayout({
   children,

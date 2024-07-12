@@ -1,23 +1,24 @@
-'use client';
+"use client";
 
-import { Label } from '@radix-ui/react-label';
-import { useRouter } from 'next/navigation';
-import * as React from 'react';
+import { Label } from "@radix-ui/react-label";
+import { useRouter } from "next/navigation";
+import * as React from "react";
 
-import { Button } from '@/components/core/Button';
-import { ErrorModal } from '@/components/core/ErrorModal';
-import { Input } from '@/components/core/Input';
+import { Button } from "@/components/core/Button";
+import { ErrorModal } from "@/components/core/ErrorModal";
+import { Input } from "@/components/core/Input";
 
-import { LoaderModal } from '@/components/core/LoaderModal';
-import { useBooleanStateControl, useErrorModalState } from '@/hooks';
-import { getInputValueFromForm } from '@/utils/forms';
-import { useLogin } from '../../../misc';
+import { LoaderModal } from "@/components/core/LoaderModal";
+import { useBooleanStateControl, useErrorModalState } from "@/hooks";
+import { getInputValueFromForm } from "@/utils/forms";
+import { useLogin } from "../../../misc";
 
-import { AxiosError } from 'axios';
-import { formatAxiosErrorMessage } from '@/utils';
+import { AxiosError } from "axios";
+import { formatAxiosErrorMessage } from "@/utils";
+import { LinkButton } from "@/components/core";
 
 interface GetStartedProps {
-  referral_code?: string | null
+  referral_code?: string | null;
 }
 
 const PasswordInput: React.FunctionComponent = () => {
@@ -32,7 +33,7 @@ const PasswordInput: React.FunctionComponent = () => {
         name="password"
         pattern="[0-9]*"
         placeholder="Passcode"
-        type={isShown ? 'text' : 'password'}
+        type={isShown ? "text" : "password"}
         required
       />
       <Button
@@ -67,7 +68,7 @@ const PasswordInput: React.FunctionComponent = () => {
   );
 };
 
-export function PhoneLoginForm({ }: GetStartedProps) {
+export function PhoneLoginForm({}: GetStartedProps) {
   const router = useRouter();
   const { state: isLoaderModalOpen, setTrue: _openLoaderModal } =
     useBooleanStateControl();
@@ -87,25 +88,23 @@ export function PhoneLoginForm({ }: GetStartedProps) {
     event.preventDefault();
 
     const form = event.target as HTMLFormElement;
-    const phone = getInputValueFromForm(form, 'phone');
-    const password = getInputValueFromForm(form, 'password');
+    const phone = getInputValueFromForm(form, "phone");
+    const password = getInputValueFromForm(form, "password");
 
     // console.log(email, password)
     const updatedData = {
       phone_number: phone,
       password: password,
-      device_type: 'MOBILE'
+      device_type: "MOBILE",
     };
 
     postLogIn(updatedData, {
       onSuccess: () => {
-        router.push('/dashboard');
+        router.push("/dashboard");
       },
-      onError: error => {
-
+      onError: (error) => {
         const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         openErrorModalWithMessage(errorMessage as string);
-
       },
     });
   }
@@ -127,10 +126,15 @@ export function PhoneLoginForm({ }: GetStartedProps) {
           required
         />
 
-        <Label className="text-white font-sans text-sm mb-2" htmlFor="password">
-          Password
-        </Label>
-        <PasswordInput />
+        <div className="mt-3">
+          <Label
+            className="text-white font-sans text-sm mb-2"
+            htmlFor="password"
+          >
+            Password
+          </Label>
+          <PasswordInput />
+        </div>
 
         <Button
           className="my-6 mt-16 block w-full rounded-[20px] text-[#1B1687] font-sans py-[.9375rem] text-base leading-[normal]"
@@ -138,19 +142,31 @@ export function PhoneLoginForm({ }: GetStartedProps) {
           type="submit"
           variant="white"
         >
-          {isLoginLoading ? 'Loading' : 'Login'}
-
+          {isLoginLoading ? "Loading" : "Login"}
         </Button>
+        <div className="flex justify-between items-center">
+          <div className="">
+            <p className="text-white text-xs">Keep me logged in</p>
+          </div>
+          <div className="">
+            <LinkButton
+              href={"/forget-password"}
+              className="text-white text-xs bg-transparent"
+            >
+              Forget Password?
+            </LinkButton>
+          </div>
+        </div>
       </form>
 
       <ErrorModal
         isErrorModalOpen={isErrorModalOpen}
         setErrorModalState={setErrorModalState}
         subheading={
-          errorModalMessage || 'Please check your inputs and try again.'
+          errorModalMessage || "Please check your inputs and try again."
         }
       >
-        <div className="flex gap-3 rounded-2xl bg-red-50 px-8 py-6">
+        {/* <div className="flex gap-3 rounded-2xl bg-red-50 px-8 py-6">
           <Button
             className="grow bg-red-950 px-1.5 sm:text-sm md:px-6"
             size="lg"
@@ -159,7 +175,7 @@ export function PhoneLoginForm({ }: GetStartedProps) {
           >
             Okay
           </Button>
-        </div>
+        </div> */}
       </ErrorModal>
     </>
   );

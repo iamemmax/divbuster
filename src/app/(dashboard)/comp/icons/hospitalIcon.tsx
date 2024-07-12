@@ -1,6 +1,6 @@
 import * as React from "react";
 import { SVGProps } from "react";
-const hospitalIcon = (props: SVGProps<SVGSVGElement>) => (
+const HospitalIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     width={32}
     height={32}
@@ -18,4 +18,4 @@ const hospitalIcon = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-export default hospitalIcon;
+export default HospitalIcon;

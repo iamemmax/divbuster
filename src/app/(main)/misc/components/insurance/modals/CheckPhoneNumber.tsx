@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   Dialog,
   DialogBody,
@@ -18,6 +18,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { Input2 } from "@/components/core/Input2";
 import { useCheckRemitalUser } from "../api/detailRequest";
+import { formatAxiosErrorMessage } from "@/utils";
+import { AxiosError } from "axios";
+import { useErrorModalState } from "@/hooks";
 
 interface Prop {
   setOpenCheckPhoneNumberModal: Dispatch<SetStateAction<boolean>>;
@@ -98,7 +101,18 @@ const CheckPhoneNumber = ({
 
     mode: "onChange",
   });
+
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const {
+    isErrorModalOpen,
+    setErrorModalState,
+    // closeErrorModal,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
   const { mutate: handleCheckNumber, isLoading } = useCheckRemitalUser();
+
   const onsubmit = (data: detailRequestType) => {
     setVerifiedPhoneNumber(data?.phone_number);
     handleCheckNumber(data, {
@@ -155,6 +169,14 @@ const CheckPhoneNumber = ({
           }
           // Perform actions for the case where user is not eligible
         }
+      },
+      onError: (error) => {
+        const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-expect-error
+        setErrorMsg(error?.response?.data?.error);
+
+        openErrorModalWithMessage(String(errorMessage));
       },
     });
   };
@@ -236,6 +258,18 @@ const CheckPhoneNumber = ({
         </DialogContent>
       </Dialog>
       {/* </ClientOnly> */}
+
+      <ErrorModal
+        isErrorModalOpen={isErrorModalOpen}
+        setErrorModalState={() => {
+          setErrorModalState(false);
+        }}
+        subheading={
+          errorModalMessage ||
+          errorMsg ||
+          "Please check your inputs and try again."
+        }
+      ></ErrorModal>
     </div>
   );
 };

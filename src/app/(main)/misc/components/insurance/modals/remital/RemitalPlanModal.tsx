@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   ClientOnly,
+  ErrorModal,
   Tabs,
   TabsContent,
   TabsList,
@@ -22,67 +23,117 @@ import PlanComfirmationModal from "./PlanComfirmationModal";
 import PlanPayment from "./PlanPayment";
 import RemitalSuccessModal from "./RemitalSuccessModal";
 import { useQuery } from "react-query";
-import { getPlan } from "../../api/plan/getPlan";
+import { getPlan, plantypes } from "../../api/plan/getPlan";
+import { useMakeRemitalPayment } from "../../api/remital/remitalpayment";
+import { formatAxiosErrorMessage } from "@/utils";
+import { AxiosError } from "axios";
+import { useErrorModalState } from "@/hooks";
 
 interface Prop {
   setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>;
   openRemitalPlan: boolean;
-  verifiedPhoneNumber: string;
+  userId: string;
+}
+export interface PaymentSuccessMsg {
+  message?: string;
+  account_name: string;
+  account_no: string;
+  bank_name: string;
+  paystack_link: string;
+  amount: number;
+
+  "user:"?: User;
+}
+
+interface User {
+  id: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  organization: null;
+  gender: string;
+  has_set_password: boolean;
+  hospitals: Hospitals;
+  phone_verified: boolean;
+  nin: string;
+  email: string;
+  address: string;
+}
+
+interface Hospitals {
+  state: string;
+  region: string;
+  hospital: string;
+  provider_id: string;
 }
 
 const RemitalPlanModal = ({
   openRemitalPlan,
   setOpenShowRemitalPlan,
-  verifiedPhoneNumber,
+  userId,
 }: Prop) => {
+  const {
+    isErrorModalOpen,
+    setErrorModalState,
+    // closeErrorModal,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
   const list = [
     "Telemedicine",
     "Surgery Care",
     "Pharmacy Access",
     "Doctor Consultation",
   ];
-  const plans = [
-    {
-      plan: "1 Month Plan",
-      amount: 3000,
-      plan_duration: "ONE",
-      duration: 1,
-    },
-    {
-      plan: "6 Month Plan",
-      amount: 18000,
-      plan_duration: "SIX",
-      duration: 6,
-    },
-    {
-      plan: "12 Month Plan",
-      amount: 36000,
-      plan_duration: "TWElVE",
-      duration: 12,
-    },
-  ];
+
+  const [errorMsg, setErrorMsg] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-  const [planData, setPlanData] = useState<{
-    plan_type: string;
-    plan_duration: number;
-    plan_amount: number;
-    type: string;
-    duration: number;
-  }>({
-    plan_type: "",
-    plan_duration: 0,
-    plan_amount: 0,
-    type: "",
-    duration: 1,
-  });
-
+  const [PaymentInfo, setPaymentInfo] = useState<PaymentSuccessMsg>();
+  const [duration, setDuration] = useState<number>();
+  const [ConfirmationMessage, setConfirmationMessage] = useState("");
+  const [checkUserHasPassword, setCheckUserHasPassword] = useState<boolean>();
   const { data: plansData } = useQuery({
     queryFn: getPlan,
     queryKey: ["get-plans"],
   });
+
+  const { mutate: handlePaymentRequest, isLoading } = useMakeRemitalPayment();
+  const handlePayment = (plan: plantypes) => {
+    handlePaymentRequest(
+      {
+        duration: plan?.duration,
+        userId,
+      },
+      {
+        onSuccess: (data: PaymentSuccessMsg) => {
+          if (data?.message) {
+            setShowConfirmation(true);
+            setConfirmationMessage(data?.message);
+            setCheckUserHasPassword(data?.["user:"]?.has_set_password);
+          } else {
+            setPaymentInfo({
+              account_name: data?.account_name,
+              account_no: data?.account_no,
+              bank_name: data?.bank_name,
+              paystack_link: data?.paystack_link,
+              amount: data?.amount,
+            });
+            setShowPaymentModal(true);
+          }
+        },
+        onError: (error) => {
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-expect-error
+          setErrorMsg(error?.response?.data?.error);
+
+          openErrorModalWithMessage(String(errorMessage));
+        },
+      }
+    );
+  };
 
   return (
     <div>
@@ -155,7 +206,7 @@ const RemitalPlanModal = ({
                               </div>
                               <div className="py-3">
                                 <p className=" text-base text-[#D1D3DB] font-normal">
-                                  {plan?.duration}
+                                  {plan?.duration} Months Plan
                                 </p>
                                 <h1 className="text-white text-[2.25rem] font-bold">
                                   ₦{plan?.amount}
@@ -184,14 +235,8 @@ const RemitalPlanModal = ({
                                 className=" rounded-3xl font-display focus:shadow-outline w-[10rem]  bg-[#fff] p-4 py-2 font-semibold tracking-wide
                                   shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                 onClick={() => {
-                                  setShowConfirmation(true);
-                                  setPlanData({
-                                    plan_duration: Number(plan?.duration),
-                                    plan_amount: Number(plan?.amount),
-                                    plan_type: "pla",
-                                    type: "INDIVIDUAL",
-                                    duration: plan?.duration,
-                                  });
+                                  handlePayment(plan);
+                                  setDuration(plan?.duration);
                                 }}
                               >
                                 Get Insurance
@@ -229,30 +274,43 @@ const RemitalPlanModal = ({
           </DialogBody>
         </DialogContent>
       </Dialog>
-
-      {showConfirmation && (
-        <PlanComfirmationModal
-          showConfirmation={showConfirmation}
-          setShowConfirmation={setShowConfirmation}
-          planData={planData}
-          verifiedPhoneNumber={verifiedPhoneNumber}
-          setShowPaymentModal={setShowPaymentModal}
-        />
-      )}
       {showPaymentModal && (
         <PlanPayment
           showPaymentModal={showPaymentModal}
           setShowPaymentModal={setShowPaymentModal}
-          verifiedPhoneNumber={verifiedPhoneNumber}
-          planData={planData}
+          userId={userId}
+          PaymentInfo={PaymentInfo}
           setShowSuccessModal={setShowSuccessModal}
+          duration={duration}
         />
       )}
+      {showConfirmation && (
+        <PlanComfirmationModal
+          showConfirmation={showConfirmation}
+          setShowConfirmation={setShowConfirmation}
+          ConfirmationMessage={ConfirmationMessage}
+          setShowPaymentModal={setShowPaymentModal}
+          checkUserHasPassword={checkUserHasPassword}
+        />
+      )}
+      {/* 
       <RemitalSuccessModal
         showSuccessModal={showSuccessModal}
         setShowSuccessModal={setShowSuccessModal}
-        verifiedPhoneNumber={verifiedPhoneNumber}
-      />
+        userId={userId}
+      /> */}
+
+      <ErrorModal
+        isErrorModalOpen={isErrorModalOpen}
+        setErrorModalState={() => {
+          setErrorModalState(false);
+        }}
+        subheading={
+          errorModalMessage ||
+          errorMsg ||
+          "Please check your inputs and try again."
+        }
+      ></ErrorModal>
     </div>
   );
 };

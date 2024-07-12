@@ -2,7 +2,7 @@ import { adminAxios } from '@/lib/axios';
 import { useMutation, useQuery } from 'react-query';
 
 
-interface regionTypes {
+export interface regionTypes {
   state: string;
   region: string;
   provider_id: number;
@@ -19,10 +19,14 @@ export const fetchStateList = async () => {
     const {data} = await adminAxios.get( `life-insurance/filter_provider/`);
     return data as string[] 
 };
+
 export const fetchRegionByState = async (state:string) => {
     const {data} = await adminAxios.get(`life-insurance/filter_provider/?state=${state}`);
     return data as regionTypes[] 
 };
+
+
+
 
 export const fetchHospitalListByState = async ( state: string,region:string) => {
     const {data} = await adminAxios.get(`life-insurance/filter_provider/?state=${state}&region=${region}`);
@@ -33,16 +37,20 @@ export const fetchHospitalListByState = async ( state: string,region:string) => 
 
 
 interface hopitalChoiceProp{
-    verifiedPhoneNumber: string;
-    state: string,
-    hospital:string
+    userId: string;
+  state: string;
+  hospital: string;
+  region: string;
+  provider_id: number;
 }
 
-export const userHospitalChoice = async ({ verifiedPhoneNumber, state, hospital }: hopitalChoiceProp) => {
+export const userHospitalChoice = async ({ userId, state, hospital,provider_id,region }: hopitalChoiceProp) => {
     
-  const response = await adminAxios.post(`life-insurance/hospital-choice/?phone_number=${verifiedPhoneNumber}`, {
+  const response = await adminAxios.put(`life-insurance/accept_users_hospital/${userId}`, {
         state,
-        hospital
+    hospital,
+    provider_id,
+        region
     });
     return response?.data;
 };

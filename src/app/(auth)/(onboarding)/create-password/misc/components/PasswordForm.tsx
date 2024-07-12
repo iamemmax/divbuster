@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { FormError } from "@/components/core";
 import EyeIcon from "@/app/(main)/misc/icons/EyeIcon";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useChangePassword } from "../../api/createPassword";
+import { useChangePassword } from "../../../api/createPassword";
 
 interface GetStartedProps {
   referral_code?: string | null;

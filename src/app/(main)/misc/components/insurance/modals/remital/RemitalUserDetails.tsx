@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   ClientOnly,
   Dialog,
@@ -25,40 +25,42 @@ import {
   fetchHospitalListByState,
   fetchRegionByState,
   fetchStateList,
+  regionTypes,
   useUserHospitalChoice,
 } from "../../api/remital/remtalUserDetails";
 import { SmallSpinner, Spinner } from "@/icons/core";
+import { formatAxiosErrorMessage } from "@/utils";
+import { AxiosError } from "axios";
+import { useErrorModalState } from "@/hooks";
 
 interface Prop {
   setOpenRemitalUserDetail: Dispatch<SetStateAction<boolean>>;
   OpenRemitalUserDetail: true;
-  verifiedPhoneNumber: string;
+  userId: string;
   setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>;
 }
 
+// interface regionProp{
+
+// }
+
 const formValues = z.object({
   hospitaldata: z.object({
-    state: z
-      .string({ required_error: "Please select a state." })
-      .trim()
-      .min(1, { message: "Please select a state." }),
-    region: z
-      .string({ required_error: "Please select a state." })
-      .trim()
-      .min(1, { message: "Please select a state." }),
-
+    state: z.string().trim().min(1, { message: "Please select a state." }),
+    region: z.string().trim().min(1, { message: "Please select a region." }),
     hospital: z
-      .string({ required_error: "Please select a hospital." })
+      .string()
       .trim()
-      .min(1, { message: "Please select a hosiptal." }),
+      .min(1, { message: "Please select a hospital." }),
   }),
 });
 
 type formValues = z.infer<typeof formValues>;
+
 const RemitalUserDetails = ({
   setOpenRemitalUserDetail,
   OpenRemitalUserDetail,
-  verifiedPhoneNumber,
+  userId,
   setOpenShowRemitalPlan,
 }: Prop) => {
   const {
@@ -78,7 +80,16 @@ const RemitalUserDetails = ({
     },
   });
 
-  // track selected state.............................
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const {
+    isErrorModalOpen,
+    setErrorModalState,
+    // closeErrorModal,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
+  // track selected state and region
   const selectedState = useWatch({
     control,
     name: "hospitaldata.state",
@@ -88,43 +99,59 @@ const RemitalUserDetails = ({
     name: "hospitaldata.region",
   });
 
-  // fetch hospital list.....................................................................
+  // fetch state list
   const { data: stateList } = useQuery({
     queryFn: fetchStateList,
     queryKey: ["fetch-state-list"],
   });
+
+  // fetch region list by state
   const { data: regionList, isLoading: loadingRegion } = useQuery({
     queryFn: () => fetchRegionByState(selectedState),
     queryKey: ["fetch-region-list", selectedState],
   });
-  // Remove duplicates states
+
+  // Remove duplicate states
   const uniqueStates = Array.from(new Set(stateList));
 
-  // fetching hostipal list
+  // fetch hospital list by state and region
   const { data: hospitalList, isLoading: loadingHospital } = useQuery({
     queryFn: () => fetchHospitalListByState(selectedState, selectedRegion),
     queryKey: ["fetch-hospital-list", selectedRegion],
   });
-  // console.log(stateList);
 
   const { mutate: handleSubmitHospital, isLoading: loadingSubmit } =
     useUserHospitalChoice();
 
   const onSubmit = (data: formValues) => {
+    const selectedRegionData = regionList?.find(
+      (region: regionTypes) => region.region === data.hospitaldata.region
+    );
+
     handleSubmitHospital(
       {
-        verifiedPhoneNumber,
-        state: data?.hospitaldata?.state,
-        hospital: data?.hospitaldata?.hospital,
+        userId,
+        state: data.hospitaldata.state,
+        hospital: data.hospitaldata.hospital,
+        provider_id: Number(selectedRegionData?.provider_id),
+        region: String(selectedRegionData?.region),
       },
       {
         onSuccess(data) {
           // console.log(data);
+          setOpenShowRemitalPlan(true);
+          setOpenRemitalUserDetail(false);
+        },
+        onError: (error) => {
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-expect-error
+          setErrorMsg(error?.response?.data?.error);
+
+          openErrorModalWithMessage(String(errorMessage));
         },
       }
     );
-    setOpenShowRemitalPlan(true);
-    setOpenRemitalUserDetail(false);
   };
 
   return (
@@ -151,7 +178,6 @@ const RemitalUserDetails = ({
               </div>
             </div>
             <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
-              {/* {statedroplist && ( */}
               <div className="">
                 <Label
                   className="mt-10 mb-1 block text-xs text-[#fff]"
@@ -174,7 +200,6 @@ const RemitalUserDetails = ({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value={"loading"} disabled></SelectItem>
-
                         {uniqueStates?.map((state_name, idx: number) => (
                           <SelectItem key={idx} value={state_name}>
                             {state_name}
@@ -188,9 +213,9 @@ const RemitalUserDetails = ({
               <div className="">
                 <Label
                   className="mt-10 mb-1 block text-xs text-[#fff]"
-                  htmlFor="State"
+                  htmlFor="Region"
                 >
-                  LG
+                  Region
                 </Label>
 
                 <Controller
@@ -199,11 +224,11 @@ const RemitalUserDetails = ({
                   render={({ field: { onChange, value, ref } }) => (
                     <Select value={value} onValueChange={onChange}>
                       <SelectTrigger
-                        id="state"
+                        id="region"
                         ref={ref}
                         className="bg-[#2D3456] text-[#fff]"
                       >
-                        <SelectValue placeholder="select region" />
+                        <SelectValue placeholder="Select Region" />
                       </SelectTrigger>
                       <SelectContent>
                         {loadingRegion ? (
@@ -216,7 +241,7 @@ const RemitalUserDetails = ({
                             {/* Show spinner while loading */}
                           </SelectItem>
                         ) : (
-                          regionList?.map((region, idx) => (
+                          regionList?.map((region: any, idx: number) => (
                             <SelectItem key={idx} value={region.region}>
                               {region.region}
                             </SelectItem>
@@ -227,17 +252,6 @@ const RemitalUserDetails = ({
                   )}
                 />
               </div>
-
-              {/* {errors?.hospitaldata?.state && (
-                    <FormError
-                      className="bg-red-900/40 text-white"
-                      errorMessage={errors?.hospitaldata?.state.message}
-                    />
-                  )} */}
-              {/* )} */}
-
-              {/* Hospital dropdownList */}
-
               <div>
                 <Label
                   className=" block text-xs  text-[#fff]"
@@ -269,9 +283,9 @@ const RemitalUserDetails = ({
                         )}
                       </SelectTrigger>
                       <SelectContent>
-                        {hospitalList?.map((clinic, index: number) => (
-                          <SelectItem key={index} value={clinic?.hospital}>
-                            {clinic?.hospital}
+                        {hospitalList?.map((clinic: any, index: number) => (
+                          <SelectItem key={index} value={clinic.hospital}>
+                            {clinic.hospital}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -283,7 +297,6 @@ const RemitalUserDetails = ({
                 <button
                   className="mt-[4.5rem] flex items-center gap-x-5 justify-center font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
         shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
-                  //disabled={!selectedState}
                   type="submit"
                 >
                   Continue{" "}
@@ -293,26 +306,21 @@ const RemitalUserDetails = ({
                 </button>
               </div>
             </form>
-            {/* <ErrorModal
-              isErrorModalOpen={isErrorModalOpen}
-              setErrorModalState={setErrorModalState}
-              subheading={
-                errorModalMessage || "Please check your inputs and try again."
-              }
-            >
-              <div className="flex gap-3 rounded-2xl bg-red-50 px-8 py-6">
-                <button
-                  className="grow bg-red-950 px-1.5 sm:text-sm md:px-6"
-                  type="button"
-                  onClick={closeErrorModal}
-                >
-                  Okay
-                </button>
-              </div>
-            </ErrorModal> */}
           </DialogBody>
         </DialogContent>
       </Dialog>
+
+      <ErrorModal
+        isErrorModalOpen={isErrorModalOpen}
+        setErrorModalState={() => {
+          setErrorModalState(false);
+        }}
+        subheading={
+          errorModalMessage ||
+          errorMsg ||
+          "Please check your inputs and try again."
+        }
+      ></ErrorModal>
     </div>
   );
 };

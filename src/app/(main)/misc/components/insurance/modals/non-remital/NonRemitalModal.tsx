@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   Dialog,
   DialogBody,
@@ -18,6 +18,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { Input2 } from "@/components/core/Input2";
 import { useCheckNinUser } from "../../api/non-remital/check-nin";
+import { formatAxiosErrorMessage } from "@/utils";
+import { AxiosError } from "axios";
+import { useErrorModalState } from "@/hooks";
 
 interface Prop {
   openNonRemitalDetailModal: boolean;
@@ -90,6 +93,13 @@ const NonRemitalModal = ({
   userId,
 }: Prop) => {
   const {
+    isErrorModalOpen,
+    setErrorModalState,
+    // closeErrorModal,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
+  const {
     register,
     handleSubmit,
     formState: { errors },
@@ -103,6 +113,7 @@ const NonRemitalModal = ({
 
     mode: "onChange",
   });
+  const [errorMsg, setErrorMsg] = useState("");
   const { mutate: handleCheckNin, isLoading } = useCheckNinUser();
   const onsubmit = (data: detailRequestNiNType) => {
     handleCheckNin(
@@ -132,6 +143,14 @@ const NonRemitalModal = ({
           }
 
           setOpenNonRemitalDetailModal(false);
+        },
+        onError: (error) => {
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-expect-error
+          setErrorMsg(error?.response?.data?.error);
+
+          openErrorModalWithMessage(String(errorMessage));
         },
       }
     );
@@ -238,6 +257,18 @@ const NonRemitalModal = ({
         </DialogContent>
       </Dialog>
       {/* </ClientOnly> */}
+
+      <ErrorModal
+        isErrorModalOpen={isErrorModalOpen}
+        setErrorModalState={() => {
+          setErrorModalState(false);
+        }}
+        subheading={
+          errorModalMessage ||
+          errorMsg ||
+          "Please check your inputs and try again."
+        }
+      ></ErrorModal>
     </div>
   );
 };

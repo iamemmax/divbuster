@@ -1,0 +1,14 @@
+// utils/statusColor.ts
+export const statusColor = (status: string) => {
+  switch (status.toLowerCase()) {
+    case 'completed':
+      return { color: '#099976', backgroundColor: '#31D0AA26' };
+    case 'pending':
+      return { color: '#FB9700', backgroundColor: '#FB970026' };
+    case 'failed':
+      return { color: '#EF4444', backgroundColor: '#EF444426' };
+    default:
+      return { color: '#FB9700', backgroundColor: '#FB970026' }; // Default to gray
+  }
+};
+// dc3545

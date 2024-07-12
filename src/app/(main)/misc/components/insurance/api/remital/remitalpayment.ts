@@ -3,16 +3,14 @@ import { useMutation } from 'react-query';
 
 
 interface planProp{
-    verifiedPhoneNumber: string;
-    amount: number,
+  userId: string;
     duration:number
 }
 
-export const makeRemitalPayment = async ({ verifiedPhoneNumber, amount,duration }: planProp) => {
+export const makeRemitalPayment = async ({ userId,duration }: planProp) => {
     
-  const response = await adminAxios.post(`life-insurance/remita-payment-confirmation/?phone_number=${verifiedPhoneNumber}`, {
-       phone_number:verifiedPhoneNumber, 
-    amount,
+  const response = await adminAxios.post(`/life-insurance/create-health-plan/`, {
+       user_id:userId, 
   duration
     
     });

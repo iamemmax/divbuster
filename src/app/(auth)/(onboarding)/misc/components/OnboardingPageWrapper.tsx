@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Balancer } from 'react-wrap-balancer';
+import * as React from "react";
+import { Balancer } from "react-wrap-balancer";
 
-import { cn } from '@/utils/classNames';
+import { cn } from "@/utils/classNames";
 
 export function OnboardingPageWrapper({
   children,
@@ -20,33 +20,33 @@ export function OnboardingPageWrapper({
         <div className="relative h-auto px-6 pb-10 pt-[5vh]  md:pb-8 lg:px-14 ">
           <div
             className={cn(
-              'absolute inset-0 rounded-[1.1875rem] from-[#080D27] from-[-31.2%] to-white/20 to-[24.74%] bg-[#080D27]'
+              "absolute inset-0 rounded-[1.1875rem] from-[#080D27] from-[-31.2%] to-white/20 to-[24.74%] bg-[#080D27]"
             )}
           />
           <h1
             className={cn(
-              'relative mb-1 font-clash text-2xl font-semibold leading-[normal] text-white lg:text-[2.125rem]',
-              isCentered && 'text-center'
+              "relative mb-1 font-clash text-2xl font-semibold leading-[normal] text-white lg:text-[2.125rem]",
+              isCentered && "text-center"
             )}
           >
-            <Balancer className={cn(isCentered && 'text-center')}>
+            <Balancer className={cn(isCentered && "text-center")}>
               {heading}
             </Balancer>
           </h1>
           <p
             className={cn(
-              'relative mb-9 text-xs leading-[normal] text-white lg:text-sm',
-              isCentered && 'text-center'
+              "relative mb-9 text-xs leading-[normal] text-opacity-70 text-white lg:text-sm text-left max-w-[391px]"
             )}
           >
-            <Balancer className={cn(isCentered && 'text-center')}>
-              {subHeading}
-            </Balancer>
+            {" "}
+            <p className={cn("text-left")}>{subHeading}</p>
           </p>
 
           {children}
 
-          <p className='relative text-center leading-[normal] text-white text-xs mt-24'>© LibertyAssured, All Rights Reserved</p>
+          <p className="relative text-center leading-[normal] text-white text-xs mt-24">
+            © LibertyAssured, All Rights Reserved
+          </p>
         </div>
       </main>
     </>
