@@ -73,7 +73,6 @@ export default function Home() {
             </h1>
             <p className="xl:max-w-[593px] font-sans text-[0.825rem] md:text-lg text-helper">
               <span>
-                {" "}
                 Get a comprehensive health cover and stand a chance to benefit
               </span>
               <span className="flex">
