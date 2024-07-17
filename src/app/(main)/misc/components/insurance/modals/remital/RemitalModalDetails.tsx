@@ -156,8 +156,7 @@ const RemitalModalDetails = ({
           <DialogBody className="bg-[#141B3f] md:w-full">
             <div className="py-1 overflow-y-auto">
               <div className="text-[#fff] font-light text-sm font-sans">
-                Kindly confirm your remita details and dial the USSD code for
-                OTP verification.
+                Please confirm your details below.
               </div>
               {phoneNumberCheckResponse?.full_name ||
               phoneNumberCheckResponse?.ministry ||
