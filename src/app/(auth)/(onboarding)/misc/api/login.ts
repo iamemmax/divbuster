@@ -1,5 +1,5 @@
-import { adminAxios, setAxiosDefaultToken } from '@/lib/axios';
-import { useAuth } from '@/contexts/authentication';
+import { adminAxios, setAxiosDefaultToken } from "@/lib/axios";
+import { useAuth } from "@/contexts/authentication";
 
 import { useMutation } from "react-query";
 
@@ -15,11 +15,9 @@ interface TokenResponse {
   refresh: string;
 }
 
-
 const login = (loginDto: LoginDto): Promise<AxiosResponse<TokenResponse>> =>
   adminAxios.post("/user/auth/login/", loginDto);
 
-  
 export const useLogin = () => {
   const { authDispatch } = useAuth();
 

@@ -12,7 +12,7 @@ export interface User {
   bvn_first_name: string;
 }
 
-export interface UserEntities {
+export interface UserDataTypes {
   message: string;
   user_data: UserData;
   accounts_data: AccountsDaum[];
@@ -187,12 +187,12 @@ export interface Target {
 
 export type AuthState = {
   isAuthenticated: boolean;
-  user: UserEntities | null;
+  user: UserDataTypes | null;
   isLoading: boolean;
 };
 
 export type AuthAction =
-  | { type: "LOGIN"; payload: UserEntities }
+  | { type: "LOGIN"; payload: UserDataTypes }
   | { type: "LOGOUT" }
   | { type: "STOP_LOADING" };
 
@@ -208,8 +208,6 @@ export type LoginOtpDto = {
   otp: string;
   referal_code: string | null;
 };
-
-
 
 export interface UserDataTypes {
   first_name: string;
