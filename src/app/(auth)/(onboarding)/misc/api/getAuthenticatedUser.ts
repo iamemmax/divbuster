@@ -2,7 +2,7 @@ import { adminAxios } from "@/lib/axios";
 
 import { useQuery } from "react-query";
 
-import { UserEntities } from "../types";
+import { UserDataTypes } from "../types";
 
 export interface NoPinError {
   error: string;
@@ -10,8 +10,14 @@ export interface NoPinError {
   create_transaction_pin_link: string;
 }
 
-export const getAuthenticatedUser = async (): Promise<UserEntities> => {
-  const { data } = await adminAxios.get("/agency/user/get_user_details/");
+interface Hospitals {
+  lga: string;
+  state: string;
+  hospital: string;
+  provider_id: string;
+}
+export const getAuthenticatedUser = async (): Promise<UserDataTypes> => {
+  const { data } = await adminAxios.get("/user/get-user-details/");
   return data;
 };
 

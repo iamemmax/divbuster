@@ -109,7 +109,7 @@ const PlanPayment = ({
                 </Link>
                 <Link href={"/login"}>
                   <Button className="w-full bg-white py-4 rounded-10 text-sm font-bold text-[#1B1687] flex justify-center items-center">
-                    Continue
+                    I have made payment
                   </Button>
                 </Link>
               </div>

@@ -10,10 +10,11 @@ import Image from "next/image";
 import { useState } from "react";
 
 import CheckPhoneNumber from "./misc/components/insurance/modals/CheckPhoneNumber";
-import RemitalModalDetails from "./misc/components/insurance/modals/remital/RemitalModalDetails";
+
+import NonRemitalModal from "./misc/components/insurance/modals/non-remital/NonRemitalModal";
 import RemitalUserDetails from "./misc/components/insurance/modals/remital/RemitalUserDetails";
 import RemitalPlanModal from "./misc/components/insurance/modals/remital/RemitalPlanModal";
-import NonRemitalModal from "./misc/components/insurance/modals/non-remital/NonRemitalModal";
+import RemitalModalDetails from "./misc/components/insurance/modals/remital/RemitalModalDetails";
 
 export default function Home() {
   const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
@@ -21,7 +22,7 @@ export default function Home() {
   const [openRemitalDetailModal, setOpenRemitalDetailModal] = useState(false);
   const [phoneNumberCheckResponse, setPhoneNumberCheckResponse] = useState({
     id: "",
-    phone_number: "",
+    address: "",
     full_name: "",
     ministry: "",
     state: "",
@@ -35,6 +36,7 @@ export default function Home() {
 
   const [verifyResponse, setVerifyResponse] = useState({
     nin: "",
+    bvn: "",
     address: "",
     email: "",
     id: "",
@@ -127,7 +129,6 @@ export default function Home() {
             />
           </div>
         </section>
-
         <section className="xl:px-[120px] xl:my-12">
           <div
             className={cn(
@@ -343,10 +344,10 @@ export default function Home() {
           setUserId={setUserId}
           setOpenRemitalUserDetail={setOpenRemitalUserDetail}
           setVerifyResponse={setVerifyResponse}
-        // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
+          // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
         />
       )}
-      {/* remitals ............................................................... remita.................... */}
+      {/* remitals .................................................................. remita.................... */}
       {openRemitalDetailModal && (
         <RemitalModalDetails
           setOpenRemitalDetailModal={setOpenRemitalDetailModal}
@@ -362,6 +363,7 @@ export default function Home() {
           OpenRemitalUserDetail={OpenRemitalUserDetail}
           userId={userId}
           setOpenShowRemitalPlan={setOpenShowRemitalPlan}
+          verifyResponse={verifyResponse}
         />
       )}
 

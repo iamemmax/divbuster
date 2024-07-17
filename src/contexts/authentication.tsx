@@ -1,17 +1,21 @@
-'use client';
+"use client";
 
 // Auth strategy inspired by: https://theodorusclarence.com/blog/nextjs-redirect-no-flashing.
 
-import React from 'react';
+import React from "react";
 
 import {
   adminAxios, // ngrokAxios,
   deleteAxiosDefaultToken,
   setAxiosDefaultToken,
-} from '@/lib/axios';
+} from "@/lib/axios";
 import {
-  AuthState, AuthAction, tokenStorage, AuthDispatch, getAuthenticatedUser,
-} from '@/app/(auth)/(onboarding)/misc';
+  AuthState,
+  AuthAction,
+  tokenStorage,
+  AuthDispatch,
+  getAuthenticatedUser,
+} from "@/app/(auth)/(onboarding)/misc";
 
 const initialAuthState: AuthState = {
   isAuthenticated: false,
@@ -21,21 +25,21 @@ const initialAuthState: AuthState = {
 
 const authReducer: React.Reducer<AuthState, AuthAction> = (
   state: AuthState,
-  action: AuthAction,
+  action: AuthAction
 ) => {
   switch (action.type) {
-    case 'LOGIN':
+    case "LOGIN":
       return { ...state, isAuthenticated: true, user: action.payload };
 
-    case 'LOGOUT':
+    case "LOGOUT":
       tokenStorage.clearToken();
       return { ...state, isAuthenticated: false, user: null };
 
-    case 'STOP_LOADING':
+    case "STOP_LOADING":
       return { ...state, isLoading: false };
 
     default:
-      throw new Error('Unknown action type');
+      throw new Error("Unknown action type");
   }
 };
 
@@ -47,7 +51,7 @@ const AuthContext = React.createContext<{
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authState, authDispatch] = React.useReducer(
     authReducer,
-    initialAuthState,
+    initialAuthState
   );
 
   React.useEffect(() => {
@@ -62,12 +66,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setAxiosDefaultToken(token, adminAxios);
 
         const user = await getAuthenticatedUser();
-        authDispatch({ type: 'LOGIN', payload: user });
+        authDispatch({ type: "LOGIN", payload: user });
       } catch (err) {
         tokenStorage.clearToken();
         deleteAxiosDefaultToken();
       } finally {
-        authDispatch({ type: 'STOP_LOADING' });
+        authDispatch({ type: "STOP_LOADING" });
       }
     };
 
@@ -85,7 +89,7 @@ export const useAuth = () => {
   const context = React.useContext(AuthContext);
 
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
 
   return context;

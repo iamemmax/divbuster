@@ -1,23 +1,52 @@
 import { adminAxios } from "@/lib/axios";
-import { useMutation } from "react-query";
-// import { detailRequestNiNType } from "../../modals/non-remital/NonRemitalModal";
+import { useMutation, UseMutationResult } from "react-query";
 
-
-interface Prop{
-    address:string, userId:string,nin:string,email:string
+interface Prop {
+  userId: string;
+  address: string;
+  nin: string;
+  email: string;
+  bvn: string;
+  selectedOption: "bvn" | "nin";
 }
-export const checkNinUser = async ({userId,nin,email,address}:Prop) => {
-    // console.log(phone_number);
-    
-    const response = await adminAxios.post(`/user/update_non_remita_users_details/${userId}`, { nin,email,address});
-    return response?.data;
+
+export const checkNinUser = async ({
+  userId,
+  nin,
+  email,
+  address,
+  bvn,
+  selectedOption,
+}: Prop) => {
+  let requestData = {
+    email,
+    address,
+    userId,
+  };
+
+  if (selectedOption === "nin") {
+    requestData = {
+      ...requestData,
+      nin,
+    } as typeof requestData & { nin: string };
+  } else if (selectedOption === "bvn") {
+    requestData = {
+      ...requestData,
+      bvn,
+    } as typeof requestData & { bvn: string };
+  }
+
+  const response = await adminAxios.post(
+    `/user/update_non_remita_users_details/${userId}`,
+    requestData
+  );
+
+  return response?.data;
 };
 
-
-export const useCheckNinUser = () =>
-
-  useMutation({
-    mutationFn: checkNinUser
-  })
-//   37315057084
-//   21563101196
+export const useCheckNinUser = (): UseMutationResult<
+  any,
+  unknown,
+  Prop,
+  unknown
+> => useMutation(checkNinUser);

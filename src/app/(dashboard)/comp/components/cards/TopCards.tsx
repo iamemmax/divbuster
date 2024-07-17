@@ -5,8 +5,25 @@ import CopyIcon from "../../icons/CopyIcon";
 import WalletIcon from "../../icons/WalletIcon";
 import PlusIcon from "../../icons/PlusIcon";
 import { useClipboard } from "@/hooks";
+import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
+import { useQuery } from "react-query";
+import { getUserAccountDetails } from "@/app/(dashboard)/dashboard/api/getUserAccountDetails";
+import { getUserCurrentPlan } from "@/app/(dashboard)/dashboard/api/getCurrentPlan";
+import { Spinner } from "@/icons/core";
+import moment from "moment";
 
-const TopCards = () => {
+interface Prop {
+  userData: UserDataTypes | undefined;
+}
+const TopCards = ({ userData: users }: Prop) => {
+  const { data, isLoading: loadingAcct } = useQuery({
+    queryFn: () => getUserAccountDetails(String(users?.phone_number)),
+    queryKey: ["fetch-user-acct", users?.phone_number],
+  });
+  const { data: currentPlan } = useQuery({
+    queryFn: () => getUserCurrentPlan(String(users?.phone_number)),
+    queryKey: ["fetch-user-current-plan", users?.phone_number],
+  });
   const userData = {
     accounts: {
       account_name: "Olamide Adewale",
@@ -31,36 +48,50 @@ const TopCards = () => {
         <div className="bg-white rounded-10 p-1">
           <div className="bg-[#F0F5FF] h-full shadow-sm rounded-10  px-6 py-[.875rem] ">
             <p className="text-xs font-sans font-medium text-black">
-              Transfer to details below to fund your plan
+              Transfer to details below to fund your plan.
             </p>
-            <div className=" mt-4 grid  items-start grid-cols-2 ">
-              <div className="">
-                <h2 className="text-xs text-[#032282] font-medium font-sans">
-                  {userData?.accounts?.account_name}
-                </h2>
-                <p className="text-[#8490A8] text-[.625rem]">Account name</p>
-              </div>
-              <div className="">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xs text-[#032282] font-medium font-sans">
-                    {userData?.accounts?.account_number}
-                  </h2>
-                  <Button
-                    className="bg-transparent px-0 py-0"
-                    onClick={() => copy(userData?.accounts?.account_number)}
-                  >
-                    <CopyIcon />
-                  </Button>
+            {loadingAcct ? (
+              <Spinner />
+            ) : (
+              <>
+                <div className=" mt-4 grid  items-start grid-cols-2 ">
+                  <div className="">
+                    <h2 className="text-xs text-[#032282] font-medium font-sans">
+                      {data?.data?.account_name
+                        ? data?.data?.account_name
+                        : "Nil"}
+                    </h2>
+                    <p className="text-[#8490A8] text-[.625rem]">
+                      Account name
+                    </p>
+                  </div>
+                  <div className="">
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-xs text-[#032282] font-medium font-sans">
+                        {data?.data?.account_number
+                          ? data?.data?.account_number
+                          : "Nil"}
+                      </h2>
+                      <Button
+                        className="bg-transparent px-0 py-0"
+                        onClick={() => copy(data?.data?.account_number ?? "")}
+                      >
+                        <CopyIcon />
+                      </Button>
+                    </div>
+                    <p className="text-[#8490A8] text-[.625rem]">
+                      Account number
+                    </p>
+                  </div>
+                  <div className="mt-3">
+                    <h2 className="text-xs text-[#032282] font-medium font-sans">
+                      {data?.data?.bank_name ? data?.data?.bank_name : "Nil"}
+                    </h2>
+                    <p className="text-[#8490A8] text-[.625rem]">Bank name</p>
+                  </div>
                 </div>
-                <p className="text-[#8490A8] text-[.625rem]">Account number</p>
-              </div>
-              <div className="mt-3">
-                <h2 className="text-xs text-[#032282] font-medium font-sans">
-                  {userData?.accounts?.bank}
-                </h2>
-                <p className="text-[#8490A8] text-[.625rem]">Bank name</p>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -71,7 +102,9 @@ const TopCards = () => {
           <div className=" mt-[.625rem] grid w-full  grid-cols-2 ">
             <div className="mt-3">
               <h2 className="text-xs text-[#032282] font-medium font-sans">
-                {userData?.plan?.enrolee_name}
+                {currentPlan?.data?.enrolee_name
+                  ? currentPlan?.data?.enrolee_name
+                  : "Nil"}
               </h2>
               <p className="text-[#8490A8] text-[.625rem]">Enrolee name</p>
             </div>
@@ -92,7 +125,9 @@ const TopCards = () => {
             </div>
             <div className="mt-3">
               <h2 className="text-xs text-[#032282] font-medium font-sans">
-                {userData?.plan?.expires_on}
+                {currentPlan?.data?.expires_on
+                  ? moment(currentPlan?.data?.expires_on).format("MMM Do YY")
+                  : "Nil"}
               </h2>
               <p className="text-[#8490A8] text-[.625rem]">Expires on</p>
             </div>

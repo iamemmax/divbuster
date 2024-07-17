@@ -12,7 +12,7 @@ export interface User {
   bvn_first_name: string;
 }
 
-export interface UserEntities {
+export interface UserDataTypes {
   message: string;
   user_data: UserData;
   accounts_data: AccountsDaum[];
@@ -187,12 +187,12 @@ export interface Target {
 
 export type AuthState = {
   isAuthenticated: boolean;
-  user: UserEntities | null;
+  user: UserDataTypes | null;
   isLoading: boolean;
 };
 
 export type AuthAction =
-  | { type: "LOGIN"; payload: UserEntities }
+  | { type: "LOGIN"; payload: UserDataTypes }
   | { type: "LOGOUT" }
   | { type: "STOP_LOADING" };
 
@@ -208,3 +208,39 @@ export type LoginOtpDto = {
   otp: string;
   referal_code: string | null;
 };
+
+export interface UserDataTypes {
+  first_name: string;
+  middle_name: string;
+  last_name: string;
+  email: string;
+  email_verified: string;
+  phone_number: string;
+  phone_verified: boolean;
+  address: string;
+  gender: string;
+  organization: string;
+  date_of_birth: string;
+  state: string;
+  due_date: string;
+  wema_account_details: string;
+  account_number: string;
+  has_set_password: boolean;
+  bvn: string;
+  bvn_verified: string;
+  nin: string;
+  nin_verified: string;
+  hospitals: Hospitals;
+  exists_on_loandisk: string;
+  loandisk_borrower_id: string;
+  is_remita: boolean;
+  is_active: boolean;
+  is_staff: string;
+}
+
+interface Hospitals {
+  lga: string;
+  state: string;
+  hospital: string;
+  provider_id: string;
+}
