@@ -271,13 +271,13 @@ const RemitalUserDetails = ({
                         <SelectValue placeholder="Select State" />
                       </SelectTrigger>
                       <SelectContent className="relative">
-                        <div className="w-full h-[4rem] absolute pr-10">
+                        {/* <div className="w-full h-[4rem] absolute pr-10">
                           <DebounceInput
                             className="w-full p-2 bg-white text-black"
                             value={globalFilter ?? ""}
                             onChange={(e) => setGlobalFilter(e)}
                           />
-                        </div>
+                        </div> */}
                         <div className="mt-12">
                           {filteredStates?.map((state_name, idx: number) => (
                             <SelectItem
