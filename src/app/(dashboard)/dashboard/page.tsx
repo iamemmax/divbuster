@@ -5,6 +5,7 @@ import TopCards from "../comp/components/cards/TopCards";
 import HospitalAround from "../comp/components/cards/hospital/table/HospitalAround";
 import HospitalVisited from "../comp/components/cards/hospital/table/HospitalVisited";
 import TransactionsTable from "../comp/components/transactions/table/TransactionsTable";
+import Marquee from "@/app/(main)/misc/components/Marquee";
 
 const page = () => {
   return (
@@ -78,6 +79,7 @@ const page = () => {
           </div>
         </div>
       </div>
+      <Marquee/>
     </div>
   );
 };
