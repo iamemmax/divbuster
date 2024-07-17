@@ -28,7 +28,7 @@ interface Prop {
   setPhoneNumberCheckResponse: Dispatch<
     SetStateAction<{
       id: string;
-      phone_number: string;
+      address: string;
       full_name: string;
       ministry: string;
       state: string;
@@ -42,6 +42,7 @@ interface Prop {
   setVerifyResponse: Dispatch<
     SetStateAction<{
       nin: string;
+      bvn: string;
       address: string;
       email: string;
       id: string;
@@ -74,6 +75,7 @@ interface User {
   nin: string;
   email: string;
   address: string;
+  bvn: string;
 }
 
 export type detailRequestType = z.infer<typeof contactSchema>;
@@ -127,12 +129,13 @@ const CheckPhoneNumber = ({
           ministry: "",
           state: data?.["user:"].organization ?? "",
           id: data?.["user:"].id,
-          phone_number: data?.["user:"]?.phone_number,
+          address: data?.["user:"]?.address,
         });
 
         setVerifyResponse({
           address: data?.["user:"]?.address ?? "",
           nin: data?.["user:"]?.nin ?? "",
+          bvn: data?.["user:"]?.bvn ?? "",
           email: data?.["user:"]?.email ?? "",
           id: data?.["user:"]?.id ?? "",
         });

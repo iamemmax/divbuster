@@ -29,9 +29,9 @@ const PasswordInput: React.FunctionComponent = () => {
       <input
         className="login-autofill-text login-no-chrome-autofill-bg h-auto min-w-0 grow !bg-transparent py-3.5 pl-6 text-base font-medium text-white placeholder:text-white focus-visible:outline-none"
         id="password"
-        inputMode="numeric"
+        // inputMode="numeric"
         name="password"
-        pattern="[0-9]*"
+        // pattern="[0-9]*"
         placeholder="Passcode"
         type={isShown ? "text" : "password"}
         required

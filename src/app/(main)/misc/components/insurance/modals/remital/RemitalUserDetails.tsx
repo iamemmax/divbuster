@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   ClientOnly,
   Dialog,
@@ -20,34 +20,74 @@ import { z } from "zod";
 import { Label } from "@radix-ui/react-label";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import {
-  fetchHospitalListByState,
+  fetchHospitalListByLga,
   fetchRegionByState,
   fetchStateList,
   regionTypes,
   useUserHospitalChoice,
 } from "../../api/remital/remtalUserDetails";
 import { SmallSpinner, Spinner } from "@/icons/core";
-import { formatAxiosErrorMessage } from "@/utils";
+import { capitalizeFirstLetter, formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
+import { Input2 } from "@/components/core/Input2";
+import DebounceInput from "@/app/(dashboard)/comp/components/misc/DebounceInput";
+import { useRouter } from "next/navigation";
 
 interface Prop {
   setOpenRemitalUserDetail: Dispatch<SetStateAction<boolean>>;
   OpenRemitalUserDetail: true;
   userId: string;
   setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>;
+  verifyResponse: {
+    nin: string;
+    bvn: string;
+    address: string;
+    email: string;
+    id: string;
+  };
+}
+interface SuccessMsg {
+  // message: string;
+  id: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  organization: null;
+  gender: string;
+  has_set_password: boolean;
+  hospitals: Hospitals;
+  phone_verified: boolean;
+  nin: null;
+  bvn: string;
+  email: string;
+  address: string;
 }
 
-// interface regionProp{
+interface Hospitals {
+  state: string;
+  lga: string;
+  provider_id: string;
+  hospital: string;
+}
 
-// }
+interface Hospitals {
+  lga: string;
+  state: string;
+  hospital: string;
+  provider_id: string;
+}
 
 const formValues = z.object({
   hospitaldata: z.object({
+    email: z
+      .string()
+      .email({ message: "Invalid email format" })
+      .min(1, { message: "Email is required" }),
     state: z.string().trim().min(1, { message: "Please select a state." }),
-    region: z.string().trim().min(1, { message: "Please select a region." }),
+    lga: z.string().trim().min(1, { message: "Please select a lga." }),
     hospital: z
       .string()
       .trim()
@@ -62,6 +102,7 @@ const RemitalUserDetails = ({
   OpenRemitalUserDetail,
   userId,
   setOpenShowRemitalPlan,
+  verifyResponse,
 }: Prop) => {
   const {
     control,
@@ -73,86 +114,101 @@ const RemitalUserDetails = ({
     resolver: zodResolver(formValues),
     defaultValues: {
       hospitaldata: {
+        email: verifyResponse?.email || "",
         hospital: "",
-        region: "",
+        lga: "",
         state: "",
       },
     },
   });
 
+  const [globalFilter, setGlobalFilter] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
   const {
     isErrorModalOpen,
     setErrorModalState,
-    // closeErrorModal,
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
-  // track selected state and region
+
+  const selectedEmail = useWatch({
+    control,
+    name: "hospitaldata.email",
+  });
   const selectedState = useWatch({
     control,
     name: "hospitaldata.state",
   });
-  const selectedRegion = useWatch({
+
+  const selectedlga = useWatch({
     control,
-    name: "hospitaldata.region",
+    name: "hospitaldata.lga",
+  });
+  const seletedHospital = useWatch({
+    control,
+    name: "hospitaldata.hospital",
   });
 
-  // fetch state list
   const { data: stateList } = useQuery({
     queryFn: fetchStateList,
     queryKey: ["fetch-state-list"],
   });
 
-  // fetch region list by state
-  const { data: regionList, isLoading: loadingRegion } = useQuery({
+  const { data: lgaList, isLoading: loadinglga } = useQuery({
     queryFn: () => fetchRegionByState(selectedState),
-    queryKey: ["fetch-region-list", selectedState],
+    queryKey: ["fetch-lga-list", selectedState],
   });
 
-  // Remove duplicate states
   const uniqueStates = Array.from(new Set(stateList));
 
-  // fetch hospital list by state and region
   const { data: hospitalList, isLoading: loadingHospital } = useQuery({
-    queryFn: () => fetchHospitalListByState(selectedState, selectedRegion),
-    queryKey: ["fetch-hospital-list", selectedRegion],
+    queryFn: () => fetchHospitalListByLga(selectedlga),
+    queryKey: ["fetch-hospital-list", selectedlga],
   });
 
   const { mutate: handleSubmitHospital, isLoading: loadingSubmit } =
     useUserHospitalChoice();
-
+  const router = useRouter();
   const onSubmit = (data: formValues) => {
-    const selectedRegionData = regionList?.find(
-      (region: regionTypes) => region.region === data.hospitaldata.region
+    const selectedlgaData = hospitalList?.data?.find(
+      (hos) =>
+        hos?.lga?.toLowerCase() === data?.hospitaldata?.lga?.toLowerCase()
     );
 
     handleSubmitHospital(
       {
         userId,
+        email: data?.hospitaldata?.email,
         state: data.hospitaldata.state,
         hospital: data.hospitaldata.hospital,
-        provider_id: Number(selectedRegionData?.provider_id),
-        region: String(selectedRegionData?.region),
+        provider_id: String(selectedlgaData?.provider_id),
+        lga: String(selectedlgaData?.lga),
       },
       {
-        onSuccess(data) {
-          // console.log(data);
-          setOpenShowRemitalPlan(true);
-          setOpenRemitalUserDetail(false);
+        onSuccess(data: SuccessMsg) {
+          if (data?.has_set_password) {
+            setOpenShowRemitalPlan(true);
+            setOpenRemitalUserDetail(false);
+          } else {
+            router.push(`/create-password?email=${selectedEmail}`);
+            // setOpenRemitalUserDetail(false);
+          }
         },
         onError: (error) => {
           const errorMessage = formatAxiosErrorMessage(error as AxiosError);
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           //@ts-expect-error
           setErrorMsg(error?.response?.data?.error);
-
           openErrorModalWithMessage(String(errorMessage));
         },
       }
     );
   };
+
+  const filteredStates = uniqueStates.filter((state) =>
+    state?.toLowerCase().includes(globalFilter.toLowerCase())
+  );
 
   return (
     <div className="rounded-xl">
@@ -162,7 +218,6 @@ const RemitalUserDetails = ({
             <DialogTitle className="'font-DMSans' font-medium text-[#fff]">
               User Details
             </DialogTitle>
-
             <DialogClose className="rounded-full">
               <button onClick={() => setOpenRemitalUserDetail(false)}>
                 close
@@ -178,9 +233,26 @@ const RemitalUserDetails = ({
               </div>
             </div>
             <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
+              <div className="w-full mt-[1rem] text-sm font-normal">
+                <Label
+                  className="mb-1 block text-xs text-[#fff]"
+                  htmlFor="email"
+                >
+                  Email
+                </Label>
+                <div className="relative mt-[.25rem]">
+                  <Input2
+                    className={`${errors?.hospitaldata?.email?.message ? "border border-red-700" : ""} text-[#fff]`}
+                    placeholder="Enter email"
+                    type="text"
+                    id="email"
+                    {...register("hospitaldata.email")}
+                  />
+                </div>
+              </div>
               <div className="">
                 <Label
-                  className="mt-10 mb-1 block text-xs text-[#fff]"
+                  className="mt-5 mb-1 block text-xs text-[#fff]"
                   htmlFor="State"
                 >
                   State
@@ -198,11 +270,66 @@ const RemitalUserDetails = ({
                       >
                         <SelectValue placeholder="Select State" />
                       </SelectTrigger>
+                      <SelectContent className="relative">
+                        <div className="w-full h-[4rem] absolute pr-10">
+                          <DebounceInput
+                            className="w-full p-2 bg-white text-black"
+                            value={globalFilter ?? ""}
+                            onChange={(e) => setGlobalFilter(e)}
+                          />
+                        </div>
+                        <div className="mt-12">
+                          {filteredStates?.map((state_name, idx: number) => (
+                            <SelectItem
+                              className="border-t-[0.1px] border-[#E2E8F0] border-opacity-50 py-3 text-[#1B1687] text-xs"
+                              key={idx}
+                              value={state_name}
+                            >
+                              {state_name}
+                            </SelectItem>
+                          ))}
+                        </div>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
+
+              <div className="">
+                <Label
+                  className="mt-5 mb-1 block text-xs text-[#fff]"
+                  htmlFor="lga"
+                >
+                  Lga
+                </Label>
+
+                <Controller
+                  control={control}
+                  name="hospitaldata.lga"
+                  render={({ field: { onChange, value, ref } }) => (
+                    <Select value={value} onValueChange={onChange}>
+                      <SelectTrigger
+                        id="lga"
+                        ref={ref}
+                        className="bg-[#2D3456] text-[#fff]"
+                      >
+                        {loadinglga ? (
+                          <div className="border rounded-full w-4 h-4 flex justify-center items-center animate-spin">
+                            <Spinner color="red" className="w-4 h-4" />
+                          </div>
+                        ) : (
+                          <SelectValue>{selectedlga}</SelectValue>
+                        )}
+                        <SelectValue placeholder="Select lga" />
+                      </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={"loading"} disabled></SelectItem>
-                        {uniqueStates?.map((state_name, idx: number) => (
-                          <SelectItem key={idx} value={state_name}>
-                            {state_name}
+                        {lgaList?.map((lga: any, idx: number) => (
+                          <SelectItem
+                            className="border-t-[0.1px] border-[#E2E8F0] border-opacity-50 py-3 text-[#1B1687] text-xs"
+                            key={idx}
+                            value={lga}
+                          >
+                            {lga}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -210,54 +337,9 @@ const RemitalUserDetails = ({
                   )}
                 />
               </div>
-              <div className="">
-                <Label
-                  className="mt-10 mb-1 block text-xs text-[#fff]"
-                  htmlFor="Region"
-                >
-                  Region
-                </Label>
-
-                <Controller
-                  control={control}
-                  name="hospitaldata.region"
-                  render={({ field: { onChange, value, ref } }) => (
-                    <Select value={value} onValueChange={onChange}>
-                      <SelectTrigger
-                        id="region"
-                        ref={ref}
-                        className="bg-[#2D3456] text-[#fff]"
-                      >
-                        <SelectValue placeholder="Select Region" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {loadingRegion ? (
-                          <SelectItem
-                            value="loading"
-                            disabled
-                            className="w-full flex justify-center items-center"
-                          >
-                            <Spinner color="blue" className="w-4 h-4" />{" "}
-                            {/* Show spinner while loading */}
-                          </SelectItem>
-                        ) : (
-                          regionList?.map((region: any, idx: number) => (
-                            <SelectItem key={idx} value={region.region}>
-                              {region.region}
-                            </SelectItem>
-                          ))
-                        )}
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-              </div>
               <div>
-                <Label
-                  className=" block text-xs  text-[#fff]"
-                  htmlFor="Hospital"
-                >
-                  Hospital
+                <Label className="block text-xs text-[#fff]" htmlFor="Hospital">
+                  Hospital Available ({hospitalList?.data?.length ?? 0})
                 </Label>
 
                 <Controller
@@ -279,13 +361,24 @@ const RemitalUserDetails = ({
                             <Spinner color="red" className="w-4 h-4" />
                           </div>
                         ) : (
-                          <SelectValue placeholder="Select Hospital" />
+                          <SelectValue>{seletedHospital}</SelectValue>
                         )}
                       </SelectTrigger>
                       <SelectContent>
-                        {hospitalList?.map((clinic: any, index: number) => (
-                          <SelectItem key={index} value={clinic.hospital}>
-                            {clinic.hospital}
+                        {hospitalList?.data?.map((clinic, index: number) => (
+                          <SelectItem
+                            className="border-t-[0.1px] border-[#E2E8F0] border-opacity-50 py-3 "
+                            key={index}
+                            value={clinic?.name}
+                          >
+                            <div className="w-[20rem]">
+                              <h2 className="text-[#1B1687] text-xs">
+                                {clinic?.name}
+                              </h2>
+                              <p className="text-[.625rem] text-[#080D27]">
+                                {clinic?.address?.toLowerCase()}
+                              </p>
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>

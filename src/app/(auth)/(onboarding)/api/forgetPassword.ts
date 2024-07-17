@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 
 export const forgetPassword = async (  phone_number: string) => {
     
-  const response = await adminAxios.post(`/user/auth/change-password/`, {
+  const response = await adminAxios.post(`/user/auth/forgot-password/`, {
         phone_number,
       
     });

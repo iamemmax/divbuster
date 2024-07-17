@@ -6,16 +6,16 @@ type passwordformProps = {
    
         email: string;
         password: string;
-    confirmpassword: string;
-    phone: string;
+    confirm_password: string;
+    // phone?: string;
  
 }
-export const changePassword = async ({ email,password,phone,confirmpassword }: passwordformProps) => {
+export const changePassword = async ({ email,password,confirm_password }: passwordformProps) => {
     
-  const response = await adminAxios.post(`life-insurance/create-password/?phone_number=${phone}`, {
+  const response = await adminAxios.post(`user/auth/create-password/`, {
         email,
-        password1:password,
-        password2:confirmpassword,
+        password,
+        confirm_password,
     });
     return response?.data;
 };
