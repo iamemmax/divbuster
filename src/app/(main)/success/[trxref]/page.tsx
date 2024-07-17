@@ -60,10 +60,10 @@ const page = () => {
               </LinkButton>
 
               <LinkButton
-                href={`/create-password`}
+                href={`/login`}
                 className="rounded-3xl bg-[#fff] text-[#1B1687] py-[0.9rem] w-[10rem] shadow-lg font-normal transition-colors delay-150 ease-in-out focus:outline-none"
               >
-                Create password
+                Login
               </LinkButton>
             </div>
           </div>

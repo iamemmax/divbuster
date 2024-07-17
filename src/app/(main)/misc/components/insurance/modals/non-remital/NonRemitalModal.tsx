@@ -1,5 +1,4 @@
-"use client";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import {
   Dialog,
   DialogBody,
@@ -9,11 +8,15 @@ import {
   DialogTitle,
   DialogTrigger,
   ErrorModal,
-  FormError,
+  Select,
+  SelectItem,
+  SelectTrigger,
+  SelectContent,
+  SelectValue,
 } from "@/components/core";
 import { RightUpArrow, SmallSpinner } from "@/icons/core";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { Input2 } from "@/components/core/Input2";
@@ -27,13 +30,12 @@ interface Prop {
   setPhoneNumberCheckResponse: Dispatch<
     SetStateAction<{
       id: string;
-      phone_number: string;
+      address: string;
       full_name: string;
       ministry: string;
       state: string;
     }>
   >;
-
   setOpenNonRemitalDetailModal: Dispatch<SetStateAction<boolean>>;
   setOpenRemitalUserDetail: Dispatch<SetStateAction<boolean>>;
   setOpenRemitalDetailModal: Dispatch<SetStateAction<boolean>>;
@@ -41,46 +43,44 @@ interface Prop {
   userId: string;
   verifyResponse: {
     nin: string;
+    bvn: string;
     address: string;
     email: string;
     id: string;
   };
 }
-
-const contactSchema = z.object({
+const baseSchema = z.object({
   address: z
-    .string({ required_error: "Enter your phone number" })
-    .trim()
-    .min(2, { message: "Enter Address" }),
+    .string({ required_error: "Enter your address" })
+    .min(2, { message: "Address should be at least 2 characters" }),
+  email: z
+    .string()
+    .email({ message: "Invalid email format" })
+    .min(1, { message: "Email is required" }),
+  selectedOption: z.union([z.literal("nin"), z.literal("bvn")]),
+  bvn: z.string().trim(),
+  // .min(11, { message: "BVN should be at least 11 digits" }),
+  nin: z.string().trim(),
+  // .min(10, { message: "NIN should be at least 10 digits" }),
+});
+
+// Extend the base schema for NIN
+const ninSchema = baseSchema.extend({
   nin: z
     .string()
     .trim()
-    .min(10, { message: "Nin should be at least 11 digits" }),
-  email: z.string().email().min(1, { message: "Enter email" }),
-  //   id: z.string().optional(),
+    .min(10, { message: "NIN should be at least 10 digits" }),
 });
 
-interface successResponseType {
-  "user:": User;
-  sms_sent: boolean;
-}
+// Extend the base schema for BVN
+const bvnSchema = baseSchema.extend({
+  bvn: z
+    .string()
+    .trim()
+    .min(11, { message: "BVN should be at least 11 digits" }),
+});
 
-interface User {
-  id: string;
-  first_name: null;
-  last_name: null;
-  phone_number: string;
-  organization: null;
-  gender: string;
-  has_set_password: boolean;
-  hospital: null;
-  phone_verified: boolean;
-  nin: string;
-  email: string;
-  address: string;
-}
-export type detailRequestNiNType = z.infer<typeof contactSchema>;
-
+export { baseSchema, ninSchema, bvnSchema };
 const NonRemitalModal = ({
   verifiedPhoneNumber,
   openNonRemitalDetailModal,
@@ -88,68 +88,76 @@ const NonRemitalModal = ({
   setPhoneNumberCheckResponse,
   setOpenRemitalUserDetail,
   setOpenRemitalDetailModal,
-
   verifyResponse,
   userId,
 }: Prop) => {
   const {
     isErrorModalOpen,
     setErrorModalState,
-    // closeErrorModal,
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
+
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<detailRequestNiNType>({
-    resolver: zodResolver(contactSchema),
+  } = useForm({
+    resolver: zodResolver(baseSchema),
     defaultValues: {
-      address: verifyResponse?.address,
-      email: verifyResponse?.email,
-      nin: verifyResponse?.nin,
+      address: verifyResponse?.address || "",
+      email: verifyResponse?.email || "",
+      selectedOption: "nin", // Default selected option
+      nin: verifyResponse?.nin || "",
+      bvn: verifyResponse?.bvn || "",
     },
-
     mode: "onChange",
   });
-  const [errorMsg, setErrorMsg] = useState("");
+  const watchSelectedOption = useWatch({
+    control,
+    name: "selectedOption",
+  });
+
+  const schema = watchSelectedOption === "nin" ? ninSchema : bvnSchema;
+  type sch = z.infer<typeof schema>;
   const { mutate: handleCheckNin, isLoading } = useCheckNinUser();
-  const onsubmit = (data: detailRequestNiNType) => {
+
+  const onSubmit = (data: any) => {
+    // console.log(data);
+
     handleCheckNin(
       {
+        selectedOption: data.selectedOption,
         userId,
-        email: data?.email,
-        address: data?.address,
-        nin: data?.nin,
+        email: data.email,
+        address: data.address,
+        nin: watchSelectedOption === "nin" ? data.nin : "",
+        bvn: watchSelectedOption === "bvn" ? data.bvn : "",
       },
       {
-        onSuccess: (data: successResponseType) => {
-          // console.log(data);
-
+        onSuccess: (responseData: any) => {
           setPhoneNumberCheckResponse({
-            full_name: `${data?.["user:"]?.first_name} ${data?.["user:"]?.last_name}`,
+            full_name: `${responseData?.["user:"]?.first_name} ${responseData?.["user:"]?.last_name}`,
             ministry: "",
-            state: data?.["user:"]?.organization ?? "",
-            id: data?.["user:"]?.id,
-            phone_number: data?.["user:"]?.phone_number,
+            state: responseData?.["user:"]?.organization ?? "",
+            id: responseData?.["user:"]?.id,
+            address: responseData?.["user:"]?.address,
           });
-          if (data?.["user:"]?.phone_verified) {
+
+          if (responseData?.["user:"]?.phone_verified) {
             setOpenRemitalUserDetail(true);
             setOpenNonRemitalDetailModal(false);
           } else {
             setOpenRemitalDetailModal(true);
             setOpenNonRemitalDetailModal(false);
           }
-
-          setOpenNonRemitalDetailModal(false);
         },
-        onError: (error) => {
-          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          //@ts-expect-error
-          setErrorMsg(error?.response?.data?.error);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-expect-error
 
+        onError: (error: AxiosError) => {
+          const errorMessage = formatAxiosErrorMessage(error);
           openErrorModalWithMessage(String(errorMessage));
         },
       }
@@ -158,11 +166,7 @@ const NonRemitalModal = ({
 
   return (
     <div className="">
-      {/* <ClientOnly> */}
-      <Dialog
-        open={openNonRemitalDetailModal}
-        //   onOpenChange={()=>setOpenCheckPhoneNumberModal(true)}
-      >
+      <Dialog open={openNonRemitalDetailModal}>
         <DialogTrigger className="bg-white text-black flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-7 rounded-full max-w-max font-display">
           Get insurance
           <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
@@ -170,8 +174,8 @@ const NonRemitalModal = ({
           </span>
         </DialogTrigger>
 
-        <DialogContent className="!overflow-hidden ">
-          <DialogHeader className="bg-[#1B1687] ">
+        <DialogContent className="!overflow-hidden">
+          <DialogHeader className="bg-[#1B1687]">
             <DialogTitle className="text-[#fff]">Details Request</DialogTitle>
 
             <DialogClose className="rounded-full">
@@ -181,74 +185,131 @@ const NonRemitalModal = ({
             </DialogClose>
           </DialogHeader>
 
-          <DialogBody className="bg-[#151D42] w-full ">
-            <div className="">
+          <DialogBody className="bg-[#151D42] w-full">
+            <div>
               <p className="text-sm font-medium text-white font-sans">
                 Kindly enter your details below to process your application.
               </p>
-              <form className="mt-8" onSubmit={handleSubmit(onsubmit)}>
-                <div className="w-full mt-[1rem] text-sm font-normal">
+              <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
+                <div className="relative mt-[.25rem]">
                   <Label
-                    className="mb-1 block text-xs  text-[#fff]"
-                    htmlFor="phone"
+                    className="mb-1 block text-xs text-[#fff]"
+                    htmlFor="selectedOption"
                   >
                     Address
                   </Label>
-
-                  <div className={`relative mt-[.25rem] `}>
-                    <Input2
-                      className={`${errors?.address?.message ? "border border-red-700" : ""} text-[#fff]`}
-                      placeholder="Enter your address"
-                      type="text"
-                      id="phone"
-                      //   disabled
-                      {...register("address")}
-                    />
-                  </div>
+                  <Input2
+                    className={`${errors?.address?.message ? "border border-red-700" : ""} text-[#fff]`}
+                    placeholder="Enter your address"
+                    type="text"
+                    id="address"
+                    {...register("address")}
+                  />
                 </div>
+
                 <div className="w-full mt-[1rem] text-sm font-normal">
                   <Label
-                    className="mb-1 block text-xs  text-[#fff]"
-                    htmlFor="nin"
-                  >
-                    (Dial *346# on your phone to get your nin)
-                  </Label>
-
-                  <div className={`relative mt-[.25rem] `}>
-                    <Input2
-                      className={`${errors?.nin?.message ? "border border-red-700" : ""} text-[#fff]`}
-                      placeholder="Enter  nin"
-                      type="number"
-                      id="nin"
-                      {...register("nin")}
-                    />
-                  </div>
-                </div>
-                <div className="w-full mt-[1rem] text-sm font-normal">
-                  <Label
-                    className="mb-1 block text-xs  text-[#fff]"
+                    className="mb-1 block text-xs text-[#fff]"
                     htmlFor="email"
                   >
                     Email
                   </Label>
-
-                  <div className={`relative mt-[.25rem] `}>
+                  <div className="relative mt-[.25rem]">
                     <Input2
                       className={`${errors?.email?.message ? "border border-red-700" : ""} text-[#fff]`}
-                      placeholder="Enter  email"
+                      placeholder="Enter email"
                       type="text"
-                      id="nin"
+                      id="email"
                       {...register("email")}
                     />
                   </div>
                 </div>
+
+                <div className="w-full mt-[1rem] text-sm font-normal">
+                  <Label
+                    className="mb-1 block text-xs text-[#fff]"
+                    htmlFor="selectedOption"
+                  >
+                    Select the one to enter, BVN or NIN?
+                  </Label>
+                  <Controller
+                    control={control}
+                    name="selectedOption"
+                    render={({ field: { onChange, value, ref } }) => (
+                      <Select value={value} onValueChange={onChange}>
+                        <SelectTrigger
+                          id="selectedOption"
+                          ref={ref}
+                          className="bg-[#2D3456] text-[#fff] w-full py-2 px-3 rounded-md focus:outline-none"
+                        >
+                          <span>
+                            {value === "bvn"
+                              ? "BVN"
+                              : value === "nin"
+                                ? "NIN"
+                                : "Select BVN or NIN"}
+                          </span>
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border border-gray-300 mt-1 rounded-md shadow-lg w-full absolute z-50 top-full">
+                          <SelectItem value="bvn">BVN</SelectItem>
+                          <SelectItem value="nin">NIN</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                </div>
+
+                {watchSelectedOption === "bvn" && (
+                  <div className="w-full mt-[1rem] text-sm font-normal">
+                    <Label
+                      className="mb-1 block text-xs text-[#fff]"
+                      htmlFor="bvn"
+                    >
+                      BVN
+                    </Label>
+                    <div className="relative mt-[.25rem]">
+                      <Input2
+                        className={`${errors?.bvn?.message ? "border border-red-700" : ""} text-[#fff]`}
+                        placeholder="Enter BVN"
+                        type="text"
+                        id="bvn"
+                        {...register("bvn")}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {watchSelectedOption === "nin" && (
+                  <div className="w-full mt-[1rem] text-sm font-normal">
+                    <Label
+                      className="mb-1 block text-xs text-[#fff]"
+                      htmlFor="nin"
+                    >
+                      NIN
+                    </Label>
+                    <div className="relative mt-[.25rem]">
+                      <Input2
+                        className={`${errors?.nin?.message ? "border border-red-700" : ""} text-[#fff]`}
+                        placeholder="Enter NIN"
+                        type="text"
+                        id="nin"
+                        {...register("nin")}
+                      />
+                    </div>
+                  </div>
+                )}
+
                 <div className="pb-[2rem]">
                   <button
-                    className=" mt-[3rem] font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
-                                    shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                    className="mt-[3rem] flex justify-center items-center font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                     type="submit"
                   >
                     Continue
+                    {isLoading && (
+                      <div className="absolute top-[1.3rem] right-[1rem] transform -translate-y-1/2">
+                        <SmallSpinner className="" color="blue" />
+                      </div>
+                    )}
                   </button>
                 </div>
               </form>
@@ -256,7 +317,6 @@ const NonRemitalModal = ({
           </DialogBody>
         </DialogContent>
       </Dialog>
-      {/* </ClientOnly> */}
 
       <ErrorModal
         isErrorModalOpen={isErrorModalOpen}
@@ -264,11 +324,9 @@ const NonRemitalModal = ({
           setErrorModalState(false);
         }}
         subheading={
-          errorModalMessage ||
-          errorMsg ||
-          "Please check your inputs and try again."
+          errorModalMessage || "Please check your inputs and try again."
         }
-      ></ErrorModal>
+      />
     </div>
   );
 };

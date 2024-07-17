@@ -1,6 +1,5 @@
 "use client";
 
-
 import { Button, DrawerMenu } from "@/components/core";
 import { DrawerClose } from "@/components/core/Drawer";
 import { cn } from "@/utils/classNames";
@@ -11,8 +10,10 @@ import CaretDown from "./CaretDown";
 import Logo from "@/app/(dashboard)/comp/icons/logo";
 import HomeIcon from "@/app/(dashboard)/comp/icons/home";
 import Notifications from "@/app/(dashboard)/comp/icons/notification";
+import { useUser } from "@/app/(auth)/(onboarding)/misc";
 
 export function DashboardHeader() {
+  const { data: userData, isLoading } = useUser();
   const navLinks = [
     {
       title: "Dashboard",
@@ -67,9 +68,11 @@ export function DashboardHeader() {
               <Button className="rounded-full w-9 h-9 flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
                 <Notifications height={20} width={20} />
               </Button>
-              <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
-                AK
-              </Button>
+              {!isLoading && (
+                <Button className="rounded-full  w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
+                  {`${userData?.first_name?.slice(0, 1)}${userData?.last_name?.slice(0, 1)}`}
+                </Button>
+              )}
               <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-transparent p-2">
                 <CaretDown />
               </Button>

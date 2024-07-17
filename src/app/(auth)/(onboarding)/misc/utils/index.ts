@@ -1,4 +1,4 @@
-const TOKEN_STORAGE_PREFIX = 'LIBERTY_SEEDS_';
+const TOKEN_STORAGE_PREFIX = 'LIBERTY_LIFE_';
 
 export const tokenStorage = {
   getToken: () => JSON.parse(

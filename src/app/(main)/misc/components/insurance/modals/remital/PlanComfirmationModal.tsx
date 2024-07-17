@@ -28,7 +28,7 @@ const PlanComfirmationModal = ({
       open={showConfirmation}
       // onOpenChange={setSixMonthIndividualPlanModal}
     >
-      <DialogContent className="!overflow-hidden !border max-sm:w-[97%] !border-[#407BFF]">
+      <DialogContent className="!overflow-hidden min-h-[30rem] !border max-sm:w-[97%] !border-[#407BFF]">
         <DialogBody className="bg-[#141B3f] px-6 w-full rounded-[1.125rem] border-[0.01px] border-[#407BFF]  border-opacity-50">
           <div className="py-1 px-6">
             <div className="flex items-center justify-center w-full">
@@ -53,10 +53,10 @@ const PlanComfirmationModal = ({
             </div>
             <div className="py-3 mt-2">
               <LinkButton
-                href={checkUserHasPassword ? "/login" : "/create-password"}
+                href={checkUserHasPassword ? "/login" : ""}
                 className="w-full bg-white py-4 rounded-10 text-sm font-bold text-[#1B1687] flex justify-center items-center"
               >
-                {checkUserHasPassword ? "Contine" : "Create Password"}
+                {checkUserHasPassword && "Contine"}
               </LinkButton>
             </div>
           </div>

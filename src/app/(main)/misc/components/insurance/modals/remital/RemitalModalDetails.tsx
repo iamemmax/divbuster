@@ -22,6 +22,7 @@ import { useResentOtp } from "../../api/remital/resendOtp";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
+import { SmallSpinner } from "@/icons/core";
 
 interface prop {
   setOpenRemitalDetailModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -79,7 +80,8 @@ const RemitalModalDetails = ({
     mode: "onChange",
   });
 
-  const { mutate: handleVerifyOtp } = useCheckRemitalOtp();
+  const { mutate: handleVerifyOtp, isLoading: loadingSubmit } =
+    useCheckRemitalOtp();
   const onSubmit = (data: pinType) => {
     handleVerifyOtp(
       {
@@ -190,15 +192,14 @@ const RemitalModalDetails = ({
                 </div>
               ) : null}
               <div className="mt-4 bg-[#2B3151] text-[#fff] rounded-lg">
-                <p className="text-[.8125rem] py-4 px-6 font-sans font-medium">
-                  Kindly dial *123*304# on your phone to get an OTP.
-                </p>
+                <h2 className="text-[.8125rem] font-bold py-4 px-6 font-sans">
+                  Dial *347*180*52# to get an OTP.
+                </h2>
               </div>
               <div className="mt-6 text-[#fff] w-full font-medium font-sans">
                 <p className="w-full text-xs font-medium">
-                  Enter the OTP code sent to{" "}
-                  {maskPhoneNumber(verifiedPhoneNumber)}. Did not get SMS? Dial
-                  *123*304# to get OTP.
+                  Enter the OTP code sent to your number{" "}
+                  {maskPhoneNumber(verifiedPhoneNumber)}
                 </p>
               </div>
               <form className="mt-6" onSubmit={handleSubmit(onSubmit)}>
@@ -248,24 +249,27 @@ const RemitalModalDetails = ({
                   </div>
                   <div className="flex w-full mt-3 items-center justify-between px-4">
                     <div className="text-white text-xs">
-                      <Countdown onTimeUp={handleTimeUp} reset={resetTimer} />
+                      {/* <Countdown onTimeUp={handleTimeUp} reset={resetTimer} /> */}
                     </div>
-                    {showResendOtpButton && (
-                      <button
-                        type="button"
-                        className="flex items-center gap-[.3125rem] text-white text-[.625rem]"
-                        onClick={handleResendOtp}
-                      >
-                        <REsetOtpIcon /> Resend OTP
-                      </button>
-                    )}
+                    {/* {showResendOtpButton && ( */}
+                    <button
+                      type="button"
+                      className="flex items-center gap-[.3125rem] text-white text-[.625rem]"
+                      onClick={handleResendOtp}
+                    >
+                      <REsetOtpIcon /> Resend OTP
+                    </button>
+                    {/* )} */}
                   </div>
                   <div>
                     <button
-                      className="md:mt-[5rem] mt-4 font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687] mb-[3rem]"
+                      className="md:mt-[5rem] flex items-center justify-center gap-x-5 mt-4 font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687] mb-[3rem]"
                       type="submit"
                     >
                       Continue
+                      {loadingSubmit && (
+                        <SmallSpinner className="" color="#1B1687" />
+                      )}
                     </button>
                   </div>
                 </div>

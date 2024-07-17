@@ -17,41 +17,74 @@ import { FormError } from "@/components/core";
 import EyeIcon from "@/app/(main)/misc/icons/EyeIcon";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useChangePassword } from "../../../api/createPassword";
+import RemitalPlanModal from "@/app/(main)/misc/components/insurance/modals/remital/RemitalPlanModal";
+import { formatAxiosErrorMessage } from "@/utils";
+import { AxiosError } from "axios";
+import useDataStore from "@/app/store/useStore";
+import { SmallSpinner } from "@/icons/core";
 
 interface GetStartedProps {
   referral_code?: string | null;
 }
 
+const PasswordFormSchema = z.object({
+  passwordData: z
+    .object({
+      email: z
+        .string({ required_error: "Please enter your email." })
+        .trim()
+        .min(1, { message: "invalid email." })
+        .email(),
+      password: z
+        .string({ required_error: "Please enter your password." })
+        .trim()
+        .min(1, { message: "password must be at least 1 characters." }),
+
+      confirm_password: z
+        .string({ required_error: "Please enter your password." })
+        .trim()
+        .min(1, { message: "Password must be at least 1 characters." }),
+    })
+    .refine((data) => data?.password === data?.confirm_password, {
+      message: "Passwords don't match",
+      path: ["confirmpassword"],
+    }),
+});
+
+interface successMsg {
+  message: string;
+  user: User;
+}
+
+interface User {
+  id: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  organization: null;
+  gender: string;
+  has_set_password: boolean;
+  hospitals: Hospitals;
+  phone_verified: boolean;
+  nin: string;
+  bvn: string;
+  email: string;
+  address: string;
+}
+
+interface Hospitals {
+  lga: string;
+  state: string;
+  hospital: string;
+  provider_id: string;
+}
 export function PasswordForm({}: GetStartedProps) {
   const { state: isLoaderModalOpen, setTrue: _openLoaderModal } =
     useBooleanStateControl();
 
-  const PasswordFormSchema = z.object({
-    passwordData: z
-      .object({
-        email: z
-          .string({ required_error: "Please enter your email." })
-          .trim()
-          .min(1, { message: "invalid email." })
-          .email(),
-        password: z
-          .string({ required_error: "Please enter your password." })
-          .trim()
-          .min(1, { message: "password must be at least 1 characters." }),
-
-        confirmpassword: z
-          .string({ required_error: "Please enter your password." })
-          .trim()
-          .min(1, { message: "Password must be at least 1 characters." }),
-      })
-      .refine((data) => data?.password === data?.confirmpassword, {
-        message: "Passwords don't match",
-        path: ["confirmpassword"],
-      }),
-  });
-
   type passwordformProps = z.infer<typeof PasswordFormSchema>;
-
+  const search = useSearchParams();
+  const emailAddress = search?.get("email");
   const {
     register,
     handleSubmit,
@@ -60,43 +93,66 @@ export function PasswordForm({}: GetStartedProps) {
     resolver: zodResolver(PasswordFormSchema),
     defaultValues: {
       passwordData: {
-        email: "",
+        email: emailAddress || "",
         password: "",
-        confirmpassword: "",
+        confirm_password: "",
       },
     },
 
     mode: "onChange",
   });
 
+  const [errorMsg, setErrorMsg] = React.useState("");
+
   const {
     isErrorModalOpen,
     setErrorModalState,
-    closeErrorModal,
+    openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
-
   const [passwordShown, setPasswordShown] = React.useState(false);
+  const [openRemitalPlan, setOpenShowRemitalPlan] = React.useState(false);
+  const [userId, setUserId] = React.useState("");
   const router = useRouter();
   const togglePassword = () => {
     setPasswordShown(!passwordShown);
   };
-  const search = useSearchParams();
-  const phone = search?.get("phone");
-  const { mutate: handleChangePassword } = useChangePassword();
+
+  const { mutate: handleChangePassword, isLoading } = useChangePassword();
+  const addUser = useDataStore((state) => state?.addUser);
   const onsubmit = ({
-    passwordData: { confirmpassword, email, password },
+    passwordData: { confirm_password, email, password },
   }: passwordformProps) => {
     handleChangePassword(
       {
-        confirmpassword,
+        confirm_password,
         email,
         password,
-        phone: String(phone),
+        // phone: "",
       },
       {
-        onSuccess: () => {
-          router?.push("/");
+        onSuccess: (data: successMsg) => {
+          addUser({
+            password: password,
+            phone_number: data?.user?.phone_number,
+          });
+          setUserId(data?.user?.id);
+          if (data) {
+            setOpenShowRemitalPlan(true);
+            if (emailAddress !== undefined) {
+              setOpenShowRemitalPlan(true);
+            } else {
+              router.push("/login");
+            }
+          }
+          // router?.push("/");
+        },
+        onError: (error) => {
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-expect-error
+          setErrorMsg(error?.response?.data?.error);
+          openErrorModalWithMessage(String(errorMessage));
         },
       }
     );
@@ -107,23 +163,25 @@ export function PasswordForm({}: GetStartedProps) {
       <LoaderModal isOpen={isLoaderModalOpen} />
 
       <form className="relative z-10" onSubmit={handleSubmit(onsubmit)}>
-        <Label className="text-white font-sans text-sm mb-1" htmlFor="phone">
-          Email
-        </Label>
-        <Input
-          className="login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 outline-none text-sm font-sans font-medium text-white placeholder:text-white focus:!bg-white/30 "
-          id="email"
-          placeholder="Enter email"
-          type="email"
-          {...register("passwordData.email")}
-        />
-
-        {errors?.passwordData?.email && (
-          <FormError
-            className="bg-red-900/40 text-white"
-            errorMessage={errors.passwordData.email.message}
+        <div className={`${emailAddress ? "hidden" : ""} `}>
+          <Label className="text-white font-sans text-sm mb-1" htmlFor="phone">
+            Email
+          </Label>
+          <Input
+            className={`login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 outline-none text-sm font-sans font-medium text-white placeholder:text-white focus:!bg-white/30 `}
+            id="email"
+            placeholder="Enter email"
+            type="email"
+            {...register("passwordData.email")}
           />
-        )}
+
+          {errors?.passwordData?.email && (
+            <FormError
+              className="bg-red-900/40 text-white"
+              errorMessage={errors.passwordData.email.message}
+            />
+          )}
+        </div>
 
         <div className="mt-4">
           <div>
@@ -175,7 +233,7 @@ export function PasswordForm({}: GetStartedProps) {
               id="password"
               placeholder="Enter password"
               type={passwordShown ? "text" : "password"}
-              {...register("passwordData.confirmpassword")}
+              {...register("passwordData.confirm_password")}
               style={{ outline: "none", border: "none" }}
             />
 
@@ -189,20 +247,29 @@ export function PasswordForm({}: GetStartedProps) {
             </button>
             {/* </div> */}
           </div>
-          {errors?.passwordData?.confirmpassword && (
+
+          {openRemitalPlan && (
+            <RemitalPlanModal
+              openRemitalPlan={openRemitalPlan}
+              setOpenShowRemitalPlan={setOpenShowRemitalPlan}
+              userId={userId}
+            />
+          )}
+          {errors?.passwordData?.confirm_password && (
             <FormError
               className="mt-3 bg-red-900/40 text-white"
-              errorMessage={errors?.passwordData?.confirmpassword?.message}
+              errorMessage={errors?.passwordData?.confirm_password?.message}
             />
           )}
         </div>
 
         <Button
-          className="my-6 mt-16 block w-full rounded-[20px] text-[#1B1687] font-sans py-[.9375rem] text-base leading-[normal]"
+          className="my-6 mt-16 flex justify-center items-center gap-x-3 w-full rounded-[20px] text-[#1B1687] font-sans py-[.9375rem] text-base leading-[normal]"
           type="submit"
           variant="white"
         >
-          Go To Dashboard
+          Continue
+          {isLoading && <SmallSpinner className="" color="#1B1687" />}
         </Button>
       </form>
 
@@ -210,20 +277,11 @@ export function PasswordForm({}: GetStartedProps) {
         isErrorModalOpen={isErrorModalOpen}
         setErrorModalState={setErrorModalState}
         subheading={
-          errorModalMessage || "Please check your inputs and try again."
+          errorModalMessage ||
+          errorMsg ||
+          "Please check your inputs and try again."
         }
-      >
-        <div className="flex gap-3 rounded-2xl bg-red-50 px-8 py-6">
-          <Button
-            className="grow bg-red-950 px-1.5 sm:text-sm md:px-6"
-            size="lg"
-            type="button"
-            onClick={closeErrorModal}
-          >
-            Okay
-          </Button>
-        </div>
-      </ErrorModal>
+      ></ErrorModal>
     </>
   );
 }
