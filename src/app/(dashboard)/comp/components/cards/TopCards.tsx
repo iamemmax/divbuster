@@ -48,7 +48,7 @@ const TopCards = ({ userData: users }: Prop) => {
         <div className="bg-white rounded-10 p-1">
           <div className="bg-[#F0F5FF] h-full shadow-sm rounded-10  px-6 py-[.875rem] ">
             <p className="text-xs font-sans font-medium text-black">
-              Transfer to details below to fund your plan
+              Transfer to details below to fund your plan.
             </p>
             {loadingAcct ? (
               <Spinner />
