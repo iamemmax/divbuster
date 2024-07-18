@@ -7,7 +7,7 @@ const page = () => {
   return (
     <OnboardingPageWrapper
       heading="Forgot Password?"
-      subHeading="Enter your email address and we will send an email with a link to reset your password. "
+      subHeading="Enter your phone number and we will send an otp  to reset your password. "
     >
       <ForgetPasswordForm />
     </OnboardingPageWrapper>

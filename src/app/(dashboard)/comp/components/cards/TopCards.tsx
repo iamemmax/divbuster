@@ -11,6 +11,8 @@ import { getUserAccountDetails } from "@/app/(dashboard)/dashboard/api/getUserAc
 import { getUserCurrentPlan } from "@/app/(dashboard)/dashboard/api/getCurrentPlan";
 import { Spinner } from "@/icons/core";
 import moment from "moment";
+import { getWalletBalance } from "@/app/(dashboard)/dashboard/api/walletBalance";
+import { getFamilyPlan } from "@/app/(dashboard)/dashboard/api/getFamilyPlan";
 
 interface Prop {
   userData: UserDataTypes | undefined;
@@ -24,6 +26,15 @@ const TopCards = ({ userData: users }: Prop) => {
     queryFn: () => getUserCurrentPlan(String(users?.phone_number)),
     queryKey: ["fetch-user-current-plan", users?.phone_number],
   });
+  const { data: walletBalance } = useQuery({
+    queryFn: () => getWalletBalance(String(users?.phone_number)),
+    queryKey: ["fetch-wallet-balance", users?.phone_number],
+  });
+  const { data: familyPlanData } = useQuery({
+    queryFn: () => getFamilyPlan(String(users?.phone_number)),
+    queryKey: ["fetch-family-plan", users?.phone_number],
+  });
+
   const userData = {
     accounts: {
       account_name: "Olamide Adewale",
@@ -119,7 +130,9 @@ const TopCards = ({ userData: users }: Prop) => {
             </div>
             <div className="mt-3">
               <h2 className="text-xs text-[#032282] font-medium font-sans">
-                {userData?.plan?.enrolment_id}
+                {currentPlan?.data?.enrolement_id
+                  ? currentPlan?.data?.enrolement_id
+                  : "Nil"}
               </h2>
               <p className="text-[#8490A8] text-[.625rem]">Enrolment ID</p>
             </div>
@@ -140,13 +153,12 @@ const TopCards = ({ userData: users }: Prop) => {
                 Family Plan
               </h2>
               <p className="text-[#58431D] text-[.8125rem] mt-1 w-4/5">
-                Do something for your loved ones today by activating a plan for
-                them today
+                {familyPlanData?.message}
               </p>
             </div>
             <div className="justify-self-end">
               <Button className="bg-[#DB8C00] rounded-md py-[.4375rem] px-[.625rem] text-white text-[.625rem]">
-                Buy plan for family
+                {familyPlanData?.button}
               </Button>
             </div>
           </div>
@@ -172,7 +184,7 @@ const TopCards = ({ userData: users }: Prop) => {
 
             <div className="">
               <h2 className="text-2xl font-bold text-[₦100,000] py-3 text-[#099976]">
-                ₦100,000
+                &#8358;{walletBalance?.data?.balance ?? 0}
               </h2>
             </div>
             <div className="flex w-full items-center gap-3">

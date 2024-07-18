@@ -19,26 +19,38 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
+import { getHospitalAroundFunc } from "@/app/(dashboard)/dashboard/api/getHospitalAround";
+import { useQuery } from "react-query";
+import { capitalizeFirstLetter } from "@/utils";
 
 interface HospitaAroundHeader {
-  hospital: string;
+  name: string;
   state: string;
   address: string;
 }
 
+interface Prop {
+  userData: UserDataTypes | undefined;
+}
 const SkeletonLoading = () => (
   <div className="animate-pulse">
     <div className="h-3 bg-gray-200 rounded mb-2"></div>
   </div>
 );
 
-const HospitalAround = () => {
+const HospitalAround = ({ userData }: Prop) => {
+  const { data: HospitalAround, isLoading } = useQuery({
+    queryFn: () => getHospitalAroundFunc(String(userData?.phone_number)),
+    queryKey: ["fetch-hospital-around", userData?.phone_number],
+  });
+
   const columnHelper = createColumnHelper<HospitaAroundHeader>();
 
   const columns = [
-    columnHelper.accessor("hospital", {
+    columnHelper.accessor("name", {
       header: () => "Name",
-      cell: (info) => info?.getValue(),
+      cell: (info) => capitalizeFirstLetter(info?.getValue()),
     }),
     columnHelper.accessor("state", {
       header: () => "State",
@@ -46,29 +58,19 @@ const HospitalAround = () => {
     }),
     columnHelper.accessor("address", {
       header: () => "Address",
-      cell: (info) => info?.getValue(),
+      cell: (info) => capitalizeFirstLetter(info?.getValue()),
     }),
   ];
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   const table = useReactTable({
-    data: HospitalAroundData ?? [],
+    data: HospitalAround ?? [],
     columns: columns,
     debugTable: true,
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const rows = useMemo(() => HospitalAroundData ?? [], [HospitalAroundData]);
+  const rows = useMemo(() => HospitalAround ?? [], [HospitalAround]);
 
   return (
     <div>
@@ -146,26 +148,29 @@ const HospitalAround = () => {
             <>
               {rows?.length > 0 ? (
                 <TableBody>
-                  {table?.getRowModel()?.rows?.map((row, rowIndex) => (
-                    <React.Fragment key={row?.id}>
-                      <TableRow
-                        className={`hover:bg-[#f5f7ff]  ${rowIndex !== 0 ? "border-t" : ""}`}
-                        key={row?.id}
-                      >
-                        {row?.getVisibleCells()?.map((cell, idx: number) => (
-                          <TableCell
-                            className={`text-xs text-[#475569] cursor-pointer font-nunito py-4 border-[#E2E8F0] ${row?.getVisibleCells?.length - 1 === idx ? "border-t-[0.4px] border-[#E2E8F0]" : ""}`}
-                            key={cell?.id}
-                          >
-                            {flexRender(
-                              cell?.column?.columnDef?.cell,
-                              cell?.getContext()
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </React.Fragment>
-                  ))}
+                  {table
+                    ?.getRowModel()
+                    ?.rows?.slice(0, 5)
+                    ?.map((row, rowIndex) => (
+                      <React.Fragment key={row?.id}>
+                        <TableRow
+                          className={`hover:bg-[#f5f7ff]  ${rowIndex !== 0 ? "border-t" : ""}`}
+                          key={row?.id}
+                        >
+                          {row?.getVisibleCells()?.map((cell, idx: number) => (
+                            <TableCell
+                              className={`text-xs text-[#475569] cursor-pointer font-nunito py-4 border-[#E2E8F0] ${row?.getVisibleCells?.length - 1 === idx ? "border-t-[0.4px] border-[#E2E8F0]" : ""}`}
+                              key={cell?.id}
+                            >
+                              {flexRender(
+                                cell?.column?.columnDef?.cell,
+                                cell?.getContext()
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      </React.Fragment>
+                    ))}
                 </TableBody>
               ) : (
                 <div className="w-full flex justify-center items-center text-sm p-5">

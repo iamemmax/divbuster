@@ -12,7 +12,7 @@ export interface User {
   bvn_first_name: string;
 }
 
-export interface UserDataTypes {
+export interface UserEntities {
   message: string;
   user_data: UserData;
   accounts_data: AccountsDaum[];
@@ -208,6 +208,8 @@ export type LoginOtpDto = {
   otp: string;
   referal_code: string | null;
 };
+
+
 
 export interface UserDataTypes {
   first_name: string;

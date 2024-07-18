@@ -15,6 +15,7 @@ import NonRemitalModal from "./misc/components/insurance/modals/non-remital/NonR
 import RemitalUserDetails from "./misc/components/insurance/modals/remital/RemitalUserDetails";
 import RemitalPlanModal from "./misc/components/insurance/modals/remital/RemitalPlanModal";
 import RemitalModalDetails from "./misc/components/insurance/modals/remital/RemitalModalDetails";
+import CreatepasswordModal from "./misc/components/insurance/modals/remital/CreatePassWordModal";
 
 export default function Home() {
   const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
@@ -30,10 +31,12 @@ export default function Home() {
   const [OpenRemitalUserDetail, setOpenRemitalUserDetail] = useState(false);
   const [userId, setUserId] = useState("");
   const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [openRemitalPlan, setOpenShowRemitalPlan] = useState(false);
   const [openNonRemitalDetailModal, setOpenNonRemitalDetailModal] =
     useState(false);
 
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [verifyResponse, setVerifyResponse] = useState({
     nin: "",
     bvn: "",
@@ -344,6 +347,8 @@ export default function Home() {
           setUserId={setUserId}
           setOpenRemitalUserDetail={setOpenRemitalUserDetail}
           setVerifyResponse={setVerifyResponse}
+          setUserEmail={setUserEmail}
+          setShowPasswordModal={setShowPasswordModal}
           // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
         />
       )}
@@ -355,6 +360,7 @@ export default function Home() {
           phoneNumberCheckResponse={phoneNumberCheckResponse}
           verifiedPhoneNumber={verifiedPhoneNumber}
           setOpenRemitalUserDetail={setOpenRemitalUserDetail}
+          setUserEmail={setUserEmail}
         />
       )}
       {OpenRemitalUserDetail && (
@@ -364,9 +370,19 @@ export default function Home() {
           userId={userId}
           setOpenShowRemitalPlan={setOpenShowRemitalPlan}
           verifyResponse={verifyResponse}
+          userEmail={userEmail}
+          setShowPasswordModal={setShowPasswordModal}
         />
       )}
 
+      {showPasswordModal && (
+        <CreatepasswordModal
+          userEmail={userEmail}
+          setShowPasswordModal={setShowPasswordModal}
+          showPasswordModal={showPasswordModal}
+          setOpenShowRemitalPlan={setOpenShowRemitalPlan}
+        />
+      )}
       {openRemitalPlan && (
         <RemitalPlanModal
           openRemitalPlan={openRemitalPlan}
@@ -384,6 +400,7 @@ export default function Home() {
           setOpenRemitalUserDetail={setOpenRemitalUserDetail}
           userId={userId}
           verifyResponse={verifyResponse}
+          setUserEmail={setUserEmail}
         />
       )}
     </main>

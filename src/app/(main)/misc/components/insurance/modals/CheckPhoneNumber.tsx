@@ -21,6 +21,7 @@ import { useCheckRemitalUser } from "../api/detailRequest";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
+import { useRouter } from "next/navigation";
 
 interface Prop {
   setOpenCheckPhoneNumberModal: Dispatch<SetStateAction<boolean>>;
@@ -34,11 +35,13 @@ interface Prop {
       state: string;
     }>
   >;
+  setUserEmail: Dispatch<SetStateAction<string>>;
   setUserId: Dispatch<SetStateAction<string>>;
   setVerifiedPhoneNumber: Dispatch<SetStateAction<string>>;
   setOpenRemitalDetailModal: Dispatch<SetStateAction<boolean>>;
   setOpenNonRemitalDetailModal: Dispatch<SetStateAction<boolean>>;
   setOpenRemitalUserDetail: Dispatch<SetStateAction<boolean>>;
+  setShowPasswordModal: Dispatch<SetStateAction<boolean>>;
   setVerifyResponse: Dispatch<
     SetStateAction<{
       nin: string;
@@ -67,15 +70,22 @@ interface User {
   first_name: string;
   last_name: string;
   phone_number: string;
-  organization: string;
+  organization: null;
   gender: string;
   has_set_password: boolean;
-  hospital: string;
+  hospitals: Hospitals;
   phone_verified: boolean;
-  nin: string;
+  nin: null;
+  bvn: string;
   email: string;
   address: string;
-  bvn: string;
+}
+
+interface Hospitals {
+  lga: string;
+  state: string;
+  hospital: string;
+  provider_id: string;
 }
 
 export type detailRequestType = z.infer<typeof contactSchema>;
@@ -90,6 +100,8 @@ const CheckPhoneNumber = ({
   setVerifiedPhoneNumber,
   setUserId,
   setVerifyResponse,
+  setUserEmail,
+  setShowPasswordModal,
 }: Prop) => {
   const {
     register,
@@ -114,6 +126,7 @@ const CheckPhoneNumber = ({
     errorModalMessage,
   } = useErrorModalState();
   const { mutate: handleCheckNumber, isLoading } = useCheckRemitalUser();
+  const router = useRouter();
 
   const onsubmit = (data: detailRequestType) => {
     setVerifiedPhoneNumber(data?.phone_number);
@@ -122,6 +135,7 @@ const CheckPhoneNumber = ({
         const { status, data: mydata } = result;
         // console.log(status);
         let data: successResponseType = mydata;
+        setUserEmail(data?.["user:"]?.email);
         setPhoneNumberCheckResponse({
           full_name:
             `${data?.["user:"]?.first_name ?? ""} ${data?.["user:"]?.last_name ?? ""}`.trim() ||
@@ -140,37 +154,51 @@ const CheckPhoneNumber = ({
           id: data?.["user:"]?.id ?? "",
         });
 
-        const userData = data?.["user:"];
-        if (data?.is_eligible) {
-          setUserId(data?.["user:"]?.id);
-          if (!userData?.nin || !userData?.email || !userData?.address) {
-            // One or more fields are empty
-            setOpenNonRemitalDetailModal(true);
-
-            // Perform actions for the case where fields are missing
-          } else {
-            // All fields are present
-            setOpenRemitalUserDetail(true);
-            // Perform actions for the case where all fields are present
-          }
-          setOpenCheckPhoneNumberModal(false);
+        if (data?.["user:"]?.has_set_password) {
+          router?.push("/login");
         } else {
-          setUserId(data?.["user:"]?.id);
-          // data.is_eligible is false
-          if (status === 200) {
-            // Check if any of the required fields (nin, email, address) are missing
-            if (!userData?.nin || !userData?.email || !userData?.address) {
+          const userData = data?.["user:"];
+          if (data?.is_eligible) {
+            setUserId(data?.["user:"]?.id);
+            if (!userData?.email || !userData?.address) {
+              // One or more fields are empty
               setOpenNonRemitalDetailModal(true);
             } else {
-              if (userData?.phone_verified) {
-                setOpenRemitalUserDetail(true);
+              if (
+                data?.["user:"]?.hospitals?.hospital ||
+                data?.["user:"]?.hospitals?.state ||
+                data?.["user:"]?.hospitals?.lga
+              ) {
+                setShowPasswordModal(true);
               } else {
-                setOpenRemitalDetailModal(true);
+                setOpenRemitalUserDetail(true);
               }
             }
             setOpenCheckPhoneNumberModal(false);
+          } else {
+            setUserId(data?.["user:"]?.id);
+            // data.is_eligible is false
+            if (status === 200) {
+              // Check if any of the required fields (nin, email, address) are missing
+              if (!userData?.email || !userData?.address) {
+                setOpenNonRemitalDetailModal(true);
+              } else {
+                if (userData?.phone_verified) {
+                  if (
+                    data?.["user:"]?.hospitals?.hospital ||
+                    data?.["user:"]?.hospitals?.state ||
+                    data?.["user:"]?.hospitals?.lga
+                  ) {
+                    setShowPasswordModal(true);
+                  } else {
+                    setOpenRemitalUserDetail(true);
+                  }
+                }
+              }
+              setOpenCheckPhoneNumberModal(false);
+            }
+            // Perform actions for the case where user is not eligible
           }
-          // Perform actions for the case where user is not eligible
         }
       },
       onError: (error) => {

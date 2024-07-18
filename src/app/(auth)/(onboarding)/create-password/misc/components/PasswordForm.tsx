@@ -27,19 +27,29 @@ interface GetStartedProps {
   referral_code?: string | null;
 }
 
+// Define Zod schema using TypeScript types
 const PasswordFormSchema = z.object({
   passwordData: z
     .object({
       email: z
         .string({ required_error: "Please enter your email." })
         .trim()
-        .min(1, { message: "invalid email." })
+        .min(1, { message: "Invalid email." })
         .email(),
       password: z
         .string({ required_error: "Please enter your password." })
         .trim()
-        .min(1, { message: "password must be at least 1 characters." }),
-
+        .min(5, { message: "Password must be at least 5 characters." })
+        .refine(
+          (value) =>
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9]).{8,}$/.test(
+              value
+            ),
+          {
+            message:
+              "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+          }
+        ),
       confirm_password: z
         .string({ required_error: "Please enter your password." })
         .trim()
@@ -47,7 +57,7 @@ const PasswordFormSchema = z.object({
     })
     .refine((data) => data?.password === data?.confirm_password, {
       message: "Passwords don't match",
-      path: ["confirmpassword"],
+      path: ["confirm_password"],
     }),
 });
 
@@ -78,7 +88,7 @@ interface Hospitals {
   hospital: string;
   provider_id: string;
 }
-export function PasswordForm({}: GetStartedProps) {
+export function PasswordForm() {
   const { state: isLoaderModalOpen, setTrue: _openLoaderModal } =
     useBooleanStateControl();
 

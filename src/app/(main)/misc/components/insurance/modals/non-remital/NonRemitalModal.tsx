@@ -12,7 +12,6 @@ import {
   SelectItem,
   SelectTrigger,
   SelectContent,
-  SelectValue,
 } from "@/components/core";
 import { RightUpArrow, SmallSpinner } from "@/icons/core";
 import { z } from "zod";
@@ -39,6 +38,7 @@ interface Prop {
   setOpenNonRemitalDetailModal: Dispatch<SetStateAction<boolean>>;
   setOpenRemitalUserDetail: Dispatch<SetStateAction<boolean>>;
   setOpenRemitalDetailModal: Dispatch<SetStateAction<boolean>>;
+  setUserEmail: Dispatch<SetStateAction<string>>;
   verifiedPhoneNumber: string;
   userId: string;
   verifyResponse: {
@@ -49,6 +49,7 @@ interface Prop {
     id: string;
   };
 }
+
 const baseSchema = z.object({
   address: z
     .string({ required_error: "Enter your address" })
@@ -59,9 +60,7 @@ const baseSchema = z.object({
     .min(1, { message: "Email is required" }),
   selectedOption: z.union([z.literal("nin"), z.literal("bvn")]),
   bvn: z.string().trim(),
-  // .min(11, { message: "BVN should be at least 11 digits" }),
   nin: z.string().trim(),
-  // .min(10, { message: "NIN should be at least 10 digits" }),
 });
 
 // Extend the base schema for NIN
@@ -80,7 +79,6 @@ const bvnSchema = baseSchema.extend({
     .min(11, { message: "BVN should be at least 11 digits" }),
 });
 
-export { baseSchema, ninSchema, bvnSchema };
 const NonRemitalModal = ({
   verifiedPhoneNumber,
   openNonRemitalDetailModal,
@@ -88,6 +86,7 @@ const NonRemitalModal = ({
   setPhoneNumberCheckResponse,
   setOpenRemitalUserDetail,
   setOpenRemitalDetailModal,
+  setUserEmail,
   verifyResponse,
   userId,
 }: Prop) => {
@@ -100,32 +99,34 @@ const NonRemitalModal = ({
 
   const {
     control,
-    register,
     handleSubmit,
+    register,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(baseSchema),
     defaultValues: {
       address: verifyResponse?.address || "",
       email: verifyResponse?.email || "",
-      selectedOption: "nin", // Default selected option
+      selectedOption: verifyResponse?.nin
+        ? "nin"
+        : verifyResponse?.bvn
+          ? "bvn"
+          : "nin", // Default selected option
       nin: verifyResponse?.nin || "",
       bvn: verifyResponse?.bvn || "",
     },
     mode: "onChange",
   });
+
   const watchSelectedOption = useWatch({
     control,
     name: "selectedOption",
   });
 
   const schema = watchSelectedOption === "nin" ? ninSchema : bvnSchema;
-  type sch = z.infer<typeof schema>;
   const { mutate: handleCheckNin, isLoading } = useCheckNinUser();
 
   const onSubmit = (data: any) => {
-    // console.log(data);
-
     handleCheckNin(
       {
         selectedOption: data.selectedOption,
@@ -137,6 +138,7 @@ const NonRemitalModal = ({
       },
       {
         onSuccess: (responseData: any) => {
+          setUserEmail(data?.email);
           setPhoneNumberCheckResponse({
             full_name: `${responseData?.["user:"]?.first_name} ${responseData?.["user:"]?.last_name}`,
             ministry: "",
@@ -155,7 +157,6 @@ const NonRemitalModal = ({
         },
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-expect-error
-
         onError: (error: AxiosError) => {
           const errorMessage = formatAxiosErrorMessage(error);
           openErrorModalWithMessage(String(errorMessage));
@@ -165,164 +166,162 @@ const NonRemitalModal = ({
   };
 
   return (
-    <div className="">
+    <div>
       <Dialog open={openNonRemitalDetailModal}>
         <DialogTrigger className="bg-white text-black flex items-center justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-7 rounded-full max-w-max font-display">
-          Get insurance
+          Get Insurance
           <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
             <RightUpArrow className="" width={12} height={12} />
           </span>
         </DialogTrigger>
 
-        <DialogContent className="!overflow-hidden">
+        <DialogContent>
           <DialogHeader className="bg-[#1B1687]">
             <DialogTitle className="text-[#fff]">Details Request</DialogTitle>
 
-            <DialogClose className="rounded-full">
+            <DialogClose>
               <button onClick={() => setOpenNonRemitalDetailModal(false)}>
                 Close
               </button>
             </DialogClose>
           </DialogHeader>
 
-          <DialogBody className="bg-[#151D42] w-full">
-            <div>
-              <p className="text-sm font-medium text-white font-sans">
-                Kindly enter your details below to process your application.
-              </p>
-              <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
+          <DialogBody className="bg-[#151D42]">
+            <p className="text-sm font-medium text-white font-sans">
+              Kindly enter your details below to process your application.
+            </p>
+            <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
+              <div className="relative mt-[.25rem]">
+                <Label
+                  className="mb-1 block text-xs text-[#fff]"
+                  htmlFor="address"
+                >
+                  Address
+                </Label>
+                <Input2
+                  className={`${errors?.address?.message ? "border border-red-700" : ""} text-[#fff]`}
+                  placeholder="Enter your address"
+                  type="text"
+                  id="address"
+                  {...register("address")}
+                />
+              </div>
+
+              <div className="w-full mt-[1rem] text-sm font-normal">
+                <Label
+                  className="mb-1 block text-xs text-[#fff]"
+                  htmlFor="email"
+                >
+                  Email
+                </Label>
                 <div className="relative mt-[.25rem]">
-                  <Label
-                    className="mb-1 block text-xs text-[#fff]"
-                    htmlFor="selectedOption"
-                  >
-                    Address
-                  </Label>
                   <Input2
-                    className={`${errors?.address?.message ? "border border-red-700" : ""} text-[#fff]`}
-                    placeholder="Enter your address"
+                    className={`${errors?.email?.message ? "border border-red-700" : ""} text-[#fff]`}
+                    placeholder="Enter email"
                     type="text"
-                    id="address"
-                    {...register("address")}
+                    id="email"
+                    {...register("email")}
                   />
                 </div>
+              </div>
 
+              <div className="w-full mt-[1rem] text-sm font-normal">
+                <Label
+                  className="mb-1 block text-xs text-[#fff]"
+                  htmlFor="selectedOption"
+                >
+                  Select the one to enter, BVN or NIN?
+                </Label>
+                <Controller
+                  control={control}
+                  name="selectedOption"
+                  render={({ field: { onChange, value, ref } }) => (
+                    <Select value={value} onValueChange={onChange}>
+                      <SelectTrigger
+                        id="selectedOption"
+                        ref={ref}
+                        className="bg-[#2D3456] text-[#fff] w-full py-2 px-3 rounded-md focus:outline-none"
+                      >
+                        <span>
+                          {value === "bvn"
+                            ? "BVN"
+                            : value === "nin"
+                              ? "NIN"
+                              : "Select BVN or NIN"}
+                        </span>
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border border-gray-300 mt-1 rounded-md shadow-lg w-full absolute z-50 top-full">
+                        <SelectItem value="bvn">BVN</SelectItem>
+                        <SelectItem value="nin">NIN</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
+
+              {watchSelectedOption === "bvn" && (
                 <div className="w-full mt-[1rem] text-sm font-normal">
                   <Label
                     className="mb-1 block text-xs text-[#fff]"
-                    htmlFor="email"
+                    htmlFor="bvn"
                   >
-                    Email
+                    BVN
                   </Label>
                   <div className="relative mt-[.25rem]">
                     <Input2
-                      className={`${errors?.email?.message ? "border border-red-700" : ""} text-[#fff]`}
-                      placeholder="Enter email"
+                      className={`${errors?.bvn?.message ? "border border-red-700" : ""} text-[#fff]`}
+                      placeholder="Enter BVN"
                       type="text"
-                      id="email"
-                      {...register("email")}
+                      id="bvn"
+                      required
+                      {...register("bvn")}
                     />
                   </div>
                 </div>
+              )}
 
+              {watchSelectedOption === "nin" && (
                 <div className="w-full mt-[1rem] text-sm font-normal">
                   <Label
                     className="mb-1 block text-xs text-[#fff]"
-                    htmlFor="selectedOption"
+                    htmlFor="nin"
                   >
-                    Select the one to enter, BVN or NIN?
+                    NIN
                   </Label>
-                  <Controller
-                    control={control}
-                    name="selectedOption"
-                    render={({ field: { onChange, value, ref } }) => (
-                      <Select value={value} onValueChange={onChange}>
-                        <SelectTrigger
-                          id="selectedOption"
-                          ref={ref}
-                          className="bg-[#2D3456] text-[#fff] w-full py-2 px-3 rounded-md focus:outline-none"
-                        >
-                          <span>
-                            {value === "bvn"
-                              ? "BVN"
-                              : value === "nin"
-                                ? "NIN"
-                                : "Select BVN or NIN"}
-                          </span>
-                        </SelectTrigger>
-                        <SelectContent className="bg-white border border-gray-300 mt-1 rounded-md shadow-lg w-full absolute z-50 top-full">
-                          <SelectItem value="bvn">BVN</SelectItem>
-                          <SelectItem value="nin">NIN</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                </div>
-
-                {watchSelectedOption === "bvn" && (
-                  <div className="w-full mt-[1rem] text-sm font-normal">
-                    <Label
-                      className="mb-1 block text-xs text-[#fff]"
-                      htmlFor="bvn"
-                    >
-                      BVN
-                    </Label>
-                    <div className="relative mt-[.25rem]">
-                      <Input2
-                        className={`${errors?.bvn?.message ? "border border-red-700" : ""} text-[#fff]`}
-                        placeholder="Enter BVN"
-                        type="text"
-                        id="bvn"
-                        {...register("bvn")}
-                      />
-                    </div>
+                  <div className="relative mt-[.25rem]">
+                    <Input2
+                      className={`${errors?.nin?.message ? "border border-red-700" : ""} text-[#fff]`}
+                      placeholder="Enter NIN"
+                      type="text"
+                      id="nin"
+                      required
+                      {...register("nin")}
+                    />
                   </div>
-                )}
-
-                {watchSelectedOption === "nin" && (
-                  <div className="w-full mt-[1rem] text-sm font-normal">
-                    <Label
-                      className="mb-1 block text-xs text-[#fff]"
-                      htmlFor="nin"
-                    >
-                      NIN
-                    </Label>
-                    <div className="relative mt-[.25rem]">
-                      <Input2
-                        className={`${errors?.nin?.message ? "border border-red-700" : ""} text-[#fff]`}
-                        placeholder="Enter NIN"
-                        type="text"
-                        id="nin"
-                        {...register("nin")}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <div className="pb-[2rem]">
-                  <button
-                    className="mt-[3rem] flex justify-center items-center font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
-                    type="submit"
-                  >
-                    Continue
-                    {isLoading && (
-                      <div className="absolute top-[1.3rem] right-[1rem] transform -translate-y-1/2">
-                        <SmallSpinner className="" color="blue" />
-                      </div>
-                    )}
-                  </button>
                 </div>
-              </form>
-            </div>
+              )}
+
+              <div className="pb-[2rem]">
+                <button
+                  className="mt-[3rem] flex justify-center items-center font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                  type="submit"
+                >
+                  Continue
+                  {isLoading && (
+                    <div className="absolute top-[1.3rem] right-[1rem] transform -translate-y-1/2">
+                      <SmallSpinner className="" color="blue" />
+                    </div>
+                  )}
+                </button>
+              </div>
+            </form>
           </DialogBody>
         </DialogContent>
       </Dialog>
 
       <ErrorModal
         isErrorModalOpen={isErrorModalOpen}
-        setErrorModalState={() => {
-          setErrorModalState(false);
-        }}
+        setErrorModalState={() => setErrorModalState(false)}
         subheading={
           errorModalMessage || "Please check your inputs and try again."
         }

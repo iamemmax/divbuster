@@ -19,11 +19,17 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { hospitalVisitedData } from "@/app/(dashboard)/comp/mocks/hospitalVisited";
+import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
+import { useQuery } from "react-query";
+import { getHospitalVisitedFunc } from "@/app/(dashboard)/dashboard/api/getHospitalVisited";
 
 interface HospitaAroundHeader {
-  dates: string;
-  Hospital: string;
+  date: string;
+  name: string;
   action?: string;
+}
+interface Prop {
+  userData: UserDataTypes | undefined;
 }
 
 const SkeletonLoading = () => (
@@ -32,15 +38,19 @@ const SkeletonLoading = () => (
   </div>
 );
 
-const HospitalVisited = () => {
+const HospitalVisited = ({ userData }: Prop) => {
+  const { data, isLoading } = useQuery({
+    queryFn: () => getHospitalVisitedFunc(String(userData?.phone_number)),
+    queryKey: ["fetch-hospital-around-list", userData?.phone_number],
+  });
   const columnHelper = createColumnHelper<HospitaAroundHeader>();
 
   const columns = [
-    columnHelper.accessor("dates", {
+    columnHelper.accessor("date", {
       header: () => "Dates",
       cell: (info) => info?.getValue(),
     }),
-    columnHelper.accessor("Hospital", {
+    columnHelper.accessor("name", {
       header: () => "Hospital",
       cell: (info) => info?.getValue(),
     }),
@@ -54,25 +64,18 @@ const HospitalVisited = () => {
     }),
   ];
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   const table = useReactTable({
-    data: hospitalVisitedData ?? [],
+    data: data?.hospital_visit ?? [],
     columns: columns,
     debugTable: true,
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const rows = useMemo(() => hospitalVisitedData ?? [], [hospitalVisitedData]);
+  const rows = useMemo(
+    () => data?.hospital_visit ?? [],
+    [data?.hospital_visit]
+  );
 
   return (
     <div>
@@ -87,7 +90,7 @@ const HospitalVisited = () => {
         </div>
         <div className="">
           <Button className="bg-[#F0F5FF] shrink-0 px-2 py-1 rounded-full text-xs text-[#032282]">
-            {hospitalVisitedData?.length}
+            {data?.count ?? 0}
           </Button>
         </div>
       </div>
@@ -153,17 +156,20 @@ const HospitalVisited = () => {
                         className={`hover:bg-[#f5f7ff] py-3 ${rowIndex !== 0 ? "border-t" : ""}`}
                         key={row?.id}
                       >
-                        {row?.getVisibleCells()?.map((cell, idx: number) => (
-                          <TableCell
-                            className={`text-xs text-[#475569] cursor-pointer font-nunito py-3 border-[#E2E8F0] ${row?.getVisibleCells?.length - 1 === idx ? "border-t-[0.4px] border-[#E2E8F0]" : ""}`}
-                            key={cell?.id}
-                          >
-                            {flexRender(
-                              cell?.column?.columnDef?.cell,
-                              cell?.getContext()
-                            )}
-                          </TableCell>
-                        ))}
+                        {row
+                          ?.getVisibleCells()
+                          ?.slice(0, 5)
+                          ?.map((cell, idx: number) => (
+                            <TableCell
+                              className={`text-xs text-[#475569] cursor-pointer font-nunito py-3 border-[#E2E8F0] ${row?.getVisibleCells?.length - 1 === idx ? "border-t-[0.4px] border-[#E2E8F0]" : ""}`}
+                              key={cell?.id}
+                            >
+                              {flexRender(
+                                cell?.column?.columnDef?.cell,
+                                cell?.getContext()
+                              )}
+                            </TableCell>
+                          ))}
                       </TableRow>
                     </React.Fragment>
                   ))}
