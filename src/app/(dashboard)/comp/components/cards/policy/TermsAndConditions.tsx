@@ -33,10 +33,10 @@ export default function TermsAndConditions() {
   return (
     <div>
         <h1 className='text-[#032282] font-bold bg-[#F6F9FF] py-3 pl-20'>Terms and Conditions</h1>
-        <div className='mt-8'>
+        <div className='mt-8 pl-14'>
           {
             data.map((item, index) => (
-              <div key={index}>
+              <div key={index} className='list-item list-outside'>
                 <ul>
                   <li className='pt-3 text-sm'>{item.description}</li>
                 </ul>

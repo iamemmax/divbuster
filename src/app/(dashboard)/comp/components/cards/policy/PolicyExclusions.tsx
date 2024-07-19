@@ -60,12 +60,12 @@ export default function PolicyExclusions() {
   return (
     <div className='font-sans mt-10'>
         <h1 className='text-[#032282] font-bold bg-[#F6F9FF] py-3 pl-20'>Policy Exclusions</h1>
-        <div className='mt-4'>
+        <div className='mt-4 pl-14'>
             {
                 policy.map((item, index) => (
-                    <div key={index}>
-                        <ol>
-                            <li className='pt-3 text-sm'>{item.description}</li>
+                    <div key={index} className='list-item list-outside'>
+                        <ol className='flex'>
+                            <li className='pt-3 text-sm'>{item?.description}</li>
                         </ol>
                     </div>
                 ))
