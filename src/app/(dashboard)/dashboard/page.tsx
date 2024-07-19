@@ -69,7 +69,6 @@ const Dashboard = () => {
         </div>
       </div>
       <div className=" relative w-full px-6 md:px-[7.5rem] h-full ">
-        {" "}
         <div className="relative">
           <div className=" inset-x-0 top-[-4rem] absolute">
             <div className="">
