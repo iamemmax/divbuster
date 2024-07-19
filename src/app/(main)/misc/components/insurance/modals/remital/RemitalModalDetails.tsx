@@ -26,6 +26,8 @@ import { SmallSpinner } from "@/icons/core";
 
 interface prop {
   setOpenRemitalDetailModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setUserEmail: React.Dispatch<React.SetStateAction<string>>;
+
   openRemitalDetailModal: boolean;
   phoneNumberCheckResponse: {
     full_name: string;
@@ -56,6 +58,7 @@ const RemitalModalDetails = ({
   phoneNumberCheckResponse,
   verifiedPhoneNumber,
   setOpenRemitalUserDetail,
+  setUserEmail,
 }: prop) => {
   const {
     isErrorModalOpen,
@@ -92,7 +95,9 @@ const RemitalModalDetails = ({
         onSuccess: (data: successprop) => {
           if (data?.status) {
             setOpenRemitalUserDetail(true);
+            setOpenRemitalDetailModal(false);
             // setOpenRemitalDetailModal(false);
+            // setUserEmail(data?.)
           }
         },
         onError: (error) => {

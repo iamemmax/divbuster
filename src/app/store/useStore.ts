@@ -1,3 +1,4 @@
+import { string } from 'zod';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
@@ -5,14 +6,22 @@ export interface UserType {
     phone_number: string;
     password: string;
 }
+interface forgetPasswordType {
+  status: boolean;
+  message: string;
+  phone_number: string;
+}
 
-interface CartState {
+interface userState {
     user: UserType
-    addUser: (payload:UserType) => void;
+    addUser: (payload: UserType) => void;
+    forgetPasswordDetails: forgetPasswordType
+    addForgetPasswordDetails:(payload:forgetPasswordType)=>void
+    removeForgetPasswordDetails:()=>void
    
 }
 
-const useDataStore = create<CartState>()(
+const useDataStore = create<userState>()(
     devtools(
         persist(
             (set) => ({
@@ -30,7 +39,23 @@ const useDataStore = create<CartState>()(
 
                     }));
                 },
-                // removeCart: () => set(() => ({ user: {password:""} })),
+                forgetPasswordDetails: {
+                    status: false,
+                    message: "",
+                    phone_number:""
+                },
+                 addForgetPasswordDetails: payload => {
+                    set(state => ({
+                        ...state,
+                        forgetPasswordDetails: {
+                            status: payload?.status,
+                            message:payload?.message,
+                            phone_number:payload?.phone_number
+                        }
+
+                    }));
+                },
+                removeForgetPasswordDetails: () => set(() => ({ forgetPasswordDetails: {status:false,phone_number:"",message:""} })),
             }),
 
             {

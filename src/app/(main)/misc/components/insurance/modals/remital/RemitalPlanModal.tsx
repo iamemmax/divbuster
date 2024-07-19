@@ -33,6 +33,7 @@ import { useErrorModalState } from "@/hooks";
 import { useLogin } from "@/app/(auth)/(onboarding)/misc";
 import { useRouter } from "next/navigation";
 import useDataStore from "@/app/store/useStore";
+import { Spinner } from "@/icons/core";
 
 interface Prop {
   setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>;
@@ -72,6 +73,13 @@ interface Hospitals {
   provider_id: string;
 }
 
+interface loginSuccess {
+  status: boolean;
+  user: string;
+  access: string;
+  refresh: string;
+}
+
 const RemitalPlanModal = ({
   openRemitalPlan,
   setOpenShowRemitalPlan,
@@ -103,6 +111,9 @@ const RemitalPlanModal = ({
     queryKey: ["get-plans"],
   });
 
+  const user = useDataStore((state) => state?.user);
+  const router = useRouter();
+
   const { mutate: handlePaymentRequest, isLoading } = useMakeRemitalPayment();
   const handlePayment = (plan: plantypes) => {
     handlePaymentRequest(
@@ -112,8 +123,9 @@ const RemitalPlanModal = ({
       },
       {
         onSuccess: (data: PaymentSuccessMsg) => {
-          if (data?.message) {
+          if (data?.message === "insurance request sent, please wait") {
             setShowConfirmation(true);
+            // setOpenShowRemitalPlan(false);
             setConfirmationMessage(data?.message);
             setCheckUserHasPassword(data?.["user:"]?.has_set_password);
           } else {
@@ -125,6 +137,7 @@ const RemitalPlanModal = ({
               amount: data?.amount,
             });
             setShowPaymentModal(true);
+            // setOpenShowRemitalPlan(false);
           }
         },
         onError: (error) => {
@@ -137,9 +150,6 @@ const RemitalPlanModal = ({
       }
     );
   };
-
-  const user = useDataStore((state) => state?.user);
-  const router = useRouter();
   const { mutate: postLogIn, isLoading: isLoginLoading } = useLogin();
 
   const updatedData = {
@@ -149,9 +159,12 @@ const RemitalPlanModal = ({
   };
 
   // const
+  // const [isLoginLoading, setIsLoginLoading] = useState(false);
   const handleSubmit = () => {
+    // setIsLoginLoading(true);
     postLogIn(updatedData, {
       onSuccess: () => {
+        setOpenShowRemitalPlan(false);
         router.push("/dashboard");
       },
       onError: (error) => {
@@ -163,7 +176,9 @@ const RemitalPlanModal = ({
   return (
     <div>
       {isLoginLoading ? (
-        "Loading"
+        <div className="fixed z-[999999999999999999999999] inset-0 bg-white flex justify-center items-center">
+          <Spinner color="blue" />
+        </div>
       ) : (
         <Dialog open={openRemitalPlan}>
           <DialogContent className="!overflow-hidden  min-h-[90vh] max-h-[97vh] px-4 w-full md:min-h-[55rem]">
@@ -282,7 +297,8 @@ const RemitalPlanModal = ({
                         libertyaasured.com
                       </Link>
                       <Button
-                        className="bg-transparent text-white"
+                        type="button"
+                        className="bg-[#525668] rounded-[1.25rem] px-5 py-3 font-semibold text-white"
                         onClick={handleSubmit}
                       >
                         Skip

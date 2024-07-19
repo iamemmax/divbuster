@@ -18,11 +18,13 @@ import { useForgetPassword } from "../../api/forgetPassword";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { SmallSpinner } from "@/icons/core";
+import useDataStore from "@/app/store/useStore";
 
 // import { useChangePassword } from "../../api/createPassword";
 interface successsProp {
   message: string;
   phone_number: string;
+  status: boolean;
 }
 export function ForgetPasswordForm() {
   const { state: isLoaderModalOpen, setTrue: _openLoaderModal } =
@@ -60,11 +62,19 @@ export function ForgetPasswordForm() {
   // const search = useSearchParams();
   // const phone = search?.get("phone");
   const { mutate: handleResetPassword, isLoading } = useForgetPassword();
+  const addForgetPasswordDetails = useDataStore(
+    (state) => state?.addForgetPasswordDetails
+  );
   const onsubmit = ({ phone_number }: passwordformProps) => {
     handleResetPassword(phone_number, {
-      onSuccess: (data: successsProp) => {
-        if (data) {
-          router.push(`/update-password?phone=${data?.phone_number}`);
+      onSuccess: ({ message, phone_number, status }: successsProp) => {
+        if (status) {
+          addForgetPasswordDetails({
+            message,
+            phone_number,
+            status,
+          });
+          router.push(`/update-password`);
         }
       },
       onError: (error) => {

@@ -76,14 +76,14 @@ const Dashboard = () => {
             </div>
             <div className="mt-4 grid grid-cols-1  gap-3 lg:grid-cols-2">
               <div className="bg-white shadow-sm rounded-10 py-[1.125rem] px-4">
-                <HospitalAround />
+                <HospitalAround userData={userData} />
               </div>
               <div className="bg-white shadow-sm rounded-10 py-[1.125rem] px-4">
-                <HospitalVisited />
+                <HospitalVisited userData={userData} />
               </div>
             </div>
             <div className="bg-white shadow-sm rounded-10 py-[1.125rem] px-4 mt-4">
-              <TransactionsTable />
+              <TransactionsTable userData={userData} />
             </div>
           </div>
         </div>

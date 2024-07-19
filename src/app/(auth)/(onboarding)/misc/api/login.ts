@@ -13,6 +13,7 @@ import { getAuthenticatedUser } from "./index";
 interface TokenResponse {
   access: string;
   refresh: string;
+  status: boolean;
 }
 
 const login = (loginDto: LoginDto): Promise<AxiosResponse<TokenResponse>> =>
