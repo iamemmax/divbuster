@@ -196,7 +196,7 @@ const NonRemitalModal = ({
                   className="mb-1 block text-xs text-[#fff]"
                   htmlFor="address"
                 >
-                  Address
+                  Full Address(Number, Street, City, State)
                 </Label>
                 <Input2
                   className={`${errors?.address?.message ? "border border-red-700" : ""} text-[#fff]`}

@@ -79,7 +79,7 @@ const HospitalVisited = ({ userData }: Prop) => {
 
   return (
     <div>
-      <div className="flex  items-center gap-3">
+      <div className="flex  items-center flex-wrap gap-3">
         <div className="bg-[#F0F5FF] rounded-lg py-2 px-4 flex items-center gap-2">
           <Button className="px-0 py-0 bg-[#D0DFFF] shrink-0 w-5 h-5 flex justify-center items-center rounded-full">
             <HospitalIcon2 />

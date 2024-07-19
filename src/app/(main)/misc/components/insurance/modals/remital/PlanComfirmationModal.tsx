@@ -28,7 +28,7 @@ const PlanComfirmationModal = ({
       open={showConfirmation}
       // onOpenChange={setSixMonthIndividualPlanModal}
     >
-      <DialogContent className="!overflow-hidden min-h-[30rem] !border max-sm:w-[97%] !border-[#407BFF]">
+      <DialogContent className="!overflow-hidden min-h-[30rem]  max-sm:w-[97%] ">
         <DialogBody className="bg-[#141B3f] px-6 w-full rounded-[1.125rem] border-[0.01px] border-[#407BFF]  border-opacity-50">
           <div className="py-1 px-6">
             <div className="flex items-center justify-center w-full">

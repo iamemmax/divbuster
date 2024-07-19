@@ -17,22 +17,22 @@ export function DashboardHeader() {
   const navLinks = [
     {
       title: "Dashboard",
-      link: "/",
+      link: "/dashboard",
     },
     {
       title: "Hospital around",
-      link: "/hospital-around",
+      link: "/dashboard/hospital-around-me",
     },
     {
       title: "My Benefits",
-      link: "/my-benefits",
+      link: "/dashboard/my-benefits",
     },
   ];
   return (
     <>
       <header className="bg-main px-6 md:px-[7.5rem] py-6 border-b border-[#2B303C]">
         <div className="z-50  flex items-center justify-between">
-          <div className="flex text-white items-center gap-3">
+          <Link href={"/"} className="flex text-white items-center gap-3">
             <Logo className="" height={42} width={42} />
             <div className="font-wix-display">
               <h2 className="font-extrabold capitalize text-base md:text-xl text-nowrap leading-3">
@@ -42,7 +42,7 @@ export function DashboardHeader() {
                 by LibertyAssured
               </p>
             </div>
-          </div>
+          </Link>
 
           <div className="hidden lg:block">
             <nav>
@@ -70,7 +70,7 @@ export function DashboardHeader() {
               </Button>
               {!isLoading && (
                 <Button className="rounded-full  w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
-                  {`${userData?.first_name?.slice(0, 1)}${userData?.last_name?.slice(0, 1)}`}
+                  {`${userData?.first_name?.slice(0, 1) ?? ""}${userData?.last_name?.slice(0, 1) ?? ""}`}
                 </Button>
               )}
               <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-transparent p-2">

@@ -83,7 +83,7 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="bg-white shadow-sm rounded-10 py-[1.125rem] px-4 mt-4">
-              <TransactionsTable />
+              <TransactionsTable userData={userData} />
             </div>
           </div>
         </div>

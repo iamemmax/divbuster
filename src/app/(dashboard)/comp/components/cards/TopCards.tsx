@@ -22,7 +22,7 @@ const TopCards = ({ userData: users }: Prop) => {
     queryFn: () => getUserAccountDetails(String(users?.phone_number)),
     queryKey: ["fetch-user-acct", users?.phone_number],
   });
-  const { data: currentPlan } = useQuery({
+  const { data: currentPlan, isLoading: loadingPlan } = useQuery({
     queryFn: () => getUserCurrentPlan(String(users?.phone_number)),
     queryKey: ["fetch-user-current-plan", users?.phone_number],
   });
@@ -62,7 +62,9 @@ const TopCards = ({ userData: users }: Prop) => {
               Transfer to details below to fund your plan
             </p>
             {loadingAcct ? (
-              <Spinner />
+              <div className="flex justify-center items-center w-full py-6">
+                <Spinner className="w-4  h-4 " color="#DB8C00" />
+              </div>
             ) : (
               <>
                 <div className=" mt-4 grid  items-start grid-cols-2 ">
@@ -107,45 +109,56 @@ const TopCards = ({ userData: users }: Prop) => {
         </div>
 
         <div className="bg-white rounded-10 px-6 py-4 shadow-sm">
-          <div className="py-[.1875rem] bg-[#31D0AA26] w-[4.625rem] px-2 rounded-lg">
-            <p className="text-[.625rem] text-[#099976] ">Current plan</p>
-          </div>
-          <div className=" mt-[.625rem] grid w-full  grid-cols-2 ">
-            <div className="mt-3">
-              <h2 className="text-xs text-[#032282] font-medium font-sans">
-                {currentPlan?.data?.enrolee_name
-                  ? currentPlan?.data?.enrolee_name
-                  : "Nil"}
-              </h2>
-              <p className="text-[#8490A8] text-[.625rem]">Enrolee name</p>
+          {loadingPlan ? (
+            <div className="flex justify-center items-center w-full py-6">
+              <Spinner className="w-4  h-4 " color="#DB8C00" />
             </div>
-            <div className="mt-3">
-              <h2 className="text-xs text-[#032282] font-medium font-sans">
-                {userData?.plan?.plan_type}{" "}
-                <button className="bg-[#31D0AA26] rounded-md px-2 py-1 text-[#099976] text-[.625rem]">
-                  Active
-                </button>
-              </h2>
-              <p className="text-[#8490A8] text-[.625rem]">Plan type</p>
-            </div>
-            <div className="mt-3">
-              <h2 className="text-xs text-[#032282] font-medium font-sans">
-                {currentPlan?.data?.enrolement_id
-                  ? currentPlan?.data?.enrolement_id
-                  : "Nil"}
-              </h2>
-              <p className="text-[#8490A8] text-[.625rem]">Enrolment ID</p>
-            </div>
-            <div className="mt-3">
-              <h2 className="text-xs text-[#032282] font-medium font-sans">
-                {currentPlan?.data?.expires_on
-                  ? moment(currentPlan?.data?.expires_on).format("MMM Do YY")
-                  : "Nil"}
-              </h2>
-              <p className="text-[#8490A8] text-[.625rem]">Expires on</p>
-            </div>
-          </div>
+          ) : (
+            <>
+              <div className="py-[.1875rem] bg-[#31D0AA26] w-[4.625rem] px-2 rounded-lg">
+                <p className="text-[.625rem] text-[#099976] ">Current plan</p>
+              </div>
+              <div className=" mt-[.625rem] grid w-full  grid-cols-2 ">
+                <div className="mt-3">
+                  <h2 className="text-xs text-[#032282] font-medium font-sans">
+                    {currentPlan?.data?.enrolee_name
+                      ? currentPlan?.data?.enrolee_name
+                      : "Nil"}
+                  </h2>
+                  <p className="text-[#8490A8] text-[.625rem]">Enrolee name</p>
+                </div>
+                <div className="mt-3">
+                  <h2 className="text-xs text-[#032282] font-medium font-sans">
+                    {userData?.plan?.plan_type}{" "}
+                    <button className="bg-[#31D0AA26] rounded-md px-2 py-1 text-[#099976] text-[.625rem]">
+                      Active
+                    </button>
+                  </h2>
+                  <p className="text-[#8490A8] text-[.625rem]">Plan type</p>
+                </div>
+                <div className="mt-3">
+                  <h2 className="text-xs text-[#032282] font-medium font-sans">
+                    {currentPlan?.data?.enrolement_id
+                      ? currentPlan?.data?.enrolement_id
+                      : "Nil"}
+                  </h2>
+                  <p className="text-[#8490A8] text-[.625rem]">Enrolment ID</p>
+                </div>
+                <div className="mt-3">
+                  <h2 className="text-xs text-[#032282] font-medium font-sans">
+                    {currentPlan?.data?.expires_on
+                      ? moment(currentPlan?.data?.expires_on).format(
+                          "MMM Do YY"
+                        )
+                      : "Nil"}
+                  </h2>
+                  <p className="text-[#8490A8] text-[.625rem]">Expires on</p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
+
         <div className="bg-white rounded-10 p-1">
           <div className="bg-[#FFFAF0] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
             <div className="flex-1 py-1">

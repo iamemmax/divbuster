@@ -27,6 +27,10 @@ import {
 } from "@tanstack/react-table";
 import { transactionData } from "../../../mocks/transactionData";
 import { statusColor } from "@/utils/statusColor";
+import { useQuery } from "react-query";
+import { getTransaction } from "@/app/(dashboard)/dashboard/api/fetchTransaction";
+import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
+import { capitalizeFirstLetter } from "@/utils";
 
 interface transactionHeader {
   id?: number;
@@ -34,64 +38,72 @@ interface transactionHeader {
   type: string;
   mode: string;
   amount: number;
-  reference_id: number;
+  reference_id: string;
   status: string;
   action?: string;
 }
-const TransactionsTable = () => {
+interface Prop {
+  userData: UserDataTypes | undefined;
+}
+const TransactionsTable = ({ userData }: Prop) => {
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const [selectedRows, setSelectedRows] = useState<{
-    [key: string]: boolean;
-  }>({});
+  // const [selectedRows, setSelectedRows] = useState<{
+  //   [key: string]: boolean;
+  // }>({});
+
+  const { data: transaction, isLoading } = useQuery({
+    queryFn: () => getTransaction(String(userData?.phone_number)),
+    queryKey: ["fetch-transaction", userData?.phone_number],
+  });
 
   const columnHelper = createColumnHelper<transactionHeader>();
 
   // Function to toggle all checkboxes
-  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = e.target.checked;
-    const newSelectedRows: { [key: string]: boolean } = {};
-    transactionData?.forEach((row) => {
-      newSelectedRows[row.id] = isChecked;
-    });
-    setSelectedRows(newSelectedRows);
-  };
+  // const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const isChecked = e.target.checked;
+  //   const newSelectedRows: { [key: string]: boolean } = {};
+  //   transactionData?.forEach((row) => {
+  //     newSelectedRows[row.id] = isChecked;
+  //   });
+  //   setSelectedRows(newSelectedRows);
+  // };
 
-  // Function to toggle individual checkbox
-  const handleCheckboxChange = (row: any) => {
-    setSelectedRows((prev) => ({
-      ...prev,
-      [row.id]: !prev[row.id],
-    }));
-  };
+  // // Function to toggle individual checkbox
+  // const handleCheckboxChange = (row: any) => {
+  //   setSelectedRows((prev) => ({
+  //     ...prev,
+  //     [row.id]: !prev[row.id],
+  //   }));
+  // };
 
   const columns = [
-    {
-      id: "checkbox", // Unique identifier for the checkbox column
-      accessor: "checkbox",
-      header: () => (
-        <input
-          checked={
-            Object.keys(selectedRows)?.length === transactionData?.length &&
-            Object.values(selectedRows).every(Boolean)
-          }
-          type="checkbox"
-          onChange={handleSelectAll}
-        />
-      ),
-      //  eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      cell: (info) => (
-        <input
-          checked={selectedRows[info.row.original.id] || false}
-          type="checkbox"
-          onChange={() => handleCheckboxChange(info.row.original)}
-        />
-      ),
-    },
+    // {
+    //   id: "checkbox", // Unique identifier for the checkbox column
+    //   accessor: "checkbox",
+    //   header: () => (
+    //     <input
+    //       checked={
+    //         Object.keys(selectedRows)?.length === transactionData?.length &&
+    //         Object.values(selectedRows).every(Boolean)
+    //       }
+    //       type="checkbox"
+    //       onChange={handleSelectAll}
+    //     />
+    //   ),
+    //   //  eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //   // @ts-ignore
+    //   cell: (info) => (
+    //     <input
+    //       checked={selectedRows[info.row.original.id] || false}
+    //       type="checkbox"
+    //       onChange={() => handleCheckboxChange(info.row.original)}
+    //     />
+    //   ),
+    // },
     columnHelper.accessor("type", {
       header: () => "Type",
-      cell: (info) => info?.getValue(),
+      cell: (info) => <>{info?.getValue() ?? "Nil"}</>,
     }),
     columnHelper.accessor("mode", {
       header: () => "Mode",
@@ -109,17 +121,19 @@ const TransactionsTable = () => {
     columnHelper.accessor("status", {
       header: () => "Status",
       cell: (info) => {
-        const { color, backgroundColor } = statusColor(info?.getValue());
+        const { color, backgroundColor } = statusColor(
+          capitalizeFirstLetter(info?.getValue())
+        );
 
         return (
           <p
-            className="block w-auto max-w-[5.25rem] text-center text-xs font-medium rounded-10 px-3 py-2"
+            className="block w-auto max-w-[6.25rem] text-center text-xs font-medium rounded-10 px-3 py-2"
             style={{
               color,
               backgroundColor,
             }}
           >
-            {info?.getValue()}
+            {capitalizeFirstLetter(info?.getValue())}
           </p>
         );
       },
@@ -135,7 +149,7 @@ const TransactionsTable = () => {
   ];
 
   const table = useReactTable({
-    data: transactionData ?? [],
+    data: transaction?.transactions ?? [],
     columns: columns,
     debugTable: true,
     state: {
@@ -145,17 +159,11 @@ const TransactionsTable = () => {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
-  const rows = useMemo(() => transactionData ?? [], [transactionData]);
+  const rows = useMemo(
+    () => transaction?.transactions ?? [],
+    [transaction?.transactions]
+  );
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
   const SkeletonLoading = () => (
     <div className="animate-pulse">
       <div className="h-3 bg-gray-200 rounded mb-2"></div>
@@ -164,14 +172,14 @@ const TransactionsTable = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between flex-wrap items-center">
         <div className="flex items-center gap-2">
           <h2 className="text-lg font-medium text-[#0E0E2C]">Transactions</h2>
           <div className="bg-[#F0F5FF] shrink-0 px-2 py-1 rounded-full text-xs text-[#032282]">
-            <p>12</p>
+            <p>{transaction?.count ?? 0}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center flex-wrap gap-2">
           <div className="lg:w-50">
             <DebounceInput
               value={globalFilter ?? ""}

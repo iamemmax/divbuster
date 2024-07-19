@@ -113,6 +113,43 @@ const RemitalPlanModal = ({
 
   const user = useDataStore((state) => state?.user);
   const router = useRouter();
+
+  const { mutate: handlePaymentRequest, isLoading } = useMakeRemitalPayment();
+  const handlePayment = (plan: plantypes) => {
+    handlePaymentRequest(
+      {
+        duration: plan?.duration,
+        userId,
+      },
+      {
+        onSuccess: (data: PaymentSuccessMsg) => {
+          if (data?.message === "insurance request sent, please wait") {
+            setShowConfirmation(true);
+            // setOpenShowRemitalPlan(false);
+            setConfirmationMessage(data?.message);
+            setCheckUserHasPassword(data?.["user:"]?.has_set_password);
+          } else {
+            setPaymentInfo({
+              account_name: data?.account_name,
+              account_no: data?.account_no,
+              bank_name: data?.bank_name,
+              paystack_link: data?.paystack_link,
+              amount: data?.amount,
+            });
+            setShowPaymentModal(true);
+            // setOpenShowRemitalPlan(false);
+          }
+        },
+        onError: (error) => {
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+          //  eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          setErrorMsg(error?.response?.data?.error);
+          openErrorModalWithMessage(String(errorMessage));
+        },
+      }
+    );
+  };
   const { mutate: postLogIn, isLoading: isLoginLoading } = useLogin();
 
   const updatedData = {
@@ -136,43 +173,6 @@ const RemitalPlanModal = ({
       },
     });
   };
-  const { mutate: handlePaymentRequest, isLoading } = useMakeRemitalPayment();
-  const handlePayment = (plan: plantypes) => {
-    handlePaymentRequest(
-      {
-        duration: plan?.duration,
-        userId,
-      },
-      {
-        onSuccess: (data: PaymentSuccessMsg) => {
-          if (data?.message) {
-            setShowConfirmation(true);
-            setOpenShowRemitalPlan(false);
-            setConfirmationMessage(data?.message);
-            setCheckUserHasPassword(data?.["user:"]?.has_set_password);
-          } else {
-            setPaymentInfo({
-              account_name: data?.account_name,
-              account_no: data?.account_no,
-              bank_name: data?.bank_name,
-              paystack_link: data?.paystack_link,
-              amount: data?.amount,
-            });
-            setShowPaymentModal(true);
-            setOpenShowRemitalPlan(false);
-          }
-        },
-        onError: (error) => {
-          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-          //  eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          setErrorMsg(error?.response?.data?.error);
-          openErrorModalWithMessage(String(errorMessage));
-        },
-      }
-    );
-  };
-
   return (
     <div>
       {isLoginLoading ? (
@@ -298,7 +298,7 @@ const RemitalPlanModal = ({
                       </Link>
                       <Button
                         type="button"
-                        className="bg-transparent text-white"
+                        className="bg-[#525668] rounded-[1.25rem] px-5 py-3 font-semibold text-white"
                         onClick={handleSubmit}
                       >
                         Skip

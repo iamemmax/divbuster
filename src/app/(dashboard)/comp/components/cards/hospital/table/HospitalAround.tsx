@@ -74,7 +74,7 @@ const HospitalAround = ({ userData }: Prop) => {
 
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between flex-wrap items-center">
         <div className="bg-[#F0F5FF] rounded-lg py-2 px-4 flex items-center gap-2">
           <Button className="px-0 py-0 bg-[#D0DFFF] shrink-0 w-5 h-5 flex justify-center items-center rounded-full">
             <HospitalIcon2 />
@@ -86,7 +86,7 @@ const HospitalAround = ({ userData }: Prop) => {
         <div className="">
           <LinkButton
             className="bg-[#F0F5FF] px-[1.125rem] py-2 rounded-lg text-xs text-[#032282]"
-            href={"#"}
+            href={"/dashboard/hospital-around-me"}
           >
             See all
           </LinkButton>
