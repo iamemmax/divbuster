@@ -26,6 +26,7 @@ import { useQuery } from "react-query";
 import { capitalizeFirstLetter } from "@/utils";
 import DebounceInput from "../../comp/components/misc/DebounceInput";
 import TablePagination from "../../comp/components/TablePagination";
+import { AroundIcon } from "../../comp/icons";
 
 interface HospitaAroundHeader {
   name: string;
@@ -90,11 +91,17 @@ const HospitalAround = () => {
   const rows = useMemo(() => HospitalAround ?? [], [HospitalAround]);
 
   return (
-    <div className="bg-[#f5f9fe]  h-[90vh] relative">
-      <div className="w-full bg-[#080d27] h-[4rem]"></div>
-      <div className=" px-6 md:px-[7.5rem] h-full w-full  absolute top-[10px]  ">
+    <div className="bg-main px-6 md:px-[7.5rem] h-[90vh] relative">
+      <div className="pt-[120px]">
+        <button className="bg-[#34307A] rounded-full text-white gap-2 flex justify-center items-center bg-opacity-[20%] px-6 py-3.5">
+       <AroundIcon/>
+       Hospitals around me
+      </button>
+      </div>
+      <p className="text-[42px] font-medium text-white max-w-[801px]">Check and search below  to see the list of hospitals around you.</p>
+      <div className="h-full w-full">
         <div className="bg-white  w-full h-full mx-auto py-[1.9375rem] px-[2.625rem] rounded-[.625rem]">
-          <div className="flex justify-between flex-wrap gap-4 items-center">
+          <div className="flex flex-wrap gap-4 items-center">
             <div className="flex items-center flex-wrap gap-4">
               <div className="bg-[#F0F5FF] rounded-lg py-2 px-4 flex items-center gap-2">
                 <Button className="px-0 py-0 bg-[#D0DFFF] shrink-0 w-5 h-5 flex justify-center items-center rounded-full">

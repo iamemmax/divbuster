@@ -48,7 +48,7 @@ const DebounceInput = ({
         className={`h-full border-none outline-none ${className}`}
         onChange={(e) => setValue(e.target.value)}
         {...props}
-        placeholder="Search "
+        placeholder="Enter your full address to search "
         type="text"
         defaultValue={value}
       />
