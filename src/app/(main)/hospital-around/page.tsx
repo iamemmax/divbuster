@@ -113,7 +113,6 @@ const HospitalAround = () => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  console.log(table, hospitalsAround)
 
   const rows = useMemo(() => hospitalsAround ?? [], [hospitalsAround, globalFilter]);
 
@@ -221,30 +220,21 @@ const HospitalAround = () => {
                 </TableHeader>
 
                 <>
+                  {/* WE'LL USE THIS FOR NOW */}
                   {rows?.length > 0 ? (
                     <TableBody>
-                      {table?.getRowModel()?.rows?.map((row, rowIndex) => (
-                        <React.Fragment key={row?.id}>
-                          <TableRow
-                            className={`hover:bg-[#f5f7ff]  ${rowIndex !== 0 ? "border-t" : ""}`}
-                            key={row?.id}
-                          >
-                            {row
-                              ?.getVisibleCells()
-                              ?.map((cell, idx: number) => (
-                                <TableCell
-                                  className={`text-xs text-[#475569]  cursor-pointer font-nunito py-6 border-[#E2E8F0] ${row?.getVisibleCells?.length - 1 === idx ? "border-t-[0.4px] border-[#E2E8F0]" : ""}`}
-                                  key={cell?.id}
-                                >
-                                  {flexRender(
-                                    cell?.column?.columnDef?.cell,
-                                    cell?.getContext()
-                                  )}
-                                </TableCell>
-                              ))}
-                          </TableRow>
-                        </React.Fragment>
-                      ))}
+                      {hospitalsAround.length > 0 ? (
+                        hospitalsAround.map((hospital, index) => (
+                          <tr key={index}>
+                            <td className="py-2 px-4 border-b">{hospital.name}</td>
+                            <td className="py-2 px-4 border-b">{hospital.state}</td>
+                            <td className="py-2 px-4 border-b">{hospital.lga}</td>
+                            <td className="py-2 px-4 border-b">{hospital.address}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <></>
+                      )}
                     </TableBody>
                   ) : (
                     <div className="w-full flex justify-center items-center text-sm p-5">
@@ -259,16 +249,6 @@ const HospitalAround = () => {
           </div>
         </div>
       </div>
-{
-  hospitalsAround.map((hospital, index)=>(
-    <div className="rounded-md border-2 border-main">
-      <div></div>
-<h2>{hospital.name}</h2>
-<p>{hospital.state}</p>
-<p>{hospital.lga}</p>
-    </div>
-  ))
-}
     </div>
   );
 };
