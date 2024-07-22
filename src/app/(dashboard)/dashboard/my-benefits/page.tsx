@@ -4,8 +4,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { ArrowDown, CaretDown } from '@/components/icons'
 import { cn } from '@/utils/classNames'
 import { useState } from 'react'
-import PolicyExclusions from '../comp/components/cards/policy/PolicyExclusions'
-import TermsAndConditions from '../comp/components/cards/policy/TermsAndConditions'
+import PolicyExclusions from '../../comp/components/cards/policy/PolicyExclusions'
+import TermsAndConditions from '../../comp/components/cards/policy/TermsAndConditions'
 import { Value } from '@radix-ui/react-select'
 
 

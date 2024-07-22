@@ -5,3 +5,4 @@ export { default as hospitalIcon } from './hospitalIcon'
 export { default as Search } from './search'
 export { default as FilterIcon } from './FilterIcon'
 export { default as AroundIcon } from './AroundIcon'
+export { default as FilterIcn } from "./FilterIcn"
