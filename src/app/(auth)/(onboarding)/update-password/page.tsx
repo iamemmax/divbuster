@@ -8,7 +8,7 @@ const page = () => {
     <div className="w-full">
       <OnboardingPageWrapper
         heading="Create New Password"
-        subHeading="Your new password must be different from the one previously used "
+        subHeading="Your new password must be different from the one previously used. "
       >
         <UpdatePassword />
       </OnboardingPageWrapper>
