@@ -1,7 +1,7 @@
 import { adminAxios } from '@/lib/axios';
 import { useMutation } from 'react-query';
 
-interface Hospital {
+export interface Hospital {
   name: string;
   address: string;
   state: string;

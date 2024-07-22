@@ -4,6 +4,7 @@ import HospitalIcon2 from "@/app/(dashboard)/comp/icons/HospitalIcon2";
 import { HospitalAroundData } from "@/app/(dashboard)/comp/mocks/HospitalAround";
 import {
   Button,
+  DataTable,
   DropdownMenu,
   DropdownMenuItem,
   Input,
@@ -31,8 +32,9 @@ import DebounceInput from "@/app/(dashboard)/comp/components/misc/DebounceInput"
 // import TablePagination from "../../comp/components/TablePagination";
 import FilterIcon from "@/icons/core/FilterIcon";
 import { DropdownMenuContent, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { usegetHospitalsByAddress } from "../misc/api/postGetHospitalsByAddress";
+import { Hospital, usegetHospitalsByAddress } from "../misc/api/postGetHospitalsByAddress";
 import { FilterIcn } from "@/app/(dashboard)/comp/icons";
+import TablePagination from "@/app/(dashboard)/comp/components/TablePagination";
 
 interface HospitaAroundHeader {
   name: string;
@@ -49,8 +51,9 @@ const SkeletonLoading = () => (
 
 const HospitalAround = () => {
   const [globalFilter, setGlobalFilter] = useState("");
-  const { mutate: fetchHospitalsByAddress } = usegetHospitalsByAddress()
-  const [hospitalsAround, setHospitalsAround] = useState([])
+  const { mutate: fetchHospitalsByAddress, isLoading } = usegetHospitalsByAddress()
+  // const { data: HospitalAround, isLoading } = useQuery({
+  const [hospitalsAround, setHospitalsAround] = useState([] as Hospital[])
   const { data: userData } = useUser();
   // const { data: HospitalAround, isLoading } = useQuery({
   //   queryFn: () => getHospitalAroundFunc(String(userData?.phone_number)),
@@ -62,6 +65,7 @@ const HospitalAround = () => {
       {
         onSuccess(data, variables, context) {
           console.log(data, variables, context)
+          setHospitalsAround(data.data)
         },
         onError(error, variables, context) {
           console.log(error, variables, context)
@@ -70,10 +74,11 @@ const HospitalAround = () => {
     )
   }
 
-useEffect(() => {
-  searchHospitals()
+  useEffect(() => {
+    searchHospitals()
+  }, [globalFilter])
 
-}, [globalFilter])
+
 
   const columnHelper = createColumnHelper<HospitaAroundHeader>();
 
@@ -96,19 +101,21 @@ useEffect(() => {
     }),
   ];
 
-  // const table = useReactTable({
-  //   data: HospitalAround ?? [],
-  //   columns: columns,
-  //   debugTable: true,
-  //   state: {
-  //     globalFilter,
-  //   },
-  //   getFilteredRowModel: getFilteredRowModel(),
-  //   getCoreRowModel: getCoreRowModel(),
-  //   getPaginationRowModel: getPaginationRowModel(),
-  // });
+  const table = useReactTable({
+    data: hospitalsAround ?? [],
+    columns: columns,
+    debugTable: true,
+    state: {
+      globalFilter,
+    },
+    getFilteredRowModel: getFilteredRowModel(),
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  });
 
-  const rows = useMemo(() => HospitalAround ?? [], [HospitalAround]);
+  console.log(table, hospitalsAround)
+
+  const rows = useMemo(() => hospitalsAround ?? [], [hospitalsAround, globalFilter]);
 
   return (
     <div className="bg-[#F5F9FE] ">
@@ -126,22 +133,22 @@ useEffect(() => {
                     Hospital around me
                   </h2>
                 </div>
-                {/* {HospitalAround && HospitalAround?.length > 10 && (
+                {hospitalsAround && hospitalsAround?.length > 10 && (
                   <div className=" ">
                     <TablePagination
                       pageSize={10}
                       table={table}
-                      totalItems={Number(HospitalAround?.length)}
+                      totalItems={Number(hospitalsAround?.length)}
                     />
                   </div>
-                )} */}
+                )}
 
               </div>
               <div className="lg:w-64">
                 <DebounceInput
                   value={globalFilter ?? ""}
                   onChange={(value: string) => setGlobalFilter(String(value))}
-                  />
+                />
                 <Input
                   value={globalFilter ?? ""}
                   onChange={(e) => setGlobalFilter(String(e.target.value))}
@@ -162,7 +169,7 @@ useEffect(() => {
               </DropdownMenu>
             </div>
           </div>
-          {/* <div className="w-full mt-4">
+          <div className="w-full mt-4">
             {isLoading ? (
               <Table>
                 <TableHeader className="bg-[#f5f7ff]">
@@ -249,11 +256,23 @@ useEffect(() => {
                     </div>
                   )}
                 </>
+
               </Table>
+
             )}
-          </div> */}
+          </div>
         </div>
       </div>
+{
+  hospitalsAround.map((hospital, index)=>(
+    <div className="rounded-md border-2 border-main">
+      <div></div>
+<h2>{hospital.name}</h2>
+<p>{hospital.state}</p>
+<p>{hospital.lga}</p>
+    </div>
+  ))
+}
     </div>
   );
 };

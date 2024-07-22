@@ -6,7 +6,6 @@ import {
   Button,
   DropdownMenu,
   DropdownMenuItem,
-  Input,
   LinkButton,
   Table,
   TableBody,
@@ -31,7 +30,6 @@ import DebounceInput from "../../comp/components/misc/DebounceInput";
 import TablePagination from "../../comp/components/TablePagination";
 import { AroundIcon, FilterIcn } from "../../comp/icons";
 import { DropdownMenuContent, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { usegetHospitalsByAddress } from "../../../(main)/misc/api/postGetHospitalsByAddress";
 
 interface HospitaAroundHeader {
   name: string;
@@ -48,31 +46,12 @@ const SkeletonLoading = () => (
 
 const HospitalAround = () => {
   const [globalFilter, setGlobalFilter] = useState("");
-  const { mutate: fetchHospitalsByAddress } = usegetHospitalsByAddress()
-  const [hospitalsAround, setHospitalsAround] = useState([])
+
   const { data: userData } = useUser();
-  // const { data: HospitalAround, isLoading } = useQuery({
-  //   queryFn: () => getHospitalAroundFunc(String(userData?.phone_number)),
-  //   queryKey: ["fetch-hospital-around", userData?.phone_number],
-  // });
-
-  const searchHospitals = () => {
-    fetchHospitalsByAddress({ address: globalFilter },
-      {
-        onSuccess(data, variables, context) {
-          console.log(data, variables, context)
-        },
-        onError(error, variables, context) {
-          console.log(error, variables, context)
-        },
-      }
-    )
-  }
-
-useEffect(() => {
-  searchHospitals()
-
-}, [globalFilter])
+  const { data: HospitalAround, isLoading } = useQuery({
+    queryFn: () => getHospitalAroundFunc(String(userData?.phone_number)),
+    queryKey: ["fetch-hospital-around", userData?.phone_number],
+  });
 
   const columnHelper = createColumnHelper<HospitaAroundHeader>();
 
@@ -110,7 +89,7 @@ useEffect(() => {
   const rows = useMemo(() => HospitalAround ?? [], [HospitalAround]);
 
   return (
-    <div className="bg-[#F5F9FE] ">
+    <div className="bg-[#F5F9FE] "> 
       <div className="bg-main min-h-36"></div>
       <div className="h-full w-full px-6 md:px-[7.5rem] min-h-screen relative -mt-32">
         <div className="bg-white  w-full h-full mx-auto py-[1.9375rem] px-[2.625rem] rounded-[.625rem]">
@@ -125,7 +104,7 @@ useEffect(() => {
                     Hospital around me
                   </h2>
                 </div>
-                {/* {HospitalAround && HospitalAround?.length > 10 && (
+                {HospitalAround && HospitalAround?.length > 10 && (
                   <div className=" ">
                     <TablePagination
                       pageSize={10}
@@ -133,17 +112,13 @@ useEffect(() => {
                       totalItems={Number(HospitalAround?.length)}
                     />
                   </div>
-                )} */}
+                )}
 
               </div>
               <div className="lg:w-64">
                 <DebounceInput
                   value={globalFilter ?? ""}
-                  onChange={(value: string) => setGlobalFilter(String(value))}
-                  />
-                <Input
-                  value={globalFilter ?? ""}
-                  onChange={(e) => setGlobalFilter(String(e.target.value))}
+                  onChange={(value) => setGlobalFilter(String(value))}
                 />
               </div>
             </div>
