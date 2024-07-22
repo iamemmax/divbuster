@@ -149,10 +149,6 @@ const HospitalAround = () => {
                   value={globalFilter ?? ""}
                   onChange={(value: string) => setGlobalFilter(String(value))}
                 />
-                <Input
-                  value={globalFilter ?? ""}
-                  onChange={(e) => setGlobalFilter(String(e.target.value))}
-                />
               </div>
             </div>
             <div>
