@@ -14,7 +14,7 @@ import Marquee from "@/app/(main)/misc/components/Marquee";
 const Dashboard = () => {
   const { data: userData, isLoading } = useUser();
   return (
-    <div className="relative bg-[#f5f9fe] w-full h-screen mb-20">
+    <div className="relative bg-[#f5f9fe] w-full h-screen">
       <div className="bg-main w-full flex justify-between py-6 px-6 md:px-[7.5rem] ">
         <div className="flex items-center gap-x-3 mb-[5rem] w-full">
           <div className="text-white h-[2.5rem] w-[2.5rem]">
@@ -54,7 +54,6 @@ const Dashboard = () => {
                         fill="white"
                       />
                     </svg>
-
                     <p className="text-[.625rem] text-[#12B669]">Active plan</p>
                   </div>
                 </div>
@@ -88,7 +87,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <Marquee/>
+      {/* <Marquee/> */}
     </div>
   );
 };

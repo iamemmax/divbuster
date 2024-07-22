@@ -202,6 +202,13 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
       ],
     },
     {
+      link: "/hospital-around",
+      text: "Hospitals around",
+      icon: undefined,
+      disabled: false,
+      isExternal: false,
+    },
+    {
       link: "/about-us",
       text: "About us",
       icon: undefined,

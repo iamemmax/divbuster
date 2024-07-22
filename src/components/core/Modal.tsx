@@ -33,7 +33,7 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
           showZigZag
             ? 'zig-zag-top zig-zag-bottom !my-0 !rounded-none'
             : 'rounded-[10px]',
-          'my-6 bg-white'
+          'my-6'
         )}
         style={{
           width: '92.5%',

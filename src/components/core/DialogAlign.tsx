@@ -136,7 +136,7 @@ const DialogBodyAlign = ({
   return (
     <div
       className={cn(
-        'max-h-modal-body overflow-y-auto px-8 py-6 sm:overflow-y-visible md:max-h-none',
+        'max-h-modal-body overflow-y-auto sm:overflow-y-visible md:max-h-none',
         className
       )}
       {...props}

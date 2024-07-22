@@ -52,7 +52,7 @@ const _OldHeaderButtons: React.FunctionComponent = () => {
   );
 };
 
-const pagesWithColoredBg = ["/", "/faqs", "/contact-us", "/about-us"];
+const pagesWithColoredBg = ["/", "/faqs", "/hospital-around" ,"/contact-us", "/about-us"];
 
 export function MainHeader() {
   const pathname = usePathname();

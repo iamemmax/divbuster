@@ -31,6 +31,7 @@ import { useQuery } from "react-query";
 import { getTransaction } from "@/app/(dashboard)/dashboard/api/fetchTransaction";
 import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
 import { capitalizeFirstLetter } from "@/utils";
+import TransactionsReceipts from "./TransactionsReceipts";
 
 interface transactionHeader {
   id?: number;
@@ -141,9 +142,7 @@ const TransactionsTable = ({ userData }: Prop) => {
     columnHelper.accessor("action", {
       header: () => "Action",
       cell: () => (
-        <Button className="rounded-10 bg-[#F6F9FF] py-1 px-3 text-[#242424] text-xs">
-          Details
-        </Button>
+        <TransactionsReceipts/>
       ),
     }),
   ];
