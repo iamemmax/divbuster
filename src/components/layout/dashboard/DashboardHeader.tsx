@@ -62,9 +62,11 @@ export function DashboardHeader() {
           </div>
           <div className=" hidden lg:flex">
             <div className="flex gap-4">
-              <Button className="rounded-full w-9 h-9 flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
-                <HomeIcon height={15} width={16} />
-              </Button>
+              <Link href='/'>
+                <Button className="rounded-full w-9 h-9 flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
+                  <HomeIcon height={15} width={16} />
+                </Button>
+              </Link>
               <Button className="rounded-full w-9 h-9 flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
                 <Notifications height={20} width={20} />
               </Button>

@@ -234,7 +234,7 @@ const HospitalAround = () => {
           </div>
         </div>
       </div>
-      <div className='pt-[72px]'>
+      <div className='py-[72px]'>
         <div className='md:flex flex-row bg-[#FFFFFF0D] gap-36 pt-4 pb-6 sm:py-3 items-center justify-center pr-16 pl-6 rounded-lg'>
           <p className='text-xs md:text-[14px] lg:text[16px] text-[#FFFFFFCC] md:pb-0 pb-4'>
             Welcome to Liberty life, where your health and wealth is paramount to us. Enjoy health and wealth!
