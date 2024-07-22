@@ -225,7 +225,9 @@ const HospitalAround = () => {
                     <TableBody>
                       {hospitalsAround.length > 0 ? (
                         hospitalsAround.map((hospital, index) => (
-                          <tr key={index}>
+                          <tr className={`hover:bg-[#f5f7ff] ${index !== 0 ? "border-t" : ""
+                            }`}
+                            key={index}>
                             <td className="py-2 px-4 border-b">{hospital.name}</td>
                             <td className="py-2 px-4 border-b">{hospital.state}</td>
                             <td className="py-2 px-4 border-b">{hospital.lga}</td>
