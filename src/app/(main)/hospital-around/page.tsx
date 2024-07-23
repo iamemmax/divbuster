@@ -152,7 +152,7 @@ const HospitalAround = () => {
             </div>
             <div>
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex justify-center items-center text-[#556575] gap-x-3 bg-white border-[#D6D6D6] border-[0.8px] py-2 rounded-10 px-5">
+                <DropdownMenuTrigger className="hidden md:flex justify-center items-center text-[#556575] gap-x-3 bg-white border-[#D6D6D6] border-[0.8px] py-2 rounded-10 px-5">
                   <FilterIcn />
                   <h2>Filter</h2>
                 </DropdownMenuTrigger>
