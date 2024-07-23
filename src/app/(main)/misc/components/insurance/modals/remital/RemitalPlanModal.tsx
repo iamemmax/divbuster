@@ -173,6 +173,8 @@ const RemitalPlanModal = ({
       },
     });
   };
+
+  console.log("true", openRemitalPlan);
   return (
     <div>
       {isLoginLoading ? (
@@ -181,7 +183,7 @@ const RemitalPlanModal = ({
         </div>
       ) : (
         <Dialog open={openRemitalPlan}>
-          <DialogContent className="!overflow-hidden  min-h-[90vh] max-h-screen px-4 w-full md:min-h-[55rem]">
+          <DialogContent className="!overflow-hidden  min-h-[90vh] max-h- px-4 w-full md:min-h-[55rem]">
             <div className="md:w-full flex justify-between items-center">
               <DialogHeader className="bg-[#1B1687] w-full !justify-between">
                 <DialogTitle className="text-[#fff] whitespace-nowrap">
@@ -189,7 +191,10 @@ const RemitalPlanModal = ({
                 </DialogTitle>
 
                 <DialogClose className="rounded-lg">
-                  <button onClick={() => setOpenShowRemitalPlan(false)}>
+                  <button onClick={() => {
+                    location.reload();
+
+                  }}>
                     Close
                   </button>
                 </DialogClose>
