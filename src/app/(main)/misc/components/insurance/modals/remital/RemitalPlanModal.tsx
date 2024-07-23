@@ -181,7 +181,7 @@ const RemitalPlanModal = ({
         </div>
       ) : (
         <Dialog open={openRemitalPlan}>
-          <DialogContent className="!overflow-hidden  min-h-[90vh] max-h-[97vh] px-4 w-full md:min-h-[55rem]">
+          <DialogContent className="!overflow-hidden  min-h-[90vh] max-h-screen px-4 w-full md:min-h-[55rem]">
             <div className="md:w-full flex justify-between items-center">
               <DialogHeader className="bg-[#1B1687] w-full !justify-between">
                 <DialogTitle className="text-[#fff] whitespace-nowrap">
