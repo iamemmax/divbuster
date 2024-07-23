@@ -134,13 +134,20 @@ export const linkGroups = [
       {
         text: "Individual Plan",
         link: "/IndividualPlanModal",
-        action: () => {},
+        action: () => { },
       },
       {
         text: "Family Plan",
         link: "/IndividualPlanModal",
       },
     ],
+  },
+  {
+    link: "/hospital-around",
+    text: "Hospitals around",
+    icon: undefined,
+    disabled: false,
+    isExternal: false,
   },
   {
     link: "/about-us",
