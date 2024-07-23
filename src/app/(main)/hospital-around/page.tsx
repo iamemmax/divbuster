@@ -119,7 +119,7 @@ const HospitalAround = () => {
   return (
     <div className="bg-[#F5F9FE] ">
       <div className="bg-main min-h-36"></div>
-      <div className="h-full w-full px-6 md:px-[7.5rem] min-h-screen relative -mt-32">
+      <div className="h-full w-full pl-3 md:px-[7.5rem] min-h-screen relative -mt-32">
         <div className="bg-white  w-full h-full mx-auto py-[1.9375rem] px-[2.625rem] rounded-[.625rem]">
           <div className="flex justify-between">
             <div className="flex flex-wrap gap-4 items-center">
@@ -143,7 +143,7 @@ const HospitalAround = () => {
                 )}
 
               </div>
-              <div className="lg:w-64">
+              <div className="w-full lg:w-64">
                 <DebounceInput
                   value={globalFilter ?? ""}
                   onChange={(value: string) => setGlobalFilter(String(value))}
@@ -225,10 +225,10 @@ const HospitalAround = () => {
                     <TableBody>
                       {hospitalsAround.length > 0 ? (
                         hospitalsAround.map((hospital, index) => (
-                          <tr className={`hover:bg-[#f5f7ff] ${index !== 0 ? "border-t" : ""
+                          <tr className={`hover:bg-[#f5f7ff] text-[#475569] text-xs text-nowrap ${index !== 0 ? "border-t" : ""
                             }`}
                             key={index}>
-                            <td className="py-2 px-4 border-b">{hospital.name}</td>
+                            <td className="py-2 px-4 border-b ">{hospital.name}</td>
                             <td className="py-2 px-4 border-b">{hospital.state}</td>
                             <td className="py-2 px-4 border-b">{hospital.lga}</td>
                             <td className="py-2 px-4 border-b">{hospital.address}</td>
@@ -240,7 +240,7 @@ const HospitalAround = () => {
                     </TableBody>
                   ) : (
                     <div className="w-full flex justify-center items-center text-sm p-5">
-                      No data found
+                      <p className="text-xs text-[#888888] text-nowrap">  Search for hospitals around e.g. 27, maddiso Ikeja</p>
                     </div>
                   )}
                 </>
