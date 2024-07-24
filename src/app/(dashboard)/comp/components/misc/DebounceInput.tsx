@@ -6,12 +6,14 @@ interface Prop {
   onChange: (payload: string) => void;
   value: string;
   className?: string;
+  placeholder?:string;
 }
 const DebounceInput = ({
   value: initialValue,
   debounce = 500,
   onChange,
   className,
+  placeholder="Search",
   ...props
 }: Prop) => {
   const [value, setValue] = useState(initialValue);
@@ -45,10 +47,10 @@ const DebounceInput = ({
       </svg>
 
       <input
-        className={`h-full border-none outline-none ${className}`}
+        className={`h-full flex-1 border-none outline-none ${className}`}
         onChange={(e) => setValue(e.target.value)}
         {...props}
-        placeholder="Enter your full address to search "
+        placeholder={placeholder}
         type="text"
         defaultValue={value}
       />

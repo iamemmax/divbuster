@@ -27,32 +27,32 @@ export interface hopitalTypesx {
   address: string;
   state: string;
   lga: string;
-  provider_id:string
+  provider_id: string
 }
 
 export const fetchStateList = async () => {
-    const {data} = await adminAxios.get( `life-insurance/filter_provider/`);
-    return data as string[] 
+  const { data } = await adminAxios.get(`life-insurance/filter_provider/`);
+  return data as string[]
 };
 
-export const fetchRegionByState = async (state:string) => {
-    const {data} = await adminAxios.get(`life-insurance/lgas/?state=${state}`);
-    return data as string[] 
+export const fetchRegionByState = async (state: string) => {
+  const { data } = await adminAxios.get(`life-insurance/lgas/?state=${state}`);
+  return data as string[]
 };
 
 // life-insurance/lgas/?state=Lagos
 
 
-export const  fetchHospitalListByLga = async (lga:string) => {
-    const {data} = await adminAxios.get(`life-insurance/get-nem-location-by-lga/?lga=${lga}`);
-    return data as lgaTypes
-     
+export const fetchHospitalListByLga = async (lga: string) => {
+  const { data } = await adminAxios.get(`life-insurance/get-nem-location-by-lga/?lga=${lga}`);
+  return data as lgaTypes
+
 };
-   
 
 
-interface hopitalChoiceProp{
-    userId: string;
+
+interface hopitalChoiceProp {
+  userId: string;
   email: string;
   state: string;
   hospital: string;
@@ -60,16 +60,16 @@ interface hopitalChoiceProp{
   provider_id: string;
 }
 
-export const userHospitalChoice = async ({ userId, state, hospital,provider_id,lga ,email}: hopitalChoiceProp) => {
-    
+export const userHospitalChoice = async ({ userId, state, hospital, provider_id, lga, email}: hopitalChoiceProp) => {
+
   const response = await adminAxios.put(`life-insurance/accept_users_hospital/${userId}`, {
     email,
-        state,
+    state,
     hospital,
     provider_id,
-        lga
-    });
-    return response?.data;
+    lga
+  });
+  return response?.data;
 };
 
 

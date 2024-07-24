@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/core";
-import React from "react";
+import React, { useState } from "react";
 import CopyIcon from "../../icons/CopyIcon";
 import WalletIcon from "../../icons/WalletIcon";
 import PlusIcon from "../../icons/PlusIcon";
@@ -13,6 +13,9 @@ import { Spinner } from "@/icons/core";
 import moment from "moment";
 import { getWalletBalance } from "@/app/(dashboard)/dashboard/api/walletBalance";
 import { getFamilyPlan } from "@/app/(dashboard)/dashboard/api/getFamilyPlan";
+import AddFundModal from "../Funds/AddFund";
+import BuyPlanModal from "../Funds/BuyPlanForFamily";
+
 
 interface Prop {
   userData: UserDataTypes | undefined;
@@ -52,7 +55,12 @@ const TopCards = ({ userData: users }: Prop) => {
     },
     family_plan: [{}],
   };
+
   const { copy } = useClipboard();
+
+const [AddFund, setAddFund] = useState(false)
+const [BuyPlan, setBuyPlan] = useState(false)
+
   return (
     <div className="">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 xl:grid-cols-4">
@@ -170,7 +178,7 @@ const TopCards = ({ userData: users }: Prop) => {
               </p>
             </div>
             <div className="justify-self-end">
-              <Button className="bg-[#DB8C00] rounded-md py-[.4375rem] px-[.625rem] text-white text-[.625rem]">
+              <Button className="bg-[#DB8C00] rounded-md py-[.4375rem] px-[.625rem] text-white text-[.625rem]" onClick={() => setBuyPlan(true)}>
                 {familyPlanData?.button}
               </Button>
             </div>
@@ -188,7 +196,7 @@ const TopCards = ({ userData: users }: Prop) => {
                 </p>
               </div>
               <div className="">
-                <Button className="bg-[#CBF3E9] flex items-center justify-center gap-2 text-xs font-semibold text-[#099976] px-3 py-2 rounded-md">
+                <Button className="bg-[#CBF3E9] flex items-center justify-center gap-2 text-xs font-semibold text-[#099976] px-3 py-2 rounded-md" onClick={() => setAddFund(true)}>
                   Top up
                   <PlusIcon />
                 </Button>
@@ -211,6 +219,24 @@ const TopCards = ({ userData: users }: Prop) => {
           </div>
         </div>
       </div>
+      {
+        AddFund &&
+        <AddFundModal
+          heading="Add Fund"
+          isAddFundModalOpen={AddFund}
+          setAddFundModal={setAddFund} 
+          subsection="Fund wallet with any of the underlisted options" 
+          />
+      }
+      {
+        BuyPlan &&
+        <BuyPlanModal
+          heading="Beneficiary Details"
+          isBuyPlanModalOpen={BuyPlan}
+          setBuyPlanModal={setBuyPlan} 
+          subsection="Kindly enter the details below to activate beneficiary ." 
+          />
+      }
     </div>
   );
 };
