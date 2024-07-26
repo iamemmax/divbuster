@@ -1,8 +1,10 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, ClientOnly, Dialog, DialogBody, DialogClose, DialogContent, DialogHeader, DialogTitle, RadioGroup, RadioGroupItem } from "@/components/core";
 import CopyIcon2 from '../../icons/CopyIcon2';
 import { Label } from '@radix-ui/react-label';
+import { PayStack } from '../../icons';
+import SuccessPaymentModal from './SuccessPayment';
 
 
 
@@ -29,7 +31,6 @@ function SelectPlanModal({
         value: string
     }
 
-
     const PlanDetails: data[] = [
         {
             item: "Account name",
@@ -44,6 +45,8 @@ function SelectPlanModal({
             value: "VFD Microfinance Bank"
         },
     ]
+
+    const [SuccessPayment, setSuccessPayment] = useState(false)
 
     return (
 
@@ -114,28 +117,28 @@ function SelectPlanModal({
                                         </div>
                                     </RadioGroup>
                                 </div>
-                                
+                                <Button className='border-[0.3px] border-[#407BFF] py-4 gap-2 w-full mt-10 rounded-10' onClick={() => setSuccessPayment(true)}>
+                                    <div><PayStack /></div>
+                                    <div className='font-sans font-medium'>Pay with paystack </div>
+                                </Button>
+                                <Button className='w-full text-[#1B1687] bg-white py-3.5 font-medium text-sm mt-6'>
+                                    I have made payment
+                                </Button>
                             </article>
                         </DialogBody>
-
                     </DialogContent>
-
                 </Dialog>
-
             </ClientOnly>
-
-
+            {
+                SuccessPayment && 
+                <SuccessPaymentModal
+                    isSuccessPaymentModalOpen={SuccessPayment}
+                    setSuccessPaymentModal={setSuccessPayment}
+                    subsection="Application Successful" 
+                    heading={''}                
+                    />
+            }
         </div >
-
-
-
-
-
     )
-
-
 }
-
 export default SelectPlanModal;
-
-

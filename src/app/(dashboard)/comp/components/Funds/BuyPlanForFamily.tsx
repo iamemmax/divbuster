@@ -1,3 +1,5 @@
+"use client"
+
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
     ClientOnly,
@@ -34,6 +36,7 @@ import { useRouter } from "next/navigation";
 import Select, { components } from "react-select";
 import { fetchHospitalListByLga, fetchRegionByState, fetchStateList, useUserHospitalChoice } from "@/app/(main)/misc/components/insurance/api/remital/remtalUserDetails";
 import SelectPlanModal from "./Selectplan";
+import { useUser } from "@/app/(auth)/(onboarding)/misc";
 
 interface Prop {
     setBuyPlanModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -41,7 +44,6 @@ interface Prop {
     heading: string;
     subsection: string
 }
-
 
 interface Hospitals {
     state: string;
@@ -86,9 +88,18 @@ const BuyPlanModal = ({
         register,
         formState: { errors },
         setValue,
-    } = useForm<formValues>({
-        resolver: zodResolver(formValues)
-    });
+      } = useForm<formValues>({
+        resolver: zodResolver(formValues),
+        defaultValues: {
+          hospitaldata: {
+            phone_number: '',
+            name: '',
+            email: '',
+            state: '',
+            lga: '',
+          },
+        },
+      });
 
     const [errorMsg, setErrorMsg] = useState("");
 
@@ -120,6 +131,7 @@ const BuyPlanModal = ({
         queryFn: () => fetchRegionByState(selectedState),
         queryKey: ["fetch-lga-list", selectedState],
     });
+    console.log(selectedlga)
 
     const uniqueStates = Array.from(new Set(stateList));
 
@@ -138,14 +150,38 @@ const BuyPlanModal = ({
         return () => clearTimeout(timer);
     }, []);
     const { mutate: handleSubmitHospital, isLoading: loadingSubmit } =
-        useUserHospitalChoice();
-    // const router = useRouter();
-    const onSubmit = (data: formValues) => {
-        const selectedlgaData = hospitalList?.data?.find(
-            (hos) =>
-                hos?.lga?.toLowerCase() === data?.hospitaldata?.lga?.toLowerCase()
-        );
-    }
+    useUserHospitalChoice();
+  // const router = useRouter();
+  const onSubmit = (data: formValues) => {
+    const selectedlgaData = hospitalList?.data?.find(
+      (hos) =>
+        hos?.lga?.toLowerCase() === data?.hospitaldata?.lga?.toLowerCase()
+    );
+    const { data: userData, isLoading } = useUser();
+    handleSubmitHospital(
+      {
+        userId: userData?.user_id as string,
+        email: data?.hospitaldata?.email,
+        state: data?.hospitaldata.state,
+        hospital: data?.hospitaldata.hospital,
+        provider_id: String(selectedlgaData?.provider_id),
+        lga: String(selectedlgaData?.lga),
+      },
+      {
+        onSuccess: () => {
+         setBuyPlanModal
+        },
+        onError: (error) => {
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-expect-error
+          setErrorMsg(error?.response?.data?.error);
+          openErrorModalWithMessage(String(errorMessage));
+        },
+      }
+    );
+  };
+
     const stateOptions = uniqueStates?.map((state) => ({
         value: state,
         label: state,
@@ -380,7 +416,9 @@ const BuyPlanModal = ({
                                         <Button
                                             className="mt-[4.5rem] flex items-center gap-x-5 justify-center font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
                                             shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
-                                            type="submit" onClick={() => setSelectPlan(true)}
+                                            type="submit"
+                                            
+                               
                                         >
                                             Continue{" "}
                                             {loadingSubmit && (

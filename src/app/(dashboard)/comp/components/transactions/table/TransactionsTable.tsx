@@ -33,6 +33,7 @@ import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
 import { capitalizeFirstLetter } from "@/utils";
 import TransactionsReceipts from "./TransactionsReceipts";
 import TransactionReceivedModal from "./TransactionsReceipts";
+import { NoData } from "../../../icons";
 
 interface transactionHeader {
   id?: number;
@@ -293,8 +294,11 @@ const [ TransactionDetails, setTransactionDetails] = useState(false)
                 ))}
               </TableBody>
             ) : (
-              <div className="w-ful flex justify-center items-center text-sm p-5">
-                No data found
+              <div className="">
+              <div className="w-full flex justify-center items-center text-sm p-5">
+                <NoData/>
+              </div>
+                <div className="text-center flex justify-center items-center text-[#0E0E2C] font-sans text-lg">No data to display yet as you haven't made any transactions.</div>
               </div>
             )}
           </Table>

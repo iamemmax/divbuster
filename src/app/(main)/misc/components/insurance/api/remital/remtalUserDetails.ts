@@ -15,7 +15,6 @@ interface hopitalTypes {
   hospital: string;
 }
 
-
 export interface lgaTypes {
   status: string;
   message: string;
@@ -29,6 +28,7 @@ export interface hopitalTypesx {
   lga: string;
   provider_id: string
 }
+
 
 export const fetchStateList = async () => {
   const { data } = await adminAxios.get(`life-insurance/filter_provider/`);
@@ -44,6 +44,7 @@ export const fetchRegionByState = async (state: string) => {
 
 
 export const fetchHospitalListByLga = async (lga: string) => {
+  console.log(lga)
   const { data } = await adminAxios.get(`life-insurance/get-nem-location-by-lga/?lga=${lga}`);
   return data as lgaTypes
 
