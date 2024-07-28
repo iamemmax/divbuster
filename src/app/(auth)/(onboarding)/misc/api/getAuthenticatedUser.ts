@@ -10,15 +10,11 @@ export interface NoPinError {
   create_transaction_pin_link: string;
 }
 
-interface Hospitals {
-  lga: string;
-  state: string;
-  hospital: string;
-  provider_id: string;
-}
+
+
 export const getAuthenticatedUser = async (): Promise<UserDataTypes> => {
   const { data } = await adminAxios.get("/user/get-user-details/");
-  return data;
+  return data ;
 };
 
 export const useUser = () =>

@@ -98,6 +98,27 @@ const RemitalPlanModal = ({
     "Doctor Consultation",
   ];
 
+  const familyPlanList = [
+    {
+      duration: 2,
+      amount: 24000,
+      discount: 18000,
+      benefit: "4 people (3 + 1 free)",
+    },
+    {
+      duration: 6,
+      amount: 72000,
+      discount: 54000,
+      benefit: "4 people (3 + 1 free)",
+    },
+    {
+      duration: 12,
+      amount: 144000,
+      discount: 118000,
+      benefit: "4 people (3 + 1 free)",
+    },
+  ];
+
   const [errorMsg, setErrorMsg] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -173,6 +194,8 @@ const RemitalPlanModal = ({
       },
     });
   };
+  const tabHeader = ["Individual", "Family", "Corporate"];
+  const [selectedTab, setSelectedTab] = useState(tabHeader[0]);
   return (
     <div>
       {isLoginLoading ? (
@@ -181,11 +204,11 @@ const RemitalPlanModal = ({
         </div>
       ) : (
         <Dialog open={openRemitalPlan}>
-          <DialogContent className="!overflow-hidden  min-h-[90vh] max-h-[97vh] px-4 w-full md:min-h-[55rem]">
+          <DialogContent className="!overflow-hidden rounded-[1.125rem]  min-h-[90vh] max-h-[97vh] px-4 w-full md:min-h-[55rem]">
             <div className="md:w-full flex justify-between items-center">
-              <DialogHeader className="bg-[#1B1687] w-full !justify-between">
+              <DialogHeader className="bg-[#1B1687]  w-full !justify-between">
                 <DialogTitle className="text-[#fff] whitespace-nowrap">
-                  Individual Plan
+                  {selectedTab} Plan
                 </DialogTitle>
 
                 <DialogClose className="rounded-lg">
@@ -196,7 +219,7 @@ const RemitalPlanModal = ({
               </DialogHeader>
             </div>
 
-            <DialogBody className="bg-[#151D42] w-full h-full">
+            <DialogBody className="bg-[#151D42] w-full rounded-b-[1.125rem] h-full">
               <div className="py-1">
                 <div className="text-[#fff] text-center font-semibold text-3xl">
                   <DialogDescription className="text-3xl">
@@ -206,28 +229,45 @@ const RemitalPlanModal = ({
               </div>
 
               <div className="flex w-full items-center justify-center">
-                <p className="w-full px-4 md:px-[2rem] text-center sm:max-w-[80%] text-[#747577] font-medium">
-                  Individual plan gives you access to health cover for you only,
-                  while the family plan covers for you and your family.
-                </p>
+                {selectedTab === "Individual" && (
+                  <p className="w-full px-4 md:px-[2rem] text-center  text-base  sm:max-w-[80%] text-[#fff] text-opacity-50 font-medium">
+                    Individual plan gives you access to health cover for you
+                    only, and you stand a chance to enjoy awesome benefits.
+                  </p>
+                )}
+                {selectedTab === "Family" && (
+                  <p className="w-full px-4 md:px-[1.5rem] text-center  text-base sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
+                    Family plan gives you access to health coverage for your
+                    family. When you add up to 3 family member, you get a free
+                    plan for the fourth member.
+                  </p>
+                )}
+                {selectedTab === "Corporate" && (
+                  <p className="w-full px-4 md:px-[1.5rem] text-center text-base  sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
+                    Corporate plan gives you access to health coverage for your
+                    employees. When you add up to 5 employees, you get a free
+                    plan for the sixth member.
+                  </p>
+                )}
               </div>
 
-              <div className="max-h-[60vh] md:min-h-[409px] rounded-b-lg md:mb-[5rem] md:w-full mt-5 md:mt-10">
-                <Tabs className="" defaultValue="Individual">
+              <div className="max-h-[60vh] md:min-h-[409px] rounded-b-lg md:mb-[2rem] md:w-full mt-5 md:mt-6">
+                <Tabs
+                  className=""
+                  defaultValue={selectedTab}
+                  onValueChange={(e) => setSelectedTab(e)}
+                >
                   <div className="flex w-full px-6 items-center justify-center">
-                    <TabsList className="flex w-[98%] justify-center rounded-[.75rem] bg-[#1D2651] md:max-w-[23rem] md:pl-6 lg:pl-0 border border-[#407BFF]">
-                      <TabsTrigger
-                        className="inline-flex w-full items-center justify-center rounded-xl text-lg font-medium text-[#fff] data-[state=active]:shadow-none"
-                        value="Individual"
-                      >
-                        Individual
-                      </TabsTrigger>
-                      <TabsTrigger
-                        className="inline-flex w-full items-center justify-center rounded-xl text-lg font-medium text-[#fff] data-[state=active]:shadow-none"
-                        value="Family"
-                      >
-                        Family
-                      </TabsTrigger>
+                    <TabsList className="flex w-[98%] justify-center rounded-[.75rem] bg-[#1D2651] md:max-w-[30rem] md:pl-6 lg:pl-0 border border-[#407BFF]">
+                      {tabHeader?.map((tab, idx: number) => (
+                        <TabsTrigger
+                          className="inline-flex w-full items-center justify-center rounded-xl text-lg font-medium text-[#fff] data-[state=active]:shadow-none"
+                          value={tab}
+                          key={idx}
+                        >
+                          {tab}
+                        </TabsTrigger>
+                      ))}
                     </TabsList>
                   </div>
 
@@ -242,37 +282,39 @@ const RemitalPlanModal = ({
                           key={idx}
                         >
                           <div className="w-full">
-                            <div className="border-[0.3px] border-[#4760FD] rounded-lg bg-[#1A234c]">
-                              <div className="w-full py-8 px-6">
-                                <div className="">
-                                  <UserIcons />
+                            <div className="border-[0.3px] relative border-[#4760FD] rounded-[1.25rem] bg-[#1A234C]">
+                              <div className="w-full py-8  relative">
+                                <div className="absolute -top-6 flex justify-center items-center w-full">
+                                  <UserIcons width={65} height={65} />
                                 </div>
-                                <div className="py-3">
-                                  <p className="text-base text-[#D1D3DB] font-normal">
-                                    {plan?.duration} Months Plan
-                                  </p>
-                                  <h1 className="text-white text-[2.25rem] font-bold">
-                                    ₦{plan?.amount}
-                                  </h1>
-                                </div>
-                                <div className="space-y-4">
-                                  {list?.map((list, index: number) => (
-                                    <div
-                                      className="flex border-b-[0.1px] pb-2 space-y-1 border-[#ddd] border-opacity-20 items-center gap-2"
-                                      key={index}
-                                    >
-                                      <div className="">
-                                        <RemitalListIcon />
+                                <div className="mt-4">
+                                  <div className="py-3 px-6">
+                                    <p className="text-base text-[#D1D3DB] text-opacity-80 font-normal">
+                                      {plan?.duration} Months Plan
+                                    </p>
+                                    <h1 className="text-white text-[1.5rem] font-bold">
+                                      ₦{plan?.amount}
+                                    </h1>
+                                  </div>
+                                  <div className="space-y-4">
+                                    {list?.map((list, index: number) => (
+                                      <div
+                                        className="flex px-6 border-b-[0.1px] pb-2 space-y-1 border-[#ddd] border-opacity-10 items-center gap-2"
+                                        key={index}
+                                      >
+                                        <div className="">
+                                          <RemitalListIcon />
+                                        </div>
+                                        <p className="text-white text-opacity-80 text-xs -mt-1">
+                                          {list}
+                                        </p>
                                       </div>
-                                      <p className="text-white text-xs -mt-1">
-                                        {list}
-                                      </p>
-                                    </div>
-                                  ))}
+                                    ))}
+                                  </div>
                                 </div>
                               </div>
 
-                              <div className="border-[.0313rem] border-[#4760FD] rounded-10 mt-5 flex justify-center items-center w-full py-5">
+                              <div className="border-[.0313rem] border-[#4760FD] rounded-10 mt-3 flex justify-center items-center w-full py-5">
                                 <button
                                   className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                   onClick={() => {
@@ -288,35 +330,166 @@ const RemitalPlanModal = ({
                         </div>
                       ))}
                     </div>
-
-                    <div className="flex sm:flex-row justify-between  px-6 w-full  items-center mt-[1.4rem] gap-1 flex-nowrap">
-                      <Link href={"#"} className="text-white text-sm">
-                        <span className="text-[#747577]">
-                          Terms & Conditions Apply:
-                        </span>{" "}
-                        libertyaasured.com
-                      </Link>
-                      <Button
-                        type="button"
-                        className="bg-[#525668] rounded-[1.25rem] px-5 py-3 font-semibold text-white"
-                        onClick={handleSubmit}
-                      >
-                        Skip
-                      </Button>
-                    </div>
                   </TabsContent>
 
                   {/* FAMILY PLAN */}
 
                   <TabsContent
-                    className="mt-1 rounded-10 px-6 lg:px-0 lg:py-4"
+                    className="md:mt-6 mt-3 rounded-10 w-full py-10 lg:py-4"
                     value="Family"
                   >
-                    <div className="w-full flex gap-[1rem] items-center justify-center">
-                      <h2 className="text-white text-3xl py-6">coming soon</h2>
+                    <div className="w-full flex flex-col md:flex-row gap-[1rem] px-6 items-center justify-center">
+                      {familyPlanList?.map((plan, idx: number) => (
+                        <div
+                          className="flex flex-col w-full items-center justify-center"
+                          key={idx}
+                        >
+                          <div className="w-full">
+                            <div className="border-[0.3px] relative border-[#4760FD] rounded-[1.25rem] bg-[#1A234C]">
+                              <div className="w-full py-8  relative">
+                                <div className="absolute -top-6 flex justify-center items-center w-full">
+                                  <UserIcons width={65} height={65} />
+                                </div>
+                                <div className="mt-4">
+                                  <div className="py-3 px-6">
+                                    <p className="text-base text-[#D1D3DB] text-opacity-80 font-normal">
+                                      {plan?.duration} Months Plan
+                                    </p>
+                                    <div className="flex items-center gap-x-2">
+                                      <p className="text-white line-through text-lg text-opacity-80 font-bold">
+                                        ₦{plan?.amount}
+                                      </p>
+                                      <p className="text-white text-lg font-bold">
+                                        ₦{plan?.discount}
+                                      </p>
+                                    </div>
+                                    <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
+                                      {plan?.benefit}
+                                    </p>
+                                  </div>
+                                  <div className="space-y-4 mt-1">
+                                    {list?.map((list, index: number) => (
+                                      <div
+                                        className="flex px-6 border-b-[0.1px] pb-2 space-y-1 border-[#ddd] border-opacity-10 items-center gap-2"
+                                        key={index}
+                                      >
+                                        <div className="">
+                                          <RemitalListIcon />
+                                        </div>
+                                        <p className="text-white text-opacity-80 text-xs -mt-1">
+                                          {list}
+                                        </p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="border-[.0313rem] border-[#4760FD] rounded-10 mt-1 flex justify-center items-center w-full py-5">
+                                <button
+                                  className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                                  onClick={() => {
+                                    handlePayment(plan);
+                                    setDuration(plan?.duration);
+                                  }}
+                                >
+                                  Get Insurance
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </TabsContent>
+
+                  {/* CORPERATE PLAN */}
+                  <TabsContent
+                    className="md:mt-6 mt-3 rounded-10 w-full py-10 lg:py-4"
+                    value="Corporate"
+                  >
+                    <div className="w-full flex flex-col md:flex-row gap-[1rem] px-6 items-center justify-center">
+                      {familyPlanList?.map((plan, idx: number) => (
+                        <div
+                          className="flex flex-col w-full items-center justify-center"
+                          key={idx}
+                        >
+                          <div className="w-full">
+                            <div className="border-[0.3px] relative border-[#4760FD] rounded-[1.25rem] bg-[#1A234C]">
+                              <div className="w-full py-8  relative">
+                                <div className="absolute -top-6 flex justify-center items-center w-full">
+                                  <UserIcons width={65} height={65} />
+                                </div>
+                                <div className="mt-4">
+                                  <div className="py-3 px-6">
+                                    <p className="text-base text-[#D1D3DB] text-opacity-80 font-normal">
+                                      {plan?.duration} Months Plan
+                                    </p>
+                                    <div className="flex items-center gap-x-2">
+                                      <p className="text-white line-through text-lg text-opacity-80 font-bold">
+                                        ₦{plan?.amount}
+                                      </p>
+                                      <p className="text-white text-lg font-bold">
+                                        ₦{plan?.discount}
+                                      </p>
+                                    </div>
+                                    <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
+                                      5 minimum
+                                    </p>
+                                  </div>
+                                  <div className="space-y-4 mt-1">
+                                    {list?.map((list, index: number) => (
+                                      <div
+                                        className="flex px-6 border-b-[0.1px] pb-2 space-y-1 border-[#ddd] border-opacity-10 items-center gap-2"
+                                        key={index}
+                                      >
+                                        <div className="">
+                                          <RemitalListIcon />
+                                        </div>
+                                        <p className="text-white text-opacity-80 text-xs -mt-1">
+                                          {list}
+                                        </p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="border-[.0313rem] border-[#4760FD] rounded-10 mt-1 flex justify-center items-center w-full py-5">
+                                <button
+                                  className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                                  onClick={() => {
+                                    handlePayment(plan);
+                                    setDuration(plan?.duration);
+                                  }}
+                                >
+                                  Get Insurance
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </TabsContent>
                 </Tabs>
+                <div
+                  className={`flex sm:flex-row justify-between  px-6 w-full pb-1 items-center ${selectedTab === "Individual" ? " mt-[1rem]" : ""} gap-1 flex-nowrap`}
+                >
+                  <Link href={"#"} className="text-white text-sm">
+                    <span className="text-[#747577]">
+                      Terms & Conditions Apply:
+                    </span>{" "}
+                    libertyaasured.com
+                  </Link>
+                  <Button
+                    type="button"
+                    className="bg-[#525668] rounded-[1.25rem] px-5 py-3 font-semibold text-white"
+                    onClick={handleSubmit}
+                  >
+                    Skip
+                  </Button>
+                </div>
               </div>
             </DialogBody>
           </DialogContent>

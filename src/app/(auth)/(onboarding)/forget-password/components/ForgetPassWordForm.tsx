@@ -99,7 +99,7 @@ export function ForgetPasswordForm() {
           </Label>
 
           <Input
-            className="login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 outline-none text-sm font-sans font-medium text-white placeholder:text-white focus:!bg-white/30 "
+            className="login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 outline-none text-sm font-sans font-medium text-white  focus-visible:outline-none placeholder:text-white focus:!bg-white/30 "
             id="phone"
             placeholder="Enter Phone no"
             type="text"
