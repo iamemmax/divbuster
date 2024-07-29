@@ -39,7 +39,7 @@ export function DashboardHeader() {
                 Liberty Life
               </h2>
               <p className="text-[.625rem] text-white text-opacity-65">
-                by LibertyAssured
+                by LibertyAssured.
               </p>
             </div>
           </Link>
