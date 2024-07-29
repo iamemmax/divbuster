@@ -47,9 +47,9 @@ export default function Home() {
   // console.log(phoneNumberCheckResponse);
 
   return (
-    <main className="max-w-max md:pb-20 w-full bg-main min-h-screen">
+    <main className="md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
-        <section className="flex flex-col lg:grid grid-cols-2 items-center justify-between sm:max-lg:px-2 md:pt-12 md:pb-6 md:pl-[30px] ">
+        <section className="flex flex-col w-full lg:grid grid-cols-[1.5fr_1fr] items-center justify-between sm:max-lg:px-2 md:pt-12 md:pb-6 md:pl-[30px] ">
           <div className="flex flex-col  gap-4  md:gap-6 px-[6rem] max-md:px-6 max-md:py-10">
             <h6
               className={cn(
@@ -65,7 +65,7 @@ export default function Home() {
             <h1
               className={cn(
                 "font-display",
-                "flex flex-col font-semibold md:font-bold text-xl md:text-3xl xl:text-4xl gap-2"
+                "flex flex-col font-semibold md:font-bold text-xl md:text-3xl xl:text-7xl gap-2"
               )}
             >
               <span className="flex items-center flex-wrap leading-tight md:leading-none gap-2">
@@ -76,7 +76,7 @@ export default function Home() {
                 for you and your family.
               </span>
             </h1>
-            <p className="xl:max-w-[593px] font-sans text-[0.825rem] md:text-lg text-helper">
+            <p className="xl:max-w-[80%] font-sans text-[0.825rem] md:text-xl text-helper">
               <span>
                 Get a comprehensive health cover and stand a chance to benefit
               </span>
@@ -132,7 +132,7 @@ export default function Home() {
             />
           </div>
         </section>
-        <section className="xl:px-[120px] xl:my-12">
+        {/* <section className="xl:px-[120px] xl:my-12">
           <div
             className={cn(
               "px-3 2xl:px-[113px] flex flex-col items-stretch lg:flex-row gap-4 rounded-[20px] xl:py-8 bg-[#FFFFFF08]"
@@ -332,7 +332,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </section>
       <Marquee />
 
