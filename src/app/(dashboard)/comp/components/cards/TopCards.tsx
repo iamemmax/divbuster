@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/core";
-import React from "react";
+import React, { useState } from "react";
 import CopyIcon from "../../icons/CopyIcon";
 import WalletIcon from "../../icons/WalletIcon";
 import PlusIcon from "../../icons/PlusIcon";
@@ -13,6 +13,9 @@ import { Spinner } from "@/icons/core";
 import moment from "moment";
 import { getWalletBalance } from "@/app/(dashboard)/dashboard/api/walletBalance";
 import { getFamilyPlan } from "@/app/(dashboard)/dashboard/api/getFamilyPlan";
+import AddFundModal from "../Funds/AddFund";
+import BuyPlanModal from "../Funds/BuyPlanForFamily";
+import FamilyUserIcon from "./icons/UserIcon";
 
 interface Prop {
   userData: UserDataTypes | undefined;
@@ -52,14 +55,19 @@ const TopCards = ({ userData: users }: Prop) => {
     },
     family_plan: [{}],
   };
+
   const { copy } = useClipboard();
+
+  const [AddFund, setAddFund] = useState(false);
+  const [BuyPlan, setBuyPlan] = useState(false);
+
   return (
     <div className="">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 xl:grid-cols-4">
         <div className="bg-white rounded-10 p-1">
           <div className="bg-[#F0F5FF] h-full shadow-sm rounded-10  px-6 py-[.875rem] ">
             <p className="text-xs font-sans font-medium text-black">
-              Transfer to details below to fund your plan
+              Transfer to details below to fund your plan.
             </p>
             {loadingAcct ? (
               <div className="flex justify-center items-center w-full py-6">
@@ -107,7 +115,7 @@ const TopCards = ({ userData: users }: Prop) => {
             )}
           </div>
         </div>
-
+        {/* 
         <div className="bg-white rounded-10 px-6 py-4 shadow-sm">
           {loadingPlan ? (
             <div className="flex justify-center items-center w-full py-6">
@@ -157,60 +165,209 @@ const TopCards = ({ userData: users }: Prop) => {
               </div>
             </>
           )}
-        </div>
+        </div> */}
 
         <div className="bg-white rounded-10 p-1">
-          <div className="bg-[#FFFAF0] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
+          <div className="bg-[#F0F5FF] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
             <div className="flex-1 py-1">
-              <h2 className="text-xl font-bold font-sans  text-[#DB8C00]">
-                Family Plan
-              </h2>
-              <p className="text-[#58431D] text-[.8125rem] mt-1 w-4/5">
-                {familyPlanData?.message}
-              </p>
+              <div className="flex items-center gap-x-1">
+                <FamilyUserIcon />
+                <h2 className="text-sm font-semibold font-sans  text-[#032282]">
+                  Family Plan
+                </h2>
+              </div>
+              <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
+                <h2 className="text-[#032282] text-xl font-bold">0</h2>
+                <div className="bg-white py-1 px-2 rounded-md">
+                  <p className="text-xxs text-[#032282]">Benefactors</p>
+                </div>
+              </div>
             </div>
-            <div className="justify-self-end">
-              <Button className="bg-[#DB8C00] rounded-md py-[.4375rem] px-[.625rem] text-white text-[.625rem]">
-                {familyPlanData?.button}
+            <div className="justify-self-end flex items-center gap-4">
+              <Button
+                variant={"outlined"}
+                className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
+                onClick={() => setBuyPlan(true)}
+              >
+                {/* {familyPlanData?.button} */}
+                Buy Plan
+              </Button>
+              <Button
+                className="bg-white rounded-md py-[.4375rem]  px-[.8125rem] text-[#032282] text-[.625rem]"
+                // onClick={() => setBuyPlan(true)}
+              >
+                {/* {familyPlanData?.button} */}
+                View benefactors
               </Button>
             </div>
           </div>
         </div>
+
+        {/* coperate card */}
         <div className="bg-white rounded-10 p-1">
-          <div className="bg-[#31D0AA26] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-x-2">
-                <button className="bg-[#31D0AA1F] shrink-0 rounded-full w-6 h-6 justify-center items-center flex">
-                  <WalletIcon />
-                </button>
-                <p className="text-[#099976] text-xs font-semibold">
-                  Wallet balance
-                </p>
+          <div className="bg-[#FFFAF0] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
+            {/* <div className="flex-1 py-1">
+              <div className="flex items-center gap-x-1">
+                <FamilyUserIcon />
+                <h2 className="text-sm font-semibold font-sans  text-[#032282]">
+                  Family Plan
+                </h2>
               </div>
+              <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
+                <h2 className="text-[#032282] text-xl font-bold">0</h2>
+                <div className="bg-white py-1 px-2 rounded-md">
+                  <p className="text-xxs text-[#032282]">Benefactors</p>
+                </div>
+              </div>
+            </div> */}
+            <div className="grid grid-cols-[1fr_1.1fr] divide-x-[.0187rem] divide-opacity-70 divide-[#DB8C00]">
               <div className="">
-                <Button className="bg-[#CBF3E9] flex items-center justify-center gap-2 text-xs font-semibold text-[#099976] px-3 py-2 rounded-md">
+                <div className="flex items-center gap-x-1">
+                  <FamilyUserIcon backgroundColor="#FFF2D9" color="#DB8C00" />
+                  <h2 className="text-sm font-semibold font-sans  text-[#DB8C00]">
+                    Corporate
+                  </h2>
+                </div>
+                <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
+                  <h2 className="text-[#D98B02] text-xl font-bold">0</h2>
+                  <div className="bg-[#FFF2D9] py-1 px-2 rounded-md">
+                    <p className="text-xxs text-[#DB8C00]">Employees</p>
+                  </div>
+                </div>
+                <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
+                  <Button
+                    // variant={"outlined"}
+                    className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
+                    onClick={() => setBuyPlan(true)}
+                  >
+                    {/* {familyPlanData?.button} */}
+                    Buy Plan
+                  </Button>
+                  <Button
+                    className="bg-[#FFE9BC] rounded-md py-[.4375rem]  px-[.8125rem] text-[#DB8C00] text-[.625rem]"
+                    // onClick={() => setBuyPlan(true)}
+                  >
+                    {/* {familyPlanData?.button} */}
+                    View
+                  </Button>
+                </div>
+              </div>
+              <div className="pl-6">
+                <div className="flex items-center gap-x-1">
+                  <FamilyUserIcon backgroundColor="#FFF2D9" color="#DB8C00" />
+                  <h2 className="text-sm font-semibold font-sans  text-[#DB8C00]">
+                    Corporate
+                  </h2>
+                </div>
+                <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
+                  <h2 className="text-[#D98B02] text-xl font-bold">0</h2>
+                  <div className="bg-[#FFF2D9] py-1 px-2 rounded-md">
+                    <p className="text-xxs text-[#DB8C00]">Employees</p>
+                  </div>
+                </div>
+                <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
+                  <Button
+                    // variant={"outlined"}
+                    className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
+                    onClick={() => setBuyPlan(true)}
+                  >
+                    {/* {familyPlanData?.button} */}
+                    Buy Plan
+                  </Button>
+                  <Button
+                    className="bg-[#FFE9BC] rounded-md py-[.4375rem]  px-[.8125rem] text-[#DB8C00] text-[.625rem]"
+                    // onClick={() => setBuyPlan(true)}
+                  >
+                    {/* {familyPlanData?.button} */}
+                    View
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-10 p-1">
+          <div className="bg-[#31D0AA26] h-full grid grid-cols-[1fr_1.2fr] divide-x-[.0625rem] divide-[#099976] divide-opacity-70 shadow-sm rounded-10  px-6 py-[.875rem] ">
+            <div className="">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-x-2">
+                  <button className="bg-[#31D0AA1F] shrink-0 rounded-full w-6 h-6 justify-center items-center flex">
+                    <WalletIcon />
+                  </button>
+                  <p className="text-[#099976] text-xs font-semibold">
+                    Wallet balance
+                  </p>
+                </div>
+              </div>
+
+              <div className="">
+                <h2 className="text-2xl font-bold text-[₦100,000] py-3 text-[#099976]">
+                  &#8358;{walletBalance?.data?.balance ?? 0}
+                </h2>
+              </div>
+              {/* <div className="flex w-full items-center gap-3">
+                <Button className=" py-2 w-full bg-white rounded-10 text-[#099976] font-semibold">
+                  Withdraw
+                </Button>
+                <Button className="py-2 w-full bg-white rounded-10 text-[#099976] font-semibold">
+                  Buy new plan
+                </Button>
+              </div> */}
+              <div className="">
+                <Button
+                  className="bg-[#fff] flex items-center justify-center gap-2 text-xs font-semibold text-[#099976] px-3 py-2 rounded-md"
+                  onClick={() => setAddFund(true)}
+                >
                   Top up
                   <PlusIcon />
                 </Button>
               </div>
             </div>
+            <div className="pl-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-x-2">
+                  <button className="bg-[#31D0AA1F] shrink-0 rounded-full w-6 h-6 justify-center items-center flex">
+                    <WalletIcon />
+                  </button>
+                  <p className="text-[#099976] text-xs font-semibold">
+                    Referral Wallet
+                  </p>
+                </div>
+              </div>
 
-            <div className="">
-              <h2 className="text-2xl font-bold text-[₦100,000] py-3 text-[#099976]">
-                &#8358;{walletBalance?.data?.balance ?? 0}
-              </h2>
-            </div>
-            <div className="flex w-full items-center gap-3">
-              <Button className=" py-2 w-full bg-white rounded-10 text-[#099976] font-semibold">
-                Withdraw
-              </Button>
-              <Button className="py-2 w-full bg-white rounded-10 text-[#099976] font-semibold">
-                Buy new plan
-              </Button>
+              <div className="">
+                <h2 className="text-2xl font-bold text-[₦100,000] py-3 text-[#099976]">
+                  &#8358;{walletBalance?.data?.balance ?? 0}
+                </h2>
+              </div>
+              <div className="flex w-full items-center gap-3">
+                <Button className=" py-2 w-full bg-white rounded-10 text-[#099976] font-semibold">
+                  Withdraw
+                </Button>
+                <Button className="py-2 w-full bg-white rounded-10 text-[#099976] font-semibold">
+                  View
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      {AddFund && (
+        <AddFundModal
+          heading="Add Fund"
+          isAddFundModalOpen={AddFund}
+          setAddFundModal={setAddFund}
+          subsection="Fund wallet with any of the underlisted options"
+        />
+      )}
+      {BuyPlan && (
+        <BuyPlanModal
+          heading="Beneficiary Details"
+          isBuyPlanModalOpen={BuyPlan}
+          setBuyPlanModal={setBuyPlan}
+          subsection="Kindly enter the details below to activate beneficiary ."
+        />
+      )}
     </div>
   );
 };

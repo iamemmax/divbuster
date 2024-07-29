@@ -52,7 +52,7 @@ const _OldHeaderButtons: React.FunctionComponent = () => {
   );
 };
 
-const pagesWithColoredBg = ["/", "/faqs", "/contact-us", "/about-us"];
+const pagesWithColoredBg = ["/", "/faqs", "/hospital-around", "/contact-us", "/about-us"];
 
 export function MainHeader() {
   const pathname = usePathname();
@@ -186,7 +186,7 @@ export function MainHeader() {
 
         <div className="flex items-center gap-6 md:hidden">
           <LinkButton
-            className="text-base text-main-solid xl:text-xl"
+            className="text-base text-white xl:text-xl"
             href={false ? "/dashboard" : "/login"}
             size="unstyled"
             variant="unstyled"

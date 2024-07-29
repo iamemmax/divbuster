@@ -212,7 +212,11 @@ const RemitalPlanModal = ({
                 </DialogTitle>
 
                 <DialogClose className="rounded-lg">
-                  <button onClick={() => setOpenShowRemitalPlan(false)}>
+                  <button
+                    onClick={() => {
+                      location.reload();
+                    }}
+                  >
                     Close
                   </button>
                 </DialogClose>

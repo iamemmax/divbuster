@@ -31,6 +31,9 @@ import { useQuery } from "react-query";
 import { getTransaction } from "@/app/(dashboard)/dashboard/api/fetchTransaction";
 import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
 import { capitalizeFirstLetter } from "@/utils";
+import TransactionsReceipts from "./TransactionsReceipts";
+import TransactionReceivedModal from "./TransactionsReceipts";
+import { NoData } from "../../../icons";
 
 interface transactionHeader {
   id?: number;
@@ -45,8 +48,10 @@ interface transactionHeader {
 interface Prop {
   userData: UserDataTypes | undefined;
 }
-const TransactionsTable = ({ userData }: Prop) => {
+const  TransactionsTable = ({ userData }: Prop) => {
   const [globalFilter, setGlobalFilter] = useState("");
+
+const [ TransactionDetails, setTransactionDetails] = useState(false)  
 
   // const [selectedRows, setSelectedRows] = useState<{
   //   [key: string]: boolean;
@@ -141,7 +146,7 @@ const TransactionsTable = ({ userData }: Prop) => {
     columnHelper.accessor("action", {
       header: () => "Action",
       cell: () => (
-        <Button className="rounded-10 bg-[#F6F9FF] py-1 px-3 text-[#242424] text-xs">
+        <Button className="rounded-10 bg-[#F6F9FF] py-1 px-3 text-[#242424] text-xs" onClick={() => setTransactionDetails(true)}>
           Details
         </Button>
       ),
@@ -173,13 +178,13 @@ const TransactionsTable = ({ userData }: Prop) => {
   return (
     <div>
       <div className="flex justify-between flex-wrap items-center">
-        <div className="flex items-center gap-2">
-          <h2 className="text-lg font-medium text-[#0E0E2C]">Transactions</h2>
-          <div className="bg-[#F0F5FF] shrink-0 px-2 py-1 rounded-full text-xs text-[#032282]">
-            <p>{transaction?.count ?? 0}</p>
-          </div>
-        </div>
         <div className="flex items-center flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-medium text-[#0E0E2C]">Transactions</h2>
+            <div className="bg-[#F0F5FF] shrink-0 px-2 py-1 rounded-full text-xs text-[#032282]">
+              <p>{transaction?.count ?? 0}</p>
+            </div>
+          </div>
           <div className="lg:w-50">
             <DebounceInput
               value={globalFilter ?? ""}
@@ -187,35 +192,35 @@ const TransactionsTable = ({ userData }: Prop) => {
             />
           </div>
 
-          <div className="">
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button className="flex items-center outline-none bg-white border-[.05rem] text-[#556575] text-sm font-medium px-5 border-[#D6D6D6] gap-x-2">
-                  <FiltersIcon /> Filter
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="min-w-[100px] px-4 bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade">
-                <DropdownMenuItem
-                  className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
-                  defaultValue={"successful"}
-                >
-                  SuccessFul
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
-                  defaultValue={"pending"}
-                >
-                  Pending
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
-                  defaultValue={"failed"}
-                >
-                  Failed
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+        </div>
+        <div className="">
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button className="flex items-center outline-none bg-white border-[.05rem] text-[#556575] text-sm font-medium px-5 border-[#D6D6D6] gap-x-2">
+                <FiltersIcon /> Filter
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="min-w-[100px] px-4 bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade">
+              <DropdownMenuItem
+                className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                defaultValue={"successful"}
+              >
+                SuccessFul
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                defaultValue={"pending"}
+              >
+                Pending
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                defaultValue={"failed"}
+              >
+                Failed
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <div className="w-full mt-4">
@@ -289,13 +294,25 @@ const TransactionsTable = ({ userData }: Prop) => {
                 ))}
               </TableBody>
             ) : (
-              <div className="w-ful flex justify-center items-center text-sm p-5">
-                No data found
+              <div className="">
+              <div className="w-full flex justify-center items-center text-sm p-5">
+                <NoData/>
+              </div>
+                <div className="text-center flex justify-center items-center text-[#0E0E2C] font-sans text-lg">No data to display yet as you haven't made any transactions.</div>
               </div>
             )}
           </Table>
         )}
       </div>
+      {
+        TransactionDetails &&
+        <TransactionReceivedModal
+          heading="Transaction Details"
+          subsection="Other details"
+          isTransactionDetailsModalOpen = {TransactionDetails}
+          setTransactionDetailsModal = {setTransactionDetails}
+        />
+      }
     </div>
   );
 };

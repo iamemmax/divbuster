@@ -145,8 +145,19 @@ export function PhoneLoginForm({}: GetStartedProps) {
           {isLoginLoading ? "Loading" : "Login"}
         </Button>
         <div className="flex justify-between items-center">
-          <div className="">
-            <p className="text-white text-xs">Keep me logged in</p>
+          <div className="flex items-center gap-[9px]">
+            <Input
+              className="h-3 w-3"
+              id="keep_me_logged"
+              type="checkbox"
+              value="yes"
+            />
+            <label
+              className="select-none font-sans text-xs text-white"
+              htmlFor="keep_me_logged"
+            >
+              Keep me logged in
+            </label>
           </div>
           <div className="">
             <LinkButton

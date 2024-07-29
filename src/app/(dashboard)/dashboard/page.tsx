@@ -9,9 +9,14 @@ import TransactionsTable from "../comp/components/transactions/table/Transaction
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
 import { capitalizeFirstLetter } from "@/utils";
 import { Spinner } from "@/icons/core";
+import Marquee from "@/app/(main)/misc/components/Marquee";
+import ActiveIcon from "../comp/icons/ActiveIcon";
+import CopyIcon3 from "../comp/icons/CopyIcon3";
+import { useClipboard } from "@/hooks";
 
 const Dashboard = () => {
   const { data: userData, isLoading } = useUser();
+  const { copy } = useClipboard();
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
       <div className="bg-main w-full flex justify-between py-6 px-6 md:px-[7.5rem] ">
@@ -39,26 +44,52 @@ const Dashboard = () => {
                   <p className="text-[#6E6E8B] text-xs md:text-sm font-medium">
                     Welcome, How are you today?
                   </p>
-                  <div className="bg-[#142D22] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle cx="5" cy="5" r="5" fill="#12B669" />
-                      <path
-                        d="M4.58224 7.17C4.49378 7.17 4.40975 7.13462 4.34783 7.0727L3.09619 5.82106C2.96794 5.6928 2.96794 5.48051 3.09619 5.35225C3.22445 5.22399 3.43675 5.22399 3.56501 5.35225L4.58224 6.36948L6.85553 4.09619C6.98378 3.96794 7.19608 3.96794 7.32434 4.09619C7.4526 4.22445 7.4526 4.43675 7.32434 4.56501L4.81664 7.0727C4.75472 7.13462 4.67069 7.17 4.58224 7.17Z"
-                        fill="white"
-                      />
-                    </svg>
-
-                    <p className="text-[.625rem] text-[#12B669]">Active plan</p>
-                  </div>
+                  {userData?.is_active ? (
+                    <div className="bg-[#142D22] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
+                      <ActiveIcon />
+                      <p className="text-[.625rem] text-[#12B669]">
+                        Active plan
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="bg-[#F6CE7F26] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
+                      <ActiveIcon color="#DB8C00" />
+                      <p className="text-[.625rem] text-[#DB8C00]">
+                        Inactive plan
+                      </p>
+                    </div>
+                  )}
                 </div>
-                <div className="hidden lg:block">
-                  <Button className="bg-[#099976] text-white text-xs font-medium">
+                <div className="hidden lg:flex items-start gap-2 ">
+                  <div className="flex flex-col bg-[#21253d] px-3 border-opacity-70 py-[.3125rem] border-[.0125rem] border-[#fff] rounded-10">
+                    <p className="text-white text-sm"> Referral code</p>
+                    <div className="flex items-center">
+                      <p className="text-white text-xs font-medium">012345</p>
+                      <Button
+                        className=" text-white px-0  py-[.0625rem]  flex items-start w-full bg-transparent text-xs font-medium"
+                        onClick={() => copy("012345" ?? "")}
+                      >
+                        <CopyIcon3 />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="flex flex-col bg-[#21253d] px-3 border-opacity-70 py-[.3125rem] border-[.0125rem] border-[#fff] rounded-10">
+                    <p className="text-white text-sm truncate w-[40px]">
+                      {" "}
+                      libelife01...
+                    </p>
+                    <div className="flex items-center">
+                      <p className="text-white text-xs font-medium">012345</p>
+                      <Button
+                        className=" text-white px-0  py-[.0625rem]  flex items-start w-full bg-transparent text-xs font-medium"
+                        onClick={() => copy("012345" ?? "")}
+                      >
+                        <CopyIcon3 />
+                      </Button>
+                    </div>
+                  </div>
+
+                  <Button className="bg-[#099976] text-white py-2 text-xs font-medium">
                     Renew plan
                   </Button>
                 </div>
@@ -68,7 +99,6 @@ const Dashboard = () => {
         </div>
       </div>
       <div className=" relative w-full px-6 md:px-[7.5rem] h-full ">
-        {" "}
         <div className="relative">
           <div className=" inset-x-0 top-[-4rem] absolute">
             <div className="">
@@ -88,6 +118,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      {/* <Marquee/> */}
     </div>
   );
 };
