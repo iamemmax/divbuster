@@ -2,9 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-html{
+html {
   scroll-snap-type: y mandatory !important;
 }
+
+
 @layer base {
   :root {
     --light-bg: rgb(246, 248, 253);
@@ -82,9 +84,16 @@ html{
 }
 
 @layer utilities {
+
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  .borderr {
+    width: 200px;
+    height: 100px;
+    background-image: url("data:image/svg+xml,<svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' fill='transparent' stroke='black' stroke-width='2' stroke-dasharray='10, 5' stroke-dashoffset='5' /></svg>");
   }
 
   .no-scrollbar {
@@ -121,11 +130,9 @@ html{
 
 .light__blue__gradient {
   border-radius: 12px !important;
-  background: linear-gradient(
-    45deg,
-    #5879fd -16.26%,
-    #5879fd 51.75%
-  ) !important;
+  background: linear-gradient(45deg,
+      #5879fd -16.26%,
+      #5879fd 51.75%) !important;
 }
 
 
@@ -169,7 +176,7 @@ input[type='radio']:checked::before {
   transform: scale(1);
 }
 
-ol.disc > li {
+ol.disc>li {
   list-style-type: disc;
   font-size: 0.85rem;
   font-weight: 500;
@@ -218,23 +225,18 @@ input.login-autofill-text:-webkit-autofill::first-line {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: radial-gradient(
-    59.67% 59.67% at 53.97% 40.33%,
-    #4c1961 0%,
-    #270336 100%
-  ) !important;
+  background: radial-gradient(59.67% 59.67% at 53.97% 40.33%,
+      #4c1961 0%,
+      #270336 100%) !important;
   border-radius: 10px !important;
 }
 
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
@@ -245,9 +247,12 @@ body {
 
 
 .trapezium {
-  width: 200px; /* Adjust the width as needed */
-  height: 100px; /* Adjust the height as needed */
-  background-color: #320808; /* Adjust the background color as needed */
+  width: 200px;
+  /* Adjust the width as needed */
+  height: 100px;
+  /* Adjust the height as needed */
+  background-color: #320808;
+  /* Adjust the background color as needed */
   position: relative;
 }
 
@@ -256,9 +261,12 @@ body {
   position: absolute;
   left: 0;
   top: 0;
-  border-top: 50px solid transparent; /* Adjust the top-left corner angle */
-  border-right: 200px solid #2a1c78; /* Adjust the background color */
-  border-bottom: 50px solid transparent; /* Adjust the bottom-left corner angle */
+  border-top: 50px solid transparent;
+  /* Adjust the top-left corner angle */
+  border-right: 200px solid #2a1c78;
+  /* Adjust the background color */
+  border-bottom: 50px solid transparent;
+  /* Adjust the bottom-left corner angle */
   width: 0;
 }
 
@@ -267,9 +275,12 @@ body {
   position: absolute;
   right: 0;
   top: 0;
-  border-top: 50px solid transparent; /* Adjust the top-right corner angle */
-  border-left: 200px solid #58761b; /* Adjust the background color */
-  border-bottom: 50px solid transparent; /* Adjust the bottom-right corner angle */
+  border-top: 50px solid transparent;
+  /* Adjust the top-right corner angle */
+  border-left: 200px solid #58761b;
+  /* Adjust the background color */
+  border-bottom: 50px solid transparent;
+  /* Adjust the bottom-right corner angle */
   width: 0;
 }
 
