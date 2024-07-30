@@ -470,9 +470,33 @@ export default function page() {
                     </div>
                     <div className='mt-2 flex flex-col md:flex-row gap-4'>
 
-                        <ul className='grid grid-cols-1 w-full gap-5 bg-white lg:grid-cols-2'>
+                        <ul className='flex flex-col gap-6 basis-1/2 bg-white'>
                             {
-                                data2?.map((items, index) => {
+                                data2?.slice(0, 10)?.map((items, index) => {
+                                    const [isOpen, setIsOpen] = useState(false)
+                                    return (
+                                        <Collapsible key={index}>
+                                            <CollapsibleTrigger className='flex justify-between items-center text-start w-full rounded bg-[#F6F9FF] text-[#032282] py-2.5 pl-6 pr-8 text-sm' onClick={() => setIsOpen(!isOpen)}>
+                                                {items.question}
+                                                <ArrowDown className={cn(isOpen && "rotate-180")} />
+                                            </CollapsibleTrigger>
+
+                                            <CollapsibleContent className='bg-[#F6F9FF] mt-1 rounded'>
+                                                {items?.nested?.map((item,idex:number)=>(
+                                                    <li key={idex} className={`flex justify-between  py-3 text-[#475569] gap-10 border-[#E2E8F0] text-xs w-full px-6 ${items?.nested?.length -1 !== idex ?"border-b-[0.4px]":""} `}>
+                                                        <p className='basis-1/2 text-left'>{item?.name}</p>
+                                                        <p className='basis-1/2 text-left'>{item?.value}</p>
+                                                    </li>
+                                                ))}
+                                            </CollapsibleContent>
+                                        </Collapsible>
+                                    )
+                                })
+                            }
+                        </ul>
+                        <ul className='flex flex-col gap-6 basis-1/2 '>
+                            {
+                                data2?.slice(0, 10)?.map((items, index) => {
                                     const [isOpen, setIsOpen] = useState(false)
                                     return (
                                         <Collapsible key={index}>

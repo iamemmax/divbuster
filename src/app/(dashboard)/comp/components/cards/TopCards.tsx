@@ -24,37 +24,23 @@ const TopCards = ({ userData: users }: Prop) => {
   const { data, isLoading: loadingAcct } = useQuery({
     queryFn: () => getUserAccountDetails(String(users?.phone_number)),
     queryKey: ["fetch-user-acct", users?.phone_number],
+    enabled: !!users?.phone_number,
   });
   const { data: currentPlan, isLoading: loadingPlan } = useQuery({
     queryFn: () => getUserCurrentPlan(String(users?.phone_number)),
     queryKey: ["fetch-user-current-plan", users?.phone_number],
+    enabled: !!users?.phone_number,
   });
   const { data: walletBalance } = useQuery({
     queryFn: () => getWalletBalance(String(users?.phone_number)),
     queryKey: ["fetch-wallet-balance", users?.phone_number],
+    enabled: !!users?.phone_number,
   });
   const { data: familyPlanData } = useQuery({
     queryFn: () => getFamilyPlan(String(users?.phone_number)),
     queryKey: ["fetch-family-plan", users?.phone_number],
+    enabled: !!users?.phone_number,
   });
-
-  const userData = {
-    accounts: {
-      account_name: "Olamide Adewale",
-      account_number: "0182492011",
-      bank: "Wema bank",
-    },
-    plan: {
-      enrolee_name: "Olamide Adewale",
-      plan_type: "Monthly",
-      enrolment_id: "81028389101",
-      expires_on: "Wed, 4th Aug 2024",
-    },
-    wallet: {
-      wallet_balance: "100000",
-    },
-    family_plan: [{}],
-  };
 
   const { copy } = useClipboard();
 
@@ -137,9 +123,9 @@ const TopCards = ({ userData: users }: Prop) => {
                 </div>
                 <div className="mt-3">
                   <h2 className="text-xs text-[#032282] font-medium font-sans">
-                    {userData?.plan?.plan_type}{" "}
+                    {users?.is_active}{" "}
                     <button className="bg-[#31D0AA26] rounded-md px-2 py-1 text-[#099976] text-[.625rem]">
-                      Active
+                      {users?.is_active ? "Active" : "In Active"}
                     </button>
                   </h2>
                   <p className="text-[#8490A8] text-[.625rem]">Plan type</p>

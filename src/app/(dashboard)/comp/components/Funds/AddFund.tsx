@@ -2,6 +2,7 @@
 import React from 'react'
 import { Button, ClientOnly, Dialog, DialogBody, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/core";
 import CopyIcon2 from '../../icons/CopyIcon2';
+import { useClipboard } from '@/hooks';
 
 
 
@@ -42,6 +43,7 @@ const FundDetails: data[] = [
         value:"Wema Bank"
     },
 ]
+const { copy } = useClipboard();
     return (
 
         <div className="rounded-xl">
@@ -81,14 +83,15 @@ const FundDetails: data[] = [
                                                             ))
                                                         }
                                                     </div>
-                                                    <div className='mt-5'>
+                                                    <Button className='mt-5 bg-transparent' onClick={() => copy("0182492011" ?? ""
+                                                    )}>
                                                         <CopyIcon2/>
-                                                    </div>
+                                                    </Button>
                                                     </article>
                                                 </div>
                                             </article>
                             </DialogBody>
-
+                            
                     </DialogContent>
 
                 </Dialog>

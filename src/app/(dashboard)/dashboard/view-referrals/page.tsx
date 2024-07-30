@@ -21,7 +21,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { hospitalVisitedData } from "@/app/(dashboard)/comp/mocks/hospitalVisited";
-import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
+import { UserDataTypes, useUser } from "@/app/(auth)/(onboarding)/misc";
 import { useQuery } from "react-query";
 import { getHospitalVisitedFunc } from "@/app/(dashboard)/dashboard/api/getHospitalVisited";
 import moment from "moment";
@@ -33,6 +33,9 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { FilterIcn } from "../../comp/icons";
 import TablePagination from "../../comp/components/TablePagination";
+import BackIcon from "../../comp/icons/Backicon";
+import { useRouter } from "next/navigation";
+import { getWalletBalance } from "../api/walletBalance";
 
 interface ReferralListHeader {
   referral_date: string;
@@ -45,42 +48,15 @@ interface ReferralListHeader {
   };
   amount_rewarded: number;
 }
-interface Prop {
-  userData: UserDataTypes | undefined;
-}
-const data = [
-  {
-    id: 1,
-    amount_rewarded: 900,
-    referee: {
-      id: "01518fce-be7c-47f1-8cb0-7c383ea6e819",
-      first_name: "Emmanuel",
-      last_name: "Ayodeji",
-      phone_number: "08131530994",
-      organization: null,
-      gender: null,
-      has_set_password: false,
-      hospitals: null,
-      phone_verified: true,
-      nin: null,
-      bvn: null,
-      email: null,
-      address: null,
-      referral_code: "",
-    },
-    referral_date: "2024-07-30T14:42:51.896295+01:00",
-    referrer_rewarded: true,
-    created_at: "2024-07-30T14:42:51.896311+01:00",
-  },
-];
+
 const SkeletonLoading = () => (
   <div className="animate-pulse">
     <div className="h-3 bg-gray-200 rounded mb-2"></div>
   </div>
 );
 
-const Page = ({ userData }: Prop) => {
-  const { isLoading } = useQuery({
+const Page = () => {
+  const { isLoading, data } = useQuery({
     queryFn: fetchReferralList,
     queryKey: ["fetch-referral-list"],
   });
@@ -125,26 +101,52 @@ const Page = ({ userData }: Prop) => {
   });
 
   const rows = useMemo(() => data ?? [], [data]);
-
+  const router = useRouter();
+  const { data: users } = useUser();
+  const { data: walletBalance } = useQuery({
+    queryFn: () => getWalletBalance(String(users?.phone_number)),
+    queryKey: ["fetch-wallet-balance", users?.phone_number],
+    enabled: !!users?.phone_number,
+  });
   return (
     <div className="bg-[#F5F9FE]">
+      <div className="px-6 md:px-[7.5rem] flex justify-between items-center flex-wrap py-10 bg-[#080d27]">
+        <Button
+          className="flex items- bg-transparent gap-3"
+          onClick={() => router?.back()}
+        >
+          <BackIcon />
+          <h2 className="text-white font-bold text-2xl">Referral</h2>
+        </Button>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-x-1">
+            <p className="text-white text-sm text-opacity-75">
+              Referral Wallet -
+            </p>{" "}
+            <h2 className="text-white font-bold text-xl">
+              ₦{walletBalance?.data?.referral_balance ?? 0}
+            </h2>
+          </div>
+          <Button className="bg-[#099976] text-white py-2 text-xs font-medium">
+            Withdraw
+          </Button>
+        </div>
+      </div>
       <div className="bg-main min-h-36"></div>
       <div className="h-full w-full px-6 md:px-[7.5rem] min-h-screen relative -mt-32">
         <div className="bg-white w-full h-full mx-auto py-[1.9375rem] px-[2.625rem] rounded-[.625rem]">
           <div className="flex justify-between">
-            <div className="flex flex-wrap gap-4 items-center">
-              <div className="flex items-center justify-between flex-wrap gap-4">
-                <div className="bg-[#F0F5FF] flex-1 rounded-lg py-2 px-4 flex items-center gap-2">
+            <div className="flex flex-wrap gap-4 w-full items-center">
+              <div className="flex items-center w-full  justify-between flex-wrap gap-4">
+                <div className="bg-[#F0F5FF]   rounded-lg py-2 px-4 flex items-center gap-2">
                   <Button className="px-0 py-0 bg-[#D0DFFF] shrink-0 w-5 h-5 flex justify-center items-center rounded-full">
                     <HospitalIcon2 />
                   </Button>
                   <h2 className="text-sm font-medium text-[#032282]">
                     List of Referees
                   </h2>
-                </div>
-                <div className="">
                   <div className="">
-                    {data?.length > 10 && (
+                    {data && data?.length > 10 && (
                       <TablePagination
                         pageSize={10}
                         table={table}
@@ -152,27 +154,29 @@ const Page = ({ userData }: Prop) => {
                       />
                     )}
                   </div>
+                </div>
+                <div className="flex items-center flex-wrap gap-4">
                   <div className="lg:w-64">
                     <DebounceInput
                       value={globalFilter ?? ""}
                       onChange={(value) => setGlobalFilter(String(value))}
                     />
                   </div>
+                  <div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="flex justify-center items-center text-[#556575] gap-x-3 bg-white border-[#D6D6D6] border-[0.8px] py-2 rounded-10 px-5">
+                        <FilterIcn />
+                        <h2>Filter</h2>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem>
+                          {/* Add filter options here */}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex justify-center items-center text-[#556575] gap-x-3 bg-white border-[#D6D6D6] border-[0.8px] py-2 rounded-10 px-5">
-                  <FilterIcn />
-                  <h2>Filter</h2>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    {/* Add filter options here */}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </div>
           </div>
 
