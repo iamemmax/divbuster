@@ -19,6 +19,7 @@ import { LinkButton } from "@/components/core";
 
 interface GetStartedProps {
   referral_code?: string | null;
+  userPhoneNumber: string;
 }
 
 const PasswordInput: React.FunctionComponent = () => {
@@ -68,7 +69,7 @@ const PasswordInput: React.FunctionComponent = () => {
   );
 };
 
-export function PhoneLoginForm({}: GetStartedProps) {
+export function PhoneLoginForm({ userPhoneNumber }: GetStartedProps) {
   const router = useRouter();
   const { state: isLoaderModalOpen, setTrue: _openLoaderModal } =
     useBooleanStateControl();
@@ -123,6 +124,7 @@ export function PhoneLoginForm({}: GetStartedProps) {
           name="phone"
           placeholder="Enter phone number"
           type="tel"
+          value={userPhoneNumber}
           required
         />
 

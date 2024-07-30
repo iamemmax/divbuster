@@ -14,6 +14,6 @@ interface Data {
 
 
 export const getUserCurrentPlan = async (phone:string) => {
-  const { data } = await adminAxios.get(`life-insurance/current-plan/?phone_number=${phone}`);
+  const { data } = await adminAxios.get(`current-plan/?phone_number=${phone}`);
   return data as currentPlanTypes;
 };

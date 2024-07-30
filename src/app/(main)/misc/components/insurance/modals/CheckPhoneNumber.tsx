@@ -21,7 +21,7 @@ import { useCheckRemitalUser } from "../api/detailRequest";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Prop {
   setOpenCheckPhoneNumberModal: Dispatch<SetStateAction<boolean>>;
@@ -59,7 +59,7 @@ const contactSchema = z.object({
     .trim()
     .min(10, { message: "Phone number should be at least 11 digits" }),
 
-  referal_code: z.string({ required_error: "Enter your phone number" }).trim(),
+  referral_code: z.string({ required_error: "Enter your phone number" }).trim(),
 });
 
 interface successResponseType {
@@ -105,6 +105,8 @@ const CheckPhoneNumber = ({
   setUserEmail,
   setShowPasswordModal,
 }: Prop) => {
+  const search = useSearchParams();
+  const myReferral = search?.get("referral_code");
   const {
     register,
     handleSubmit,
@@ -113,7 +115,7 @@ const CheckPhoneNumber = ({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       phone_number: "",
-      referal_code: "",
+      referral_code: myReferral || "",
     },
 
     mode: "onChange",
@@ -233,10 +235,11 @@ const CheckPhoneNumber = ({
           <DialogHeader className="bg-[#1B1687] ">
             <DialogTitle className="text-[#fff]">Details Request</DialogTitle>
 
-            <DialogClose className="rounded-full">
-              <button onClick={() => setOpenCheckPhoneNumberModal(false)}>
-                Close
-              </button>
+            <DialogClose
+              className="rounded-full"
+              onClick={() => setOpenCheckPhoneNumberModal(false)}
+            >
+              <button>Close</button>
             </DialogClose>
           </DialogHeader>
 
@@ -271,7 +274,9 @@ const CheckPhoneNumber = ({
                     )}
                   </div>
                 </div>
-                <div className="w-full mt-[2rem] text-sm font-normal">
+                <div
+                  className={`${myReferral ? "hidden" : ""} w-full mt-[2rem] text-sm font-normal`}
+                >
                   <Label
                     className="mb-1 block text-xs  text-[#fff]"
                     htmlFor="code"
@@ -281,11 +286,11 @@ const CheckPhoneNumber = ({
 
                   <div className={`relative mt-[.25rem] `}>
                     <Input2
-                      className={`${errors?.referal_code?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
+                      className={`${errors?.referral_code?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
                       placeholder="Enter code"
                       type="text"
                       id="code"
-                      {...register("referal_code")}
+                      {...register("referral_code")}
                     />
                   </div>
                 </div>

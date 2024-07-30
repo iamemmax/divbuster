@@ -7,7 +7,7 @@ import { Button, LinkButton } from "@/components/core";
 import { CheckStar } from "./misc/icons";
 import Marquee from "./misc/components/Marquee";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import CheckPhoneNumber from "./misc/components/insurance/modals/CheckPhoneNumber";
 
@@ -16,6 +16,7 @@ import RemitalUserDetails from "./misc/components/insurance/modals/remital/Remit
 import RemitalPlanModal from "./misc/components/insurance/modals/remital/RemitalPlanModal";
 import RemitalModalDetails from "./misc/components/insurance/modals/remital/RemitalModalDetails";
 import CreatepasswordModal from "./misc/components/insurance/modals/remital/CreatePassWordModal";
+import { useSearchParams } from "next/navigation";
 
 export default function Home() {
   const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
@@ -45,7 +46,13 @@ export default function Home() {
     id: "",
   });
   // console.log(phoneNumberCheckResponse);
-
+  const search = useSearchParams();
+  const getStarted = search.get("get-started");
+  useEffect(() => {
+    if (getStarted) {
+      document.getElementById("get-insurance-button")?.click();
+    }
+  }, [getStarted]);
   return (
     <main className="max-w-max md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
@@ -107,6 +114,7 @@ export default function Home() {
                 "flex items-center cursor-pointer justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
                 "font-display"
               )}
+              id="get-insurance-button"
               variant="white"
               onClick={() => setOpenCheckPhoneNumberModal(true)}
             >

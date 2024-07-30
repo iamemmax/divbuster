@@ -144,12 +144,13 @@ export function PasswordForm() {
           });
           setUserId(data?.user?.id);
           if (data) {
-            setOpenShowRemitalPlan(true);
-            if (emailAddress !== undefined) {
-              setOpenShowRemitalPlan(true);
-            } else {
-              router.push("/login");
-            }
+            // setOpenShowRemitalPlan(true);
+            // if (emailAddress !== undefined) {
+            //   // setOpenShowRemitalPlan(true);
+            // } else {
+            //   router.push("/login");
+            // }
+            router.push("/login");
           }
           // router?.push("/");
         },
@@ -254,13 +255,13 @@ export function PasswordForm() {
             {/* </div> */}
           </div>
 
-          {openRemitalPlan && (
+          {/* {openRemitalPlan && (
             <RemitalPlanModal
               openRemitalPlan={openRemitalPlan}
               setOpenShowRemitalPlan={setOpenShowRemitalPlan}
               userId={userId}
             />
-          )}
+          )} */}
           {errors?.passwordData?.confirm_password && (
             <FormError
               className="mt-3 bg-red-900/40 text-white"

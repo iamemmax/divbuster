@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/core";
+import { Button, LinkButton } from "@/components/core";
 import React, { useState } from "react";
 import CopyIcon from "../../icons/CopyIcon";
 import WalletIcon from "../../icons/WalletIcon";
@@ -64,7 +64,7 @@ const TopCards = ({ userData: users }: Prop) => {
   return (
     <div className="">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 xl:grid-cols-4">
-        <div className="bg-white rounded-10 p-1">
+        {/* <div className="bg-white rounded-10 p-1">
           <div className="bg-[#F0F5FF] h-full shadow-sm rounded-10  px-6 py-[.875rem] ">
             <p className="text-xs font-sans font-medium text-black">
               Transfer to details below to fund your plan.
@@ -114,8 +114,8 @@ const TopCards = ({ userData: users }: Prop) => {
               </>
             )}
           </div>
-        </div>
-        {/* 
+        </div> */}
+
         <div className="bg-white rounded-10 px-6 py-4 shadow-sm">
           {loadingPlan ? (
             <div className="flex justify-center items-center w-full py-6">
@@ -165,7 +165,7 @@ const TopCards = ({ userData: users }: Prop) => {
               </div>
             </>
           )}
-        </div> */}
+        </div>
 
         <div className="bg-white rounded-10 p-1">
           <div className="bg-[#F0F5FF] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
@@ -256,13 +256,13 @@ const TopCards = ({ userData: users }: Prop) => {
                 <div className="flex items-center gap-x-1">
                   <FamilyUserIcon backgroundColor="#FFF2D9" color="#DB8C00" />
                   <h2 className="text-sm font-semibold font-sans  text-[#DB8C00]">
-                    Corporate
+                    Dependent
                   </h2>
                 </div>
                 <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
                   <h2 className="text-[#D98B02] text-xl font-bold">0</h2>
                   <div className="bg-[#FFF2D9] py-1 px-2 rounded-md">
-                    <p className="text-xxs text-[#DB8C00]">Employees</p>
+                    <p className="text-xxs text-[#DB8C00]">Beneficiaries</p>
                   </div>
                 </div>
                 <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
@@ -344,9 +344,12 @@ const TopCards = ({ userData: users }: Prop) => {
                 <Button className=" py-2 w-full bg-white rounded-10 text-[#099976] font-semibold">
                   Withdraw
                 </Button>
-                <Button className="py-2 w-full bg-white rounded-10 text-[#099976] font-semibold">
+                <LinkButton
+                  href={"/dashboard/view-referrals"}
+                  className="py-2 w-full bg-white rounded-10 text-[#099976] font-semibold"
+                >
                   View
-                </Button>
+                </LinkButton>
               </div>
             </div>
           </div>

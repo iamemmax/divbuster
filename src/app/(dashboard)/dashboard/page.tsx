@@ -8,15 +8,32 @@ import HospitalVisited from "../comp/components/cards/hospital/table/HospitalVis
 import TransactionsTable from "../comp/components/transactions/table/TransactionsTable";
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
 import { capitalizeFirstLetter } from "@/utils";
-import { Spinner } from "@/icons/core";
+import { SmallSpinner, Spinner } from "@/icons/core";
 import Marquee from "@/app/(main)/misc/components/Marquee";
 import ActiveIcon from "../comp/icons/ActiveIcon";
 import CopyIcon3 from "../comp/icons/CopyIcon3";
 import { useClipboard } from "@/hooks";
+import { useQuery, useQueryClient } from "react-query";
+import { fetchReferralCode } from "./api/referral/fetchReferralCode";
 
 const Dashboard = () => {
   const { data: userData, isLoading } = useUser();
   const { copy } = useClipboard();
+  const queryClient = useQueryClient();
+
+  const {
+    data,
+    refetch,
+    isLoading: loadinGenerate,
+  } = useQuery({
+    queryFn: () => fetchReferralCode(userData?.user_id as string),
+    queryKey: ["generate-qrcode", userData?.user_id],
+    enabled: false,
+    onSuccess: () => {
+      // Invalidate user details query to refetch data
+      queryClient.invalidateQueries(["user-details", data?.referral_code]);
+    },
+  });
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
       <div className="bg-main w-full flex justify-between py-6 px-6 md:px-[7.5rem] ">
@@ -61,34 +78,50 @@ const Dashboard = () => {
                   )}
                 </div>
                 <div className="hidden lg:flex items-start gap-2 ">
-                  <div className="flex flex-col bg-[#21253d] px-3 border-opacity-70 py-[.3125rem] border-[.0125rem] border-[#fff] rounded-10">
-                    <p className="text-white text-sm"> Referral code</p>
-                    <div className="flex items-center">
-                      <p className="text-white text-xs font-medium">012345</p>
-                      <Button
-                        className=" text-white px-0  py-[.0625rem]  flex items-start w-full bg-transparent text-xs font-medium"
-                        onClick={() => copy("012345" ?? "")}
+                  {userData?.referral_code ? (
+                    <div className="flex items-center gap-2">
+                      <div className="">
+                        <p className="text-white text-xs">
+                          Referral link/code -
+                        </p>
+                      </div>
+                      <div
+                        className="flex items-center gap-x-2 bg-[#21253d] px-3 rounded-md cursor-pointer border-opacity-70 py-[.5625rem] "
+                        onClick={() =>
+                          copy(
+                            ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}` ??
+                              ""
+                          )
+                        }
                       >
-                        <CopyIcon3 />
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="flex flex-col bg-[#21253d] px-3 border-opacity-70 py-[.3125rem] border-[.0125rem] border-[#fff] rounded-10">
-                    <p className="text-white text-sm truncate w-[40px]">
-                      {" "}
-                      libelife01...
-                    </p>
-                    <div className="flex items-center">
-                      <p className="text-white text-xs font-medium">012345</p>
-                      <Button
-                        className=" text-white px-0  py-[.0625rem]  flex items-start w-full bg-transparent text-xs font-medium"
-                        onClick={() => copy("012345" ?? "")}
+                        <p className="text-white max-w-[6.25rem] text-xxs truncate">
+                          {` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}`}
+                        </p>
+                        <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
+                          <CopyIcon3 height={15} width={15} />
+                        </Button>
+                      </div>
+                      <div
+                        className="flex items-center gap-x-2 bg-[#21253d] px-3 rounded-md cursor-pointer border-opacity-70 py-[.5625rem] "
+                        onClick={() => copy(userData?.referral_code ?? "")}
                       >
-                        <CopyIcon3 />
-                      </Button>
+                        <p className="text-white max-w-[3.25rem] text-xxs truncate">
+                          {userData?.referral_code ?? ""}
+                        </p>
+                        <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
+                          <CopyIcon3 height={15} width={15} />
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-
+                  ) : (
+                    <Button onClick={() => refetch()}>
+                      {loadinGenerate ? (
+                        <SmallSpinner color="white" />
+                      ) : (
+                        "Generate Referral"
+                      )}
+                    </Button>
+                  )}
                   <Button className="bg-[#099976] text-white py-2 text-xs font-medium">
                     Renew plan
                   </Button>

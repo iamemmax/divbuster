@@ -293,10 +293,11 @@ const RemitalUserDetails = ({
                 <DialogTitle className="'font-DMSans' font-medium text-[#fff]">
                   User Details
                 </DialogTitle>
-                <DialogClose className="rounded-full">
-                  <button onClick={() => setOpenRemitalUserDetail(false)}>
-                    close
-                  </button>
+                <DialogClose
+                  className="rounded-full"
+                  onClick={() => setOpenRemitalUserDetail(false)}
+                >
+                  <button>close</button>
                 </DialogClose>
               </DialogHeader>
 
@@ -421,13 +422,12 @@ const RemitalUserDetails = ({
                       )}
                     </div>
                   </div>
-                 
+
                   <div className="pb-[4rem]">
                     <button
                       className="mt-[4.5rem] flex items-center gap-x-5 justify-center font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
         shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                       type="submit"
-                    
                     >
                       Continue{" "}
                       {loadingSubmit && (

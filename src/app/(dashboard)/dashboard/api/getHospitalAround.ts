@@ -6,6 +6,6 @@ interface hospitalAroundData {
   lga: string;
 }
 export const getHospitalAroundFunc = async (phone:string) => {
-  const { data } = await adminAxios.get(`life-insurance/hospitals-around-me/?phone_number=${phone}`);
+  const { data } = await adminAxios.get(`hospitals-around-me/?phone_number=${phone}`);
   return data as hospitalAroundData[];
 };
