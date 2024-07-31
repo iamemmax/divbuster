@@ -206,7 +206,7 @@ const RemitalUserDetails = ({
             setOpenRemitalUserDetail(false);
           } else {
             setIsLoading(true);
-            // router.push(`/create-password?email=${selectedEmail}`);
+
             setShowPasswordModal(true);
             setOpenRemitalUserDetail(false);
           }
