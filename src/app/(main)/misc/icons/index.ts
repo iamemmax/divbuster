@@ -3,3 +3,7 @@ export { default as CrossIcon } from './Crossicon';
 export { default as GroupIcon } from './GroupIcon';
 export { default as LearnMore } from './LearnMore';
 export { default as UnderLine } from './Underline';
+export { default as Testimonial1 } from './Testimonial1';
+export { default as Testimonial2 } from './Testimonial2';
+export { default as Testimonial3 } from './Testimonial3';
+export { default as Testimonial4 } from './Testimonial4';

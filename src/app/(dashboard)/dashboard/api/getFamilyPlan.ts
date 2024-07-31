@@ -6,6 +6,6 @@ interface familyPlanType {
   button: string;
 }
 export const getFamilyPlan = async (phone:string) => {
-  const { data } = await adminAxios.get(`life-insurance/family-plan/?phone_number=${phone}`);
+  const { data } = await adminAxios.get(`family-plan/?phone_number=${phone}`);
   return data as familyPlanType ;
 };

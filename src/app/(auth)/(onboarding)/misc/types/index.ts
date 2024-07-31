@@ -239,6 +239,7 @@ export interface UserDataTypes {
   is_remita: boolean;
   is_active: boolean;
   is_staff: string;
+  referral_code: string
 }
 
 interface Hospitals {

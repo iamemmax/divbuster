@@ -23,10 +23,6 @@ import { AxiosError } from "axios";
 import useDataStore from "@/app/store/useStore";
 import { SmallSpinner } from "@/icons/core";
 
-interface GetStartedProps {
-  referral_code?: string | null;
-}
-
 // Define Zod schema using TypeScript types
 const PasswordFormSchema = z.object({
   passwordData: z
@@ -148,12 +144,13 @@ export function PasswordForm() {
           });
           setUserId(data?.user?.id);
           if (data) {
-            setOpenShowRemitalPlan(true);
-            if (emailAddress !== undefined) {
-              setOpenShowRemitalPlan(true);
-            } else {
-              router.push("/login");
-            }
+            // setOpenShowRemitalPlan(true);
+            // if (emailAddress !== undefined) {
+            //   // setOpenShowRemitalPlan(true);
+            // } else {
+            //   router.push("/login");
+            // }
+            router.push("/login");
           }
           // router?.push("/");
         },
@@ -203,8 +200,8 @@ export function PasswordForm() {
             </Label>
 
             <div className="flex items-center w-full  pr-10 md:pr-16 !bg-white/10 rounded-lg h-[3rem] ">
-              <Input
-                className="login-autofill-text  pr-7 login-no-chrome-autofill-bg h-full  outline-none border-none  rounded-lg bg-transparent  px-6 py-3.5 text-sm font-sans font-medium text-white placeholder:text-white  focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#403C3A]"
+              <input
+                className="login-autofill-text  pr-7 login-no-chrome-autofill-bg h-full  outline-none border-none  rounded-lg bg-transparent  px-6 py-3.5 text-sm font-sans font-medium text-white placeholder:text-white  focus-visible:outline-none  focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#403C3A]"
                 id="password"
                 placeholder="Enter password"
                 type={passwordShown ? "text" : "password"}
@@ -258,13 +255,13 @@ export function PasswordForm() {
             {/* </div> */}
           </div>
 
-          {openRemitalPlan && (
+          {/* {openRemitalPlan && (
             <RemitalPlanModal
               openRemitalPlan={openRemitalPlan}
               setOpenShowRemitalPlan={setOpenShowRemitalPlan}
               userId={userId}
             />
-          )}
+          )} */}
           {errors?.passwordData?.confirm_password && (
             <FormError
               className="mt-3 bg-red-900/40 text-white"

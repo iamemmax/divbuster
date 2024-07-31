@@ -14,6 +14,7 @@ import { useUser } from "@/app/(auth)/(onboarding)/misc";
 
 export function DashboardHeader() {
   const { data: userData, isLoading } = useUser();
+
   const navLinks = [
     {
       title: "Dashboard",
@@ -62,7 +63,7 @@ export function DashboardHeader() {
           </div>
           <div className=" hidden lg:flex">
             <div className="flex gap-4">
-              <Link href='/'>
+              <Link href="/">
                 <Button className="rounded-full w-9 h-9 flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
                   <HomeIcon height={15} width={16} />
                 </Button>

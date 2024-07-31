@@ -48,10 +48,10 @@ interface transactionHeader {
 interface Prop {
   userData: UserDataTypes | undefined;
 }
-const  TransactionsTable = ({ userData }: Prop) => {
+const TransactionsTable = ({ userData }: Prop) => {
   const [globalFilter, setGlobalFilter] = useState("");
 
-const [ TransactionDetails, setTransactionDetails] = useState(false)  
+  const [TransactionDetails, setTransactionDetails] = useState(false);
 
   // const [selectedRows, setSelectedRows] = useState<{
   //   [key: string]: boolean;
@@ -60,6 +60,7 @@ const [ TransactionDetails, setTransactionDetails] = useState(false)
   const { data: transaction, isLoading } = useQuery({
     queryFn: () => getTransaction(String(userData?.phone_number)),
     queryKey: ["fetch-transaction", userData?.phone_number],
+    enabled: !!userData?.phone_number,
   });
 
   const columnHelper = createColumnHelper<transactionHeader>();
@@ -146,7 +147,10 @@ const [ TransactionDetails, setTransactionDetails] = useState(false)
     columnHelper.accessor("action", {
       header: () => "Action",
       cell: () => (
-        <Button className="rounded-10 bg-[#F6F9FF] py-1 px-3 text-[#242424] text-xs" onClick={() => setTransactionDetails(true)}>
+        <Button
+          className="rounded-10 bg-[#F6F9FF] py-1 px-3 text-[#242424] text-xs"
+          onClick={() => setTransactionDetails(true)}
+        >
           Details
         </Button>
       ),
@@ -191,7 +195,6 @@ const [ TransactionDetails, setTransactionDetails] = useState(false)
               onChange={(value) => setGlobalFilter(String(value))}
             />
           </div>
-
         </div>
         <div className="">
           <DropdownMenu>
@@ -295,24 +298,25 @@ const [ TransactionDetails, setTransactionDetails] = useState(false)
               </TableBody>
             ) : (
               <div className="">
-              <div className="w-full flex justify-center items-center text-sm p-5">
-                <NoData/>
-              </div>
-                <div className="text-center flex justify-center items-center text-[#0E0E2C] font-sans text-lg">No data to display yet as you haven't made any transactions.</div>
+                <div className="w-full flex justify-center items-center text-sm p-5">
+                  <NoData />
+                </div>
+                <div className="text-center flex justify-center items-center text-[#0E0E2C] font-sans text-lg">
+                  No data to display yet as you haven't made any transactions.
+                </div>
               </div>
             )}
           </Table>
         )}
       </div>
-      {
-        TransactionDetails &&
+      {TransactionDetails && (
         <TransactionReceivedModal
           heading="Transaction Details"
           subsection="Other details"
-          isTransactionDetailsModalOpen = {TransactionDetails}
-          setTransactionDetailsModal = {setTransactionDetails}
+          isTransactionDetailsModalOpen={TransactionDetails}
+          setTransactionDetailsModal={setTransactionDetails}
         />
-      }
+      )}
     </div>
   );
 };

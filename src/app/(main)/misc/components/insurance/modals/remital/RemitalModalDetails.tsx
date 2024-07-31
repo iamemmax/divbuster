@@ -152,10 +152,11 @@ const RemitalModalDetails = ({
         <DialogContent className="!overflow-hidden max-h-[94vh] md:w-[28.75rem]">
           <DialogHeader className="bg-[#1B1687]">
             <DialogTitle className="text-[#fff]">Remita Details</DialogTitle>
-            <DialogClose className="rounded-full">
-              <button onClick={() => setOpenRemitalDetailModal(false)}>
-                Close
-              </button>
+            <DialogClose
+              className="rounded-full"
+              onClick={() => setOpenRemitalDetailModal(false)}
+            >
+              <button>Close</button>
             </DialogClose>
           </DialogHeader>
           <DialogBody className="bg-[#141B3f] md:w-full">

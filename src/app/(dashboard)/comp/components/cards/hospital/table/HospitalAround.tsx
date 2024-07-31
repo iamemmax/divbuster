@@ -43,6 +43,7 @@ const HospitalAround = ({ userData }: Prop) => {
   const { data: HospitalAround, isLoading } = useQuery({
     queryFn: () => getHospitalAroundFunc(String(userData?.phone_number)),
     queryKey: ["fetch-hospital-around", userData?.phone_number],
+    enabled: !!userData?.phone_number,
   });
 
   const columnHelper = createColumnHelper<HospitaAroundHeader>();

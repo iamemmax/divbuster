@@ -17,6 +17,6 @@ interface Transaction {
 }
 
 export const    getTransaction = async (phone:string) => {
-  const { data } = await adminAxios.get(`life-insurance/transactions/?phone_number=${phone}`);
+  const { data } = await adminAxios.get(`transactions/?phone_number=${phone}`);
   return data as TransactionType
 };
