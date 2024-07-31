@@ -18,6 +18,8 @@ import { fetchReferralCode } from "./api/referral/fetchReferralCode";
 
 const Dashboard = () => {
   const { data: userData, isLoading } = useUser();
+
+  console.log(userData, "uyu");
   const { copy } = useClipboard();
   const queryClient = useQueryClient();
 

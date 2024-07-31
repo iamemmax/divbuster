@@ -36,6 +36,8 @@ import TablePagination from "../../comp/components/TablePagination";
 import BackIcon from "../../comp/icons/Backicon";
 import { useRouter } from "next/navigation";
 import { getWalletBalance } from "../api/walletBalance";
+import WithDrawalModal from "../../comp/components/withdrawal/WithdrawalModal";
+import WithDrawalSuccessModal from "../../comp/components/withdrawal/WidrawalSuccessModal";
 
 interface ReferralListHeader {
   referral_date: string;
@@ -56,6 +58,10 @@ const SkeletonLoading = () => (
 );
 
 const Page = () => {
+  const [showWithdrawalModal, setshowWithdrawalModal] = useState(false);
+  const [withdrawalAmount, setWithdrawalAmount] = useState("");
+  const [showWithdrawalSuccessModal, setshowWithdrawalSuccessModal] =
+    useState(false);
   const { isLoading, data } = useQuery({
     queryFn: fetchReferralList,
     queryKey: ["fetch-referral-list"],
@@ -108,6 +114,7 @@ const Page = () => {
     queryKey: ["fetch-wallet-balance", users?.phone_number],
     enabled: !!users?.phone_number,
   });
+
   return (
     <div className="bg-[#F5F9FE]">
       <div className="px-6 md:px-[7.5rem] flex justify-between items-center flex-wrap py-10 bg-[#080d27]">
@@ -127,7 +134,10 @@ const Page = () => {
               ₦{walletBalance?.data?.referral_balance ?? 0}
             </h2>
           </div>
-          <Button className="bg-[#099976] text-white py-2 text-xs font-medium">
+          <Button
+            className="bg-[#099976] text-white py-2 text-xs font-medium"
+            onClick={() => setshowWithdrawalModal(true)}
+          >
             Withdraw
           </Button>
         </div>
@@ -282,6 +292,23 @@ const Page = () => {
           </div>
         </div>
       </div>
+      {showWithdrawalModal && (
+        <WithDrawalModal
+          setshowWithdrawalModal={setshowWithdrawalModal}
+          showWithdrawalModal={showWithdrawalModal}
+          referralWalletBalance={walletBalance?.data?.referral_balance}
+          setshowWithdrawalSuccessModal={setshowWithdrawalSuccessModal}
+          setWithdrawalAmount={setWithdrawalAmount}
+        />
+      )}
+
+      {showWithdrawalSuccessModal && (
+        <WithDrawalSuccessModal
+          showWithdrawalSuccessModal={showWithdrawalSuccessModal}
+          setshowWithdrawalSuccessModal={setshowWithdrawalSuccessModal}
+          withdrawalAmount={withdrawalAmount}
+        />
+      )}
     </div>
   );
 };

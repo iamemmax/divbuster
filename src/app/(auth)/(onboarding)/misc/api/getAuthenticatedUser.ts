@@ -18,4 +18,4 @@ export const getAuthenticatedUser = async (): Promise<UserDataTypes> => {
 };
 
 export const useUser = () =>
-  useQuery("user-details", getAuthenticatedUser, { cacheTime: 1000 * 60 * 5 });
+  useQuery("user-details", getAuthenticatedUser, { retry: 2 });

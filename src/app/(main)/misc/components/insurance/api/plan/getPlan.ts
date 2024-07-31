@@ -26,7 +26,7 @@ interface Plantype {
   name: string;
 }
 export const getPlan = async ( ) => {
-    const {data} = await adminAxios.get(`life-insurance/insurance_plan/`);
+    const {data} = await adminAxios.get(`/insurance_plan/`);
     return data as plantypes[]
      
 };

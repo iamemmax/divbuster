@@ -16,6 +16,8 @@ import { getFamilyPlan } from "@/app/(dashboard)/dashboard/api/getFamilyPlan";
 import AddFundModal from "../Funds/AddFund";
 import BuyPlanModal from "../Funds/BuyPlanForFamily";
 import FamilyUserIcon from "./icons/UserIcon";
+import WithDrawalModal from "../withdrawal/WithdrawalModal";
+import WithDrawalSuccessModal from "../withdrawal/WidrawalSuccessModal";
 
 interface Prop {
   userData: UserDataTypes | undefined;
@@ -46,6 +48,10 @@ const TopCards = ({ userData: users }: Prop) => {
 
   const [AddFund, setAddFund] = useState(false);
   const [BuyPlan, setBuyPlan] = useState(false);
+  const [showWithdrawalModal, setshowWithdrawalModal] = useState(false);
+  const [showWithdrawalSuccessModal, setshowWithdrawalSuccessModal] =
+    useState(false);
+  const [withdrawalAmount, setWithdrawalAmount] = useState("");
 
   return (
     <div className="">
@@ -327,7 +333,10 @@ const TopCards = ({ userData: users }: Prop) => {
                 </h2>
               </div>
               <div className="flex w-full items-center gap-3">
-                <Button className=" py-2 w-full bg-white rounded-10 text-[#099976] font-semibold">
+                <Button
+                  className=" py-2 w-full bg-white rounded-10 text-[#099976] font-semibold"
+                  onClick={() => setshowWithdrawalModal(true)}
+                >
                   Withdraw
                 </Button>
                 <LinkButton
@@ -355,6 +364,23 @@ const TopCards = ({ userData: users }: Prop) => {
           isBuyPlanModalOpen={BuyPlan}
           setBuyPlanModal={setBuyPlan}
           subsection="Kindly enter the details below to activate beneficiary ."
+        />
+      )}
+      {showWithdrawalModal && (
+        <WithDrawalModal
+          setshowWithdrawalModal={setshowWithdrawalModal}
+          showWithdrawalModal={showWithdrawalModal}
+          referralWalletBalance={walletBalance?.data?.referral_balance}
+          setshowWithdrawalSuccessModal={setshowWithdrawalSuccessModal}
+          setWithdrawalAmount={setWithdrawalAmount}
+        />
+      )}
+
+      {showWithdrawalSuccessModal && (
+        <WithDrawalSuccessModal
+          showWithdrawalSuccessModal={showWithdrawalSuccessModal}
+          setshowWithdrawalSuccessModal={setshowWithdrawalSuccessModal}
+          withdrawalAmount={withdrawalAmount}
         />
       )}
     </div>
