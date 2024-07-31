@@ -24,13 +24,7 @@ export default function ProtectedRouteGuard({ children }: ProtectedRouteProps) {
   const path = pathname; // Access pathname using useRouter
 
   const { data, isError, error } = useUser();
-  React.useEffect(() => {
-    console.log(error && error?.message);
 
-    // if(){}
-
-    return () => {};
-  }, []);
 
   React.useEffect(() => {
     if (!isLoading && !isAuthenticated && protectedRoutes.includes(path)) {
