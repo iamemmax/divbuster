@@ -6,7 +6,6 @@ import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/authentication"; // Import your authentication context
 import { ScrollingFeatures } from "../../login/misc/components";
 import ScrollAnimationSVG from "../../login/misc/components/ScrollfeatureSvg";
-import { useUser } from "../api";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -22,15 +21,6 @@ export default function ProtectedRouteGuard({ children }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading } = authState;
 
   const path = pathname; // Access pathname using useRouter
-
-  const { data, isError, error } = useUser();
-  React.useEffect(() => {
-    console.log(error && error?.message);
-
-    // if(){}
-
-    return () => {};
-  }, []);
 
   React.useEffect(() => {
     if (!isLoading && !isAuthenticated && protectedRoutes.includes(path)) {
