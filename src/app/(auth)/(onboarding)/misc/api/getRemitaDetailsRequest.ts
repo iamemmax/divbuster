@@ -17,7 +17,7 @@ export interface remitadetails {
 export const RemitaUserDetails= async(phonenumber:string):Promise<remitadetails>=>{
     const {data} = await adminAxios.post(
 
-        `life-insurance/check-remita-user/`,{
+        `check-remita-user/`,{
 
           phone_number: phonenumber
         }

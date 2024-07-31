@@ -14,7 +14,7 @@ export interface StateLists {
 export const getNigerianStateList = async ():Promise<string[]> => {
 
     const {data} = await adminAxios.get(
-        `life-insurance/states/`
+        `/states/`
     );
     return data;
 };
