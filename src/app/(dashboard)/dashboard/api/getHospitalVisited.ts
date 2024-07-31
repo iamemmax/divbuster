@@ -11,6 +11,6 @@ interface VisitData {
   count: number;
 }
 export const getHospitalVisitedFunc = async (phone:string) => {
-  const { data } = await adminAxios.get(`life-insurance/hospital-visits/?phone_number=${phone}`);
+  const { data } = await adminAxios.get(`hospital-visits/?phone_number=${phone}`);
   return data as VisitData
 };

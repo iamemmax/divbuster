@@ -21,7 +21,7 @@ import { useCheckRemitalUser } from "../api/detailRequest";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Prop {
   setOpenCheckPhoneNumberModal: Dispatch<SetStateAction<boolean>>;
@@ -58,6 +58,8 @@ const contactSchema = z.object({
     .string({ required_error: "Enter your phone number" })
     .trim()
     .min(10, { message: "Phone number should be at least 11 digits" }),
+
+  referral_code: z.string({ required_error: "Enter your phone number" }).trim(),
 });
 
 interface successResponseType {
@@ -103,6 +105,8 @@ const CheckPhoneNumber = ({
   setUserEmail,
   setShowPasswordModal,
 }: Prop) => {
+  const search = useSearchParams();
+  const myReferral = search?.get("referral_code");
   const {
     register,
     handleSubmit,
@@ -111,6 +115,7 @@ const CheckPhoneNumber = ({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       phone_number: "",
+      referral_code: myReferral || "",
     },
 
     mode: "onChange",
@@ -230,10 +235,11 @@ const CheckPhoneNumber = ({
           <DialogHeader className="bg-[#1B1687] ">
             <DialogTitle className="text-[#fff]">Details Request</DialogTitle>
 
-            <DialogClose className="rounded-full">
-              <button onClick={() => setOpenCheckPhoneNumberModal(false)}>
-                Close
-              </button>
+            <DialogClose
+              className="rounded-full"
+              onClick={() => setOpenCheckPhoneNumberModal(false)}
+            >
+              <button>Close</button>
             </DialogClose>
           </DialogHeader>
 
@@ -254,19 +260,13 @@ const CheckPhoneNumber = ({
 
                   <div className={`relative mt-[.25rem] `}>
                     <Input2
-                      className={`${errors?.phone_number?.message ? "border border-red-700" : ""} text-[#fff]`}
+                      className={`${errors?.phone_number?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
                       placeholder="Enter your phone number"
                       type="number"
                       id="phone"
                       {...register("phone_number")}
                     />
-                    {/* 
-                      {errors?.phone_number && (
-                        <FormError
-                          className="bg-red-900/40 text-white"
-                          errorMessage={errors?.phone_number?.message}
-                        />
-                      )} */}
+
                     {isLoading && (
                       <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
                         <SmallSpinner className="" color="#fff" />
@@ -274,13 +274,33 @@ const CheckPhoneNumber = ({
                     )}
                   </div>
                 </div>
+                <div
+                  className={`${myReferral ? "hidden" : ""} w-full mt-[2rem] text-sm font-normal`}
+                >
+                  <Label
+                    className="mb-1 block text-xs  text-[#fff]"
+                    htmlFor="code"
+                  >
+                    Referral Code (Optional)
+                  </Label>
+
+                  <div className={`relative mt-[.25rem] `}>
+                    <Input2
+                      className={`${errors?.referral_code?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
+                      placeholder="Enter code"
+                      type="text"
+                      id="code"
+                      {...register("referral_code")}
+                    />
+                  </div>
+                </div>
                 <div className="pb-[2rem]">
                   <button
-                    className=" mt-[3rem] font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
+                    className=" mt-[3rem] flex items-center justify-center gap-x-2 font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
                                     shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                     type="submit"
                   >
-                    Continue
+                    Continue {isLoading && <SmallSpinner color="blue" />}
                   </button>
                 </div>
               </form>

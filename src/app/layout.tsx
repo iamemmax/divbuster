@@ -1,4 +1,4 @@
-import {  DM_Sans, Wix_Madefor_Display } from "next/font/google";
+import { DM_Sans, Wix_Madefor_Display } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/utils/classNames";
 import { Suspense } from "react";
@@ -6,17 +6,17 @@ import ReactQueryProvider from "@/lib/reactQuery";
 import { AuthProvider } from "@/contexts/authentication";
 import ProtectedRouteGuard from "./(auth)/(onboarding)/misc/components/ProtectedRouteGuard";
 import { Wrapper } from "./(auth)/(onboarding)/misc/components/Wrapper";
-
+import { useUser } from "./(auth)/(onboarding)/misc";
 
 const sans = DM_Sans({
   subsets: ["latin"],
-  variable: '--font-sans',
-  display: 'swap'
+  variable: "--font-sans",
+  display: "swap",
 });
 const display = Wix_Madefor_Display({
   subsets: ["latin"],
-  variable: '--font-display',
-  display: 'swap'
+  variable: "--font-display",
+  display: "swap",
 });
 
 // export const metadata: Metadata = {
@@ -29,19 +29,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // const { data } = useUser();
+  // console.log(data);
+
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
-      <body >
-
+      <body>
         <ReactQueryProvider>
           <AuthProvider>
             <ProtectedRouteGuard>
-              <Suspense fallback={
-                <></>
-              }>
-                <Wrapper>
-                  {children}
-                </Wrapper>
+              <Suspense fallback={<></>}>
+                <Wrapper>{children}</Wrapper>
               </Suspense>
             </ProtectedRouteGuard>
           </AuthProvider>

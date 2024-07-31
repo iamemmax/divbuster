@@ -25,7 +25,10 @@ import { capitalizeFirstLetter } from "@/utils";
 import DebounceInput from "../../comp/components/misc/DebounceInput";
 import TablePagination from "../../comp/components/TablePagination";
 import { FilterIcn } from "../../comp/icons";
-import { DropdownMenuContent, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import {
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
 import { getHospitalAroundFunc } from "@/app/(dashboard)/dashboard/api/getHospitalAround";
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
 
@@ -49,28 +52,32 @@ const HospitalAround = () => {
   const { data: hospitalData, isLoading } = useQuery({
     queryFn: () => getHospitalAroundFunc(String(userData?.phone_number)),
     queryKey: ["fetch-hospital-around", userData?.phone_number],
+    enabled: !!userData?.phone_number,
   });
 
   const columnHelper = createColumnHelper<HospitaAroundHeader>();
 
-  const columns = useMemo(() => [
-    columnHelper.accessor("name", {
-      header: () => "Name",
-      cell: (info) => capitalizeFirstLetter(info.getValue()),
-    }),
-    columnHelper.accessor("state", {
-      header: () => "State",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("lga", {
-      header: () => "Region",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("address", {
-      header: () => "Address",
-      cell: (info) => capitalizeFirstLetter(info.getValue()),
-    }),
-  ], []);
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor("name", {
+        header: () => "Name",
+        cell: (info) => capitalizeFirstLetter(info.getValue()),
+      }),
+      columnHelper.accessor("state", {
+        header: () => "State",
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("lga", {
+        header: () => "Region",
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("address", {
+        header: () => "Address",
+        cell: (info) => capitalizeFirstLetter(info.getValue()),
+      }),
+    ],
+    []
+  );
 
   const table = useReactTable({
     data: hospitalData ?? [],
@@ -194,16 +201,18 @@ const HospitalAround = () => {
                     <TableBody>
                       {table.getRowModel().rows.map((row, rowIndex) => (
                         <TableRow
-                          className={`hover:bg-[#f5f7ff] ${rowIndex !== 0 ? "border-t" : ""
-                            }`}
+                          className={`hover:bg-[#f5f7ff] ${
+                            rowIndex !== 0 ? "border-t" : ""
+                          }`}
                           key={row.id}
                         >
                           {row.getVisibleCells().map((cell, idx) => (
                             <TableCell
-                              className={`text-xs text-[#475569] cursor-pointer font-nunito py-6 border-[#E2E8F0] ${row.getVisibleCells().length - 1 === idx
-                                ? "border-t-[0.4px] border-[#E2E8F0]"
-                                : ""
-                                }`}
+                              className={`text-xs text-[#475569] cursor-pointer font-nunito py-6 border-[#E2E8F0] ${
+                                row.getVisibleCells().length - 1 === idx
+                                  ? "border-t-[0.4px] border-[#E2E8F0]"
+                                  : ""
+                              }`}
                               key={cell.id}
                             >
                               {flexRender(

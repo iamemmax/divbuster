@@ -31,21 +31,21 @@ export interface hopitalTypesx {
 
 
 export const fetchStateList = async () => {
-  const { data } = await adminAxios.get(`life-insurance/filter_provider/`);
+  const { data } = await adminAxios.get(`/filter_provider/`);
   return data as string[]
 };
 
 export const fetchRegionByState = async (state: string) => {
-  const { data } = await adminAxios.get(`life-insurance/lgas/?state=${state}`);
+  const { data } = await adminAxios.get(`/lgas/?state=${state}`);
   return data as string[]
 };
 
-// life-insurance/lgas/?state=Lagos
+// /lgas/?state=Lagos
 
 
 export const fetchHospitalListByLga = async (lga: string) => {
-  console.log(lga)
-  const { data } = await adminAxios.get(`life-insurance/get-nem-location-by-lga/?lga=${lga}`);
+  // console.log(lga)
+  const { data } = await adminAxios.get(`/get-nem-location-by-lga/?lga=${lga}`);
   return data as lgaTypes
 
 };

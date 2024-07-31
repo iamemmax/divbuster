@@ -6,7 +6,6 @@ import {
 } from "@/components/core/DialogClone";
 // import { useMakeRemitalPayment } from "../../api/remital/remitalpayment";
 import { SmallSpinner } from "@/icons/core";
-import { PaymentSuccessMsg } from "./RemitalPlanModal";
 import {
   Button,
   DialogClose,
@@ -16,6 +15,7 @@ import {
 import CopyIcon from "@/app/(dashboard)/comp/icons/CopyIcon";
 import PayStatckIcon from "../../icons/PayStackIcon";
 import Link from "next/link";
+import { PaymentSuccessMsg } from "./SubmitPlan";
 
 interface Prop {
   setShowPaymentModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,14 +23,19 @@ interface Prop {
   userId: string;
   PaymentInfo: PaymentSuccessMsg | undefined;
   setShowSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
-  duration: number | undefined;
+  planType: {
+    duration: number;
+    amount: string;
+    userId: string;
+    play_type: string;
+  };
 }
 
 const PlanPayment = ({
   setShowPaymentModal,
   showPaymentModal,
   PaymentInfo,
-  duration,
+  planType,
   userId,
   setShowSuccessModal,
 }: Prop) => {
@@ -46,8 +51,11 @@ const PlanPayment = ({
           <DialogHeader className="bg-[#1B1687] ">
             <DialogTitle className="text-[#fff]">Payment</DialogTitle>
 
-            <DialogClose className="rounded-full">
-              <button onClick={() => setShowPaymentModal(false)}>Close</button>
+            <DialogClose
+              className="rounded-full"
+              onClick={() => setShowPaymentModal(false)}
+            >
+              <button>Close</button>
             </DialogClose>
           </DialogHeader>
 
@@ -60,7 +68,7 @@ const PlanPayment = ({
 
               <div className="mt-4 bg-[#2B3151] flex justify-center py-4 items-center flex-col text-[#fff]  rounded-lg">
                 <p className="text-sm text-white font-sans font-medium">
-                  {duration} Month Individual Health Cover
+                  {planType?.duration} Month {planType?.play_type} Health Cover
                 </p>
                 <h2 className="text-white text-2xl font-bold py-1">
                   {PaymentInfo?.amount}

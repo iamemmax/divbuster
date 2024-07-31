@@ -5,9 +5,16 @@ import { RightUpArrow } from "@/icons/core";
 import { Button, LinkButton } from "@/components/core";
 
 import { CheckStar, CrossIcon, GroupIcon, LearnMore, Testimonial1, Testimonial2, Testimonial3, Testimonial4, UnderLine } from "./misc/icons";
+// import {
+//   CheckStar,
+//   CrossIcon,
+//   GroupIcon,
+//   LearnMore,
+//   UnderLine,
+// } from "./misc/icons";
 import Marquee from "./misc/components/Marquee";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import CheckPhoneNumber from "./misc/components/insurance/modals/CheckPhoneNumber";
 
@@ -17,6 +24,7 @@ import RemitalPlanModal from "./misc/components/insurance/modals/remital/Remital
 import RemitalModalDetails from "./misc/components/insurance/modals/remital/RemitalModalDetails";
 import CreatepasswordModal from "./misc/components/insurance/modals/remital/CreatePassWordModal";
 import style from '../(main)/style.module.css'
+import { useSearchParams } from "next/navigation";
 
 export default function Home() {
   const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
@@ -72,6 +80,43 @@ export default function Home() {
   //     testimonial: "“Good health is underrated and there's nothing as good as having a health cover. It gives me confidence.”"
   //   },
   // ]
+  const search = useSearchParams();
+  const getStarted = search.get("get-started");
+  useEffect(() => {
+    if (getStarted) {
+      document.getElementById("get-insurance-button")?.click();
+    }
+  }, [getStarted]);
+  const Testimonials = [
+    {
+      name: "Oluwafisayomi",
+      image: "",
+      role: "Entrepreneur",
+      testimonial:
+        "“Thanks to Liberty Life, I don't have to worry about the high cost of health. I got value more than my money.”",
+    },
+    {
+      name: "Mrs. Adebunmi",
+      image: "",
+      role: "ED at Light Fashion House",
+      testimonial:
+        "“I and my household now have an HMO without breaking the bank and it comes with a lot of benefits,”",
+    },
+    {
+      name: "Otimeyin Igbene",
+      image: "",
+      role: "MD/CEO Liberty Assured",
+      testimonial:
+        "“I am able to enjoy health coverage with my family and employees.Thanks to Liberty Life. Highly recommended for everyone.”",
+    },
+    {
+      name: "Miss Morenike",
+      image: "",
+      role: "Creatives at Yaks Artistry",
+      testimonial:
+        "“Good health is underrated and there's nothing as good as having a health cover. It gives me confidence.”",
+    },
+  ];
   return (
     <main className="md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
@@ -120,6 +165,7 @@ export default function Home() {
                 "flex items-center cursor-pointer justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
                 "font-display"
               )}
+              id="get-insurance-button"
               variant="white"
               onClick={() => setOpenCheckPhoneNumberModal(true)}
             >
@@ -214,8 +260,7 @@ export default function Home() {
                       color="#ffffff"
                       href={`/learn-more`}
                     >
-                      Learn more{" "}
-                      <LearnMore />
+                      Learn more <LearnMore />
                     </LinkButton>
                   </div>
                 </div>
@@ -235,8 +280,7 @@ export default function Home() {
                       color="#ffffff"
                       href={`/learn-more`}
                     >
-                      Learn more{" "}
-                      <LearnMore />
+                      Learn more <LearnMore />
                     </LinkButton>
                   </div>
                 </div>
@@ -247,8 +291,7 @@ export default function Home() {
                   color="#ffffff"
                   href={`/learn-more`}
                 >
-                  Learn more{" "}
-                  <LearnMore />
+                  Learn more <LearnMore />
                 </LinkButton>
               </div>
             </div>
@@ -270,7 +313,7 @@ export default function Home() {
           setVerifyResponse={setVerifyResponse}
           setUserEmail={setUserEmail}
           setShowPasswordModal={setShowPasswordModal}
-        // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
+          // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
         />
       )}
       {/* remitals .................................................................. remita.................... */}

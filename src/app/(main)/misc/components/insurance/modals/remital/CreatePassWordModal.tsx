@@ -184,10 +184,11 @@ const CreatepasswordModal = ({
               <DialogTitle className="'font-DMSans' font-medium text-[#fff]">
                 Sign up
               </DialogTitle>
-              <DialogClose className="rounded-full">
-                <button onClick={() => setShowPasswordModal(false)}>
-                  close
-                </button>
+              <DialogClose
+                className="rounded-full"
+                onClick={() => setShowPasswordModal(false)}
+              >
+                <button>close</button>
               </DialogClose>
             </DialogHeader>
 
