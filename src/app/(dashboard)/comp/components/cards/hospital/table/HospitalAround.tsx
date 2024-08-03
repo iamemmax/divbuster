@@ -23,6 +23,7 @@ import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
 import { getHospitalAroundFunc } from "@/app/(dashboard)/dashboard/api/getHospitalAround";
 import { useQuery } from "react-query";
 import { capitalizeFirstLetter } from "@/utils";
+import { NoData } from "@/app/(dashboard)/comp/icons";
 
 interface HospitaAroundHeader {
   name: string;
@@ -147,7 +148,7 @@ const HospitalAround = ({ userData }: Prop) => {
             </TableHeader>
 
             <>
-              {rows?.length > 0 ? (
+              {rows?.length > 0 && (
                 <TableBody>
                   {table
                     ?.getRowModel()
@@ -173,13 +174,22 @@ const HospitalAround = ({ userData }: Prop) => {
                       </React.Fragment>
                     ))}
                 </TableBody>
-              ) : (
-                <div className="w-full flex justify-center items-center text-sm p-5">
-                  No data found
-                </div>
               )}
             </>
           </Table>
+        )}
+        {rows?.length <= 0 && (
+          <div className="py-8">
+            <div className="w-full flex justify-center items-center text-sm p-5">
+              <NoData />
+            </div>
+            <div className="text-center flex justify-center items-center text-[#0E0E2C] font-sans text-xs">
+              <p className=" md:max-w-[12rem] text-center">
+                {" "}
+                No data to display yet as you haven't made any transactions.
+              </p>
+            </div>
+          </div>
         )}
       </div>
     </div>

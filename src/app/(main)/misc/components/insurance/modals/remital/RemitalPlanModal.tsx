@@ -153,20 +153,20 @@ const RemitalPlanModal = ({
                   </div>
 
                   <div className="flex w-full items-center justify-center">
-                    {selectedTab === "Personal/Individual" && (
+                    {selectedTab === "INDIVIDUAL" && (
                       <p className="w-full px-4 md:px-[2rem] text-center  text-base  sm:max-w-[80%] text-[#fff] text-opacity-50 font-medium">
                         Individual plan gives you access to health cover for you
                         only, and you stand a chance to enjoy awesome benefits.
                       </p>
                     )}
-                    {selectedTab === "Family" && (
+                    {selectedTab === "FAMILY" && (
                       <p className="w-full px-4 md:px-[1.5rem] text-center  text-base sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
                         Family plan gives you access to health coverage for your
                         family. When you add up to 3 family member, you get a
                         free plan for the fourth member.
                       </p>
                     )}
-                    {selectedTab === "Corporate" && (
+                    {selectedTab === "CORPERATE" && (
                       <p className="w-full px-4 md:px-[1.5rem] text-center text-base  sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
                         Corporate plan gives you access to health coverage for
                         your employees. When you add up to 5 employees, you get
@@ -234,15 +234,18 @@ const RemitalPlanModal = ({
                                               </p>
                                             )}
                                           </div>
-                                          {healthPlan?.package_name !==
-                                            "Personal/Individual" && (
-                                            <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
-                                              {plan?.plan_duration?.min_members}{" "}
-                                              people (
-                                              {`${plan?.plan_duration?.min_members - 1} + 1 free`}{" "}
-                                              )
-                                            </p>
-                                          )}
+                                          {healthPlan?.package_name === "FAMILY" && (
+  <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
+    3 Individuals (3 + 1 free )
+  </p>
+)}
+                                          {
+ healthPlan?.package_name === "CORPERATE" && (
+  <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
+    Minimum of {plan?.plan_duration?.min_members} 
+  </p>
+)}
+
                                         </div>
                                         <div className="space-y-[10px] mt-1">
                                           {plan?.descriptions?.map(

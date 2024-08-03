@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/core";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import TopCards from "../comp/components/cards/TopCards";
 import HospitalAround from "../comp/components/cards/hospital/table/HospitalAround";
 import HospitalVisited from "../comp/components/cards/hospital/table/HospitalVisited";
@@ -15,26 +15,33 @@ import CopyIcon3 from "../comp/icons/CopyIcon3";
 import { useClipboard } from "@/hooks";
 import { useQuery, useQueryClient } from "react-query";
 import { fetchReferralCode } from "./api/referral/fetchReferralCode";
+import MakePaymentModal from "../comp/components/payment/MakePayment";
+import { getPlan } from "@/app/(main)/misc/components/insurance/api/plan/getPlan";
 
 const Dashboard = () => {
   const { data: userData, isLoading } = useUser();
 
-  console.log(userData, "uyu");
   const { copy } = useClipboard();
   const queryClient = useQueryClient();
+  const [showMakePaymentModal, setshowMakePaymentModal] = useState(false);
 
   const {
     data,
     refetch,
+
     isLoading: loadinGenerate,
   } = useQuery({
     queryFn: () => fetchReferralCode(userData?.user_id as string),
-    queryKey: ["generate-qrcode", userData?.user_id],
+    queryKey: ["generate-referral-code", userData?.user_id],
     enabled: false,
     onSuccess: () => {
       // Invalidate user details query to refetch data
       queryClient.invalidateQueries(["user-details", data?.referral_code]);
     },
+  });
+  const { data: plansData } = useQuery({
+    queryFn: getPlan,
+    queryKey: ["get-plans"],
   });
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
@@ -79,16 +86,11 @@ const Dashboard = () => {
                     </div>
                   )}
                 </div>
-                <div className="hidden lg:flex items-start gap-2 ">
+                <div className="hidden lg:flex items-center   gap-2 ">
                   {userData?.referral_code ? (
                     <div className="flex items-center gap-2">
-                      <div className="">
-                        <p className="text-white text-xs">
-                          Referral link/code -
-                        </p>
-                      </div>
                       <div
-                        className="flex items-center gap-x-2 bg-[#21253d] px-3 rounded-md cursor-pointer border-opacity-70 py-[.5625rem] "
+                        className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
                         onClick={() =>
                           copy(
                             ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}` ??
@@ -96,23 +98,34 @@ const Dashboard = () => {
                           )
                         }
                       >
-                        <p className="text-white max-w-[6.25rem] text-xxs truncate">
-                          {` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}`}
+                        <p className="text-white text-xxs text-opacity-60">
+                          Referral link
                         </p>
-                        <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
-                          <CopyIcon3 height={15} width={15} />
-                        </Button>
+                        <div className="flex">
+                          <p className="text-white max-w-[6.25rem] text-xxs truncate">
+                            {` https://liberty-life.vercel.app/?referral_code=${userData?.referral_code}`}
+                          </p>
+                          <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
+                            <CopyIcon3 height={15} width={15} />
+                          </Button>
+                        </div>
                       </div>
+
                       <div
-                        className="flex items-center gap-x-2 bg-[#21253d] px-3 rounded-md cursor-pointer border-opacity-70 py-[.5625rem] "
+                        className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-6 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
                         onClick={() => copy(userData?.referral_code ?? "")}
                       >
-                        <p className="text-white max-w-[3.25rem] text-xxs truncate">
-                          {userData?.referral_code ?? ""}
+                        <p className="text-white text-xxs text-opacity-60">
+                          Referral Code
                         </p>
-                        <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
-                          <CopyIcon3 height={15} width={15} />
-                        </Button>
+                        <div className="flex">
+                          <p className="text-white max-w-[3.25rem] text-xxs truncate">
+                            {userData?.referral_code ?? ""}
+                          </p>
+                          <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
+                            <CopyIcon3 height={15} width={15} />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ) : (
@@ -124,7 +137,10 @@ const Dashboard = () => {
                       )}
                     </Button>
                   )}
-                  <Button className="bg-[#099976] text-white py-2 text-xs font-medium">
+                  <Button
+                    className="bg-[#099976] h-[2.8125rem] text-white  text-xs font-medium"
+                    onClick={() => setshowMakePaymentModal(true)}
+                  >
                     Renew plan
                   </Button>
                 </div>
@@ -154,6 +170,15 @@ const Dashboard = () => {
         </div>
       </div>
       {/* <Marquee/> */}
+
+      {showMakePaymentModal && (
+        <MakePaymentModal
+          isSelectPlanModalOpen={showMakePaymentModal}
+          setSelectPlanModal={setshowMakePaymentModal}
+          planType="INDIVIDUAL"
+          selectedPlan={plansData && plansData[0]?.data}
+        />
+      )}
     </div>
   );
 };

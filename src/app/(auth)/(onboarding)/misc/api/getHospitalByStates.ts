@@ -14,7 +14,7 @@ export interface HospitalEntity {
 
 export const getHospitalListData = async ( state: string):Promise<HospitalLists | any> => {
     const {data} = await adminAxios.get(
-       `life-insurance/hospitals/?state=${state}`
+       `/hospitals/?state=${state}`
      );
     return data as string[]
      

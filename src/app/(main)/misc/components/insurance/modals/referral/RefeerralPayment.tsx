@@ -1,0 +1,138 @@
+import React from "react";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+} from "@/components/core/DialogClone";
+// import { useMakeRemitalPayment } from "../../api/remital/remitalpayment";
+import { SmallSpinner } from "@/icons/core";
+import {
+  Button,
+  DialogClose,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/core";
+import CopyIcon from "@/app/(dashboard)/comp/icons/CopyIcon";
+import PayStatckIcon from "../../icons/PayStackIcon";
+import Link from "next/link";
+import { PaymentSuccessMsg } from "../remital/SubmitPlan";
+
+interface Prop {
+  //   userId?: string;
+  PaymentInfo?: PaymentSuccessMsg | undefined;
+  showReferralPayment: true;
+  setShowReferralPayment: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowReferralPasswordModal: React.Dispatch<React.SetStateAction<boolean>>;
+  //   setShowSuccessModal?: React.Dispatch<React.SetStateAction<boolean>>;
+  //   planType?: {
+  //     duration: number;
+  //     amount: string;
+  //     userId: string;
+  //     play_type: string;
+  //   };
+}
+
+const ReferralPlanPayment = ({
+  setShowReferralPayment,
+  showReferralPayment,
+  PaymentInfo,
+  setShowReferralPasswordModal,
+
+  //   planType,
+  //   userId,
+  //   setShowSuccessModal,
+}: Prop) => {
+  // const { mutate: handlePaymentRequest, isLoading } = useMakeRemitalPayment();
+
+  return (
+    <div>
+      <Dialog
+        open={showReferralPayment}
+        // onOpenChange={setRemitaDetailsModal}
+      >
+        <DialogContent className="!overflow-hidden max-h-[94vh]  md:w-[28.75rem]">
+          <DialogHeader className="bg-[#1B1687] ">
+            <DialogTitle className="text-[#fff]">Payment</DialogTitle>
+
+            <DialogClose
+              className="rounded-full"
+              onClick={() => setShowReferralPayment(false)}
+            >
+              <button>Close</button>
+            </DialogClose>
+          </DialogHeader>
+
+          <DialogBody className="bg-[#141B3f]  md:w-full px-8">
+            <div className="py-1  ">
+              <div className="text-[#fff] font-light text-sm font-sans">
+                Kindly make payment for your health cover via the payment
+                options below.
+              </div>
+
+              <div className="mt-4 bg-[#2B3151] flex justify-center py-4 items-center flex-col text-[#fff]  rounded-lg">
+                {/* <p className="text-sm text-white font-sans font-medium">
+                  {planType?.duration} Month {planType?.play_type} Health Cover
+                </p> */}
+                <h2 className="text-white text-2xl font-bold py-1">
+                  {PaymentInfo?.amount}
+                </h2>
+              </div>
+
+              <div className="mt-6 bg-[#141B3f] px-6 py-4 rounded-2xl">
+                <div className="border-b border-[#eee] border-opacity-20 py-4 w-full">
+                  <p className="text-sm text-white">
+                    Make payment via transfer
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-4 items-start mt-5">
+                  <div className="">
+                    <p className="text-xs text-white text-opacity-70">
+                      Account name
+                    </p>
+                    <h2 className="text-white font-semibold textbase">
+                      {PaymentInfo?.account_name}
+                    </h2>
+                  </div>
+                  <div className="">
+                    <p className="text-xs text-white text-opacity-70">
+                      Account no
+                    </p>
+                    <h2 className="text-white gap-x-3 flex font-semibold textbase">
+                      {" "}
+                      {PaymentInfo?.account_no} <CopyIcon />
+                    </h2>
+                  </div>
+                  <div className="">
+                    <p className="text-xs text-white text-opacity-70">
+                      Bank name
+                    </p>
+                    <h2 className="text-white font-semibold textbase">
+                      {PaymentInfo?.bank_name}
+                    </h2>
+                  </div>
+                </div>
+              </div>
+              <div className="my-10 flex flex-col space-y-5">
+                <Link href={String(PaymentInfo?.paystack_link)}>
+                  <Button className="w-full rounded-10 text-sm bg-transparent py-4 font-bold text-white flex justify-center items-center gap-x-2 border border-[#1B1687]">
+                    <PayStatckIcon /> Pay with paystack{" "}
+                  </Button>
+                </Link>
+                {/* <Link href={""}> */}
+                <Button
+                  className="w-full bg-white py-4 rounded-10 text-sm font-bold text-[#1B1687] flex justify-center items-center"
+                  onClick={() => setShowReferralPasswordModal(true)}
+                >
+                  I have made payment
+                </Button>
+                {/* </Link> */}
+              </div>
+            </div>
+          </DialogBody>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default ReferralPlanPayment;

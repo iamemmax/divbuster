@@ -206,7 +206,7 @@ const RemitalUserDetails = ({
             setOpenRemitalUserDetail(false);
           } else {
             setIsLoading(true);
-            // router.push(`/create-password?email=${selectedEmail}`);
+
             setShowPasswordModal(true);
             setOpenRemitalUserDetail(false);
           }
@@ -222,10 +222,6 @@ const RemitalUserDetails = ({
     );
   };
 
-  //   const filteredStates = uniqueStates.filter((state) =>
-  //     state?.toLowerCase().includes(globalFilter.toLowerCase())
-
-  // );
   const stateOptions = uniqueStates?.map((state) => ({
     value: state,
     label: state,

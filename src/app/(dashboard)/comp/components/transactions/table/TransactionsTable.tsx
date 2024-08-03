@@ -186,7 +186,7 @@ const TransactionsTable = ({ userData }: Prop) => {
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-medium text-[#0E0E2C]">Transactions</h2>
             <div className="bg-[#F0F5FF] shrink-0 px-2 py-1 rounded-full text-xs text-[#032282]">
-              <p>{transaction?.count ?? 0}</p>
+              <p>{table?.getRowModel()?.rows?.length ?? 0}</p>
             </div>
           </div>
           <div className="lg:w-50">
@@ -276,7 +276,7 @@ const TransactionsTable = ({ userData }: Prop) => {
                 </TableRow>
               ))}
             </TableHeader>
-            {rows?.length > 0 ? (
+            {rows?.length > 0 && (
               <TableBody>
                 {table?.getRowModel()?.rows?.map((row) => (
                   <React.Fragment key={row?.id}>
@@ -296,17 +296,21 @@ const TransactionsTable = ({ userData }: Prop) => {
                   </React.Fragment>
                 ))}
               </TableBody>
-            ) : (
-              <div className="">
-                <div className="w-full flex justify-center items-center text-sm p-5">
-                  <NoData />
-                </div>
-                <div className="text-center flex justify-center items-center text-[#0E0E2C] font-sans text-lg">
-                  No data to display yet as you haven't made any transactions.
-                </div>
-              </div>
             )}
           </Table>
+        )}
+        {table?.getRowModel()?.rows?.length === 0 && (
+          <div className="py-8">
+            <div className="w-full flex justify-center items-center text-sm p-5">
+              <NoData />
+            </div>
+            <div className="text-center flex justify-center items-center text-[#0E0E2C] font-sans text-xs">
+              <p className=" md:max-w-[12rem] text-center">
+                {" "}
+                No data to display yet as you haven't made any transactions.
+              </p>
+            </div>
+          </div>
         )}
       </div>
       {TransactionDetails && (

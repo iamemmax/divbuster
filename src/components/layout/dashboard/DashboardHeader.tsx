@@ -103,9 +103,7 @@ export function DashboardHeader() {
                     "bg-white/10 h-8 w-8 rounded-full text-white/50 rotate-12 text-lg hover:text-white",
                     "font-display"
                   )}
-                >
-                  x
-                </DrawerClose>
+                ></DrawerClose>
               </header>
 
               <ul

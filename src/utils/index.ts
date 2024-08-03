@@ -205,6 +205,35 @@ export const amountNumberFormat = (value: number | bigint) =>
     style: "currency",
     currency: "NGN",
   }).format(value);
+  
+// export const formatCurrency = (value: number | bigint) => {
+//   // Format the number using Intl.NumberFormat with currency style
+//   const formattedValue = new Intl.NumberFormat("en-US", {
+//     style: "currency",
+//     currency: "NGN",
+//   }).format(value);
+  
+//   // Prepend "NGN" before the formatted value
+//   return `₦ ${formattedValue}`;
+// };
+
+
+export const formatCurrency = (value: number | bigint) => {
+  // Format the value to a currency string
+  const formatted = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "NGN",
+    currencyDisplay: "code", // Displays the currency code instead of the symbol
+  }).format(value).replace(/^NGN\s/, '₦'); // Removes the "NGN " from the start
+
+  // Remove trailing ".00" if present
+  return formatted.replace(/\.00$/, '');
+};
+
+export function removeCommaFromPrice(price:string) {
+    return price.replace(/,/g, '');
+}
+
 
 /**
  * @function convertArrayOfObjectsToArrayOfArrays

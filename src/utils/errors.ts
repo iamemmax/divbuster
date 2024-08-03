@@ -3,7 +3,7 @@
 // import { isStringOrArrayOfStrings } from './strings';
 
 // /**
-//  * Formats an object containing errors into a string.
+//  * Formats a object containing errors into a string.
 //  * The errors/exceptions are usually formatted by Django Rest Framework.
 //  * https://www.django-rest-framework.org/api-guide/exceptions/#exception-handling-in-rest-framework-views
 //  *

@@ -1,12 +1,12 @@
 import { adminAxios } from "@/lib/axios";
 
 
-interface plantypes {
+export interface plantypes {
   package_name: string;
-  data: Datum[];
+  data: PlanData[];
 }
 
-interface Datum {
+export interface PlanData {
   id: number;
   plan_duration: Planduration;
   price: string;
@@ -26,7 +26,7 @@ interface Plantype {
   name: string;
 }
 export const getPlan = async ( ) => {
-    const {data} = await adminAxios.get(`/insurance_plan/`);
+    const {data} = await adminAxios.get(`insurance_plan/`);
     return data as plantypes[]
      
 };

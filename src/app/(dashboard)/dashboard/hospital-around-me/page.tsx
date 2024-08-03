@@ -24,7 +24,7 @@ import { useQuery } from "react-query";
 import { capitalizeFirstLetter } from "@/utils";
 import DebounceInput from "../../comp/components/misc/DebounceInput";
 import TablePagination from "../../comp/components/TablePagination";
-import { FilterIcn } from "../../comp/icons";
+import { FilterIcn, NoData } from "../../comp/icons";
 import {
   DropdownMenuContent,
   DropdownMenuTrigger,
@@ -98,8 +98,8 @@ const HospitalAround = () => {
       <div className="bg-main min-h-36"></div>
       <div className="h-full w-full px-6 md:px-[7.5rem] min-h-screen relative -mt-32">
         <div className="bg-white w-full h-full mx-auto py-[1.9375rem] px-[2.625rem] rounded-[.625rem]">
-          <div className="flex justify-between">
-            <div className="flex flex-wrap gap-4 items-center">
+          <div className="flex items-center justify-between">
+            <div className="flex flex-wrap  gap-4 items-center">
               <div className="flex items-center flex-wrap gap-4">
                 <div className="bg-[#F0F5FF] rounded-lg py-2 px-4 flex items-center gap-2">
                   <Button className="px-0 py-0 bg-[#D0DFFF] shrink-0 w-5 h-5 flex justify-center items-center rounded-full">
@@ -110,11 +110,13 @@ const HospitalAround = () => {
                   </h2>
                 </div>
                 {hospitalData && hospitalData.length > 10 && (
-                  <TablePagination
-                    pageSize={10}
-                    table={table}
-                    totalItems={Number(hospitalData.length)}
-                  />
+                  <div className="">
+                    <TablePagination
+                      pageSize={10}
+                      table={table}
+                      totalItems={Number(hospitalData.length)}
+                    />
+                  </div>
                 )}
               </div>
               <div className="lg:w-64">
@@ -197,7 +199,7 @@ const HospitalAround = () => {
                 </TableHeader>
 
                 <>
-                  {rows.length > 0 ? (
+                  {rows.length > 0 && (
                     <TableBody>
                       {table.getRowModel().rows.map((row, rowIndex) => (
                         <TableRow
@@ -224,15 +226,24 @@ const HospitalAround = () => {
                         </TableRow>
                       ))}
                     </TableBody>
-                  ) : (
-                    <div className="w-full flex justify-center items-center text-sm p-5">
-                      No data found
-                    </div>
                   )}
                 </>
               </Table>
             )}
           </div>
+          {table?.getRowModel()?.rows?.length === 0 && (
+            <div className="py-8">
+              <div className="w-full flex justify-center items-center text-sm p-5">
+                <NoData />
+              </div>
+              <div className="text-center flex justify-center items-center text-[#0E0E2C] font-sans text-xs">
+                <p className=" md:max-w-[12rem] text-center">
+                  {" "}
+                  No data to display yet as you haven't made any transactions.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
