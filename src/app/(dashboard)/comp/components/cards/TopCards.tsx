@@ -96,7 +96,7 @@ const TopCards = ({ userData: users }: Prop) => {
                   </h2>
                   <p className="text-[#8490A8] text-[.625rem]">Enrolee name</p>
                 </div>
-                <div className="mt-3">
+                <div className="mt-2">
                   <h2 className="text-xs text-[#032282] font-medium font-sans">
                     {users?.is_active}{" "}
                     <button className="bg-[#31D0AA26] rounded-md px-2 py-1 text-[#099976] text-[.625rem]">

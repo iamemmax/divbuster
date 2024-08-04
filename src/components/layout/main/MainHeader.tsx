@@ -127,17 +127,17 @@ export function MainHeader() {
         <DesktopMenuBar isColored={isColored} />
 
         <div className="flex items-center gap-[31px]">
-          <LinkButton
+          <a
             className={cn(
               "hidden md:flex items-center justify-between md:max-lg:text-sm lg:text-base text-white text-left p-0 bg-transparent rounded-full max-w-max",
               "font-display"
             )}
             href="/login"
             // target="_blank"
-            variant="white"
+            // variant="white"
           >
             Login
-          </LinkButton>
+          </a>
 
           <ClientOnly>
             <Dialog open={open} onOpenChange={setOpen}>

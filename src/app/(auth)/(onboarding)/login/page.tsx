@@ -61,6 +61,9 @@ export default function Login() {
       },
       onError: (error) => {
         const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+        if (errorModalMessage === "User not found") {
+          router.push("/?get-started=true");
+        }
         openErrorModalWithMessage(String(errorMessage));
       },
     });
@@ -123,19 +126,21 @@ export default function Login() {
           <PhoneLoginForm userPhoneNumber={userPhoneNumber} />
         )}
 
-        <ErrorModal
-          isErrorModalOpen={isErrorModalOpen}
-          setErrorModalState={() => {
-            if (errorModalMessage === "User not found") {
-              router.push("/?get-started=true");
-            } else {
-              setErrorModalState(false);
+        {errorModalMessage !== "User not found" && (
+          <ErrorModal
+            isErrorModalOpen={isErrorModalOpen}
+            setErrorModalState={() => {
+              if (errorModalMessage === "User not found") {
+                router.push("/?get-started=true");
+              } else {
+                setErrorModalState(false);
+              }
+            }}
+            subheading={
+              errorModalMessage || "Please check your inputs and try again."
             }
-          }}
-          subheading={
-            errorModalMessage || "Please check your inputs and try again."
-          }
-        ></ErrorModal>
+          ></ErrorModal>
+        )}
       </OnboardingPageWrapper>
     </>
   );
