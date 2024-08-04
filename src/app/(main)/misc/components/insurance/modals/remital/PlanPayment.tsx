@@ -15,7 +15,7 @@ import {
 import CopyIcon from "@/app/(dashboard)/comp/icons/CopyIcon";
 import PayStatckIcon from "../../icons/PayStackIcon";
 import Link from "next/link";
-import { PaymentSuccessMsg } from "./SubmitPlan";
+import { PaymentSuccessMsg } from "./RemitalSubmitPlan";
 
 interface Prop {
   setShowPaymentModal: React.Dispatch<React.SetStateAction<boolean>>;

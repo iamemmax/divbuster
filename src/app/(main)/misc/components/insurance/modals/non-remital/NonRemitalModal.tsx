@@ -303,15 +303,11 @@ const NonRemitalModal = ({
 
               <div className="pb-[2rem]">
                 <button
-                  className="mt-[3rem] flex justify-center items-center font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                  className="mt-[3rem] flex justify-center gap-x-3 items-center font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                   type="submit"
                 >
                   Continue
-                  {isLoading && (
-                    <div className="absolute top-[1.3rem] right-[1rem] transform -translate-y-1/2">
-                      <SmallSpinner className="" color="blue" />
-                    </div>
-                  )}
+                  {isLoading && <SmallSpinner className="" color="blue" />}
                 </button>
               </div>
             </form>

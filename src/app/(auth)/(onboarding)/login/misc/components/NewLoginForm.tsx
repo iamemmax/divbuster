@@ -33,7 +33,7 @@ const PasswordInput: React.FunctionComponent = () => {
         // inputMode="numeric"
         name="password"
         // pattern="[0-9]*"
-        placeholder="Passcode"
+        placeholder="Enter password"
         type={isShown ? "text" : "password"}
         required
       />

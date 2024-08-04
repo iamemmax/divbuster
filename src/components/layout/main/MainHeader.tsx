@@ -52,7 +52,13 @@ const _OldHeaderButtons: React.FunctionComponent = () => {
   );
 };
 
-const pagesWithColoredBg = ["/", "/faqs", "/hospital-around", "/contact-us", "/about-us"];
+const pagesWithColoredBg = [
+  "/",
+  "/faqs",
+  "/hospital-around",
+  "/contact-us",
+  "/about-us",
+];
 
 export function MainHeader() {
   const pathname = usePathname();
@@ -71,7 +77,7 @@ export function MainHeader() {
         <div className="flex items-center gap-4 lg:gap-10 xl:gap-[5.625rem]">
           <Link href="/">
             <span className="sr-only">Go home</span>
-            <Liberty className="max-sm:max-w-[100px]"/>
+            <Liberty className="max-sm:max-w-[100px]" />
             {/* <svg
               fill="none"
               className="max-sm:max-w-[100px]"
@@ -127,7 +133,7 @@ export function MainHeader() {
               "font-display"
             )}
             href="/login"
-            target="_blank"
+            // target="_blank"
             variant="white"
           >
             Login

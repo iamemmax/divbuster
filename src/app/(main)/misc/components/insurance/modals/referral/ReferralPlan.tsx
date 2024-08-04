@@ -437,7 +437,7 @@ const ReferralModalPlan = ({
                                     </div>
 
                                     <div className="border-[.0313rem] border-[#4760FD] rounded-10 -mt-2 flex justify-center items-center w-full py-5">
-                                      <button
+                                      <Button
                                         className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                         onClick={() => {
                                           setPlanType({
@@ -452,7 +452,7 @@ const ReferralModalPlan = ({
                                         }}
                                       >
                                         Get Insurance
-                                      </button>
+                                      </Button>
                                     </div>
                                   </div>
                                 </div>
@@ -466,7 +466,7 @@ const ReferralModalPlan = ({
                   <div
                     className={`flex sm:flex-row justify-between  px-6 w-full pb-1 items-center ${selectedTab === "Individual" ? " mt-[1rem]" : ""} gap-1 flex-nowrap`}
                   >
-                    <Link href={"#"} className="text-white text-sm">
+                    <Link href={"#"} className="text-[#AFD85B] text-sm">
                       <span className="text-[#747577]">
                         Terms & Conditions Apply:
                       </span>{" "}
@@ -475,7 +475,7 @@ const ReferralModalPlan = ({
                     <Button
                       type="button"
                       className="bg-[#525668] rounded-[1.25rem] px-5 py-3 font-semibold text-white"
-                        onClick={()=>router.push('/login')}
+                      onClick={() => router.push("/login")}
                     >
                       Skip
                     </Button>

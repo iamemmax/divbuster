@@ -32,5 +32,6 @@ interface Enrolee {
 }
 export const getBeneficiaries = async () => {
   const { data } = await adminAxios.get(`beneficiary/`);
-  return data as benficiariesType;
+  
+  return data as benficiariesType[];
 };

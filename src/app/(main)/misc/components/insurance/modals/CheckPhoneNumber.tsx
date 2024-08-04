@@ -44,6 +44,7 @@ interface Prop {
   setShowPasswordModal: Dispatch<SetStateAction<boolean>>;
   setVerifyResponse: Dispatch<
     SetStateAction<{
+      is_eligible: boolean;
       nin: string;
       bvn: string;
       address: string;
@@ -81,6 +82,7 @@ interface User {
   bvn: string;
   email: string;
   address: string;
+  is_eligible: boolean;
 }
 
 interface Hospitals {
@@ -157,22 +159,23 @@ const CheckPhoneNumber = ({
           bvn: data?.["user:"]?.bvn ?? "",
           email: data?.["user:"]?.email ?? "",
           id: data?.["user:"]?.id ?? "",
+          is_eligible: data?.is_eligible ?? false,
         });
 
-        if (data?.["user:"]?.has_set_password) {
+        const userData = data?.["user:"];
+        if (userData?.has_set_password) {
           router?.push("/login");
         } else {
-          const userData = data?.["user:"];
           if (data?.is_eligible) {
-            setUserId(data?.["user:"]?.id);
+            setUserId(userData?.id);
             if (!userData?.email || !userData?.address) {
               // One or more fields are empty
               setOpenNonRemitalDetailModal(true);
             } else {
               if (
-                data?.["user:"]?.hospitals?.hospital ||
-                data?.["user:"]?.hospitals?.state ||
-                data?.["user:"]?.hospitals?.lga
+                userData?.hospitals?.hospital ||
+                userData?.hospitals?.state ||
+                userData?.hospitals?.lga
               ) {
                 setShowPasswordModal(true);
               } else {
@@ -181,7 +184,7 @@ const CheckPhoneNumber = ({
             }
             setOpenCheckPhoneNumberModal(false);
           } else {
-            setUserId(data?.["user:"]?.id);
+            setUserId(userData?.id);
             // data.is_eligible is false
             if (status === 200) {
               // Check if any of the required fields (nin, email, address) are missing
@@ -190,9 +193,9 @@ const CheckPhoneNumber = ({
               } else {
                 if (userData?.phone_verified) {
                   if (
-                    data?.["user:"]?.hospitals?.hospital ||
-                    data?.["user:"]?.hospitals?.state ||
-                    data?.["user:"]?.hospitals?.lga
+                    userData?.hospitals?.hospital ||
+                    userData?.hospitals?.state ||
+                    userData?.hospitals?.lga
                   ) {
                     setShowPasswordModal(true);
                   } else {

@@ -15,6 +15,7 @@ import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import PlanComfirmationModal from "./PlanComfirmationModal";
 import PlanPayment from "./PlanPayment";
+import { useRouter } from "next/navigation";
 
 interface prop {
   setShowSubmitModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,7 +61,7 @@ interface Hospitals {
   provider_id: string;
 }
 
-const SubmitPlanModal = ({
+const RemitalSubmitPlanModal = ({
   setShowSubmitModal,
   showSubmitModal,
   planType,
@@ -79,6 +80,7 @@ const SubmitPlanModal = ({
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
+  const router = useRouter();
   const handlePayment = () => {
     handlePaymentRequest(
       {
@@ -88,22 +90,25 @@ const SubmitPlanModal = ({
       },
       {
         onSuccess: (data: PaymentSuccessMsg) => {
-          if (data?.message === "insurance request sent, please wait") {
-            setShowConfirmation(true);
-            // setOpenShowRemitalPlan(false);
-            setConfirmationMessage(data?.message);
-            setCheckUserHasPassword(data?.["user:"]?.has_set_password);
-          } else {
-            setPaymentInfo({
-              account_name: data?.account_name,
-              account_no: data?.account_no,
-              bank_name: data?.bank_name,
-              paystack_link: data?.paystack_link,
-              amount: data?.amount,
-            });
-            setShowPaymentModal(true);
-            // setOpenShowRemitalPlan(false);
+          if (data) {
+            router.push("/success?remital=true");
           }
+          // if (data?.message === "insurance request sent, please wait") {
+          //   setShowConfirmation(true);
+          //   // setOpenShowRemitalPlan(false);
+          //   setConfirmationMessage(data?.message);
+          //   setCheckUserHasPassword(data?.["user:"]?.has_set_password);
+          // } else {
+          //   setPaymentInfo({
+          //     account_name: data?.account_name,
+          //     account_no: data?.account_no,
+          //     bank_name: data?.bank_name,
+          //     paystack_link: data?.paystack_link,
+          //     amount: data?.amount,
+          //   });
+          //   setShowPaymentModal(true);
+          //   // setOpenShowRemitalPlan(false);
+          // }
         },
         onError: (error) => {
           const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -220,4 +225,4 @@ const SubmitPlanModal = ({
   );
 };
 
-export default SubmitPlanModal;
+export default RemitalSubmitPlanModal;
