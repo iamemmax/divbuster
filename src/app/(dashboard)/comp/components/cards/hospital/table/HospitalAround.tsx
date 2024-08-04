@@ -32,6 +32,7 @@ interface HospitaAroundHeader {
 }
 
 interface Prop {
+  loadinUser: boolean;
   userData: UserDataTypes | undefined;
 }
 const SkeletonLoading = () => (
@@ -40,7 +41,7 @@ const SkeletonLoading = () => (
   </div>
 );
 
-const HospitalAround = ({ userData }: Prop) => {
+const HospitalAround = ({ userData, loadinUser }: Prop) => {
   const { data: HospitalAround, isLoading } = useQuery({
     queryFn: () => getHospitalAroundFunc(String(userData?.phone_number)),
     queryKey: ["fetch-hospital-around", userData?.phone_number],
@@ -96,7 +97,7 @@ const HospitalAround = ({ userData }: Prop) => {
       </div>
 
       <div className="w-full mt-4">
-        {isLoading ? (
+        {isLoading || loadinUser ? (
           <Table>
             <TableHeader className="bg-[#f5f7ff]">
               <TableRow>
@@ -178,7 +179,7 @@ const HospitalAround = ({ userData }: Prop) => {
             </>
           </Table>
         )}
-        {rows?.length <= 0 && (
+        {!loadinUser && rows?.length <= 0 && (
           <div className="py-8">
             <div className="w-full flex justify-center items-center text-sm p-5">
               <NoData />

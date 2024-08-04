@@ -47,8 +47,9 @@ interface transactionHeader {
 }
 interface Prop {
   userData: UserDataTypes | undefined;
+  loadinUser: boolean;
 }
-const TransactionsTable = ({ userData }: Prop) => {
+const TransactionsTable = ({ userData, loadinUser }: Prop) => {
   const [globalFilter, setGlobalFilter] = useState("");
 
   const [TransactionDetails, setTransactionDetails] = useState(false);
@@ -227,7 +228,7 @@ const TransactionsTable = ({ userData }: Prop) => {
         </div>
       </div>
       <div className="w-full mt-4">
-        {isLoading ? (
+        {isLoading || loadinUser ? (
           <>
             <Table>
               {/* <TableHeader className="bg-[#f5f7ff]">
@@ -299,7 +300,7 @@ const TransactionsTable = ({ userData }: Prop) => {
             )}
           </Table>
         )}
-        {table?.getRowModel()?.rows?.length === 0 && (
+        {!loadinUser && table?.getRowModel()?.rows?.length === 0 && (
           <div className="py-8">
             <div className="w-full flex justify-center items-center text-sm p-5">
               <NoData />

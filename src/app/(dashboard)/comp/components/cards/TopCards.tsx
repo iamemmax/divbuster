@@ -25,8 +25,9 @@ import { getBeneficiaries } from "../plans/api/fetchBeneficairies";
 
 interface Prop {
   userData: UserDataTypes | undefined;
+  loadinUser: boolean;
 }
-const TopCards = ({ userData: users }: Prop) => {
+const TopCards = ({ userData: users, loadinUser }: Prop) => {
   const { data, isLoading: loadingAcct } = useQuery({
     queryFn: () => getUserAccountDetails(String(users?.phone_number)),
     queryKey: ["fetch-user-acct", users?.phone_number],
@@ -37,7 +38,7 @@ const TopCards = ({ userData: users }: Prop) => {
     queryKey: ["fetch-user-current-plan", users?.phone_number],
     enabled: !!users?.phone_number,
   });
-  const { data: walletBalance } = useQuery({
+  const { data: walletBalance, isLoading: loadingWallet } = useQuery({
     queryFn: () => getWalletBalance(String(users?.phone_number)),
     queryKey: ["fetch-wallet-balance", users?.phone_number],
     enabled: !!users?.phone_number,
@@ -47,10 +48,10 @@ const TopCards = ({ userData: users }: Prop) => {
     queryKey: ["fetch-family-plan", users?.phone_number],
     enabled: !!users?.phone_number,
   });
-  const { data: beneficiaryList } = useQuery({
+  const { data: beneficiaryList, isLoading: loadingBeneficial } = useQuery({
     queryFn: getBeneficiaries,
     queryKey: ["fetch-Beneficiaries-list"],
-    // enabled: !!users?.phone_number,
+    enabled: !!users?.phone_number,
   });
 
   const [AddFund, setAddFund] = useState(false);
@@ -78,8 +79,8 @@ const TopCards = ({ userData: users }: Prop) => {
     <div className="">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 2xl:grid-cols-[1.1fr_1fr_1fr_1fr_1.4fr]">
         <div className="bg-white rounded-10 px-6 py-4 shadow-sm">
-          {loadingPlan ? (
-            <div className="flex justify-center items-center w-full py-6">
+          {loadingPlan || loadinUser ? (
+            <div className="flex justify-center h-full items-center w-full py-6">
               <Spinner className="w-4  h-4 " color="#DB8C00" />
             </div>
           ) : (
@@ -127,143 +128,166 @@ const TopCards = ({ userData: users }: Prop) => {
         </div>
 
         <div className="bg-white rounded-10 p-1">
-          <div className="bg-[#F0F5FF] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
-            <div className="flex-1 py-1">
-              <div className="flex items-center gap-x-1">
-                <FamilyUserIcon />
-                <h2 className="text-sm font-semibold font-sans  text-[#032282]">
-                  Family Plan
-                </h2>
+          {loadingBeneficial || loadinUser ? (
+            <div className="flex justify-center h-full items-center w-full py-6">
+              <Spinner className="w-4  h-4 " color="#DB8C00" />
+            </div>
+          ) : (
+            <div className="bg-[#F0F5FF] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
+              <div className="flex-1 py-1">
+                <div className="flex items-center gap-x-1">
+                  <FamilyUserIcon />
+                  <h2 className="text-sm font-semibold font-sans  text-[#032282]">
+                    Family Plan
+                  </h2>
+                </div>
+                <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
+                  <h2 className="text-[#032282] text-xl font-bold">
+                    {beneficiaryList && beneficiaryList[0]?.data?.length}
+                  </h2>
+                  <div className="bg-white py-1 px-2 rounded-md">
+                    <p className="text-xxs text-[#032282]">Benefactors</p>
+                  </div>
+                  <div className="p-4">
+                    <AvatarGroup
+                      avatars={generateAvatars(
+                        Number(
+                          beneficiaryList && beneficiaryList[0]?.data?.length
+                        )
+                      )}
+                    />
+                  </div>
+                </div>
               </div>
-              <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
-                <h2 className="text-[#032282] text-xl font-bold">
-                  {beneficiaryList && beneficiaryList[0]?.data?.length}
-                </h2>
-                <div className="bg-white py-1 px-2 rounded-md">
-                  <p className="text-xxs text-[#032282]">Benefactors</p>
-                </div>
-                <div className="p-4">
-                  <AvatarGroup
-                    avatars={generateAvatars(
-                      Number(
-                        beneficiaryList && beneficiaryList[0]?.data?.length
-                      )
-                    )}
-                  />
-                </div>
+              <div className="justify-self-end flex items-center gap-4">
+                <Button
+                  variant={"outlined"}
+                  className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
+                  onClick={() => setBuyPlan(true)}
+                >
+                  Buy Plan
+                </Button>
+                <Button
+                  className="bg-white rounded-md py-[.4375rem]  px-[.8125rem] text-[#032282] text-[.625rem]"
+                  // onClick={() => setBuyPlan(true)}
+                >
+                  View benefactors
+                </Button>
               </div>
             </div>
-            <div className="justify-self-end flex items-center gap-4">
-              <Button
-                variant={"outlined"}
-                className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
-                onClick={() => setBuyPlan(true)}
-              >
-                Buy Plan
-              </Button>
-              <Button
-                className="bg-white rounded-md py-[.4375rem]  px-[.8125rem] text-[#032282] text-[.625rem]"
-                // onClick={() => setBuyPlan(true)}
-              >
-                View benefactors
-              </Button>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* coperate card */}
         <div className="bg-white rounded-10 p-1">
-          <div className="bg-[#FFFAF0] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
-            <div className="">
+          {loadingBeneficial || loadinUser ? (
+            <div className="flex justify-center h-full items-center w-full py-6">
+              <Spinner className="w-4  h-4 " color="#DB8C00" />
+            </div>
+          ) : (
+            <div className="bg-[#FFFAF0] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
               <div className="">
-                <div className="flex items-center gap-x-1">
-                  <FamilyUserIcon backgroundColor="#FFF2D9" color="#DB8C00" />
-                  <h2 className="text-sm font-semibold font-sans  text-[#DB8C00]">
-                    Corporate
-                  </h2>
-                </div>
-                <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
-                  <h2 className="text-[#D98B02] text-xl font-bold">
-                    {" "}
-                    {beneficiaryList && beneficiaryList[1]?.data?.length}
-                  </h2>
-                  <div className="bg-[#FFF2D9] py-1 px-2 rounded-md">
-                    <p className="text-xxs text-[#DB8C00]">Employees</p>
+                <div className="">
+                  <div className="flex items-center gap-x-1">
+                    <FamilyUserIcon backgroundColor="#FFF2D9" color="#DB8C00" />
+                    <h2 className="text-sm font-semibold font-sans  text-[#DB8C00]">
+                      Corporate
+                    </h2>
+                  </div>
+                  <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
+                    <h2 className="text-[#D98B02] text-xl font-bold">
+                      {" "}
+                      {beneficiaryList && beneficiaryList[1]?.data?.length}
+                    </h2>
+                    <div className="bg-[#FFF2D9] py-1 px-2 rounded-md">
+                      <p className="text-xxs text-[#DB8C00]">Employees</p>
+                    </div>
+                  </div>
+                  <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
+                    <Button
+                      // variant={"outlined"}
+                      className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
+                      onClick={() => setBuyPlanForCoporate(true)}
+                    >
+                      Buy Plan
+                    </Button>
+                    <Button
+                      className="bg-[#FFE9BC] rounded-md py-[.4375rem]  px-[.8125rem] text-[#DB8C00] text-[.625rem]"
+                      // onClick={() => setBuyPlan(true)}
+                    >
+                      View
+                    </Button>
                   </div>
                 </div>
-                <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
-                  <Button
-                    // variant={"outlined"}
-                    className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
-                    onClick={() => setBuyPlanForCoporate(true)}
-                  >
-                    Buy Plan
-                  </Button>
-                  <Button
-                    className="bg-[#FFE9BC] rounded-md py-[.4375rem]  px-[.8125rem] text-[#DB8C00] text-[.625rem]"
-                    // onClick={() => setBuyPlan(true)}
-                  >
-                    View
-                  </Button>
-                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
         <div className="bg-white rounded-10 p-1">
-          <div className=" bg-[#fbe0f3] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
-            <div className="flex items-center gap-x-1">
-              <FamilyUserIcon backgroundColor="#f8c5e9" color="#e42eb1" />
-              <h2 className="text-sm font-semibold font-sans  text-[#E42EB1]">
-                Loved ones
-              </h2>
+          {loadingBeneficial || loadinUser ? (
+            <div className="flex justify-center h-full items-center w-full py-6">
+              <Spinner className="w-4  h-4 " color="#DB8C00" />
             </div>
-            <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
-              <h2 className="text-[#E42EB1] text-xl font-bold">
-                {" "}
-                {beneficiaryList && beneficiaryList[2]?.data?.length}
-              </h2>
-              <div className="bg-[#E42EB126] bg-opacity-15 py-1 px-2 rounded-md">
-                <p className="text-xxs text-[#E42EB1]">Beneficiaries</p>
-              </div>
-            </div>
-            <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
-              <Button
-                // variant={"outlined"}
-                className="bg-[#E42EB1] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
-                onClick={() => setBuyPlanForLovedOnes(true)}
-              >
-                Buy Plan
-              </Button>
-              <Button
-                className="bg-[#f8c5e9] rounded-md py-[.4375rem]  px-[.8125rem] text-[#E42EB1] text-[.625rem]"
-                // onClick={() => setBuyPlan(true)}
-              >
-                View
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white rounded-10 p-1">
-          <div className="bg-[#31D0AA26] h-full grid grid-cols-[1fr_1.2fr] divide-x-[.0625rem] divide-[#099976] divide-opacity-70 shadow-sm rounded-10  px-6 py-[.875rem] ">
-            <div className="">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-x-2">
-                  <button className="bg-[#31D0AA1F] shrink-0 rounded-full w-6 h-6 justify-center items-center flex">
-                    <WalletIcon />
-                  </button>
-                  <p className="text-[#099976] text-xs font-semibold">
-                    Wallet balance
-                  </p>
-                </div>
-              </div>
-
-              <div className="">
-                <h2 className="text-2xl font-bold text-[₦100,000] py-3 text-[#099976]">
-                  &#8358;{walletBalance?.data?.balance ?? 0}
+          ) : (
+            <div className=" bg-[#fbe0f3] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
+              <div className="flex items-center gap-x-1">
+                <FamilyUserIcon backgroundColor="#f8c5e9" color="#e42eb1" />
+                <h2 className="text-sm font-semibold font-sans  text-[#E42EB1]">
+                  Loved ones
                 </h2>
               </div>
-              {/* <div className="flex w-full items-center gap-3">
+              <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
+                <h2 className="text-[#E42EB1] text-xl font-bold">
+                  {" "}
+                  {beneficiaryList && beneficiaryList[2]?.data?.length}
+                </h2>
+                <div className="bg-[#E42EB126] bg-opacity-15 py-1 px-2 rounded-md">
+                  <p className="text-xxs text-[#E42EB1]">Beneficiaries</p>
+                </div>
+              </div>
+              <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
+                <Button
+                  // variant={"outlined"}
+                  className="bg-[#E42EB1] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
+                  onClick={() => setBuyPlanForLovedOnes(true)}
+                >
+                  Buy Plan
+                </Button>
+                <Button
+                  className="bg-[#f8c5e9] rounded-md py-[.4375rem]  px-[.8125rem] text-[#E42EB1] text-[.625rem]"
+                  // onClick={() => setBuyPlan(true)}
+                >
+                  View
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="bg-white rounded-10 p-1">
+          {loadingWallet || loadinUser ? (
+            <div className="flex justify-center h-full items-center w-full py-6">
+              <Spinner className="w-4  h-4 " color="#DB8C00" />
+            </div>
+          ) : (
+            <div className="bg-[#31D0AA26] h-full grid grid-cols-[1fr_1.2fr] divide-x-[.0625rem] divide-[#099976] divide-opacity-70 shadow-sm rounded-10  px-6 py-[.875rem] ">
+              <div className="">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-x-2">
+                    <button className="bg-[#31D0AA1F] shrink-0 rounded-full w-6 h-6 justify-center items-center flex">
+                      <WalletIcon />
+                    </button>
+                    <p className="text-[#099976] text-xs font-semibold">
+                      Wallet balance
+                    </p>
+                  </div>
+                </div>
+
+                <div className="">
+                  <h2 className="text-2xl font-bold text-[₦100,000] py-3 text-[#099976]">
+                    &#8358;{walletBalance?.data?.balance ?? 0}
+                  </h2>
+                </div>
+                {/* <div className="flex w-full items-center gap-3">
                 <Button className=" py-2 w-full bg-white rounded-10 text-[#099976] font-semibold">
                   Withdraw
                 </Button>
@@ -271,49 +295,50 @@ const TopCards = ({ userData: users }: Prop) => {
                   Buy new plan
                 </Button>
               </div> */}
-              <div className="">
-                <Button
-                  className="bg-[#fff] flex items-center justify-center gap-2 text-xs font-semibold text-[#099976] px-3 py-2 rounded-md"
-                  onClick={() => setAddFund(true)}
-                >
-                  Top up
-                  <PlusIcon />
-                </Button>
-              </div>
-            </div>
-            <div className="pl-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-x-2">
-                  <button className="bg-[#31D0AA1F] shrink-0 rounded-full w-6 h-6 justify-center items-center flex">
-                    <WalletIcon />
-                  </button>
-                  <p className="text-[#099976] text-xs font-semibold">
-                    Referral Wallet
-                  </p>
+                <div className="">
+                  <Button
+                    className="bg-[#fff] flex items-center justify-center gap-2 text-xs font-semibold text-[#099976] px-3 py-2 rounded-md"
+                    onClick={() => setAddFund(true)}
+                  >
+                    Top up
+                    <PlusIcon />
+                  </Button>
                 </div>
               </div>
+              <div className="pl-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-x-2">
+                    <button className="bg-[#31D0AA1F] shrink-0 rounded-full w-6 h-6 justify-center items-center flex">
+                      <WalletIcon />
+                    </button>
+                    <p className="text-[#099976] text-xs font-semibold">
+                      Referral Wallet
+                    </p>
+                  </div>
+                </div>
 
-              <div className="">
-                <h2 className="text-2xl font-bold text-[₦100,000] py-3 text-[#099976]">
-                  &#8358;{walletBalance?.data?.balance ?? 0}
-                </h2>
-              </div>
-              <div className="flex w-full items-center gap-3">
-                <Button
-                  className=" py-2 w-full bg-white rounded-10 text-[#099976] font-semibold"
-                  onClick={() => setshowWithdrawalModal(true)}
-                >
-                  Withdraw
-                </Button>
-                <LinkButton
-                  href={"/dashboard/view-referrals"}
-                  className="py-2 w-full bg-white rounded-10 text-[#099976] font-semibold"
-                >
-                  View
-                </LinkButton>
+                <div className="">
+                  <h2 className="text-2xl font-bold text-[₦100,000] py-3 text-[#099976]">
+                    &#8358;{walletBalance?.data?.balance ?? 0}
+                  </h2>
+                </div>
+                <div className="flex w-full items-center gap-3">
+                  <Button
+                    className=" py-2 w-full bg-white rounded-10 text-[#099976] font-semibold"
+                    onClick={() => setshowWithdrawalModal(true)}
+                  >
+                    Withdraw
+                  </Button>
+                  <LinkButton
+                    href={"/dashboard/view-referrals"}
+                    className="py-2 w-full bg-white rounded-10 text-[#099976] font-semibold"
+                  >
+                    View
+                  </LinkButton>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
       {AddFund && (
