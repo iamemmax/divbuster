@@ -45,8 +45,8 @@ const Dashboard = () => {
   });
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
-      <div className="bg-main w-full flex justify-between py-6 px-6 md:px-[7.5rem] ">
-        <div className="flex items-center gap-x-3 mb-[5rem] w-full">
+      <div className="bg-main w-full flex justify-between flex-wrap mb-[5rem] gap-3 items-center  py-6 px-6 md:px-[7.5rem] ">
+        <div className="flex items-center  gap-x-3 ">
           <div className="text-white h-[2.5rem] w-[2.5rem]">
             <Image
               alt="user icon"
@@ -56,97 +56,95 @@ const Dashboard = () => {
               className="rounded-full"
             />
           </div>
-
-          {isLoading ? (
+          <div className="flex  flex-col ">
+            <h2 className="text-white text-sm md:text-base font-medium">
+              {capitalizeFirstLetter(String(userData?.first_name))}{" "}
+              {capitalizeFirstLetter(String(userData?.last_name))}
+            </h2>
+            <div className="flex justify-between items-center w-full ">
+              <div className="flex items-center gap-x-3 flex-1">
+                <p className="text-[#6E6E8B] text-xs md:text-sm font-medium">
+                  Welcome, How are you today?
+                </p>
+                {userData?.is_active ? (
+                  <div className="bg-[#142D22] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
+                    <ActiveIcon />
+                    <p className="text-[.625rem] text-[#12B669]">Active plan</p>
+                  </div>
+                ) : (
+                  <div className="bg-[#F6CE7F26] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
+                    <ActiveIcon color="#DB8C00" />
+                    <p className="text-[.625rem] text-[#DB8C00]">
+                      Inactive plan
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          {/* {isLoading ? (
             <Spinner color="red" />
           ) : (
-            <div className="flex  flex-col w-full ">
-              <h2 className="text-white text-sm md:text-base font-medium">
-                {capitalizeFirstLetter(String(userData?.first_name))}{" "}
-                {capitalizeFirstLetter(String(userData?.last_name))}
-              </h2>
-              <div className="flex justify-between items-center w-full ">
-                <div className="flex items-center gap-x-3 flex-1">
-                  <p className="text-[#6E6E8B] text-xs md:text-sm font-medium">
-                    Welcome, How are you today?
+           
+          )} */}
+        </div>
+        <div className="flex items-center   gap-2  ">
+          {userData?.referral_code ? (
+            <div className="flex items-center gap-2">
+              <div
+                className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
+                onClick={() =>
+                  copy(
+                    ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}` ??
+                      ""
+                  )
+                }
+              >
+                <p className="text-white text-xxs text-opacity-60">
+                  Referral link
+                </p>
+                <div className="flex">
+                  <p className="text-white max-w-[6.25rem] text-xxs truncate">
+                    {` https://liberty-life.vercel.app/?referral_code=${userData?.referral_code}`}
                   </p>
-                  {userData?.is_active ? (
-                    <div className="bg-[#142D22] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
-                      <ActiveIcon />
-                      <p className="text-[.625rem] text-[#12B669]">
-                        Active plan
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="bg-[#F6CE7F26] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
-                      <ActiveIcon color="#DB8C00" />
-                      <p className="text-[.625rem] text-[#DB8C00]">
-                        Inactive plan
-                      </p>
-                    </div>
-                  )}
+                  <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
+                    <CopyIcon3 height={15} width={15} />
+                  </Button>
                 </div>
-                <div className="hidden lg:flex items-center   gap-2 ">
-                  {userData?.referral_code ? (
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
-                        onClick={() =>
-                          copy(
-                            ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}` ??
-                              ""
-                          )
-                        }
-                      >
-                        <p className="text-white text-xxs text-opacity-60">
-                          Referral link
-                        </p>
-                        <div className="flex">
-                          <p className="text-white max-w-[6.25rem] text-xxs truncate">
-                            {` https://liberty-life.vercel.app/?referral_code=${userData?.referral_code}`}
-                          </p>
-                          <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
-                            <CopyIcon3 height={15} width={15} />
-                          </Button>
-                        </div>
-                      </div>
+              </div>
 
-                      <div
-                        className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-6 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
-                        onClick={() => copy(userData?.referral_code ?? "")}
-                      >
-                        <p className="text-white text-xxs text-opacity-60">
-                          Referral Code
-                        </p>
-                        <div className="flex">
-                          <p className="text-white max-w-[3.25rem] text-xxs truncate">
-                            {userData?.referral_code ?? ""}
-                          </p>
-                          <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
-                            <CopyIcon3 height={15} width={15} />
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <Button onClick={() => refetch()}>
-                      {loadinGenerate ? (
-                        <SmallSpinner color="white" />
-                      ) : (
-                        "Generate Referral"
-                      )}
-                    </Button>
-                  )}
-                  <Button
-                    className="bg-[#099976] h-[2.8125rem] text-white  text-xs font-medium"
-                    onClick={() => setshowMakePaymentModal(true)}
-                  >
-                    Renew plan
+              <div
+                className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-6 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
+                onClick={() => copy(userData?.referral_code ?? "")}
+              >
+                <p className="text-white text-xxs text-opacity-60">
+                  Referral Code
+                </p>
+                <div className="flex">
+                  <p className="text-white max-w-[3.25rem] text-xxs truncate">
+                    {userData?.referral_code ?? ""}
+                  </p>
+                  <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
+                    <CopyIcon3 height={15} width={15} />
                   </Button>
                 </div>
               </div>
             </div>
+          ) : (
+            <Button onClick={() => refetch()}>
+              {loadinGenerate ? (
+                <SmallSpinner color="white" />
+              ) : (
+                "Generate Referral"
+              )}
+            </Button>
           )}
+          <Button
+            className="bg-[#099976] h-[2.8125rem] text-white  text-xs font-medium"
+            onClick={() => setshowMakePaymentModal(true)}
+          >
+            Renew plan
+          </Button>
         </div>
       </div>
       <div className=" relative w-full px-6 md:px-[7.5rem] h-full ">
