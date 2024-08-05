@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/core";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TopCards from "../comp/components/cards/TopCards";
 import HospitalAround from "../comp/components/cards/hospital/table/HospitalAround";
 import HospitalVisited from "../comp/components/cards/hospital/table/HospitalVisited";
@@ -43,6 +43,7 @@ const Dashboard = () => {
     queryFn: getPlan,
     queryKey: ["get-plans"],
   });
+
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
       <div className="mb-[5rem] bg-main py-6 px-6 md:px-[7.5rem]">
