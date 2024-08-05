@@ -475,7 +475,7 @@ const ReferralModalPlan = ({
                     <Button
                       type="button"
                       className="bg-[#525668] rounded-[1.25rem] px-5 py-3 font-semibold text-white"
-                      onClick={() => router.push("/login")}
+                      onClick={() => router.push("/create-password")}
                     >
                       Skip
                     </Button>
