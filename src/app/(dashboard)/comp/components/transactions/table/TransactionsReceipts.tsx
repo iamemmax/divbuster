@@ -1,242 +1,209 @@
-"use client"
-import React from 'react'
-import { Button, ClientOnly, Dialog, DialogBody, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/core";
-
-
+"use client";
+import React from "react";
+import {
+  Button,
+  ClientOnly,
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/core";
+import { TransactionTypes } from "@/app/(dashboard)/dashboard/api/fetchTransaction";
+import {
+  capitalizeFirstLetter,
+  formatCurrency,
+  removeCommaFromPrice,
+} from "@/utils";
+import moment from "moment";
 
 interface UseBooleanStateControlProps {
-    isTransactionDetailsModalOpen: boolean;
-    setTransactionDetailsModal: React.Dispatch<React.SetStateAction<boolean>>
-
-    heading: string;
-    subsection:string;
-    children?: React.ReactNode;
+  isTransactionDetailsModalOpen: boolean;
+  setTransactionDetailsModal: React.Dispatch<React.SetStateAction<boolean>>;
+  transDetails: TransactionTypes | undefined;
+  heading: string;
+  subsection: string;
+  children?: React.ReactNode;
 }
 
 interface data {
-    trans: {
-        item: string;
-        value: string
-    }[];
-    wallet: {
-        item: string;
-        value: string
-    }[];
-    other: {
-        item: string
-        value: string
-    }[]
+  trans: {
+    item: string;
+    value: string;
+  }[];
+  wallet: {
+    item: string;
+    value: string;
+  }[];
+  other: {
+    item: string;
+    value: string;
+  }[];
 }
 
-const data: data[] = [{
+const data: data[] = [
+  {
     trans: [
-        {
-            item: "₦10,000.00",
-            value: "successful"
-        }
+      {
+        item: "₦10,000.00",
+        value: "successful",
+      },
     ],
     wallet: [
-        {
-            item: "Wallet type",
-            value: "Main Wallet"
-        },
-        {
-            item: "Transaction type",
-            value: "Credit"
-        },
-        {
-            item: "Paid by",
-            value: "Olamide Keulere"
-        },
-        {
-            item: "Narration",
-            value: "Your Health Cover"
-        },],
+      {
+        item: "Wallet type",
+        value: "Main Wallet",
+      },
+      {
+        item: "Transaction type",
+        value: "Credit",
+      },
+      {
+        item: "Paid by",
+        value: "Olamide Keulere",
+      },
+      {
+        item: "Narration",
+        value: "Your Health Cover",
+      },
+    ],
 
     other: [
-        {
-            item: "Transaction ref",
-            value: "NF20394029DG"
-        },
-        {
-            item: "Transaction status",
-            value: "Successful"
-        },
-        {
-            item: "Date",
-            value: "Jul 16 2024"
-        },
-        {
-            item: "Time",
-            value: "8:01am"
-        },
-    ]
-}
-]
+      {
+        item: "Transaction ref",
+        value: "NF20394029DG",
+      },
+      {
+        item: "Transaction status",
+        value: "Successful",
+      },
+      {
+        item: "Date",
+        value: "Jul 16 2024",
+      },
+      {
+        item: "Time",
+        value: "8:01am",
+      },
+    ],
+  },
+];
 
 function TransactionReceivedModal({
+  transDetails,
+  isTransactionDetailsModalOpen,
+  setTransactionDetailsModal,
 
-    isTransactionDetailsModalOpen,
-    setTransactionDetailsModal,
+  heading,
+  subsection,
 
-    heading,
-    subsection
-
-    // children,
-
-
+  // children,
 }: UseBooleanStateControlProps) {
+  return (
+    <div className="rounded-xl">
+      <ClientOnly>
+        <Dialog open={isTransactionDetailsModalOpen}>
+          <DialogContent className="!overflow-hidden">
+            <DialogHeader className="bg-[#1B1687] ">
+              <DialogTitle className="text-[#fff]">{heading}</DialogTitle>
 
+              <DialogClose className="rounded-10 bg-transparent border-[0.3px] border-[#407BFF]">
+                <button onClick={() => setTransactionDetailsModal(false)}>
+                  close
+                </button>
+              </DialogClose>
+            </DialogHeader>
 
-
-
-
-    return (
-
-        <div className="rounded-xl">
-
-
-
-            <ClientOnly>
-
-                <Dialog open={isTransactionDetailsModalOpen}
-                    >
-
-                    <DialogContent className="!overflow-hidden">
-
-                        <DialogHeader className="bg-[#1B1687] ">
-
-                            <DialogTitle className="text-[#fff]">
-                                {heading}
-                            </DialogTitle>
-
-                            <DialogClose className="rounded-10 bg-transparent border-[0.3px] border-[#407BFF]">
-                                <button onClick={() => setTransactionDetailsModal(false)}>close</button>
-                            </DialogClose>
-
-                        </DialogHeader>
-
-                            <DialogBody className="bg-[#141B3f]">
-                                            <article className=' text-sm'>
-                                                <div >
-                                                    {
-                                                        data.map((item, index) =>
-                                                            <div key={index}>
-                                                                <div>
-                                                                    <p className='text-[#FFFFFF99] text-sm'>Amount:</p>
-                                                                    <div>{item?.trans?.map((items, index) =>
-                                                                        <div key={index} className='grid grid-cols-2'>
-                                                                            <p className='text-xl font-bold text-[#FFFFFFCC]'>{items?.item}</p>
-                                                                            <div>
-                                                                            <Button className='rounded-full bg-[#FFFFFF1A] text-white px-6 py-2 text-xs'>{items?.value}</Button>
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
-                                                                    </div>
-                                                                </div>
-                                                                <div className='mt-5'>
-                                                                    {item?.wallet?.map((items, index) =>
-                                                                        <div key={index} className='grid grid-cols-2 py-2'>
-                                                                            <p className='text-[#FFFFFF99]'>{items?.item}</p>
-                                                                            <p className='text-[#FFFFFFCC] text-start'>{items?.value}</p>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                                <p className='text-[#FFFFFFCC] mt-5 text-sm' >{subsection}</p>
-                                                                <div className='mt-5'>
-                                                                    {item?.other?.map((items, index) =>
-                                                                        <div key={index} className='grid grid-cols-2 py-2'>
-                                                                            <p className='text-[#FFFFFF99]'>{items?.item}</p>
-                                                                            <p className='text-[#FFFFFFCC]'>{items?.value}</p>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                                <div className='grid grid-cols-2 my-12'>
-                                                                    <div>
-                                                                        <Button className='rounded-[20px] border-[0.3px] border-[#FFFFFF99] py-3.5 px-7'>Download receipts</Button>
-                                                                    </div>
-                                                                    <div>
-                                                                        <Button className='rounded-[20px] border-[0.3px] border-[#FFFFFF99] py-3.5 px-10'>Share receipts</Button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    }
-                                                </div>
-                                            </article>
-                            </DialogBody>
-
-                    </DialogContent>
-
-                </Dialog>
-
-            </ClientOnly>
-
-
-        </div>
-
-
-
-
-
-    )
-
-
+            <DialogBody className="bg-[#141B3f]">
+              <article className=" text-sm">
+                <div>
+                  {data.map((item, index) => (
+                    <div key={index}>
+                      <div>
+                        <p className="text-[#FFFFFF99] text-sm">Amount:</p>
+                        <div>
+                          <div key={index} className="grid grid-cols-2">
+                            <p className="text-xl font-bold text-[#FFFFFFCC]">
+                              {formatCurrency(
+                                Number(
+                                  removeCommaFromPrice(
+                                    String(transDetails?.amount)
+                                  )
+                                )
+                              )}
+                            </p>
+                            <div>
+                              <Button className="rounded-full bg-[#FFFFFF1A]  text-white px-6 block py-2 text-xs">
+                                {capitalizeFirstLetter(
+                                  transDetails?.status?.toLocaleLowerCase() ??
+                                    ""
+                                )}
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-5">
+                        {item?.wallet?.map((items, index) => (
+                          <div key={index} className="grid grid-cols-2 py-2">
+                            <p className="text-[#FFFFFF99]">{items?.item}</p>
+                            <p className="text-[#FFFFFFCC] text-start">
+                              {items?.value}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-[#FFFFFFCC] mt-5 text-sm">
+                        {subsection}
+                      </p>
+                      <div className="mt-5">
+                        <div key={index} className="grid grid-cols-2 py-2">
+                          <p className="text-[#FFFFFF99]">Time</p>
+                          <p className="text-[#FFFFFFCC] text-xs">
+                            {moment(transDetails?.["date/time"]).format(
+                              " h:mm:ss a"
+                            )}
+                          </p>
+                        </div>
+                        <div key={index} className="grid grid-cols-2 py-2">
+                          <p className="text-[#FFFFFF99]">Date</p>
+                          <p className="text-[#FFFFFFCC] text-xs">
+                            {moment(transDetails?.["date/time"]).format(
+                              "dddd, MMMM Do YYYY,"
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 my-12">
+                        <div>
+                          <Button className="rounded-[20px] border-[0.3px] border-[#FFFFFF99] py-3.5 px-7">
+                            Download receipts
+                          </Button>
+                        </div>
+                        <div>
+                          <Button className="rounded-[20px] border-[0.3px] border-[#FFFFFF99] py-3.5 px-10">
+                            Share receipts
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </article>
+            </DialogBody>
+          </DialogContent>
+        </Dialog>
+      </ClientOnly>
+    </div>
+  );
 }
 
 export default TransactionReceivedModal;
 
-
 function setTransactionDetailsModal(arg0: boolean) {
-    throw new Error('Function not implemented.');
+  throw new Error("Function not implemented.");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import {  Button, Modal } from '@/components/core'
 // import { useBooleanStateControl } from '@/hooks'
@@ -256,7 +223,6 @@ function setTransactionDetailsModal(arg0: boolean) {
 //         value: string
 //     }[]
 // }
-
 
 // const TransactionsReceipts = () => {
 
@@ -314,8 +280,6 @@ function setTransactionDetailsModal(arg0: boolean) {
 //     } = useBooleanStateControl()
 //     return (
 //         <div>
-            
-            
 
 //             <Modal
 //                 isModalOpen={isModalOpen}
