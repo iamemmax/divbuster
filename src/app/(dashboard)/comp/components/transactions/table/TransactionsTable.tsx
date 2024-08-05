@@ -28,7 +28,10 @@ import {
 import { transactionData } from "../../../mocks/transactionData";
 import { statusColor } from "@/utils/statusColor";
 import { useQuery } from "react-query";
-import { getTransaction } from "@/app/(dashboard)/dashboard/api/fetchTransaction";
+import {
+  getTransaction,
+  TransactionTypes,
+} from "@/app/(dashboard)/dashboard/api/fetchTransaction";
 import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
 import { capitalizeFirstLetter } from "@/utils";
 import TransactionsReceipts from "./TransactionsReceipts";
@@ -53,7 +56,7 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
   const [globalFilter, setGlobalFilter] = useState("");
 
   const [TransactionDetails, setTransactionDetails] = useState(false);
-
+  const [transDetails, setTransDetails] = useState<TransactionTypes>();
   // const [selectedRows, setSelectedRows] = useState<{
   //   [key: string]: boolean;
   // }>({});
@@ -147,10 +150,13 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
     }),
     columnHelper.accessor("action", {
       header: () => "Action",
-      cell: () => (
+      cell: (info) => (
         <Button
           className="rounded-10 bg-[#F6F9FF] py-1 px-3 text-[#242424] text-xs"
-          onClick={() => setTransactionDetails(true)}
+          onClick={() => {
+            setTransDetails(info?.row?.original as TransactionTypes);
+            setTransactionDetails(true);
+          }}
         >
           Details
         </Button>
@@ -320,6 +326,7 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
           subsection="Other details"
           isTransactionDetailsModalOpen={TransactionDetails}
           setTransactionDetailsModal={setTransactionDetails}
+          transDetails={transDetails}
         />
       )}
     </div>

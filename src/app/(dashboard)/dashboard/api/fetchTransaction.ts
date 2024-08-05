@@ -2,11 +2,11 @@ import { adminAxios } from "@/lib/axios";
 
 
 interface TransactionType {
-  transactions: Transaction[];
+  transactions: TransactionTypes[];
   count: number;
 }
 
-interface Transaction {
+export interface TransactionTypes {
   's/n': number;
   'date/time': string;
   type: string;
