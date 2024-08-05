@@ -19,7 +19,7 @@
 //   // List out error keys that are usually not associated with input fields.
 //   const otherErrorKeys = [
 //     'non-field-errors',
-//     'nonFieldErrors',
+//     'nonFieldErrors'
 //     'detail',
 //     'message',
 //   ];
