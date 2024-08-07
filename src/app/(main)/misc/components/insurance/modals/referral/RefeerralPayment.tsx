@@ -19,7 +19,13 @@ import { PaymentSuccessMsg } from "../remital/RemitalSubmitPlan";
 
 interface Prop {
   //   userId?: string;
-  PaymentInfo?: PaymentSuccessMsg | undefined;
+  PaymentInfo?: {
+    account_name: string;
+    account_no: string;
+    amount: string;
+    bank_name: string;
+    paystack_link: string;
+  };
   showReferralPayment: true;
   setShowReferralPayment: React.Dispatch<React.SetStateAction<boolean>>;
   setShowReferralPasswordModal: React.Dispatch<React.SetStateAction<boolean>>;

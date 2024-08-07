@@ -139,7 +139,7 @@ const BuyPlanModal = ({ setBuyPlanModal, isBuyPlanModalOpen }: Prop) => {
                           >
                             {field?.type_of_beneficary === "MINOR"
                               ? "Minor  Name"
-                              : " Name"}
+                              : "Adult Name"}
                           </Label>
                           {fields?.length > 1 && (
                             <Button
@@ -203,7 +203,7 @@ const BuyPlanModal = ({ setBuyPlanModal, isBuyPlanModalOpen }: Prop) => {
                           })
                         }
                       >
-                        Add ADULT
+                        Add Adult
                       </Button>
                       <Button
                         className="text-white w-full rounded-[1.25rem] border-[0.3px] border-white border-opacity-70 py-4"

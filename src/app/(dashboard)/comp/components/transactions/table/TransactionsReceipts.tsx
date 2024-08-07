@@ -116,7 +116,7 @@ function TransactionReceivedModal({
             </DialogHeader>
 
             <DialogBody className="bg-[#141B3f]">
-              <article className=" text-sm">
+              <article className=" text-sm pb-5">
                 <div>
                   {data.map((item, index) => (
                     <div key={index}>
@@ -175,7 +175,7 @@ function TransactionReceivedModal({
                           </p>
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 my-12">
+                      {/* <div className="grid grid-cols-2 my-12">
                         <div>
                           <Button className="rounded-[20px] border-[0.3px] border-[#FFFFFF99] py-3.5 px-7">
                             Download receipts
@@ -186,7 +186,7 @@ function TransactionReceivedModal({
                             Share receipts
                           </Button>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   ))}
                 </div>

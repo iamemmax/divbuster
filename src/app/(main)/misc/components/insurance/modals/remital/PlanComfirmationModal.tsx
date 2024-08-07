@@ -53,10 +53,10 @@ const PlanComfirmationModal = ({
             </div>
             <div className="py-3 mt-2">
               <LinkButton
-                href={checkUserHasPassword ? "/login" : ""}
-                className="w-full bg-white py-4 rounded-10 text-sm font-bold text-[#1B1687] flex justify-center items-center"
+                href={checkUserHasPassword ? "/login" : "/"}
+                className="w-full bg-white py-4 rounded-10 text-sm font-bold text-[#000] flex justify-center items-center"
               >
-                {checkUserHasPassword && "Contine"}
+                Continue
               </LinkButton>
             </div>
           </div>

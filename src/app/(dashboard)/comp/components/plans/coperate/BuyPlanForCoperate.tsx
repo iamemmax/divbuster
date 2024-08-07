@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   Button,
+  ComingSoon,
 } from "@/components/core";
 import { z } from "zod";
 import { Label } from "@radix-ui/react-label";
@@ -18,6 +19,7 @@ import CloseIcon from "@/app/(main)/misc/icons/CLoseIcon";
 import BeneficiariesModal from "../BeneficariesModal";
 import { useQuery } from "react-query";
 import { getPlan } from "@/app/(main)/misc/components/insurance/api/plan/getPlan";
+import ComingSoonIcon from "@/app/(main)/misc/components/insurance/icons/ComingSoonIcon";
 
 interface Prop {
   setBuyPlanModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -93,212 +95,6 @@ const BuyPlanModalForCoperate = ({
     queryKey: ["get-plans"],
   });
 
-  // const plansData = [
-  //   {
-  //     package_name: "Personal/Individual",
-  //     data: [
-  //       {
-  //         id: 4,
-  //         plan_duration: {
-  //           id: 1,
-  //           plan_type: {
-  //             id: 1,
-  //             name: "Personal/Individual",
-  //           },
-  //           duration: 1,
-  //           min_members: 0,
-  //         },
-  //         price: "3000.00",
-  //         old_price: null,
-  //         descriptions: [
-  //           "Basic Health Coverage",
-  //           "Wellness and Preventive Care",
-  //           "Mental Health Services",
-  //           "Specialist Consultations",
-  //           "Fitness and Nutrition Programs",
-  //         ],
-  //       },
-  //       {
-  //         id: 5,
-  //         plan_duration: {
-  //           id: 2,
-  //           plan_type: {
-  //             id: 1,
-  //             name: "Personal/Individual",
-  //           },
-  //           duration: 6,
-  //           min_members: 0,
-  //         },
-  //         price: "15000.00",
-  //         old_price: null,
-  //         descriptions: [
-  //           "Basic Health Coverage",
-  //           "Wellness and Preventive Care",
-  //           "Mental Health Services",
-  //           "Specialist Consultations",
-  //           "Fitness and Nutrition Programs",
-  //         ],
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     package_name: "Family",
-  //     data: [
-  //       {
-  //         id: 1,
-  //         plan_duration: {
-  //           id: 4,
-  //           plan_type: {
-  //             id: 2,
-  //             name: "Family",
-  //           },
-  //           duration: 2,
-  //           min_members: 3,
-  //         },
-  //         price: "6000.00",
-  //         old_price: "3000.00",
-  //         descriptions: [
-  //           "Comprehensive Family Coverage",
-  //           "Child Wellness Program",
-  //           "Maternity and Newborn Care",
-  //           "Chronic Condition Management",
-  //           "Dental and Vision Care",
-  //         ],
-  //       },
-  //       {
-  //         id: 2,
-  //         plan_duration: {
-  //           id: 5,
-  //           plan_type: {
-  //             id: 2,
-  //             name: "Family",
-  //           },
-  //           duration: 6,
-  //           min_members: 3,
-  //         },
-  //         price: "10000.00",
-  //         old_price: "5000.00",
-  //         descriptions: [
-  //           "Comprehensive Family Coverage",
-  //           "Child Wellness Program",
-  //           "Maternity and Newborn Care",
-  //           "Chronic Condition Management",
-  //           "Dental and Vision Care",
-  //         ],
-  //       },
-  //       {
-  //         id: 3,
-  //         plan_duration: {
-  //           id: 6,
-  //           plan_type: {
-  //             id: 2,
-  //             name: "Family",
-  //           },
-  //           duration: 12,
-  //           min_members: 3,
-  //         },
-  //         price: "18000.00",
-  //         old_price: "7000.00",
-  //         descriptions: [
-  //           "Comprehensive Family Coverage",
-  //           "Child Wellness Program",
-  //           "Maternity and Newborn Care",
-  //           "Chronic Condition Management",
-  //           "Dental and Vision Care",
-  //         ],
-  //       },
-  //       {
-  //         id: 6,
-  //         plan_duration: {
-  //           id: 6,
-  //           plan_type: {
-  //             id: 2,
-  //             name: "Family",
-  //           },
-  //           duration: 12,
-  //           min_members: 3,
-  //         },
-  //         price: "30000.00",
-  //         old_price: null,
-  //         descriptions: [
-  //           "Basic Health Coverage",
-  //           "Wellness and Preventive Care",
-  //           "Mental Health Services",
-  //           "Specialist Consultations",
-  //           "Fitness and Nutrition Programs",
-  //         ],
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     package_name: "Corporate",
-  //     data: [
-  //       {
-  //         id: 7,
-  //         plan_duration: {
-  //           id: 7,
-  //           plan_type: {
-  //             id: 3,
-  //             name: "Corporate",
-  //           },
-  //           duration: 3,
-  //           min_members: 4,
-  //         },
-  //         price: "10000.00",
-  //         old_price: null,
-  //         descriptions: [
-  //           "Comprehensive Employee Health Plans",
-  //           "Occupational Health Services",
-  //           "Employee Assistance Programs",
-  //           "Health and Wellness Workshops",
-  //           "Executive Health Check-Ups",
-  //         ],
-  //       },
-  //       {
-  //         id: 8,
-  //         plan_duration: {
-  //           id: 8,
-  //           plan_type: {
-  //             id: 3,
-  //             name: "Corporate",
-  //           },
-  //           duration: 6,
-  //           min_members: 4,
-  //         },
-  //         price: "20000.00",
-  //         old_price: null,
-  //         descriptions: [
-  //           "Comprehensive Employee Health Plans",
-  //           "Occupational Health Services",
-  //           "Employee Assistance Programs",
-  //           "Health and Wellness Workshops",
-  //           "Executive Health Check-Ups",
-  //         ],
-  //       },
-  //       {
-  //         id: 9,
-  //         plan_duration: {
-  //           id: 9,
-  //           plan_type: {
-  //             id: 3,
-  //             name: "Corporate",
-  //           },
-  //           duration: 12,
-  //           min_members: 4,
-  //         },
-  //         price: "40000.00",
-  //         old_price: null,
-  //         descriptions: [
-  //           "Comprehensive Employee Health Plans",
-  //           "Occupational Health Services",
-  //           "Employee Assistance Programs",
-  //           "Health and Wellness Workshops",
-  //           "Executive Health Check-Ups",
-  //         ],
-  //       },
-  //     ],
-  //   },
-  // ];
   return (
     <>
       {isLoading ? (
@@ -320,7 +116,8 @@ const BuyPlanModalForCoperate = ({
               </DialogHeader>
 
               <DialogBody className="bg-[#141B3f] w-full !max-h-[86vh]">
-                <div className="text-[#fff] font-light text-sm pb-4">
+                <ComingSoonIcon />
+                {/* <div className="text-[#fff] font-light text-sm pb-4">
                   <p className="w-4/5 pb-2">
                     Kindly enter the details below to activate beneficiary.
                   </p>
@@ -419,7 +216,7 @@ const BuyPlanModalForCoperate = ({
                       </Button>
                     </div>
                   </div>
-                </form>
+                </form> */}
               </DialogBody>
             </DialogContent>
           </Dialog>

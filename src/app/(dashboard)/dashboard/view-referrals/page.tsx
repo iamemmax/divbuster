@@ -117,7 +117,7 @@ const Page = () => {
 
   return (
     <div className="bg-[#F5F9FE]">
-      <div className="px-6 md:px-[7.5rem] flex justify-between items-center flex-wrap py-10 bg-[#080d27]">
+      <div className="px-6  md:px-[4.5rem] lg:px-[7.5rem]  flex justify-between items-center flex-wrap py-10 bg-[#080d27]">
         <Button
           className="flex items- bg-transparent gap-3"
           onClick={() => router?.back()}
@@ -143,7 +143,7 @@ const Page = () => {
         </div>
       </div>
       <div className="bg-main min-h-36"></div>
-      <div className="h-full w-full px-6 md:px-[7.5rem] min-h-screen relative -mt-32">
+      <div className="h-full w-full px-6  md:px-[4.5rem] lg:px-[7.5rem]  min-h-screen relative -mt-32">
         <div className="bg-white w-full h-full mx-auto py-[1.9375rem] px-[2.625rem] rounded-[.625rem]">
           <div className="flex justify-between">
             <div className="flex flex-wrap gap-4 w-full items-center">

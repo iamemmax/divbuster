@@ -201,8 +201,8 @@ const CreatepasswordModal = ({
                   >
                     Email
                   </Label>
-                  <Input
-                    className={`login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 outline-none text-sm font-sans font-medium text-white placeholder:text-white focus:!bg-white/30 `}
+                  <input
+                    className={`login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5  text-sm font-sans font-medium text-white placeholder:text-white focus:!bg-white/30 `}
                     id="email"
                     placeholder="Enter email"
                     type="email"
@@ -228,7 +228,7 @@ const CreatepasswordModal = ({
 
                     <div className="flex items-center w-full  pr-10 md:pr-16 !bg-white/10 rounded-lg h-[3rem] ">
                       <input
-                        className="login-autofill-text w-full pr-7 login-no-chrome-autofill-bg h-full  !outline-none !border-none  rounded-lg bg-transparent  px-6 py-3.5 text-sm font-sans focus:outline-none font-medium text-white placeholder:text-white "
+                        className="login-autofill-text w-full pr-7 login-no-chrome-autofill-bg h-full   !border-none  rounded-lg bg-transparent  px-6 py-3.5 text-sm font-sans focus:outline-none font-medium text-white placeholder:text-white "
                         id="password"
                         placeholder="Enter password"
                         type={passwordShown ? "text" : "password"}

@@ -263,13 +263,13 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
             </div>
           )}
         </div>
-        <div className="bg-white rounded-10 p-1">
+        <div className="bg-white rounded-10 p-1 col-span-[1.5fr] 2xl:col-span-1">
           {loadingWallet || loadinUser ? (
             <div className="flex justify-center h-full items-center w-full py-6">
               <Spinner className="w-4  h-4 " color="#DB8C00" />
             </div>
           ) : (
-            <div className="bg-[#31D0AA26] h-full grid grid-cols-[1fr_1.2fr] divide-x-[.0625rem] divide-[#099976] divide-opacity-70 shadow-sm rounded-10  px-6 py-[.875rem] ">
+            <div className="bg-[#31D0AA26] h-full grid grid-cols-[1fr_1fr] divide-x-[.0625rem] divide-[#099976] divide-opacity-70 shadow-sm rounded-10  px-6 py-[.875rem] ">
               <div className="">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-x-2">
@@ -322,16 +322,16 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                     &#8358;{walletBalance?.data?.balance ?? 0}
                   </h2>
                 </div>
-                <div className="flex w-full items-center gap-3">
+                <div className="flex w-full items-center flex-wrap 2xl:flex-nowrap gap-3">
                   <Button
-                    className=" py-2 w-full bg-white rounded-10 text-[#099976] font-semibold"
+                    className=" py-2  bg-white rounded-10 text-[#099976] font-semibold"
                     onClick={() => setshowWithdrawalModal(true)}
                   >
                     Withdraw
                   </Button>
                   <LinkButton
                     href={"/dashboard/view-referrals"}
-                    className="py-2 w-full bg-white rounded-10 text-[#099976] font-semibold"
+                    className="py-2  bg-white rounded-10 text-[#099976] font-semibold"
                   >
                     View
                   </LinkButton>
