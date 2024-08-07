@@ -104,6 +104,19 @@ function SelectDurationModal({
     queryKey: ["fetch-percentage-list"],
   });
 
+  function getPercentage(type: string, number: number): number {
+    const percentageData = percentageCalc?.percentage_data[type];
+
+    // Convert number to string for indexing
+    const key = number > 8 ? "8" : number.toString();
+
+    if (percentageData && percentageData.hasOwnProperty(key)) {
+      return percentageData[key];
+    } else {
+      return 0; // or some default value if the key doesn't exist
+    }
+  }
+
   // Update calculations when relevant data changes
   useEffect(() => {
     if (selectedPlan && beneficiariesList?.beneficiaries) {

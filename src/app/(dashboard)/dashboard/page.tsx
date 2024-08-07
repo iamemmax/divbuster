@@ -46,7 +46,7 @@ const Dashboard = () => {
 
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
-      <div className="mb-[5rem] bg-main py-6 px-6 md:px-[7.5rem]">
+      <div className="mb-[5rem] bg-main py-6 px-6  md:px-[4.5rem] lg:px-[7.5rem]  ">
         {isLoading ? (
           <div className="w-full h-24 flex justify-center items-center">
             {" "}
@@ -154,7 +154,7 @@ const Dashboard = () => {
           </div>
         )}
       </div>
-      <div className=" relative w-full px-6 md:px-[7.5rem] h-full ">
+      <div className=" relative w-full px-6  md:px-[4.5rem] lg:px-[7.5rem]  h-full ">
         <div className="relative">
           <div className=" inset-x-0 top-[-4rem] absolute">
             <div className="">

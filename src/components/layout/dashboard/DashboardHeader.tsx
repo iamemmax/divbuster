@@ -31,7 +31,7 @@
 //   ];
 //   return (
 //     <>
-//       <header className="bg-main px-6 md:px-[7.5rem] py-6 border-b border-[#2B303C]">
+//       <header className="bg-main px-6  md:px-[4.5rem] lg:px-[7.5rem]  py-6 border-b border-[#2B303C]">
 //         <div className="z-50  flex items-center justify-between">
 //           <Link href={"/"} className="flex text-white items-center gap-3">
 //             <Logo className="" height={42} width={42} />
@@ -173,7 +173,7 @@ export function DashboardHeader() {
 
   return (
     <>
-      <header className="bg-main px-6 md:px-[7.5rem] py-6 border-b border-[#2B303C]">
+      <header className="bg-main px-6  md:px-[4.5rem] lg:px-[7.5rem]  py-6 border-b border-[#2B303C]">
         <div className="z-50 flex items-center justify-between">
           <a href={"/"} className="flex text-white items-center gap-3">
             <Logo className="" height={42} width={42} />

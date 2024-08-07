@@ -88,7 +88,10 @@ const NonRemitalSubmitPlanModal = ({
       },
       {
         onSuccess: (data: PaymentSuccessMsg) => {
-          if (data?.message === "insurance request sent, please wait") {
+          if (
+            data?.message === "insurance request sent, please wait" ||
+            data?.message === "You still have an active health plan.!!"
+          ) {
             setShowConfirmation(true);
             // setOpenShowRemitalPlan(false);
             setConfirmationMessage(data?.message);
@@ -149,7 +152,8 @@ const NonRemitalSubmitPlanModal = ({
 
               <div className="text-center px-7 mt-[0.65rem] ">
                 <p className="text-xs text-[#94a3b8] font-normal 'font-DMSans' ">
-                  You have selected 6 months health cover. A monthly premium of
+                  You have selected 6 months health cover. <br /> A monthly
+                  premium of
                   <span className="text-white px-1 font-semibold">
                     {" "}
                     ₦ {planType?.amount ?? 0 + " "}{" "}

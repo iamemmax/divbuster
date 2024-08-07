@@ -22,20 +22,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import useDataStore from "@/app/store/useStore";
 import { useChangePassword } from "@/app/(auth)/(onboarding)/api/createPassword";
 import { SmallSpinner } from "@/icons/core";
 import EyeIcon from "@/app/(main)/misc/icons/EyeIcon";
 import { Label } from "@radix-ui/react-label";
 import { Input2 } from "@/components/core/Input2";
-
-interface Prop {
-  setShowPasswordModal: Dispatch<SetStateAction<boolean>>;
-  // setOpenShowRemitalPlan: React.Dispatch<React.SetStateAction<boolean>>;
-  //   userEmail: string;
-  showPasswordModal: boolean;
-}
+import { useUpdateReferralUser } from "../../api/referral/updateReferral";
+import toast from "react-hot-toast";
 
 // Define Zod schema using TypeScript types
 const PasswordFormSchema = z.object({
@@ -118,12 +113,7 @@ interface Hospitals {
   hospital: string;
   provider_id: string;
 }
-const CreateReferralPasswordModal = ({
-  setShowPasswordModal,
-  showPasswordModal,
-  //   setOpenShowRemitalPlan,
-  //   userEmail,
-}: Prop) => {
+const CreateReferralPasswordModal = () => {
   const {
     register,
     handleSubmit,
@@ -151,7 +141,8 @@ const CreateReferralPasswordModal = ({
 
   const schema = watchSelectedOption === "nin" ? ninSchema : bvnSchema;
   const [errorMsg, setErrorMsg] = React.useState("");
-
+  const searchParams = useSearchParams();
+  const trxref = searchParams.get("trxref");
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -165,35 +156,33 @@ const CreateReferralPasswordModal = ({
     setPasswordShown(!passwordShown);
   };
 
-  const { mutate: handleChangePassword, isLoading } = useChangePassword();
-  const addUser = useDataStore((state) => state?.addUser);
+  const { mutate: handleChangePassword, isLoading } = useUpdateReferralUser();
   const onsubmit = ({
-    passwordData: { confirm_password, email, password },
+    passwordData: {
+      confirm_password,
+      email,
+      password,
+      bvn,
+      nin,
+      selectedOption,
+    },
   }: passwordformProps) => {
     handleChangePassword(
       {
+        transaction_ref: String(trxref),
+        selectedOption,
         confirm_password,
         email,
         password,
-        // phone: "",
+        nin: watchSelectedOption === "nin" ? nin : "",
+        bvn: watchSelectedOption === "bvn" ? bvn : "",
       },
       {
-        onSuccess: (data: successMsg) => {
-          addUser({
-            password: password,
-            phone_number: data?.user?.phone_number,
+        onSuccess: () => {
+          toast.success("record updated successfuly", {
+            id: "updateReferralPassword",
           });
-          setUserId(data?.user?.id);
-          //   if (data) {
-          //     setOpenShowRemitalPlan(true);
-          //     if (userEmail !== undefined) {
-          //       setOpenShowRemitalPlan(true);
-          //       setShowPasswordModal(false);
-          //     } else {
-          //       router.push("/login");
-          //     }
-          //   }
-          // router?.push("/");
+          router?.push("/login");
         },
         onError: (error) => {
           const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -210,227 +199,200 @@ const CreateReferralPasswordModal = ({
     <>
       (
       <div className="rounded-xl">
-        <Dialog open={showPasswordModal}>
-          <DialogContent className="!overflow-hidden">
-            <DialogHeader className="bg-[#1B1687] 'font-DMSans' font-medium text-[#fff] text-base">
-              <DialogTitle className="'font-DMSans' font-medium text-[#fff]">
-                Create Password
-              </DialogTitle>
-              <DialogClose
-                className="rounded-full"
-                onClick={() => setShowPasswordModal(false)}
+        <form className="relative z-10" onSubmit={handleSubmit(onsubmit)}>
+          <div className={` `}>
+            <Label
+              className="text-white font-sans text-sm mb-1"
+              htmlFor="phone"
+            >
+              Email
+            </Label>
+            <Input
+              className={`login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 outline-none text-sm font-sans font-medium text-white placeholder:text-white focus:!bg-white/30 `}
+              id="email"
+              placeholder="Enter email"
+              type="email"
+              {...register("passwordData.email")}
+            />
+
+            {errors?.passwordData?.email && (
+              <FormError
+                className="bg-red-900/40 text-white"
+                errorMessage={errors.passwordData.email.message}
+              />
+            )}
+          </div>
+
+          <div className="mt-4">
+            <div>
+              <Label
+                className="text-white font-sans text-sm mb-2"
+                htmlFor="password"
               >
-                <button>close</button>
-              </DialogClose>
-            </DialogHeader>
+                Password
+              </Label>
 
-            <DialogBody className="bg-[#141B3f] w-full">
-              <form className="relative z-10" onSubmit={handleSubmit(onsubmit)}>
-                <div className={` `}>
-                  <Label
-                    className="text-white font-sans text-sm mb-1"
-                    htmlFor="phone"
-                  >
-                    Email
-                  </Label>
-                  <Input
-                    className={`login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 outline-none text-sm font-sans font-medium text-white placeholder:text-white focus:!bg-white/30 `}
-                    id="email"
-                    placeholder="Enter email"
-                    type="email"
-                    {...register("passwordData.email")}
-                  />
-
-                  {errors?.passwordData?.email && (
-                    <FormError
-                      className="bg-red-900/40 text-white"
-                      errorMessage={errors.passwordData.email.message}
-                    />
-                  )}
-                </div>
-
-                <div className="mt-4">
-                  <div>
-                    <Label
-                      className="text-white font-sans text-sm mb-2"
-                      htmlFor="password"
-                    >
-                      Password
-                    </Label>
-
-                    <div className="flex items-center w-full  pr-10 md:pr-16 !bg-white/10 rounded-lg h-[3rem] ">
-                      <Input
-                        className="login-autofill-text  pr-7 login-no-chrome-autofill-bg h-full  outline-none border-none  rounded-lg bg-transparent  px-6 py-3.5 text-sm font-sans font-medium text-white placeholder:text-white  focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#403C3A]"
-                        id="password"
-                        placeholder="Enter password"
-                        type={passwordShown ? "text" : "password"}
-                        {...register("passwordData.password")}
-                      />
-                      <button
-                        type="button"
-                        className="absolute right-5"
-                        onClick={togglePassword}
-                      >
-                        <EyeIcon />
-                      </button>
-                    </div>
-                    <p className="text-white leading-[15px] opacity-80 text-[.625rem] my-2">
-                      Must be at least 6 characters long - uppercase, lowercase,
-                      number, special characters (@*-!_)
-                    </p>
-
-                    {errors?.passwordData?.password && (
-                      <FormError
-                        className="mt-3 bg-red-900/40 text-white"
-                        errorMessage={errors.passwordData.password.message}
-                      />
-                    )}
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <Label
-                    className="text-white font-sans text-sm mb-2"
-                    htmlFor="password"
-                  >
-                    Confirm Pasword
-                  </Label>
-
-                  <div className="flex items-center relative w-full pr-10 md:pr-16  !bg-white/10 rounded-lg h-[3rem] ">
-                    <Input
-                      className="login-autofill-text !outline-none !border-none login-no-chrome-autofill-bg h-full rounded-lg bg-transparent px-6 py-3.5 text-sm font-sans font-medium text-white placeholder"
-                      id="password"
-                      placeholder="Enter password"
-                      type={passwordShown ? "text" : "password"}
-                      {...register("passwordData.confirm_password")}
-                      style={{ outline: "none", border: "none" }}
-                    />
-
-                    {/* <div> */}
-                    <button
-                      type="button"
-                      className="absolute right-5"
-                      onClick={togglePassword}
-                    >
-                      <EyeIcon />
-                    </button>
-                    {/* </div> */}
-                  </div>
-
-                  {errors?.passwordData?.confirm_password && (
-                    <FormError
-                      className="mt-3 bg-red-900/40 text-white"
-                      errorMessage={
-                        errors?.passwordData?.confirm_password?.message
-                      }
-                    />
-                  )}
-                </div>
-                <div className="w-full mt-[1rem] text-sm font-normal">
-                  <Label
-                    className="mb-1 block text-xs text-[#fff]"
-                    htmlFor="selectedOption"
-                  >
-                    Select the one to enter, BVN or NIN?
-                  </Label>
-                  <Controller
-                    control={control}
-                    name="passwordData.selectedOption"
-                    render={({ field: { onChange, value, ref } }) => (
-                      <Select value={value} onValueChange={onChange}>
-                        <SelectTrigger
-                          id="selectedOption"
-                          ref={ref}
-                          className="bg-[#2D3456] text-[#fff] w-full py-2 px-3 rounded-md focus:outline-none"
-                        >
-                          <span>
-                            {value === "bvn"
-                              ? "BVN"
-                              : value === "nin"
-                                ? "NIN"
-                                : "Select BVN or NIN"}
-                          </span>
-                        </SelectTrigger>
-                        <SelectContent className="bg-white border border-gray-300 mt-1 rounded-md shadow-lg w-full absolute z-50 top-full">
-                          <SelectItem value="bvn" className="w-full">
-                            BVN
-                          </SelectItem>
-                          <SelectItem value="nin" className="w-full">
-                            NIN
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                </div>
-
-                {watchSelectedOption === "bvn" && (
-                  <div className="w-full mt-[1rem] text-sm font-normal">
-                    <Label
-                      className="mb-1 block text-xs text-[#fff]"
-                      htmlFor="bvn"
-                    >
-                      BVN
-                    </Label>
-                    <div className="relative mt-[.25rem]">
-                      <Input2
-                        className={`${errors?.passwordData?.bvn?.message ? "border border-red-700" : ""} text-[#fff] h-12`}
-                        placeholder="Enter BVN"
-                        type="text"
-                        id="bvn"
-                        required
-                        {...register("passwordData.bvn")}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {watchSelectedOption === "nin" && (
-                  <div className="w-full mt-[1rem] text-sm font-normal">
-                    <Label
-                      className="mb-1 block text-xs text-[#fff]"
-                      htmlFor="nin"
-                    >
-                      NIN
-                    </Label>
-                    <div className="relative mt-[.25rem]">
-                      <Input2
-                        className={`${errors?.passwordData?.nin?.message ? "border border-red-700" : ""} text-[#fff] h-12`}
-                        placeholder="Enter NIN"
-                        type="text"
-                        id="nin"
-                        required
-                        {...register("passwordData.nin")}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <Button
-                  className="my-6 mt-16 flex justify-center items-center gap-x-3 w-full rounded-[20px] text-[#1B1687] font-sans py-[.9375rem] text-base leading-[normal]"
-                  type="submit"
-                  variant="white"
+              <div className="flex items-center w-full  pr-10 md:pr-16 !bg-white/10 rounded-lg h-[3rem] ">
+                <Input
+                  className="login-autofill-text  pr-7 login-no-chrome-autofill-bg h-full  outline-none border-none  rounded-lg bg-transparent  px-6 py-3.5 text-sm font-sans font-medium text-white placeholder:text-white  focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#403C3A]"
+                  id="password"
+                  placeholder="Enter password"
+                  type={passwordShown ? "text" : "password"}
+                  {...register("passwordData.password")}
+                />
+                <button
+                  type="button"
+                  className="absolute right-5"
+                  onClick={togglePassword}
                 >
-                  Continue
-                  {isLoading && <SmallSpinner className="" color="#1B1687" />}
-                </Button>
-              </form>
-            </DialogBody>
-          </DialogContent>
-        </Dialog>
+                  <EyeIcon />
+                </button>
+              </div>
+              <p className="text-white leading-[15px] opacity-80 text-[.625rem] my-2">
+                Must be at least 6 characters long - uppercase, lowercase,
+                number, special characters (@*-!_)
+              </p>
 
-        <ErrorModal
-          isErrorModalOpen={isErrorModalOpen}
-          setErrorModalState={() => {
-            setErrorModalState(false);
-          }}
-          subheading={
-            errorModalMessage ||
-            errorMsg ||
-            "Please check your inputs and try again."
-          }
-        ></ErrorModal>
+              {errors?.passwordData?.password && (
+                <FormError
+                  className="mt-3 bg-red-900/40 text-white"
+                  errorMessage={errors.passwordData.password.message}
+                />
+              )}
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <Label
+              className="text-white font-sans text-sm mb-2"
+              htmlFor="password"
+            >
+              Confirm Pasword
+            </Label>
+
+            <div className="flex items-center relative w-full pr-10 md:pr-16  !bg-white/10 rounded-lg h-[3rem] ">
+              <Input
+                className="login-autofill-text !outline-none !border-none login-no-chrome-autofill-bg h-full rounded-lg bg-transparent px-6 py-3.5 text-sm font-sans font-medium text-white placeholder"
+                id="password"
+                placeholder="Enter password"
+                type={passwordShown ? "text" : "password"}
+                {...register("passwordData.confirm_password")}
+                style={{ outline: "none", border: "none" }}
+              />
+
+              {/* <div> */}
+              <button
+                type="button"
+                className="absolute right-5"
+                onClick={togglePassword}
+              >
+                <EyeIcon />
+              </button>
+              {/* </div> */}
+            </div>
+
+            {errors?.passwordData?.confirm_password && (
+              <FormError
+                className="mt-3 bg-red-900/40 text-white"
+                errorMessage={errors?.passwordData?.confirm_password?.message}
+              />
+            )}
+          </div>
+          <div className="w-full mt-[1rem] text-sm font-normal">
+            <Label
+              className="mb-1 block text-xs text-[#fff]"
+              htmlFor="selectedOption"
+            >
+              Select the one to enter, BVN or NIN?
+            </Label>
+            <Controller
+              control={control}
+              name="passwordData.selectedOption"
+              render={({ field: { onChange, value, ref } }) => (
+                <Select value={value} onValueChange={onChange}>
+                  <SelectTrigger
+                    id="selectedOption"
+                    ref={ref}
+                    className="bg-[#2D3456] text-[#fff] w-full py-2 px-3 rounded-md focus:outline-none"
+                  >
+                    <span>
+                      {value === "bvn"
+                        ? "BVN"
+                        : value === "nin"
+                          ? "NIN"
+                          : "Select BVN or NIN"}
+                    </span>
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-gray-300 mt-1 rounded-md shadow-lg w-full absolute z-50 top-full">
+                    <SelectItem value="bvn" className="w-full">
+                      BVN
+                    </SelectItem>
+                    <SelectItem value="nin" className="w-full">
+                      NIN
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+
+          {watchSelectedOption === "bvn" && (
+            <div className="w-full mt-[1rem] text-sm font-normal">
+              <Label className="mb-1 block text-xs text-[#fff]" htmlFor="bvn">
+                BVN
+              </Label>
+              <div className="relative mt-[.25rem]">
+                <Input2
+                  className={`${errors?.passwordData?.bvn?.message ? "border border-red-700" : ""} text-[#fff] h-12`}
+                  placeholder="Enter BVN"
+                  type="text"
+                  id="bvn"
+                  required
+                  {...register("passwordData.bvn")}
+                />
+              </div>
+            </div>
+          )}
+
+          {watchSelectedOption === "nin" && (
+            <div className="w-full mt-[1rem] text-sm font-normal">
+              <Label className="mb-1 block text-xs text-[#fff]" htmlFor="nin">
+                NIN
+              </Label>
+              <div className="relative mt-[.25rem]">
+                <Input2
+                  className={`${errors?.passwordData?.nin?.message ? "border border-red-700" : ""} text-[#fff] h-12`}
+                  placeholder="Enter NIN"
+                  type="text"
+                  id="nin"
+                  required
+                  {...register("passwordData.nin")}
+                />
+              </div>
+            </div>
+          )}
+
+          <Button
+            className="my-6 mt-16 flex justify-center items-center gap-x-3 w-full rounded-[20px] text-[#1B1687] font-sans py-[.9375rem] text-base leading-[normal]"
+            type="submit"
+            variant="white"
+          >
+            Continue
+            {isLoading && <SmallSpinner className="" color="#1B1687" />}
+          </Button>
+        </form>
       </div>
+      <ErrorModal
+        isErrorModalOpen={isErrorModalOpen}
+        setErrorModalState={() => {
+          setErrorModalState(false);
+        }}
+        subheading={
+          errorModalMessage ||
+          errorMsg ||
+          "Please check your inputs and try again."
+        }
+      ></ErrorModal>
       )
     </>
   );

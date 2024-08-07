@@ -1,6 +1,7 @@
 "use client";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import {
+  Button,
   Dialog,
   DialogBody,
   DialogClose,
@@ -21,14 +22,36 @@ import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useCreateReferralPlanRequest } from "../../api/referral/createReferralPlan";
 
 interface Prop {
   setOpenCheckPhoneNumberModal: React.Dispatch<SetStateAction<boolean>>;
   openCheckPhoneNumberModal: boolean;
-  //   setShowPaymentModal: React.Dispatch<React.SetStateAction<boolean>>;
+  planType: {
+    duration: string;
+    amount: string;
+    number_of_recipient: string;
+    play_type: string;
+  };
   setShowReferralPayment: React.Dispatch<React.SetStateAction<boolean>>;
+  setPaymentData: React.Dispatch<
+    React.SetStateAction<{
+      account_name: string;
+      account_no: string;
+      amount: string;
+      bank_name: string;
+      paystack_link: string;
+    }>
+  >;
 }
 
+interface successProp {
+  amount: string;
+  account_no: string;
+  bank_name: string;
+  paystack_link: string;
+  message: string;
+}
 const contactSchema = z.object({
   phone_number: z
     .string({ required_error: "Enter your phone number" })
@@ -43,40 +66,14 @@ const contactSchema = z.object({
     .optional(),
 });
 
-interface successResponseType {
-  is_eligible: boolean;
-  "user:": User;
-}
-
-interface User {
-  id: string;
-  first_name: string;
-  last_name: string;
-  phone_number: string;
-  organization: null;
-  gender: string;
-  has_set_password: boolean;
-  hospitals: Hospitals;
-  phone_verified: boolean;
-  nin: null;
-  bvn: string;
-  email: string;
-  address: string;
-}
-
-interface Hospitals {
-  lga: string;
-  state: string;
-  hospital: string;
-  provider_id: string;
-}
-
 export type detailRequestType = z.infer<typeof contactSchema>;
 
 const AddRemitalPhoneNumer = ({
   openCheckPhoneNumberModal,
   setOpenCheckPhoneNumberModal,
   setShowReferralPayment,
+  setPaymentData,
+  planType,
 }: Prop) => {
   const search = useSearchParams();
   const myReferral = search?.get("referral_code");
@@ -88,6 +85,7 @@ const AddRemitalPhoneNumer = ({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       phone_number: "",
+      referral_code: myReferral || "",
     },
 
     mode: "onChange",
@@ -103,13 +101,46 @@ const AddRemitalPhoneNumer = ({
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
-  //   const { mutate: handleCheckNumber, isLoading } = useCheckRemitalUser();
+  const { mutate: handleCreatePlan, isLoading } =
+    useCreateReferralPlanRequest();
   const router = useRouter();
 
   const onsubmit = (data: detailRequestType) => {
-    setShowReferralPayment(true);
-    setOpenCheckPhoneNumberModal(false);
-    console.log("123");
+    // console.log("123");
+    handleCreatePlan(
+      {
+        duration: Number(planType?.duration),
+        phone_number: data?.phone_number,
+        number_of_recipient: Number(planType?.number_of_recipient),
+        packages: planType?.play_type,
+      },
+      {
+        onSuccess: (data: successProp) => {
+          if (data?.message) {
+            setErrorMsg(data?.message);
+            openErrorModalWithMessage(String(data?.message));
+          } else {
+            setPaymentData({
+              account_name: "",
+              account_no: data?.account_no,
+              amount: data?.amount,
+              bank_name: data?.bank_name,
+              paystack_link: data?.paystack_link,
+            });
+            setShowReferralPayment(true);
+            setOpenCheckPhoneNumberModal(false);
+          }
+        },
+        onError: (error) => {
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-expect-error
+          setErrorMsg(error?.response?.data?.error);
+
+          openErrorModalWithMessage(String(errorMessage));
+        },
+      }
+    );
   };
 
   return (
@@ -168,15 +199,36 @@ const AddRemitalPhoneNumer = ({
                     )} */}
                   </div>
                 </div>
+                <div
+                  className={`${myReferral ? "hidden" : ""} w-full mt-[2rem] text-sm font-normal`}
+                >
+                  <Label
+                    className="mb-1 block text-xs  text-[#fff]"
+                    htmlFor="code"
+                  >
+                    Referral Code (Optional)
+                  </Label>
+
+                  <div className={`relative mt-[.25rem] `}>
+                    <Input2
+                      className={`${errors?.referral_code?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
+                      placeholder="Enter code"
+                      type="text"
+                      id="code"
+                      {...register("referral_code")}
+                    />
+                  </div>
+                </div>
 
                 <div className="pb-[2rem]">
-                  <button
+                  <Button
                     className=" mt-[3rem] flex items-center justify-center gap-x-2 font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
                                     shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                     type="submit"
                   >
-                    Continue
-                  </button>
+                    Continue{" "}
+                    {isLoading && <SmallSpinner className="" color="blue" />}
+                  </Button>
                 </div>
               </form>
             </div>
