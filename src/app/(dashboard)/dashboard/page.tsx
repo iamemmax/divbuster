@@ -7,49 +7,14 @@ import HospitalAround from "../comp/components/cards/hospital/table/HospitalArou
 import HospitalVisited from "../comp/components/cards/hospital/table/HospitalVisited";
 import TransactionsTable from "../comp/components/transactions/table/TransactionsTable";
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
-import { capitalizeFirstLetter } from "@/utils";
-import { SmallSpinner, Spinner } from "@/icons/core";
-import Marquee from "@/app/(main)/misc/components/Marquee";
-import ActiveIcon from "../comp/icons/ActiveIcon";
-import CopyIcon3 from "../comp/icons/CopyIcon3";
-import { useClipboard } from "@/hooks";
-import { useQuery, useQueryClient } from "react-query";
-import { fetchReferralCode } from "./api/referral/fetchReferralCode";
-import MakePaymentModal from "../comp/components/payment/MakePayment";
-import { getPlan } from "@/app/(main)/misc/components/insurance/api/plan/getPlan";
+import DashboardPlanHeader from "../comp/components/DashboardPlanHeader";
 
 const Dashboard = () => {
   const { data: userData, isLoading } = useUser();
 
-  const { copy } = useClipboard();
-  const queryClient = useQueryClient();
-  const [showMakePaymentModal, setshowMakePaymentModal] = useState(false);
-
-  const {
-    data,
-    refetch,
-
-    isLoading: loadinGenerate,
-  } = useQuery({
-    queryFn: () => fetchReferralCode(userData?.user_id as string),
-    queryKey: ["generate-referral-code", userData?.user_id],
-    enabled: false,
-    onSuccess: () => {
-      // Invalidate user details query to refetch data
-      queryClient.invalidateQueries(["user-details", data?.referral_code]);
-    },
-  });
-  const { data: plansData } = useQuery({
-    queryFn: getPlan,
-    queryKey: ["get-plans"],
-  });
-  const makePayment =
-    userData?.subscription_status === "NOT_ACTIVE" ||
-    userData?.subscription_status === "PENDING" ||
-    userData?.subscription_status === "FAILED";
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
-      <div className=" bg-main py-6 px-6  md:px-[4.5rem] lg:px-[7.5rem]  ">
+      {/* <div className=" bg-main py-6 px-6  md:px-[4.5rem] lg:px-[7.5rem]  ">
         {isLoading ? (
           <div className="w-full h-24 flex justify-center items-center">
             {" "}
@@ -174,7 +139,8 @@ const Dashboard = () => {
             </div>
           </div>
         )}
-      </div>
+      </div> */}
+      <DashboardPlanHeader />
       <div className="w-full h-12 bg-main py-10"></div>
       <div className=" relative w-full px-6  md:px-[4.5rem] lg:px-[7.5rem]  h-full ">
         <div className="relative">
@@ -197,15 +163,6 @@ const Dashboard = () => {
         </div>
       </div>
       {/* <Marquee/> */}
-
-      {showMakePaymentModal && (
-        <MakePaymentModal
-          isSelectPlanModalOpen={showMakePaymentModal}
-          setSelectPlanModal={setshowMakePaymentModal}
-          planType="INDIVIDUAL"
-          selectedPlan={plansData && plansData[0]?.data}
-        />
-      )}
     </div>
   );
 };

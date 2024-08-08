@@ -131,7 +131,7 @@ const Page = () => {
               Referral Wallet -
             </p>{" "}
             <h2 className="text-white font-bold text-xl">
-              ₦{walletBalance?.data?.referral_balance ?? 0}
+              ₦{walletBalance?.referral_balance ?? 0}
             </h2>
           </div>
           <Button
@@ -296,7 +296,7 @@ const Page = () => {
         <WithDrawalModal
           setshowWithdrawalModal={setshowWithdrawalModal}
           showWithdrawalModal={showWithdrawalModal}
-          referralWalletBalance={walletBalance?.data?.referral_balance}
+          referralWalletBalance={walletBalance?.referral_balance}
           setshowWithdrawalSuccessModal={setshowWithdrawalSuccessModal}
           setWithdrawalAmount={setWithdrawalAmount}
         />
@@ -307,6 +307,7 @@ const Page = () => {
           showWithdrawalSuccessModal={showWithdrawalSuccessModal}
           setshowWithdrawalSuccessModal={setshowWithdrawalSuccessModal}
           withdrawalAmount={withdrawalAmount}
+          setshowWithdrawalModal={setshowWithdrawalModal}
         />
       )}
     </div>

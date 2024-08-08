@@ -20,12 +20,18 @@ import {
 } from "@/components/core";
 
 import { SmallSpinner, Spinner } from "@/icons/core";
-import { capitalizeFirstLetter, formatAxiosErrorMessage } from "@/utils";
+import {
+  capitalizeFirstLetter,
+  formatAxiosErrorMessage,
+  formatCurrency,
+} from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
 
 import { useVerifyAccountNumber } from "@/app/(dashboard)/dashboard/api/withdrawal/verifyAcctNumber";
 import { useWithdrawalReferral } from "@/app/(dashboard)/dashboard/api/withdrawal/withdrawal";
+import { useQueryClient } from "react-query";
+import { removeCommas } from "@/utils/numbers";
 
 interface Prop {
   setshowConfirmationModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -71,6 +77,8 @@ const ConfirmWidthrawal = ({
   } = useErrorModalState();
 
   const { mutate: handleWithdrawal, isLoading } = useWithdrawalReferral();
+  // const queryClient = fetch - wallet - balance;
+  const queryClient = useQueryClient();
 
   const handleSubmit = () => {
     handleWithdrawal(
@@ -85,8 +93,9 @@ const ConfirmWidthrawal = ({
       {
         onSuccess: (data: verifySuccessdata) => {
           //   setBuyPlanModal;
+          queryClient.invalidateQueries(["fetch-wallet-balance"]);
           setshowWithdrawalSuccessModal(true);
-          setshowWithdrawalModal(false);
+          // setshowWithdrawalModal(false);
         },
         onError: (error) => {
           const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -158,7 +167,11 @@ const ConfirmWidthrawal = ({
                       Amount
                     </p>
                     <p className="text-white font-medium text-sm font-display capitalize">
-                      {capitalizeFirstLetter(watchAct?.amount)}
+                      {capitalizeFirstLetter(
+                        formatCurrency(
+                          Number(removeCommas(String(watchAct?.amount)))
+                        )
+                      )}
                     </p>
                   </div>
                   <div className="flex items-center  w-full">

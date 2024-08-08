@@ -43,3 +43,9 @@ export function getPercentage(type: string, number: number): number {
   
 
 
+export function subtractFromSix(num: number): number {
+  if (num === 6) {
+    return 0;
+  }
+  return 6 - num;
+}

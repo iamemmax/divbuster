@@ -188,6 +188,7 @@ export default function Home() {
                 width={600}
                 // src="/images/landing-page/libertyLife.png"
                 src="/images/landing-page/doctorPng.png"
+                className="animate-spin  duration-500"
               />
             </div>
           </section>
