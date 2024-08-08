@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import DashboardPlanHeader from "../../comp/components/DashboardPlanHeader";
 import WalletCard from "../../comp/components/cards/WalletCard";
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
-import CurrentPlanCard from "../../comp/components/cards/CurrentPlanCard";
 import { useQuery } from "react-query";
 import { getBeneficiaries } from "../../comp/components/plans/api/fetchBeneficairies";
 import { Spinner } from "@/icons/core";
@@ -15,6 +14,8 @@ import BuyPlanModal from "../../comp/components/plans/family/BuyPlanForFamily";
 import { useRouter } from "next/navigation";
 import BackIcon from "../../comp/icons/Backicon";
 import { subtractFromSix } from "../../comp/components/plans/util/planCalc";
+import FamilyBeneficiary from "../../comp/components/beneficiary/FamilyBeneficiary";
+import CurrentPlanCard from "../../comp/components/cards/CurrentPlanCard";
 
 const Page = () => {
   const [BuyPlan, setBuyPlan] = useState(false);
@@ -120,6 +121,10 @@ const Page = () => {
             </div>
             <WalletCard loadinUser={isLoading} userData={userData} />
           </div>
+          <FamilyBeneficiary
+            beneficiaryList={beneficiaryList && beneficiaryList[0]}
+            loading={isLoading}
+          />
         </div>
       </div>
       {BuyPlan && (

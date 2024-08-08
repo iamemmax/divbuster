@@ -52,7 +52,7 @@ export default function Login() {
   const onsubmit = ({ phone_number }: userStatusType) => {
     handleCheckStatus(phone_number, {
       onSuccess: (data: userStatusTypes) => {
-        if (data?.phone_verified && data?.has_set_password) {
+        if (data?.has_set_password) {
           setReturninguser(true);
           setUserPhoneNumber(data?.phone_number);
         } else {

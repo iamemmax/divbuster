@@ -1,11 +1,11 @@
 import { adminAxios } from "@/lib/axios";
 
- interface beneficiaryType {
+ export interface beneficiaryType {
   package_type: string;
-  data: Datum[];
+  data: data[];
 }
 
-interface Datum {
+interface data {
   enrolee: Enrolee;
   hospital: number;
   name: string;
