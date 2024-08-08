@@ -22,6 +22,7 @@ import {
   DialogTrigger,
   Input,
 } from "@/components/core";
+import { useUser } from "@/app/(auth)/(onboarding)/misc";
 
 const _OldHeaderButtons: React.FunctionComponent = () => {
   return (
@@ -63,8 +64,16 @@ const pagesWithColoredBg = [
 export function MainHeader() {
   const pathname = usePathname();
   const isColored = pagesWithColoredBg.includes(pathname);
-
+  const { data: users } = useUser();
   const [open, setOpen] = React.useState(false);
+  const [userActive, setUserActive] = React.useState(false);
+  React.useEffect(() => {
+    if (users?.is_active) {
+      setUserActive(true);
+    } else {
+      setUserActive(false);
+    }
+  }, [users]);
 
   return (
     <div className={cn(isColored && "bg-main")}>
@@ -127,17 +136,31 @@ export function MainHeader() {
         <DesktopMenuBar isColored={isColored} />
 
         <div className="flex items-center gap-[31px]">
-          <a
-            className={cn(
-              "hidden md:flex items-center justify-between md:max-lg:text-sm lg:text-base text-white text-left p-0 bg-transparent rounded-full max-w-max",
-              "font-display"
-            )}
-            href="/login"
-            // target="_blank"
-            // variant="white"
-          >
-            Login
-          </a>
+          {!userActive ? (
+            <a
+              className={cn(
+                "hidden md:flex items-center justify-between md:max-lg:text-sm lg:text-base text-white text-left p-0 bg-transparent rounded-full max-w-max",
+                "font-display"
+              )}
+              href="/login"
+              // target="_blank"
+              // variant="white"
+            >
+              Login
+            </a>
+          ) : (
+            <a
+              className={cn(
+                "hidden md:flex items-center justify-between md:max-lg:text-sm lg:text-base text-white text-left p-0 bg-transparent rounded-full max-w-max",
+                "font-display"
+              )}
+              href="/dashboard"
+              // target="_blank"
+              // variant="white"
+            >
+              Dashboard
+            </a>
+          )}
 
           <ClientOnly>
             <Dialog open={open} onOpenChange={setOpen}>

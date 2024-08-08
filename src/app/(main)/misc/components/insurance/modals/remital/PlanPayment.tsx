@@ -11,11 +11,21 @@ import {
   DialogClose,
   DialogHeader,
   DialogTitle,
+  ErrorModal,
 } from "@/components/core";
 import CopyIcon from "@/app/(dashboard)/comp/icons/CopyIcon";
 import PayStatckIcon from "../../icons/PayStackIcon";
 import Link from "next/link";
 import { PaymentSuccessMsg } from "./RemitalSubmitPlan";
+import { useQuery } from "react-query";
+import { confirmTransfer } from "../../api/plan/confirmTransfer";
+import { useUser } from "@/app/(auth)/(onboarding)/misc";
+import { useClipboard, useErrorModalState } from "@/hooks";
+import { formatAxiosErrorMessage } from "@/utils";
+import { AxiosError } from "axios";
+import CopyIcon2 from "@/app/(dashboard)/comp/icons/CopyIcon2";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface Prop {
   setShowPaymentModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -41,6 +51,38 @@ const PlanPayment = ({
 }: Prop) => {
   // const { mutate: handlePaymentRequest, isLoading } = useMakeRemitalPayment();
 
+  const [errorMsg, setErrorMsg] = React.useState("");
+
+  const {
+    isErrorModalOpen,
+    setErrorModalState,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
+  const { data: users, isLoading } = useUser();
+  const router = useRouter();
+  const { refetch } = useQuery({
+    queryFn: () => confirmTransfer(String(users?.phone_number)),
+    queryKey: ["confirm-transfer", users?.phone_number],
+    enabled: false,
+    onSuccess: (data) => {
+      if (data.message !== "success") {
+        toast.success(data?.message);
+        router.push("/dashboard");
+      } else {
+        setErrorMsg(data?.message);
+        openErrorModalWithMessage(String(data?.message));
+      }
+    },
+    onError: (error) => {
+      const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-expect-error
+      setErrorMsg(error?.response?.data?.error);
+      openErrorModalWithMessage(String(errorMessage));
+    },
+  });
+  const { copy } = useClipboard();
   return (
     <div>
       <Dialog
@@ -96,7 +138,10 @@ const PlanPayment = ({
                     </p>
                     <h2 className="text-white gap-x-3 flex font-semibold textbase">
                       {" "}
-                      {PaymentInfo?.account_no} <CopyIcon />
+                      {PaymentInfo?.account_no}{" "}
+                      <CopyIcon2
+                        onClick={() => copy(String(PaymentInfo?.account_no))}
+                      />
                     </h2>
                   </div>
                   <div className="">
@@ -115,16 +160,31 @@ const PlanPayment = ({
                     <PayStatckIcon /> Pay with paystack{" "}
                   </Button>
                 </Link>
-                <Link href={"/login"}>
-                  <Button className="w-full bg-white py-4 rounded-10 text-sm font-bold text-[#1B1687] flex justify-center items-center">
-                    I have made payment
-                  </Button>
-                </Link>
+                {/* <Link href={"/login"}> */}
+                <Button
+                  type="submit"
+                  className="w-full bg-white z-[9999] space-x-3 py-4 rounded-10 text-sm font-bold text-[#1B1687] flex justify-center items-center"
+                  onClick={() => refetch()}
+                >
+                  I have made payment {isLoading && <SmallSpinner />}
+                </Button>
+                {/* </Link> */}
               </div>
             </div>
           </DialogBody>
         </DialogContent>
       </Dialog>
+      <ErrorModal
+        isErrorModalOpen={isErrorModalOpen}
+        setErrorModalState={() => {
+          setErrorModalState(false);
+        }}
+        subheading={
+          errorModalMessage ||
+          errorMsg ||
+          "Please check your inputs and try again."
+        }
+      ></ErrorModal>
     </div>
   );
 };

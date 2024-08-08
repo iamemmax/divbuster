@@ -92,7 +92,7 @@ const BeneficiariesModal = ({
               {planType !== "INDIVIDUAL" && (
                 <div className="text-[#fff] font-light text-sm pb-4">
                   {beneficiariesList &&
-                    beneficiariesList?.beneficiaries?.length > 0 && (
+                    beneficiariesList?.beneficiaries?.length > 1 && (
                       <Button className="bg-white mb-1 flex justify-center items-center gap-2 rounded-lg text-[#032282]">
                         {" "}
                         People Added{" "}
@@ -162,14 +162,16 @@ const BeneficiariesModal = ({
                 )}
               </div>
               <div className="w-full mt-6  flex items-center gap-3 py-5 text-sm font-normal">
-                <Button
-                  className="text-white w-full p-4 py-3 rounded-[1.25rem] border-[0.3px] border-white border-opacity-70 "
-                  variant={"outlined"}
-                  type="button"
-                  onClick={() => setShowBeneficaries(false)}
-                >
-                  Add more
-                </Button>
+                {planType !== "INDIVIDUAL" && (
+                  <Button
+                    className="text-white w-full p-4 py-3 rounded-[1.25rem] border-[0.3px] border-white border-opacity-70 "
+                    variant={"outlined"}
+                    type="button"
+                    onClick={() => setShowBeneficaries(false)}
+                  >
+                    Add more
+                  </Button>
+                )}
                 <Button
                   className=" flex items-center gap-x-5 justify-center font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
                                             shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"

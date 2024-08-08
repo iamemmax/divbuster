@@ -2,6 +2,7 @@
 
 import React from "react";
 import {
+  Button,
   ClientOnly,
   Dialog,
   DialogBody,
@@ -21,12 +22,14 @@ interface Prop {
   setshowWithdrawalSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
   showWithdrawalSuccessModal: boolean;
   withdrawalAmount: string;
+  setshowWithdrawalModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const WithDrawalSuccessModal = ({
   setshowWithdrawalSuccessModal,
   showWithdrawalSuccessModal,
   withdrawalAmount,
+  setshowWithdrawalModal,
 }: Prop) => {
   return (
     <div className="rounded-xl">
@@ -99,12 +102,12 @@ const WithDrawalSuccessModal = ({
                     </div>
 
                     <div className="w-full flex justify-center py-3 items-center gap-[1rem] mt-[1rem] text-sm">
-                      <LinkButton
-                        href={"/dashboard"}
+                      <Button
+                        onClick={() => setshowWithdrawalModal(false)}
                         className="rounded-3xl font-normal border-[0.3px] text-[#fff] py-[0.9rem] w-[10rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none"
                       >
                         Done
-                      </LinkButton>
+                      </Button>
                     </div>
                   </div>
                 </div>

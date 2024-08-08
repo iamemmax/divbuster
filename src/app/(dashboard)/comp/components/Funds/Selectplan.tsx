@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  ErrorModal,
   LinkButton,
   RadioGroup,
   RadioGroupItem,
@@ -17,9 +18,16 @@ import CopyIcon2 from "../../icons/CopyIcon2";
 import { Label } from "@radix-ui/react-label";
 import { PayStack } from "../../icons";
 import SuccessPaymentModal from "./SuccessPayment";
-import { formatCurrency } from "@/utils";
-import { useClipboard } from "@/hooks";
+import { formatAxiosErrorMessage, formatCurrency } from "@/utils";
+import { useClipboard, useErrorModalState } from "@/hooks";
 import { successProp } from "../plans/SelectDurationModal";
+import { useUser } from "@/app/(auth)/(onboarding)/misc";
+import { useRouter } from "next/navigation";
+import { useQuery } from "react-query";
+import { confirmTransfer } from "@/app/(main)/misc/components/insurance/api/plan/confirmTransfer";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
+import { SmallSpinner } from "@/icons/core";
 
 interface UseBooleanStateControlProps {
   isSelectPlanModalOpen: boolean;
@@ -40,11 +48,43 @@ function SelectPlanModal({
     item: string;
     value: string;
   }
-  const { copy } = useClipboard();
 
   const [SuccessPayment, setSuccessPayment] = useState(false);
 
   const [selectedValue, setSelectedValue] = useState<string>("");
+
+  const [errorMsg, setErrorMsg] = React.useState("");
+
+  const {
+    isErrorModalOpen,
+    setErrorModalState,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
+  const { data: users, isLoading } = useUser();
+  const router = useRouter();
+  const { refetch } = useQuery({
+    queryFn: () => confirmTransfer(String(users?.phone_number)),
+    queryKey: ["confirm-transfer", users?.phone_number],
+    enabled: false,
+    onSuccess: (data) => {
+      if (data.message !== "success") {
+        toast.success(data?.message);
+        router.push("/dashboard");
+      } else {
+        setErrorMsg(data?.message);
+        openErrorModalWithMessage(String(data?.message));
+      }
+    },
+    onError: (error) => {
+      const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-expect-error
+      setErrorMsg(error?.response?.data?.error);
+      openErrorModalWithMessage(String(errorMessage));
+    },
+  });
+  const { copy } = useClipboard();
   return (
     <div className="rounded-xl">
       <ClientOnly>
@@ -164,8 +204,11 @@ function SelectPlanModal({
                       Pay with paystack{" "}
                     </div>
                   </LinkButton>
-                  <Button className="w-full text-[#1B1687] bg-white py-3.5 font-medium text-sm mt-6">
-                    I have made payment
+                  <Button
+                    className="w-full text-[#1B1687] bg-white py-3.5 font-medium text-sm mt-6"
+                    onClick={() => refetch()}
+                  >
+                    I have made payment {isLoading && <SmallSpinner />}
                   </Button>
                 </div>
               </article>
@@ -181,6 +224,17 @@ function SelectPlanModal({
           heading={""}
         />
       )}
+      <ErrorModal
+        isErrorModalOpen={isErrorModalOpen}
+        setErrorModalState={() => {
+          setErrorModalState(false);
+        }}
+        subheading={
+          errorModalMessage ||
+          errorMsg ||
+          "Please check your inputs and try again."
+        }
+      ></ErrorModal>
     </div>
   );
 }

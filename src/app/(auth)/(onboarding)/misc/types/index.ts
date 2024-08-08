@@ -240,6 +240,7 @@ export interface UserDataTypes {
   is_active: boolean;
   is_staff: string;
   referral_code: string
+  subscription_status: "NOT_ACTIVE" | "PENDING" | "PENDING" | "EXPIRED" | "SUCCESS" | "FAILED"
 }
 
 interface Hospitals {

@@ -124,7 +124,7 @@ function SelectDurationModal({
         (plan) => String(plan.plan_duration.duration) === selectedValue
       );
       const basePrice = selectedPlanItem
-        ? parseFloat(removeCommaFromPrice(selectedPlanItem.price))
+        ? parseFloat(removeCommaFromPrice(String(percentageCalc?.base_price)))
         : 0;
       const numberOfBeneficiaries = beneficiariesList.beneficiaries.length;
 
@@ -232,11 +232,13 @@ function SelectDurationModal({
 
                 <div className="flex items-center gap-x-2 w-full py-4 bg-black rounded-lg mt-3 justify-center">
                   <p className="text-white text-lg font-bold">Total:</p>
-                  <p className="text-white line-through text-lg text-opacity-80 font-bold">
-                    {totalAmount !== null
-                      ? formatCurrency(totalAmount)
-                      : "0.00"}
-                  </p>
+                  {planType !== "INDIVIDUAL" && (
+                    <p className="text-white line-through text-lg text-opacity-80 font-bold">
+                      {totalAmount !== null
+                        ? formatCurrency(totalAmount)
+                        : "0.00"}
+                    </p>
+                  )}
                   <p className="text-white text-lg font-bold">
                     {discountedAmount !== null
                       ? formatCurrency(discountedAmount)

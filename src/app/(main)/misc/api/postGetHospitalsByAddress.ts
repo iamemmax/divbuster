@@ -20,7 +20,7 @@ type getHospitalsInputProp = {
 }
 export const getHospitalsByAddress = async ({ address }: getHospitalsInputProp) => {
     
-  const response = await adminAxios.post(`life-insurance/get-nem-location/`, {
+  const response = await adminAxios.post(`get-nem-location/`, {
         address,
     });
     return response?.data as Response;

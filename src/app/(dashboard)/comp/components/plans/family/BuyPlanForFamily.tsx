@@ -116,7 +116,7 @@ const BuyPlanModal = ({ setBuyPlanModal, isBuyPlanModalOpen }: Prop) => {
                   <p className="w-4/5 pb-2">
                     Kindly enter the details below to activate beneficiary.
                   </p>
-                  {fields?.length > 0 && (
+                  {fields?.length > 1 && (
                     <Button className="bg-white mt-2 flex justify-center items-center gap-2 rounded-lg text-[#032282]">
                       People Added
                       <div className="bg-[#E5ECFA] h-[1.375rem] w-[1.375rem] shrink-0 flex justify-center items-center rounded-full">
