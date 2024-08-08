@@ -11,6 +11,7 @@ import {
   DialogClose,
   DialogHeader,
   DialogTitle,
+  ErrorModal,
 } from "@/components/core";
 import CopyIcon from "@/app/(dashboard)/comp/icons/CopyIcon";
 import PayStatckIcon from "../../icons/PayStackIcon";
@@ -94,7 +95,7 @@ const ReferralPlanPayment = ({
     <div>
       <Dialog
         open={showReferralPayment}
-        // onOpenChange={setRemitaDetailsModal}
+      // onOpenChange={setRemitaDetailsModal}
       >
         <DialogContent className="!overflow-hidden max-h-[94vh]  md:w-[28.75rem]">
           <DialogHeader className="bg-[#1B1687] ">
