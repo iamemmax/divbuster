@@ -302,7 +302,7 @@ export default function Home() {
           // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
         />
       )}
-      {/* remitals .................................................................. remita.................... */}
+      {/* remitals .............................................................. remita.................... */}
       {openRemitalDetailModal && (
         <RemitalModalDetails
           setOpenRemitalDetailModal={setOpenRemitalDetailModal}

@@ -327,7 +327,7 @@ const RemitalUserDetails = ({
                       className="mt-5 mb-1 block text-xs text-[#fff]"
                       htmlFor="State"
                     >
-                      State
+                      State of Residence
                     </Label>
 
                     <Controller
