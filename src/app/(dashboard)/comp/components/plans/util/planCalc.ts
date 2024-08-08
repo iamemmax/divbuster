@@ -10,6 +10,7 @@ import { getPecentage } from "../api/fetchPercentagePrice";
     if (isNaN(numberOfBeneficiary)) {
       throw new Error("numberOfBeneficiary must be a valid number");
     }
+// console.log({"basePrice":basePrice, "duration":duration,"numberOfBeneficiary":numberOfBeneficiary});
 
     const actualAmount = basePrice * duration * numberOfBeneficiary;
     return actualAmount * (1 - percentage / 100);
@@ -38,4 +39,7 @@ export function getPercentage(type: string, number: number): number {
     } else {
       return 0; // or some default value if the key doesn't exist
     }
-  }
+}
+  
+
+

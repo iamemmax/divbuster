@@ -16,6 +16,14 @@ import CopyIcon from "@/app/(dashboard)/comp/icons/CopyIcon";
 import PayStatckIcon from "../../icons/PayStackIcon";
 import Link from "next/link";
 import { PaymentSuccessMsg } from "../remital/RemitalSubmitPlan";
+import { AxiosError } from "axios";
+import { useClipboard, useErrorModalState } from "@/hooks";
+import { useUser } from "@/app/(auth)/(onboarding)/misc";
+import { useRouter } from "next/navigation";
+import { useQuery } from "react-query";
+import { confirmTransfer } from "../../api/plan/confirmTransfer";
+import { formatAxiosErrorMessage } from "@/utils";
+import toast from "react-hot-toast";
 
 interface Prop {
   //   userId?: string;
@@ -50,6 +58,38 @@ const ReferralPlanPayment = ({
 }: Prop) => {
   // const { mutate: handlePaymentRequest, isLoading } = useMakeRemitalPayment();
 
+  const [errorMsg, setErrorMsg] = React.useState("");
+
+  const {
+    isErrorModalOpen,
+    setErrorModalState,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
+  const { data: users, isLoading } = useUser();
+  const router = useRouter();
+  const { refetch } = useQuery({
+    queryFn: () => confirmTransfer(String(users?.phone_number)),
+    queryKey: ["confirm-transfer", users?.phone_number],
+    enabled: false,
+    onSuccess: (data) => {
+      if (data.message !== "success") {
+        toast.success(data?.message);
+        router.push("/dashboard");
+      } else {
+        setErrorMsg(data?.message);
+        openErrorModalWithMessage(String(data?.message));
+      }
+    },
+    onError: (error) => {
+      const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-expect-error
+      setErrorMsg(error?.response?.data?.error);
+      openErrorModalWithMessage(String(errorMessage));
+    },
+  });
+  const { copy } = useClipboard();
   return (
     <div>
       <Dialog
@@ -126,10 +166,10 @@ const ReferralPlanPayment = ({
                 </Link>
                 {/* <Link href={""}> */}
                 <Button
-                  className="w-full bg-white py-4 rounded-10 text-sm font-bold text-[#1B1687] flex justify-center items-center"
-                  onClick={() => setShowReferralPasswordModal(true)}
+                  className="w-full bg-white py-4 rounded-10 text-sm space-x-3 font-bold text-[#1B1687] flex justify-center items-center"
+                  onClick={() => refetch()}
                 >
-                  I have made payment
+                  I have made payment {isLoading && <SmallSpinner />}
                 </Button>
                 {/* </Link> */}
               </div>
@@ -137,6 +177,17 @@ const ReferralPlanPayment = ({
           </DialogBody>
         </DialogContent>
       </Dialog>
+      <ErrorModal
+        isErrorModalOpen={isErrorModalOpen}
+        setErrorModalState={() => {
+          setErrorModalState(false);
+        }}
+        subheading={
+          errorModalMessage ||
+          errorMsg ||
+          "Please check your inputs and try again."
+        }
+      ></ErrorModal>
     </div>
   );
 };

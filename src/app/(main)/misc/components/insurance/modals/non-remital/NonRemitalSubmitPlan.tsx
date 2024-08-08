@@ -152,11 +152,11 @@ const NonRemitalSubmitPlanModal = ({
 
               <div className="text-center px-7 mt-[0.65rem] ">
                 <p className="text-xs text-[#94a3b8] font-normal 'font-DMSans' ">
-                  You have selected 6 months health cover. <br /> A monthly
-                  premium of
+                  You have selected {planType?.duration} months health cover.{" "}
+                  <br /> A monthly premium of
                   <span className="text-white px-1 font-semibold">
                     {" "}
-                    ₦ {planType?.amount ?? 0 + " "}{" "}
+                    {planType?.amount ?? 0 + " "}{" "}
                   </span>
                 </p>
               </div>

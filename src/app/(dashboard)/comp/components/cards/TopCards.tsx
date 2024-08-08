@@ -75,6 +75,11 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
     return avatars;
   };
   // const avatars = generateAvatars(12);
+
+  const makePayment =
+    users?.subscription_status === "NOT_ACTIVE" ||
+    users?.subscription_status === "PENDING" ||
+    users?.subscription_status === "FAILED";
   return (
     <div className="">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 2xl:grid-cols-[1.1fr_1fr_1fr_1fr_1.4fr]">
@@ -141,85 +146,50 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                     Family Plan
                   </h2>
                 </div>
-                <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
-                  <h2 className="text-[#032282] text-xl font-bold">
-                    {beneficiaryList && beneficiaryList[0]?.data?.length}
-                  </h2>
-                  <div className="bg-white py-1 px-2 rounded-md">
-                    <p className="text-xxs text-[#032282]">Benefactors</p>
+                {makePayment ? (
+                  <div className="mt-2">
+                    <p className="text-[#475569] text-xxs">
+                      Do something for your loved ones today by activating a
+                      plan for them today
+                    </p>
                   </div>
-                  <div className="p-4">
-                    <AvatarGroup
-                      avatars={generateAvatars(
-                        Number(
-                          beneficiaryList && beneficiaryList[0]?.data?.length
-                        )
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="justify-self-end flex items-center gap-4">
-                <Button
-                  variant={"outlined"}
-                  className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
-                  onClick={() => setBuyPlan(true)}
-                >
-                  Buy Plan
-                </Button>
-                <Button
-                  className="bg-white rounded-md py-[.4375rem]  px-[.8125rem] text-[#032282] text-[.625rem]"
-                  // onClick={() => setBuyPlan(true)}
-                >
-                  View benefactors
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* coperate card */}
-        <div className="bg-white rounded-10 p-1">
-          {loadingBeneficial || loadinUser ? (
-            <div className="flex justify-center h-full items-center w-full py-6">
-              <Spinner className="w-4  h-4 " color="#DB8C00" />
-            </div>
-          ) : (
-            <div className="bg-[#FFFAF0] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
-              <div className="">
-                <div className="">
-                  <div className="flex items-center gap-x-1">
-                    <FamilyUserIcon backgroundColor="#FFF2D9" color="#DB8C00" />
-                    <h2 className="text-sm font-semibold font-sans  text-[#DB8C00]">
-                      Corporate
-                    </h2>
-                  </div>
+                ) : (
                   <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
-                    <h2 className="text-[#D98B02] text-xl font-bold">
-                      {" "}
-                      {beneficiaryList && beneficiaryList[1]?.data?.length}
+                    <h2 className="text-[#032282] text-xl font-bold">
+                      {beneficiaryList && beneficiaryList[0]?.data?.length}
                     </h2>
-                    <div className="bg-[#FFF2D9] py-1 px-2 rounded-md">
-                      <p className="text-xxs text-[#DB8C00]">Employees</p>
+                    <div className="bg-white py-1 px-2 rounded-md">
+                      <p className="text-xxs text-[#032282]">Benefactors</p>
+                    </div>
+                    <div className="p-4">
+                      <AvatarGroup
+                        avatars={generateAvatars(
+                          Number(
+                            beneficiaryList && beneficiaryList[0]?.data?.length
+                          )
+                        )}
+                      />
                     </div>
                   </div>
-                  <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
-                    <Button
-                      // variant={"outlined"}
-                      className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
-                      onClick={() => setBuyPlanForCoporate(true)}
-                    >
-                      Buy Plan
-                    </Button>
-                    <Button
-                      className="bg-[#FFE9BC] rounded-md py-[.4375rem]  px-[.8125rem] text-[#DB8C00] text-[.625rem]"
-                      // onClick={() => setBuyPlan(true)}
-                    >
-                      View
-                    </Button>
-                  </div>
-                </div>
+                )}
               </div>
+              {!makePayment && (
+                <div className="justify-self-end flex items-center gap-4">
+                  <Button
+                    variant={"outlined"}
+                    className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
+                    onClick={() => setBuyPlan(true)}
+                  >
+                    Buy Plan
+                  </Button>
+                  <Button
+                    className="bg-white rounded-md py-[.4375rem]  px-[.8125rem] text-[#032282] text-[.625rem]"
+                    // onClick={() => setBuyPlan(true)}
+                  >
+                    View benefactors
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -236,33 +206,100 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                   Loved ones
                 </h2>
               </div>
-              <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
-                <h2 className="text-[#E42EB1] text-xl font-bold">
-                  {" "}
-                  {beneficiaryList && beneficiaryList[2]?.data?.length}
-                </h2>
-                <div className="bg-[#E42EB126] bg-opacity-15 py-1 px-2 rounded-md">
-                  <p className="text-xxs text-[#E42EB1]">Beneficiaries</p>
+
+              {makePayment ? (
+                <div className="mt-2 w-2/3">
+                  <p className="text-[#58431D] text-xxs">
+                    Activate a plan for your friends today.
+                  </p>
                 </div>
-              </div>
-              <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
-                <Button
-                  // variant={"outlined"}
-                  className="bg-[#E42EB1] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
-                  onClick={() => setBuyPlanForLovedOnes(true)}
-                >
-                  Buy Plan
-                </Button>
-                <Button
-                  className="bg-[#f8c5e9] rounded-md py-[.4375rem]  px-[.8125rem] text-[#E42EB1] text-[.625rem]"
-                  // onClick={() => setBuyPlan(true)}
-                >
-                  View
-                </Button>
+              ) : (
+                <>
+                  <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
+                    <h2 className="text-[#E42EB1] text-xl font-bold">
+                      {" "}
+                      {beneficiaryList && beneficiaryList[2]?.data?.length}
+                    </h2>
+                    <div className="bg-[#E42EB126] bg-opacity-15 py-1 px-2 rounded-md">
+                      <p className="text-xxs text-[#E42EB1]">Beneficiaries</p>
+                    </div>
+                  </div>
+                  <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
+                    <Button
+                      // variant={"outlined"}
+                      className="bg-[#E42EB1] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
+                      onClick={() => setBuyPlanForLovedOnes(true)}
+                    >
+                      Buy Plan
+                    </Button>
+                    <Button
+                      className="bg-[#f8c5e9] rounded-md py-[.4375rem]  px-[.8125rem] text-[#E42EB1] text-[.625rem]"
+                      // onClick={() => setBuyPlan(true)}
+                    >
+                      View
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+        {/* coperate card */}
+        <div className="bg-white rounded-10 p-1">
+          {loadingBeneficial || loadinUser ? (
+            <div className="flex justify-center h-full items-center w-full py-6">
+              <Spinner className="w-4  h-4 " color="#DB8C00" />
+            </div>
+          ) : (
+            <div className="bg-[#FFFAF0] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
+              <div className="">
+                <div className="">
+                  <div className="flex items-center gap-x-1">
+                    <FamilyUserIcon backgroundColor="#FFF2D9" color="#DB8C00" />
+                    <h2 className="text-sm font-semibold font-sans  text-[#DB8C00]">
+                      Corporate
+                    </h2>
+                  </div>
+                  {makePayment ? (
+                    <div className="mt-2 w-2/3">
+                      <p className="text-[#475569] text-xxs">
+                        Activate a plan for your employees today.
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
+                        <h2 className="text-[#D98B02] text-xl font-bold">
+                          {" "}
+                          {beneficiaryList && beneficiaryList[1]?.data?.length}
+                        </h2>
+                        <div className="bg-[#FFF2D9] py-1 px-2 rounded-md">
+                          <p className="text-xxs text-[#DB8C00]">Employees</p>
+                        </div>
+                      </div>
+                      <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
+                        <Button
+                          // variant={"outlined"}
+                          className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
+                          onClick={() => setBuyPlanForCoporate(true)}
+                        >
+                          Buy Plan
+                        </Button>
+                        <Button
+                          className="bg-[#FFE9BC] rounded-md py-[.4375rem]  px-[.8125rem] text-[#DB8C00] text-[.625rem]"
+                          // onClick={() => setBuyPlan(true)}
+                        >
+                          View
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           )}
         </div>
+
         <div className="bg-white rounded-10 p-1 col-span-[1.5fr] 2xl:col-span-1">
           {loadingWallet || loadinUser ? (
             <div className="flex justify-center h-full items-center w-full py-6">

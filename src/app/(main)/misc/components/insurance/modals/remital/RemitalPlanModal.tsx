@@ -450,7 +450,9 @@ const RemitalPlanModal = ({
                                                   getAmountDeduction(
                                                     Number(
                                                       removeCommaFromPrice(
-                                                        String(plan?.price)
+                                                        String(
+                                                          percentageCalc?.base_price
+                                                        )
                                                       )
                                                     ),
                                                     plan?.plan_duration
@@ -480,7 +482,38 @@ const RemitalPlanModal = ({
                                               userId,
                                               duration:
                                                 plan?.plan_duration?.duration,
-                                              amount: plan?.price,
+                                              amount:
+                                                healthPlan?.package_name ===
+                                                "FAMILY"
+                                                  ? formatCurrency(
+                                                      getAmountDeduction(
+                                                        Number(
+                                                          removeCommaFromPrice(
+                                                            String(
+                                                              percentageCalc?.base_price
+                                                            )
+                                                          )
+                                                        ),
+                                                        plan?.plan_duration
+                                                          ?.duration,
+                                                        planCounts[
+                                                          plan.id.toString()
+                                                        ] || 0,
+                                                        getPercentage(
+                                                          plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
+                                                          planCounts[
+                                                            plan.id.toString()
+                                                          ]
+                                                        )
+                                                      )
+                                                    )
+                                                  : formatCurrency(
+                                                      Number(
+                                                        removeCommaFromPrice(
+                                                          String(plan?.price)
+                                                        )
+                                                      )
+                                                    ),
                                               play_type:
                                                 healthPlan?.package_name,
                                             });

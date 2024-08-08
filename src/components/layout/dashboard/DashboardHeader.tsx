@@ -176,15 +176,15 @@ export function DashboardHeader() {
       <header className="bg-main px-6  md:px-[4.5rem] lg:px-[7.5rem]  py-6 border-b border-[#2B303C]">
         <div className="z-50 flex items-center justify-between">
           <a href={"/"} className="flex text-white items-center gap-3">
-            <Logo className="" height={42} width={42} />
-            <div className="font-wix-display">
+            <Logo className="" />
+            {/* <div className="font-wix-display">
               <h2 className="font-extrabold capitalize text-base md:text-xl text-nowrap leading-3">
                 Liberty Life
               </h2>
               <p className="text-[.625rem] text-white text-opacity-65">
                 by LibertyAssured.
               </p>
-            </div>
+            </div> */}
           </a>
 
           <div className="hidden lg:block">

@@ -35,6 +35,10 @@ import { AxiosError } from "axios";
 import { SmallSpinner } from "@/icons/core";
 import { useAddbeneficiaries } from "../plans/api/addBeneficiariels";
 import { PayStack } from "../../icons";
+import { useUser } from "@/app/(auth)/(onboarding)/misc";
+import { useRouter } from "next/navigation";
+import { confirmTransfer } from "@/app/(main)/misc/components/insurance/api/plan/confirmTransfer";
+import toast from "react-hot-toast";
 // import { getPackagePlans } from "./api/fetchPackagePlan";
 // import { getPecentage } from "./api/fetchPercentagePrice";
 // import {
@@ -99,74 +103,38 @@ function MakePaymentModal({
     String(Number(selectedPlan && selectedPlan[0]?.plan_duration?.duration))
   );
 
-  //   const { data: percentageCalc } = useQuery({
-  //     queryFn: getPecentage,
-  //     queryKey: ["fetch-percentage-list"],
-  //   });
-
-  // Update calculations when relevant data changes
-  //   useEffect(() => {
-  //     if (selectedPlan && beneficiariesList?.beneficiaries) {
-  //       const selectedPlanItem = selectedPlan.find(
-  //         (plan) => String(plan.plan_duration.duration) === selectedValue
-  //       );
-  //       const basePrice = selectedPlanItem
-  //         ? parseFloat(removeCommaFromPrice(selectedPlanItem.price))
-  //         : 0;
-  //       const numberOfBeneficiaries = beneficiariesList.beneficiaries.length;
-
-  //       setPaymentAmount(basePrice);
-
-  //       const calculatedTotalAmount = calculateActualAmount(
-  //         basePrice,
-  //         Number(selectedValue),
-  //         numberOfBeneficiaries
-  //       );
-  //       setTotalAmount(calculatedTotalAmount);
-
-  //       const percentage = getPercentage(
-  //         planType?.toLowerCase(),
-  //         numberOfBeneficiaries
-  //       );
-  //       setDiscountedAmount(
-  //         getAmountDeduction(
-  //           basePrice,
-  //           Number(selectedValue),
-  //           numberOfBeneficiaries,
-  //           percentage
-  //         )
-  //       );
-  //     }
-  //   }, [selectedPlan, selectedValue, beneficiariesList, percentageCalc]);
-
   const handleChange = (value: string) => {
     setSelectedValue(String(value));
   };
 
   const makePaymentReqquest = () => {
     setShowPaymentOption(true);
-    // handleAddBeneficiary(
-    //   {
-    //     beneficiariesList: beneficiariesList?.beneficiaries as beneficailData[],
-    //     packages: planType,
-    //     duration: Number(selectedValue),
-    //   },
-    //   {
-    //     onSuccess: (data: successProp) => {
-    //       setPaymentProp(data);
-    //       setSelectPlan(true);
-    //     },
-    //     onError: (error) => {
-    //       const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-    //       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //       //@ts-expect-error
-    //       setErrorMsg(error?.response?.data?.error);
-    //       openErrorModalWithMessage(String(errorMessage));
-    //     },
-    //   }
-    // );
   };
   const { copy } = useClipboard();
+
+  const { data: users, isLoading: isLoadingTransfer } = useUser();
+  const router = useRouter();
+  const { refetch } = useQuery({
+    queryFn: () => confirmTransfer(String(users?.phone_number)),
+    queryKey: ["confirm-transfer", users?.phone_number],
+    enabled: false,
+    onSuccess: (data) => {
+      if (data.message !== "success") {
+        toast.success(data?.message);
+        router.push("/dashboard");
+      } else {
+        setErrorMsg(data?.message);
+        openErrorModalWithMessage(String(data?.message));
+      }
+    },
+    onError: (error) => {
+      const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-expect-error
+      setErrorMsg(error?.response?.data?.error);
+      openErrorModalWithMessage(String(errorMessage));
+    },
+  });
   return (
     <div className="rounded-xl">
       <ClientOnly>
@@ -326,8 +294,12 @@ function MakePaymentModal({
                           Pay with paystack{" "}
                         </div>
                       </LinkButton>
-                      <Button className="w-full text-[#1B1687] bg-white py-3.5 font-medium text-sm mt-6">
-                        I have made payment
+                      <Button
+                        className="w-full text-[#1B1687] flex justify-center items-center space-x-3 bg-white py-3.5 font-medium text-sm mt-6"
+                        onClick={() => refetch()}
+                      >
+                        I have made payment{" "}
+                        {isLoadingTransfer && <SmallSpinner />}
                       </Button>
                     </div>
                   </article>

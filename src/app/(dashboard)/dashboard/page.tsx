@@ -43,10 +43,13 @@ const Dashboard = () => {
     queryFn: getPlan,
     queryKey: ["get-plans"],
   });
-
+  const makePayment =
+    userData?.subscription_status === "NOT_ACTIVE" ||
+    userData?.subscription_status === "PENDING" ||
+    userData?.subscription_status === "FAILED";
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
-      <div className="mb-[5rem] bg-main py-6 px-6  md:px-[4.5rem] lg:px-[7.5rem]  ">
+      <div className=" bg-main py-6 px-6  md:px-[4.5rem] lg:px-[7.5rem]  ">
         {isLoading ? (
           <div className="w-full h-24 flex justify-center items-center">
             {" "}
@@ -74,7 +77,7 @@ const Dashboard = () => {
                     <p className="text-[#6E6E8B] text-xs md:text-sm font-medium">
                       Welcome, How are you today?
                     </p>
-                    {userData?.is_active ? (
+                    {userData?.subscription_status === "SUCCESS" ? (
                       <div className="bg-[#142D22] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
                         <ActiveIcon />
                         <p className="text-[.625rem] text-[#12B669]">
@@ -144,16 +147,35 @@ const Dashboard = () => {
                   )}
                 </Button>
               )}
-              <Button
-                className="bg-[#099976] h-[2.8125rem] text-white  text-xs font-medium"
-                onClick={() => setshowMakePaymentModal(true)}
-              >
-                Renew plan
-              </Button>
+              {makePayment && (
+                <Button
+                  className="bg-[#099976] h-[2.8125rem] text-white  text-xs font-medium"
+                  onClick={() => setshowMakePaymentModal(true)}
+                >
+                  Make Payment
+                </Button>
+              )}
+              {userData?.subscription_status === "EXPIRED" && (
+                <Button
+                  className="bg-[#099976] h-[2.8125rem] text-white  text-xs font-medium"
+                  onClick={() => setshowMakePaymentModal(true)}
+                >
+                  Renew plan
+                </Button>
+              )}
+              {userData?.subscription_status === "SUCCESS" && (
+                <Button
+                  className="bg-[#099976] h-[2.8125rem] text-white text-xs font-medium"
+                  disabled
+                >
+                  Success
+                </Button>
+              )}
             </div>
           </div>
         )}
       </div>
+      <div className="w-full h-12 bg-main py-10"></div>
       <div className=" relative w-full px-6  md:px-[4.5rem] lg:px-[7.5rem]  h-full ">
         <div className="relative">
           <div className=" inset-x-0 top-[-4rem] absolute">
