@@ -24,7 +24,7 @@ import { useAuth } from "@/contexts/authentication";
 export function DashboardHeader() {
   const { data: userData, isLoading } = useUser();
   const pathname = usePathname(); // Get the current pathname
-
+  const router = useRouter();
   const navLinks = [
     {
       title: "Dashboard",
@@ -40,9 +40,6 @@ export function DashboardHeader() {
     },
   ];
 
-  const handleProfileClick = () => {
-    // router.push("/profile"); // Adjust the path according to your app
-  };
   const { replace } = useRouter();
   const queryClient = useQueryClient();
   // const user = await getAuthenticatedUser();
@@ -100,8 +97,14 @@ export function DashboardHeader() {
                 <Notifications height={20} width={20} />
               </Button>
               {!isLoading && (
-                <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
-                  {`${userData?.first_name?.slice(0, 1) ?? ""}${userData?.last_name?.slice(0, 1) ?? ""}`}
+                <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-1">
+                  {/* {`${userData?.first_name?.slice(0, 1) ?? ""}${userData?.last_name?.slice(0, 1) ?? ""}`} */}
+
+                  <img
+                    src="/images/userIcon.png"
+                    style={{ width: "100%", height: "100%" }}
+                    alt="user"
+                  />
                 </Button>
               )}
               {/* <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-transparent p-2">
@@ -117,8 +120,8 @@ export function DashboardHeader() {
 
                 <DropdownMenuContent className="bg-white z-[999] rounded-md shadow-md p-2">
                   <DropdownMenuItem
-                    onClick={handleProfileClick}
                     className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => router.push("/dashboard/profile")}
                   >
                     Profile
                   </DropdownMenuItem>

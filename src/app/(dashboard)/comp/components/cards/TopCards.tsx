@@ -23,6 +23,7 @@ import BuyPlanModalForLovedOne from "../plans/loved-ones/BuyLovedOnePlan";
 import { getBeneficiaries } from "../plans/api/fetchBeneficairies";
 import WalletCard from "./WalletCard";
 import CurrentPlanCard from "./CurrentPlanCard";
+import AddPrinciplePhoneNumer from "../plans/family/AddPrinciplePhoneNumber";
 
 // generate Avater
 export const generateAvatars = (count: number) => {
@@ -65,7 +66,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
   const [BuyPlan, setBuyPlan] = useState(false);
   const [buyPlanForCoporate, setBuyPlanForCoporate] = useState(false);
   const [buyPlanForLovedOnes, setBuyPlanForLovedOnes] = useState(false);
-
+  const [buyFamilyPlan, setBuyFamilyPlan] = useState(false);
   // const avatars = generateAvatars(12);
 
   const makePayment =
@@ -251,10 +252,18 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
       </div>
 
       {BuyPlan && (
+        <AddPrinciplePhoneNumer
+          openCheckPhoneNumberModal={BuyPlan}
+          setOpenCheckPhoneNumberModal={setBuyPlan}
+          setBuyFamilyPlan={setBuyFamilyPlan}
+        />
+      )}
+
+      {buyFamilyPlan && (
         <BuyPlanModal
           heading="Beneficiary Details"
-          isBuyPlanModalOpen={BuyPlan}
-          setBuyPlanModal={setBuyPlan}
+          isBuyPlanModalOpen={buyFamilyPlan}
+          setBuyPlanModal={setBuyFamilyPlan}
           subsection="Kindly enter the details below to activate beneficiary ."
         />
       )}

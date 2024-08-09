@@ -31,6 +31,7 @@ import { useQuery } from "react-query";
 import {
   getTransaction,
   TransactionTypes,
+
 } from "@/app/(dashboard)/dashboard/api/fetchTransaction";
 import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
 import { capitalizeFirstLetter } from "@/utils";
@@ -44,8 +45,8 @@ interface transactionHeader {
   type: string;
   mode: string;
   amount: number;
-  reference_id: string;
-  status: string;
+  reference_reference: string;
+  transaction_status: string;
   action?: string;
 }
 interface Prop {
@@ -124,11 +125,11 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
       header: () => "Amount",
       cell: (info) => info?.getValue(),
     }),
-    columnHelper.accessor("reference_id", {
+    columnHelper.accessor("reference_refere", {
       header: () => "Reference ID",
       cell: (info) => info?.getValue(),
     }),
-    columnHelper.accessor("status", {
+    columnHelper.accessor("transaction_status", {
       header: () => "Status",
       cell: (info) => {
         const { color, backgroundColor } = statusColor(
@@ -154,7 +155,7 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
         <Button
           className="rounded-10 bg-[#F6F9FF] py-1 px-3 text-[#242424] text-xs"
           onClick={() => {
-            setTransDetails(info?.row?.original as TransactionTypes);
+            setTransDetails(info?.row?.original);
             setTransactionDetails(true);
           }}
         >
@@ -165,7 +166,7 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
   ];
 
   const table = useReactTable({
-    data: transaction?.transactions ?? [],
+    data: transaction ?? [],
     columns: columns,
     debugTable: true,
     state: {
@@ -176,8 +177,8 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
     getPaginationRowModel: getPaginationRowModel(),
   });
   const rows = useMemo(
-    () => transaction?.transactions ?? [],
-    [transaction?.transactions]
+    () => transaction ?? [],
+    [transaction?]
   );
 
   const SkeletonLoading = () => (
