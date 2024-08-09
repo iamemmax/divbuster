@@ -12,6 +12,7 @@ import { getPlan } from "@/app/(main)/misc/components/insurance/api/plan/getPlan
 import ActiveIcon from "../icons/ActiveIcon";
 import Image from "next/image";
 import MakePaymentModal from "./payment/MakePayment";
+import MakePaymentDetailsModal from "./payment/MakePaymentDetailsModal";
 
 const DashboardPlanHeader = () => {
   const { data: userData, isLoading } = useUser();
@@ -19,7 +20,14 @@ const DashboardPlanHeader = () => {
   const { copy } = useClipboard();
   const queryClient = useQueryClient();
   const [showMakePaymentModal, setshowMakePaymentModal] = useState(false);
-
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentData, setPaymentData] = useState({
+    account_name: "",
+    account_no: "",
+    amount: "",
+    bank_name: "",
+    paystack_link: "",
+  });
   const {
     data,
     refetch,
@@ -173,8 +181,17 @@ const DashboardPlanHeader = () => {
         <MakePaymentModal
           isSelectPlanModalOpen={showMakePaymentModal}
           setSelectPlanModal={setshowMakePaymentModal}
-          planType="INDIVIDUAL"
-          selectedPlan={plansData && plansData[0]?.data}
+          planData={plansData}
+          setShowPaymentModal={setShowPaymentModal}
+          setPaymentData={setPaymentData}
+        />
+      )}
+
+      {showPaymentModal && (
+        <MakePaymentDetailsModal
+          showMakePaymentModal={showPaymentModal}
+          setShowPaymentModal={setShowPaymentModal}
+          PaymentInfo={paymentData}
         />
       )}
     </div>

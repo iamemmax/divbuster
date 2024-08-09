@@ -1,18 +1,17 @@
 import { adminAxios } from "@/lib/axios";
-
- export interface beneficiaryType {
+export interface beneficiaryTypeProp {
   package_type: string;
-  data: data[];
+  data: BeneficiaryData[];
 }
 
-interface data {
+export interface BeneficiaryData {
   enrolee: Enrolee;
   hospital: number;
   name: string;
   phone_number: string;
-  email: string;
-  state: string;
-  lga: string;
+  email: null;
+  state: null;
+  lga: null;
 }
 
 interface Enrolee {
@@ -65,5 +64,5 @@ interface Hospitals {
 export const getBeneficiaries = async () => {
   const { data } = await adminAxios.get(`beneficiary/`);
   
-  return data as beneficiaryType[]
+  return data as beneficiaryTypeProp[]
 };

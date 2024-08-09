@@ -95,7 +95,7 @@ const ReferralPlanPayment = ({
     <div>
       <Dialog
         open={showReferralPayment}
-      // onOpenChange={setRemitaDetailsModal}
+        // onOpenChange={setRemitaDetailsModal}
       >
         <DialogContent className="!overflow-hidden max-h-[94vh]  md:w-[28.75rem]">
           <DialogHeader className="bg-[#1B1687] ">
@@ -146,7 +146,10 @@ const ReferralPlanPayment = ({
                     </p>
                     <h2 className="text-white gap-x-3 flex font-semibold textbase">
                       {" "}
-                      {PaymentInfo?.account_no} <CopyIcon />
+                      {PaymentInfo?.account_no}{" "}
+                      <CopyIcon
+                        onClick={() => copy(String(PaymentInfo?.account_no))}
+                      />
                     </h2>
                   </div>
                   <div className="">

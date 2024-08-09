@@ -1,9 +1,6 @@
 import React, { useMemo, useState } from "react";
 import {
   Button,
-  DropdownMenu,
-  DropdownMenuItem,
-  LinkButton,
   Table,
   TableBody,
   TableCell,
@@ -11,6 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/core";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
 import {
   createColumnHelper,
   flexRender,
@@ -20,7 +23,10 @@ import {
 } from "@tanstack/react-table";
 import moment from "moment";
 import { maskPhoneNumber } from "@/utils/strings";
-import { beneficiaryType } from "../plans/api/fetchBeneficairies";
+import { beneficiaryTypeProp } from "../plans/api/fetchBeneficairies";
+import ThreeDot from "../cards/icons/ThreeDot";
+import FiltersIcon from "../../icons/FilterIcons";
+import DebounceInput from "../misc/DebounceInput";
 
 const SkeletonLoading = () => (
   <div className="animate-pulse">
@@ -29,62 +35,87 @@ const SkeletonLoading = () => (
 );
 
 interface BenficiaryHeader {
-  created_at?: string;
-  name?: string;
-  middle_name?: string;
-  last_name?: string;
-  first_name?: string;
-  phone_number?: string;
-  category?: string;
-  status?: string;
-  action?: string;
+  enrolee: {
+    created_at: string;
+    middle_name: string;
+    last_name: string;
+    first_name: string;
+    phone_number: string;
+    referral_code: string;
+    email: string;
+  };
+  action?: any;
 }
 
 interface Prop {
-  beneficiaryList: beneficiaryType;
+  beneficiaryList: beneficiaryTypeProp | undefined;
   loading: boolean;
 }
+
 const FamilyBeneficiary = ({ beneficiaryList, loading: isLoading }: Prop) => {
   const columnHelper = createColumnHelper<BenficiaryHeader>();
 
   const columns = [
-    columnHelper.accessor("created_at", {
+    columnHelper.accessor("enrolee.created_at", {
       header: () => "Date/Time",
-      cell: (info) => info?.getValue(),
+      cell: (info) => moment(info.getValue()).format("YYYY-MM-DD HH:mm:ss"),
     }),
-    columnHelper.accessor("name", {
-      header: () => "Name",
+    columnHelper.accessor("enrolee.first_name", {
+      header: () => "Beneficiaries",
       cell: (info) => (
         <p>
-          {`${info?.row?.original?.first_name}`}{" "}
-          {`${info?.row?.original?.middle_name}`}
-          {`${info?.row?.original?.last_name}`}
+          {`${info?.row?.original?.enrolee?.first_name} `}
+          {`${info?.row?.original?.enrolee?.middle_name} `}
+          {`${info?.row?.original?.enrolee?.last_name}`}
         </p>
       ),
     }),
-    columnHelper.accessor("phone_number", {
+    columnHelper.accessor("enrolee.phone_number", {
       header: () => "Phone Number",
       cell: (info) => <p>{maskPhoneNumber(String(info?.getValue()))}</p>,
     }),
-    columnHelper.accessor("category", {
-      header: () => "Category",
+    columnHelper.accessor("enrolee.referral_code", {
+      header: () => "Referral code",
       cell: (info) => info?.getValue(),
     }),
-    columnHelper.accessor("status", {
-      header: () => "Status",
-      cell: (info) => moment(info.getValue()).format("ll"),
+    columnHelper.accessor("enrolee.email", {
+      header: () => "Email",
+      cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("action", {
       header: () => "Action",
-      cell: (info) => moment(info.getValue()).format("ll"),
+      cell: (info) => (
+        <TableCell>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <FiltersIcon /> Filter
+              {/* <Button className="flex items-center outline-none bg-white border-[.05rem] text-[#556575] text-sm font-medium px-5 border-[#D6D6D6] gap-x-2">
+              </Button> */}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="min-w-[100px] px-4 bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
+              sideOffset={5}
+            >
+              <DropdownMenuItem className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1">
+                SuccessFul
+              </DropdownMenuItem>
+              <DropdownMenuItem className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1">
+                Pending
+              </DropdownMenuItem>
+              <DropdownMenuItem className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1">
+                Failed
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </TableCell>
+      ),
     }),
   ];
 
   const [globalFilter, setGlobalFilter] = useState("");
   const table = useReactTable({
-    data: (beneficiaryList && beneficiaryList?.data) ?? [],
+    data: beneficiaryList?.data ?? [],
     columns: columns,
-    debugTable: true,
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       globalFilter,
@@ -94,13 +125,60 @@ const FamilyBeneficiary = ({ beneficiaryList, loading: isLoading }: Prop) => {
   });
 
   const rows = useMemo(
-    () => (beneficiaryList && beneficiaryList?.data) ?? [],
+    () => beneficiaryList?.data ?? [],
     [beneficiaryList && beneficiaryList?.data]
   );
 
   return (
-    <div>
-      <div className="">
+    <div className="px-6  md:px-[4.5rem] lg:px-[7.5rem]">
+      <div className=" bg-white px-12 py-10 mt-4 rounded-10 ">
+        <div className="flex justify-between flex-wrap items-center">
+          <div className="flex items-center flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-medium text-[#0E0E2C]">
+                Beneficiaries
+              </h2>
+              <div className="bg-[#F0F5FF] shrink-0 px-2 py-1 rounded-full text-xs text-[#032282]">
+                <p>{table?.getRowModel()?.rows?.length ?? 0}</p>
+              </div>
+            </div>
+            <div className="lg:w-50">
+              <DebounceInput
+                value={globalFilter ?? ""}
+                onChange={(value) => setGlobalFilter(String(value))}
+              />
+            </div>
+          </div>
+          <div className="">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Button className="flex items-center outline-none bg-white border-[.05rem] text-[#556575] text-sm font-medium px-5 border-[#D6D6D6] gap-x-2">
+                  <FiltersIcon /> Filter
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="min-w-[100px] px-4 bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade">
+                <DropdownMenuItem
+                  className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                  defaultValue={"successful"}
+                >
+                  SuccessFul
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                  defaultValue={"pending"}
+                >
+                  Pending
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                  defaultValue={"failed"}
+                >
+                  Failed
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
         <div className="w-full mt-4">
           {isLoading ? (
             <Table>

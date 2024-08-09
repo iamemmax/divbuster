@@ -43,11 +43,9 @@ const CurrentPlanCard = ({ loadinUser, userData: users }: Prop) => {
                 {/* {capitalizeFirstLetter(
                   String(users?.subscription_status?.toLowerCase())
                 )}{" "} */}
-                {!makePayment ? (
-                  <button className="bg-[#31D0AA26] rounded-md px-2 py-1 text-[#099976] text-[.625rem]">
-                    {capitalizeFirstLetter(
-                      String(users?.subscription_status?.toLowerCase())
-                    )}
+                {makePayment ? (
+                  <button className="bg-[#F6CE7F26] rounded-md px-2 py-1 text-[#DB8C00] text-[.625rem]">
+                    {capitalizeFirstLetter(String("In active"))}
                   </button>
                 ) : (
                   <button className="bg-[#31D0AA26] rounded-md px-2 py-1 text-[#099976] text-[.625rem]">

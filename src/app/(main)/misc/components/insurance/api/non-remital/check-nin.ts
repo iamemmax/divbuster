@@ -5,8 +5,8 @@ interface Prop {
   userId: string;
   address: string;
   nin: string;
-  email: string;
   bvn: string;
+  email: string;
   selectedOption: "bvn" | "nin";
 }
 

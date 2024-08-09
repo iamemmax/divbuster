@@ -14,8 +14,6 @@ interface  planProp{
 
 
 export const updateReferralUser = async ({ transaction_ref,password,confirm_password,nin,bvn,selectedOption,email }: planProp) => {
-   
-    
   let requestData = {
     email, transaction_ref,password,confirm_password
   };

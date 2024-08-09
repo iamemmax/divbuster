@@ -21,11 +21,16 @@ import { useQuery } from "react-query";
 import { confirmTransfer } from "../../api/plan/confirmTransfer";
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
 import { useClipboard, useErrorModalState } from "@/hooks";
-import { formatAxiosErrorMessage } from "@/utils";
+import {
+  capitalizeFirstLetter,
+  formatAxiosErrorMessage,
+  formatCurrency,
+} from "@/utils";
 import { AxiosError } from "axios";
 import CopyIcon2 from "@/app/(dashboard)/comp/icons/CopyIcon2";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { removeCommas } from "@/utils/numbers";
 
 interface Prop {
   setShowPaymentModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -110,10 +115,13 @@ const PlanPayment = ({
 
               <div className="mt-4 bg-[#2B3151] flex justify-center py-4 items-center flex-col text-[#fff]  rounded-lg">
                 <p className="text-sm text-white font-sans font-medium">
-                  {planType?.duration} Month {planType?.play_type} Health Cover
+                  {planType?.duration} Month{" "}
+                  {capitalizeFirstLetter(planType?.play_type)} Health Cover
                 </p>
                 <h2 className="text-white text-2xl font-bold py-1">
-                  {PaymentInfo?.amount}
+                  {formatCurrency(
+                    Number(removeCommas(String(PaymentInfo?.amount)))
+                  )}
                 </h2>
               </div>
 

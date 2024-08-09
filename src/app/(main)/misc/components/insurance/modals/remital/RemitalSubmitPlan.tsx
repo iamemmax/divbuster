@@ -25,6 +25,7 @@ interface prop {
     amount: string;
     userId: string;
     play_type: string;
+    number_of_recipient: number;
   };
 }
 
@@ -87,6 +88,7 @@ const RemitalSubmitPlanModal = ({
         duration: planType?.duration,
         userId: planType?.userId,
         plan_type: planType?.play_type,
+        number_of_recipient: Number(planType?.number_of_recipient),
       },
       {
         onSuccess: (data: PaymentSuccessMsg) => {

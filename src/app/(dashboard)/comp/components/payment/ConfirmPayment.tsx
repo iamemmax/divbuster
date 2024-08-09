@@ -1,120 +1,101 @@
-"use client";
+import { Button, ErrorModal } from "@/components/core";
 import React, { useState } from "react";
 import {
   Dialog,
   DialogBody,
+  DialogClose,
   DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/core/DialogClone";
-import { useCreatePlanRequest } from "../../api/remital/createPlan";
 import { SmallSpinner } from "@/icons/core";
-import { useMakeRemitalPayment } from "../../api/remital/remitalpayment";
-import Link from "next/link";
-import { Button, ErrorModal, LinkButton } from "@/components/core";
 import { useErrorModalState } from "@/hooks";
+import { useCreateReferralPlanRequest } from "@/app/(main)/misc/components/insurance/api/referral/createReferralPlan";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
-import PlanComfirmationModal from "../remital/PlanComfirmationModal";
-import PlanPayment from "../remital/PlanPayment";
-
 interface prop {
-  setShowSubmitModal: React.Dispatch<React.SetStateAction<boolean>>;
-  showSubmitModal: boolean;
+  setShowPaymentConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
+  showPaymentConfirmation: boolean;
   planType: {
-    duration: number;
+    phone_number: string;
+    duration: string;
     amount: string;
-    userId: string;
+    number_of_recipient: string;
     play_type: string;
-    number_of_recipient: number;
   };
+  setSelectPlanModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setPaymentData: React.Dispatch<
+    React.SetStateAction<{
+      account_name: string;
+      account_no: string;
+      amount: string;
+      bank_name: string;
+      paystack_link: string;
+    }>
+  >;
+  setShowPaymentModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
-export interface PaymentSuccessMsg {
-  message?: string;
-  account_name: string;
+interface successProp {
+  amount: string;
   account_no: string;
   bank_name: string;
   paystack_link: string;
-  amount: number;
-
-  "user:"?: User;
+  message: string;
 }
-
-interface User {
-  id: string;
-  first_name: string;
-  last_name: string;
-  phone_number: string;
-  organization: null;
-  gender: string;
-  has_set_password: boolean;
-  hospitals: Hospitals;
-  phone_verified: boolean;
-  nin: string;
-  email: string;
-  address: string;
-}
-
-interface Hospitals {
-  state: string;
-  region: string;
-  hospital: string;
-  provider_id: string;
-}
-
-const NonRemitalSubmitPlanModal = ({
-  setShowSubmitModal,
-  showSubmitModal,
+const ConfirmPayment = ({
+  setShowPaymentConfirmation,
+  showPaymentConfirmation,
   planType,
+  setPaymentData,
+  setShowPaymentModal,
+  setSelectPlanModal,
 }: prop) => {
-  const { mutate: handlePaymentRequest, isLoading } = useMakeRemitalPayment();
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [ConfirmationMessage, setConfirmationMessage] = useState("");
-  const [PaymentInfo, setPaymentInfo] = useState<PaymentSuccessMsg>();
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [checkUserHasPassword, setCheckUserHasPassword] = useState<boolean>();
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const {
     isErrorModalOpen,
     setErrorModalState,
+    // closeErrorModal,
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
+  const { mutate: handleCreatePlan, isLoading } =
+    useCreateReferralPlanRequest();
+  //   const router = useRouter();
+
   const handlePayment = () => {
-    handlePaymentRequest(
+    // console.log("123");
+    handleCreatePlan(
       {
-        duration: planType?.duration,
-        userId: planType?.userId,
-        plan_type: planType?.play_type,
+        duration: Number(planType?.duration),
+        phone_number: planType?.phone_number,
         number_of_recipient: Number(planType?.number_of_recipient),
+        packages: planType?.play_type,
       },
       {
-        onSuccess: (data: PaymentSuccessMsg) => {
-          if (
-            data?.message === "insurance request sent, please wait" ||
-            data?.message === "You still have an active health plan.!!"
-          ) {
-            setShowConfirmation(true);
-            // setOpenShowRemitalPlan(false);
-            setConfirmationMessage(data?.message);
-            setCheckUserHasPassword(data?.["user:"]?.has_set_password);
+        onSuccess: (data: successProp) => {
+          if (data?.message) {
+            setErrorMsg(data?.message);
+            openErrorModalWithMessage(String(data?.message));
           } else {
-            setPaymentInfo({
-              account_name: data?.account_name,
+            setPaymentData({
+              account_name: "",
               account_no: data?.account_no,
+              amount: data?.amount,
               bank_name: data?.bank_name,
               paystack_link: data?.paystack_link,
-              amount: data?.amount,
             });
             setShowPaymentModal(true);
-            // setOpenShowRemitalPlan(false);
+            setSelectPlanModal(false);
           }
         },
         onError: (error) => {
           const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-          //  eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-expect-error
           setErrorMsg(error?.response?.data?.error);
+
           openErrorModalWithMessage(String(errorMessage));
         },
       }
@@ -123,7 +104,7 @@ const NonRemitalSubmitPlanModal = ({
   return (
     <>
       <Dialog
-        open={showSubmitModal}
+        open={showPaymentConfirmation}
         // onOpenChange={setSixMonthIndividualPlanModal}
       >
         <DialogContent className="!overflow-hidden min-h-[30rem]  max-w-[98%]  w-[26rem]  ">
@@ -175,7 +156,7 @@ const NonRemitalSubmitPlanModal = ({
                   variant={"outlined"}
                   className="rounded-3xl border-[0.3px] border-white border-opacity-70 text-[#fff]  py-[0.9rem] w-[10rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none"
                   onClick={() => {
-                    setShowSubmitModal(false);
+                    setShowPaymentConfirmation(false);
                   }}
                 >
                   Decline
@@ -192,36 +173,19 @@ const NonRemitalSubmitPlanModal = ({
           </DialogBody>
         </DialogContent>
       </Dialog>
-      {showConfirmation && (
-        <PlanComfirmationModal
-          showConfirmation={showConfirmation}
-          setShowConfirmation={setShowConfirmation}
-          ConfirmationMessage={ConfirmationMessage}
-          setShowPaymentModal={setShowPaymentModal}
-          checkUserHasPassword={checkUserHasPassword}
-        />
-      )}
-      {showPaymentModal && (
-        <PlanPayment
-          showPaymentModal={showPaymentModal}
-          setShowPaymentModal={setShowPaymentModal}
-          userId={planType?.userId}
-          PaymentInfo={PaymentInfo}
-          setShowSuccessModal={setShowSuccessModal}
-          planType={planType}
-        />
-      )}
       <ErrorModal
         isErrorModalOpen={isErrorModalOpen}
         setErrorModalState={() => {
           setErrorModalState(false);
         }}
         subheading={
-          errorModalMessage || "Please check your inputs and try again."
+          errorModalMessage ||
+          errorMsg ||
+          "Please check your inputs and try again."
         }
       ></ErrorModal>
     </>
   );
 };
 
-export default NonRemitalSubmitPlanModal;
+export default ConfirmPayment;

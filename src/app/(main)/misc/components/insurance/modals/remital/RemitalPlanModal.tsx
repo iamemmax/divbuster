@@ -102,6 +102,7 @@ const RemitalPlanModal = ({
     amount: "",
     userId: "",
     play_type: "",
+    number_of_recipient: 0,
   });
   const [planCounts, setPlanCounts] = useState<Record<string, number>>({});
 
@@ -474,6 +475,9 @@ const RemitalPlanModal = ({
                                         onClick={() => {
                                           setPlanType({
                                             userId,
+                                            number_of_recipient:
+                                              planCounts[plan.id.toString()] ||
+                                              0,
                                             duration:
                                               plan?.plan_duration?.duration,
                                             amount:

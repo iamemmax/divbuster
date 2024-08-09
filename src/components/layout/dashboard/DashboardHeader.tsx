@@ -4,13 +4,13 @@ import { Button, DrawerMenu } from "@/components/core";
 import { DrawerClose } from "@/components/core/Drawer";
 import { cn } from "@/utils/classNames";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 import CaretDown from "./CaretDown";
 import Logo from "@/app/(dashboard)/comp/icons/logo";
 import HomeIcon from "@/app/(dashboard)/comp/icons/home";
 import Notifications from "@/app/(dashboard)/comp/icons/notification";
-import { useUser } from "@/app/(auth)/(onboarding)/misc";
+import { getAuthenticatedUser, useUser } from "@/app/(auth)/(onboarding)/misc";
 import CloseIcon from "@/app/(main)/misc/icons/CLoseIcon";
 import {
   DropdownMenu,
@@ -19,6 +19,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@radix-ui/react-dropdown-menu";
+import { useQueryClient } from "react-query";
+import { useAuth } from "@/contexts/authentication";
 export function DashboardHeader() {
   const { data: userData, isLoading } = useUser();
   const pathname = usePathname(); // Get the current pathname
@@ -41,10 +43,15 @@ export function DashboardHeader() {
   const handleProfileClick = () => {
     // router.push("/profile"); // Adjust the path according to your app
   };
-
+  const { replace } = useRouter();
+  const queryClient = useQueryClient();
+  // const user = await getAuthenticatedUser();
+  //     authDispatch({ type: "LOGIN", payload: user });
+  const { authDispatch } = useAuth();
   const handleLogoutClick = () => {
-    // Add your logout logic here, e.g., clearing tokens, redirecting, etc.
-    console.log("Logout clicked");
+    if (authDispatch) authDispatch({ type: "LOGOUT" });
+    queryClient.clear();
+    replace("/login");
   };
 
   return (
