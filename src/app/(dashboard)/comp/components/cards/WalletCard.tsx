@@ -69,7 +69,7 @@ const WalletCard = ({ loadinUser, userData: users }: Prop) => {
           <Spinner className="w-4  h-4 " color="#DB8C00" />
         </div>
       ) : (
-        <div className="bg-[#31D0AA26] h-full grid grid-cols-[1fr_1fr] divide-x-[.0625rem] divide-[#099976] divide-opacity-70 shadow-sm rounded-10  px-6 py-[.875rem] ">
+        <div className="bg-[#31D0AA26] h-full grid grid-cols-[1fr_1.3fr] divide-x-[.0625rem] divide-[#099976] divide-opacity-70 shadow-sm rounded-10  px-6 py-[.875rem] ">
           <div className="">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-x-2">
@@ -100,7 +100,7 @@ const WalletCard = ({ loadinUser, userData: users }: Prop) => {
               </Button>
             </div>
           </div>
-          <div className="pl-6">
+          <div className="pl-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-x-2">
                 <button className="bg-[#31D0AA1F] shrink-0 rounded-full w-6 h-6 justify-center items-center flex">
@@ -123,16 +123,17 @@ const WalletCard = ({ loadinUser, userData: users }: Prop) => {
             </div>
             <div className="flex w-full items-center flex-wrap 2xl:flex-nowrap gap-3">
               <Button
-                className=" py-2  bg-white rounded-10 text-[#099976] font-semibold"
+                className=" py-2 px-2  bg-white rounded-10 text-[#099976] font-semibold"
                 onClick={() => setshowWithdrawalModal(true)}
               >
                 Withdraw
               </Button>
               <LinkButton
+                title="View Referral"
                 href={"/dashboard/view-referrals"}
-                className="py-2  bg-white rounded-10 text-[#099976] font-semibold"
+                className="py-2  bg-white px-[10px] rounded-10 text-[#099976] font-semibold"
               >
-                View
+                View Referral
               </LinkButton>
             </div>
           </div>

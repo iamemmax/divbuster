@@ -30,9 +30,10 @@ const SkeletonLoading = () => (
 
 interface BenficiaryHeader {
   created_at?: string;
-  first_name?: string;
+  name?: string;
   middle_name?: string;
   last_name?: string;
+  first_name?: string;
   phone_number?: string;
   category?: string;
   status?: string;
@@ -49,12 +50,10 @@ const FamilyBeneficiary = ({ beneficiaryList, loading: isLoading }: Prop) => {
   const columns = [
     columnHelper.accessor("created_at", {
       header: () => "Date/Time",
-      cell: (info) => (
-        <>{`${info?.getValue()} ${info?.row?.original?.created_at}`}</>
-      ),
+      cell: (info) => info?.getValue(),
     }),
-    columnHelper.accessor("first_name", {
-      header: () => "Phone Number",
+    columnHelper.accessor("name", {
+      header: () => "Name",
       cell: (info) => (
         <p>
           {`${info?.row?.original?.first_name}`}{" "}

@@ -17,6 +17,7 @@ import {
   removeCommaFromPrice,
 } from "@/utils";
 import moment from "moment";
+import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
 
 interface UseBooleanStateControlProps {
   isTransactionDetailsModalOpen: boolean;
@@ -25,6 +26,7 @@ interface UseBooleanStateControlProps {
   heading: string;
   subsection: string;
   children?: React.ReactNode;
+  userData: UserDataTypes | undefined;
 }
 
 interface data {
@@ -94,12 +96,59 @@ function TransactionReceivedModal({
   transDetails,
   isTransactionDetailsModalOpen,
   setTransactionDetailsModal,
-
+  userData,
   heading,
   subsection,
 
   // children,
 }: UseBooleanStateControlProps) {
+  const data: data[] = [
+    {
+      trans: [
+        {
+          item: "₦10,000.00",
+          value: "successful",
+        },
+      ],
+      wallet: [
+        {
+          item: "Wallet type",
+          value: "Main Wallet",
+        },
+        {
+          item: "Transaction type",
+          value: "Credit",
+        },
+        {
+          item: "Paid by",
+          value: `${userData?.first_name} ${userData?.last_name}`,
+        },
+        {
+          item: "Narration",
+          value: "Your Health Cover",
+        },
+      ],
+
+      other: [
+        {
+          item: "Transaction ref",
+          value: "NF20394029DG",
+        },
+        {
+          item: "Transaction status",
+          value: "Successful",
+        },
+        {
+          item: "Date",
+          value: "Jul 16 2024",
+        },
+        {
+          item: "Time",
+          value: "8:01am",
+        },
+      ],
+    },
+  ];
   return (
     <div className="rounded-xl">
       <ClientOnly>
@@ -145,14 +194,19 @@ function TransactionReceivedModal({
                         </div>
                       </div>
                       <div className="mt-5">
-                        {item?.wallet?.map((items, index) => (
-                          <div key={index} className="grid grid-cols-2 py-2">
-                            <p className="text-[#FFFFFF99]">{items?.item}</p>
-                            <p className="text-[#FFFFFFCC] text-start">
-                              {items?.value}
-                            </p>
-                          </div>
-                        ))}
+                        <div className="grid grid-cols-2 py-2">
+                          <p className="text-[#FFFFFF99]">Transaction Type</p>
+                          <p className="text-[#FFFFFFCC] text-start">
+                            {capitalizeFirstLetter(String(transDetails?.mode))}
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-2 py-2">
+                          <p className="text-[#FFFFFF99]">Paid by</p>
+                          <p className="text-[#FFFFFFCC] text-start">
+                            {`${capitalizeFirstLetter(String(userData?.first_name))} ${capitalizeFirstLetter(String(userData?.last_name))}`}
+                            {/* {userData?.} */}
+                          </p>
+                        </div>
                       </div>
                       <p className="text-[#FFFFFFCC] mt-5 text-sm">
                         {subsection}

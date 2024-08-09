@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "@/components/core";
 import React, { useState } from "react";
+import { Button } from "@/components/core";
 import CopyIcon3 from "../icons/CopyIcon3";
 import { SmallSpinner } from "@/icons/core";
 import { capitalizeFirstLetter } from "@/utils";
@@ -162,7 +162,7 @@ const DashboardPlanHeader = () => {
                 className="bg-[#099976] h-[2.8125rem] text-white text-xs font-medium"
                 disabled
               >
-                Success
+                {userData?.subscription_status === "SUCCESS" && "Active"}
               </Button>
             )}
           </div>

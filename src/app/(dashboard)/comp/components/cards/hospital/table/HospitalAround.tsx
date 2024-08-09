@@ -187,7 +187,8 @@ const HospitalAround = ({ userData, loadinUser }: Prop) => {
             <div className="text-center flex justify-center items-center text-[#0E0E2C] font-sans text-xs">
               <p className=" md:max-w-[12rem] text-center">
                 {" "}
-                No data to display yet as you haven't made any transactions.
+                No data to display yet as you have not selected your State,
+                local government and Address
               </p>
             </div>
           </div>

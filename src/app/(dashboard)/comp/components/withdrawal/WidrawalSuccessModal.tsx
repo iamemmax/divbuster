@@ -102,12 +102,13 @@ const WithDrawalSuccessModal = ({
                     </div>
 
                     <div className="w-full flex justify-center py-3 items-center gap-[1rem] mt-[1rem] text-sm">
-                      <Button
-                        onClick={() => setshowWithdrawalModal(false)}
+                      <LinkButton
+                        href={"/dashboard"}
+                        // onClick={() => setshowWithdrawalModal(false)}
                         className="rounded-3xl font-normal border-[0.3px] text-[#fff] py-[0.9rem] w-[10rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none"
                       >
                         Done
-                      </Button>
+                      </LinkButton>
                     </div>
                   </div>
                 </div>

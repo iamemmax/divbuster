@@ -327,6 +327,7 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
           isTransactionDetailsModalOpen={TransactionDetails}
           setTransactionDetailsModal={setTransactionDetails}
           transDetails={transDetails}
+          userData={userData}
         />
       )}
     </div>
