@@ -116,12 +116,12 @@ const BuyPlanModalForCoperate = ({
               </DialogHeader>
 
               <DialogBody className="bg-[#141B3f] w-full !max-h-[86vh]">
-                <ComingSoonIcon />
-                {/* <div className="text-[#fff] font-light text-sm pb-4">
+                {/* <ComingSoonIcon /> */}
+                <div className="text-[#fff] font-light text-sm pb-4">
                   <p className="w-4/5 pb-2">
                     Kindly enter the details below to activate beneficiary.
                   </p>
-                  {fields?.length > 0 && (
+                  {fields?.length > 1 && (
                     <Button className="bg-white mt-2 flex justify-center items-center gap-2 rounded-lg text-[#032282]">
                       People Added
                       <div className="bg-[#E5ECFA] h-[1.375rem] w-[1.375rem] shrink-0 flex justify-center items-center rounded-full">
@@ -216,7 +216,7 @@ const BuyPlanModalForCoperate = ({
                       </Button>
                     </div>
                   </div>
-                </form> */}
+                </form> 
               </DialogBody>
             </DialogContent>
           </Dialog>

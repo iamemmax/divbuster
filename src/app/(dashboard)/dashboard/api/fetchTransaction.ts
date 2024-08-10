@@ -2,7 +2,7 @@ import { adminAxios } from "@/lib/axios";
 
 
 export interface TransactionTypes {
-  id: string;
+  id: number;
   created_at: string;
   updated_at: string;
   wallet_balance_before: number;
@@ -25,8 +25,16 @@ export interface TransactionTypes {
   wallet: string;
 }
 
-export const    getTransaction = async (phone:string) => {
-  const { data } = await adminAxios.get(`wallet/transactions/?phone_number=${phone}`);
-  return data as TransactionTypes[]
+export const    getTransaction = async (phone:string, fiterStatus:string) => {
+  let myResponse
+  if(fiterStatus){
+    const { data } = await adminAxios.get(`wallet/transactions/?status=${fiterStatus}`);
+    myResponse = data 
+  }else{
+  
+      const { data } = await adminAxios.get(`wallet/transactions/`);
+      myResponse = data 
+  }
+  return myResponse as TransactionTypes[]
 };
 // http://127.0.0.1:8000/life-insurance/transactions/?phone_number=09033531336

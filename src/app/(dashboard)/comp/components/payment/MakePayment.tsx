@@ -364,6 +364,10 @@ import {
 import UserIcons from "@/app/(main)/misc/components/insurance/icons/Usericon";
 import RemitalListIcon from "@/app/(main)/misc/components/insurance/icons/RemitalListIcon";
 import ConfirmPayment from "./ConfirmPayment";
+import BuyPlanModalForCoperate from "../plans/coperate/BuyPlanForCoperate";
+import BuyPlanModalForLovedOne from "../plans/loved-ones/BuyLovedOnePlan";
+import BuyPlanModal from "../plans/family/BuyPlanForFamily";
+import AddPrinciplePhoneNumer from "../plans/family/AddPrinciplePhoneNumber";
 
 interface Prop {
   isSelectPlanModalOpen: boolean;
@@ -427,7 +431,9 @@ const MakePaymentModal = ({
   // const [showSubmitModal, setShowSubmitModal] = useState(false);
   // const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [planCounts, setPlanCounts] = useState<Record<string, number>>({});
-
+  const [BuyPlan, setBuyPlan] = useState(false);
+  const [buyPlanForCoporate, setBuyPlanForCoporate] = useState(false);
+  const [buyFamilyPlan, setBuyFamilyPlan] = useState(false);
   const { data: plansData, isLoading: loadingPlan } = useQuery({
     queryFn: getPlan,
     queryKey: ["get-plans"],
@@ -765,53 +771,60 @@ const MakePaymentModal = ({
                                       <Button
                                         className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                         onClick={() => {
-                                          setPlanType({
-                                            phone_number: String(
-                                              users?.phone_number
-                                            ),
-                                            number_of_recipient: String(
-                                              planCounts[plan.id.toString()] ||
-                                                0
-                                            ),
-                                            duration: String(
-                                              plan?.plan_duration?.duration
-                                            ),
-                                            amount:
-                                              healthPlan?.package_name ===
-                                              "FAMILY"
-                                                ? formatCurrency(
-                                                    getAmountDeduction(
-                                                      Number(
-                                                        removeCommaFromPrice(
-                                                          String(
-                                                            percentageCalc?.base_price
+                                          if(plan?.plan_duration?.plan_type?.name === "INDIVIDUAL"){
+
+                                            setPlanType({
+                                              phone_number: String(
+                                                users?.phone_number
+                                              ),
+                                              number_of_recipient: String(
+                                                planCounts[plan.id.toString()] ||
+                                                  0
+                                              ),
+                                              duration: String(
+                                                plan?.plan_duration?.duration
+                                              ),
+                                              amount:
+                                                healthPlan?.package_name ===
+                                                "FAMILY"
+                                                  ? formatCurrency(
+                                                      getAmountDeduction(
+                                                        Number(
+                                                          removeCommaFromPrice(
+                                                            String(
+                                                              percentageCalc?.base_price
+                                                            )
                                                           )
-                                                        )
-                                                      ),
-                                                      plan?.plan_duration
-                                                        ?.duration,
-                                                      planCounts[
-                                                        plan.id.toString()
-                                                      ] || 0,
-                                                      getPercentage(
-                                                        plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
+                                                        ),
+                                                        plan?.plan_duration
+                                                          ?.duration,
                                                         planCounts[
                                                           plan.id.toString()
-                                                        ]
+                                                        ] || 0,
+                                                        getPercentage(
+                                                          plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
+                                                          planCounts[
+                                                            plan.id.toString()
+                                                          ]
+                                                        )
                                                       )
                                                     )
-                                                  )
-                                                : formatCurrency(
-                                                    Number(
-                                                      removeCommaFromPrice(
-                                                        String(plan?.price)
+                                                  : formatCurrency(
+                                                      Number(
+                                                        removeCommaFromPrice(
+                                                          String(plan?.price)
+                                                        )
                                                       )
-                                                    )
-                                                  ),
-                                            play_type: healthPlan?.package_name,
-                                          });
-
-                                          setShowPaymentConfirmation(true);
+                                                    ),
+                                              play_type: healthPlan?.package_name,
+                                            });
+  
+                                            setShowPaymentConfirmation(true);
+                                          }else if(plan?.plan_duration?.plan_type?.name === "FAMILY"){
+                                            setBuyPlan(true)
+                                          }else{
+                                            setBuyPlanForCoporate(true)
+                                          }
                                         }}
                                       >
                                         Get Insurance
@@ -860,6 +873,34 @@ const MakePaymentModal = ({
           setSelectPlanModal={setSelectPlanModal}
         />
       )}
+
+
+{buyPlanForCoporate && (
+        <BuyPlanModalForCoperate
+          heading="Beneficiary Details"
+          isBuyPlanModalOpen={buyPlanForCoporate}
+          setBuyPlanModal={setBuyPlanForCoporate}
+          subsection="Kindly enter the details below to activate beneficiary ."
+        />
+      )}
+      
+      {BuyPlan && (
+        <AddPrinciplePhoneNumer
+          openCheckPhoneNumberModal={BuyPlan}
+          setOpenCheckPhoneNumberModal={setBuyPlan}
+          setBuyFamilyPlan={setBuyFamilyPlan}
+        />
+      )}
+
+      {buyFamilyPlan && (
+        <BuyPlanModal
+          heading="Beneficiary Details"
+          isBuyPlanModalOpen={buyFamilyPlan}
+          setBuyPlanModal={setBuyFamilyPlan}
+          subsection="Kindly enter the details below to activate beneficiary ."
+        />
+      )}
+      
       <ErrorModal
         isErrorModalOpen={isErrorModalOpen}
         setErrorModalState={() => {

@@ -53,6 +53,7 @@ interface Enrolee {
   is_staff: boolean;
   groups: any[];
   user_permissions: any[];
+  action?:any
 }
 
 interface Hospitals {

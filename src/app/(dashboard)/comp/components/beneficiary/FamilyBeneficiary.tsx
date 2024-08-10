@@ -85,31 +85,11 @@ const FamilyBeneficiary = ({ beneficiaryList, loading: isLoading }: Prop) => {
     columnHelper.accessor("action", {
       header: () => "Action",
       cell: (info) => (
-        <TableCell>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <FiltersIcon /> Filter
-              {/* <Button className="flex items-center outline-none bg-white border-[.05rem] text-[#556575] text-sm font-medium px-5 border-[#D6D6D6] gap-x-2">
-              </Button> */}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              className="min-w-[100px] px-4 bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
-              sideOffset={5}
-            >
-              <DropdownMenuItem className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1">
-                SuccessFul
-              </DropdownMenuItem>
-              <DropdownMenuItem className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1">
-                Pending
-              </DropdownMenuItem>
-              <DropdownMenuItem className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1">
-                Failed
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </TableCell>
+        <Button className="bg-red-700">jjjjjjjjjjjj</Button>
       ),
     }),
+    
+    
   ];
 
   const [globalFilter, setGlobalFilter] = useState("");
@@ -242,7 +222,28 @@ const FamilyBeneficiary = ({ beneficiaryList, loading: isLoading }: Prop) => {
                   </TableRow>
                 ))}
               </TableHeader>
-
+              <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="flex items-center outline-none bg-white border-[.05rem] text-[#556575] text-sm font-medium px-5 border-[#D6D6D6] gap-x-2">
+              <ThreeDot /> {/* Use an appropriate icon or text */}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className="min-w-[100px] px-4 bg-red-900 rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
+            sideOffset={5}
+            align="end"
+          >
+            <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
+              Successful
+            </DropdownMenuItem>
+            <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
+              Pending
+            </DropdownMenuItem>
+            <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
+              Failed
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
               <>
                 {rows?.length > 0 ? (
                   <TableBody>
