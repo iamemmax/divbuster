@@ -72,36 +72,36 @@ export default function Home() {
     }
   }, [getStarted]);
 
-  const Testimonials = [
-    {
-      name: "Oluwafisayomi",
-      image: "",
-      role: "Entrepreneur",
-      testimonial:
-        "“Thanks to Liberty Life, I don't have to worry about the high cost of health. I got value more than my money.”",
-    },
-    {
-      name: "Mrs. Adebunmi",
-      image: "",
-      role: "ED at Light Fashion House",
-      testimonial:
-        "“I and my household now have an HMO without breaking the bank and it comes with a lot of benefits,”",
-    },
-    {
-      name: "Otimeyin Igbene",
-      image: "",
-      role: "MD/CEO Liberty Assured",
-      testimonial:
-        "“I am able to enjoy health coverage with my family and employees.Thanks to Liberty Life. Highly recommended for everyone.”",
-    },
-    {
-      name: "Miss Morenike",
-      image: "",
-      role: "Creatives at Yaks Artistry",
-      testimonial:
-        "“Good health is underrated and there's nothing as good as having a health cover. It gives me confidence.”",
-    },
-  ];
+  // const Testimonials = [
+  //   {
+  //     name: "Oluwafisayomi",
+  //     image: "",
+  //     role: "Entrepreneur",
+  //     testimonial:
+  //       "“Thanks to Liberty Life, I don't have to worry about the high cost of health. I got value more than my money.”",
+  //   },
+  //   {
+  //     name: "Mrs. Adebunmi",
+  //     image: "",
+  //     role: "ED at Light Fashion House",
+  //     testimonial:
+  //       "“I and my household now have an HMO without breaking the bank and it comes with a lot of benefits,”",
+  //   },
+  //   {
+  //     name: "Otimeyin Igbene",
+  //     image: "",
+  //     role: "MD/CEO Liberty Assured",
+  //     testimonial:
+  //       "“I am able to enjoy health coverage with my family and employees.Thanks to Liberty Life. Highly recommended for everyone.”",
+  //   },
+  //   {
+  //     name: "Miss Morenike",
+  //     image: "",
+  //     role: "Creatives at Yaks Artistry",
+  //     testimonial:
+  //       "“Good health is underrated and there's nothing as good as having a health cover. It gives me confidence.”",
+  //   },
+  // ];
   return (
     <main className="md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
@@ -161,7 +161,7 @@ export default function Home() {
             </Button>
           </div>
           <section className="relative px-5 md:px-0">
-            <div className="">
+            {/* <div className="">
               <div className="absolute left-[8%] top-[20%] md:left-[15%] lg:left-[13%] lg:top-[10%] z-10 animate-bounce">
                 <Testimonial1 className="w-[89px] md:w-[140px] lg:w-[146px] h-[54px] md:h-[65px] lg:h-[79px]" />
               </div>
@@ -174,7 +174,7 @@ export default function Home() {
               <div className="absolute top-[60%] left-[68%] md:top-[65%] md:left-[77%] lg:left-[65%] z-10 lg:top-[67%] animate-bounce">
                 <Testimonial4 className="w-[92px] md:w-[140px] lg:w-[151px] h-[54px] md:h-[65px] lg:h-[78px]" />
               </div>
-            </div>
+            </div> */}
             <div
               className={cn(
                 "relative flex items-center justify-center w-full p-5 md:p-0 md:max-w-[500px] overflow-hidden md:ml-28"
@@ -188,7 +188,7 @@ export default function Home() {
                 width={600}
                 // src="/images/landing-page/libertyLife.png"
                 src="/images/landing-page/doctorPng.png"
-                className="animate-spin  duration-500"
+                className=""
               />
             </div>
           </section>

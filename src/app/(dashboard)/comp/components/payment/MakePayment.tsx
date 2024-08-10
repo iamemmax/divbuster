@@ -451,12 +451,38 @@ const MakePaymentModal = ({
     }
   }, [plansData]);
 
+  // const increment = (planId: string) => {
+  //   setPlanCounts((prevCounts) => ({
+  //     ...prevCounts,
+  //     [planId]: (prevCounts[planId] || 0) + 1,
+  //   }));
+  // };
+  
+  // const me = true
   const increment = (planId: string) => {
-    setPlanCounts((prevCounts) => ({
-      ...prevCounts,
-      [planId]: (prevCounts[planId] || 0) + 1,
-    }));
+    setPlanCounts((prevCounts) => {
+      const currentCount = prevCounts[planId] || 0;
+      
+      // Determine the maximum allowed count based on `has_created_individual_health`
+      const maxAllowed = users?.has_created_individual_health ? 5 : 6;
+  
+      if (selectedTab === "FAMILY" && currentCount >= maxAllowed) {
+        setErrorMsg(`Maximum of ${maxAllowed} plans allowed for FAMILY.`);
+        return prevCounts; // Prevent incrementing
+      }
+      
+      // Clear any previous error message if the condition passes
+      setErrorMsg("");
+      
+      return {
+        ...prevCounts,
+        [planId]: currentCount + 1,
+      };
+    });
   };
+  
+  
+
 
   const decrement = (planId: string, minCount: number) => {
     setPlanCounts((prevCounts) => ({
@@ -484,7 +510,6 @@ const MakePaymentModal = ({
       setPlanCounts(initialCounts);
     }
   }, [plansData]);
-
   // percentage calculation
   function getPercentage(
     type: keyof PercentageCalc["percentage_data"],
@@ -821,7 +846,7 @@ const MakePaymentModal = ({
   
                                             setShowPaymentConfirmation(true);
                                           }else if(plan?.plan_duration?.plan_type?.name === "FAMILY"){
-                                            setBuyPlan(true)
+                                            setBuyFamilyPlan(true)
                                           }else{
                                             setBuyPlanForCoporate(true)
                                           }

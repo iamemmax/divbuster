@@ -65,8 +65,8 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
 
   const [BuyPlan, setBuyPlan] = useState(false);
   const [buyPlanForCoporate, setBuyPlanForCoporate] = useState(false);
-  const [buyPlanForLovedOnes, setBuyPlanForLovedOnes] = useState(false);
   const [buyFamilyPlan, setBuyFamilyPlan] = useState(false);
+  const [buyPlanForLovedOnes, setBuyPlanForLovedOnes] = useState(false);
   // const avatars = generateAvatars(12);
 
   const makePayment =
@@ -125,7 +125,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                 <Button
                   variant={"outlined"}
                   className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
-                  onClick={() => setBuyPlan(true)}
+                  onClick={() => setBuyFamilyPlan(true)}
                 >
                   Buy Plan
                 </Button>
