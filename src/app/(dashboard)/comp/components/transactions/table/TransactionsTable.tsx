@@ -42,7 +42,7 @@ import { NoData } from "../../../icons";
 interface transactionHeader {
   id?: number;
   checkbox?: string;
-  type: string;
+  transaction_type: string;
   mode: string;
   amount: number;
   reference_reference: string;
@@ -112,7 +112,7 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
     //     />
     //   ),
     // },
-    columnHelper.accessor("type", {
+    columnHelper.accessor("transaction_type", {
       header: () => "Type",
       cell: (info) => <>{info?.getValue() ?? "Nil"}</>,
     }),
@@ -125,7 +125,7 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
       header: () => "Amount",
       cell: (info) => info?.getValue(),
     }),
-    columnHelper.accessor("reference_refere", {
+    columnHelper.accessor("reference_reference", {
       header: () => "Reference ID",
       cell: (info) => info?.getValue(),
     }),
