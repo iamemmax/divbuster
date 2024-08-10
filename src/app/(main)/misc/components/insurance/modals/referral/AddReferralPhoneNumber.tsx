@@ -18,7 +18,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { Input2 } from "@/components/core/Input2";
-import { formatAxiosErrorMessage } from "@/utils";
+import {
+  addCommasToNumber,
+  formatAxiosErrorMessage,
+  formatCurrency,
+  removeCommaFromPrice,
+} from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -144,7 +149,13 @@ const AddRemitalPhoneNumer = ({
               setPaymentData({
                 account_name: data?.account_name,
                 account_no: data?.account_no,
-                amount: data?.amount,
+                amount: formatCurrency(
+                  Number(
+                    removeCommaFromPrice(
+                      String(addCommasToNumber(data?.plan_details?.price))
+                    )
+                  )
+                ),
                 bank_name: data?.bank_name,
                 paystack_link: data?.paystack_link,
               });
@@ -178,7 +189,13 @@ const AddRemitalPhoneNumer = ({
             } else {
               setPaymentData({
                 account_name: data?.account_name,
-                amount: String(data?.plan_details?.price),
+                amount: formatCurrency(
+                  Number(
+                    removeCommaFromPrice(
+                      String(addCommasToNumber(data?.plan_details?.price))
+                    )
+                  )
+                ),
                 account_no: data?.account_no,
                 bank_name: data?.bank_name,
                 paystack_link: data?.paystack_link,
