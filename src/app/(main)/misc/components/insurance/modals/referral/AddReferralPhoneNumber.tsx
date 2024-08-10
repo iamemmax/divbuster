@@ -144,7 +144,7 @@ const AddRemitalPhoneNumer = ({
               setPaymentData({
                 account_name: data?.account_name,
                 account_no: data?.account_no,
-                amount: formatCurrency(Number(data?.plan_details?.price)),
+                amount: formatCurrency(Number(data?.amount)),
                 bank_name: data?.bank_name,
                 paystack_link: data?.paystack_link,
               });
