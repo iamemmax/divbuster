@@ -238,6 +238,7 @@ export interface UserDataTypes {
   loandisk_borrower_id: string;
   is_remita: boolean;
   is_active: boolean;
+  has_created_individual_health: boolean;
   is_staff: string;
   referral_code: string
   subscription_status: "NOT_ACTIVE" | "PENDING" | "PENDING" | "EXPIRED" | "SUCCESS" | "FAILED"

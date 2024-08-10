@@ -210,7 +210,7 @@ const BuyPlanModalForLovedOne = ({
               setShowBeneficaries={setShowBeneficaries}
               beneficiariesList={beneficiariesList}
               remove={remove}
-              planType="INDIVIDUAL"
+              planType="LOVE_ONES"
               selectedPlan={plansData && plansData[0]?.data}
             />
           )}

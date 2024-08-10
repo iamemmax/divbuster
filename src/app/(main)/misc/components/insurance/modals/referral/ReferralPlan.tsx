@@ -118,13 +118,25 @@ const ReferralModalPlan = ({
     }
   }, [plansData]);
 
-  const increment = (planId: string) => {
-    setPlanCounts((prevCounts) => ({
-      ...prevCounts,
-      [planId]: (prevCounts[planId] || 0) + 1,
-    }));
-  };
 
+  const increment = (planId: string) => {
+    setPlanCounts((prevCounts) => {
+      const currentCount = prevCounts[planId] || 0;
+      
+      if (selectedTab === "FAMILY" && currentCount >= 6) {
+        setErrorMsg("Maximum of 6 plans allowed for FAMILY.");
+        return prevCounts; // Prevent incrementing
+      }
+      
+      // Clear any previous error message if the condition passes
+      setErrorMsg("");
+      
+      return {
+        ...prevCounts,
+        [planId]: currentCount + 1,
+      };
+    });
+  };
   const decrement = (planId: string, minCount: number) => {
     setPlanCounts((prevCounts) => ({
       ...prevCounts,

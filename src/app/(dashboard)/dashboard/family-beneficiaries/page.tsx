@@ -7,7 +7,7 @@ import { useQuery } from "react-query";
 import { getBeneficiaries } from "../../comp/components/plans/api/fetchBeneficairies";
 import { Spinner } from "@/icons/core";
 import FamilyUserIcon from "../../comp/components/cards/icons/UserIcon";
-import { Button } from "@/components/core";
+import { Button, LinkButton } from "@/components/core";
 import AvatarGroup from "../../comp/components/plans/family/AvaterGroup";
 import { generateAvatars } from "../../comp/components/cards/TopCards";
 import BuyPlanModal from "../../comp/components/plans/family/BuyPlanForFamily";
@@ -35,14 +35,15 @@ const Page = () => {
     <div className="relative bg-[#f5f9fe] w-full h-screen">
       <DashboardPlanHeader />
 
-      <div className="bg-main px-6  md:px-[4.5rem] lg:px-[7.5rem]">
-        <Button
+      <div className="bg-main px-6 flex items-start md:px-[4.5rem] lg:px-[7.5rem]">
+        <LinkButton
+          href={"/dashboard"}
           className="flex items px-0 bg-transparent gap-3"
-          onClick={() => router?.back()}
+          // onClick={() => router?.back()}
         >
           <BackIcon />
           <h2 className="text-white font-bold text-2xl">Family</h2>
-        </Button>
+        </LinkButton>
       </div>
 
       <div className="w-full h-12 bg-main py-10"></div>

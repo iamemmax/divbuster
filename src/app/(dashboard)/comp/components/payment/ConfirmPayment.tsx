@@ -14,6 +14,9 @@ import { useErrorModalState } from "@/hooks";
 import { useCreateReferralPlanRequest } from "@/app/(main)/misc/components/insurance/api/referral/createReferralPlan";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
+import { useCreateBeneficiaryPlanRequest } from "@/app/(dashboard)/dashboard/api/payment/createBeneficairyPlan";
+import { useCreateIndividualPlanRequest } from "@/app/(dashboard)/dashboard/api/payment/createIndividualPlan";
+import { useUser } from "@/app/(auth)/(onboarding)/misc";
 interface prop {
   setShowPaymentConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
   showPaymentConfirmation: boolean;
@@ -61,45 +64,83 @@ const ConfirmPayment = ({
     errorModalMessage,
   } = useErrorModalState();
   const { mutate: handleCreatePlan, isLoading } =
-    useCreateReferralPlanRequest();
+    useCreateIndividualPlanRequest();
+  const { mutate: handleCreateBeneficiaryPlan, isLoading:loadBeneficiary } = useCreateBeneficiaryPlanRequest();
   //   const router = useRouter();
-
+const {data:users}  = useUser()
   const handlePayment = () => {
-    // console.log("123");
-    handleCreatePlan(
-      {
-        duration: Number(planType?.duration),
-        phone_number: planType?.phone_number,
-        number_of_recipient: Number(planType?.number_of_recipient),
-        packages: planType?.play_type,
-      },
-      {
-        onSuccess: (data: successProp) => {
-          if (data?.message) {
-            setErrorMsg(data?.message);
-            openErrorModalWithMessage(String(data?.message));
-          } else {
-            setPaymentData({
-              account_name: "",
-              account_no: data?.account_no,
-              amount: data?.amount,
-              bank_name: data?.bank_name,
-              paystack_link: data?.paystack_link,
-            });
-            setShowPaymentModal(true);
-            setSelectPlanModal(false);
-          }
+    if(planType?.play_type === "INDIVIDUAL"){
+      handleCreatePlan(
+        {
+        plan_duration:planType?.duration,
+        userId:users?.user_id as string,
+        plan_type:planType?.play_type
         },
-        onError: (error) => {
-          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          //@ts-expect-error
-          setErrorMsg(error?.response?.data?.error);
+        {
+          onSuccess: (data: successProp) => {
+            if (data?.message) {
+              setErrorMsg(data?.message);
+              openErrorModalWithMessage(String(data?.message));
+            } else {
+              setPaymentData({
+                account_name: "",
+                account_no: data?.account_no,
+                amount: data?.amount,
+                bank_name: data?.bank_name,
+                paystack_link: data?.paystack_link,
+              });
+              setShowPaymentModal(true);
+              setSelectPlanModal(false);
+            }
+          },
+          onError: (error) => {
+            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
+            setErrorMsg(error?.response?.data?.error);
+  
+            openErrorModalWithMessage(String(errorMessage));
+          },
+        }
+      );
 
-          openErrorModalWithMessage(String(errorMessage));
+    }else{
+      handleCreateBeneficiaryPlan(
+        {
+          duration: Number(planType?.duration),
+          phone_number: planType?.phone_number,
+          number_of_recipient: Number(planType?.number_of_recipient),
+          packages: planType?.play_type,
         },
-      }
-    );
+        {
+          onSuccess: (data: successProp) => {
+            if (data?.message) {
+              setErrorMsg(data?.message);
+              openErrorModalWithMessage(String(data?.message));
+            } else {
+              setPaymentData({
+                account_name: "",
+                account_no: data?.account_no,
+                amount: data?.amount,
+                bank_name: data?.bank_name,
+                paystack_link: data?.paystack_link,
+              });
+              setShowPaymentModal(true);
+              setSelectPlanModal(false);
+            }
+          },
+          onError: (error) => {
+            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
+            setErrorMsg(error?.response?.data?.error);
+  
+            openErrorModalWithMessage(String(errorMessage));
+          },
+        }
+      );
+    }
+    // console.log("123");
   };
   return (
     <>

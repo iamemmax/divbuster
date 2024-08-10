@@ -1,3 +1,4 @@
+"use client";
 import React, { useMemo, useState } from "react";
 import {
   Button,
@@ -53,7 +54,10 @@ interface Prop {
   loading: boolean;
 }
 
-const FamilyBeneficiary = ({ beneficiaryList, loading: isLoading }: Prop) => {
+const LovedOnesBeneficiaries = ({
+  beneficiaryList,
+  loading: isLoading,
+}: Prop) => {
   const columnHelper = createColumnHelper<BenficiaryHeader>();
 
   const columns = [
@@ -252,7 +256,6 @@ const FamilyBeneficiary = ({ beneficiaryList, loading: isLoading }: Prop) => {
               </>
             </Table>
           )}
-
           {!isLoading && table?.getRowModel()?.rows?.length === 0 && (
             <div className="py-8">
               <div className="w-full flex justify-center items-center text-sm p-5">
@@ -261,7 +264,7 @@ const FamilyBeneficiary = ({ beneficiaryList, loading: isLoading }: Prop) => {
               <div className="text-center flex justify-center items-center text-[#0E0E2C] font-sans text-xs">
                 <p className=" md:max-w-[12rem] text-center">
                   {" "}
-                  No data to display yet as you haven't made any transactions.
+                  No data to display yet as you haven't added beneficiary.
                 </p>
               </div>
             </div>
@@ -272,4 +275,4 @@ const FamilyBeneficiary = ({ beneficiaryList, loading: isLoading }: Prop) => {
   );
 };
 
-export default FamilyBeneficiary;
+export default LovedOnesBeneficiaries;

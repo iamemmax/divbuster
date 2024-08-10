@@ -24,6 +24,8 @@ import { getBeneficiaries } from "../plans/api/fetchBeneficairies";
 import WalletCard from "./WalletCard";
 import CurrentPlanCard from "./CurrentPlanCard";
 import AddPrinciplePhoneNumer from "../plans/family/AddPrinciplePhoneNumber";
+import CorporateCard from "./CorporateCard";
+import LoveOneCard from "./LoveOneCard";
 
 // generate Avater
 export const generateAvatars = (count: number) => {
@@ -64,8 +66,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
   });
 
   const [BuyPlan, setBuyPlan] = useState(false);
-  const [buyPlanForCoporate, setBuyPlanForCoporate] = useState(false);
-  const [buyPlanForLovedOnes, setBuyPlanForLovedOnes] = useState(false);
+
   const [buyFamilyPlan, setBuyFamilyPlan] = useState(false);
   // const avatars = generateAvatars(12);
 
@@ -125,7 +126,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                 <Button
                   variant={"outlined"}
                   className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
-                  onClick={() => setBuyPlan(true)}
+                  onClick={() => setBuyFamilyPlan(true)}
                 >
                   Buy Plan
                 </Button>
@@ -141,112 +142,19 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
             </div>
           )}
         </div>
-        <div className="bg-white rounded-10 p-1">
-          {loadingBeneficial || loadinUser ? (
-            <div className="flex justify-center h-full items-center w-full py-6">
-              <Spinner className="w-4  h-4 " color="#DB8C00" />
-            </div>
-          ) : (
-            <div className=" bg-[#fbe0f3] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
-              <div className="flex items-center gap-x-1">
-                <FamilyUserIcon backgroundColor="#f8c5e9" color="#e42eb1" />
-                <h2 className="text-sm font-semibold font-sans  text-[#E42EB1]">
-                  Loved ones
-                </h2>
-              </div>
 
-              {/* {makePayment ? (
-                <div className="mt-2 w-2/3">
-                  <p className="text-[#58431D] text-xxs">
-                    Activate a plan for your friends today.
-                  </p>
-                </div>
-              ) : ( */}
-              <>
-                <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
-                  <h2 className="text-[#E42EB1] text-xl font-bold">
-                    {" "}
-                    {beneficiaryList && beneficiaryList[2]?.data?.length}
-                  </h2>
-                  <div className="bg-[#E42EB126] bg-opacity-15 py-1 px-2 rounded-md">
-                    <p className="text-xxs text-[#E42EB1]">Beneficiaries</p>
-                  </div>
-                </div>
-                <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
-                  <Button
-                    // variant={"outlined"}
-                    className="bg-[#E42EB1] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
-                    onClick={() => setBuyPlanForLovedOnes(true)}
-                  >
-                    Buy Plan
-                  </Button>
-                  <Button
-                    className="bg-[#f8c5e9] rounded-md py-[.4375rem]  px-[.8125rem] text-[#E42EB1] text-[.625rem]"
-                    // onClick={() => setBuyPlan(true)}
-                  >
-                    View
-                  </Button>
-                </div>
-              </>
-              {/* )} */}
-            </div>
-          )}
-        </div>
-        {/* coperate card */}
-        <div className="bg-white rounded-10 p-1">
-          {loadingBeneficial || loadinUser ? (
-            <div className="flex justify-center h-full items-center w-full py-6">
-              <Spinner className="w-4  h-4 " color="#DB8C00" />
-            </div>
-          ) : (
-            <div className="bg-[#FFFAF0] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
-              <div className="">
-                <div className="">
-                  <div className="flex items-center gap-x-1">
-                    <FamilyUserIcon backgroundColor="#FFF2D9" color="#DB8C00" />
-                    <h2 className="text-sm font-semibold font-sans  text-[#DB8C00]">
-                      Corporate
-                    </h2>
-                  </div>
-                  {/* {makePayment ? ( */}
-                  {/* //   <div className="mt-2 w-2/3">
-                  //     <p className="text-[#475569] text-xxs">
-                  //       Activate a plan for your employees today.
-                  //     </p>
-                  //   </div> */}
-                  {/* // ) : ( */}
-                  <>
-                    <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
-                      <h2 className="text-[#D98B02] text-xl font-bold">
-                        {" "}
-                        {beneficiaryList && beneficiaryList[1]?.data?.length}
-                      </h2>
-                      <div className="bg-[#FFF2D9] py-1 px-2 rounded-md">
-                        <p className="text-xxs text-[#DB8C00]">Employees</p>
-                      </div>
-                    </div>
-                    <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
-                      <Button
-                        // variant={"outlined"}
-                        className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
-                        onClick={() => setBuyPlanForCoporate(true)}
-                      >
-                        Buy Plan
-                      </Button>
-                      <Button
-                        className="bg-[#FFE9BC] rounded-md py-[.4375rem]  px-[.8125rem] text-[#DB8C00] text-[.625rem]"
-                        // onClick={() => setBuyPlan(true)}
-                      >
-                        View
-                      </Button>
-                    </div>
-                  </>
-                  {/* // )} */}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+        <LoveOneCard
+          loadinUser={loadinUser}
+          userData={users}
+          loadingBeneficial={loadingBeneficial}
+          beneficiaryList={beneficiaryList}
+        />
+        <CorporateCard
+          loadinUser={loadinUser}
+          userData={users}
+          loadingBeneficial={loadingBeneficial}
+          beneficiaryList={beneficiaryList}
+        />
 
         <WalletCard loadinUser={loadinUser} userData={users} />
       </div>
@@ -264,22 +172,6 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
           heading="Beneficiary Details"
           isBuyPlanModalOpen={buyFamilyPlan}
           setBuyPlanModal={setBuyFamilyPlan}
-          subsection="Kindly enter the details below to activate beneficiary ."
-        />
-      )}
-      {buyPlanForCoporate && (
-        <BuyPlanModalForCoperate
-          heading="Beneficiary Details"
-          isBuyPlanModalOpen={buyPlanForCoporate}
-          setBuyPlanModal={setBuyPlanForCoporate}
-          subsection="Kindly enter the details below to activate beneficiary ."
-        />
-      )}
-      {buyPlanForLovedOnes && (
-        <BuyPlanModalForLovedOne
-          heading="Beneficiary Details"
-          isBuyPlanModalOpen={buyPlanForLovedOnes}
-          setBuyPlanModal={setBuyPlanForLovedOnes}
           subsection="Kindly enter the details below to activate beneficiary ."
         />
       )}

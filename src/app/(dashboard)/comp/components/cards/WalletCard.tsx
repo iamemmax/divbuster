@@ -69,7 +69,7 @@ const WalletCard = ({ loadinUser, userData: users }: Prop) => {
           <Spinner className="w-4  h-4 " color="#DB8C00" />
         </div>
       ) : (
-        <div className="bg-[#31D0AA26] h-full grid grid-cols-[1fr_1.3fr] divide-x-[.0625rem] divide-[#099976] divide-opacity-70 shadow-sm rounded-10  px-6 py-[.875rem] ">
+        <div className="bg-[#31D0AA26] h-full justify-center grid grid-cols-[1fr_1.3fr] divide-x-[.0625rem] divide-[#099976] divide-opacity-70 shadow-sm rounded-10  px-6 py-[.875rem] ">
           <div className="">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-x-2">

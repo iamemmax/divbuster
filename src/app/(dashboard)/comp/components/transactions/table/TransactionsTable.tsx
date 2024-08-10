@@ -31,7 +31,6 @@ import { useQuery } from "react-query";
 import {
   getTransaction,
   TransactionTypes,
-
 } from "@/app/(dashboard)/dashboard/api/fetchTransaction";
 import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
 import { capitalizeFirstLetter } from "@/utils";
@@ -42,10 +41,10 @@ import { NoData } from "../../../icons";
 interface transactionHeader {
   id?: number;
   checkbox?: string;
-  transaction_type: string;
-  mode: string;
+  type?: string;
+  mode?: string;
   amount: number;
-  reference_reference: string;
+  transaction_reference: string;
   transaction_status: string;
   action?: string;
 }
@@ -55,6 +54,7 @@ interface Prop {
 }
 const TransactionsTable = ({ userData, loadinUser }: Prop) => {
   const [globalFilter, setGlobalFilter] = useState("");
+  const [fiterStatus, setFiterStatus] = useState("");
 
   const [TransactionDetails, setTransactionDetails] = useState(false);
   const [transDetails, setTransDetails] = useState<TransactionTypes>();
@@ -63,30 +63,12 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
   // }>({});
 
   const { data: transaction, isLoading } = useQuery({
-    queryFn: () => getTransaction(String(userData?.phone_number)),
-    queryKey: ["fetch-transaction", userData?.phone_number],
+    queryFn: () => getTransaction(String(userData?.phone_number), fiterStatus),
+    queryKey: ["fetch-transaction", userData?.phone_number, fiterStatus],
     enabled: !!userData?.phone_number,
   });
 
   const columnHelper = createColumnHelper<transactionHeader>();
-
-  // Function to toggle all checkboxes
-  // const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const isChecked = e.target.checked;
-  //   const newSelectedRows: { [key: string]: boolean } = {};
-  //   transactionData?.forEach((row) => {
-  //     newSelectedRows[row.id] = isChecked;
-  //   });
-  //   setSelectedRows(newSelectedRows);
-  // };
-
-  // // Function to toggle individual checkbox
-  // const handleCheckboxChange = (row: any) => {
-  //   setSelectedRows((prev) => ({
-  //     ...prev,
-  //     [row.id]: !prev[row.id],
-  //   }));
-  // };
 
   const columns = [
     // {
@@ -112,11 +94,11 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
     //     />
     //   ),
     // },
-    columnHelper.accessor("transaction_type", {
+    columnHelper.accessor("type", {
       header: () => "Type",
       cell: (info) => <>{info?.getValue() ?? "Nil"}</>,
     }),
-    columnHelper.accessor("mode", {
+    columnHelper.accessor("transaction_status", {
       header: () => "Mode",
       cell: (info) => info?.getValue(),
     }),
@@ -125,7 +107,7 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
       header: () => "Amount",
       cell: (info) => info?.getValue(),
     }),
-    columnHelper.accessor("reference_reference", {
+    columnHelper.accessor("transaction_reference", {
       header: () => "Reference ID",
       cell: (info) => info?.getValue(),
     }),
@@ -155,7 +137,7 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
         <Button
           className="rounded-10 bg-[#F6F9FF] py-1 px-3 text-[#242424] text-xs"
           onClick={() => {
-            setTransDetails(info?.row?.original);
+            setTransDetails(info?.row?.original as TransactionTypes);
             setTransactionDetails(true);
           }}
         >
@@ -176,10 +158,7 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
-  const rows = useMemo(
-    () => transaction ?? [],
-    [transaction?]
-  );
+  const rows = useMemo(() => transaction ?? [], [transaction]);
 
   const SkeletonLoading = () => (
     <div className="animate-pulse">
@@ -214,19 +193,22 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
             <DropdownMenuContent className="min-w-[100px] px-4 bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade">
               <DropdownMenuItem
                 className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
-                defaultValue={"successful"}
+                defaultValue={"Successful"}
+                onClick={() => setFiterStatus("SUCCESS")}
               >
                 SuccessFul
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
-                defaultValue={"pending"}
+                defaultValue={"Pending"}
+                onClick={() => setFiterStatus("PENDING")}
               >
                 Pending
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
-                defaultValue={"failed"}
+                defaultValue={"Failed"}
+                onClick={() => setFiterStatus("FAILED")}
               >
                 Failed
               </DropdownMenuItem>
