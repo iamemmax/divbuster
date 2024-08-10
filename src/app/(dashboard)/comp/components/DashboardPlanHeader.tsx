@@ -63,7 +63,7 @@ const DashboardPlanHeader = () => {
             <div className="text-white h-[2.5rem] w-[2.5rem]">
               <Image
                 alt="user icon"
-                src={`/images/usericon.png`}
+                src={`/images/userIcon.png`}
                 height={40}
                 width={40}
                 className="rounded-full"

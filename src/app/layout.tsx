@@ -7,6 +7,8 @@ import { AuthProvider } from "@/contexts/authentication";
 import ProtectedRouteGuard from "./(auth)/(onboarding)/misc/components/ProtectedRouteGuard";
 import { Wrapper } from "./(auth)/(onboarding)/misc/components/Wrapper";
 import { useUser } from "./(auth)/(onboarding)/misc";
+import { Button } from "@/components/core";
+import Image from "next/image";
 
 const sans = DM_Sans({
   subsets: ["latin"],
@@ -31,7 +33,7 @@ export default function RootLayout({
 }>) {
   // const { data } = useUser();
   // console.log(data);
-
+  const url = `https://wa.me/08077284810`;
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
       <body>
@@ -43,6 +45,23 @@ export default function RootLayout({
               </Suspense>
             </ProtectedRouteGuard>
           </AuthProvider>
+          <div className="fixed right-6 xl:right-24 bottom-3">
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="whatsapp-button bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-300"
+            >
+              <Button className="bg-transparent animate-pulse">
+                <Image
+                  src={"/images/whatsappIcon.png"}
+                  width={50}
+                  height={50}
+                  alt="chat icon"
+                />
+              </Button>
+            </a>
+          </div>
         </ReactQueryProvider>
       </body>
     </html>

@@ -457,32 +457,29 @@ const MakePaymentModal = ({
   //     [planId]: (prevCounts[planId] || 0) + 1,
   //   }));
   // };
-  
+
   // const me = true
   const increment = (planId: string) => {
     setPlanCounts((prevCounts) => {
       const currentCount = prevCounts[planId] || 0;
-      
+
       // Determine the maximum allowed count based on `has_created_individual_health`
       const maxAllowed = users?.has_created_individual_health ? 5 : 6;
-  
+
       if (selectedTab === "FAMILY" && currentCount >= maxAllowed) {
         setErrorMsg(`Maximum of ${maxAllowed} plans allowed for FAMILY.`);
         return prevCounts; // Prevent incrementing
       }
-      
+
       // Clear any previous error message if the condition passes
       setErrorMsg("");
-      
+
       return {
         ...prevCounts,
         [planId]: currentCount + 1,
       };
     });
   };
-  
-  
-
 
   const decrement = (planId: string, minCount: number) => {
     setPlanCounts((prevCounts) => ({
@@ -796,15 +793,18 @@ const MakePaymentModal = ({
                                       <Button
                                         className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                         onClick={() => {
-                                          if(plan?.plan_duration?.plan_type?.name === "INDIVIDUAL"){
-
+                                          if (
+                                            plan?.plan_duration?.plan_type
+                                              ?.name === "INDIVIDUAL"
+                                          ) {
                                             setPlanType({
                                               phone_number: String(
                                                 users?.phone_number
                                               ),
                                               number_of_recipient: String(
-                                                planCounts[plan.id.toString()] ||
-                                                  0
+                                                planCounts[
+                                                  plan.id.toString()
+                                                ] || 0
                                               ),
                                               duration: String(
                                                 plan?.plan_duration?.duration
@@ -841,14 +841,18 @@ const MakePaymentModal = ({
                                                         )
                                                       )
                                                     ),
-                                              play_type: healthPlan?.package_name,
+                                              play_type:
+                                                healthPlan?.package_name,
                                             });
-  
+
                                             setShowPaymentConfirmation(true);
-                                          }else if(plan?.plan_duration?.plan_type?.name === "FAMILY"){
-                                            setBuyFamilyPlan(true)
-                                          }else{
-                                            setBuyPlanForCoporate(true)
+                                          } else if (
+                                            plan?.plan_duration?.plan_type
+                                              ?.name === "FAMILY"
+                                          ) {
+                                            setBuyFamilyPlan(true);
+                                          } else {
+                                            setBuyPlanForCoporate(true);
                                           }
                                         }}
                                       >
@@ -899,8 +903,7 @@ const MakePaymentModal = ({
         />
       )}
 
-
-{buyPlanForCoporate && (
+      {buyPlanForCoporate && (
         <BuyPlanModalForCoperate
           heading="Beneficiary Details"
           isBuyPlanModalOpen={buyPlanForCoporate}
@@ -908,7 +911,7 @@ const MakePaymentModal = ({
           subsection="Kindly enter the details below to activate beneficiary ."
         />
       )}
-      
+
       {BuyPlan && (
         <AddPrinciplePhoneNumer
           openCheckPhoneNumberModal={BuyPlan}
@@ -925,7 +928,7 @@ const MakePaymentModal = ({
           subsection="Kindly enter the details below to activate beneficiary ."
         />
       )}
-      
+
       <ErrorModal
         isErrorModalOpen={isErrorModalOpen}
         setErrorModalState={() => {

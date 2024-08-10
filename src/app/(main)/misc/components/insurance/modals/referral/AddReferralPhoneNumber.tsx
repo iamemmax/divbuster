@@ -23,6 +23,7 @@ import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCreateReferralPlanRequest } from "../../api/referral/createReferralPlan";
+import { useCreateReferralBeneficiaries } from "../../api/referral/createReferralBeneficies";
 
 interface Prop {
   setOpenCheckPhoneNumberModal: React.Dispatch<SetStateAction<boolean>>;
@@ -46,11 +47,27 @@ interface Prop {
 }
 
 interface successProp {
+  account_name: string;
   amount: string;
   account_no: string;
   bank_name: string;
   paystack_link: string;
   message: string;
+}
+interface BeneFicairySuccess {
+  account_no: string;
+  bank_name: string;
+  account_name: string;
+  paystack_link: string;
+  message: string;
+  unique_request_id: string;
+  plan_details: Plandetails;
+}
+
+interface Plandetails {
+  plan_duration: number;
+  total_price: number;
+  price: number;
 }
 const contactSchema = z.object({
   phone_number: z
@@ -103,44 +120,84 @@ const AddRemitalPhoneNumer = ({
   } = useErrorModalState();
   const { mutate: handleCreatePlan, isLoading } =
     useCreateReferralPlanRequest();
+  const { mutate: handleCreateBeneficiariesPlan, isLoading: LoadinBene } =
+    useCreateReferralBeneficiaries();
   const router = useRouter();
 
   const onsubmit = (data: detailRequestType) => {
     // console.log("123");
-    handleCreatePlan(
-      {
-        duration: Number(planType?.duration),
-        phone_number: data?.phone_number,
-        number_of_recipient: Number(planType?.number_of_recipient),
-        packages: planType?.play_type,
-      },
-      {
-        onSuccess: (data: successProp) => {
-          if (data?.message) {
-            setErrorMsg(data?.message);
-            openErrorModalWithMessage(String(data?.message));
-          } else {
-            setPaymentData({
-              account_name: "",
-              account_no: data?.account_no,
-              amount: data?.amount,
-              bank_name: data?.bank_name,
-              paystack_link: data?.paystack_link,
-            });
-            setShowReferralPayment(true);
-            setOpenCheckPhoneNumberModal(false);
-          }
-        },
-        onError: (error) => {
-          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          //@ts-expect-error
-          setErrorMsg(error?.response?.data?.error);
 
-          openErrorModalWithMessage(String(errorMessage));
+    if (planType?.play_type === "INDIVIDUAL") {
+      handleCreatePlan(
+        {
+          duration: Number(planType?.duration),
+          phone_number: data?.phone_number,
+          number_of_recipient: 1,
+          packages: planType?.play_type,
         },
-      }
-    );
+        {
+          onSuccess: (data: successProp) => {
+            if (data?.message) {
+              setErrorMsg(data?.message);
+              openErrorModalWithMessage(String(data?.message));
+            } else {
+              setPaymentData({
+                account_name: data?.account_name,
+                account_no: data?.account_no,
+                amount: data?.amount,
+                bank_name: data?.bank_name,
+                paystack_link: data?.paystack_link,
+              });
+              setShowReferralPayment(true);
+              setOpenCheckPhoneNumberModal(false);
+            }
+          },
+          onError: (error) => {
+            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
+            setErrorMsg(error?.response?.data?.error);
+
+            openErrorModalWithMessage(String(errorMessage));
+          },
+        }
+      );
+    } else {
+      handleCreateBeneficiariesPlan(
+        {
+          duration: Number(planType?.duration),
+          phone_number: data?.phone_number,
+          number_of_recipient: Number(planType?.number_of_recipient),
+          packages: planType?.play_type,
+        },
+        {
+          onSuccess: (data: BeneFicairySuccess) => {
+            if (data?.message) {
+              setErrorMsg(data?.message);
+              openErrorModalWithMessage(String(data?.message));
+            } else {
+              setPaymentData({
+                account_name: data?.account_name,
+                amount: String(data?.plan_details?.price),
+                account_no: data?.account_no,
+                bank_name: data?.bank_name,
+                paystack_link: data?.paystack_link,
+              });
+              setShowReferralPayment(true);
+              setOpenCheckPhoneNumberModal(false);
+            }
+          },
+          onError: (error) => {
+            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
+            setErrorMsg(error?.response?.data?.error);
+
+            openErrorModalWithMessage(String(errorMessage));
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -227,7 +284,10 @@ const AddRemitalPhoneNumer = ({
                     type="submit"
                   >
                     Continue{" "}
-                    {isLoading && <SmallSpinner className="" color="blue" />}
+                    {isLoading ||
+                      (LoadinBene && (
+                        <SmallSpinner className="" color="blue" />
+                      ))}
                   </Button>
                 </div>
               </form>
