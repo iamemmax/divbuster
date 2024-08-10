@@ -200,7 +200,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
             </div>
           ) : (
             <div className="bg-[#FFFAF0] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
-              <div className="">
+              
                 <div className="">
                   <div className="flex items-center gap-x-1">
                     <FamilyUserIcon backgroundColor="#FFF2D9" color="#DB8C00" />
@@ -208,14 +208,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                       Corporate
                     </h2>
                   </div>
-                  {/* {makePayment ? ( */}
-                  {/* //   <div className="mt-2 w-2/3">
-                  //     <p className="text-[#475569] text-xxs">
-                  //       Activate a plan for your employees today.
-                  //     </p>
-                  //   </div> */}
-                  {/* // ) : ( */}
-                  <>
+                  
                     <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
                       <h2 className="text-[#D98B02] text-xl font-bold">
                         {" "}
@@ -240,10 +233,8 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                         View
                       </Button>
                     </div>
-                  </>
-                  {/* // )} */}
+                 
                 </div>
-              </div>
             </div>
           )}
         </div>
