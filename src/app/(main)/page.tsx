@@ -339,6 +339,7 @@ export default function Home() {
           setOpenShowRemitalPlan={setOpenShowRemitalPlan}
           userId={userId}
           verifyResponse={verifyResponse}
+          verifiedPhoneNumber={verifiedPhoneNumber}
         />
       )}
       {openNonRemitalDetailModal && (

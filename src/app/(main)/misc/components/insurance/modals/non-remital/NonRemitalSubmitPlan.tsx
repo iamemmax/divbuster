@@ -11,14 +11,21 @@ import { useMakeRemitalPayment } from "../../api/remital/remitalpayment";
 import Link from "next/link";
 import { Button, ErrorModal, LinkButton } from "@/components/core";
 import { useErrorModalState } from "@/hooks";
-import { formatAxiosErrorMessage } from "@/utils";
+import {
+  addCommasToNumber,
+  formatAxiosErrorMessage,
+  formatCurrency,
+} from "@/utils";
 import { AxiosError } from "axios";
 import PlanComfirmationModal from "../remital/PlanComfirmationModal";
 import PlanPayment from "../remital/PlanPayment";
+import { useCreateReferralBeneficiaries } from "../../api/referral/createReferralBeneficies";
+import { BeneFicairySuccess } from "../referral/AddReferralPhoneNumber";
 
 interface prop {
   setShowSubmitModal: React.Dispatch<React.SetStateAction<boolean>>;
   showSubmitModal: boolean;
+  verifiedPhoneNumber: string;
   planType: {
     duration: number;
     amount: string;
@@ -65,6 +72,7 @@ const NonRemitalSubmitPlanModal = ({
   setShowSubmitModal,
   showSubmitModal,
   planType,
+  verifiedPhoneNumber,
 }: prop) => {
   const { mutate: handlePaymentRequest, isLoading } = useMakeRemitalPayment();
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -73,52 +81,87 @@ const NonRemitalSubmitPlanModal = ({
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [checkUserHasPassword, setCheckUserHasPassword] = useState<boolean>();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
+  const [errorMsg, setErrorMsg] = useState("");
   const {
     isErrorModalOpen,
     setErrorModalState,
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
+  const { mutate: handleCreateBeneficiariesPlan, isLoading: LoadinBene } =
+    useCreateReferralBeneficiaries();
   const handlePayment = () => {
-    handlePaymentRequest(
-      {
-        duration: planType?.duration,
-        userId: planType?.userId,
-        plan_type: planType?.play_type,
-        number_of_recipient: Number(planType?.number_of_recipient),
-      },
-      {
-        onSuccess: (data: PaymentSuccessMsg) => {
-          if (
-            data?.message === "insurance request sent, please wait" ||
-            data?.message === "You still have an active health plan.!!"
-          ) {
-            setShowConfirmation(true);
-            // setOpenShowRemitalPlan(false);
-            setConfirmationMessage(data?.message);
-            setCheckUserHasPassword(data?.["user:"]?.has_set_password);
-          } else {
-            setPaymentInfo({
-              account_name: data?.account_name,
-              account_no: data?.account_no,
-              bank_name: data?.bank_name,
-              paystack_link: data?.paystack_link,
-              amount: data?.amount,
-            });
-            setShowPaymentModal(true);
-            // setOpenShowRemitalPlan(false);
-          }
+    if (planType?.play_type === "INDIVIDUAL") {
+      handlePaymentRequest(
+        {
+          duration: planType?.duration,
+          userId: planType?.userId,
+          plan_type: planType?.play_type,
+          number_of_recipient: Number(planType?.number_of_recipient),
         },
-        onError: (error) => {
-          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-          //  eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          setErrorMsg(error?.response?.data?.error);
-          openErrorModalWithMessage(String(errorMessage));
+        {
+          onSuccess: (data: PaymentSuccessMsg) => {
+            if (data?.message) {
+              setErrorMsg(data?.message);
+              openErrorModalWithMessage(String(data?.message));
+            } else {
+              setPaymentInfo({
+                account_name: data?.account_name,
+                account_no: data?.account_no,
+                amount: Number(formatCurrency(Number(data?.amount))),
+                bank_name: data?.bank_name,
+                paystack_link: data?.paystack_link,
+              });
+              setShowPaymentModal(true);
+              // setOpenShowRemitalPlan(false);
+            }
+          },
+          onError: (error) => {
+            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
+            setErrorMsg(error?.response?.data?.error);
+
+            openErrorModalWithMessage(String(errorMessage));
+          },
+        }
+      );
+    } else {
+      handleCreateBeneficiariesPlan(
+        {
+          duration: Number(planType?.duration),
+          phone_number: verifiedPhoneNumber,
+          number_of_recipient: Number(planType?.number_of_recipient),
+          packages: planType?.play_type,
         },
-      }
-    );
+        {
+          onSuccess: (data: BeneFicairySuccess) => {
+            if (data?.message) {
+              setErrorMsg(data?.message);
+              openErrorModalWithMessage(String(data?.message));
+            } else {
+              setPaymentInfo({
+                account_name: data?.account_name,
+                amount: data?.plan_details?.total_price,
+                account_no: data?.account_no,
+                bank_name: data?.bank_name,
+                paystack_link: data?.paystack_link,
+              });
+              setShowPaymentModal(true);
+              // setOpenCheckPhoneNumberModal(false);
+            }
+          },
+          onError: (error) => {
+            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
+            setErrorMsg(error?.response?.data?.error);
+
+            openErrorModalWithMessage(String(errorMessage));
+          },
+        }
+      );
+    }
   };
   return (
     <>
@@ -185,7 +228,8 @@ const NonRemitalSubmitPlanModal = ({
                   className="rounded-3xl bg-[#fff] gap-x-2 flex items-center justify-center text-[#1B1687]   py-[0.9rem] w-[12rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none"
                   onClick={handlePayment}
                 >
-                  Agree & Proceed {isLoading && <SmallSpinner color="blue" />}
+                  Agree & Proceed{" "}
+                  {isLoading || (LoadinBene && <SmallSpinner color="blue" />)}
                 </Button>
               </div>
             </div>

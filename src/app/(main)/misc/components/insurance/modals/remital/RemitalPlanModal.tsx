@@ -50,6 +50,7 @@ interface Prop {
   setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>;
   openRemitalPlan: boolean;
   userId: string;
+  verifiedPhoneNumber: string;
   verifyResponse: {
     is_eligible: boolean;
     nin: string;
@@ -83,6 +84,7 @@ type PlanType = "family" | "individual" | "corporate";
 const RemitalPlanModal = ({
   openRemitalPlan,
   setOpenShowRemitalPlan,
+  verifiedPhoneNumber,
   userId,
   verifyResponse,
 }: Prop) => {
@@ -152,19 +154,18 @@ const RemitalPlanModal = ({
     }
   }, [plansData]);
 
- 
   const increment = (planId: string) => {
     setPlanCounts((prevCounts) => {
       const currentCount = prevCounts[planId] || 0;
-      
+
       if (selectedTab === "FAMILY" && currentCount >= 6) {
         setErrorMsg("Maximum of 6 plans allowed for FAMILY.");
         return prevCounts; // Prevent incrementing
       }
-      
+
       // Clear any previous error message if the condition passes
       setErrorMsg("");
-      
+
       return {
         ...prevCounts,
         [planId]: currentCount + 1,
@@ -576,6 +577,7 @@ const RemitalPlanModal = ({
           showSubmitModal={showSubmitModal}
           setShowSubmitModal={setShowSubmitModal}
           planType={planType}
+          verifiedPhoneNumber={verifiedPhoneNumber}
         />
       )}
 
@@ -584,6 +586,7 @@ const RemitalPlanModal = ({
           showSubmitModal={showNonRemitalSubmitModal}
           setShowSubmitModal={setShowNonRemitalSubmitModal}
           planType={planType}
+          verifiedPhoneNumber={verifiedPhoneNumber}
         />
       )}
       <ErrorModal

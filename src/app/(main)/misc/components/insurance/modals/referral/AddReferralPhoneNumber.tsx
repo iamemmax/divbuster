@@ -54,7 +54,7 @@ interface successProp {
   paystack_link: string;
   message: string;
 }
-interface BeneFicairySuccess {
+export interface BeneFicairySuccess {
   account_no: string;
   bank_name: string;
   account_name: string;
