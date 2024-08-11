@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import DashboardPlanHeader from "../../comp/components/DashboardPlanHeader";
 import Image from "next/image";
