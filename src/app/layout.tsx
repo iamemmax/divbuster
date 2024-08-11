@@ -45,18 +45,18 @@ export default function RootLayout({
               </Suspense>
             </ProtectedRouteGuard>
           </AuthProvider>
-          <div className="fixed right-6 xl:right-24 bottom-3">
+          <div className="fixed right-6 xl:right-24 bottom-6 z-[999999]">
             <a
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="whatsapp-button bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-300"
+              className="whatsapp-button  text-white font-bold py-2 px-4 rounded  transition duration-300"
             >
               <Button className="bg-transparent animate-pulse">
                 <Image
                   src={"/images/whatsappIcon.png"}
-                  width={50}
-                  height={50}
+                  width={55}
+                  height={55}
                   alt="chat icon"
                 />
               </Button>

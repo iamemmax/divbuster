@@ -1,5 +1,10 @@
 import React from "react";
 import DashboardPlanHeader from "../../comp/components/DashboardPlanHeader";
+import Image from "next/image";
+import CameraIcon from "../../comp/icons/CameraIcon";
+import { Button } from "@/components/core";
+import UploadIcon from "../../comp/icons/UploadIcon";
+import RemoveIcon from "../../comp/icons/RemoveIcon";
 
 const page = () => {
   return (
@@ -15,8 +20,30 @@ const page = () => {
                 Personal Information
               </h2>
             </div>
-            <div className="mt-6 flex justify-between items-center">
-              <div className=""></div>
+            <div className="mt-6 flex justify-between items-center relative">
+              <div className="relative flex items-center gap-10">
+                <div className="relative">
+                <div className="relative  ">
+                  <Image
+                  src={"/images/userIcon.png"}
+                  width={100}
+                  height={100}
+                  alt="user Profile"
+                  className="rounded-full"
+                  />
+                </div>
+              <input type="file" id="BtnBrowseHidden" name="files" className="hidden"/>
+       <div className="absolute -right-9 bottom-3 z-[9999]">
+         <label htmlFor="BtnBrowseHidden" id="LblBrowse">
+         <Button className="bg-transparent"> <CameraIcon/></Button>
+        </label></div>
+
+                </div>
+                <div className="flex items-center gap-4">
+          <Button variant={"outlined"} className="border-[#032282] bg-[#F5F9FE] py-3 border-[.0187rem] flex items-center gap-x-2 rounded-10"><UploadIcon/> Upload</Button>
+          <Button className="bg-[#F5F9FE] text-[#032282] flex items-center gap-x-2 py-3"><RemoveIcon/> Remove</Button>
+        </div>
+              </div>
               <div className=""></div>
             </div>
           </div>

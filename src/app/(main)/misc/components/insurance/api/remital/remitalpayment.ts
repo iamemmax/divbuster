@@ -11,7 +11,7 @@ interface planProp{
 
 export const makeRemitalPayment = async ({ userId,duration,plan_type,number_of_recipient }: planProp) => {
     
-  const response = await adminAxios.post(`/create-health-plan/`, {
+  const response = await adminAxios.post(`create-health-plan/`, {
        user_id:userId, 
     duration,
     plan_type,
