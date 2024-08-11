@@ -60,20 +60,24 @@ const pagesWithColoredBg = [
   "/contact-us",
   "/about-us",
 ];
+import { useAuth } from "@/contexts/authentication"; // Import your authentication context
 
 export function MainHeader() {
   const pathname = usePathname();
+  const { authState } = useAuth();
   const isColored = pagesWithColoredBg.includes(pathname);
   const { data: users } = useUser();
   const [open, setOpen] = React.useState(false);
-  const [userActive, setUserActive] = React.useState(false);
-  React.useEffect(() => {
-    if (users?.is_active) {
-      setUserActive(true);
-    } else {
-      setUserActive(false);
-    }
-  }, [users]);
+  const { isAuthenticated } = authState;
+  // const [userActive, setUserActive] = React.useState(false);
+  // React.useEffect(() => {
+  //   if (users?.is_active) {
+  //     setUserActive(true);
+  //   } else {
+  //     setUserActive(false);
+  //   }
+  // }, [users]);
+
 
   return (
     <div className={cn(isColored && "bg-main")}>
@@ -136,7 +140,7 @@ export function MainHeader() {
         <DesktopMenuBar isColored={isColored} />
 
         <div className="flex items-center gap-[31px]">
-          {!userActive ? (
+          {!isAuthenticated ? (
             <a
               className={cn(
                 "hidden md:flex items-center justify-between md:max-lg:text-sm lg:text-base text-white text-left p-0 bg-transparent rounded-full max-w-max",
@@ -216,11 +220,11 @@ export function MainHeader() {
         <div className="flex items-center gap-6 md:hidden">
           <LinkButton
             className="text-base text-white xl:text-xl"
-            href={false ? "/dashboard" : "/login"}
+            href={isAuthenticated ? "/dashboard" : "/login"}
             size="unstyled"
             variant="unstyled"
           >
-            {false ? "Dashboard" : " Login"}
+            {isAuthenticated ? "Dashboard" : " Login"}
           </LinkButton>
 
           <MobileMenuDialog />

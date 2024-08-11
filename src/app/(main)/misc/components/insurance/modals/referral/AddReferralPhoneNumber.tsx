@@ -42,6 +42,7 @@ interface Prop {
       amount: string;
       bank_name: string;
       paystack_link: string;
+      phone_number: string;
     }>
   >;
 }
@@ -53,8 +54,9 @@ interface successProp {
   bank_name: string;
   paystack_link: string;
   message: string;
+  phone_number: string;
 }
-interface BeneFicairySuccess {
+export interface BeneFicairySuccess {
   account_no: string;
   bank_name: string;
   account_name: string;
@@ -62,6 +64,7 @@ interface BeneFicairySuccess {
   message: string;
   unique_request_id: string;
   plan_details: Plandetails;
+  phone_number: string;
 }
 
 interface Plandetails {
@@ -147,6 +150,7 @@ const AddRemitalPhoneNumer = ({
                 amount: formatCurrency(Number(data?.amount)),
                 bank_name: data?.bank_name,
                 paystack_link: data?.paystack_link,
+                phone_number: data?.phone_number,
               });
               setShowReferralPayment(true);
               setOpenCheckPhoneNumberModal(false);
@@ -182,6 +186,7 @@ const AddRemitalPhoneNumer = ({
                 account_no: data?.account_no,
                 bank_name: data?.bank_name,
                 paystack_link: data?.paystack_link,
+                phone_number: data?.phone_number,
               });
               setShowReferralPayment(true);
               setOpenCheckPhoneNumberModal(false);
