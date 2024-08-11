@@ -5,8 +5,31 @@ import CameraIcon from "../../comp/icons/CameraIcon";
 import { Button } from "@/components/core";
 import UploadIcon from "../../comp/icons/UploadIcon";
 import RemoveIcon from "../../comp/icons/RemoveIcon";
+import CopyIcon3 from "../../comp/icons/CopyIcon3";
+import { SmallSpinner } from "@/icons/core";
+import { useClipboard } from "@/hooks";
+import { useQuery, useQueryClient } from "react-query";
+import { fetchReferralCode } from "../api/referral/fetchReferralCode";
+import { useUser } from "@/app/(auth)/(onboarding)/misc";
 
-const page = () => {
+const Page = () => {
+  const { copy } = useClipboard();
+const {data:userData}= useUser()
+  const queryClient = useQueryClient();
+ const {
+    data,
+    refetch,
+
+    isLoading: loadinGenerate,
+  } = useQuery({
+    queryFn: () => fetchReferralCode(userData?.user_id as string),
+    queryKey: ["generate-referral-code", userData?.user_id],
+    enabled: false,
+    onSuccess: () => {
+      // Invalidate user details query to refetch data
+      queryClient.invalidateQueries(["user-details", data?.referral_code]);
+    },
+  });
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
       <div className="bg-main px-6  md:px-[4.5rem] lg:px-[7.5rem]"></div>
@@ -44,13 +67,64 @@ const page = () => {
           <Button className="bg-[#F5F9FE] text-[#032282] flex items-center gap-x-2 py-3"><RemoveIcon/> Remove</Button>
         </div>
               </div>
-              <div className=""></div>
+              {userData?.referral_code ? (
+              <div className="flex items-center gap-2">
+                <div
+                  className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
+                  onClick={() =>
+                    copy(
+                      ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}` ??
+                        ""
+                    )
+                  }
+                >
+                  <p className="text-white text-xxs text-opacity-60">
+                    Referral link
+                  </p>
+                  <div className="flex">
+                    <p className="text-white max-w-[6.25rem] text-xxs truncate">
+                      {` https://liberty-life.vercel.app/?referral_code=${userData?.referral_code}`}
+                    </p>
+                    <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
+                      <CopyIcon3 height={15} width={15} />
+                    </Button>
+                  </div>
+                </div>
+
+                <div
+                  className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-6 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
+                  onClick={() => copy(userData?.referral_code ?? "")}
+                >
+                  <p className="text-white text-xxs text-opacity-60">
+                    Referral Code
+                  </p>
+                  <div className="flex">
+                    <p className="text-white max-w-[3.25rem] text-xxs truncate">
+                      {userData?.referral_code ?? ""}
+                    </p>
+                    <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
+                      <CopyIcon3 height={15} width={15} />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Button onClick={() => refetch()}>
+                {loadinGenerate ? (
+                  <SmallSpinner color="white" />
+                ) : (
+                  "Generate Referral"
+                )}
+              </Button>
+            )}
+                <div className=""><Button className="bg-[#099976]">Edit</Button></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    
   );
 };
 
-export default page;
+export default Page;
