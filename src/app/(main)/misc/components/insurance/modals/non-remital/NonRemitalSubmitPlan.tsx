@@ -42,6 +42,7 @@ export interface PaymentSuccessMsg {
   bank_name: string;
   paystack_link: string;
   amount: number;
+  phone_number: string;
 
   "user:"?: User;
 }
@@ -111,6 +112,7 @@ const NonRemitalSubmitPlanModal = ({
                 amount: Number(formatCurrency(Number(data?.amount))),
                 bank_name: data?.bank_name,
                 paystack_link: data?.paystack_link,
+                phone_number: data?.phone_number,
               });
               setShowPaymentModal(true);
               // setOpenShowRemitalPlan(false);
@@ -146,6 +148,7 @@ const NonRemitalSubmitPlanModal = ({
                 account_no: data?.account_no,
                 bank_name: data?.bank_name,
                 paystack_link: data?.paystack_link,
+                phone_number: data?.phone_number,
               });
               setShowPaymentModal(true);
               // setOpenCheckPhoneNumberModal(false);

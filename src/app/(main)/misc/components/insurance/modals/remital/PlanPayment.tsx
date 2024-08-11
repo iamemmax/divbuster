@@ -67,8 +67,8 @@ const PlanPayment = ({
   const { data: users, isLoading } = useUser();
   const router = useRouter();
   const { refetch } = useQuery({
-    queryFn: () => confirmTransfer(String(users?.phone_number)),
-    queryKey: ["confirm-transfer", users?.phone_number],
+    queryFn: () => confirmTransfer(String(PaymentInfo?.phone_number)),
+    queryKey: ["confirm-transfer", PaymentInfo?.phone_number],
     enabled: false,
     onSuccess: (data) => {
       if (data.message !== "success") {

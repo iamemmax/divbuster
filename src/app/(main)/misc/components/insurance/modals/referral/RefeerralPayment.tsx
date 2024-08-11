@@ -34,6 +34,7 @@ interface Prop {
     amount: string;
     bank_name: string;
     paystack_link: string;
+    phone_number: string;
   };
   showReferralPayment: true;
   setShowReferralPayment: React.Dispatch<React.SetStateAction<boolean>>;
@@ -70,13 +71,13 @@ const ReferralPlanPayment = ({
   const { data: users, isLoading } = useUser();
   const router = useRouter();
   const { refetch } = useQuery({
-    queryFn: () => confirmTransfer(String(users?.phone_number)),
-    queryKey: ["confirm-transfer", users?.phone_number],
+    queryFn: () => confirmTransfer(String(PaymentInfo?.phone_number)),
+    queryKey: ["confirm-transfer", PaymentInfo?.phone_number],
     enabled: false,
     onSuccess: (data) => {
       if (data.message !== "success") {
         toast.success(data?.message);
-        router.push("/dashboard");
+        router.push("/login");
       } else {
         setErrorMsg(data?.message);
         openErrorModalWithMessage(String(data?.message));
