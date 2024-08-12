@@ -3,7 +3,7 @@
 
 // import Image from 'next/image'
 // import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
-// import { CopyIcon4, Delete, Photo, Upload } from '../../comp/icons'
+
 // import { Button, FormError, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core'
 // import { useQuery, useQueryClient } from 'react-query'
 // import { fetchReferralCode } from '../api/referral/fetchReferralCode'
@@ -507,3 +507,15 @@
 // }
 
 
+import * as React from 'react';
+
+const Page = () => {
+    return (
+
+        <>
+        </>
+    )
+
+}
+
+export default Page;
