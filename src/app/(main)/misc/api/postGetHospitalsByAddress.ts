@@ -16,14 +16,13 @@ interface Response {
 }
 type getHospitalsInputProp = {
   address: string;
-  myAddress?:string
  
 }
-export const getHospitalsByAddress = async ({ address, myAddress }: getHospitalsInputProp) => {
-  const searchFilter = address !== "" ? address : myAddress;
+export const getHospitalsByAddress = async ({ address }: getHospitalsInputProp) => {
+  // const searchFilter = address !== "" ? address : myAddress;
 
   try {
-    const response = await adminAxios.post('get-nem-location/', { searchFilter });
+    const response = await adminAxios.post('get-nem-location/', { address });
     return response?.data as Response;
   } catch (error) {
     // Handle the error (e.g., log it, show a message, etc.)
