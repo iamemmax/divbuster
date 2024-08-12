@@ -121,7 +121,7 @@ export default function Home() {
             <h1
               className={cn(
                 "font-display",
-                "flex flex-col font-semibold md:font-bold text-xl md:text-3xl xl:text-7xl gap-2"
+                "flex flex-col font-semibold md:font-bold text-xl md:text-3xl xl:text-6xl gap-2"
               )}
             >
               <span className="flex items-center flex-wrap leading-tight md:leading-none gap-2">

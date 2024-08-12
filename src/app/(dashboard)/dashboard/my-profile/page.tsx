@@ -4,7 +4,7 @@
 import Image from 'next/image'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
-import { Button, FormError, Input, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core'
+import { Button, FormError, Input, RadioGroup, RadioGroupItem, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core'
 import { useQuery, useQueryClient } from 'react-query'
 import { fetchReferralCode } from '../api/referral/fetchReferralCode'
 import { useUser } from '@/app/(auth)/(onboarding)/misc'
@@ -18,6 +18,8 @@ import { capitalizeFirstLetter } from '@/utils'
 
 import Select, { components } from "react-select";
 import { Spinner } from '@/icons/core'
+import { CopyIcon4, Delete, Photo, Upload } from '../../comp/icons'
+import { Input2 } from '@/components/core/Input2'
 
 
 interface Prop {
@@ -75,20 +77,14 @@ const formValues = z.object({
             .string()
             .trim()
             .min(1, { message: "Please select a hospital." }),
+        selectedOption: z.union([z.literal("nin"), z.literal("bvn")]),
+        bvn: z.string().trim(),
+        nin: z.string().trim(),
     }),
 });
 
 const baseSchema = z.object({
-    address: z
-        .string({ required_error: "Enter your address" })
-        .min(2, { message: "Address should be at least 2 characters" }),
-    email: z
-        .string()
-        .email({ message: "Invalid email format" })
-        .min(1, { message: "Email is required" }),
-    selectedOption: z.union([z.literal("nin"), z.literal("bvn")]),
-    bvn: z.string().trim(),
-    nin: z.string().trim(),
+
 });
 
 // Extend the base schema for NIN
@@ -150,6 +146,10 @@ export default function Page() {
 
     type formValues = z.infer<typeof formValues>;
 
+    const watchSelectedOption = useWatch({
+        control,
+        name: "hospitaldata.selectedOption",
+    });
 
     const selectedState = useWatch({
         control,
@@ -226,7 +226,7 @@ export default function Page() {
         control: (base: any) => ({
             ...base,
             border: 0,
-            background: "#2a304f",
+            background: "#F5F9FE",
             height: "2.875rem",
             boxShadow: "none",
             color: "#fff",
@@ -236,21 +236,13 @@ export default function Page() {
             color: "#333",
             background: "#fff",
             "&:hover": {
-                background: "#f0f0f0",
+                background: "#F5F9FE",
             },
         }),
         singleValue: (provided: any) => ({
             ...provided,
-            color: "#fff",
+            color: "#032282",
             fontSize: "12px",
-
-
-
-
-
-
-
-
             textTransform: "capitalize",
         }),
     };
@@ -290,7 +282,7 @@ export default function Page() {
                     <section className="h-full w-full px-6 md:px-[7.5rem] min-h-screen pb-[1.88rem] relative -mt-32">
                         <div className='bg-white w-full h-screen mx-auto pt-[2.625rem] px-[4.5rem] rounded-[.625rem]'>
                             <p className='text-[#032282] font-sans font-bold text-2xl'>Personal Information</p>
-                            <section className='mt-8 flex justify-between'>
+                            <section className='mt-8 flex flex-col lg:flex-row justify-between'>
                                 <div className='flex justify-between items-center gap-4'>
                                     <div className='flex'>
                                         <Image
@@ -301,17 +293,17 @@ export default function Page() {
                                             className="rounded-full"
                                         />
                                         <div className='mt-[3.8rem] -ml-[1.5rem]'>
-                                            {/* <Photo /> */}
+                                            <Photo />
                                         </div>
                                     </div>
                                     <label htmlFor='upload'></label>
                                     <input type="file" name="" id="upload" className='hidden' />
                                     <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload'>
-                                        {/* <Upload /> */}
+                                        <Upload />
                                         <p className='text-[#032282] font-medium'>Upload</p>
                                     </Button>
                                     <Button className='bg-[#F5F9FE] gap-1 px-4 py-3'>
-                                        {/* <Delete /> */}
+                                        <Delete />
                                         <p className='text-[#032282] font-medium'>Remove</p>
                                     </Button>
                                 </div>
@@ -335,7 +327,7 @@ export default function Page() {
                                                     {` https://liberty-life.vercel.app/?referral_code=${userData?.referral_code}`}
                                                 </p>
                                                 <Button className=" text-[#032282] px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
-                                                    {/* <CopyIcon4 height={15} width={15} fill='' /> */}
+                                                    <CopyIcon4 height={15} width={15} fill='' />
                                                 </Button>
                                             </div>
                                         </div>
@@ -351,7 +343,7 @@ export default function Page() {
                                                     {userData?.referral_code ?? ""}
                                                 </p>
                                                 <Button className=" text-[#032282] px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
-                                                    {/* <CopyIcon4 height={15} width={15} /> */}
+                                                    <CopyIcon4 height={15} width={15} />
                                                 </Button>
                                             </div>
                                         </div>
@@ -408,7 +400,7 @@ export default function Page() {
                                             </div>
                                             <div className="">
                                                 <Label
-                                                    className="mt-5 mb-1 block text-xs text-[#fff]"
+                                                    className='text-[#032282]'
                                                     htmlFor="State"
                                                 >
                                                     State
@@ -439,7 +431,7 @@ export default function Page() {
                                             </div>
                                             <div className="">
                                                 <Label
-                                                    className="mt-5 mb-1 block text-xs text-[#fff]"
+                                                    className='text-[#032282]'
                                                     htmlFor="State"
                                                 >
                                                     Lga
@@ -467,13 +459,13 @@ export default function Page() {
                                                     )}
                                                 />
                                             </div>
-                                            <div className="w-full mt-[1rem] text-sm font-normal">
-                                                <label
-                                                    className="mb-1 block text-xs text-[#fff]"
+                                            <div className="">
+                                                <Label
+                                                    className='text-[#032282]'
                                                     htmlFor="hospital"
                                                 >
                                                     Hospital ({hospitalList?.data?.length ?? 0})
-                                                </label>
+                                                </Label>
                                                 <div className="relative mt-[.25rem]">
                                                     <Controller
                                                         control={control}
@@ -502,13 +494,103 @@ export default function Page() {
                                                     )}
                                                 </div>
                                             </div>
+                                            <div>
+                                                <Label
+                                                    className='text-[#032282]'
+                                                    htmlFor='selectedOption'
+                                                >
+                                                    Select the one to enter, BVN or NIN?
+                                                </Label>
+                                                <Controller
+                                                    control={control}
+                                                    name="hospitaldata.selectedOption"
+                                                    render={({ field: { onChange, value, ref } }) => (
+
+                                                        <RadioGroup defaultValue="bvn"
+                                                        className='px-4 py-3 bg-[#F5F9FE] mt-2'
+                                                        >
+                                                            <div className='flex gap-x-4'>
+                                                            <div className="flex items-center space-x-2 bg-white py-2 pl-3 text-[#032282] pr-8 rounded-lg">
+                                                                <RadioGroupItem value="bvn" id="r1" />
+                                                                <Label htmlFor="r1" className='text-[#032282]'>BVN</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2 bg-white py-2 pl-3 text-[#032282] pr-8 rounded-lg">
+                                                                <RadioGroupItem value="nin" id="r2" />
+                                                                <Label htmlFor="r2" className='text-[#032282]'>NIN</Label>
+                                                            </div>
+                                                            </div>
+                                                        </RadioGroup>
+
+                                                        // <Select value={value} onValueChange={onChange}>
+                                                        //     <SelectTrigger
+                                                        //         id="selectedOption"
+                                                        //         ref={ref}
+                                                        //         className="bg-[#2D3456] text-[#fff] w-full py-2 px-3 rounded-md focus:outline-none"
+                                                        //     >
+                                                        //         <span>
+                                                        //             {value === "bvn"
+                                                        //                 ? "BVN"
+                                                        //                 : value === "nin"
+                                                        //                     ? "NIN"
+                                                        //                     : "Select BVN or NIN"}
+                                                        //         </span>
+                                                        //     </SelectTrigger>
+                                                        //     <SelectContent className="bg-white border border-gray-300 mt-1 rounded-md shadow-lg w-full absolute z-50 top-full">
+                                                        //         <SelectItem value="bvn">BVN</SelectItem>
+                                                        //         <SelectItem value="nin">NIN</SelectItem>
+                                                        //     </SelectContent>
+                                                        // </Select>
+                                                    )}
+                                                />
+                                            </div>
+                                            {watchSelectedOption === "bvn" && (
+                                                <div className="w-full mt-[1rem] text-sm font-normal">
+                                                    <Label
+                                                        className="mb-1 block text-xs text-[#fff]"
+                                                        htmlFor="bvn"
+                                                    >
+                                                        BVN
+                                                    </Label>
+                                                    <div className="relative mt-[.25rem]">
+                                                        <Input2
+                                                            className={`${errors?.hospitaldata?.bvn?.message ? "border border-red-700" : ""} text-[#fff]`}
+                                                            placeholder="Enter BVN"
+                                                            type="text"
+                                                            id="bvn"
+                                                            required
+                                                            {...register("hospitaldata.bvn")}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {watchSelectedOption === "nin" && (
+                                                <div className="w-full mt-[1rem] text-sm font-normal">
+                                                    <Label
+                                                        className="mb-1 block text-xs text-[#fff]"
+                                                        htmlFor="nin"
+                                                    >
+                                                        NIN
+                                                    </Label>
+                                                    <div className="relative mt-[.25rem]">
+                                                        <Input2
+                                                            className={`${errors?.hospitaldata?.nin?.message ? "border border-red-700" : ""} text-[#fff]`}
+                                                            placeholder="Enter NIN"
+                                                            type="text"
+                                                            id="nin"
+                                                            required
+                                                            {...register("hospitaldata.nin")}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </form>
                                 </div>
                             </section>
                             <div className='border-b-[0.3px] mt-4'></div>
                             <div className='mt-6'>
-                                <Button className='bg-[#099976] py-[18px] px-7 text-xs rounded-10 items-stretch'>Save Changes</Button>
+                                <Button className='bg-[#099976] py-[18px] px-7 text-xs text-nowrap rounded-10 items-stretch'>Save Changes</Button>
                             </div>
                         </div>
                     </section>

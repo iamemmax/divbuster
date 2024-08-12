@@ -205,6 +205,9 @@ const HospitalAround = () => {
                       <TableCell className="text-xs cursor-pointer font-nunito py-2 ">
                         <SkeletonLoading />
                       </TableCell>
+                      <TableCell className="text-xs cursor-pointer font-nunito py-2 ">
+                        <SkeletonLoading />
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
