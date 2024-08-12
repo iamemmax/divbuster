@@ -124,7 +124,7 @@ export function DesktopMenuLink({
             showReferralPayment={showReferralPayment}
             setShowReferralPayment={setShowReferralPayment}
             setShowReferralPasswordModal={setShowReferralPasswordModal}
-            // setShowPaymentModal={}
+            // setShowPaymentModal
             // planType={"Family"}
             //@ts-ignore
             PaymentInfo={paymentData}
