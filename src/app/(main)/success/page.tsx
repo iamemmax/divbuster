@@ -8,6 +8,7 @@ import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
 import { Spinner } from "@/icons/core";
+import { useAuth } from "@/contexts/authentication";
 
 //liberty-life.vercel.app/success?trxref=llf8db2425-3845-4d05-80e7-6339c6e7afd31723316951.9175694&reference=llf8db2425-3845-4d05-80e7-6339c6e7afd31723316951.9175694
 const Page = () => {
@@ -42,6 +43,9 @@ const Page = () => {
       openErrorModalWithMessage(String(errorMessage));
     },
   });
+
+  const { authState } = useAuth();
+  const { isAuthenticated } = authState;
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-[#080D27] backdrop-blur-0">
@@ -105,12 +109,21 @@ const Page = () => {
                   Done
                 </LinkButton>
 
-                <LinkButton
-                  href={`/login`}
-                  className="rounded-3xl bg-[#fff] text-[#1B1687] py-[0.9rem] w-[10rem] shadow-lg font-normal transition-colors delay-150 ease-in-out focus:outline-none"
-                >
-                  Login
-                </LinkButton>
+                {isAuthenticated ? (
+                  <LinkButton
+                    href={`/dashboard`}
+                    className="rounded-3xl bg-[#fff] text-[#1B1687] py-[0.9rem] w-[10rem] shadow-lg font-normal transition-colors delay-150 ease-in-out focus:outline-none"
+                  >
+                    Dashboard
+                  </LinkButton>
+                ) : (
+                  <LinkButton
+                    href={`/login`}
+                    className="rounded-3xl bg-[#fff] text-[#1B1687] py-[0.9rem] w-[10rem] shadow-lg font-normal transition-colors delay-150 ease-in-out focus:outline-none"
+                  >
+                    Login
+                  </LinkButton>
+                )}
               </div>
             </div>
           </div>

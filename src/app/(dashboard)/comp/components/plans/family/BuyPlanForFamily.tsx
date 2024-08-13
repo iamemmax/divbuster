@@ -68,7 +68,7 @@ const BuyPlanModal = ({ setBuyPlanModal, isBuyPlanModalOpen }: Prop) => {
     control,
     name: "beneficiaries",
   });
-const {data:users}=useUser()
+  const { data: users } = useUser();
   const [beneficiariesList, setBeneficiariesList] = useState<FormValues>();
   const [showBeneficaries, setShowBeneficaries] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -113,8 +113,13 @@ const {data:users}=useUser()
 
               <DialogBody className="bg-[#141B3f] w-full !max-h-[86vh]">
                 <div className="text-[#fff] font-light text-sm pb-4">
-                 {!users?.has_created_individual_health && <p className="py-2 pb-4">You have not created an individual health plan,
-                  Liberty Life will create a health plan for you and add you as the benefactor to the beneficiaries you want  </p>}
+                  {!users?.has_created_individual_health && (
+                    <p className="py-2 pb-4">
+                      You have not created an individual health plan, Liberty
+                      Life will create a health plan for you and add you as the
+                      benefactor to the beneficiaries you want{" "}
+                    </p>
+                  )}
                   <p className="w-4/5 pb-2">
                     Kindly enter the details below to activate beneficiary.
                   </p>
@@ -128,7 +133,9 @@ const {data:users}=useUser()
                   )}
                 </div>
                 <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-                  <div className="max-h-[50vh] overflow-y-auto">
+                  <div
+                    className={`${!users?.has_created_individual_health ? "max-h-[43vh]" : "50vh"}  overflow-y-auto`}
+                  >
                     {fields.map((field, index) => (
                       <div
                         key={field.id}
