@@ -21,6 +21,8 @@ const LoveOneCard = ({
   showViewButton = true,
 }: Prop) => {
   const [buyPlanForLovedOnes, setBuyPlanForLovedOnes] = useState(false);
+  const checkLovedOnesPaymentStatus =
+    userData?.paid_beneficiary_requests?.includes("LOVE_ONES");
 
   return (
     <div className="bg-white rounded-10 p-1">
@@ -55,13 +57,24 @@ const LoveOneCard = ({
               </div>
             </div>
             <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
-              <Button
-                // variant={"outlined"}
-                className="bg-[#E42EB1] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
-                onClick={() => setBuyPlanForLovedOnes(true)}
-              >
-                Buy Plan
-              </Button>
+              {checkLovedOnesPaymentStatus ? (
+                <Button
+                  // variant={"outlined"}
+                  className="bg-[#E42EB1] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
+                  onClick={() => setBuyPlanForLovedOnes(true)}
+                >
+                  Add More
+                </Button>
+              ) : (
+                <Button
+                  // variant={"outlined"}
+                  className="bg-[#E42EB1] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
+                  onClick={() => setBuyPlanForLovedOnes(true)}
+                >
+                  {" "}
+                  Buy Plan
+                </Button>
+              )}
               {showViewButton && (
                 <LinkButton
                   href={"/dashboard/loved-ones-beneficiaries"}

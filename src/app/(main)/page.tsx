@@ -132,12 +132,12 @@ export default function Home() {
                 for you and your family.
               </span>
             </h1>
-            <p className="xl:max-w-[80%] font-sans text-[0.825rem] md:text-xl text-helper">
+            <p className="xl:max-w-[80%] flex font-sans text-[0.825rem] md:text-xl text-helper">
               <span>
                 Get a comprehensive health cover and stand a chance to benefit
+                from a lifestyle reward of
               </span>
               <span className="flex">
-                from a lifestyle reward of
                 <span className="flex flex-col ml-2 text-white">
                   ₦500,000
                   <UnderLine />

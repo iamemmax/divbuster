@@ -340,6 +340,7 @@ const RemitalUserDetails = ({
                           )}
                           options={stateOptions}
                           placeholder="Select State"
+                          isSearchable
                           ref={ref}
                           onChange={(selectedOption) => {
                             onChange(selectedOption?.value);
@@ -371,6 +372,7 @@ const RemitalUserDetails = ({
                           )}
                           options={lgaOption}
                           placeholder="Select Lga"
+                          isSearchable
                           ref={ref}
                           onChange={(lgaOption) => {
                             onChange(lgaOption?.value);
@@ -399,6 +401,7 @@ const RemitalUserDetails = ({
                             {...field}
                             options={hospitalOptions}
                             placeholder="Select Hospital"
+                            isSearchable
                             onChange={(option) => field.onChange(option?.value)}
                             value={hospitalOptions?.find(
                               (option) => option.value === field.value

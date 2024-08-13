@@ -60,6 +60,7 @@ export function DesktopMenuLink({
     amount: "",
     bank_name: "",
     paystack_link: "",
+    phone_number: "",
     // "user:": { address: "", email: "", first_name: "" },
   });
   const search = useSearchParams();
@@ -85,7 +86,7 @@ export function DesktopMenuLink({
     );
   }
 
-  if (text === "Plan") {
+  if (text === "Plans") {
     return (
       <>
         <button
@@ -204,7 +205,7 @@ export const linkGroups = [
   },
   {
     link: "/plan",
-    text: "Plan",
+    text: "Plans",
     icon: undefined,
     disabled: false,
     isExternal: false,
@@ -226,7 +227,14 @@ export const linkGroups = [
   },
   {
     link: "/faqs",
-    text: "FAQs",
+    text: "Faqs",
+    icon: undefined,
+    disabled: false,
+    isExternal: false,
+  },
+  {
+    link: "/blogs",
+    text: "Blogs",
     icon: undefined,
     disabled: false,
     isExternal: false,
@@ -255,7 +263,7 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
     },
     {
       link: "/plan",
-      text: "Plan",
+      text: "Plans",
       icon: undefined,
       disabled: false,
       isExternal: false,
@@ -278,6 +286,13 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
     {
       link: "/faqs",
       text: "FAQs",
+      icon: undefined,
+      disabled: false,
+      isExternal: false,
+    },
+    {
+      link: "/blogs",
+      text: "Blogs",
       icon: undefined,
       disabled: false,
       isExternal: false,
