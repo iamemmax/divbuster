@@ -115,6 +115,7 @@ export function DesktopMenuLink({
             setOpenCheckPhoneNumberModal={setOpenReferralPhonNumber}
             setShowReferralPayment={setShowReferralPayment}
             planType={planType}
+            //@ts-ignore
             setPaymentData={setPaymentData}
           />
         )}
@@ -124,8 +125,9 @@ export function DesktopMenuLink({
             showReferralPayment={showReferralPayment}
             setShowReferralPayment={setShowReferralPayment}
             setShowReferralPasswordModal={setShowReferralPasswordModal}
-            // setShowPaymentModal={}
+            // setShowPaymentModal
             // planType={"Family"}
+            //@ts-ignore
             PaymentInfo={paymentData}
           />
         )}
