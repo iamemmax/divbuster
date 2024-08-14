@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaSquareXTwitter, FaLinkedin, FaYoutube, FaFacebookF, FaInstagram } from "react-icons/fa6";
+import { FaSquareXTwitter, FaLinkedin, FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
 import { AboutIcon } from '@/components/icons';
 import Link from 'next/link';
 
@@ -50,7 +50,7 @@ export default function page() {
                             <div className='bg-[#FFFFFF0D] py-4 pl-4 md:pl-8 rounded-lg mt-3'>
                                 <p className='text-[#CAC9D4] pb-1'>Follow us on social media</p>
                                 <ul className='flex text-white gap-2 md:gap-5'>
-                                    <Link href='https://www.tiktok.com/@libertylifehmo?_t=8orvfqOrIhx&_r=1'>
+                                    <Link href='https://x.com/libertylifeplus?s=21&t=-L8aIrO3luRw_JZ0xg78FA'>
                                         <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
                                             <FaSquareXTwitter />
                                         </li>
@@ -60,9 +60,11 @@ export default function page() {
                                             <FaLinkedin />
                                         </li>
                                     </Link>
-                                    {/* <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
-                                        <FaYoutube />
-                                    </li> */}
+                                    <Link href='https://www.tiktok.com/@libertylifehmo?_t=8orvfqOrIhx&_r=1'>
+                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
+                                            <FaTiktok />
+                                        </li>
+                                    </Link>
                                     <Link href='https://www.facebook.com/profile.php?id=61562985866097https://www.instagram.com/libertylifehmo/ '>
                                         <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
                                             <FaFacebookF />
