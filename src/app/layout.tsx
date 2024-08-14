@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   // const { data } = useUser();
   // console.log(data);
-  const url = `https://wa.me/08077284810`;
+  const url = `https://wa.link/wsz6hg`;
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
       <body>

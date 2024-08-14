@@ -70,10 +70,13 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
   const [buyFamilyPlan, setBuyFamilyPlan] = useState(false);
   // const avatars = generateAvatars(12);
 
-  const makePayment =
-    users?.subscription_status === "NOT_ACTIVE" ||
-    users?.subscription_status === "PENDING" ||
-    users?.subscription_status === "FAILED";
+  // const makePayment =
+  //   users?.subscription_status === "NOT_ACTIVE" ||
+  //   users?.subscription_status === "PENDING" ||
+  //   users?.subscription_status === "FAILED";
+  const checkFamilyPaymentStatus =
+    users?.paid_beneficiary_requests?.includes("FAMILY");
+
   return (
     <div className="">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 2xl:grid-cols-[1.1fr_1fr_1fr_1fr_1.4fr]">
@@ -123,13 +126,23 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
               </div>
               {/* {!makePayment && ( */}
               <div className="justify-self-end flex items-center gap-4">
-                <Button
-                  variant={"outlined"}
-                  className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
-                  onClick={() => setBuyFamilyPlan(true)}
-                >
-                  Buy Plan
-                </Button>
+                {checkFamilyPaymentStatus ? (
+                  <Button
+                    variant={"outlined"}
+                    className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
+                    onClick={() => setBuyFamilyPlan(true)}
+                  >
+                    Add Member
+                  </Button>
+                ) : (
+                  <Button
+                    variant={"outlined"}
+                    className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
+                    onClick={() => setBuyFamilyPlan(true)}
+                  >
+                    Buy Plan
+                  </Button>
+                )}
                 <LinkButton
                   href={"/dashboard/family-beneficiaries"}
                   className="bg-white rounded-md py-[.4375rem]  px-[.8125rem] text-[#032282] text-[.625rem]"

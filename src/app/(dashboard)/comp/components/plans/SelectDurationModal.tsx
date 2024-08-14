@@ -39,6 +39,8 @@ import {
   getAmountDeduction,
   getPercentage,
 } from "./util/planCalc";
+import { useAddMoreToBeneficiaryList } from "./api/addMoreBeneficiries";
+import { useUser } from "@/app/(auth)/(onboarding)/misc";
 
 export interface successProp {
   account_number: number;
@@ -87,7 +89,7 @@ function SelectDurationModal({
     errorModalMessage,
   } = useErrorModalState();
   const [errorMsg, setErrorMsg] = useState("");
-
+  const { data: users } = useUser();
   const [SuccessPayment, setSuccessPayment] = useState(false);
   const { mutate: handleAddBeneficiary, isLoading } = useAddbeneficiaries();
   const [paymentProp, setPaymentProp] = useState<successProp>();
@@ -156,27 +158,54 @@ function SelectDurationModal({
     setSelectedValue(String(value));
   };
 
+  const { mutate: addMoreBeneficiary, isLoading: loadingMoreBeneficiary } =
+    useAddMoreToBeneficiaryList();
   const makePayment = () => {
-    handleAddBeneficiary(
-      {
-        beneficiariesList: beneficiariesList?.beneficiaries as beneficailData[],
-        packages: planType,
-        duration: Number(selectedValue),
-      },
-      {
-        onSuccess: (data: successProp) => {
-          setPaymentProp(data);
-          setSelectPlan(true);
+    if (users?.paid_beneficiary_requests?.includes(planType)) {
+      addMoreBeneficiary(
+        {
+          beneficiariesList:
+            beneficiariesList?.beneficiaries as beneficailData[],
+          packages: planType,
+          duration: Number(selectedValue),
         },
-        onError: (error) => {
-          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          //@ts-expect-error
-          setErrorMsg(error?.response?.data?.error);
-          openErrorModalWithMessage(String(errorMessage));
+        {
+          onSuccess: (data: successProp) => {
+            setPaymentProp(data);
+            setSelectPlan(true);
+          },
+          onError: (error) => {
+            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
+            setErrorMsg(error?.response?.data?.error);
+            openErrorModalWithMessage(String(errorMessage));
+          },
+        }
+      );
+    } else {
+      handleAddBeneficiary(
+        {
+          beneficiariesList:
+            beneficiariesList?.beneficiaries as beneficailData[],
+          packages: planType,
+          duration: Number(selectedValue),
         },
-      }
-    );
+        {
+          onSuccess: (data: successProp) => {
+            setPaymentProp(data);
+            setSelectPlan(true);
+          },
+          onError: (error) => {
+            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
+            setErrorMsg(error?.response?.data?.error);
+            openErrorModalWithMessage(String(errorMessage));
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -221,7 +250,9 @@ function SelectDurationModal({
                           {Number(payment?.plan_duration?.duration)} Month Plan
                           <span className="text-white pl-2 font-bold text-sm">
                             {formatCurrency(
-                              Number(removeCommaFromPrice(payment?.price))
+                              Number(
+                                removeCommaFromPrice(String(payment?.price))
+                              )
                             )}
                           </span>
                         </Label>
@@ -235,13 +266,17 @@ function SelectDurationModal({
                   {planType !== "INDIVIDUAL" && (
                     <p className="text-white line-through text-lg text-opacity-80 font-bold">
                       {totalAmount !== null
-                        ? formatCurrency(totalAmount)
+                        ? formatCurrency(
+                            Number(removeCommaFromPrice(String(totalAmount)))
+                          )
                         : "0.00"}
                     </p>
                   )}
                   <p className="text-white text-lg font-bold">
                     {discountedAmount !== null
-                      ? formatCurrency(discountedAmount)
+                      ? formatCurrency(
+                          Number(removeCommaFromPrice(String(discountedAmount)))
+                        )
                       : "0.00"}
                   </p>
                 </div>
@@ -253,7 +288,10 @@ function SelectDurationModal({
                     onClick={makePayment}
                   >
                     Make payment{" "}
-                    {isLoading && <SmallSpinner className="" color="#1B1687" />}
+                    {isLoading ||
+                      (loadingMoreBeneficiary && (
+                        <SmallSpinner className="" color="#1B1687" />
+                      ))}
                   </Button>
                 </div>
               </div>

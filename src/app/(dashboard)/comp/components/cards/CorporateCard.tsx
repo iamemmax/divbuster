@@ -18,6 +18,8 @@ const CorporateCard = ({
   beneficiaryList,
 }: Prop) => {
   const [buyPlanForCoporate, setBuyPlanForCoporate] = useState(false);
+  const checkCorporatePaymentStatus =
+    userData?.paid_beneficiary_requests?.includes("CORPORATE");
   return (
     <div className="bg-white rounded-10 p-1">
       {loadingBeneficial || loadinUser ? (
@@ -44,13 +46,23 @@ const CorporateCard = ({
               </div>
             </div>
             <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
-              <Button
-                // variant={"outlined"}
-                className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
-                onClick={() => setBuyPlanForCoporate(true)}
-              >
-                Buy Plan
-              </Button>
+              {checkCorporatePaymentStatus ? (
+                <Button
+                  // variant={"outlined"}
+                  className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
+                  onClick={() => setBuyPlanForCoporate(true)}
+                >
+                  Add Member
+                </Button>
+              ) : (
+                <Button
+                  // variant={"outlined"}
+                  className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
+                  onClick={() => setBuyPlanForCoporate(true)}
+                >
+                  Buy Plan
+                </Button>
+              )}
               <LinkButton
                 href={"/dashboard/corporate-beneficiaries"}
                 className="bg-[#FFE9BC] rounded-md py-[.4375rem]  px-[.8125rem] text-[#DB8C00] text-[.625rem]"

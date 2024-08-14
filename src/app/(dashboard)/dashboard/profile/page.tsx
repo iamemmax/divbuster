@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import DashboardPlanHeader from "../../comp/components/DashboardPlanHeader";
 import Image from "next/image";
 import CameraIcon from "../../comp/icons/CameraIcon";
@@ -32,6 +32,17 @@ const Page = () => {
       queryClient.invalidateQueries(["user-details", data?.referral_code]);
     },
   });
+
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      console.log("File selected:", file);
+      // You can handle the file upload here
+    }
+  };
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
       <div className="bg-main px-6  md:px-[4.5rem] lg:px-[7.5rem]"></div>
@@ -49,12 +60,12 @@ const Page = () => {
               <div className="mt-6 flex justify-between items-center relative">
                 <div className="relative flex items-center gap-10">
                   <div className="relative">
-                    <div className="relative  ">
+                    <div className="relative">
                       <Image
                         src={"/images/userIcon.png"}
                         width={100}
                         height={100}
-                        alt="user Profile"
+                        alt="User Profile"
                         className="rounded-full"
                       />
                     </div>
@@ -63,11 +74,11 @@ const Page = () => {
                       id="BtnBrowseHidden"
                       name="files"
                       className="hidden"
+                      onChange={handleFileChange}
                     />
-                    <div className="absolute -right-9 bottom-3 z-[9999]">
-                      <label htmlFor="BtnBrowseHidden" id="LblBrowse">
-                        <Button className="bg-transparent">
-                          {" "}
+                    <div className="absolute -right-9 bottom-3 z-[10]">
+                      <label htmlFor="BtnBrowseHidden">
+                        <Button className="bg-transparent z-[10]">
                           <CameraIcon />
                         </Button>
                       </label>
@@ -80,7 +91,10 @@ const Page = () => {
                     >
                       <UploadIcon /> Upload
                     </Button>
-                    <Button className="bg-[#F5F9FE] text-[#032282] flex items-center gap-x-2 py-3">
+                    <Button
+                      className="bg-[#F5F9FE] text-[#032282] flex items-center gap-x-2 py-3"
+                      onClick={() => setSelectedFile(null)}
+                    >
                       <RemoveIcon /> Remove
                     </Button>
                   </div>

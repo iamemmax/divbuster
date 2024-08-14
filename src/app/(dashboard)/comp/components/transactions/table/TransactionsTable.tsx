@@ -98,7 +98,7 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
       header: () => "Type",
       cell: (info) => <>{info?.getValue() ?? "Nil"}</>,
     }),
-    columnHelper.accessor("transaction_status", {
+    columnHelper.accessor("mode", {
       header: () => "Mode",
       cell: (info) => info?.getValue(),
     }),
@@ -194,7 +194,14 @@ const TransactionsTable = ({ userData, loadinUser }: Prop) => {
               <DropdownMenuItem
                 className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
                 defaultValue={"Successful"}
-                onClick={() => setFiterStatus("SUCCESS")}
+                onClick={() => setFiterStatus("")}
+              >
+                All
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                defaultValue={"Successful"}
+                onClick={() => setFiterStatus("SUCCESSFUL")}
               >
                 SuccessFul
               </DropdownMenuItem>
