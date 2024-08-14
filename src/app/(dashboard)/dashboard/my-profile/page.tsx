@@ -7,7 +7,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Button, FormError, Input, RadioGroup, RadioGroupItem, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core'
 import { useQuery, useQueryClient } from 'react-query'
 import { fetchReferralCode } from '../api/referral/fetchReferralCode'
-import { useUser } from '@/app/(auth)/(onboarding)/misc'
+import { UserDataTypes, useUser } from '@/app/(auth)/(onboarding)/misc'
 import { Label } from '@radix-ui/react-label'
 import { Controller, useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
@@ -20,6 +20,8 @@ import Select, { components } from "react-select";
 import { Spinner } from '@/icons/core'
 import { CopyIcon4, Delete, Photo, Upload } from '../../comp/icons'
 import { Input2 } from '@/components/core/Input2'
+import { userDetails } from '../api/patchUserDetails'
+import { getUserDetails, useGetUserDetails } from '../api/getUserDetails'
 
 
 interface Prop {
@@ -66,7 +68,9 @@ interface Hospitals {
 }
 
 const formValues = z.object({
-    hospitaldata: z.object({
+    
+        name: z.string().trim(),
+        phone_number: z.string().trim(),
         email: z
             .string()
             .email({ message: "Invalid email format" })
@@ -80,7 +84,7 @@ const formValues = z.object({
         selectedOption: z.union([z.literal("nin"), z.literal("bvn")]),
         bvn: z.string().trim(),
         nin: z.string().trim(),
-    }),
+    
 });
 
 const baseSchema = z.object({
@@ -103,13 +107,10 @@ const bvnSchema = baseSchema.extend({
         .min(11, { message: "BVN should be at least 11 digits" }),
 });
 
-
 export default function Page() {
 
-
-
-
-    const { data: userData } = useUser();
+    const { data: userData , isLoading: isloadingUserdata } = useUser();
+    const { data: userDetails } = useGetUserDetails(userData?.phone_number!);
     const queryClient = useQueryClient();
 
     const { copy } = useClipboard();
@@ -135,30 +136,42 @@ export default function Page() {
     } = useForm<formValues>({
         resolver: zodResolver(formValues),
         defaultValues: {
-            hospitaldata: {
                 email: "",
                 hospital: "",
                 lga: "",
-                state: "",
-            },
+                state: userData?.state,
+                name: userDetails?.data.name,
+                phone_number: userDetails?.data.phone
         },
     });
 
     type formValues = z.infer<typeof formValues>;
 
+    useEffect(() => {
+      if (!isloadingUserdata && userData ) {
+        setValue("name", userData?.first_name || "");
+        setValue("phone_number", userData?.phone_number || "");
+        setValue("email", userData?.email || "");
+        setValue("state", userData.state || "");
+        setValue('nin', userData?.nin || "")
+      }
+     
+    }, [isloadingUserdata])
+    
+
     const watchSelectedOption = useWatch({
         control,
-        name: "hospitaldata.selectedOption",
+        name: "selectedOption",
     });
 
     const selectedState = useWatch({
         control,
-        name: "hospitaldata.state",
+        name: "state",
     });
 
     const selectedlga = useWatch({
         control,
-        name: "hospitaldata.lga",
+        name: "lga",
     });
 
     const { data: stateList } = useQuery({
@@ -200,8 +213,8 @@ export default function Page() {
         //   {
         //     userId,
         //     email: data?.hospitaldata?.email,
-        //     state: data?.hospitaldata.state,
-        //     hospital: data?.hospitaldata.hospital,
+        //     state: data?.state,
+        //     hospital: data?.hospital,
         //     provider_id: String(selectedlgaData?.provider_id),
         //     lga: String(selectedlgaData?.lga),
         //   },
@@ -254,7 +267,24 @@ export default function Page() {
         address: hospital?.address,
     }));
 
+    // const { data: UserDetail } = useQuery({
+    //     queryFn: userDetails,
+    //     queryKey: ["update-user-detail"],
+    // });
 
+
+    interface Prop {
+        userData: UserDataTypes | undefined;
+      }
+      
+    const UserData = ({ userData: userDetail2} : Prop) =>{
+    const { data: userDetailed } = useQuery({
+        queryFn: () => getUserDetails(String(userDetail2?.phone_number)),
+        queryKey: ["get-user-detail"],
+        enabled: !!userDetail2?.phone_number,
+        });
+    }
+    const [ editprofile, setEditProfile ] = useState(false)
 
     const CustomOption = (props: any) => {
         const { data } = props;
@@ -280,7 +310,7 @@ export default function Page() {
                 <div className='bg-[#F5F9FE]'>
                     <div className='bg-main min-h-36'></div>
                     <section className="h-full w-full px-6 md:px-[7.5rem] min-h-screen pb-[1.88rem] relative -mt-32">
-                        <div className='bg-white w-full h-screen mx-auto pt-[2.625rem] px-[4.5rem] rounded-[.625rem]'>
+                        <div className='bg-white w-full h-full lg:h-screen mx-auto pt-[2.625rem] px-[4.5rem] rounded-[.625rem]'>
                             <p className='text-[#032282] font-sans font-bold text-2xl'>Personal Information</p>
                             <section className='mt-8 flex flex-col lg:flex-row justify-between'>
                                 <div className='flex justify-between items-center gap-4'>
@@ -308,7 +338,7 @@ export default function Page() {
                                     </Button>
                                 </div>
 
-                                <div className='flex gap-4 justify-between items-center'>
+                                <div className='flex gap-4 justify-between items-center mt-3 lg:mt-0'>
                                     <div className="flex items-center gap-2">
                                         <div
                                             className="flex items-center justify-center flex-col gap-x-2 border-[0.3px] border-[#032282] bg-white px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
@@ -348,14 +378,14 @@ export default function Page() {
                                             </div>
                                         </div>
                                     </div>
-                                    <Button className='bg-[#099976] py-[18px] px-7 text-xs rounded-10 items-stretch'>Edit Profile</Button>
+                                    <Button className='bg-[#099976] py-[18px] px-4 lg:px-7 text-xs rounded-10 items-stretch'>Edit Profile</Button>
                                 </div>
                             </section>
                             <div className='border-b-[0.3px] mt-4'></div>
-                            <section>
+                            <section >
                                 <div className='mt-10'>
                                     <form onSubmit={handleSubmit(onSubmit)}>
-                                        <div className='grid grid-cols-2 gap-x-10 gap-y-6 font-sans text-sm'>
+                                        <div className='grid grid-rows-1 lg:grid-cols-2 gap-x-10 gap-y-6 font-sans text-sm'>
                                             <div >
                                                 <Label
                                                     htmlFor='name'
@@ -368,6 +398,10 @@ export default function Page() {
                                                     type='text'
                                                     id='name'
                                                     className='py-3 bg-[#F5F9FE] mt-2'
+                                                    {...register("name", {
+                                                        
+                                                        })}
+                                                    
                                                 />
                                             </div>
                                             <div>
@@ -382,6 +416,7 @@ export default function Page() {
                                                     type='text'
                                                     id='email'
                                                     className='py-3 bg-[#F5F9FE]  mt-2'
+                                                    {...register("email", {})}
                                                 />
                                             </div>
                                             <div>
@@ -396,6 +431,7 @@ export default function Page() {
                                                     type='number'
                                                     id='phone_number'
                                                     className='py-3 bg-[#F5F9FE]  mt-2'
+                                                    {...register("phone_number", {})}
                                                 />
                                             </div>
                                             <div className="">
@@ -408,7 +444,7 @@ export default function Page() {
 
                                                 <Controller
                                                     control={control}
-                                                    name="hospitaldata.state"
+                                                    name="state"
                                                     render={({ field: { onChange, value, ref } }) => (
                                                         <Select
                                                             value={stateOptions.find(
@@ -419,7 +455,7 @@ export default function Page() {
                                                             ref={ref}
                                                             onChange={(selectedOption) => {
                                                                 onChange(selectedOption?.value);
-                                                                setValue("hospitaldata.lga", "");
+                                                                setValue("lga", "");
                                                             }}
                                                             styles={style}
                                                             components={{
@@ -439,7 +475,7 @@ export default function Page() {
 
                                                 <Controller
                                                     control={control}
-                                                    name="hospitaldata.lga"
+                                                    name="lga"
                                                     render={({ field: { onChange, value, ref } }) => (
                                                         <Select
                                                             value={lgaOption?.find(
@@ -469,7 +505,7 @@ export default function Page() {
                                                 <div className="relative mt-[.25rem]">
                                                     <Controller
                                                         control={control}
-                                                        name="hospitaldata.hospital"
+                                                        name="hospital"
                                                         render={({ field }) => (
                                                             <Select
                                                                 {...field}
@@ -487,9 +523,9 @@ export default function Page() {
                                                             />
                                                         )}
                                                     />
-                                                    {errors?.hospitaldata?.hospital && (
+                                                    {errors?.hospital && (
                                                         <p className="text-red-600 text-xs mt-1">
-                                                            {errors.hospitaldata.hospital.message}
+                                                            {errors.hospital.message}
                                                         </p>
                                                     )}
                                                 </div>
@@ -503,13 +539,17 @@ export default function Page() {
                                                 </Label>
                                                 <Controller
                                                     control={control}
-                                                    name="hospitaldata.selectedOption"
+                                                    name="selectedOption"
                                                     render={({ field: { onChange, value, ref } }) => (
 
-                                                        <RadioGroup defaultValue="bvn"
+                                                        <RadioGroup 
+                                                        defaultValue="bvn"
+                                                        onValueChange={onChange}
+                                                        value={value}
                                                         className='px-4 py-3 bg-[#F5F9FE] mt-2'
                                                         >
                                                             <div className='flex gap-x-4'>
+
                                                             <div className="flex items-center space-x-2 bg-white py-2 pl-3 text-[#032282] pr-8 rounded-lg">
                                                                 <RadioGroupItem value="bvn" id="r1" />
                                                                 <Label htmlFor="r1" className='text-[#032282]'>BVN</Label>
@@ -546,19 +586,20 @@ export default function Page() {
                                             {watchSelectedOption === "bvn" && (
                                                 <div className="w-full mt-[1rem] text-sm font-normal">
                                                     <Label
-                                                        className="mb-1 block text-xs text-[#fff]"
+                                                        className="mb-1 block text-xs text-[#032282]"
                                                         htmlFor="bvn"
                                                     >
                                                         BVN
                                                     </Label>
                                                     <div className="relative mt-[.25rem]">
                                                         <Input2
-                                                            className={`${errors?.hospitaldata?.bvn?.message ? "border border-red-700" : ""} text-[#fff]`}
+                                                            className={`${errors?.bvn?.message ? "border border-red-700" : ""} text-[#fff] bg-[#F5F9FE] py-6`}
                                                             placeholder="Enter BVN"
                                                             type="text"
                                                             id="bvn"
                                                             required
-                                                            {...register("hospitaldata.bvn")}
+                                                            {...register("bvn")}
+
                                                         />
                                                     </div>
                                                 </div>
@@ -567,19 +608,19 @@ export default function Page() {
                                             {watchSelectedOption === "nin" && (
                                                 <div className="w-full mt-[1rem] text-sm font-normal">
                                                     <Label
-                                                        className="mb-1 block text-xs text-[#fff]"
+                                                        className="mb-1 block text-xs text-[#032282]"
                                                         htmlFor="nin"
                                                     >
                                                         NIN
                                                     </Label>
                                                     <div className="relative mt-[.25rem]">
                                                         <Input2
-                                                            className={`${errors?.hospitaldata?.nin?.message ? "border border-red-700" : ""} text-[#fff]`}
+                                                            className={`${errors?.nin?.message ? "border border-red-700" : ""}  bg-[#F5F9FE] py-6`}
                                                             placeholder="Enter NIN"
                                                             type="text"
                                                             id="nin"
                                                             required
-                                                            {...register("hospitaldata.nin")}
+                                                            {...register("nin")}
                                                         />
                                                     </div>
                                                 </div>
@@ -590,7 +631,7 @@ export default function Page() {
                             </section>
                             <div className='border-b-[0.3px] mt-4'></div>
                             <div className='mt-6'>
-                                <Button className='bg-[#099976] py-[18px] px-7 text-xs text-nowrap rounded-10 items-stretch'>Save Changes</Button>
+                                <Button className='bg-[#099976] py-3 px-7 text-xs text-nowrap rounded-10 border-[0.3px] border-[#032282]'>Save Changes</Button>
                             </div>
                         </div>
                     </section>
