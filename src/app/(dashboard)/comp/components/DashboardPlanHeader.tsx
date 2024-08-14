@@ -105,7 +105,7 @@ const DashboardPlanHeader = () => {
                   className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
                   onClick={() =>
                     copy(
-                      ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}` ??
+                      `https://www.libertylifeplus.com/?referral_code=${userData?.referral_code}` ??
                         ""
                     )
                   }
@@ -115,7 +115,7 @@ const DashboardPlanHeader = () => {
                   </p>
                   <div className="flex">
                     <p className="text-white max-w-[6.25rem] text-xxs truncate">
-                      {` https://liberty-life.vercel.app/?referral_code=${userData?.referral_code}`}
+                      {`https://www.libertylifeplus.com/?referral_code=${userData?.referral_code}`}
                     </p>
                     <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
                       <CopyIcon3 height={15} width={15} />

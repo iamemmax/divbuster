@@ -32,7 +32,7 @@ export const generateAvatars = (count: number) => {
   const avatars = [];
   for (let i = 1; i <= count; i++) {
     avatars.push({
-      src: `https://via.placeholder.com/40?text=User+${i}`,
+      src: `/images/userIcon.png`,
       alt: `User ${i}`,
     });
   }
