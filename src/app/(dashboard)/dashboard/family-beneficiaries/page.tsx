@@ -31,6 +31,8 @@ const Page = () => {
     userData?.subscription_status === "PENDING" ||
     userData?.subscription_status === "FAILED";
   const router = useRouter();
+  const checkFamilyPaymentStatus =
+    userData?.paid_beneficiary_requests?.includes("FAMILY");
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
       <DashboardPlanHeader />
@@ -65,58 +67,51 @@ const Page = () => {
                         Family Plan
                       </h2>
                     </div>
-                    {!makePayment ? (
-                      <div className="mt-2">
-                        <p className="text-[#475569] text-xxs">
-                          Do something for your loved ones today by activating a
-                          plan for them today
-                        </p>
+
+                    <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
+                      <h2 className="text-[#032282] text-xl font-bold">
+                        {beneficiaryList && beneficiaryList[0]?.data?.length}
+                      </h2>
+                      <div className="bg-white py-1 px-2 rounded-md">
+                        <p className="text-xxs text-[#032282]">Benefactors</p>
                       </div>
-                    ) : (
-                      <div className=" mt-[.8125rem] px-2 flex items-center gap-x-2">
-                        <h2 className="text-[#032282] text-xl font-bold">
-                          {beneficiaryList && beneficiaryList[0]?.data?.length}
-                        </h2>
-                        <div className="bg-white py-1 px-2 rounded-md">
-                          <p className="text-xxs text-[#032282]">Benefactors</p>
-                        </div>
-                        <div className="p-4">
-                          <AvatarGroup
-                            avatars={generateAvatars(
-                              Number(
-                                beneficiaryList &&
-                                  beneficiaryList[0]?.data?.length
-                              )
-                            )}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  {makePayment && (
-                    <div className="justify-self-end flex items-center gap-4">
-                      <div className="">
-                        <h2 className="text-[#032282] text-xs font-semibold">
-                          {subtractFromSix(
+                      <div className="p-4">
+                        <AvatarGroup
+                          avatars={generateAvatars(
                             Number(
                               beneficiaryList &&
                                 beneficiaryList[0]?.data?.length
                             )
-                          )}{" "}
-                          Slot
-                        </h2>
-                        <p className="text-[#8490A8] text-xxs">
-                          Remaining Slot
-                        </p>
+                          )}
+                        />
                       </div>
-                      <Button
-                        className="bg-white rounded-md py-[.4375rem]  px-[.8125rem] text-[#032282] text-[.625rem]"
-                        onClick={() => setBuyPlan(true)}
-                      >
-                        Add Member
-                      </Button>
                     </div>
-                  )}
+                  </div>
+                  {/* {checkFamilyPaymentStatus && ( */}
+                  <div className="justify-self-end flex items-center gap-4">
+                    <div className="">
+                      <h2 className="text-[#032282] text-xs font-semibold">
+                        {subtractFromSix(
+                          Number(
+                            beneficiaryList && beneficiaryList[0]?.data?.length
+                          )
+                        )}{" "}
+                        Slot
+                      </h2>
+                      <p className="text-[#8490A8] text-xxs">Remaining Slot</p>
+                    </div>
+                    <Button
+                      className="bg-white rounded-md py-[.4375rem]  px-[.8125rem] text-[#032282] text-[.625rem]"
+                      onClick={() => setBuyPlan(true)}
+                      disabled={
+                        beneficiaryList &&
+                        beneficiaryList[0]?.data?.length === 6
+                      }
+                    >
+                      Add Member
+                    </Button>
+                  </div>
+                  {/* )} */}
                 </div>
               )}
             </div>

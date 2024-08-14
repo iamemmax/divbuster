@@ -32,6 +32,10 @@ const PasswordFormSchema = z.object({
         .trim()
         .min(1, { message: "Invalid email." })
         .email(),
+      // phone_number: z
+      //   .string({ required_error: "Enter your phone number" })
+      //   .trim()
+      //   .min(10, { message: "Phone number should be at least 11 digits" }),
       password: z
         .string({ required_error: "Please enter your password." })
         .trim()
@@ -84,11 +88,12 @@ interface Hospitals {
   hospital: string;
   provider_id: string;
 }
+type passwordformProps = z.infer<typeof PasswordFormSchema>;
 export function PasswordForm() {
   const { state: isLoaderModalOpen, setTrue: _openLoaderModal } =
     useBooleanStateControl();
-
-  type passwordformProps = z.infer<typeof PasswordFormSchema>;
+  const searchParams = useSearchParams();
+  const phone = searchParams?.get("phone");
   const search = useSearchParams();
   const emailAddress = search?.get("email");
   const {
@@ -134,7 +139,7 @@ export function PasswordForm() {
         confirm_password,
         email,
         password,
-        // phone: "",
+        phone_number: String(phone),
       },
       {
         onSuccess: (data: successMsg) => {
@@ -190,6 +195,18 @@ export function PasswordForm() {
           )}
         </div>
 
+        {/* {phone && (
+          <Input
+            className="login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 text-sm font-sans font-medium text-white placeholder:text-white focus:!bg-white/30 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#403C3A]"
+            id="phone"
+            name="phone"
+            placeholder="Enter phone number"
+            type="tel"
+            value={phone}
+            r
+            required
+          />
+        )} */}
         <div className="mt-4">
           <div>
             <Label
@@ -200,14 +217,22 @@ export function PasswordForm() {
             </Label>
 
             <div className="flex items-center w-full  pr-10 md:pr-16 !bg-white/10 rounded-lg h-[3rem] ">
-              <input
+              {/* <Input
                 className="login-autofill-text  pr-7 login-no-chrome-autofill-bg h-full  outline-none border-none  rounded-lg bg-transparent  px-6 py-3.5 text-sm font-sans font-medium text-white placeholder:text-white  focus-visible:outline-none  focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#403C3A]"
                 id="password"
                 placeholder="Enter password"
                 type={passwordShown ? "text" : "password"}
                 {...register("passwordData.password")}
-              />
+              /> */}
 
+              <input
+                className="login-autofill-text login-no-chrome-autofill-bg h-auto min-w-0 grow !bg-transparent py-3.5 pl-6 text-base font-medium text-white placeholder:text-white focus-visible:outline-none"
+                id="password"
+                // pattern="[0-9]*"
+                placeholder="Enter password"
+                type={passwordShown ? "text" : "password"}
+                {...register("passwordData.password")}
+              />
               <button
                 type="button"
                 className="absolute right-5"
@@ -235,13 +260,22 @@ export function PasswordForm() {
           </Label>
 
           <div className="flex items-center relative w-full pr-10 md:pr-16  !bg-white/10 rounded-lg h-[3rem] ">
-            <Input
+            {/* <Input
               className="login-autofill-text !outline-none !border-none login-no-chrome-autofill-bg h-full rounded-lg bg-transparent px-6 py-3.5 text-sm font-sans font-medium text-white placeholder"
               id="password"
               placeholder="Enter password"
               type={passwordShown ? "text" : "password"}
               {...register("passwordData.confirm_password")}
               style={{ outline: "none", border: "none" }}
+            /> */}
+
+            <input
+              className="login-autofill-text login-no-chrome-autofill-bg h-auto min-w-0 grow !bg-transparent py-3.5 pl-6 text-base font-medium text-white placeholder:text-white focus-visible:outline-none"
+              id="password"
+              // pattern="[0-9]*"
+              placeholder="Enter password"
+              type={passwordShown ? "text" : "password"}
+              {...register("passwordData.confirm_password")}
             />
 
             {/* <div> */}

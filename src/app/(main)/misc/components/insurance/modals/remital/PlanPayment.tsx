@@ -137,7 +137,7 @@ const PlanPayment = ({
                       Account name
                     </p>
                     <h2 className="text-white font-semibold textbase">
-                      {PaymentInfo?.account_name}
+                      {capitalizeFirstLetter(String(PaymentInfo?.account_name))}
                     </h2>
                   </div>
                   <div className="">

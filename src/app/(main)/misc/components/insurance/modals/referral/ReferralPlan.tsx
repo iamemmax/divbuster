@@ -64,7 +64,7 @@ interface PercentageData {
   [key: number]: number;
 }
 
-interface PercentageCalc {
+export interface PercentageCalc {
   percentage_data: {
     family: PercentageData;
     individual: PercentageData;
@@ -74,7 +74,7 @@ interface PercentageCalc {
 }
 
 // Define the type for the health plan
-type PlanType = "family" | "individual" | "corporate";
+export type PlanType = "family" | "individual" | "corporate";
 
 const ReferralModalPlan = ({
   openRemitalPlan,
@@ -118,19 +118,18 @@ const ReferralModalPlan = ({
     }
   }, [plansData]);
 
-
   const increment = (planId: string) => {
     setPlanCounts((prevCounts) => {
       const currentCount = prevCounts[planId] || 0;
-      
+
       if (selectedTab === "FAMILY" && currentCount >= 6) {
         setErrorMsg("Maximum of 6 plans allowed for FAMILY.");
         return prevCounts; // Prevent incrementing
       }
-      
+
       // Clear any previous error message if the condition passes
       setErrorMsg("");
-      
+
       return {
         ...prevCounts,
         [planId]: currentCount + 1,
