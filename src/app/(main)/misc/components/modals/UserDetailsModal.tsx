@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Label } from '@radix-ui/react-label';
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useStateListData } from "@/app/(auth)/(onboarding)/misc/api/getNigerianStates";
-import { useState } from "react";
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useErrorModalState } from "@/hooks";

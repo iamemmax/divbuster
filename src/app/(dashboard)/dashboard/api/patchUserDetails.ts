@@ -1,10 +1,8 @@
 import { adminAxios } from "@/lib/axios"
+import { useMutation } from "react-query"
 
-interface user {
-    data: Data
-}
 
-interface Data {
+interface UserDetailsDTO {
     name : string
     email : string
     phone_number : string
@@ -15,7 +13,18 @@ interface Data {
     nin:string
 }
 
-export const UserDetails = async () => {
-    const {data} = await adminAxios.patch('/update_user_details/')
-    return data as user
+export const updateUserDetails = async ({ name, email, bvn, hospital,lga, nin, phone_number, state}: UserDetailsDTO) => {
+    const response = await adminAxios.patch('/user/update_user_details/', {
+        
+        name, email, bvn, hospital,lga, nin, phone_number, state
+    })
+    return response?.data
 }
+
+
+export const useUpdateUserDetails = () =>
+
+    useMutation({
+      mutationFn: updateUserDetails
+    })
+    

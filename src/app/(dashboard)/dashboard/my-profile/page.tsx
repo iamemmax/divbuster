@@ -20,8 +20,9 @@ import Select, { components } from "react-select";
 import { Spinner } from '@/icons/core'
 import { CopyIcon4, Delete, Photo, Upload } from '../../comp/icons'
 import { Input2 } from '@/components/core/Input2'
-import { UserDetails } from '../api/patchUserDetails'
-import { getUserDetails, useGetUserDetails } from '../api/getUserDetails'
+import { useUpdateUserDetails } from '../api/patchUserDetails'
+// import { getUserDetails, useGetUserDetails } from '../api/getUserDetails'
+import toast from 'react-hot-toast'
 
 
 interface Prop {
@@ -111,7 +112,6 @@ const bvnSchema = baseSchema.extend({
 export default function Page() {
 
     const { data: userData, isLoading: isloadingUserdata } = useUser();
-    const { data: userDetails } = useGetUserDetails(userData?.phone_number!);
     const queryClient = useQueryClient();
 
     const { copy } = useClipboard();
@@ -137,12 +137,12 @@ export default function Page() {
     } = useForm<formValues>({
         resolver: zodResolver(formValues),
         defaultValues: {
-            email: "",
-            hospital: "",
-            lga: "",
-            state: userData?.state,
-            name: userDetails?.data.name,
-            phone_number: userDetails?.data.phone
+                email: "",
+                hospital: "",
+                lga: "",
+                state: userData?.state,
+                name: userData?.first_name,
+                phone_number: userData?.phone_number
         },
     });
 
@@ -151,6 +151,7 @@ export default function Page() {
     useEffect(() => {
         if (!isloadingUserdata && userData) {
             setValue("name", userData?.first_name || "");
+            setValue("name", userData?.last_name || "");
             setValue("phone_number", userData?.phone_number || "");
             setValue("email", userData?.email || "");
             setValue("state", userData.state || "");
@@ -204,24 +205,7 @@ export default function Page() {
     const { mutate: handleSubmitHospital } =
         useUserHospitalChoice();
     // const router = useRouter();
-    const onSubmit = (data: formValues) => {
-        // const selectedlgaData = hospitalList?.data?.find(
-        //   (hos) =>
-        //     hos?.lga?.toLowerCase() === data?.hospitaldata?.lga?.toLowerCase()
-        // );
 
-        // handleSubmitHospital (
-        //   {
-        //     userId,
-        //     email: data?.hospitaldata?.email,
-        //     state: data?.state,
-        //     hospital: data?.hospital,
-        //     provider_id: String(selectedlgaData?.provider_id),
-        //     lga: String(selectedlgaData?.lga),
-        //   },
-        // );
-        console.log(data, "datae")
-    };
 
     const stateOptions = uniqueStates?.map((state) => ({
         value: state,
@@ -268,24 +252,31 @@ export default function Page() {
         address: hospital?.address,
     }));
 
-    const { data: UserDetail } = useQuery({
-        queryFn: UserDetails,
-        queryKey: ["update-user-detail"],
-    });
-
+    const { mutate: handleUpdateProfile, isLoading: isHandleUpdateProfile } = useUpdateUserDetails();
+    const onSubmit = (data: formValues) => {
+        handleUpdateProfile(
+            {
+              name: data.name,
+              email: data.email,
+              phone_number: data.phone_number,
+              state: data.state,
+              lga: data.lga,
+              hospital: data.hospital,
+              bvn: data.bvn,
+              nin: data.nin
+            },
+           { 
+            onSuccess: () => {
+                toast.success("Your details have been updated")
+            },
+        }
+        )
+        console.log(data, "datae")
+    };
 
     interface Prop {
         userData: UserDataTypes | undefined;
     }
-
-    const UserData = ({ userData: userDetail2 }: Prop) => {
-        const { data: userDetailed } = useQuery({
-            queryFn: () => getUserDetails(String(userDetail2?.phone_number)),
-            queryKey: ["get-user-detail"],
-            enabled: !!userDetail2?.phone_number,
-        });
-    }
-
 
     const CustomOption = (props: any) => {
         const { data } = props;
@@ -300,9 +291,6 @@ export default function Page() {
             </components.Option>
         );
     };
-
-    // '/images/userIcon.png',
-
 
     const [profilePic, setProfilePic] = useState('/images/userIcon.png');
     const fileInputRef = useRef(null);
@@ -321,12 +309,12 @@ export default function Page() {
     const handleClick = () => {
         if (fileInputRef.current) {
             (fileInputRef.current as HTMLInputElement).click();
-          }
+        }
     };
 
     const handleDelete = () => {
         setProfilePic('images/userIcon.png');
-      };
+    };
 
 
     return (
@@ -361,16 +349,16 @@ export default function Page() {
                                             onChange={handleProfilePicChange}
                                         />
                                     </div>
-                                    
+
                                     <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload'>
-                                        <Upload 
-                                        onClick={handleClick}
+                                        <Upload
+                                            onClick={handleClick}
                                         />
                                         <p className='text-[#032282] font-medium'>Upload</p>
                                     </Button>
                                     <Button className='bg-[#F5F9FE] gap-1 px-4 py-3'>
-                                        <Delete 
-                                        onClick={handleDelete}
+                                        <Delete
+                                            onClick={handleDelete}
                                         />
                                         <p className='text-[#032282] font-medium'>Remove</p>
                                     </Button>
@@ -455,6 +443,7 @@ export default function Page() {
                                                     id='email'
                                                     className='py-3 bg-[#F5F9FE]  mt-2'
                                                     {...register("email", {})}
+                                                    disabled
                                                 />
                                             </div>
                                             <div>
@@ -470,6 +459,7 @@ export default function Page() {
                                                     id='phone_number'
                                                     className='py-3 bg-[#F5F9FE]  mt-2'
                                                     {...register("phone_number", {})}
+                                                    disabled
                                                 />
                                             </div>
                                             <div className="">
@@ -581,7 +571,7 @@ export default function Page() {
                                                     render={({ field: { onChange, value, ref } }) => (
 
                                                         <RadioGroup
-                                                            defaultValue="bvn"
+                                                            defaultValue="nin"
                                                             onValueChange={onChange}
                                                             value={value}
                                                             className='px-4 py-3 bg-[#F5F9FE] mt-2'
@@ -598,26 +588,6 @@ export default function Page() {
                                                                 </div>
                                                             </div>
                                                         </RadioGroup>
-
-                                                        // <Select value={value} onValueChange={onChange}>
-                                                        //     <SelectTrigger
-                                                        //         id="selectedOption"
-                                                        //         ref={ref}
-                                                        //         className="bg-[#2D3456] text-[#fff] w-full py-2 px-3 rounded-md focus:outline-none"
-                                                        //     >
-                                                        //         <span>
-                                                        //             {value === "bvn"
-                                                        //                 ? "BVN"
-                                                        //                 : value === "nin"
-                                                        //                     ? "NIN"
-                                                        //                     : "Select BVN or NIN"}
-                                                        //         </span>
-                                                        //     </SelectTrigger>
-                                                        //     <SelectContent className="bg-white border border-gray-300 mt-1 rounded-md shadow-lg w-full absolute z-50 top-full">
-                                                        //         <SelectItem value="bvn">BVN</SelectItem>
-                                                        //         <SelectItem value="nin">NIN</SelectItem>
-                                                        //     </SelectContent>
-                                                        // </Select>
                                                     )}
                                                 />
                                             </div>
@@ -631,7 +601,7 @@ export default function Page() {
                                                     </Label>
                                                     <div className="relative mt-[.25rem]">
                                                         <Input2
-                                                            className={`${errors?.bvn?.message ? "border border-red-700" : ""} text-[#fff] bg-[#F5F9FE] py-6`}
+                                                            className={`${errors?.bvn?.message ? "border border-red-700" : ""} text-[#032282] bg-[#F5F9FE] py-6`}
                                                             placeholder="Enter BVN"
                                                             type="text"
                                                             id="bvn"
@@ -659,18 +629,20 @@ export default function Page() {
                                                             id="nin"
                                                             required
                                                             {...register("nin")}
+                                                            disabled
                                                         />
                                                     </div>
                                                 </div>
                                             )}
                                         </div>
+                                        <div className='border-b-[0.3px] mt-4'></div>
+                                        <div className='mt-6'>
+                                            <Button className='bg-[#099976] py-3 px-7 text-xs text-nowrap rounded-10 border-[0.3px] border-[#032282]'>Save Changes</Button>
+                                        </div>
                                     </form>
                                 </div>
                             </section>
-                            <div className='border-b-[0.3px] mt-4'></div>
-                            <div className='mt-6'>
-                                <Button className='bg-[#099976] py-3 px-7 text-xs text-nowrap rounded-10 border-[0.3px] border-[#032282]'>Save Changes</Button>
-                            </div>
+
                         </div>
                     </section>
                 </div>

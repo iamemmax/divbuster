@@ -9,6 +9,7 @@ import { Wrapper } from "./(auth)/(onboarding)/misc/components/Wrapper";
 import { useUser } from "./(auth)/(onboarding)/misc";
 import { Button } from "@/components/core";
 import Image from "next/image";
+import { Toaster } from "react-hot-toast";
 
 const sans = DM_Sans({
   subsets: ["latin"],
@@ -37,6 +38,17 @@ export default function RootLayout({
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
       <body>
+      <Toaster
+          containerStyle={{
+            zIndex: 99999,
+          }}
+          position="top-center"
+          toastOptions={{
+            style: {
+              zIndex: 99999,
+            },
+          }}
+        />
         <ReactQueryProvider>
           <AuthProvider>
             <ProtectedRouteGuard>
