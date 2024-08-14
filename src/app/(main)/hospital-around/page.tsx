@@ -124,7 +124,7 @@ const HospitalAround = () => {
         <div className="hidden md:block pt-20">
           <button className="flex justify-center items-center rounded-full bg-[#34307A] px-6 py-3.5 text-white bg-opacity-[20%] text-sm gap-x-2 ">
             {" "}
-            <AroundIcon /> Hospital around me
+            <AroundIcon /> Hospitals around me
           </button>
           <div className="text-[42px] font-medium max-w-[790px] mt-3 text-white leading-snug">
             Find hospitals around you with ease by entering your address below
@@ -139,7 +139,7 @@ const HospitalAround = () => {
                     <HospitalIcon2 />
                   </Button>
                   <h2 className="text-sm font-medium text-[#032282]">
-                    Hospital around me
+                    Hospitals around me
                   </h2>
                 </div>
                 {hospitalsAround && hospitalsAround?.length > 10 && (
