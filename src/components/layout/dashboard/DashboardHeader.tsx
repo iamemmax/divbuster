@@ -38,6 +38,10 @@ export function DashboardHeader() {
       title: "My Benefits",
       link: "/dashboard/my-benefits",
     },
+    {
+      title: "My Profile",
+      link: "/dashboard/my-profile",
+    },
   ];
 
   const { replace } = useRouter();
