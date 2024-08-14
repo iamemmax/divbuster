@@ -2,7 +2,7 @@
 
 
 import Image from 'next/image'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 
 import { Button, FormError, Input, RadioGroup, RadioGroupItem, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core'
 import { useQuery, useQueryClient } from 'react-query'
@@ -10,7 +10,7 @@ import { fetchReferralCode } from '../api/referral/fetchReferralCode'
 import { UserDataTypes, useUser } from '@/app/(auth)/(onboarding)/misc'
 import { Label } from '@radix-ui/react-label'
 import { Controller, useForm, useWatch } from 'react-hook-form'
-import { z } from 'zod'
+import { string, z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useClipboard, useErrorModalState } from '@/hooks'
 import { fetchHospitalListByLga, fetchRegionByState, fetchStateList, useUserHospitalChoice } from '@/app/(main)/misc/components/insurance/api/remital/remtalUserDetails'
@@ -20,7 +20,7 @@ import Select, { components } from "react-select";
 import { Spinner } from '@/icons/core'
 import { CopyIcon4, Delete, Photo, Upload } from '../../comp/icons'
 import { Input2 } from '@/components/core/Input2'
-import { userDetails } from '../api/patchUserDetails'
+import { UserDetails } from '../api/patchUserDetails'
 import { getUserDetails, useGetUserDetails } from '../api/getUserDetails'
 
 
@@ -67,24 +67,25 @@ interface Hospitals {
     provider_id: string;
 }
 
+
 const formValues = z.object({
-    
-        name: z.string().trim(),
-        phone_number: z.string().trim(),
-        email: z
-            .string()
-            .email({ message: "Invalid email format" })
-            .min(1, { message: "Email is required" }),
-        state: z.string().trim().min(1, { message: "Please select a state." }),
-        lga: z.string().trim().min(1, { message: "Please select a lga." }),
-        hospital: z
-            .string()
-            .trim()
-            .min(1, { message: "Please select a hospital." }),
-        selectedOption: z.union([z.literal("nin"), z.literal("bvn")]),
-        bvn: z.string().trim(),
-        nin: z.string().trim(),
-    
+
+    name: z.string().trim(),
+    phone_number: z.string().trim(),
+    email: z
+        .string()
+        .email({ message: "Invalid email format" })
+        .min(1, { message: "Email is required" }),
+    state: z.string().trim().min(1, { message: "Please select a state." }),
+    lga: z.string().trim().min(1, { message: "Please select a lga." }),
+    hospital: z
+        .string()
+        .trim()
+        .min(1, { message: "Please select a hospital." }),
+    selectedOption: z.union([z.literal("nin"), z.literal("bvn")]),
+    bvn: z.string().trim(),
+    nin: z.string().trim(),
+
 });
 
 const baseSchema = z.object({
@@ -109,7 +110,7 @@ const bvnSchema = baseSchema.extend({
 
 export default function Page() {
 
-    const { data: userData , isLoading: isloadingUserdata } = useUser();
+    const { data: userData, isLoading: isloadingUserdata } = useUser();
     const { data: userDetails } = useGetUserDetails(userData?.phone_number!);
     const queryClient = useQueryClient();
 
@@ -136,28 +137,28 @@ export default function Page() {
     } = useForm<formValues>({
         resolver: zodResolver(formValues),
         defaultValues: {
-                email: "",
-                hospital: "",
-                lga: "",
-                state: userData?.state,
-                name: userDetails?.data.name,
-                phone_number: userDetails?.data.phone
+            email: "",
+            hospital: "",
+            lga: "",
+            state: userData?.state,
+            name: userDetails?.data.name,
+            phone_number: userDetails?.data.phone
         },
     });
 
     type formValues = z.infer<typeof formValues>;
 
     useEffect(() => {
-      if (!isloadingUserdata && userData ) {
-        setValue("name", userData?.first_name || "");
-        setValue("phone_number", userData?.phone_number || "");
-        setValue("email", userData?.email || "");
-        setValue("state", userData.state || "");
-        setValue('nin', userData?.nin || "")
-      }
-     
+        if (!isloadingUserdata && userData) {
+            setValue("name", userData?.first_name || "");
+            setValue("phone_number", userData?.phone_number || "");
+            setValue("email", userData?.email || "");
+            setValue("state", userData.state || "");
+            setValue('nin', userData?.nin || "")
+        }
+
     }, [isloadingUserdata])
-    
+
 
     const watchSelectedOption = useWatch({
         control,
@@ -267,24 +268,24 @@ export default function Page() {
         address: hospital?.address,
     }));
 
-    // const { data: UserDetail } = useQuery({
-    //     queryFn: userDetails,
-    //     queryKey: ["update-user-detail"],
-    // });
+    const { data: UserDetail } = useQuery({
+        queryFn: UserDetails,
+        queryKey: ["update-user-detail"],
+    });
 
 
     interface Prop {
         userData: UserDataTypes | undefined;
-      }
-      
-    const UserData = ({ userData: userDetail2} : Prop) =>{
-    const { data: userDetailed } = useQuery({
-        queryFn: () => getUserDetails(String(userDetail2?.phone_number)),
-        queryKey: ["get-user-detail"],
-        enabled: !!userDetail2?.phone_number,
+    }
+
+    const UserData = ({ userData: userDetail2 }: Prop) => {
+        const { data: userDetailed } = useQuery({
+            queryFn: () => getUserDetails(String(userDetail2?.phone_number)),
+            queryKey: ["get-user-detail"],
+            enabled: !!userDetail2?.phone_number,
         });
     }
-    const [ editprofile, setEditProfile ] = useState(false)
+
 
     const CustomOption = (props: any) => {
         const { data } = props;
@@ -300,6 +301,33 @@ export default function Page() {
         );
     };
 
+    // '/images/userIcon.png',
+
+
+    const [profilePic, setProfilePic] = useState('/images/userIcon.png');
+    const fileInputRef = useRef(null);
+
+    const handleProfilePicChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event?.target?.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfilePic(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleClick = () => {
+        if (fileInputRef.current) {
+            (fileInputRef.current as HTMLInputElement).click();
+          }
+    };
+
+    const handleDelete = () => {
+        setProfilePic('images/userIcon.png');
+      };
+
 
     return (
         <>
@@ -314,26 +342,36 @@ export default function Page() {
                             <p className='text-[#032282] font-sans font-bold text-2xl'>Personal Information</p>
                             <section className='mt-8 flex flex-col lg:flex-row justify-between'>
                                 <div className='flex justify-between items-center gap-4'>
-                                    <div className='flex'>
+                                    <div className='flex relative'>
                                         <Image
                                             alt="profile"
-                                            src={`/images/dashboard/ProfileImage.png`}
+                                            src={profilePic}
                                             height={100}
                                             width={100}
                                             className="rounded-full"
+
                                         />
                                         <div className='mt-[3.8rem] -ml-[1.5rem]'>
-                                            <Photo />
+                                            <Photo onClick={handleClick} />
                                         </div>
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            style={{ display: 'none' }}
+                                            onChange={handleProfilePicChange}
+                                        />
                                     </div>
-                                    <label htmlFor='upload'></label>
-                                    <input type="file" name="" id="upload" className='hidden' />
+                                    
                                     <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload'>
-                                        <Upload />
+                                        <Upload 
+                                        onClick={handleClick}
+                                        />
                                         <p className='text-[#032282] font-medium'>Upload</p>
                                     </Button>
                                     <Button className='bg-[#F5F9FE] gap-1 px-4 py-3'>
-                                        <Delete />
+                                        <Delete 
+                                        onClick={handleDelete}
+                                        />
                                         <p className='text-[#032282] font-medium'>Remove</p>
                                     </Button>
                                 </div>
@@ -399,9 +437,9 @@ export default function Page() {
                                                     id='name'
                                                     className='py-3 bg-[#F5F9FE] mt-2'
                                                     {...register("name", {
-                                                        
-                                                        })}
-                                                    
+
+                                                    })}
+
                                                 />
                                             </div>
                                             <div>
@@ -542,22 +580,22 @@ export default function Page() {
                                                     name="selectedOption"
                                                     render={({ field: { onChange, value, ref } }) => (
 
-                                                        <RadioGroup 
-                                                        defaultValue="bvn"
-                                                        onValueChange={onChange}
-                                                        value={value}
-                                                        className='px-4 py-3 bg-[#F5F9FE] mt-2'
+                                                        <RadioGroup
+                                                            defaultValue="bvn"
+                                                            onValueChange={onChange}
+                                                            value={value}
+                                                            className='px-4 py-3 bg-[#F5F9FE] mt-2'
                                                         >
                                                             <div className='flex gap-x-4'>
 
-                                                            <div className="flex items-center space-x-2 bg-white py-2 pl-3 text-[#032282] pr-8 rounded-lg">
-                                                                <RadioGroupItem value="bvn" id="r1" />
-                                                                <Label htmlFor="r1" className='text-[#032282]'>BVN</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2 bg-white py-2 pl-3 text-[#032282] pr-8 rounded-lg">
-                                                                <RadioGroupItem value="nin" id="r2" />
-                                                                <Label htmlFor="r2" className='text-[#032282]'>NIN</Label>
-                                                            </div>
+                                                                <div className="flex items-center space-x-2 bg-white py-2 pl-3 text-[#032282] pr-8 rounded-lg">
+                                                                    <RadioGroupItem value="bvn" id="r1" />
+                                                                    <Label htmlFor="r1" className='text-[#032282]'>BVN</Label>
+                                                                </div>
+                                                                <div className="flex items-center space-x-2 bg-white py-2 pl-3 text-[#032282] pr-8 rounded-lg">
+                                                                    <RadioGroupItem value="nin" id="r2" />
+                                                                    <Label htmlFor="r2" className='text-[#032282]'>NIN</Label>
+                                                                </div>
                                                             </div>
                                                         </RadioGroup>
 

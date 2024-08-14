@@ -8,10 +8,14 @@ interface Data {
     name : string
     email : string
     phone_number : string
+    state: string
+    lga: string
+    hospital: string
+    bvn:string
+    nin:string
 }
 
-
-export const userDetails = async () => {
+export const UserDetails = async () => {
     const {data} = await adminAxios.patch('/update_user_details/')
     return data as user
 }
