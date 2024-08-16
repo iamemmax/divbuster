@@ -31,6 +31,7 @@ interface Prop {
   setOpenShowRemitalPlan: React.Dispatch<React.SetStateAction<boolean>>;
   userEmail: string;
   showPasswordModal: boolean;
+  verifiedPhoneNumber: string;
 }
 
 // Define Zod schema using TypeScript types
@@ -100,6 +101,7 @@ const CreatepasswordModal = ({
   showPasswordModal,
   setOpenShowRemitalPlan,
   userEmail,
+  verifiedPhoneNumber,
 }: Prop) => {
   const {
     register,
@@ -143,6 +145,7 @@ const CreatepasswordModal = ({
         confirm_password,
         email,
         password,
+        phone_number: verifiedPhoneNumber,
         // phone: "",
       },
       {

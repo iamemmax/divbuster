@@ -139,7 +139,7 @@ const RemitalUserDetails = ({
 
   // const selectedEmail = useWatch({
   //   control,
-  //   name: "hospitaldata.email",
+  //   name: "hospitaldata.email"
   // });
   const selectedState = useWatch({
     control,

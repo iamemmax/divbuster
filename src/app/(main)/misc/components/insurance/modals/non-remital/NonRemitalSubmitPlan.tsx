@@ -15,6 +15,7 @@ import {
   addCommasToNumber,
   formatAxiosErrorMessage,
   formatCurrency,
+  removeCommaFromPrice,
 } from "@/utils";
 import { AxiosError } from "axios";
 import PlanComfirmationModal from "../remital/PlanComfirmationModal";
@@ -109,7 +110,7 @@ const NonRemitalSubmitPlanModal = ({
               setPaymentInfo({
                 account_name: data?.account_name,
                 account_no: data?.account_no,
-                amount: Number(formatCurrency(Number(data?.amount))),
+                amount: data?.amount,
                 bank_name: data?.bank_name,
                 paystack_link: data?.paystack_link,
                 phone_number: data?.phone_number,
@@ -228,11 +229,11 @@ const NonRemitalSubmitPlanModal = ({
                 </Button>
 
                 <Button
-                  className="rounded-3xl bg-[#fff] gap-x-2 flex items-center justify-center text-[#1B1687]   py-[0.9rem] w-[12rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none"
+                  className="rounded-3xl bg-[#fff] gap-x-2 flex items-center justify-center text-[#1B1687] py-[0.9rem] w-[12rem] shadow-lg transition-colors delay-150 ease-in-out focus:outline-none"
                   onClick={handlePayment}
                 >
-                  Agree & Proceed{" "}
-                  {isLoading || (LoadinBene && <SmallSpinner color="blue" />)}
+                  Agree & Proceed
+                  {(isLoading || LoadinBene) && <SmallSpinner color="blue" />}
                 </Button>
               </div>
             </div>

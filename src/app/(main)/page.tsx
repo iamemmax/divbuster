@@ -350,6 +350,7 @@ export default function Home() {
           setShowPasswordModal={setShowPasswordModal}
           showPasswordModal={showPasswordModal}
           setOpenShowRemitalPlan={setOpenShowRemitalPlan}
+          verifiedPhoneNumber={verifiedPhoneNumber}
         />
       )}
       {openRemitalPlan && (

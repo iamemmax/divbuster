@@ -34,11 +34,11 @@ export default function RootLayout({
 }>) {
   // const { data } = useUser();
   // console.log(data);
-  const url = `https://wa.link/wsz6hg`;
+  const url = `https://wa.link/j2dkg7`;
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
       <body>
-      <Toaster
+        <Toaster
           containerStyle={{
             zIndex: 99999,
           }}

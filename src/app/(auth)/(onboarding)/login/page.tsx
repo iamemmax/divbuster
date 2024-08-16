@@ -54,10 +54,10 @@ export default function Login() {
       onSuccess: (data: userStatusTypes) => {
         if (data?.has_set_password) {
           setReturninguser(true);
-          setUserPhoneNumber(data?.phone_number);
         } else {
           setUserPasswordNotSet(true);
         }
+        setUserPhoneNumber(data?.phone_number);
       },
       onError: (error) => {
         const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -110,7 +110,7 @@ export default function Login() {
                       className=" mt-[3rem] h-12 text-white border-[.0187rem] border-opacity-60 border-white flex items-center justify-center gap-x-2 font-display focus:shadow-outline w-full  bg-transparent p-4 py-3 font-semibold tracking-wide
                                  rounded-[1.25rem]   shadow-lg transition-colors delay-150 ease-in-out  focus:outline-none "
                       variant={"outlined"}
-                      href={`/create-password`}
+                      href={`/create-password?phone=${userPhoneNumber}`}
                     >
                       <p className="text-xxs font-normal">
                         Don’t have a password ?

@@ -184,7 +184,7 @@ function SelectPlanModal({
                       >
                         <div>Main wallet Balance:</div>
                         <div className="font-medium">
-                          {formatCurrency(Number(paymentProp?.account_number))}
+                          {formatCurrency(Number(paymentProp?.wallet_balance))}
                         </div>
                       </label>
                     </div>
