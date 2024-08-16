@@ -248,8 +248,8 @@ const ReferralModalPlan = ({
                     )}
                     {selectedTab === "CORPORATE" && (
                       <p className="w-full px-4 md:px-[1.5rem] text-center text-base  sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
-                        Corporate Plan allows you provide Premium <br /> Health
-                        Coverage for employees
+                        Corporate Plan allows you provide premium health
+                        coverage for employees.
                       </p>
                     )}
                   </div>

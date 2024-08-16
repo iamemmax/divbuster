@@ -591,8 +591,8 @@ const MakePaymentModal = ({
                     )}
                     {selectedTab === "CORPORATE" && (
                       <p className="w-full px-4 md:px-[1.5rem] text-center text-base  sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
-                        Corporate plan allows you provide premium .<br /> Health
-                        coverage for employees
+                        Corporate plan allows you provide premium health
+                        coverage for employees .
                       </p>
                     )}
                   </div>
@@ -639,8 +639,8 @@ const MakePaymentModal = ({
                                         <UserIcons width={65} height={65} />
                                       </div>
                                       <div className="mt-4">
-                                        <div className="py-3 px-4">
-                                          <p className="text-base text-[#D1D3DB] text-opacity-80 font-normal">
+                                        <div className="py-3 px-3">
+                                          <p className="text-sm text-[#D1D3DB] text-opacity-80 font-normal">
                                             {plan?.plan_duration?.duration}{" "}
                                             Months Plan
                                           </p>

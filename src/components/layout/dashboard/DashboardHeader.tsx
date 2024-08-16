@@ -31,7 +31,7 @@ export function DashboardHeader() {
       link: "/dashboard",
     },
     {
-      title: "Hospital around",
+      title: "Hospitals around",
       link: "/dashboard/hospital-around-me",
     },
     {
