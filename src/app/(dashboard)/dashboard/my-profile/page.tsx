@@ -156,6 +156,7 @@ export default function Page() {
             setValue("email", userData?.email || "");
             setValue("state", userData.state || "");
             setValue('nin', userData?.nin || "")
+            setValue('bvn', userData?.bvn || "")
         }
 
     }, [isloadingUserdata])
@@ -618,6 +619,7 @@ export default function Page() {
                                                     <Label
                                                         className="mb-1 block text-xs text-[#032282]"
                                                         htmlFor="nin"
+                                                        
                                                     >
                                                         NIN
                                                     </Label>
