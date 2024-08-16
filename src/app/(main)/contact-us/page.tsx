@@ -45,7 +45,7 @@ export default function page() {
                             <div className='bg-[#FFFFFF0D] py-4 pl-4 md:pl-8 rounded-lg mt-3'>
                                 <p className='text-[#CAC9D4]'>You can visit our office</p>
                                 <p className='font-medium'>27 Alara street, off commercial avenue, Sabo Yaba, Lagos.</p>
-                                <p className='text-[#CAC9D4]'>9:00am - 5pm(Mon-Fri)</p>
+                                <p className='text-[#CAC9D4]'>9:00am - 5pm (Mon-Fri)</p>
                             </div>
                             <div className='bg-[#FFFFFF0D] py-4 pl-4 md:pl-8 rounded-lg mt-3'>
                                 <p className='text-[#CAC9D4] pb-1'>Follow us on social media</p>

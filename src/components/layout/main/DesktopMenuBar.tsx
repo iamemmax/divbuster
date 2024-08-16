@@ -234,7 +234,7 @@ export const linkGroups = [
     isExternal: false,
   },
   {
-    link: "/blogs",
+    // link: "/blogs",
     text: "Blogs",
     icon: undefined,
     disabled: false,

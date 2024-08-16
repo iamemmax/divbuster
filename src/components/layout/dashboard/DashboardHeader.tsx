@@ -21,6 +21,7 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { useQueryClient } from "react-query";
 import { useAuth } from "@/contexts/authentication";
+import { Liberty } from "@/icons/core";
 export function DashboardHeader() {
   const { data: userData, isLoading } = useUser();
   const pathname = usePathname(); // Get the current pathname
@@ -60,7 +61,7 @@ export function DashboardHeader() {
       <header className="bg-main px-6  md:px-[4.5rem] lg:px-[7.5rem]  py-6 border-b border-[#2B303C]">
         <div className="z-50 flex items-center justify-between">
           <a href={"/"} className="flex text-white items-center gap-3">
-            <Logo className="" />
+            <Liberty className="max-sm:max-w-[100px]" />
             {/* <div className="font-wix-display">
               <h2 className="font-extrabold capitalize text-base md:text-xl text-nowrap leading-3">
                 Liberty Life
@@ -125,7 +126,7 @@ export function DashboardHeader() {
                 <DropdownMenuContent className="bg-white z-[999] rounded-md shadow-md p-2">
                   <DropdownMenuItem
                     className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => router.push("/dashboard/profile")}
+                    onClick={() => router.push("/dashboard/my-profile")}
                   >
                     Profile
                   </DropdownMenuItem>

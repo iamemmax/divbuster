@@ -17,15 +17,15 @@ export default function page() {
       answer: "You can easily register by dialling the USSD code *347*180*9# on any mobile phone. No internet or smartphone is needed, just your Bank Verification Number (BVN)."
     },
     {
-      question: "What does LibertyHealth Micro Insurance cover?",
+      question: "What does LibertyLife Micro Insurance cover?",
       answer: "The plan covers a wide range of healthcare services, from basic needs like doctor consultations, medications, and hospitalizations to fitness programs and mental health services, ensuring all your essential health needs are met."
     },
     {
-      question: "Who is eligible for LibertyHealth Micro Insurance?",
-      answer: "All Nigerians with a BVN are eligible to enrol in LibertyHealth Micro Insurance. It's especially designed for low-income earners and those who may not have access to traditional health insurance."
+      question: "Who is eligible for LibertyLife Micro Insurance?",
+      answer: "All Nigerians with a BVN are eligible to enrol in LibertyLife Micro Insurance. It's especially designed for low-income earners and those who may not have access to traditional health insurance."
     },
     {
-      question: "How much does LibertyHealth Micro Insurance cost?",
+      question: "How much does LibertyLife Micro Insurance cost?",
       answer: "The premiums are tailored to be budget-friendly for the average Nigerian, starting as low as 3,000 Naira. With flexible payment options, you can easily access comprehensive healthcare coverage."
     },
     {
@@ -38,15 +38,15 @@ export default function page() {
     },
     {
       question: "What makes Liberty Life Micro Insurance different from other health insurance plans?",
-      answer: "LibertyHealth Micro Insurance is specifically designed for affordability and accessibility. It's tailored for low-income earners and those without access to traditional health insurance, and it's easy to register using the USSD code*347*180*9#."
+      answer: "LibertyLife Micro Insurance is specifically designed for affordability and accessibility. It's tailored for low-income earners and those without access to traditional health insurance, and it's easy to register using the USSD code*347*180*9#."
     },
     {
       question: "How does Liberty Life support corporations and businesses?",
-      answer: "Corporations and businesses can offer LibertyHealth as a benefit to their employees or staff, providing them with affordable health coverage and peace of mind."
+      answer: "Corporations and businesses can offer LibertyLife as a benefit to their employees or staff, providing them with affordable health coverage and peace of mind."
     },
     {
       question: "Would I have 24/7 access to customer support?",
-      answer: "LibertyHealth offers dedicated service managers to assist with onboarding, customer support, and retention, ensuring a smooth and positive experience for all potential, new and existing customers."
+      answer: "LibertyLife offers dedicated service managers to assist with onboarding, customer support, and retention, ensuring a smooth and positive experience for all potential, new and existing customers."
     },
     {
       question: "What is Liberty Life?",

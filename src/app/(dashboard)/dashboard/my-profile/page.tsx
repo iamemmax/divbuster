@@ -317,13 +317,12 @@ export default function Page() {
         setProfilePic('images/userIcon.png');
     };
 
-
+    
     return (
         <>
             {isLoading ? (
                 <Spinner />
             ) : (
-
                 <div className='bg-[#F5F9FE]'>
                     <div className='bg-main min-h-36'></div>
                     <section className="h-full w-full px-6 md:px-[7.5rem] min-h-screen pb-[1.88rem] relative -mt-32">
@@ -331,7 +330,26 @@ export default function Page() {
                             <p className='text-[#032282] font-sans font-bold text-2xl'>Personal Information</p>
                             <section className='mt-8 flex flex-col lg:flex-row justify-between'>
                                 <div className='flex justify-between items-center gap-4'>
-                                    <div className='flex relative'>
+                                    <div className='hidden md:flex relative'>
+                                        <Image
+                                            alt="profile"
+                                            src={profilePic}
+                                            height={100}
+                                            width={100}
+                                            className="rounded-full"
+
+                                        />
+                                        <div className='mt-[3.8rem] -ml-[1.5rem]'>
+                                            <Photo onClick={handleClick} />
+                                        </div>
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            style={{ display: 'none' }}
+                                            onChange={handleProfilePicChange}
+                                        />
+                                    </div>
+                                    <div className='flex md:hidden relative '>
                                         <Image
                                             alt="profile"
                                             src={profilePic}
@@ -351,7 +369,7 @@ export default function Page() {
                                         />
                                     </div>
 
-                                    <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload'>
+                                    <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] hidden border-[#032282] px-4 py-3' id='upload'>
                                         <Upload
                                             onClick={handleClick}
                                         />
@@ -365,7 +383,7 @@ export default function Page() {
                                     </Button>
                                 </div>
 
-                                <div className='flex gap-4 justify-between items-center mt-3 lg:mt-0'>
+                                <div className='flex flex-col md:flex-row gap-4 justify-between items-center mt-3 lg:mt-0'>
                                     <div className="flex items-center gap-2">
                                         <div
                                             className="flex items-center justify-center flex-col gap-x-2 border-[0.3px] border-[#032282] bg-white px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
