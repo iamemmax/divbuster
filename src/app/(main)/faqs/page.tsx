@@ -13,6 +13,10 @@ export default function page() {
 
   const FAQs = [
     {
+      question: "What is Liberty Life?",
+      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+    },
+    {
       question: "How can I register to a healthcare plan?",
       answer: "You can easily register by dialling the USSD code *347*180*9# on any mobile phone. No internet or smartphone is needed, just your Bank Verification Number (BVN)."
     },
@@ -47,10 +51,6 @@ export default function page() {
     {
       question: "Would I have 24/7 access to customer support?",
       answer: "LibertyLife offers dedicated service managers to assist with onboarding, customer support, and retention, ensuring a smooth and positive experience for all potential, new and existing customers."
-    },
-    {
-      question: "What is Liberty Life?",
-      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
     },
   ]
 

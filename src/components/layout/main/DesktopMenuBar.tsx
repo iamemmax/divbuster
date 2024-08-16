@@ -292,7 +292,7 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
       isExternal: false,
     },
     {
-      link: "/blogs",
+      link: "/faqs",
       text: "Blogs",
       icon: undefined,
       disabled: false,

@@ -248,7 +248,7 @@ export default function Home() {
 
             <div
               className={cn(
-                "bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-4 md:px-8 grid grid-cols-2 md:grid-rows-1 gap-4 mb-16 md:mb-0 lg:gap-2"
+                "bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-4 md:px-8 grid md:grid-cols-2 gap-4 mb-16 md:mb-0 lg:gap-2"
               )}
               >
               <div className="flex flex-col items-center justify-center">
