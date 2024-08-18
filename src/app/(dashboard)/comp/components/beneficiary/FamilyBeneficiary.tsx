@@ -305,6 +305,8 @@ import FiltersIcon from "../../icons/FilterIcons";
 import DebounceInput from "../misc/DebounceInput";
 import { NoData } from "../../icons";
 import { CaretDown } from "@/components/icons";
+import { statusColor } from "@/utils/statusColor";
+import { capitalizeFirstLetter } from "@/utils";
 
 const SkeletonLoading = () => (
   <div className="animate-pulse">
@@ -329,9 +331,14 @@ interface BenficiaryHeader {
 interface Prop {
   beneficiaryList: beneficiaryTypeProp | undefined;
   loading: boolean;
+  setFiterStatus: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const FamilyBeneficiary = ({ beneficiaryList, loading: isLoading }: Prop) => {
+const FamilyBeneficiary = ({
+  beneficiaryList,
+  loading: isLoading,
+  setFiterStatus,
+}: Prop) => {
   const columnHelper = createColumnHelper<BenficiaryHeader>();
 
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -400,7 +407,23 @@ const FamilyBeneficiary = ({ beneficiaryList, loading: isLoading }: Prop) => {
     }),
     columnHelper.accessor("status", {
       header: () => "Status",
-      cell: (info) => info?.getValue(),
+      cell: (info) => {
+        const { color, backgroundColor } = statusColor(
+          capitalizeFirstLetter(info?.getValue())
+        );
+
+        return (
+          <p
+            className="block w-auto max-w-[6.25rem] text-center text-xs font-medium rounded-10 px-3 py-2"
+            style={{
+              color,
+              backgroundColor,
+            }}
+          >
+            {capitalizeFirstLetter(info?.getValue())}
+          </p>
+        );
+      },
     }),
     columnHelper.accessor("enrolee.email", {
       header: () => "Email",
@@ -517,7 +540,7 @@ const FamilyBeneficiary = ({ beneficiaryList, loading: isLoading }: Prop) => {
                   <DropdownMenuItem
                     className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
                     defaultValue={"Successful"}
-                    // onClick={() => setFiterStatus("")}
+                    onClick={() => setFiterStatus("")}
                   >
                     All
                   </DropdownMenuItem>

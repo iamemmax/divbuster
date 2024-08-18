@@ -74,7 +74,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
     enabled: !!users?.phone_number,
   });
   const { data: beneficiaryList, isLoading: loadingBeneficial } = useQuery({
-    queryFn: getBeneficiaries,
+    queryFn: () => getBeneficiaries(""),
     queryKey: ["fetch-Beneficiaries-list"],
     enabled: !!users?.phone_number,
   });

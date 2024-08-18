@@ -309,6 +309,8 @@ import FiltersIcon from "../../icons/FilterIcons";
 import DebounceInput from "../misc/DebounceInput";
 import { NoData } from "../../icons";
 import { CaretDown } from "@/components/icons";
+import { statusColor } from "@/utils/statusColor";
+import { capitalizeFirstLetter } from "@/utils";
 
 const SkeletonLoading = () => (
   <div className="animate-pulse">
@@ -327,6 +329,7 @@ interface BenficiaryHeader {
     email: string;
   };
   ctx?: any;
+  status: string;
 }
 
 interface Prop {
@@ -407,6 +410,26 @@ const LovedOnesBeneficiaries = ({
       header: () => "Referral code",
       cell: (info) => info?.getValue(),
     }),
+    columnHelper.accessor("status", {
+      header: () => "Status",
+      cell: (info) => {
+        const { color, backgroundColor } = statusColor(
+          capitalizeFirstLetter(info?.getValue())
+        );
+
+        return (
+          <p
+            className="block w-auto max-w-[6.25rem] text-center text-xs font-medium rounded-10 px-3 py-2"
+            style={{
+              color,
+              backgroundColor,
+            }}
+          >
+            {capitalizeFirstLetter(info?.getValue())}
+          </p>
+        );
+      },
+    }),
     columnHelper.accessor("enrolee.email", {
       header: () => "Email",
       cell: (info) => <div className=" ">{info.getValue()}</div>,
@@ -428,13 +451,7 @@ const LovedOnesBeneficiaries = ({
                 align="end"
               >
                 <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  Cancel
-                </DropdownMenuItem>
-                <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  Disable
-                </DropdownMenuItem>
-                <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  Remove
+                  Renew Plan
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -19,10 +19,11 @@ import CurrentPlanCard from "../../comp/components/cards/CurrentPlanCard";
 
 const Page = () => {
   const [BuyPlan, setBuyPlan] = useState(false);
+  const [fiterStatus, setFiterStatus] = useState("");
   const { data: userData, isLoading } = useUser();
   const { data: beneficiaryList, isLoading: loadingBeneficial } = useQuery({
-    queryFn: getBeneficiaries,
-    queryKey: ["fetch-Beneficiaries-list"],
+    queryFn: () => getBeneficiaries(fiterStatus),
+    queryKey: ["fetch-Beneficiaries-list", fiterStatus],
     enabled: !!userData?.phone_number,
   });
 
@@ -128,6 +129,7 @@ const Page = () => {
           <FamilyBeneficiary
             beneficiaryList={beneficiaryList && beneficiaryList[0]}
             loading={isLoading}
+            setFiterStatus={setFiterStatus}
           />
         </div>
       </div>

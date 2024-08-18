@@ -28,6 +28,7 @@ import ThreeDot from "../cards/icons/ThreeDot";
 import FiltersIcon from "../../icons/FilterIcons";
 import DebounceInput from "../misc/DebounceInput";
 import { NoData } from "../../icons";
+import { CaretDown } from "@/components/icons";
 
 const SkeletonLoading = () => (
   <div className="animate-pulse">
@@ -51,15 +52,60 @@ interface BenficiaryHeader {
 interface Prop {
   beneficiaryList: beneficiaryTypeProp | undefined;
   loading: boolean;
+  setFiterStatus: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const CorporateBeneficiary = ({
   beneficiaryList,
   loading: isLoading,
+  setFiterStatus,
 }: Prop) => {
   const columnHelper = createColumnHelper<BenficiaryHeader>();
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [selectedData, setSelectedData] = useState<BenficiaryHeader[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
+
+  const rows = useMemo(
+    () => beneficiaryList?.data ?? [],
+    [beneficiaryList && beneficiaryList?.data]
+  );
+
+  const toggleSelectAll = () => {
+    if (selectAll) {
+      setSelectedRows([]);
+      setSelectedData([]);
+    } else {
+      const allIndices = rows.map((_, index) => index);
+      setSelectedRows(allIndices);
+      setSelectedData(rows);
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const toggleRowSelection = (index: number) => {
+    if (selectedRows.includes(index)) {
+      setSelectedRows((prev) => prev.filter((i) => i !== index));
+      setSelectedData((prev) => prev.filter((_, i) => i !== index));
+    } else {
+      setSelectedRows((prev) => [...prev, index]);
+      setSelectedData((prev) => [...prev, rows[index]]);
+    }
+  };
 
   const columns = [
+    columnHelper.display({
+      id: "select",
+      header: ({ table }) => (
+        <input type="checkbox" checked={selectAll} onChange={toggleSelectAll} />
+      ),
+      cell: ({ row }) => (
+        <input
+          type="checkbox"
+          checked={selectedRows.includes(row.index)}
+          onChange={() => toggleRowSelection(row.index)}
+        />
+      ),
+    }),
     columnHelper.accessor("enrolee.created_at", {
       header: () => "Date/Time",
       cell: (info) => moment(info.getValue()).format("YYYY-MM-DD HH:mm:ss"),
@@ -103,13 +149,7 @@ const CorporateBeneficiary = ({
                 align="end"
               >
                 <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  Cancel
-                </DropdownMenuItem>
-                <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  Disable
-                </DropdownMenuItem>
-                <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  Remove
+                  Renew Plan
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -130,11 +170,10 @@ const CorporateBeneficiary = ({
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  const rows = useMemo(
-    () => beneficiaryList?.data ?? [],
-    [beneficiaryList && beneficiaryList?.data]
-  );
+  const handleActionOnSelected = () => {
+    console.log("Selected Rows Data: ", selectedData);
+    // You can perform any actions with the selected data here
+  };
 
   return (
     <div className="px-6  md:px-[4.5rem] lg:px-[7.5rem]">
@@ -154,6 +193,70 @@ const CorporateBeneficiary = ({
                 value={globalFilter ?? ""}
                 onChange={(value) => setGlobalFilter(String(value))}
               />
+            </div>
+          </div>
+
+          <div className="flex gap-x-3">
+            {selectedData?.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="flex items-center outline-none bg-[#f6f9ff] text-[#032282] text-sm font-medium px-3 border-[#D6D6D6] gap-x-1">
+                    Actions <CaretDown color="#032282" />
+                    {/* Use an appropriate icon or text */}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className=" px-4  bg-white z-50 rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
+                  sideOffset={5}
+                  align="end"
+                >
+                  <DropdownMenuItem
+                    className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100"
+                    onClick={handleActionOnSelected}
+                  >
+                    Renew plan
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+            <div className="">
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button className="flex items-center outline-none bg-white border-[.05rem] text-[#556575] text-sm font-medium px-5 border-[#D6D6D6] gap-x-2">
+                    <FiltersIcon /> Filter
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="min-w-[100px] px-4 bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade">
+                  <DropdownMenuItem
+                    className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    defaultValue={"Successful"}
+                    onClick={() => setFiterStatus("")}
+                  >
+                    All
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    defaultValue={"Successful"}
+                    // onClick={() => setFiterStatus("SUCCESSFUL")}
+                  >
+                    SuccessFul
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    defaultValue={"Pending"}
+                    // onClick={() => setFiterStatus("PENDING")}
+                  >
+                    Pending
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    defaultValue={"Failed"}
+                    // onClick={() => setFiterStatus("FAILED")}
+                  >
+                    Failed
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
