@@ -33,6 +33,10 @@ const Page = () => {
   const router = useRouter();
   const checkFamilyPaymentStatus =
     userData?.paid_beneficiary_requests?.includes("FAMILY");
+
+  const srcArray =
+    beneficiaryList?.[0]?.data?.map((item) => item.enrolee?.profile_image) ||
+    [];
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
       <DashboardPlanHeader />
@@ -76,13 +80,17 @@ const Page = () => {
                         <p className="text-xxs text-[#032282]">Benefactors</p>
                       </div>
                       <div className="p-4">
-                        <AvatarGroup
+                        {/* <AvatarGroup
                           avatars={generateAvatars(
                             Number(
                               beneficiaryList &&
                                 beneficiaryList[0]?.data?.length
                             )
                           )}
+                        /> */}
+
+                        <AvatarGroup
+                          avatars={generateAvatars(srcArray.length, srcArray)}
                         />
                       </div>
                     </div>

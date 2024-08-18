@@ -28,11 +28,25 @@ import CorporateCard from "./CorporateCard";
 import LoveOneCard from "./LoveOneCard";
 
 // generate Avater
-export const generateAvatars = (count: number) => {
+// export const generateAvatars = (count: number) => {
+//   const avatars = [];
+//   for (let i = 1; i <= count; i++) {
+//     avatars.push({
+//       src: `/images/userIcon.png`,
+//       alt: `User ${i}`,
+//     });
+//   }
+//   return avatars;
+// };
+
+export const generateAvatars = (
+  count: number,
+  srcArray: (string | null)[] = []
+) => {
   const avatars = [];
   for (let i = 1; i <= count; i++) {
     avatars.push({
-      src: `/images/userIcon.png`,
+      src: srcArray[i - 1] || `/images/userIcon.png`, // Use provided src or default image
       alt: `User ${i}`,
     });
   }

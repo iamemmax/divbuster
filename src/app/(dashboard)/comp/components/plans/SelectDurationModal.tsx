@@ -263,7 +263,7 @@ function SelectDurationModal({
 
                 <div className="flex items-center gap-x-2 w-full py-4 bg-black rounded-lg mt-3 justify-center">
                   <p className="text-white text-lg font-bold">Total:</p>
-                  {planType !== "INDIVIDUAL" && (
+                  {planType !== "LOVE_ONES" && (
                     <p className="text-white line-through text-lg text-opacity-80 font-bold">
                       {totalAmount !== null
                         ? formatCurrency(

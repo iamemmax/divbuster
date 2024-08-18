@@ -162,7 +162,7 @@ const BeneficiariesModal = ({
                 )}
               </div>
               <div className="w-full mt-6  flex items-center gap-3 py-5 text-sm font-normal">
-                {planType !== "INDIVIDUAL" && (
+                {planType !== "LOVE_ONES" && (
                   <Button
                     className="text-white w-full p-4 py-3 rounded-[1.25rem] border-[0.3px] border-white border-opacity-70 "
                     variant={"outlined"}

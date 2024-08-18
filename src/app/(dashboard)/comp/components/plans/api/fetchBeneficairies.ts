@@ -12,6 +12,7 @@ export interface BeneficiaryData {
   email: null;
   state: null;
   lga: null;
+  status: string;
 }
 
 interface Enrolee {
@@ -47,21 +48,25 @@ interface Enrolee {
   is_a_liberty_staff: boolean;
   new_user_from_packages: boolean;
   new_user_from_packages_and_has_completed_the_flow: boolean;
+  has_created_individual_health: boolean;
   is_a_company: boolean;
   is_remita: boolean;
   is_active: boolean;
-  is_staff: boolean;
-  groups: any[];
-  user_permissions: any[];
-  action?:any
+  profile_image: null;
 }
-
 interface Hospitals {
   lga: string;
   state: string;
   hospital: string;
   provider_id: string;
+  status: string;
 }
+
+
+
+
+
+
 export const getBeneficiaries = async () => {
   const { data } = await adminAxios.get(`beneficiary/`);
   
