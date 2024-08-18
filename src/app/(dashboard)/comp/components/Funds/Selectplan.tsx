@@ -337,7 +337,7 @@ function SelectPlanModal({
               </DialogClose>
             </DialogHeader>
             <DialogBody className="bg-[#141B3f]">
-              <article className="text-sm text-white">
+              <article className="text-sm text-white pb-6">
                 <p className="text-white text-sm w-4/5">{subsection}</p>
                 <div className="flex justify-center items-center gap-x-2 py-3">
                   <div className="border-dashed border border-[#9F9F9F] w-[120px] h-[1px]"></div>
@@ -479,7 +479,7 @@ function SelectPlanModal({
                 )}
                 {selectedValue === "transfer" && (
                   <Button
-                    className="w-full text-[#1B1687] bg-white py-3.5 font-medium text-sm mt-6"
+                    className="w-full text-[#1B1687] mb-4 bg-white py-3.5 font-medium text-sm mt-6"
                     onClick={() => refetch()}
                   >
                     I have made payment {isLoading && <SmallSpinner />}

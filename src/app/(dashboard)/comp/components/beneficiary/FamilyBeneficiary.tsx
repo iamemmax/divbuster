@@ -448,28 +448,29 @@ const FamilyBeneficiary = ({
     }),
     columnHelper.accessor("ctx", {
       header: () => "Action",
-      cell: () => {
+      cell: (info) => {
+        const rowData = info.row.original;
         return (
           <TableCell>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="flex items-center outline-none bg-white text-[#556575] text-sm font-medium px-5 border-[#D6D6D6] gap-x-2">
-                  <ThreeDot /> {/* Use an appropriate icon or text */}
+                  <ThreeDot />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className=" px-4  bg-white z-50 rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
+                className="px-4 bg-white z-50 rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
                 sideOffset={5}
                 align="end"
               >
                 <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  Cancel
+                  View Details
                 </DropdownMenuItem>
-                <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  Disable
-                </DropdownMenuItem>
-                <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  Remove
+                <DropdownMenuItem
+                  className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100"
+                  onClick={() => handleRenewOneActionOnSelected(rowData)}
+                >
+                  Renew
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -501,7 +502,7 @@ const FamilyBeneficiary = ({
 
   // const { mutate: handleRenewal } = useRenewBeneficiaryList();
   // Function to handle action on selected data
-  const handleActionOnSelected = () => {
+  const handleRenewActionOnSelected = () => {
     const myList = selectedData?.map((data) => ({
       name_of_beneficiary: data?.name,
       phone_number_of_beneficiary: data?.phone_number,
@@ -512,6 +513,23 @@ const FamilyBeneficiary = ({
     }));
 
     setBeneficiariesList({ beneficiaries: myList });
+    setShowDurationModal(true);
+  };
+  const handleRenewOneActionOnSelected = (row: BenficiaryHeader) => {
+    const myList = {
+      name_of_beneficiary: row?.name,
+      phone_number_of_beneficiary: row?.phone_number,
+      type_of_beneficary: row?.type_of_beneficary as
+        | "ADULT"
+        | "MINOR"
+        | undefined,
+    };
+
+    // Update the beneficiariesList state with the new item inside the beneficiaries array
+    setBeneficiariesList({
+      beneficiaries: [myList], // Wrap the single item in an array and assign it to the beneficiaries property
+    });
+
     setShowDurationModal(true);
   };
 
@@ -552,7 +570,7 @@ const FamilyBeneficiary = ({
                 >
                   <DropdownMenuItem
                     className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100"
-                    onClick={handleActionOnSelected}
+                    onClick={handleRenewActionOnSelected}
                   >
                     Renew plan
                   </DropdownMenuItem>
