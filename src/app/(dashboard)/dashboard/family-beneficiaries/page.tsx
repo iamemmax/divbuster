@@ -27,13 +27,13 @@ const Page = () => {
     enabled: !!userData?.phone_number,
   });
 
-  const makePayment =
-    userData?.subscription_status === "NOT_ACTIVE" ||
-    userData?.subscription_status === "PENDING" ||
-    userData?.subscription_status === "FAILED";
-  const router = useRouter();
-  const checkFamilyPaymentStatus =
-    userData?.paid_beneficiary_requests?.includes("FAMILY");
+  // const makePayment =
+  //   userData?.subscription_status === "NOT_ACTIVE" ||
+  //   userData?.subscription_status === "PENDING" ||
+  //   userData?.subscription_status === "FAILED";
+  // const router = useRouter();
+  // const checkFamilyPaymentStatus =
+  //   userData?.paid_beneficiary_requests?.includes("FAMILY");
 
   const srcArray =
     beneficiaryList?.[0]?.data?.map((item) => item.enrolee?.profile_image) ||

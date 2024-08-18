@@ -209,6 +209,7 @@ const BeneficiariesModal = ({
           beneficiariesList={beneficiariesList}
           selectedPlan={selectedPlan}
           planType={planType}
+          actionType="makePayment"
         />
       )}
     </>

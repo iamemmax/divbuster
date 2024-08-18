@@ -13,6 +13,7 @@ export interface BeneficiaryData {
   state: null;
   lga: null;
   status: string;
+   type_of_beneficary:string,
 }
 
 interface Enrolee {
@@ -67,7 +68,8 @@ interface Hospitals {
 
 
 
-export const getBeneficiaries = async (fiterStatus:string) => {
+export const getBeneficiaries = async (fiterStatus: string) => {
+  
   const { data } = await adminAxios.get(`beneficiary/?status=${fiterStatus}`);
   
   return data as beneficiaryTypeProp[]

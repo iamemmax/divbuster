@@ -303,7 +303,10 @@ import {
 } from "@tanstack/react-table";
 import moment from "moment";
 import { maskPhoneNumber } from "@/utils/strings";
-import { beneficiaryTypeProp } from "../plans/api/fetchBeneficairies";
+import {
+  BeneficiaryData,
+  beneficiaryTypeProp,
+} from "../plans/api/fetchBeneficairies";
 import ThreeDot from "../cards/icons/ThreeDot";
 import FiltersIcon from "../../icons/FilterIcons";
 import DebounceInput from "../misc/DebounceInput";
@@ -311,17 +314,22 @@ import { NoData } from "../../icons";
 import { CaretDown } from "@/components/icons";
 import { statusColor } from "@/utils/statusColor";
 import { capitalizeFirstLetter } from "@/utils";
+import { getPlan } from "@/app/(main)/misc/components/insurance/api/plan/getPlan";
+import { useQuery } from "react-query";
+import SelectDurationModal from "../plans/SelectDurationModal";
 
 const SkeletonLoading = () => (
   <div className="animate-pulse">
     <div className="h-3 bg-gray-200 rounded mb-2"></div>
   </div>
 );
-
 interface BenficiaryHeader {
-  enrolee: {
+  name: string;
+  phone_number: string;
+  email: string | null;
+  type_of_beneficary?: string;
+  enrolee?: {
     created_at: string;
-    middle_name: string;
     last_name: string;
     first_name: string;
     phone_number: string;
@@ -335,18 +343,31 @@ interface BenficiaryHeader {
 interface Prop {
   beneficiaryList: beneficiaryTypeProp | undefined;
   loading: boolean;
+  setFiterStatus: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const LovedOnesBeneficiaries = ({
   beneficiaryList,
   loading: isLoading,
+  setFiterStatus,
 }: Prop) => {
   const columnHelper = createColumnHelper<BenficiaryHeader>();
 
+  const [showDurationModal, setShowDurationModal] = useState(false);
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [selectedData, setSelectedData] = useState<BenficiaryHeader[]>([]);
+  const [selectedData, setSelectedData] = useState<BeneficiaryData[]>([]);
   const [selectAll, setSelectAll] = useState(false);
-
+  const { data: plansData } = useQuery({
+    queryFn: getPlan,
+    queryKey: ["get-plans"],
+  });
+  const [beneficiariesList, setBeneficiariesList] = useState<{
+    beneficiaries: {
+      name_of_beneficiary: string;
+      phone_number_of_beneficiary: string;
+      type_of_beneficary?: "ADULT" | "MINOR" | undefined;
+    }[];
+  }>();
   const rows = useMemo(
     () => beneficiaryList?.data ?? [],
     [beneficiaryList && beneficiaryList?.data]
@@ -394,15 +415,9 @@ const LovedOnesBeneficiaries = ({
     }),
     columnHelper.accessor("enrolee.first_name", {
       header: () => "Beneficiaries",
-      cell: (info) => (
-        <p>
-          {`${info?.row?.original?.enrolee?.first_name} `}
-          {`${info?.row?.original?.enrolee?.middle_name} `}
-          {`${info?.row?.original?.enrolee?.last_name}`}
-        </p>
-      ),
+      cell: (info) => info?.getValue(),
     }),
-    columnHelper.accessor("enrolee.phone_number", {
+    columnHelper.accessor("phone_number", {
       header: () => "Phone Number",
       cell: (info) => <p>{maskPhoneNumber(String(info?.getValue()))}</p>,
     }),
@@ -414,7 +429,7 @@ const LovedOnesBeneficiaries = ({
       header: () => "Status",
       cell: (info) => {
         const { color, backgroundColor } = statusColor(
-          capitalizeFirstLetter(info?.getValue())
+          info?.getValue()?.toLowerCase()
         );
 
         return (
@@ -430,7 +445,7 @@ const LovedOnesBeneficiaries = ({
         );
       },
     }),
-    columnHelper.accessor("enrolee.email", {
+    columnHelper.accessor("email", {
       header: () => "Email",
       cell: (info) => <div className=" ">{info.getValue()}</div>,
     }),
@@ -474,8 +489,17 @@ const LovedOnesBeneficiaries = ({
   });
   // Function to handle action on selected data
   const handleActionOnSelected = () => {
-    console.log("Selected Rows Data: ", selectedData);
-    // You can perform any actions with the selected data here
+    const myList = selectedData?.map((data) => ({
+      name_of_beneficiary: data?.name,
+      phone_number_of_beneficiary: data?.phone_number,
+      type_of_beneficary: data?.type_of_beneficary as
+        | "ADULT"
+        | "MINOR"
+        | undefined, // Ensure the correct type is used here
+    }));
+
+    setBeneficiariesList({ beneficiaries: myList });
+    setShowDurationModal(true);
   };
   return (
     <div className="px-6  md:px-[4.5rem] lg:px-[7.5rem]">
@@ -531,31 +555,52 @@ const LovedOnesBeneficiaries = ({
                 <DropdownMenuContent className="min-w-[100px] px-4 bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade">
                   <DropdownMenuItem
                     className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
-                    defaultValue={"Successful"}
-                    // onClick={() => setFiterStatus("")}
+                    defaultValue={""}
+                    onClick={() => setFiterStatus("")}
                   >
                     All
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
-                    defaultValue={"Successful"}
-                    // onClick={() => setFiterStatus("SUCCESSFUL")}
+                    // defaultValue={"SUCCESS"}
+                    onClick={() => setFiterStatus("SUCCESS")}
                   >
                     SuccessFul
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
-                    defaultValue={"Pending"}
-                    // onClick={() => setFiterStatus("PENDING")}
+                    // defaultValue={"PENDING"}
+                    onClick={() => setFiterStatus("PENDING")}
                   >
                     Pending
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
-                    defaultValue={"Failed"}
-                    // onClick={() => setFiterStatus("FAILED")}
+                    // defaultValue={"FAILED"}
+                    onClick={() => setFiterStatus("FAILED")}
                   >
                     Failed
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    // defaultValue={"COMPLETED"}
+                    onClick={() => setFiterStatus("COMPLETED")}
+                  >
+                    Completed
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    // defaultValue={"CANCELLED"}
+                    onClick={() => setFiterStatus("CANCELLED")}
+                  >
+                    Cancelled
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    // defaultValue={"EXPIRED"}
+                    onClick={() => setFiterStatus("EXPIRED")}
+                  >
+                    Expired
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -654,6 +699,17 @@ const LovedOnesBeneficiaries = ({
           )}
         </div>
       </div>
+
+      {showDurationModal && (
+        <SelectDurationModal
+          isSelectPlanModalOpen={showDurationModal}
+          setSelectPlanModal={setShowDurationModal}
+          beneficiariesList={beneficiariesList}
+          selectedPlan={plansData && plansData[0]?.data}
+          planType={"LOVE_ONES"}
+          actionType="renewal"
+        />
+      )}
     </div>
   );
 };
