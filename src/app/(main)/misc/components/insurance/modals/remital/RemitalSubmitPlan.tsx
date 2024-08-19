@@ -41,6 +41,8 @@ export interface PaymentSuccessMsg {
   account_name: string;
   account_no: string;
   bank_name: string;
+  wallet_balance?:string;
+unique_request_id?:string;
   paystack_link: string;
   amount: number;
   phone_number: string;

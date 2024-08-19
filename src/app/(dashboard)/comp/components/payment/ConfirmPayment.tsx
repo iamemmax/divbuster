@@ -68,12 +68,14 @@ const ConfirmPayment = ({
   const { mutate: handleCreateBeneficiaryPlan, isLoading:loadBeneficiary } = useCreateBeneficiaryPlanRequest();
   //   const router = useRouter();
 const {data:users}  = useUser()
+console.log(users);
+
   const handlePayment = () => {
     if(planType?.play_type === "INDIVIDUAL"){
       handleCreatePlan(
         {
         plan_duration:planType?.duration,
-        userId:users?.user_id as string,
+        userId:users?.id as string,
         plan_type:planType?.play_type
         },
         {
