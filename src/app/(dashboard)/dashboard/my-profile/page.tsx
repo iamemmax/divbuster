@@ -591,9 +591,11 @@ export default function Page() {
 
                                                         <RadioGroup
                                                             defaultValue="nin"
+                                                            id='selectedOption'
                                                             onValueChange={onChange}
                                                             value={value}
                                                             className='px-4 py-3 bg-[#F5F9FE] mt-2'
+                                                            ref={ref}
                                                         >
                                                             <div className='flex gap-x-4'>
 
