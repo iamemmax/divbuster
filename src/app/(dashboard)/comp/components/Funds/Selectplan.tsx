@@ -321,6 +321,7 @@ function SelectPlanModal({
     },
   });
   const { copy } = useClipboard();
+console.log(paymentProp,"paymentProp");
 
   return (
     <div className="rounded-xl">

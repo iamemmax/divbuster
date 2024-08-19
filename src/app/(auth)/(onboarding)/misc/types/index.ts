@@ -212,7 +212,7 @@ export type LoginOtpDto = {
 
 
 export interface UserDataTypes {
-  user_id:string;
+  id:string;
   first_name: string;
   middle_name: string;
   last_name: string;
