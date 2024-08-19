@@ -37,6 +37,7 @@ import { capitalizeFirstLetter } from "@/utils";
 import { useQuery } from "react-query";
 import { getPlan } from "@/app/(main)/misc/components/insurance/api/plan/getPlan";
 import SelectDurationModal from "../plans/SelectDurationModal";
+import Link from "next/link";
 
 const SkeletonLoading = () => (
   <div className="animate-pulse">
@@ -58,6 +59,7 @@ interface BenficiaryHeader {
   };
   ctx?: any;
   status: string;
+  id?:number;
 }
 
 interface Prop {
@@ -187,9 +189,11 @@ const CorporateBeneficiary = ({
                 sideOffset={5}
                 align="end"
               >
+                <Link href={`/dashboard/view-beneficiary/${info?.row.original?.id}`}>
                 <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  View Details
+                View Details
                 </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem
                   className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100"
                   onClick={() => handleRenewOneActionOnSelected(rowData)}
