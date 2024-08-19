@@ -1,8 +1,11 @@
+import ViewBeneficiaryHeader from '@/app/(dashboard)/comp/components/viewBeneficiaryHeader'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+      <ViewBeneficiaryHeader userData={undefined} loadinUser={false}/>
+    </div>
   )
 }
 
