@@ -93,7 +93,7 @@ const ViewBeneficiaryHeader = ({ loadinUser, userData: users }: Prop) => {
                             </h2>
                             <div className="flex justify-between items-center w-full ">
                                 <div className="flex items-center gap-x-3 flex-1">
-                                        <div className="bg-main px-6 md:px-[7.5rem] lg:px-[11.5rem] ">
+                                        <div className="">
                                             <h2 className="text-sm flex text-[#FFFFFFB2] font-medium font-sans">
                                                 <p className="text-[#8490A8] text-sm">Enrolment ID:</p>
                                                 {currentPlan?.enrolement_id
