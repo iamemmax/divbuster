@@ -5,6 +5,8 @@ export const statusColor = (status: string) => {
       return { color: '#099976', backgroundColor: '#31D0AA26' };
     case 'successful':
       return { color: '#099976', backgroundColor: '#31D0AA26' };
+    case 'success':
+      return { color: '#099976', backgroundColor: '#31D0AA26' };
     case 'pending':
       return { color: '#FB9700', backgroundColor: '#FB970026' };
     case 'failed':

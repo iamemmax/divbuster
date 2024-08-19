@@ -19,20 +19,25 @@ import CurrentPlanCard from "../../comp/components/cards/CurrentPlanCard";
 
 const Page = () => {
   const [BuyPlan, setBuyPlan] = useState(false);
+  const [fiterStatus, setFiterStatus] = useState("");
   const { data: userData, isLoading } = useUser();
   const { data: beneficiaryList, isLoading: loadingBeneficial } = useQuery({
-    queryFn: getBeneficiaries,
-    queryKey: ["fetch-Beneficiaries-list"],
+    queryFn: () => getBeneficiaries(fiterStatus),
+    queryKey: ["fetch-Beneficiaries-list", fiterStatus],
     enabled: !!userData?.phone_number,
   });
 
-  const makePayment =
-    userData?.subscription_status === "NOT_ACTIVE" ||
-    userData?.subscription_status === "PENDING" ||
-    userData?.subscription_status === "FAILED";
-  const router = useRouter();
-  const checkFamilyPaymentStatus =
-    userData?.paid_beneficiary_requests?.includes("FAMILY");
+  // const makePayment =
+  //   userData?.subscription_status === "NOT_ACTIVE" ||
+  //   userData?.subscription_status === "PENDING" ||
+  //   userData?.subscription_status === "FAILED";
+  // const router = useRouter();
+  // const checkFamilyPaymentStatus =
+  //   userData?.paid_beneficiary_requests?.includes("FAMILY");
+
+  const srcArray =
+    beneficiaryList?.[0]?.data?.map((item) => item.enrolee?.profile_image) ||
+    [];
   return (
     <div className="relative bg-[#f5f9fe] w-full h-screen">
       <DashboardPlanHeader />
@@ -76,13 +81,17 @@ const Page = () => {
                         <p className="text-xxs text-[#032282]">Benefactors</p>
                       </div>
                       <div className="p-4">
-                        <AvatarGroup
+                        {/* <AvatarGroup
                           avatars={generateAvatars(
                             Number(
                               beneficiaryList &&
                                 beneficiaryList[0]?.data?.length
                             )
                           )}
+                        /> */}
+
+                        <AvatarGroup
+                          avatars={generateAvatars(srcArray.length, srcArray)}
                         />
                       </div>
                     </div>
@@ -120,6 +129,7 @@ const Page = () => {
           <FamilyBeneficiary
             beneficiaryList={beneficiaryList && beneficiaryList[0]}
             loading={isLoading}
+            setFiterStatus={setFiterStatus}
           />
         </div>
       </div>

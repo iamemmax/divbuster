@@ -22,9 +22,11 @@ import CorporateCard from "../../comp/components/cards/CorporateCard";
 const Page = () => {
   const [BuyPlan, setBuyPlan] = useState(false);
   const { data: userData, isLoading } = useUser();
+  const [fiterStatus, setFiterStatus] = useState("");
+
   const { data: beneficiaryList, isLoading: loadingBeneficial } = useQuery({
-    queryFn: getBeneficiaries,
-    queryKey: ["fetch-Beneficiaries-list"],
+    queryFn: () => getBeneficiaries(fiterStatus),
+    queryKey: ["fetch-Beneficiaries-list", fiterStatus],
     enabled: !!userData?.phone_number,
   });
 
@@ -64,6 +66,7 @@ const Page = () => {
           <CorporateBeneficiary
             beneficiaryList={beneficiaryList && beneficiaryList[1]}
             loading={isLoading}
+            setFiterStatus={setFiterStatus}
           />
         </div>
       </div>

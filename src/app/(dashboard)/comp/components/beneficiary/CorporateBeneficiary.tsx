@@ -23,22 +23,34 @@ import {
 } from "@tanstack/react-table";
 import moment from "moment";
 import { maskPhoneNumber } from "@/utils/strings";
-import { beneficiaryTypeProp } from "../plans/api/fetchBeneficairies";
+import {
+  BeneficiaryData,
+  beneficiaryTypeProp,
+} from "../plans/api/fetchBeneficairies";
 import ThreeDot from "../cards/icons/ThreeDot";
 import FiltersIcon from "../../icons/FilterIcons";
 import DebounceInput from "../misc/DebounceInput";
 import { NoData } from "../../icons";
+import { CaretDown } from "@/components/icons";
+import { statusColor } from "@/utils/statusColor";
+import { capitalizeFirstLetter } from "@/utils";
+import { useQuery } from "react-query";
+import { getPlan } from "@/app/(main)/misc/components/insurance/api/plan/getPlan";
+import SelectDurationModal from "../plans/SelectDurationModal";
+import Link from "next/link";
 
 const SkeletonLoading = () => (
   <div className="animate-pulse">
     <div className="h-3 bg-gray-200 rounded mb-2"></div>
   </div>
 );
-
 interface BenficiaryHeader {
-  enrolee: {
+  name: string;
+  phone_number: string;
+  email: string | null;
+  type_of_beneficary?: string;
+  enrolee?: {
     created_at: string;
-    middle_name: string;
     last_name: string;
     first_name: string;
     phone_number: string;
@@ -46,33 +58,85 @@ interface BenficiaryHeader {
     email: string;
   };
   ctx?: any;
+  status: string;
+  id?:number;
 }
 
 interface Prop {
   beneficiaryList: beneficiaryTypeProp | undefined;
   loading: boolean;
+  setFiterStatus: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const CorporateBeneficiary = ({
   beneficiaryList,
   loading: isLoading,
+  setFiterStatus,
 }: Prop) => {
   const columnHelper = createColumnHelper<BenficiaryHeader>();
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [selectedData, setSelectedData] = useState<BeneficiaryData[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [showDurationModal, setShowDurationModal] = useState(false);
+  const { data: plansData } = useQuery({
+    queryFn: getPlan,
+    queryKey: ["get-plans"],
+  });
+  const [beneficiariesList, setBeneficiariesList] = useState<{
+    beneficiaries: {
+      name_of_beneficiary: string;
+      phone_number_of_beneficiary: string;
+      type_of_beneficary?: "ADULT" | "MINOR" | undefined;
+    }[];
+  }>();
+  const rows = useMemo(
+    () => beneficiaryList?.data ?? [],
+    [beneficiaryList && beneficiaryList?.data]
+  );
+
+  const toggleSelectAll = () => {
+    if (selectAll) {
+      setSelectedRows([]);
+      setSelectedData([]);
+    } else {
+      const allIndices = rows.map((_, index) => index);
+      setSelectedRows(allIndices);
+      setSelectedData(rows);
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const toggleRowSelection = (index: number) => {
+    if (selectedRows.includes(index)) {
+      setSelectedRows((prev) => prev.filter((i) => i !== index));
+      setSelectedData((prev) => prev.filter((_, i) => i !== index));
+    } else {
+      setSelectedRows((prev) => [...prev, index]);
+      setSelectedData((prev) => [...prev, rows[index]]);
+    }
+  };
 
   const columns = [
+    columnHelper.display({
+      id: "select",
+      header: ({ table }) => (
+        <input type="checkbox" checked={selectAll} onChange={toggleSelectAll} />
+      ),
+      cell: ({ row }) => (
+        <input
+          type="checkbox"
+          checked={selectedRows.includes(row.index)}
+          onChange={() => toggleRowSelection(row.index)}
+        />
+      ),
+    }),
     columnHelper.accessor("enrolee.created_at", {
       header: () => "Date/Time",
       cell: (info) => moment(info.getValue()).format("YYYY-MM-DD HH:mm:ss"),
     }),
     columnHelper.accessor("enrolee.first_name", {
       header: () => "Beneficiaries",
-      cell: (info) => (
-        <p>
-          {`${info?.row?.original?.enrolee?.first_name} `}
-          {`${info?.row?.original?.enrolee?.middle_name} `}
-          {`${info?.row?.original?.enrolee?.last_name}`}
-        </p>
-      ),
+      cell: (info) => info?.getValue(),
     }),
     columnHelper.accessor("enrolee.phone_number", {
       header: () => "Phone Number",
@@ -82,34 +146,59 @@ const CorporateBeneficiary = ({
       header: () => "Referral code",
       cell: (info) => info?.getValue(),
     }),
-    columnHelper.accessor("enrolee.email", {
+    columnHelper.accessor("email", {
       header: () => "Email",
-      cell: (info) => <div className=" ">{info.getValue()}</div>,
+      cell: (info) => (
+        <div className=" ">{info.getValue() ? info?.getValue() : "Nil"}</div>
+      ),
+    }),
+    columnHelper.accessor("status", {
+      header: () => "Status",
+      cell: (info) => {
+        const { color, backgroundColor } = statusColor(
+          capitalizeFirstLetter(info?.getValue())
+        );
+
+        return (
+          <p
+            className="block w-auto max-w-[6.25rem] text-center text-xs font-medium rounded-10 px-3 py-2"
+            style={{
+              color,
+              backgroundColor,
+            }}
+          >
+            {capitalizeFirstLetter(info?.getValue())}
+          </p>
+        );
+      },
     }),
     columnHelper.accessor("ctx", {
       header: () => "Action",
-      cell: () => {
+      cell: (info) => {
+        const rowData = info.row.original;
         return (
           <TableCell>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="flex items-center outline-none bg-white text-[#556575] text-sm font-medium px-5 border-[#D6D6D6] gap-x-2">
-                  <ThreeDot /> {/* Use an appropriate icon or text */}
+                  <ThreeDot />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className=" px-4  rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
+                className="px-4 bg-white z-50 rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
                 sideOffset={5}
                 align="end"
               >
+                <Link href={`/dashboard/view-beneficiary/${info?.row.original?.id}`}>
                 <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  Cancel
+                View Details
                 </DropdownMenuItem>
-                <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  Disable
-                </DropdownMenuItem>
-                <DropdownMenuItem className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100">
-                  Remove
+                </Link>
+                <DropdownMenuItem
+                  className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100"
+                  onClick={() => handleRenewOneActionOnSelected(rowData)}
+                >
+                  Renew
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -131,10 +220,37 @@ const CorporateBeneficiary = ({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const rows = useMemo(
-    () => beneficiaryList?.data ?? [],
-    [beneficiaryList && beneficiaryList?.data]
-  );
+  const handleRenewActionOnSelected = () => {
+    const myList = selectedData?.map((data) => ({
+      name_of_beneficiary: data?.name,
+      phone_number_of_beneficiary: data?.phone_number,
+      type_of_beneficary: data?.type_of_beneficary as
+        | "ADULT"
+        | "MINOR"
+        | undefined, // Ensure the correct type is used here
+    }));
+
+    setBeneficiariesList({ beneficiaries: myList });
+    setShowDurationModal(true);
+  };
+
+  const handleRenewOneActionOnSelected = (row: BenficiaryHeader) => {
+    const myList = {
+      name_of_beneficiary: row?.name,
+      phone_number_of_beneficiary: row?.phone_number,
+      type_of_beneficary: row?.type_of_beneficary as
+        | "ADULT"
+        | "MINOR"
+        | undefined,
+    };
+
+    // Update the beneficiariesList state with the new item inside the beneficiaries array
+    setBeneficiariesList({
+      beneficiaries: [myList], // Wrap the single item in an array and assign it to the beneficiaries property
+    });
+
+    setShowDurationModal(true);
+  };
 
   return (
     <div className="px-6  md:px-[4.5rem] lg:px-[7.5rem]">
@@ -154,6 +270,91 @@ const CorporateBeneficiary = ({
                 value={globalFilter ?? ""}
                 onChange={(value) => setGlobalFilter(String(value))}
               />
+            </div>
+          </div>
+
+          <div className="flex gap-x-3">
+            {selectedData?.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="flex items-center outline-none bg-[#f6f9ff] text-[#032282] text-sm font-medium px-3 border-[#D6D6D6] gap-x-1">
+                    Actions <CaretDown color="#032282" />
+                    {/* Use an appropriate icon or text */}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className=" px-4  bg-white z-50 rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
+                  sideOffset={5}
+                  align="end"
+                >
+                  <DropdownMenuItem
+                    className="group text-[13px] leading-none text-gray-700 rounded-[3px] flex items-center h-[25px] cursor-pointer font-medium select-none outline-none hover:bg-gray-100"
+                    onClick={handleRenewActionOnSelected}
+                  >
+                    Renew plan
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+            <div className="">
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button className="flex items-center outline-none bg-white border-[.05rem] text-[#556575] text-sm font-medium px-5 border-[#D6D6D6] gap-x-2">
+                    <FiltersIcon /> Filter
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="min-w-[100px] px-4 bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade">
+                  <DropdownMenuItem
+                    className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    defaultValue={""}
+                    onClick={() => setFiterStatus("")}
+                  >
+                    All
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group text-[13px]  leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    // defaultValue={"SUCCESS"}
+                    onClick={() => setFiterStatus("SUCCESS")}
+                  >
+                    SuccessFul
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    // defaultValue={"PENDING"}
+                    onClick={() => setFiterStatus("PENDING")}
+                  >
+                    Pending
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    // defaultValue={"FAILED"}
+                    onClick={() => setFiterStatus("FAILED")}
+                  >
+                    Failed
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    // defaultValue={"COMPLETED"}
+                    onClick={() => setFiterStatus("COMPLETED")}
+                  >
+                    Completed
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    // defaultValue={"CANCELLED"}
+                    onClick={() => setFiterStatus("CANCELLED")}
+                  >
+                    Cancelled
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] relative cursor-pointer font-medium select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                    // defaultValue={"EXPIRED"}
+                    onClick={() => setFiterStatus("EXPIRED")}
+                  >
+                    Expired
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
@@ -274,6 +475,16 @@ const CorporateBeneficiary = ({
           )}
         </div>
       </div>
+      {showDurationModal && (
+        <SelectDurationModal
+          isSelectPlanModalOpen={showDurationModal}
+          setSelectPlanModal={setShowDurationModal}
+          beneficiariesList={beneficiariesList}
+          planType="CORPORATE"
+          selectedPlan={plansData && plansData[2]?.data}
+          actionType="renewal"
+        />
+      )}
     </div>
   );
 };

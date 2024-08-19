@@ -41,6 +41,7 @@ import {
 } from "./util/planCalc";
 import { useAddMoreToBeneficiaryList } from "./api/addMoreBeneficiries";
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
+import { useRenewBeneficiaryList } from "./api/renewBeneficiaries";
 
 export interface successProp {
   account_number: number;
@@ -73,6 +74,7 @@ interface UseBooleanStateControlProps {
     | undefined;
   selectedPlan: PlanData[] | undefined;
   planType: string;
+  actionType: string;
 }
 
 function SelectDurationModal({
@@ -81,6 +83,7 @@ function SelectDurationModal({
   beneficiariesList,
   selectedPlan,
   planType,
+  actionType,
 }: UseBooleanStateControlProps) {
   const {
     isErrorModalOpen,
@@ -160,31 +163,57 @@ function SelectDurationModal({
 
   const { mutate: addMoreBeneficiary, isLoading: loadingMoreBeneficiary } =
     useAddMoreToBeneficiaryList();
+  const { mutate: handleRenewBene, isLoading: loadingRenew } =
+    useRenewBeneficiaryList();
   const makePayment = () => {
-    if (users?.paid_beneficiary_requests?.includes(planType)) {
-      addMoreBeneficiary(
-        {
-          beneficiariesList:
-            beneficiariesList?.beneficiaries as beneficailData[],
-          packages: planType,
-          duration: Number(selectedValue),
-        },
-        {
-          onSuccess: (data: successProp) => {
-            setPaymentProp(data);
-            setSelectPlan(true);
+    if (actionType === "makePayment") {
+      if (users?.paid_beneficiary_requests?.includes(planType)) {
+        addMoreBeneficiary(
+          {
+            beneficiariesList:
+              beneficiariesList?.beneficiaries as beneficailData[],
+            packages: planType,
+            duration: Number(selectedValue),
           },
-          onError: (error) => {
-            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-expect-error
-            setErrorMsg(error?.response?.data?.error);
-            openErrorModalWithMessage(String(errorMessage));
+          {
+            onSuccess: (data: successProp) => {
+              setPaymentProp(data);
+              setSelectPlan(true);
+            },
+            onError: (error) => {
+              const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-expect-error
+              setErrorMsg(error?.response?.data?.error);
+              openErrorModalWithMessage(String(errorMessage));
+            },
+          }
+        );
+      } else {
+        handleAddBeneficiary(
+          {
+            beneficiariesList:
+              beneficiariesList?.beneficiaries as beneficailData[],
+            packages: planType,
+            duration: Number(selectedValue),
           },
-        }
-      );
+          {
+            onSuccess: (data: successProp) => {
+              setPaymentProp(data);
+              setSelectPlan(true);
+            },
+            onError: (error) => {
+              const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-expect-error
+              setErrorMsg(error?.response?.data?.error);
+              openErrorModalWithMessage(String(errorMessage));
+            },
+          }
+        );
+      }
     } else {
-      handleAddBeneficiary(
+      handleRenewBene(
         {
           beneficiariesList:
             beneficiariesList?.beneficiaries as beneficailData[],
@@ -263,7 +292,7 @@ function SelectDurationModal({
 
                 <div className="flex items-center gap-x-2 w-full py-4 bg-black rounded-lg mt-3 justify-center">
                   <p className="text-white text-lg font-bold">Total:</p>
-                  {planType !== "INDIVIDUAL" && (
+                  {planType !== "LOVE_ONES" && (
                     <p className="text-white line-through text-lg text-opacity-80 font-bold">
                       {totalAmount !== null
                         ? formatCurrency(
@@ -289,6 +318,7 @@ function SelectDurationModal({
                   >
                     Make payment{" "}
                     {isLoading ||
+                      loadingRenew ||
                       (loadingMoreBeneficiary && (
                         <SmallSpinner className="" color="#1B1687" />
                       ))}
