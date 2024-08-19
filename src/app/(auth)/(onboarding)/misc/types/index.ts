@@ -242,7 +242,8 @@ export interface UserDataTypes {
   is_staff: string;
   referral_code: string
   subscription_status: "NOT_ACTIVE" | "PENDING" | "PENDING" | "EXPIRED" | "SUCCESS" | "FAILED"
-   paid_beneficiary_requests: string[]
+   paid_beneficiary_requests: string[];
+   profile_image: string
 }
 
 interface Hospitals {

@@ -41,38 +41,9 @@ interface Prop {
         id: string;
     };
 }
-interface SuccessMsg {
-    // message: string;
-    id: string;
-    first_name: string;
-    last_name: string;
-    phone_number: string;
-    gender: string;
-    hospitals: Hospitals;
-    phone_verified: boolean;
-    nin: null;
-    bvn: string;
-    email: string;
-    address: string;
-}
-
-interface Hospitals {
-    state: string;
-    lga: string;
-    provider_id: string;
-    hospital: string;
-}
-
-interface Hospitals {
-    lga: string;
-    state: string;
-    hospital: string;
-    provider_id: string;
-}
 
 
 const formValues = z.object({
-
     name: z.string().trim(),
     phone_number: z.string().trim(),
     email: z
@@ -168,6 +139,7 @@ export default function Page() {
             setValue("state", userData.state || "");
             setValue('nin', userData?.nin || "")
             setValue('bvn', userData?.bvn || "")
+            setProfilePic(userData?.profile_image || '/images/userIcon.png')
         }
 
     }, [isloadingUserdata])
@@ -403,10 +375,8 @@ export default function Page() {
                                             />
                                         </div>
 
-                                        <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload'>
-                                            <Upload
-                                                onClick={handleFileUpload}
-                                            />
+                                        <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload' onClick={handleFileUpload}>
+                                            <Upload />
                                             <p className='text-[#032282] font-medium'>Upload</p>
                                         </Button>
                                         <Button className='bg-[#F5F9FE] gap-1 px-4 py-3'>
