@@ -258,7 +258,6 @@ const NonRemitalModal = ({
                   )}
                 />
               </div>
-
               {watchSelectedOption === "bvn" && (
                 <div className="w-full mt-[1rem] text-sm font-normal">
                   <Label
@@ -279,7 +278,6 @@ const NonRemitalModal = ({
                   </div>
                 </div>
               )}
-
               {watchSelectedOption === "nin" && (
                 <div className="w-full mt-[1rem] text-sm font-normal">
                   <Label
