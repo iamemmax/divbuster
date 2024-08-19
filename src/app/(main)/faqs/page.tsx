@@ -17,40 +17,40 @@ export default function page() {
       answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
     },
     {
-      question: "How many people can use the family plan?",
-      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+      question: "How can I register to a healthcare plan?",
+      answer: "You can easily register by dialling the USSD code *347*180*9# on any mobile phone. No internet or smartphone is needed, just your Bank Verification Number (BVN)."
     },
     {
-      question: "What payment methods are accepted?",
-      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+      question: "What does LibertyLife Micro Insurance cover?",
+      answer: "The plan covers a wide range of healthcare services, from basic needs like doctor consultations, medications, and hospitalizations to fitness programs and mental health services, ensuring all your essential health needs are met."
     },
     {
-      question: "What is Liberty Life?",
-      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+      question: "Who is eligible for LibertyLife Micro Insurance?",
+      answer: "All Nigerians with a BVN are eligible to enrol in LibertyLife Micro Insurance. It's especially designed for low-income earners and those who may not have access to traditional health insurance."
     },
     {
-      question: "What is Liberty Life?",
-      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+      question: "How much does LibertyLife Micro Insurance cost?",
+      answer: "The premiums are tailored to be budget-friendly for the average Nigerian, starting as low as 3,000 Naira. With flexible payment options, you can easily access comprehensive healthcare coverage."
     },
     {
-      question: "What is Liberty Life?",
-      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+      question: "Can I register or connect to an agent if I have no data or smartphone?",
+      answer: "Yes, you can! With LibertY Life, you don't need data or a smartphone to register or connect with an agent. Simply dial *347*180*9# on any mobile phone, and you're good to go!"
     },
     {
-      question: "What is Liberty Life?",
-      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+      question: "How do I pay my premiums?",
+      answer: "Premiums can be conveniently paid either through automatic salary deductions for Remita customers or via a virtual account for non-Remita customers. No matter which option you choose, the payment process is seamless."
     },
     {
-      question: "What is Liberty Life?",
-      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+      question: "What makes Liberty Life Micro Insurance different from other health insurance plans?",
+      answer: "LibertyLife Micro Insurance is specifically designed for affordability and accessibility. It's tailored for low-income earners and those without access to traditional health insurance, and it's easy to register using the USSD code*347*180*9#."
     },
     {
-      question: "What is Liberty Life?",
-      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+      question: "How does Liberty Life support corporations and businesses?",
+      answer: "Corporations and businesses can offer LibertyLife as a benefit to their employees or staff, providing them with affordable health coverage and peace of mind."
     },
     {
-      question: "What is Liberty Life?",
-      answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
+      question: "Would I have 24/7 access to customer support?",
+      answer: "LibertyLife offers dedicated service managers to assist with onboarding, customer support, and retention, ensuring a smooth and positive experience for all potential, new and existing customers."
     },
   ]
 
@@ -99,7 +99,7 @@ export default function page() {
 
               return (
                 <Collapsible key={index}>
-                  <CollapsibleTrigger className='flex items-center text-left justify-between bg-[#FFFFFF1A] p-4 md:p-7 rounded-lg text-xs md:text-[15px] font-normal w-full font-sans'onClick={() => setIsOpen(!isOpen)} >
+                  <CollapsibleTrigger className='flex items-center text-left justify-between bg-[#ffffff11] p-4 md:p-7 rounded-lg text-xs md:text-[14px] lg:text-[15px] font-normal w-full font-sans'onClick={() => setIsOpen(!isOpen)} >
                     {faq.question}
                     <CaretDown className={cn(isOpen && "rotate-180")} />
                   </CollapsibleTrigger>
@@ -121,7 +121,7 @@ export default function page() {
               return (
                 <Collapsible key={index} open={isOpen}>
                   <CollapsibleTrigger
-                    className='flex items-center text-left justify-between bg-[#ffffff11] p-4 md:p-7 rounded-lg text-xs md:text-[15px] font-normal w-full font-sans '
+                    className='flex items-center text-left justify-between bg-[#ffffff11] p-4 md:p-7 rounded-lg text-xs md:text-[13px] lg:text-[15px] font-normal w-full font-sans '
                     onClick={() => setIsOpen(!isOpen)}
                   >
                     {faq.question}

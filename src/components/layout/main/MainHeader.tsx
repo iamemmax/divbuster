@@ -143,14 +143,15 @@ export function MainHeader() {
           {!isAuthenticated ? (
             <a
               className={cn(
-                "hidden md:flex items-center justify-between md:max-lg:text-sm lg:text-base text-white text-left p-0 bg-transparent rounded-full max-w-max",
+                "hidden md:flex bg-white text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 text-main items-center justify-between rounded-full max-w-max",
                 "font-display"
               )}
               href="/login"
-              // target="_blank"
-              // variant="white"
             >
               Login
+              <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
+                <RightUpArrow className="" height={12} width={12} />
+              </span>
             </a>
           ) : (
             <a
@@ -159,8 +160,8 @@ export function MainHeader() {
                 "font-display"
               )}
               href="/dashboard"
-              // target="_blank"
-              // variant="white"
+            // target="_blank"
+            // variant="white"
             >
               Dashboard
             </a>

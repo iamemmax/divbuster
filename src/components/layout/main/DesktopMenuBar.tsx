@@ -204,6 +204,13 @@ export const linkGroups = [
     isExternal: false,
   },
   {
+    link: "/about-us",
+    text: "About us",
+    icon: undefined,
+    disabled: false,
+    isExternal: false,
+  },
+  {
     link: "/plan",
     text: "Plans",
     icon: undefined,
@@ -218,13 +225,7 @@ export const linkGroups = [
     disabled: false,
     isExternal: false,
   },
-  {
-    link: "/about-us",
-    text: "About us",
-    icon: undefined,
-    disabled: false,
-    isExternal: false,
-  },
+  
   {
     link: "/faqs",
     text: "Faqs",
@@ -233,7 +234,7 @@ export const linkGroups = [
     isExternal: false,
   },
   {
-    link: "/blogs",
+    // link: "/blogs",
     text: "Blogs",
     icon: undefined,
     disabled: false,
@@ -262,6 +263,13 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
       isExternal: false,
     },
     {
+      link: "/about-us",
+      text: "About us",
+      icon: undefined,
+      disabled: false,
+      isExternal: false,
+    },
+    {
       link: "/plan",
       text: "Plans",
       icon: undefined,
@@ -277,13 +285,6 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
       isExternal: false,
     },
     {
-      link: "/about-us",
-      text: "About us",
-      icon: undefined,
-      disabled: false,
-      isExternal: false,
-    },
-    {
       link: "/faqs",
       text: "FAQs",
       icon: undefined,
@@ -291,7 +292,7 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
       isExternal: false,
     },
     {
-      link: "/blogs",
+      link: "/faqs",
       text: "Blogs",
       icon: undefined,
       disabled: false,

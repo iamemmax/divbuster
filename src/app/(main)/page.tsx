@@ -132,13 +132,12 @@ export default function Home() {
                 for you and your family.
               </span>
             </h1>
-            <p className="xl:max-w-[80%] flex font-sans text-[0.825rem] md:text-xl text-helper">
+            <p className="xl:max-w-[100%] font-sans text-[0.825rem] md:text-xl text-helper">
               <span>
-                Get a comprehensive health cover and stand a chance to benefit
-                from a lifestyle reward of
+                Get a comprehensive health cover and stand a chance to benefit from
               </span>
-              <span className="flex">
-                <span className="flex flex-col ml-2 text-white">
+              <span className=" flex flex-wrap">  a lifestyle reward of
+                <span className="flex flex-col ml-3 text-white">
                   ₦500,000
                   <UnderLine />
                 </span>
@@ -198,39 +197,60 @@ export default function Home() {
             className={cn(
               "px-3 2xl:px-6 flex flex-col items-stretch lg:grid lg:grid-cols-2 gap-4 rounded-[20px] xl:py-8 bg-[#FFFFFF08]"
             )}
-          >
+            >
             <div
               className={cn(
-                "bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-3 md:px-6 flex flex-col items-stretch md:flex-row gap-4 md:gap-8"
+                "bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-3 md:px-6 flex flex-col md:flex-row gap-4 md:gap-8"
               )}
-            >
-              <div className="basis-1/2 flex flex-col items-center justify-center">
-                <CrossIcon />
-
-                <div className="border-[0.3px] rounded-xl px-11 md:px-6 py-6 md:py-11 grow lg:grow-0 border-[#475ffd54] bg-[#161D42] -mt-5">
-                  <p className="text-xs md:text-sm text-center">
+              >
+              <div className="flex flex-col items-start justify-center">
+                <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-11 md:px-[19px] border-[#475ffd54] bg-[#161D42]">
+                  <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
+                    Standard Hospitals
+                  </h3>
+                  <p className="text-xs md:text-sm text-center mt-2 font-sans text-[#CAC9D4]">
                     Over 1000+ Hospitals readily available based on your
                     proximity.
                   </p>
+                  <div className="hidden md:flex gap-3 py-3">
+                    <LinkButton
+                      className="text bg-transparent px-3 py-2.5 text-white"
+                      color="#ffffff"
+                      href={`/faqs`}
+                    >
+                      Learn more <LearnMore />
+                    </LinkButton>
+                  </div>
                 </div>
               </div>
-              <div className="basis-1/2  flex flex-col items-center justify-center">
-                <GroupIcon />
-
-                <div className="border-[0.3px] rounded-xl py-6 md:py-11 px-10 md:px-6 border-[#475ffd54] bg-[#161D42] -mt-5">
-                  <p className="text-xs md:text-sm text-center">
-                    Premium health cover for both corporate and individuals
-                    users.
+              <div className="flex flex-col items-start justify-center">
+                <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-11 md:px-[19px] border-[#475ffd54] bg-[#161D42]">
+                  <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
+                  Comprehensive Plans
+                  </h3>
+                  <p className="text-xs md:text-sm text-center mt-2 font-sans text-[#CAC9D4]">
+                  Premium health cover for both corporate and individuals
+                  users.
                   </p>
+                  <div className="hidden md:flex gap-3 py-3">
+                    <LinkButton
+                      className="text bg-transparent px-3 py-2.5 text-white"
+                      color="#ffffff"
+                      href={`/faqs`}
+                    >
+                      Learn more <LearnMore />
+                    </LinkButton>
+                  </div>
                 </div>
               </div>
+              {/* bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-4 md:px-8 flex items-start sm:items-center flex-col md:flex-row  gap-4 mb-16 md:mb-0 lg:gap-2 */}
             </div>
 
             <div
               className={cn(
-                "bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-4 md:px-8 flex items-start sm:items-center flex-col md:flex-row gap-4 mb-16 md:mb-0 lg:gap-2"
+                "bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-4 md:px-8 grid md:grid-cols-2 gap-4 mb-16 md:mb-0 lg:gap-2"
               )}
-            >
+              >
               <div className="flex flex-col items-center justify-center">
                 <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-11 md:px-[19px] border-[#475ffd54] bg-[#161D42]">
                   <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
@@ -244,7 +264,7 @@ export default function Home() {
                     <LinkButton
                       className="text bg-transparent px-3 py-2.5 text-white"
                       color="#ffffff"
-                      href={`/learn-more`}
+                      href={`/faqs`}
                     >
                       Learn more <LearnMore />
                     </LinkButton>
@@ -252,19 +272,18 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex flex-col items-start justify-center">
-                <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-11 md:px-[19px] border-[#475ffd54] bg-[#161D42]">
+                <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-5 md:px-[10px] border-[#475ffd54] bg-[#161D42]">
                   <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
-                    Standard Hospitals
+                  Hassle free registration
                   </h3>
                   <p className="text-xs md:text-sm text-center mt-2 font-sans text-[#CAC9D4]">
-                    For every insurance plan you buy, you stand a chance to get
-                    a lifetime reward.
+                  Simply dial the USSD code, *347*180*9#, to connect to one of our agents and take the first step toward better health insurance services
                   </p>
-                  <div className="hidden md:flex gap-3 py-3">
+                  <div className="hidden md:flex gap-3 py-1">
                     <LinkButton
                       className="text bg-transparent px-3 py-2.5 text-white"
                       color="#ffffff"
-                      href={`/learn-more`}
+                      href={`/faqs`}
                     >
                       Learn more <LearnMore />
                     </LinkButton>
@@ -275,7 +294,7 @@ export default function Home() {
                 <LinkButton
                   className="text bg-transparent px-3 py-2.5 text-white"
                   color="#ffffff"
-                  href={`/learn-more`}
+                  href={`/faqs`}
                 >
                   Learn more <LearnMore />
                 </LinkButton>
@@ -299,7 +318,7 @@ export default function Home() {
           setVerifyResponse={setVerifyResponse}
           setUserEmail={setUserEmail}
           setShowPasswordModal={setShowPasswordModal}
-          // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
+        // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
         />
       )}
       {/* remitals ............................................................ remita.................... */}

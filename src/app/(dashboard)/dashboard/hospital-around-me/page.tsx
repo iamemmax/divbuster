@@ -106,7 +106,7 @@ const HospitalAround = () => {
                     <HospitalIcon2 />
                   </Button>
                   <h2 className="text-sm font-medium text-[#032282]">
-                    Hospital around me
+                    Hospitals around me
                   </h2>
                 </div>
                 {hospitalData && hospitalData.length > 10 && (
