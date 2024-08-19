@@ -226,8 +226,7 @@ function SelectDurationModal({
           },
           {
             onSuccess: (data: PaymentSuccessMsg) => {
-              // console.log(data);
-              // if (data?.message) {
+              
                 setPaymentProp({
                   account_name: data?.account_name,
                   plan_details: {
@@ -235,7 +234,6 @@ function SelectDurationModal({
                     price: data?.amount,
                     total_price: data?.amount,
                   },
-
                   wallet_balance: Number(data?.wallet_balance),
                   unique_request_id: String(data?.unique_request_id),
                   account_number: Number(data?.account_no),
@@ -243,7 +241,7 @@ function SelectDurationModal({
                   paystack_link: data?.paystack_link,
                   people_added: Number(1),
                 });
-              // }
+            
               setSelectPlan(true);
             },
             onError: (error) => {
@@ -257,27 +255,8 @@ function SelectDurationModal({
           }
         );
       } else {
-        // handleAddBeneficiary(
-        //   {
-        //     beneficiariesList:
-        //       beneficiariesList?.beneficiaries as beneficailData[],
-        //     packages: planType?.toUpperCase(),
-        //     duration: Number(selectedValue),
-        //   },
-        //   {
-        //     onSuccess: (data: successProp) => {
-        //       setPaymentProp(data);
-        //       setSelectPlan(true);
-        //     },
-        //     onError: (error) => {
-        //       const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-        //       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //       //@ts-expect-error
-        //       setErrorMsg(error?.response?.data?.error);
-        //       openErrorModalWithMessage(String(errorMessage));
-        //     },
-        //   }
-        // );
+    
+  
 
         handleRenewBene(
           {
