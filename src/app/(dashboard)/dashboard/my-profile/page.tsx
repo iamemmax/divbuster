@@ -133,6 +133,7 @@ export default function Page() {
     useEffect(() => {
         if (!isloadingUserdata && userData) {
             setValue("name", userData?.first_name || "");
+            setValue("name", userData?.middle_name || "");
             setValue("name", userData?.last_name || "");
             setValue("phone_number", userData?.phone_number || "");
             setValue("email", userData?.email || "");
