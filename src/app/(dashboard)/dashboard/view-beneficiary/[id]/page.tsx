@@ -236,14 +236,20 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
         </div>
       </div>
       {/* <ViewBeneficiaryHeader userData={undefined} loadinUser={false} /> */}
-      <div className='px-[120px] bg-[#F0F5FF] flex grow'>
-        <section className='grid grid-cols-4'>
+      <div className='px-6 md:px-10 lg:px-[120px] bg-[#F0F5FF] '>
+        <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
           {beneficiary?.map((beneficiaries, index) => {
             return (
               <div key={index}>
                 <article className='bg-white p-2 rounded-10 mt-10'>
                   <div className=' bg-[#F0F5FF] rounded-10 px-6 p-4 pb-6'>
-                    <p className='text-[#EF4444] bg-[#EF444426] rounded-md px-2 py-1 text-xxs max-w-[74px]'>{beneficiaries.status}</p>
+                    {/* <p className='text-[#EF4444] bg-[#EF444426] rounded-md px-2 py-1 text-xxs max-w-[74px]'>{beneficiaries.status}</p> */}
+                    <div>{beneficiaries?.status === "EXPIRED" ? (
+                      <div className='text-[#EF4444] bg-[#EF444426] rounded-md px-2 py-1 text-xxs max-w-[74px]'>Expired</div>
+                      ) : (
+                        <div className=' text-[#099976] bg-[#31D0AA26] rounded-md px-2 py-1 text-xxs max-w-[74px] text-nowrap'>Running Plan</div> 
+                      ) 
+                    }</div>
                     <div className='grid grid-cols-2 mt-2.5'>
                       <div className='text-[#032282] font-medium text-xs'>
                         {beneficiaries.amount}
