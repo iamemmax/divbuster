@@ -334,7 +334,7 @@ export default function Page() {
                 <div className='bg-[#F5F9FE]'>
                     <div className='bg-main min-h-36'></div>
                     <section className="h-full w-full px-6 md:px-[7.5rem] min-h-screen pb-[1.88rem] relative -mt-32">
-                        <div className='bg-white w-full h-full lg:h-screen mx-auto pt-[2.625rem] px-[4.5rem] rounded-[.625rem]'>
+                        <div className='bg-white w-full h-full lg:h-screen mx-auto pt-[2.625rem] px-6 lg:px-[4.5rem] rounded-[.625rem]'>
                             <p className='text-[#032282] font-sans font-bold text-2xl'>Personal Information</p>
                             <section className='mt-8 flex flex-col lg:flex-row justify-between'>
                                 <div className='flex justify-between items-center gap-4'>

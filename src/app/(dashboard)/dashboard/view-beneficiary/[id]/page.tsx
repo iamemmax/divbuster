@@ -9,15 +9,12 @@ import { Button, LinkButton } from "@/components/core";
 import { SmallSpinner } from "@/icons/core";
 import { capitalizeFirstLetter } from "@/utils";
 import { UserDataTypes, useUser } from "@/app/(auth)/(onboarding)/misc";
-import { useClipboard } from "@/hooks";
 import { getPlan } from "@/app/(main)/misc/components/insurance/api/plan/getPlan";
 import Image from "next/image";
 import { fetchReferralCode } from '../../api/referral/fetchReferralCode'
-import { getUserCurrentPlan } from '../../api/getCurrentPlan'
 import MakePaymentDetailsModal from '@/app/(dashboard)/comp/components/payment/MakePaymentDetailsModal'
 import MakePaymentModal from '@/app/(dashboard)/comp/components/payment/MakePayment'
 import ActiveIcon from '@/app/(dashboard)/comp/icons/ActiveIcon'
-import CopyIcon3 from '@/app/(dashboard)/comp/icons/CopyIcon3'
 import { convertToTitleCase } from '@/utils/strings'
 import { cn } from '@/utils/classNames'
 import BackIcon from '@/app/(dashboard)/comp/icons/Backicon'
@@ -29,22 +26,15 @@ interface Prop {
   loadinUser: boolean;
 }
 
-
-
-
 const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadinUser, userData: users }: Prop) => {
   const { id } = params
   const { data: beneficiary } = useQuery({
     queryFn: () => getBeneficiaryPlan(id),
     queryKey: ['get-beneficiary']
   })
-  console.log(beneficiary, "BEEEEEEEEEEEEEEEen")
-
-
 
   const { data: userData, isLoading } = useUser();
 
-  const { copy } = useClipboard();
   const queryClient = useQueryClient();
   const [showMakePaymentModal, setshowMakePaymentModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -57,8 +47,6 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
   });
   const {
     data,
-    refetch,
-
     isLoading: loadinGenerate,
   } = useQuery({
     queryFn: () => fetchReferralCode(userData?.user_id as string),
@@ -82,15 +70,15 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
   return (
     <div>
       <div>
-         <div className="bg-main px-6 flex pt-5 items-start md:px-[4.5rem] lg:px-[7.5rem]">
-                <LinkButton
-                  href={"/dashboard"}
-                  className="flex items px-0 bg-transparent gap-3"
-                >
-                  <BackIcon />
-                  <h2 className="text-white font-bold text-2xl">Plan Details</h2>
-                </LinkButton>
-              </div>
+        <div className="bg-main px-6 flex pt-5 items-start md:px-[4.5rem] lg:px-[7.5rem]">
+          <LinkButton
+            href={"/dashboard"}
+            className="flex items px-0 bg-transparent gap-3"
+          >
+            <BackIcon />
+            <h2 className="text-white font-bold text-2xl">Plan Details</h2>
+          </LinkButton>
+        </div>
         <div className=" bg-main py-6 px-6  md:px-[4.5rem] lg:px-[7.5rem]  ">
           {isLoading ? (
             <div className="w-full h-24 flex justify-center items-center">
@@ -98,9 +86,7 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
               <SmallSpinner color="white" />
             </div>
           ) : (
-            
             <div className="bg-main w-full flex justify-between flex-wrap  gap-3 items-center   ">
-             
               <div className="flex items-center  gap-x-3 ">
                 <div className="text-white h-[2.5rem] w-[2.5rem]">
                   <Image
@@ -122,7 +108,7 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
                           <h2 className="text-sm flex text-[#FFFFFFB2] font-medium font-sans">
                             <div>
                               <p className="text-white text-sm"> <span className="text-[#8490A8] text-sm">Phone Number:</span>{beneficiary?.phone_number}</p>
-                              <p><span className="text-[#8490A8] text-sm">Enrolment Id:</span> {beneficiary?.enrollment_number} </p>
+                              <p><span className="text-[#8490A8] text-sm">Enrolment Id:</span> {beneficiary?.enrollment_number ?? "Nil"} </p>
                             </div>
                           </h2>
                         </div>
@@ -144,11 +130,10 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
               <div className="flex items-center   gap-2  ">
-                
+
                 {makePayment && (
                   <Button
                     className="bg-[#099976] h-[2.8125rem] text-white  text-xs font-medium"
@@ -176,7 +161,6 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
               </div>
             </div>
           )}
-
           {showMakePaymentModal && (
             <MakePaymentModal
               isSelectPlanModalOpen={showMakePaymentModal}
@@ -186,7 +170,6 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
               setPaymentData={setPaymentData}
             />
           )}
-
           {showPaymentModal && (
             <MakePaymentDetailsModal
               showMakePaymentModal={showPaymentModal}
@@ -195,15 +178,9 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
             />
           )}
         </div>
-        
       </div>
-      {/* <ViewBeneficiaryHeader userData={undefined} loadinUser={false} /> */}
       <div className='px-6 md:px-10 lg:px-[120px] bg-[#F0F5FF]  pb-10'>
         <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-x-4 lg:gap-x-6'>
-          {/* {
-            beneficiary?.map((beneficiaries, index) => {
-              return (
-                <div key={index}> */}
           {
             beneficiary?.data.map((factors, ind) => (
               <div key={ind}>
@@ -223,18 +200,18 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
                     </div>
                     <div className='grid grid-cols-2 mt-2.5'>
                       <div className='text-[#032282] font-medium text-xs'>
-                        {factors?.amount}
+                        {factors?.amount ?? "Nil"}
                         <p className='text-[#8490A8] text-xxs'>Price</p>
                       </div>
-                      <div className='text-[#032282] font-medium text-xs'>{factors?.insurance_duration} month
+                      <div className='text-[#032282] font-medium text-xs'>{factors?.insurance_duration ?? "Nil"} month
                         <p className='text-[#8490A8] text-xxs'>Duration</p>
                       </div>
-                      <div className='text-[#032282] font-medium text-xs'>{format(factors?.date_created!, 'eee, qo MMM yyyy')}
+                      <div className='text-[#032282] font-medium text-xs'>{format(factors?.date_created!, 'eee, qo MMM yyyy') ?? "Nil"}
                         <p className='text-[#8490A8] text-xxs'>Date Created</p>
                       </div>
                       <div className='text-[#032282] font-medium text-xs'>
                         {factors?.due_date ?
-                          format(factors?.due_date!, 'eee, qo MMM yyyy')
+                          format(factors?.due_date!, 'eee, qo MMM yyyy' ?? "Nil")
                           :
                           ""
                         }
@@ -246,10 +223,6 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
               </div>
             ))
           }
-          {/* 
-                </div>
-              )
-            })} */}
         </section>
       </div>
     </div>
