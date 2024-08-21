@@ -140,7 +140,7 @@ export default function Page() {
             setValue("state", userData.state || "");
             setValue('nin', userData?.nin || "")
             setValue('bvn', userData?.bvn || "")
-            setProfilePic(userData?.profile_image || '/images/userIcon.png')
+            // setProfilePic(userData?.profile_image || '/images/userIcon.png')
         }
 
     }, [isloadingUserdata])
@@ -279,7 +279,7 @@ export default function Page() {
         );
     };
 
-    const [profilePic, setProfilePic] = useState('/images/userIcon.png');
+    const [profilePic, setProfilePic] = useState<string | null>(null);
     const fileInputRef = useRef(null);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -323,7 +323,7 @@ export default function Page() {
     };
 
     const handleDelete = () => {
-        setProfilePic('images/userIcon.png');
+        setProfilePic(null);
     };
 
     return (
@@ -341,7 +341,7 @@ export default function Page() {
                                     <div className='hidden md:flex relative'>
                                         <Image
                                             alt="profile"
-                                            src={profilePic}
+                                            src={profilePic || userData?.profile_image || '/images/userIcon.png'}
                                             height={100}
                                             width={100}
                                             className="rounded-full"
@@ -359,7 +359,7 @@ export default function Page() {
                                     <div className='flex md:hidden relative '>
                                         <Image
                                             alt="profile"
-                                            src={profilePic}
+                                            src={profilePic || userData?.profile_image || '/images/userIcon.png'}
                                             height={100}
                                             width={100}
                                             className="rounded-full"
@@ -374,17 +374,22 @@ export default function Page() {
                                             onChange={handleProfilePicChange}
                                         />
                                     </div>
+                                    {
+                                        profilePic &&
+                                        <>
 
-                                    <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload' onClick={handleFileUpload}>
-                                        <Upload />
-                                        <p className='text-[#032282] font-medium'>Upload</p>
-                                    </Button>
-                                    <Button className='bg-[#F5F9FE] gap-1 px-4 py-3'>
-                                        <Delete
-                                            onClick={handleDelete}
-                                        />
-                                        <p className='text-[#032282] font-medium'>Remove</p>
-                                    </Button>
+                                            <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload' onClick={handleFileUpload}>
+                                                <Upload />
+                                                <p className='text-[#032282] font-medium'>Upload</p>
+                                            </Button>
+                                            <Button className='bg-[#F5F9FE] gap-1 px-4 py-3'>
+                                                <Delete
+                                                    onClick={handleDelete}
+                                                />
+                                                <p className='text-[#032282] font-medium'>Remove</p>
+                                            </Button>
+                                        </>
+                                    }
                                 </div>
                                 {/* </form> */}
                                 <div className='flex flex-col md:flex-row gap-4 justify-between items-center mt-3 lg:mt-0'>
