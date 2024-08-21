@@ -1,13 +1,15 @@
 import { adminAxios } from "@/lib/axios"
 
 
+type UUID = string;
+type ISODateString = string;
 
-type Enrollee = {
-    id: string;
-    last_login: string | null;
+interface Enrolee {
+    id: UUID;
+    last_login: ISODateString | null;
     is_superuser: boolean;
-    created_at: string;
-    updated_at: string;
+    created_at: ISODateString;
+    updated_at: ISODateString;
     first_name: string;
     middle_name: string | null;
     last_name: string;
@@ -18,9 +20,9 @@ type Enrollee = {
     address: string | null;
     gender: string | null;
     organization: string | null;
-    date_of_birth: string | null;
+    date_of_birth: ISODateString | null;
     state: string | null;
-    due_date: string | null;
+    due_date: ISODateString | null;
     wema_account_details: string | null;
     account_number: string | null;
     has_set_password: boolean;
@@ -40,11 +42,11 @@ type Enrollee = {
     is_remita: boolean;
     is_active: boolean;
     profile_image: string | null;
-};
+}
 
-type BeneficiaryData = {
-    enrolee: Enrollee;
-    id: string;
+interface DataItem {
+    id: UUID;
+    enrolee: Enrolee;
     plan_type: string;
     insurance_duration: number;
     status: string;
@@ -52,13 +54,23 @@ type BeneficiaryData = {
     amount_paid: number;
     amount: number;
     is_deleted: boolean;
-    date_created: string;
-    date_updated: string;
-    activated_date: string | null;
-    due_date: string | null;
-};
+    date_created: ISODateString;
+    date_updated: ISODateString;
+    activated_date: ISODateString | null;
+    due_date: ISODateString | null;
+}
+
+interface BeneficiaryData {
+    full_name: string;
+    phone_number: string;
+    email: string | null;
+    health_plan_status: string;
+    enrollment_number: string | null;
+    data: DataItem[];
+}
+
 
 export const getBeneficiaryPlan = async (id:string) => {
     const {data} = await adminAxios.get(`/beneficiary_health_plan_details/${id}/`)
-    return data as BeneficiaryData[]
+    return data as BeneficiaryData
 }

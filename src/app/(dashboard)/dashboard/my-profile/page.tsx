@@ -337,56 +337,55 @@ export default function Page() {
                         <div className='bg-white w-full h-full lg:h-screen mx-auto pt-[2.625rem] px-[4.5rem] rounded-[.625rem]'>
                             <p className='text-[#032282] font-sans font-bold text-2xl'>Personal Information</p>
                             <section className='mt-8 flex flex-col lg:flex-row justify-between'>
-                                {/* <form encType='multipart/form-data'> */}
-                                    <div className='flex justify-between items-center gap-4'>
-                                        <div className='hidden md:flex relative'>
-                                            <Image
-                                                alt="profile"
-                                                src={profilePic}
-                                                height={100}
-                                                width={100}
-                                                className="rounded-full"
-                                            />
-                                            <div className='mt-[3.8rem] -ml-[1.5rem]'>
-                                                <Photo onClick={handleClick} />
-                                            </div>
-                                            <input
-                                                type="file"
-                                                ref={fileInputRef}
-                                                style={{ display: 'none' }}
-                                                onChange={handleProfilePicChange}
-                                            />
+                                <div className='flex justify-between items-center gap-4'>
+                                    <div className='hidden md:flex relative'>
+                                        <Image
+                                            alt="profile"
+                                            src={profilePic}
+                                            height={100}
+                                            width={100}
+                                            className="rounded-full"
+                                        />
+                                        <div className='mt-[3.8rem] -ml-[1.5rem]'>
+                                            <Photo onClick={handleClick} />
                                         </div>
-                                        <div className='flex md:hidden relative '>
-                                            <Image
-                                                alt="profile"
-                                                src={profilePic}
-                                                height={100}
-                                                width={100}
-                                                className="rounded-full"
-                                            />
-                                            <div className='mt-[3.8rem] -ml-[1.5rem]'>
-                                                <Photo onClick={handleClick} />
-                                            </div>
-                                            <input
-                                                type="file"
-                                                ref={fileInputRef}
-                                                style={{ display: 'none' }}
-                                                onChange={handleProfilePicChange}
-                                            />
-                                        </div>
-
-                                        <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload' onClick={handleFileUpload}>
-                                            <Upload />
-                                            <p className='text-[#032282] font-medium'>Upload</p>
-                                        </Button>
-                                        <Button className='bg-[#F5F9FE] gap-1 px-4 py-3'>
-                                            <Delete
-                                                onClick={handleDelete}
-                                            />
-                                            <p className='text-[#032282] font-medium'>Remove</p>
-                                        </Button>
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            style={{ display: 'none' }}
+                                            onChange={handleProfilePicChange}
+                                        />
                                     </div>
+                                    <div className='flex md:hidden relative '>
+                                        <Image
+                                            alt="profile"
+                                            src={profilePic}
+                                            height={100}
+                                            width={100}
+                                            className="rounded-full"
+                                        />
+                                        <div className='mt-[3.8rem] -ml-[1.5rem]'>
+                                            <Photo onClick={handleClick} />
+                                        </div>
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            style={{ display: 'none' }}
+                                            onChange={handleProfilePicChange}
+                                        />
+                                    </div>
+
+                                    <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload' onClick={handleFileUpload}>
+                                        <Upload />
+                                        <p className='text-[#032282] font-medium'>Upload</p>
+                                    </Button>
+                                    <Button className='bg-[#F5F9FE] gap-1 px-4 py-3'>
+                                        <Delete
+                                            onClick={handleDelete}
+                                        />
+                                        <p className='text-[#032282] font-medium'>Remove</p>
+                                    </Button>
+                                </div>
                                 {/* </form> */}
                                 <div className='flex flex-col md:flex-row gap-4 justify-between items-center mt-3 lg:mt-0'>
                                     <div className="flex items-center gap-2">
@@ -428,7 +427,6 @@ export default function Page() {
                                             </div>
                                         </div>
                                     </div>
-                                    <Button className='bg-[#099976] py-[18px] px-4 lg:px-7 text-xs rounded-10 items-stretch'>Edit Profile</Button>
                                 </div>
                             </section>
                             <div className='border-b-[0.3px] mt-4'></div>

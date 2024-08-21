@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from 'react-query'
 import { getBeneficiaryPlan } from '../../api/getBeneficiaryDetails'
 import { format } from 'date-fns'
 import React, { useState } from "react";
-import { Button } from "@/components/core";
+import { Button, LinkButton } from "@/components/core";
 import { SmallSpinner } from "@/icons/core";
 import { capitalizeFirstLetter } from "@/utils";
 import { UserDataTypes, useUser } from "@/app/(auth)/(onboarding)/misc";
@@ -18,6 +18,9 @@ import MakePaymentDetailsModal from '@/app/(dashboard)/comp/components/payment/M
 import MakePaymentModal from '@/app/(dashboard)/comp/components/payment/MakePayment'
 import ActiveIcon from '@/app/(dashboard)/comp/icons/ActiveIcon'
 import CopyIcon3 from '@/app/(dashboard)/comp/icons/CopyIcon3'
+import { convertToTitleCase } from '@/utils/strings'
+import { cn } from '@/utils/classNames'
+import BackIcon from '@/app/(dashboard)/comp/icons/Backicon'
 
 
 
@@ -35,7 +38,7 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
     queryFn: () => getBeneficiaryPlan(id),
     queryKey: ['get-beneficiary']
   })
-
+  console.log(beneficiary, "BEEEEEEEEEEEEEEEen")
 
 
 
@@ -71,14 +74,23 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
     queryKey: ["get-plans"],
   });
   const makePayment =
-    userData?.subscription_status === "NOT_ACTIVE" ||
-    userData?.subscription_status === "PENDING" ||
-    userData?.subscription_status === "FAILED";
+    beneficiary?.health_plan_status === "NOT_ACTIVE" ||
+    beneficiary?.health_plan_status === "PENDING" ||
+    beneficiary?.health_plan_status === "FAILED";
 
   console.log(beneficiary)
   return (
     <div>
       <div>
+         <div className="bg-main px-6 flex pt-5 items-start md:px-[4.5rem] lg:px-[7.5rem]">
+                <LinkButton
+                  href={"/dashboard"}
+                  className="flex items px-0 bg-transparent gap-3"
+                >
+                  <BackIcon />
+                  <h2 className="text-white font-bold text-2xl">Plan Details</h2>
+                </LinkButton>
+              </div>
         <div className=" bg-main py-6 px-6  md:px-[4.5rem] lg:px-[7.5rem]  ">
           {isLoading ? (
             <div className="w-full h-24 flex justify-center items-center">
@@ -86,7 +98,9 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
               <SmallSpinner color="white" />
             </div>
           ) : (
+            
             <div className="bg-main w-full flex justify-between flex-wrap  gap-3 items-center   ">
+             
               <div className="flex items-center  gap-x-3 ">
                 <div className="text-white h-[2.5rem] w-[2.5rem]">
                   <Image
@@ -97,97 +111,44 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
                     className="rounded-full"
                   />
                 </div>
-                <div className="flex  flex-col ">
-                  <h2 className="text-white text-sm md:text-base font-medium">
-                    {capitalizeFirstLetter(String(userData?.first_name))}{" "}
-                    {capitalizeFirstLetter(String(userData?.last_name))}
-                  </h2>
-                  <div className="flex justify-between items-center w-full ">
-                    <div className="flex items-center gap-x-3 flex-1">
-                      <div className="">
-                        <h2 className="text-sm flex text-[#FFFFFFB2] font-medium font-sans">
-                          <div>
-                            {beneficiary?.map((enrol, index) => (
-                              <div key={index}>
-
-                                <p className="text-white text-sm"> <span className="text-[#8490A8] text-sm">Phone Number:</span>{enrol.enrolee.phone_number}</p>
-                                <p><span className="text-[#8490A8] text-sm">Enrolment Id:</span></p>
-                              </div>
-                            ))}
+                <div>
+                  <div className="flex  flex-col ">
+                    <h2 className="text-white text-sm md:text-base font-medium">
+                      {capitalizeFirstLetter(String(beneficiary?.full_name))}{" "}
+                    </h2>
+                    <div className="flex justify-between items-center w-full ">
+                      <div className="flex items-center gap-x-3 flex-1">
+                        <div className="">
+                          <h2 className="text-sm flex text-[#FFFFFFB2] font-medium font-sans">
+                            <div>
+                              <p className="text-white text-sm"> <span className="text-[#8490A8] text-sm">Phone Number:</span>{beneficiary?.phone_number}</p>
+                              <p><span className="text-[#8490A8] text-sm">Enrolment Id:</span> {beneficiary?.enrollment_number} </p>
+                            </div>
+                          </h2>
+                        </div>
+                        {userData?.subscription_status === "SUCCESS" ? (
+                          <div className="bg-[#142D22] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
+                            <ActiveIcon />
+                            <p className="text-[.625rem] text-[#12B669]">
+                              Active plan
+                            </p>
                           </div>
-                        </h2>
+                        ) : (
+                          <div className="bg-[#F6CE7F26] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
+                            <ActiveIcon color="#DB8C00" />
+                            <p className="text-[.625rem] text-[#DB8C00]">
+                              Inactive plan
+                            </p>
+                          </div>
+                        )}
                       </div>
-
-                      {userData?.subscription_status === "SUCCESS" ? (
-                        <div className="bg-[#142D22] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
-                          <ActiveIcon />
-                          <p className="text-[.625rem] text-[#12B669]">
-                            Active plan
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="bg-[#F6CE7F26] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
-                          <ActiveIcon color="#DB8C00" />
-                          <p className="text-[.625rem] text-[#DB8C00]">
-                            Inactive plan
-                          </p>
-                        </div>
-                      )}
                     </div>
                   </div>
+
                 </div>
               </div>
               <div className="flex items-center   gap-2  ">
-                {userData?.referral_code ? (
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
-                      onClick={() =>
-                        copy(
-                          `https://www.libertylifeplus.com/?referral_code=${userData?.referral_code}` ??
-                          ""
-                        )
-                      }
-                    >
-                      <p className="text-white text-xxs text-opacity-60">
-                        Referral link
-                      </p>
-                      <div className="flex">
-                        <p className="text-white max-w-[6.25rem] text-xxs truncate">
-                          {`https://www.libertylifeplus.com/?referral_code=${userData?.referral_code}`}
-                        </p>
-                        <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
-                          <CopyIcon3 height={15} width={15} />
-                        </Button>
-                      </div>
-                    </div>
-
-                    <div
-                      className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-6 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
-                      onClick={() => copy(userData?.referral_code ?? "")}
-                    >
-                      <p className="text-white text-xxs text-opacity-60">
-                        Referral Code
-                      </p>
-                      <div className="flex">
-                        <p className="text-white max-w-[3.25rem] text-xxs truncate">
-                          {userData?.referral_code ?? ""}
-                        </p>
-                        <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
-                          <CopyIcon3 height={15} width={15} />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <Button onClick={() => refetch()}>
-                    {loadinGenerate ? (
-                      <SmallSpinner color="white" />
-                    ) : (
-                      "Generate Referral"
-                    )}
-                  </Button>
-                )}
+                
                 {makePayment && (
                   <Button
                     className="bg-[#099976] h-[2.8125rem] text-white  text-xs font-medium"
@@ -196,7 +157,7 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
                     Make Payment
                   </Button>
                 )}
-                {userData?.subscription_status === "EXPIRED" && (
+                {beneficiary?.health_plan_status === "EXPIRED" && (
                   <Button
                     className="bg-[#099976] h-[2.8125rem] text-white  text-xs font-medium"
                     onClick={() => setshowMakePaymentModal(true)}
@@ -204,12 +165,12 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
                     Renew plan
                   </Button>
                 )}
-                {userData?.subscription_status === "SUCCESS" && (
+                {beneficiary?.health_plan_status === "SUCCESS" && (
                   <Button
                     className="bg-[#099976] h-[2.8125rem] text-white text-xs font-medium"
                     disabled
                   >
-                    {userData?.subscription_status === "SUCCESS" && "Active"}
+                    {beneficiary?.health_plan_status === "SUCCESS" && "Active"}
                   </Button>
                 )}
               </div>
@@ -234,42 +195,61 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
             />
           )}
         </div>
+        
       </div>
       {/* <ViewBeneficiaryHeader userData={undefined} loadinUser={false} /> */}
-      <div className='px-6 md:px-10 lg:px-[120px] bg-[#F0F5FF] '>
-        <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-          {beneficiary?.map((beneficiaries, index) => {
-            return (
-              <div key={index}>
+      <div className='px-6 md:px-10 lg:px-[120px] bg-[#F0F5FF]  pb-10'>
+        <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-x-4 lg:gap-x-6'>
+          {/* {
+            beneficiary?.map((beneficiaries, index) => {
+              return (
+                <div key={index}> */}
+          {
+            beneficiary?.data.map((factors, ind) => (
+              <div key={ind}>
                 <article className='bg-white p-2 rounded-10 mt-10'>
                   <div className=' bg-[#F0F5FF] rounded-10 px-6 p-4 pb-6'>
-                    {/* <p className='text-[#EF4444] bg-[#EF444426] rounded-md px-2 py-1 text-xxs max-w-[74px]'>{beneficiaries.status}</p> */}
-                    <div>{beneficiaries?.status === "EXPIRED" ? (
-                      <div className='text-[#EF4444] bg-[#EF444426] rounded-md px-2 py-1 text-xxs max-w-[74px]'>Expired</div>
-                      ) : (
-                        <div className=' text-[#099976] bg-[#31D0AA26] rounded-md px-2 py-1 text-xxs max-w-[74px] text-nowrap'>Running Plan</div> 
-                      ) 
-                    }</div>
+                    <div>
+                      <p
+                        className={cn(
+                          "rounded-md px-2 py-1 text-xxs max-w-[74px]",
+                          factors?.status === "EXPIRED" && "text-[#EF4444] bg-[#EF444426]",
+                          factors?.status === "PENDING" && " text-[#DB8C00] bg-[#F6CE7F26]",
+                          factors?.status === "SUCCESS" && " text-[#099976] bg-[#31D0AA26]",
+                        )}
+                      >
+                        {convertToTitleCase(factors?.status)}
+                      </p>
+                    </div>
                     <div className='grid grid-cols-2 mt-2.5'>
                       <div className='text-[#032282] font-medium text-xs'>
-                        {beneficiaries.amount}
+                        {factors?.amount}
                         <p className='text-[#8490A8] text-xxs'>Price</p>
                       </div>
-                      <div className='text-[#032282] font-medium text-xs'>{beneficiaries.insurance_duration} month
+                      <div className='text-[#032282] font-medium text-xs'>{factors?.insurance_duration} month
                         <p className='text-[#8490A8] text-xxs'>Duration</p>
                       </div>
-                      <div className='text-[#032282] font-medium text-xs'>{format(beneficiaries.date_created!, 'eee, qo MMM yyyy')}
+                      <div className='text-[#032282] font-medium text-xs'>{format(factors?.date_created!, 'eee, qo MMM yyyy')}
                         <p className='text-[#8490A8] text-xxs'>Date Created</p>
                       </div>
-                      <div className='text-[#032282] font-medium text-xs'>{beneficiaries.due_date}
+                      <div className='text-[#032282] font-medium text-xs'>
+                        {factors?.due_date ?
+                          format(factors?.due_date!, 'eee, qo MMM yyyy')
+                          :
+                          ""
+                        }
                         <p className='text-[#8490A8] text-xxs'>Expires on</p>
                       </div>
                     </div>
                   </div>
                 </article>
               </div>
-            )
-          })}
+            ))
+          }
+          {/* 
+                </div>
+              )
+            })} */}
         </section>
       </div>
     </div>
