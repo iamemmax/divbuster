@@ -18,6 +18,7 @@ import ActiveIcon from '@/app/(dashboard)/comp/icons/ActiveIcon'
 import { convertToTitleCase } from '@/utils/strings'
 import { cn } from '@/utils/classNames'
 import BackIcon from '@/app/(dashboard)/comp/icons/Backicon'
+import { convertNumberToNaira } from '@/utils/currency'
 
 
 
@@ -198,9 +199,9 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
                         {convertToTitleCase(factors?.status)}
                       </p>
                     </div>
-                    <div className='grid grid-cols-2 mt-2.5'>
-                      <div className='text-[#032282] font-medium text-xs'>
-                        {factors?.amount ?? "Nil"}
+                    <div className='grid grid-cols-2 mt-2.5 gap-y-5'>
+                      <div className='text-[#032282] font-medium text-xs'> 
+                        {convertNumberToNaira(factors?.amount) ?? "0"}
                         <p className='text-[#8490A8] text-xxs'>Price</p>
                       </div>
                       <div className='text-[#032282] font-medium text-xs'>{factors?.insurance_duration ?? "Nil"} month
