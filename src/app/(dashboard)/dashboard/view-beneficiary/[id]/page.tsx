@@ -50,8 +50,8 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
     data,
     isLoading: loadinGenerate,
   } = useQuery({
-    queryFn: () => fetchReferralCode(userData?.user_id as string),
-    queryKey: ["generate-referral-code", userData?.user_id],
+    queryFn: () => fetchReferralCode(userData?.id as string),
+    queryKey: ["generate-referral-code", userData?.id],
     enabled: false,
     onSuccess: () => {
       // Invalidate user details query to refetch data
