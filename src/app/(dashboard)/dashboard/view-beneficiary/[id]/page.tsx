@@ -98,13 +98,13 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
                     className="rounded-full"
                   />
                 </div>
-                <div>
+                <div className='flex flex-row'>
                   <div className="flex  flex-col ">
                     <h2 className="text-white text-sm md:text-base font-medium">
                       {capitalizeFirstLetter(String(beneficiary?.full_name))}{" "}
                     </h2>
                     <div className="flex justify-between items-center w-full ">
-                      <div className="flex items-center gap-x-3 flex-1">
+                      <div className="flex gap-x-3 flex-1">
                         <div className="">
                           <h2 className="text-sm flex text-[#FFFFFFB2] font-medium font-sans">
                             <div>
@@ -113,6 +113,11 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
                             </div>
                           </h2>
                         </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div className='pl-4'>
                         {userData?.subscription_status === "SUCCESS" ? (
                           <div className="bg-[#142D22] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
                             <ActiveIcon />
@@ -128,9 +133,7 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
                             </p>
                           </div>
                         )}
-                      </div>
-                    </div>
-                  </div>
+                   </div>     
                 </div>
               </div>
               <div className="flex items-center   gap-2  ">
