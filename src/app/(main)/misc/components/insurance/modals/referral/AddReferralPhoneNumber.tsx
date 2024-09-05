@@ -112,7 +112,6 @@ const AddRemitalPhoneNumer = ({
   });
 
   const [errorMsg, setErrorMsg] = useState("");
-  console.log(errors);
 
   const {
     isErrorModalOpen,
@@ -206,7 +205,7 @@ const AddRemitalPhoneNumer = ({
   };
 
   return (
-    <div className="">
+    <div className="!z-[99999999999999999999999999999999999]">
       {/* <ClientOnly> */}
       <Dialog
         open={openCheckPhoneNumberModal}

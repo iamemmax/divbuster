@@ -93,7 +93,7 @@ const ReferralPlanPayment = ({
   });
   const { copy } = useClipboard();
   return (
-    <div>
+    <div className="!z-[99999999999999999999999999999999999]">
       <Dialog
         open={showReferralPayment}
         // onOpenChange={setRemitaDetailsModal}
