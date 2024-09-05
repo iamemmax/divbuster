@@ -21,9 +21,10 @@ import { Input2 } from "@/components/core/Input2";
 import { formatAxiosErrorMessage, formatCurrency } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useCreateReferralPlanRequest } from "../../api/referral/createReferralPlan";
 import { useCreateReferralBeneficiaries } from "../../api/referral/createReferralBeneficies";
+import { tokenStorage } from "@/app/(auth)/(onboarding)/misc";
 
 interface Prop {
   setOpenCheckPhoneNumberModal: React.Dispatch<SetStateAction<boolean>>;
@@ -78,7 +79,8 @@ const contactSchema = z.object({
     .trim()
     .min(10, {
       message: "Phone number ssetShowPaymentModalhould be at least 11 digits",
-    }),
+    })
+    .max(11),
 
   referral_code: z
     .string({ required_error: "Enter your phone number" })
@@ -95,8 +97,10 @@ const AddRemitalPhoneNumer = ({
   setPaymentData,
   planType,
 }: Prop) => {
+  const aprokoReferral = tokenStorage.getReferral()
   const search = useSearchParams();
   const myReferral = search?.get("referral_code");
+  const { name } = useParams();
   const {
     register,
     handleSubmit,
@@ -105,15 +109,13 @@ const AddRemitalPhoneNumer = ({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       phone_number: "",
-      referral_code: myReferral || "",
+      referral_code:String(aprokoReferral) || myReferral || String(name) || "",
     },
 
     mode: "onChange",
   });
 
   const [errorMsg, setErrorMsg] = useState("");
-  console.log(errors);
-
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -137,6 +139,7 @@ const AddRemitalPhoneNumer = ({
           phone_number: data?.phone_number,
           number_of_recipient: 1,
           packages: planType?.play_type,
+          referral_code: data?.referral_code as string,
         },
         {
           onSuccess: (data: successProp) => {
@@ -154,6 +157,8 @@ const AddRemitalPhoneNumer = ({
               });
               setShowReferralPayment(true);
               setOpenCheckPhoneNumberModal(false);
+              tokenStorage.clearReferral()
+
             }
           },
           onError: (error) => {
@@ -173,6 +178,7 @@ const AddRemitalPhoneNumer = ({
           phone_number: data?.phone_number,
           number_of_recipient: Number(planType?.number_of_recipient),
           packages: planType?.play_type,
+          referral_code: data?.referral_code as string,
         },
         {
           onSuccess: (data: BeneFicairySuccess) => {
@@ -190,6 +196,8 @@ const AddRemitalPhoneNumer = ({
               });
               setShowReferralPayment(true);
               setOpenCheckPhoneNumberModal(false);
+        tokenStorage.clearReferral()
+
             }
           },
           onError: (error) => {
@@ -206,7 +214,7 @@ const AddRemitalPhoneNumer = ({
   };
 
   return (
-    <div className="">
+    <div className="!z-[99999999999999999999999999999999999]">
       {/* <ClientOnly> */}
       <Dialog
         open={openCheckPhoneNumberModal}
@@ -251,6 +259,7 @@ const AddRemitalPhoneNumer = ({
                       placeholder="Enter your phone number"
                       type="number"
                       id="phone"
+                      maxLength={11} // Changed max to maxLength
                       {...register("phone_number")}
                     />
 
@@ -262,7 +271,7 @@ const AddRemitalPhoneNumer = ({
                   </div>
                 </div>
                 <div
-                  className={`${myReferral ? "hidden" : ""} w-full mt-[2rem] text-sm font-normal`}
+                  className={`${myReferral || name ? "hidden" : ""} w-full mt-[2rem] text-sm font-normal`}
                 >
                   <Label
                     className="mb-1 block text-xs  text-[#fff]"
@@ -289,10 +298,9 @@ const AddRemitalPhoneNumer = ({
                     type="submit"
                   >
                     Continue{" "}
-                    {isLoading ||
-                      (LoadinBene && (
-                        <SmallSpinner className="" color="blue" />
-                      ))}
+                    {(isLoading || LoadinBene) && (
+                      <SmallSpinner className="" color="blue" />
+                    )}
                   </Button>
                 </div>
               </form>

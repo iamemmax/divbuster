@@ -4,7 +4,7 @@
 import Image from 'next/image'
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 
-import { Button, FormError, Input, RadioGroup, RadioGroupItem, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core'
+import { Button, ErrorModal, FormError, Input, RadioGroup, RadioGroupItem, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core'
 import { useQuery, useQueryClient } from 'react-query'
 import { fetchReferralCode } from '../api/referral/fetchReferralCode'
 import { UserDataTypes, useUser } from '@/app/(auth)/(onboarding)/misc'
@@ -14,7 +14,7 @@ import { string, z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useClipboard, useErrorModalState } from '@/hooks'
 import { fetchHospitalListByLga, fetchRegionByState, fetchStateList, useUserHospitalChoice } from '@/app/(main)/misc/components/insurance/api/remital/remtalUserDetails'
-import { capitalizeFirstLetter } from '@/utils'
+import { capitalizeFirstLetter, formatAxiosErrorMessage } from '@/utils'
 
 import Select, { components } from "react-select";
 import { Spinner } from '@/icons/core'
@@ -23,6 +23,8 @@ import { Input2 } from '@/components/core/Input2'
 import { useUpdateUserDetails } from '../api/patchUserDetails'
 // import { getUserDetails, useGetUserDetails } from '../api/getUserDetails'
 import toast from 'react-hot-toast'
+import { useUpdateUserImage } from '../api/patchUserImage'
+import { AxiosError } from 'axios'
 
 
 interface Prop {
@@ -39,38 +41,9 @@ interface Prop {
         id: string;
     };
 }
-interface SuccessMsg {
-    // message: string;
-    id: string;
-    first_name: string;
-    last_name: string;
-    phone_number: string;
-    gender: string;
-    hospitals: Hospitals;
-    phone_verified: boolean;
-    nin: null;
-    bvn: string;
-    email: string;
-    address: string;
-}
-
-interface Hospitals {
-    state: string;
-    lga: string;
-    provider_id: string;
-    hospital: string;
-}
-
-interface Hospitals {
-    lga: string;
-    state: string;
-    hospital: string;
-    provider_id: string;
-}
 
 
 const formValues = z.object({
-
     name: z.string().trim(),
     phone_number: z.string().trim(),
     email: z
@@ -129,6 +102,15 @@ export default function Page() {
     });
 
     const {
+        isErrorModalOpen,
+        setErrorModalState,
+        openErrorModalWithMessage,
+        errorModalMessage,
+    } = useErrorModalState();
+
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const {
         control,
         handleSubmit,
         register,
@@ -137,12 +119,12 @@ export default function Page() {
     } = useForm<formValues>({
         resolver: zodResolver(formValues),
         defaultValues: {
-                email: "",
-                hospital: "",
-                lga: "",
-                state: userData?.state,
-                name: userData?.first_name,
-                phone_number: userData?.phone_number
+            email: "",
+            hospital: "",
+            lga: "",
+            state: userData?.state,
+            name: userData?.first_name,
+            phone_number: userData?.phone_number
         },
     });
 
@@ -151,12 +133,14 @@ export default function Page() {
     useEffect(() => {
         if (!isloadingUserdata && userData) {
             setValue("name", userData?.first_name || "");
+            setValue("name", userData?.middle_name || "");
             setValue("name", userData?.last_name || "");
             setValue("phone_number", userData?.phone_number || "");
             setValue("email", userData?.email || "");
             setValue("state", userData.state || "");
             setValue('nin', userData?.nin || "")
             setValue('bvn', userData?.bvn || "")
+            // setProfilePic(userData?.profile_image || '/images/userIcon.png')
         }
 
     }, [isloadingUserdata])
@@ -257,23 +241,25 @@ export default function Page() {
     const onSubmit = (data: formValues) => {
         handleUpdateProfile(
             {
-              name: data.name,
-              email: data.email,
-              phone_number: data.phone_number,
-              state: data.state,
-              lga: data.lga,
-              hospital: data.hospital,
-              bvn: data.bvn,
-              nin: data.nin
+                name: data.name,
+                email: data.email,
+                phone_number: data.phone_number,
+                state: data.state,
+                lga: data.lga,
+                hospital: data.hospital,
+                bvn: data.bvn,
+                nin: data.nin
             },
-           { 
-            onSuccess: () => {
-                toast.success("Your details have been updated")
-            },
-        }
+            {
+                onSuccess: () => {
+                    toast.success("Your details have been updated")
+                },
+            }
         )
         console.log(data, "datae")
     };
+
+
 
     interface Prop {
         userData: UserDataTypes | undefined;
@@ -293,11 +279,21 @@ export default function Page() {
         );
     };
 
-    const [profilePic, setProfilePic] = useState('/images/userIcon.png');
+    const [profilePic, setProfilePic] = useState<string | null>(null);
     const fileInputRef = useRef(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+    const handleClick = () => {
+        if (fileInputRef.current) {
+            (fileInputRef.current as HTMLInputElement).click();
+        }
+    };
 
     const handleProfilePicChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event?.target?.files?.[0];
+        if (event.target.files && event.target.files.length > 0) {
+            setSelectedFile(event.target.files[0]);
+        }
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -306,18 +302,30 @@ export default function Page() {
             reader.readAsDataURL(file);
         }
     };
-
-    const handleClick = () => {
-        if (fileInputRef.current) {
-            (fileInputRef.current as HTMLInputElement).click();
-        }
+    const { mutate: handleUpload } = useUpdateUserImage()
+    const handleFileUpload = () => {
+        handleUpload(
+            selectedFile
+            , {
+                onSuccess: (data) => {
+                    //   setBuyPlanModal;
+                    queryClient.invalidateQueries(["user-details"]);
+                    // setshowWithdrawalModal(false);
+                },
+                onError: (error) => {
+                    const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    //@ts-expect-error
+                    setErrorMsg(error?.response?.data?.error);
+                    openErrorModalWithMessage(String(errorMessage));
+                },
+            })
     };
 
     const handleDelete = () => {
-        setProfilePic('images/userIcon.png');
+        setProfilePic(null);
     };
 
-    
     return (
         <>
             {isLoading ? (
@@ -326,18 +334,17 @@ export default function Page() {
                 <div className='bg-[#F5F9FE]'>
                     <div className='bg-main min-h-36'></div>
                     <section className="h-full w-full px-6 md:px-[7.5rem] min-h-screen pb-[1.88rem] relative -mt-32">
-                        <div className='bg-white w-full h-full lg:h-screen mx-auto pt-[2.625rem] px-[4.5rem] rounded-[.625rem]'>
+                        <div className='bg-white w-full h-full lg:h-screen mx-auto pt-[2.625rem] px-6 lg:px-[4.5rem] rounded-[.625rem]'>
                             <p className='text-[#032282] font-sans font-bold text-2xl'>Personal Information</p>
                             <section className='mt-8 flex flex-col lg:flex-row justify-between'>
                                 <div className='flex justify-between items-center gap-4'>
                                     <div className='hidden md:flex relative'>
                                         <Image
                                             alt="profile"
-                                            src={profilePic}
+                                            src={profilePic || userData?.profile_image || '/images/userIcon.png'}
                                             height={100}
                                             width={100}
                                             className="rounded-full"
-
                                         />
                                         <div className='mt-[3.8rem] -ml-[1.5rem]'>
                                             <Photo onClick={handleClick} />
@@ -352,11 +359,10 @@ export default function Page() {
                                     <div className='flex md:hidden relative '>
                                         <Image
                                             alt="profile"
-                                            src={profilePic}
+                                            src={profilePic || userData?.profile_image || '/images/userIcon.png'}
                                             height={100}
                                             width={100}
                                             className="rounded-full"
-
                                         />
                                         <div className='mt-[3.8rem] -ml-[1.5rem]'>
                                             <Photo onClick={handleClick} />
@@ -368,21 +374,24 @@ export default function Page() {
                                             onChange={handleProfilePicChange}
                                         />
                                     </div>
+                                    {
+                                        profilePic &&
+                                        <>
 
-                                    <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] hidden border-[#032282] px-4 py-3' id='upload'>
-                                        <Upload
-                                            onClick={handleClick}
-                                        />
-                                        <p className='text-[#032282] font-medium'>Upload</p>
-                                    </Button>
-                                    <Button className='bg-[#F5F9FE] gap-1 px-4 py-3'>
-                                        <Delete
-                                            onClick={handleDelete}
-                                        />
-                                        <p className='text-[#032282] font-medium'>Remove</p>
-                                    </Button>
+                                            <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload' onClick={handleFileUpload}>
+                                                <Upload />
+                                                <p className='text-[#032282] font-medium'>Upload</p>
+                                            </Button>
+                                            <Button className='bg-[#F5F9FE] gap-1 px-4 py-3'>
+                                                <Delete
+                                                    onClick={handleDelete}
+                                                />
+                                                <p className='text-[#032282] font-medium'>Remove</p>
+                                            </Button>
+                                        </>
+                                    }
                                 </div>
-
+                                {/* </form> */}
                                 <div className='flex flex-col md:flex-row gap-4 justify-between items-center mt-3 lg:mt-0'>
                                     <div className="flex items-center gap-2">
                                         <div
@@ -423,7 +432,6 @@ export default function Page() {
                                             </div>
                                         </div>
                                     </div>
-                                    <Button className='bg-[#099976] py-[18px] px-4 lg:px-7 text-xs rounded-10 items-stretch'>Edit Profile</Button>
                                 </div>
                             </section>
                             <div className='border-b-[0.3px] mt-4'></div>
@@ -639,7 +647,7 @@ export default function Page() {
                                                     <Label
                                                         className="mb-1 block text-xs text-[#032282]"
                                                         htmlFor="nin"
-                                                        
+
                                                     >
                                                         NIN
                                                     </Label>
@@ -667,6 +675,17 @@ export default function Page() {
 
                         </div>
                     </section>
+                    <ErrorModal
+                        isErrorModalOpen={isErrorModalOpen}
+                        setErrorModalState={() => {
+                            setErrorModalState(false);
+                        }}
+                        subheading={
+                            errorModalMessage ||
+                            errorMsg ||
+                            "Please check your inputs and try again."
+                        }
+                    ></ErrorModal>
                 </div>
             )}
         </>

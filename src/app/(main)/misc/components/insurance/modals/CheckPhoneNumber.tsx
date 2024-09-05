@@ -22,6 +22,7 @@ import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
 import { useRouter, useSearchParams } from "next/navigation";
+import { tokenStorage } from "@/app/(auth)/(onboarding)/misc";
 
 interface Prop {
   setOpenCheckPhoneNumberModal: Dispatch<SetStateAction<boolean>>;
@@ -109,6 +110,7 @@ const CheckPhoneNumber = ({
 }: Prop) => {
   const search = useSearchParams();
   const myReferral = search?.get("referral_code");
+  const aprokoReferral = tokenStorage.getReferral()
   const {
     register,
     handleSubmit,
@@ -117,7 +119,7 @@ const CheckPhoneNumber = ({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       phone_number: "",
-      referral_code: myReferral || "",
+      referral_code: myReferral || aprokoReferral|| "",
     },
 
     mode: "onChange",
@@ -278,7 +280,7 @@ const CheckPhoneNumber = ({
                   </div>
                 </div>
                 <div
-                  className={`${myReferral ? "hidden" : ""} w-full mt-[2rem] text-sm font-normal`}
+                  className={`${myReferral|| aprokoReferral ? "hidden" : ""} w-full mt-[2rem] text-sm font-normal`}
                 >
                   <Label
                     className="mb-1 block text-xs  text-[#fff]"
