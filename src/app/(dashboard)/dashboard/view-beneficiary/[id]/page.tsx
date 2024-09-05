@@ -54,7 +54,7 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
     queryKey: ["generate-referral-code", userData?.id],
     enabled: false,
     onSuccess: () => {
-      // Invalidate user details query to refetch data
+      // Invalidate user details query to refetch data...
       queryClient.invalidateQueries(["user-details", data?.referral_code]);
     },
   });
