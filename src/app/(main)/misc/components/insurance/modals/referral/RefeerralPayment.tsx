@@ -91,6 +91,8 @@ const ReferralPlanPayment = ({
       openErrorModalWithMessage(String(errorMessage));
     },
   });
+  // console.log(PaymentInfo, "paymennt");
+
   const { copy } = useClipboard();
   return (
     <div className="!z-[99999999999999999999999999999999999]">

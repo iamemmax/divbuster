@@ -136,6 +136,7 @@ const AddRemitalPhoneNumer = ({
           phone_number: data?.phone_number,
           number_of_recipient: 1,
           packages: planType?.play_type,
+          referral_code: data?.referral_code as string,
         },
         {
           onSuccess: (data: successProp) => {
