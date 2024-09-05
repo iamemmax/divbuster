@@ -78,7 +78,8 @@ const contactSchema = z.object({
     .trim()
     .min(10, {
       message: "Phone number ssetShowPaymentModalhould be at least 11 digits",
-    }),
+    })
+    .max(11),
 
   referral_code: z
     .string({ required_error: "Enter your phone number" })
@@ -252,6 +253,7 @@ const AddRemitalPhoneNumer = ({
                       placeholder="Enter your phone number"
                       type="number"
                       id="phone"
+                      maxLength={11} // Changed max to maxLength
                       {...register("phone_number")}
                     />
 
@@ -290,10 +292,9 @@ const AddRemitalPhoneNumer = ({
                     type="submit"
                   >
                     Continue{" "}
-                    {isLoading ||
-                      (LoadinBene && (
-                        <SmallSpinner className="" color="blue" />
-                      ))}
+                    {(isLoading || LoadinBene) && (
+                      <SmallSpinner className="" color="blue" />
+                    )}
                   </Button>
                 </div>
               </form>
