@@ -256,11 +256,24 @@ const Page = () => {
                       defaultValue={selectedTab}
                       onValueChange={(e) => setSelectedTab(e)}
                     >
-                      <div className="flex w-full px-6 items-center justify-center">
+                      {/* <div className="flex w-full px-6 items-center justify-center">
                         <TabsList className="flex w-[98%] justify-center rounded-[.75rem] bg-[#1D2651] md:max-w-[30rem] md:pl-6 lg:pl-0 border border-[#407BFF]">
                           {plansData?.map((tab, idx: number) => (
                             <TabsTrigger
                               className="inline-flex w-full items-center justify-center rounded-xl text-md font-medium text-[#fff] data-[state=active]:shadow-none"
+                              value={tab?.package_name}
+                              key={idx}
+                            >
+                              {tab?.package_name}
+                            </TabsTrigger>
+                          ))}
+                        </TabsList>
+                      </div> */}
+                      <div className="flex w-full px-6 items-center justify-center">
+                        <TabsList className="flex w-full max-w-full overflow-x-auto scrollbar-hide justify-start md:w-[98%] md:justify-center rounded-[.75rem] bg-[#1D2651] md:max-w-[30rem] md:pl-6 lg:pl-0 border border-[#407BFF]">
+                          {plansData?.map((tab, idx: number) => (
+                            <TabsTrigger
+                              className="inline-flex min-w-max items-center justify-center rounded-xl text-md font-medium text-[#fff] data-[state=active]:shadow-none"
                               value={tab?.package_name}
                               key={idx}
                             >
