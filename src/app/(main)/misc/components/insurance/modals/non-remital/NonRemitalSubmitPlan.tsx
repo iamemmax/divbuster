@@ -136,6 +136,7 @@ const NonRemitalSubmitPlanModal = ({
           phone_number: verifiedPhoneNumber,
           number_of_recipient: Number(planType?.number_of_recipient),
           packages: planType?.play_type,
+          referral_code:""
         },
         {
           onSuccess: (data: BeneFicairySuccess) => {

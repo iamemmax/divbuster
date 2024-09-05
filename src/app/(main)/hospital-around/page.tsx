@@ -71,7 +71,7 @@ const HospitalAround = () => {
           setHospitalsAround(data.data);
         },
         onError(error, variables, context) {
-          console.log(error, variables, context);
+          // console.log(error, variables, context);
         },
       }
     );
