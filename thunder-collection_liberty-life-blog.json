@@ -1,0 +1,65 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "liberty-life-blog",
+    "collectionId": "78dc4bbb-f815-4c22-84e8-fb45dfab034e",
+    "dateExported": "2024-08-25T13:29:18.140Z",
+    "version": "1.2",
+    "folders": [
+        {
+            "_id": "ac48f126-d231-4396-ae0c-ce7ccf1125b8",
+            "name": "admin",
+            "containerId": "",
+            "created": "2024-08-25T12:26:41.025Z",
+            "sortNum": 10000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "bc3edaa2-ac47-4817-98d8-da39221a7c05",
+            "colId": "78dc4bbb-f815-4c22-84e8-fb45dfab034e",
+            "containerId": "ac48f126-d231-4396-ae0c-ce7ccf1125b8",
+            "name": "create-admin",
+            "url": "http://localhost:3001/api/users/create-admin",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2024-08-25T12:26:58.023Z",
+            "modified": "2024-08-25T12:43:04.369Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"emmanuelokorefe1@gmail.com\",\n  \"username\":\"emmako\",\n  \"password\":\"12345\",\n  \"password2\":\"12345\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "56f67038-73e5-4b13-a3d4-d12da5f984ac",
+            "colId": "78dc4bbb-f815-4c22-84e8-fb45dfab034e",
+            "containerId": "ac48f126-d231-4396-ae0c-ce7ccf1125b8",
+            "name": "login-admin",
+            "url": "http://localhost:3001/api/users/authenticate",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-08-25T13:04:20.896Z",
+            "modified": "2024-08-25T13:05:16.167Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"emmanuelokorefe1@gmail.com\",\n  \"password\":\"12345\"\n\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "f854d154-8f43-4d0d-8f61-cb2c7044b5f4",
+            "colId": "78dc4bbb-f815-4c22-84e8-fb45dfab034e",
+            "containerId": "ac48f126-d231-4396-ae0c-ce7ccf1125b8",
+            "name": "get-current-user",
+            "url": "http://localhost:3001/api/users/me/userId_emmakoemman674941234123",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2024-08-25T13:28:18.578Z",
+            "modified": "2024-08-25T13:28:46.488Z",
+            "headers": []
+        }
+    ],
+    "ref": "AAeYQH-qdYD12KcIjyKTkBuaRo6lavosZcv91ZFg-gnyIGEWttA5o491_TL5eXu4ri4EPl9P-awDSSwPnrURWg"
+}
