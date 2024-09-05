@@ -196,63 +196,81 @@ const Page = () => {
           <Spinner color="white" />
         </div>
       ) : (
-        <div>
-          <div className="h-full w-full  bg-main z-[99999999999999]">
-            {loadingPlan ? (
-              <div className="flex justify-center h-36 items-center">
-                <Spinner color="white" />
-              </div>
-            ) : (
-              <div className="bg-main py-5   mt-10   md:px-[4.5rem] lg:px-[7.5rem]">
-                <div className="py-1">
-                  <div className="text-[#fff] text-center font-semibold text-3xl">
-                    <h2 className="text-3xl">Choose Your Plan</h2>
-                  </div>
-                </div>
+        <Dialog open={true}>
+          <DialogContent className="!overflow-hidden rounded-[1.125rem]  min-h-[90vh] max-h-[97vh] px-4 w-full md:min-h-[55rem]">
+            <div className="md:w-full flex justify-between items-center">
+              <DialogHeader className="bg-[#1B1687]  w-full !justify-between">
+                <DialogTitle className="text-[#fff] whitespace-nowrap">
+                  {selectedTab} PLAN
+                </DialogTitle>
 
-                <div className="flex w-full items-center justify-center">
-                  {selectedTab === "INDIVIDUAL" && (
-                    <p className="w-full px-4 md:px-[2rem] text-center  text-base  sm:max-w-[80%] lg:w-[45%] text-[#fff] text-opacity-50 font-medium">
-                      Individual plan gives you access to health cover for you
-                      only, and you stand a chance to enjoy awesome benefits.
-                    </p>
-                  )}
-                  {selectedTab === "FAMILY" && (
-                    <p className="w-full px-4 md:px-[1.5rem] text-center lg:w-[45%] text-base sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
-                      Family plan gives you access to include up to 6 members of
-                      your family. The more you add, the more discount you get.
-                    </p>
-                  )}
-                  {selectedTab === "CORPORATE" && (
-                    <p className="w-full px-4 md:px-[1.5rem] text-center text-base lg:w-[45%] sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
-                      Corporate Plan allows you provide premium health coverage
-                      for employees.
-                    </p>
-                  )}
-                </div>
+                {/* <DialogClose
+                  className="rounded-lg"
+                  //   onClick={() => setOpenShowRemitalPlan(false)}
+                >
+                  <button>Close</button>
+                </DialogClose> */}
+              </DialogHeader>
+            </div>
 
-                <div className=" overflow-y-auto md:min-h-[409px] rounded-b-lg md:mb-[2rem] md:w-full mt-5 md:mt-6">
-                  <Tabs
-                    className=""
-                    defaultValue={selectedTab}
-                    onValueChange={(e) => setSelectedTab(e)}
-                  >
-                    <div className="flex w-full px-6 items-center justify-center">
-                      <TabsList className="flex w-[98%] justify-center rounded-[.75rem] bg-[#1D2651] md:max-w-[30rem] md:pl-6 lg:pl-0 border border-[#407BFF]">
-                        {plansData?.map((tab, idx: number) => (
-                          <TabsTrigger
-                            className="inline-flex w-full items-center justify-center rounded-xl text-md font-medium text-[#fff] data-[state=active]:shadow-none"
-                            value={tab?.package_name}
-                            key={idx}
-                          >
-                            {tab?.package_name}
-                          </TabsTrigger>
-                        ))}
-                      </TabsList>
+            <DialogBody className="bg-[#151D42] w-full rounded-b-[1.125rem] h-full">
+              {loadingPlan ? (
+                <div className="flex justify-center h-36 items-center">
+                  <Spinner color="white" />
+                </div>
+              ) : (
+                <>
+                  <div className="py-1">
+                    <div className="text-[#fff] text-center font-semibold text-3xl">
+                      <DialogDescription className="text-3xl">
+                        Choose Your Plan
+                      </DialogDescription>
                     </div>
+                  </div>
 
-                    {/*  PLAN */}
-                    <div className="overflow-y-auto h-[70vh] xl:h-auto">
+                  <div className="flex w-full items-center justify-center">
+                    {selectedTab === "INDIVIDUAL" && (
+                      <p className="w-full px-4 md:px-[2rem] text-center  text-base  sm:max-w-[80%] text-[#fff] text-opacity-50 font-medium">
+                        Individual plan gives you access to health cover for you
+                        only, and you stand a chance to enjoy awesome benefits.
+                      </p>
+                    )}
+                    {selectedTab === "FAMILY" && (
+                      <p className="w-full px-4 md:px-[1.5rem] text-center  text-base sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
+                        Family plan gives you access to include up to 6 members
+                        of your family. The more you add, the more discount you
+                        get.
+                      </p>
+                    )}
+                    {selectedTab === "CORPORATE" && (
+                      <p className="w-full px-4 md:px-[1.5rem] text-center text-base  sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
+                        Corporate Plan allows you provide premium health
+                        coverage for employees.
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="max-h-[60vh] overflow-y-auto md:min-h-[409px] rounded-b-lg md:mb-[2rem] md:w-full mt-5 md:mt-6">
+                    <Tabs
+                      className=""
+                      defaultValue={selectedTab}
+                      onValueChange={(e) => setSelectedTab(e)}
+                    >
+                      <div className="flex w-full px-6 items-center justify-center">
+                        <TabsList className="flex w-[98%] justify-center rounded-[.75rem] bg-[#1D2651] md:max-w-[30rem] md:pl-6 lg:pl-0 border border-[#407BFF]">
+                          {plansData?.map((tab, idx: number) => (
+                            <TabsTrigger
+                              className="inline-flex w-full items-center justify-center rounded-xl text-md font-medium text-[#fff] data-[state=active]:shadow-none"
+                              value={tab?.package_name}
+                              key={idx}
+                            >
+                              {tab?.package_name}
+                            </TabsTrigger>
+                          ))}
+                        </TabsList>
+                      </div>
+
+                      {/*  PLAN */}
                       {plansData?.map((healthPlan, idx: number) => (
                         <TabsContent
                           key={idx}
@@ -269,7 +287,7 @@ const Page = () => {
                               >
                                 <div className="w-full">
                                   <div className="border-[0.3px] relative border-[#4760FD] rounded-[1.25rem] bg-[#1A234C]">
-                                    <div className="w-full py-8 px-3 relative">
+                                    <div className="w-full py-8  relative">
                                       <div className="absolute -top-6 flex justify-center items-start w-full">
                                         <UserIcons width={65} height={65} />
                                       </div>
@@ -304,31 +322,30 @@ const Page = () => {
                                             )}
                                           </div>
                                           {/* {healthPlan?.package_name ===
-                                                     "FAMILY" && (
-                                                     <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
-                                                       3 Individuals (3 + 1 free )
-                                                     </p>
-                                                   )} */}
+                                              "FAMILY" && (
+                                              <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
+                                                3 Individuals (3 + 1 free )
+                                              </p>
+                                            )} */}
                                           {/* {healthPlan?.package_name ===
-                                                   "CORPERATE" && (
-                                                   <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
-                                                     Minimum of{" "}
-                                                     {plan?.plan_duration?.min_members}
-                                                   </p>
-                                                 )} */}
+                                            "CORPERATE" && (
+                                            <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
+                                              Minimum of{" "}
+                                              {plan?.plan_duration?.min_members}
+                                            </p>
+                                          )} */}
                                         </div>
-                                        <div className="space-y-[15px] md:space-y-3 mt-1">
+                                        <div className="space-y-[10px] mt-1">
                                           {plan?.descriptions?.map(
                                             (list, index: number) => (
                                               <div
-                                                className="flex px-4   border-b-[0.1px] py-3  border-[#ddd] border-opacity-10 items-center gap-x-2"
+                                                className="flex px-4 border-b-[0.1px] pb-2 space-y-1 border-[#ddd] border-opacity-10 items-center gap-2"
                                                 key={index}
                                               >
                                                 <div className="">
-                                                  {" "}
                                                   <RemitalListIcon />
                                                 </div>
-                                                <p className="text-white text-opacity-80 text-xs  md:text-sm  ">
+                                                <p className="text-white text-opacity-80 text-xs -mt-1">
                                                   {list}
                                                 </p>
                                               </div>
@@ -427,7 +444,7 @@ const Page = () => {
 
                                     <div className="border-[.0313rem] border-[#4760FD] rounded-10 -mt-2 flex justify-center items-center w-full py-5">
                                       <Button
-                                        className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 md:py-3 md:px-6 font-semibold tracking-wide shadow-lg  md:text-base transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                                        className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                         onClick={() => {
                                           setPlanType({
                                             number_of_recipient: String(
@@ -485,30 +502,30 @@ const Page = () => {
                           </div>
                         </TabsContent>
                       ))}
-                    </div>
-                  </Tabs>
-                </div>
-                <div
-                  className={`flex sm:flex-row justify-between  px-6 w-full pb-1 items-center ${selectedTab === "Individual" ? " mt-[1rem]" : ""} gap-1 flex-nowrap`}
-                >
-                  <Link href={"#"} className="text-[#AFD85B] text-sm">
-                    <span className="text-[#747577]">
-                      Terms & Conditions Apply:
-                    </span>{" "}
-                    libertyaasured.com
-                  </Link>
-                  {/* <Button
-                             type="button"
-                             className="bg-[#525668] rounded-[1.25rem] px-5 py-3 font-semibold text-white"
-                             onClick={() => router.push("/")}
-                           >
-                             Skip
-                           </Button> */}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+                    </Tabs>
+                  </div>
+                  <div
+                    className={`flex sm:flex-row justify-between  px-6 w-full pb-1 items-center ${selectedTab === "Individual" ? " mt-[1rem]" : ""} gap-1 flex-nowrap`}
+                  >
+                    <Link href={"#"} className="text-[#AFD85B] text-sm">
+                      <span className="text-[#747577]">
+                        Terms & Conditions Apply:
+                      </span>{" "}
+                      libertyaasured.com
+                    </Link>
+                    {/* <Button
+                      type="button"
+                      className="bg-[#525668] rounded-[1.25rem] px-5 py-3 font-semibold text-white"
+                      onClick={() => router.push("/")}
+                    >
+                      Skip
+                    </Button> */}
+                  </div>
+                </>
+              )}
+            </DialogBody>
+          </DialogContent>
+        </Dialog>
       )}
 
       {openReferralPhonNumber && (

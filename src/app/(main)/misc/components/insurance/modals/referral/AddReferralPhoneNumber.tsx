@@ -21,7 +21,7 @@ import { Input2 } from "@/components/core/Input2";
 import { formatAxiosErrorMessage, formatCurrency } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useCreateReferralPlanRequest } from "../../api/referral/createReferralPlan";
 import { useCreateReferralBeneficiaries } from "../../api/referral/createReferralBeneficies";
 
@@ -97,6 +97,7 @@ const AddRemitalPhoneNumer = ({
 }: Prop) => {
   const search = useSearchParams();
   const myReferral = search?.get("referral_code");
+  const { name } = useParams();
   const {
     register,
     handleSubmit,
@@ -105,14 +106,13 @@ const AddRemitalPhoneNumer = ({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       phone_number: "",
-      referral_code: myReferral || "",
+      referral_code: myReferral || String(name) || "",
     },
 
     mode: "onChange",
   });
 
   const [errorMsg, setErrorMsg] = useState("");
-
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -172,6 +172,7 @@ const AddRemitalPhoneNumer = ({
           phone_number: data?.phone_number,
           number_of_recipient: Number(planType?.number_of_recipient),
           packages: planType?.play_type,
+          referral_code: data?.referral_code as string,
         },
         {
           onSuccess: (data: BeneFicairySuccess) => {
@@ -261,7 +262,7 @@ const AddRemitalPhoneNumer = ({
                   </div>
                 </div>
                 <div
-                  className={`${myReferral ? "hidden" : ""} w-full mt-[2rem] text-sm font-normal`}
+                  className={`${myReferral || name ? "hidden" : ""} w-full mt-[2rem] text-sm font-normal`}
                 >
                   <Label
                     className="mb-1 block text-xs  text-[#fff]"
