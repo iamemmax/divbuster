@@ -29,19 +29,19 @@ export default function page() {
     const us: mission[] = [
 
         {
-            mission: 'Affordability:',
+            mission: 'Affordability',
             description2: 'Our plans are designed to fit your budget without compromising on quality healthcare. We offer a range of options that cater to individuals, families, and businesses.'
         },
         {
-            mission: 'Accessibility:',
+            mission: 'Accessibility',
             description2: ' With simple USSD codes, online platforms, and in-person support, enrolling in our health insurance plans is quick and hassle-free.'
         },
         {
-            mission: 'Comprehensive Coverage:',
+            mission: 'Comprehensive Coverage',
             description2: ' From routine check-ups to emergency care, our plans cover a wide range of healthcare services to keep you, your family and your business healthy.'
         },
         {
-            mission: 'Nationwide Network:',
+            mission: 'Nationwide Network',
             description2: 'We partner with top hospitals and healthcare providers across Nigeria, giving you access to quality medical care wherever you are.'
         },
     ]
@@ -102,17 +102,27 @@ export default function page() {
                     </div>
                 </div>
                 <button className='capitalize flex justify-center items-center rounded-full py-3 px-12 mt-4 md:mt-0 bg-[#34307A] bg-opacity-[20%] text-[14px] font-semibold'>Why Choose Liberty Life?</button>
-                <div className=' flex flex-col md:grid md:grid-cols-2 mt-8 gap-3 border-[0.3px] md:border-0 p-4 md:p-0 rounded-xl border-[#407cff59]'>
-                    {
-                        us?.map((sec, index) => (
-                            <div key={index}>
-                                <span >
-                                    <p className='flex font-bold'>{sec.mission}</p>
-                                    <p className='text-[10px] md:text-[0.9rem] text-[#CAC9D4] font-normal md:max-w-[438px]'>{sec.description2}</p>
-                                </span>
-                            </div>
-                        ))
-                    }
+                <div className=' flex flex-col md:grid md:grid-cols-2 mt-8 gap-3 font-sans'>
+                    <span className='border-[0.3px] border-[#407BFF] border-opacity-[50%] p-6 rounded-10 bg-[#FFFFFF05]'>
+                        <p className='text-white font-medium text-2xl'>Affordability</p>
+                        <p className='text-[10px] md:text-[0.9rem] lg:text-[19px] text-[#CAC9D4] font-normal pt-3'>Our plans are designed to fit your budget without compromising on quality healthcare. We offer a range of options that cater to individuals, families, and businesses.</p>
+                    </span>
+                    <span className='border-[0.3px] border-[#407BFF] border-opacity-[50%] p-6 rounded-10 bg-[#FFFFFF05]'>
+                        <p className='text-white font-medium text-2xl'>Comprehensive Coverage</p>
+                        <p className='text-[10px] md:text-[0.9rem] lg:text-[19px] text-[#CAC9D4] font-normal pt-3'>From routine check-ups to emergency care, our plans cover
+                            a wide range of healthcare service to keep you, your family,
+                            and your business healthy.</p>
+                    </span>
+                    <span className='border-[0.3px] border-[#407BFF] border-opacity-[50%] p-6 rounded-10 bg-[#FFFFFF05]'>
+                        <p className='text-white font-medium text-2xl'>Nationwide Network</p>
+                        <p className='text-[10px] md:text-[0.9rem] lg:text-[19px] text-[#CAC9D4] font-normal pt-3'>We partner with top hospitals and healthcare providers
+                            across the Nigeria through our collaboration with NEM Health,
+                            giving you access to quality medical care wherever you are.</p>
+                    </span>
+                    <span className='border-[0.3px] border-[#407BFF] border-opacity-[50%] p-6 rounded-10 bg-[#FFFFFF05]'>
+                        <p className='text-white font-medium text-2xl'>Accessibility</p>
+                        <p className='text-[10px] md:text-[0.9rem] lg:text-[19px] text-[#CAC9D4] font-normal pt-3'>With simple USSD codes, online platforms, and in-person support, enrolling in our health insurance plans is quick and hassle-free.</p>
+                    </span>
                 </div>
                 <div className='pt-[72px]'>
                     <div className='md:flex flex-row bg-[#FFFFFF0D] gap-36 pt-4 pb-6 sm:py-3 items-center justify-center pr-16 pl-6 rounded-lg'>
