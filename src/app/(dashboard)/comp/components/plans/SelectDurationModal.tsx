@@ -64,14 +64,14 @@ interface UseBooleanStateControlProps {
   isSelectPlanModalOpen: boolean;
   setSelectPlanModal: React.Dispatch<React.SetStateAction<boolean>>;
   beneficiariesList:
-    | {
-        beneficiaries: {
-          name_of_beneficiary: string;
-          phone_number_of_beneficiary: string;
-          type_of_beneficary?: "ADULT" | "MINOR";
-        }[];
-      }
-    | undefined;
+  | {
+    beneficiaries: {
+      name_of_beneficiary: string;
+      phone_number_of_beneficiary: string;
+      type_of_beneficary?: "ADULT" | "MINOR";
+    }[];
+  }
+  | undefined;
   selectedPlan: PlanData[] | undefined;
   planType: string;
   actionType: string;
@@ -296,16 +296,16 @@ function SelectDurationModal({
                     <p className="text-white line-through text-lg text-opacity-80 font-bold">
                       {totalAmount !== null
                         ? formatCurrency(
-                            Number(removeCommaFromPrice(String(totalAmount)))
-                          )
+                          Number(removeCommaFromPrice(String(totalAmount)))
+                        )
                         : "0.00"}
                     </p>
                   )}
                   <p className="text-white text-lg font-bold">
                     {discountedAmount !== null
                       ? formatCurrency(
-                          Number(removeCommaFromPrice(String(discountedAmount)))
-                        )
+                        Number(removeCommaFromPrice(String(discountedAmount)))
+                      )
                       : "0.00"}
                   </p>
                 </div>
