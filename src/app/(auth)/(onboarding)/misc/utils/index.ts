@@ -11,8 +11,20 @@ export const tokenStorage = {
       JSON.stringify(token),
     );
   },
-
+  
   clearToken: () => {
     window.localStorage.removeItem(`${TOKEN_STORAGE_PREFIX}TOKEN`);
+  },
+  setReferral: (data: string) => {
+    window.localStorage.setItem(
+      `${TOKEN_STORAGE_PREFIX}REFERRAL`,
+      JSON.stringify(data),
+    );
+  },
+  getReferral: () => JSON.parse(
+    window.localStorage.getItem(`${TOKEN_STORAGE_PREFIX}REFERRAL`) as string,
+  ),
+  clearReferral: () => {
+    window.localStorage.removeItem(`${TOKEN_STORAGE_PREFIX}REFERRAL`);
   },
 };

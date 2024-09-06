@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 
 import { cn } from "@/utils/classNames";
@@ -14,6 +14,7 @@ import {
 import ReferralModalPlan from "@/app/(main)/misc/components/insurance/modals/referral/ReferralPlan";
 import AddRemitalPhoneNumer from "@/app/(main)/misc/components/insurance/modals/referral/AddReferralPhoneNumber";
 import ReferralPlanPayment from "@/app/(main)/misc/components/insurance/modals/referral/RefeerralPayment";
+import { tokenStorage } from "@/app/(auth)/(onboarding)/misc";
 
 interface DesktopMenuLinkProps {
   link: string;
@@ -65,11 +66,27 @@ export function DesktopMenuLink({
   });
   const search = useSearchParams();
   const getStarted = search.get("referral_code");
+   const router = useRouter()
+ const [referralFromAproko, setReferralFromAproko] = React.useState("")
+ React.useEffect(() => {
+    const ApprokoReferral = tokenStorage.getReferral()
+    if(ApprokoReferral){
+      setReferralFromAproko(ApprokoReferral)
+     }else{
+       setReferralFromAproko("") 
+     }
+   }, [])
   React.useEffect(() => {
     if (getStarted) {
       document.getElementById("get-referral-button")?.click();
     }
   }, [getStarted]);
+
+  // React.useEffect(() => {
+  //   if (referralFromAproko === "aproko-doctor") {
+  //     router.push("/plan/aproko-doctor?select-plan=true")
+  //   }
+  // }, [referralFromAproko]);
   if (isExternal) {
     return (
       <a
@@ -95,7 +112,16 @@ export function DesktopMenuLink({
             isSelected && "font-bold",
             className
           )}
-          onClick={() => setOpenReferralModal(true)}
+          onClick={() => {
+            if (window.location.href.includes("/plan/aproko-doctor?select-plan=true")) {
+              // Reload the page
+              window.location.reload();
+            } else if (referralFromAproko === "aproko-doctor") {
+              router.push("/plan/aproko-doctor?select-plan=true");
+            } else {
+              setOpenReferralModal(true);
+            }
+          }}
           id="get-referral-button"
         >
           {text}
@@ -234,7 +260,7 @@ export const linkGroups = [
     isExternal: false,
   },
   {
-    // link: "/blogs",
+    link: "/",
     text: "Blogs",
     icon: undefined,
     disabled: false,

@@ -22,6 +22,7 @@ import PlanComfirmationModal from "../remital/PlanComfirmationModal";
 import PlanPayment from "../remital/PlanPayment";
 import { useCreateReferralBeneficiaries } from "../../api/referral/createReferralBeneficies";
 import { BeneFicairySuccess } from "../referral/AddReferralPhoneNumber";
+import { tokenStorage } from "@/app/(auth)/(onboarding)/misc";
 
 interface prop {
   setShowSubmitModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -116,6 +117,8 @@ const NonRemitalSubmitPlanModal = ({
                 phone_number: data?.phone_number,
               });
               setShowPaymentModal(true);
+              tokenStorage.clearReferral()
+
               // setOpenShowRemitalPlan(false);
             }
           },
@@ -136,6 +139,7 @@ const NonRemitalSubmitPlanModal = ({
           phone_number: verifiedPhoneNumber,
           number_of_recipient: Number(planType?.number_of_recipient),
           packages: planType?.play_type,
+          referral_code:""
         },
         {
           onSuccess: (data: BeneFicairySuccess) => {
@@ -152,7 +156,7 @@ const NonRemitalSubmitPlanModal = ({
                 phone_number: data?.phone_number,
               });
               setShowPaymentModal(true);
-              // setOpenCheckPhoneNumberModal(false);
+              tokenStorage.clearReferral()
             }
           },
           onError: (error) => {

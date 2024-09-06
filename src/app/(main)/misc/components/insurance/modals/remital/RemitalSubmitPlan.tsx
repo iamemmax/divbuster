@@ -22,6 +22,7 @@ import PlanPayment from "./PlanPayment";
 import { useRouter } from "next/navigation";
 import { useCreateReferralBeneficiaries } from "../../api/referral/createReferralBeneficies";
 import { BeneFicairySuccess } from "../referral/AddReferralPhoneNumber";
+import { tokenStorage } from "@/app/(auth)/(onboarding)/misc";
 
 interface prop {
   setShowSubmitModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -41,6 +42,8 @@ export interface PaymentSuccessMsg {
   account_name: string;
   account_no: string;
   bank_name: string;
+  wallet_balance?:string;
+unique_request_id?:string;
   paystack_link: string;
   amount: number;
   phone_number: string;
@@ -117,6 +120,8 @@ const RemitalSubmitPlanModal = ({
                 phone_number: data?.phone_number,
               });
               setShowPaymentModal(true);
+        tokenStorage.clearReferral()
+
               // setOpenShowRemitalPlan(false);
             }
           },
@@ -137,6 +142,7 @@ const RemitalSubmitPlanModal = ({
           phone_number: verifiedPhoneNumber,
           number_of_recipient: Number(planType?.number_of_recipient),
           packages: planType?.play_type,
+          referral_code:""
         },
         {
           onSuccess: (data: BeneFicairySuccess) => {
@@ -155,6 +161,8 @@ const RemitalSubmitPlanModal = ({
                 phone_number: data?.phone_number,
               });
               setShowPaymentModal(true);
+        tokenStorage.clearReferral()
+
               // setOpenCheckPhoneNumberModal(false);
             }
           },

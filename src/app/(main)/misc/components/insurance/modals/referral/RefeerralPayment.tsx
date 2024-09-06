@@ -19,7 +19,7 @@ import Link from "next/link";
 import { PaymentSuccessMsg } from "../remital/RemitalSubmitPlan";
 import { AxiosError } from "axios";
 import { useClipboard, useErrorModalState } from "@/hooks";
-import { useUser } from "@/app/(auth)/(onboarding)/misc";
+import { tokenStorage, useUser } from "@/app/(auth)/(onboarding)/misc";
 import { useRouter } from "next/navigation";
 import { useQuery } from "react-query";
 import { confirmTransfer } from "../../api/plan/confirmTransfer";
@@ -76,6 +76,7 @@ const ReferralPlanPayment = ({
     enabled: false,
     onSuccess: (data) => {
       if (data.message !== "success") {
+        tokenStorage.clearReferral()
         toast.success(data?.message);
         router.push("/login");
       } else {
@@ -91,9 +92,11 @@ const ReferralPlanPayment = ({
       openErrorModalWithMessage(String(errorMessage));
     },
   });
+  // console.log(PaymentInfo, "paymennt");
+
   const { copy } = useClipboard();
   return (
-    <div>
+    <div className="!z-[99999999999999999999999999999999999]">
       <Dialog
         open={showReferralPayment}
         // onOpenChange={setRemitaDetailsModal}

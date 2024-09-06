@@ -42,6 +42,8 @@ import {
 import { useAddMoreToBeneficiaryList } from "./api/addMoreBeneficiries";
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
 import { useRenewBeneficiaryList } from "./api/renewBeneficiaries";
+import { PaymentSuccessMsg } from "@/app/(main)/misc/components/insurance/modals/remital/RemitalSubmitPlan";
+import { useMakeRemitalPayment } from "@/app/(main)/misc/components/insurance/api/remital/remitalpayment";
 
 export interface successProp {
   account_number: number;
@@ -160,6 +162,7 @@ function SelectDurationModal({
   const handleChange = (value: string) => {
     setSelectedValue(String(value));
   };
+  const { mutate: handlePaymentRequest } = useMakeRemitalPayment();
 
   const { mutate: addMoreBeneficiary, isLoading: loadingMoreBeneficiary } =
     useAddMoreToBeneficiaryList();
@@ -213,27 +216,70 @@ function SelectDurationModal({
         );
       }
     } else {
-      handleRenewBene(
-        {
-          beneficiariesList:
-            beneficiariesList?.beneficiaries as beneficailData[],
-          packages: planType,
-          duration: Number(selectedValue),
-        },
-        {
-          onSuccess: (data: successProp) => {
-            setPaymentProp(data);
-            setSelectPlan(true);
+      if (planType === "INDIVIDUAL") {
+        handlePaymentRequest(
+          {
+            duration: Number(selectedValue),
+            userId: users?.id as string,
+            plan_type: planType,
+            number_of_recipient: 1,
           },
-          onError: (error) => {
-            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-expect-error
-            setErrorMsg(error?.response?.data?.error);
-            openErrorModalWithMessage(String(errorMessage));
+          {
+            onSuccess: (data: PaymentSuccessMsg) => {
+              
+                setPaymentProp({
+                  account_name: data?.account_name,
+                  plan_details: {
+                    plan_duration: Number(selectedValue),
+                    price: data?.amount,
+                    total_price: data?.amount,
+                  },
+                  wallet_balance: Number(data?.wallet_balance),
+                  unique_request_id: String(data?.unique_request_id),
+                  account_number: Number(data?.account_no),
+                  bank_name: data?.bank_name,
+                  paystack_link: data?.paystack_link,
+                  people_added: Number(1),
+                });
+            
+              setSelectPlan(true);
+            },
+            onError: (error) => {
+              const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-expect-error
+              setErrorMsg(error?.response?.data?.error);
+
+              openErrorModalWithMessage(String(errorMessage));
+            },
+          }
+        );
+      } else {
+    
+  
+
+        handleRenewBene(
+          {
+            beneficiariesList:
+              beneficiariesList?.beneficiaries as beneficailData[],
+            packages: planType,
+            duration: Number(selectedValue),
           },
-        }
-      );
+          {
+            onSuccess: (data: successProp) => {
+              setPaymentProp(data);
+              setSelectPlan(true);
+            },
+            onError: (error) => {
+              const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-expect-error
+              setErrorMsg(error?.response?.data?.error);
+              openErrorModalWithMessage(String(errorMessage));
+            },
+          }
+        );
+      }
     }
   };
 

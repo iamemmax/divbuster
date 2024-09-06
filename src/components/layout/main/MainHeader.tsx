@@ -78,7 +78,6 @@ export function MainHeader() {
   //   }
   // }, [users]);
 
-
   return (
     <div className={cn(isColored && "bg-main")}>
       <header
@@ -160,8 +159,8 @@ export function MainHeader() {
                 "font-display"
               )}
               href="/dashboard"
-            // target="_blank"
-            // variant="white"
+              // target="_blank"
+              // variant="white"
             >
               Dashboard
             </a>
