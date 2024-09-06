@@ -54,7 +54,7 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
     queryKey: ["generate-referral-code", userData?.id],
     enabled: false,
     onSuccess: () => {
-      // Invalidate user details query to refetch data....
+      // Invalidate user details query to refetch data.........
       queryClient.invalidateQueries(["user-details", data?.referral_code]);
     },
   });
@@ -200,7 +200,7 @@ const BeneficiaryDetailsPage = ({ params }: { params: { id: string } }, { loadin
                       </p>
                     </div>
                     <div className='grid grid-cols-2 mt-2.5 gap-y-5'>
-                      <div className='text-[#032282] font-medium text-xs'> 
+                      <div className='text-[#032282] font-medium text-xs'>
                         {convertNumberToNaira(factors?.amount) ?? "0"}
                         <p className='text-[#8490A8] text-xxs'>Price</p>
                       </div>
