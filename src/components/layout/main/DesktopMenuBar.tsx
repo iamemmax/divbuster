@@ -113,9 +113,15 @@ export function DesktopMenuLink({
             className
           )}
           onClick={() => {
-            referralFromAproko === "aproko-doctor" ?    router.push("/plan/aproko-doctor?select-plan=true") 
-            :
-            setOpenReferralModal(true)}}
+            if (window.location.href.includes("/plan/aproko-doctor?select-plan=true")) {
+              // Reload the page
+              window.location.reload();
+            } else if (referralFromAproko === "aproko-doctor") {
+              router.push("/plan/aproko-doctor?select-plan=true");
+            } else {
+              setOpenReferralModal(true);
+            }
+          }}
           id="get-referral-button"
         >
           {text}
