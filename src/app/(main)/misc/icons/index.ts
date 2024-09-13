@@ -7,3 +7,4 @@ export { default as Testimonial1 } from './Testimonial1';
 export { default as Testimonial2 } from './Testimonial2';
 export { default as Testimonial3 } from './Testimonial3';
 export { default as Testimonial4 } from './Testimonial4';
+export { default as HandIcon } from './HandIcon'

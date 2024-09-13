@@ -17,7 +17,7 @@ import { fetchHospitalListByLga, fetchRegionByState, fetchStateList, useUserHosp
 import { capitalizeFirstLetter, formatAxiosErrorMessage } from '@/utils'
 
 import Select, { components } from "react-select";
-import { Spinner } from '@/icons/core'
+import { SmallSpinner, Spinner } from '@/icons/core'
 import { CopyIcon4, Delete, Photo, Upload } from '../../comp/icons'
 import { Input2 } from '@/components/core/Input2'
 import { useUpdateUserDetails } from '../api/patchUserDetails'
@@ -302,7 +302,7 @@ export default function Page() {
             reader.readAsDataURL(file);
         }
     };
-    const { mutate: handleUpload } = useUpdateUserImage()
+    const { mutate: handleUpload, isLoading: isUploadingImage } = useUpdateUserImage()
     const handleFileUpload = () => {
         handleUpload(
             selectedFile
@@ -310,7 +310,7 @@ export default function Page() {
                 onSuccess: (data) => {
                     //   setBuyPlanModal;
                     queryClient.invalidateQueries(["user-details"]);
-                    // setshowWithdrawalModal(false);
+                    setProfilePic(null);
                 },
                 onError: (error) => {
                     const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -328,368 +328,357 @@ export default function Page() {
 
     return (
         <>
-            {isLoading ? (
-                <Spinner />
-            ) : (
-                <div className='bg-[#F5F9FE]'>
-                    <div className='bg-main min-h-36'></div>
-                    <section className="h-full w-full px-6 md:px-[7.5rem] min-h-screen pb-[1.88rem] relative -mt-32">
-                        <div className='bg-white w-full h-full lg:h-screen mx-auto pt-[2.625rem] px-6 lg:px-[4.5rem] rounded-[.625rem]'>
-                            <p className='text-[#032282] font-sans font-bold text-2xl'>Personal Information</p>
-                            <section className='mt-8 flex flex-col lg:flex-row justify-between'>
-                                <div className='flex justify-between items-center gap-4'>
-                                    <div className='hidden md:flex relative'>
-                                        <Image
-                                            alt="profile"
-                                            src={profilePic || userData?.profile_image || '/images/userIcon.png'}
-                                            height={100}
-                                            width={100}
-                                            className="rounded-full"
-                                        />
-                                        <div className='mt-[3.8rem] -ml-[1.5rem]'>
-                                            <Photo onClick={handleClick} />
-                                        </div>
-                                        <input
-                                            type="file"
-                                            ref={fileInputRef}
-                                            style={{ display: 'none' }}
-                                            onChange={handleProfilePicChange}
-                                        />
-                                    </div>
-                                    <div className='flex md:hidden relative '>
-                                        <Image
-                                            alt="profile"
-                                            src={profilePic || userData?.profile_image || '/images/userIcon.png'}
-                                            height={100}
-                                            width={100}
-                                            className="rounded-full"
-                                        />
-                                        <div className='mt-[3.8rem] -ml-[1.5rem]'>
-                                            <Photo onClick={handleClick} />
-                                        </div>
-                                        <input
-                                            type="file"
-                                            ref={fileInputRef}
-                                            style={{ display: 'none' }}
-                                            onChange={handleProfilePicChange}
-                                        />
-                                    </div>
-                                    {
-                                        profilePic &&
-                                        <>
+            {
+                (isLoading || isloadingUserdata) ?
+                    (
+                        <div className='flex items-center justify-center min-h-[60vh]'>
+                            <Spinner />
+                        </div>
+                    )
+                    :
+                    (
+                        <div className='bg-[#F5F9FE]'>
+                            <div className='bg-main min-h-36'></div>
+                            <section className="h-full w-full px-6 md:px-[7.5rem] min-h-screen pb-[1.88rem] relative -mt-32">
+                                <div className='bg-white w-full h-full lg:h-screen mx-auto pt-[2.625rem] px-6 lg:px-[4.5rem] rounded-[.625rem]'>
+                                    <p className='text-[#032282] font-sans font-bold text-2xl'>Personal Information</p>
+                                    <section className='mt-8 flex flex-col lg:flex-row justify-between'>
+                                        <div className='flex justify-between items-center gap-4'>
+                                            <div className='flex justify-center'>
+                                                <div className='relative w-[100px] h-[100px] rounded-full overflow-hidden'>
+                                                    <Image
+                                                        alt="profile"
+                                                        src={profilePic || userData?.profile_image || '/images/userIcon.png'}
+                                                        className="rounded-full"
+                                                        fill
+                                                        objectFit='cover'
+                                                    />
+                                                </div>
+                                                <div className='mt-[3.8rem] -ml-[1.5rem] z-[2]'>
+                                                    <Photo onClick={handleClick} />
+                                                </div>
+                                                <input
+                                                    type="file"
+                                                    ref={fileInputRef}
+                                                    style={{ display: 'none' }}
+                                                    onChange={handleProfilePicChange}
+                                                />
+                                            </div>
+                                            {
+                                                profilePic &&
+                                                <>
+                                                    <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload' onClick={handleFileUpload}>
+                                                        <Upload />
+                                                        <p className='text-[#032282] font-medium'>Upload</p>
+                                                        {
+                                                            isUploadingImage &&
+                                                            <SmallSpinner color='#032282' />
+                                                        }
+                                                    </Button>
 
-                                            <Button className='bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3' id='upload' onClick={handleFileUpload}>
-                                                <Upload />
-                                                <p className='text-[#032282] font-medium'>Upload</p>
-                                            </Button>
+                                                </>
+                                            }
                                             <Button className='bg-[#F5F9FE] gap-1 px-4 py-3'>
                                                 <Delete
                                                     onClick={handleDelete}
                                                 />
                                                 <p className='text-[#032282] font-medium'>Remove</p>
                                             </Button>
-                                        </>
-                                    }
-                                </div>
-                                {/* </form> */}
-                                <div className='flex flex-col md:flex-row gap-4 justify-between items-center mt-3 lg:mt-0'>
-                                    <div className="flex items-center gap-2">
-                                        <div
-                                            className="flex items-center justify-center flex-col gap-x-2 border-[0.3px] border-[#032282] bg-white px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
-                                            onClick={() =>
-                                                copy(
-                                                    ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}` ??
-                                                    ""
-                                                )
-                                            }
-                                        >
-                                            <p className="text-[#032282] text-xxs">
-                                                Referral link
-                                            </p>
-                                            <div className="flex">
-                                                <p className="text-[#032282] max-w-[6.25rem] text-xxs truncate">
-                                                    {` https://liberty-life.vercel.app/?referral_code=${userData?.referral_code}`}
-                                                </p>
-                                                <Button className=" text-[#032282] px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
-                                                    <CopyIcon4 height={15} width={15} fill='' />
-                                                </Button>
-                                            </div>
                                         </div>
-                                        <div
-                                            className="flex items-center justify-center flex-col gap-x-2 bg-white border-[0.3px] border-[#032282] px-6 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
-                                            onClick={() => copy(userData?.referral_code ?? "")}
-                                        >
-                                            <p className="text-[#032282] text-xxs">
-                                                Referral Code
-                                            </p>
-                                            <div className="flex">
-                                                <p className="text-[black] max-w-[3.25rem] text-xxs truncate">
-                                                    {userData?.referral_code ?? ""}
-                                                </p>
-                                                <Button className=" text-[#032282] px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
-                                                    <CopyIcon4 height={15} width={15} />
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
-                            <div className='border-b-[0.3px] mt-4'></div>
-                            <section >
-                                <div className='mt-10'>
-                                    <form onSubmit={handleSubmit(onSubmit)}>
-                                        <div className='grid grid-rows-1 lg:grid-cols-2 gap-x-10 gap-y-6 font-sans text-sm'>
-                                            <div >
-                                                <Label
-                                                    htmlFor='name'
-                                                    className='text-[#032282]'
-                                                >
-                                                    Name
-                                                </Label>
-                                                <Input
-                                                    placeholder='Enter name'
-                                                    type='text'
-                                                    id='name'
-                                                    className='py-3 bg-[#F5F9FE] mt-2'
-                                                    {...register("name", {
 
-                                                    })}
-
-                                                />
-                                            </div>
-                                            <div>
-                                                <Label
-                                                    htmlFor='email'
-                                                    className='text-[#032282]'
+                                        <div className='flex flex-col md:flex-row gap-4 justify-between items-center mt-3 lg:mt-0'>
+                                            <div className="flex items-center gap-2">
+                                                <div
+                                                    className="flex items-center justify-center flex-col gap-x-2 border-[0.3px] border-[#032282] bg-white px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
+                                                    onClick={() =>
+                                                        copy(
+                                                            ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}` ??
+                                                            ""
+                                                        )
+                                                    }
                                                 >
-                                                    Email
-                                                </Label>
-                                                <Input
-                                                    placeholder='Enter email'
-                                                    type='text'
-                                                    id='email'
-                                                    className='py-3 bg-[#F5F9FE]  mt-2'
-                                                    {...register("email", {})}
-                                                    disabled
-                                                />
-                                            </div>
-                                            <div>
-                                                <Label
-                                                    htmlFor='Phone_number'
-                                                    className='text-[#032282]'
-                                                >
-                                                    Phone number
-                                                </Label>
-                                                <Input
-                                                    placeholder='Enter phone number'
-                                                    type='number'
-                                                    id='phone_number'
-                                                    className='py-3 bg-[#F5F9FE]  mt-2'
-                                                    {...register("phone_number", {})}
-                                                    disabled
-                                                />
-                                            </div>
-                                            <div className="">
-                                                <Label
-                                                    className='text-[#032282]'
-                                                    htmlFor="State"
-                                                >
-                                                    State
-                                                </Label>
-
-                                                <Controller
-                                                    control={control}
-                                                    name="state"
-                                                    render={({ field: { onChange, value, ref } }) => (
-                                                        <Select
-                                                            value={stateOptions.find(
-                                                                (c) => c.value === String(value)
-                                                            )}
-                                                            options={stateOptions}
-                                                            placeholder="Select State"
-                                                            ref={ref}
-                                                            onChange={(selectedOption) => {
-                                                                onChange(selectedOption?.value);
-                                                                setValue("lga", "");
-                                                            }}
-                                                            styles={style}
-                                                            components={{
-                                                                IndicatorSeparator: () => null,
-                                                            }}
-                                                        />
-                                                    )}
-                                                />
-                                            </div>
-                                            <div className="">
-                                                <Label
-                                                    className='text-[#032282]'
-                                                    htmlFor="State"
-                                                >
-                                                    Lga
-                                                </Label>
-
-                                                <Controller
-                                                    control={control}
-                                                    name="lga"
-                                                    render={({ field: { onChange, value, ref } }) => (
-                                                        <Select
-                                                            value={lgaOption?.find(
-                                                                (c) => c.value === String(value)
-                                                            )}
-                                                            options={lgaOption}
-                                                            placeholder="Select Lga"
-                                                            ref={ref}
-                                                            onChange={(lgaOption) => {
-                                                                onChange(lgaOption?.value);
-                                                            }}
-                                                            styles={style}
-                                                            components={{
-                                                                IndicatorSeparator: () => null,
-                                                            }}
-                                                        />
-                                                    )}
-                                                />
-                                            </div>
-                                            <div className="">
-                                                <Label
-                                                    className='text-[#032282]'
-                                                    htmlFor="hospital"
-                                                >
-                                                    Hospital ({hospitalList?.data?.length ?? 0})
-                                                </Label>
-                                                <div className="relative mt-[.25rem]">
-                                                    <Controller
-                                                        control={control}
-                                                        name="hospital"
-                                                        render={({ field }) => (
-                                                            <Select
-                                                                {...field}
-                                                                options={hospitalOptions}
-                                                                placeholder="Select Hospital"
-                                                                onChange={(option) => field.onChange(option?.value)}
-                                                                value={hospitalOptions?.find(
-                                                                    (option) => option.value === field.value
-                                                                )}
-                                                                styles={style}
-                                                                components={{
-                                                                    Option: CustomOption,
-                                                                    IndicatorSeparator: () => null,
-                                                                }}
-                                                            />
-                                                        )}
-                                                    />
-                                                    {errors?.hospital && (
-                                                        <p className="text-red-600 text-xs mt-1">
-                                                            {errors.hospital.message}
+                                                    <p className="text-[#032282] text-xxs">
+                                                        Referral link
+                                                    </p>
+                                                    <div className="flex">
+                                                        <p className="text-[#032282] max-w-[6.25rem] text-xxs truncate">
+                                                            {` https://liberty-life.vercel.app/?referral_code=${userData?.referral_code}`}
                                                         </p>
-                                                    )}
+                                                        <Button className=" text-[#032282] px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
+                                                            <CopyIcon4 height={15} width={15} fill='' />
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    className="flex items-center justify-center flex-col gap-x-2 bg-white border-[0.3px] border-[#032282] px-6 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
+                                                    onClick={() => copy(userData?.referral_code ?? "")}
+                                                >
+                                                    <p className="text-[#032282] text-xxs">
+                                                        Referral Code
+                                                    </p>
+                                                    <div className="flex">
+                                                        <p className="text-[black] max-w-[3.25rem] text-xxs truncate">
+                                                            {userData?.referral_code ?? ""}
+                                                        </p>
+                                                        <Button className=" text-[#032282] px-0  py-[.0625rem] flex items-start bg-transparent text-xs font-medium">
+                                                            <CopyIcon4 height={15} width={15} />
+                                                        </Button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <Label
-                                                    className='text-[#032282]'
-                                                    htmlFor='selectedOption'
-                                                >
-                                                    Select the one to enter, BVN or NIN?
-                                                </Label>
-                                                <Controller
-                                                    control={control}
-                                                    name="selectedOption"
-                                                    render={({ field: { onChange, value, ref } }) => (
-
-                                                        <RadioGroup
-                                                            defaultValue="nin"
-                                                            id='selectedOption'
-                                                            onValueChange={onChange}
-                                                            value={value}
-                                                            className='px-4 py-3 bg-[#F5F9FE] mt-2'
-                                                            ref={ref}
+                                        </div>
+                                    </section>
+                                    <div className='border-b-[0.3px] mt-4'></div>
+                                    <section >
+                                        <div className='mt-10'>
+                                            <form onSubmit={handleSubmit(onSubmit)}>
+                                                <div className='grid grid-rows-1 lg:grid-cols-2 gap-x-10 gap-y-6 font-sans text-sm'>
+                                                    <div >
+                                                        <Label
+                                                            htmlFor='name'
+                                                            className='text-[#032282]'
                                                         >
-                                                            <div className='flex gap-x-4'>
+                                                            Name
+                                                        </Label>
+                                                        <Input
+                                                            placeholder='Enter name'
+                                                            type='text'
+                                                            id='name'
+                                                            className='py-3 bg-[#F5F9FE] mt-2'
+                                                            {...register("name", {
 
-                                                                <div className="flex items-center space-x-2 bg-white py-2 pl-3 text-[#032282] pr-8 rounded-lg">
-                                                                    <RadioGroupItem value="bvn" id="r1" />
-                                                                    <Label htmlFor="r1" className='text-[#032282]'>BVN</Label>
-                                                                </div>
-                                                                <div className="flex items-center space-x-2 bg-white py-2 pl-3 text-[#032282] pr-8 rounded-lg">
-                                                                    <RadioGroupItem value="nin" id="r2" />
-                                                                    <Label htmlFor="r2" className='text-[#032282]'>NIN</Label>
-                                                                </div>
-                                                            </div>
-                                                        </RadioGroup>
-                                                    )}
-                                                />
-                                            </div>
-                                            {watchSelectedOption === "bvn" && (
-                                                <div className="w-full mt-[1rem] text-sm font-normal">
-                                                    <Label
-                                                        className="mb-1 block text-xs text-[#032282]"
-                                                        htmlFor="bvn"
-                                                    >
-                                                        BVN
-                                                    </Label>
-                                                    <div className="relative mt-[.25rem]">
-                                                        <Input2
-                                                            className={`${errors?.bvn?.message ? "border border-red-700" : ""} text-[#032282] bg-[#F5F9FE] py-6`}
-                                                            placeholder="Enter BVN"
-                                                            type="text"
-                                                            id="bvn"
-                                                            required
-                                                            {...register("bvn")}
+                                                            })}
 
                                                         />
                                                     </div>
-                                                </div>
-                                            )}
-
-                                            {watchSelectedOption === "nin" && (
-                                                <div className="w-full mt-[1rem] text-sm font-normal">
-                                                    <Label
-                                                        className="mb-1 block text-xs text-[#032282]"
-                                                        htmlFor="nin"
-
-                                                    >
-                                                        NIN
-                                                    </Label>
-                                                    <div className="relative mt-[.25rem]">
-                                                        <Input2
-                                                            className={`${errors?.nin?.message ? "border border-red-700" : ""}  bg-[#F5F9FE] py-6`}
-                                                            placeholder="Enter NIN"
-                                                            type="text"
-                                                            id="nin"
-                                                            required
-                                                            {...register("nin")}
+                                                    <div>
+                                                        <Label
+                                                            htmlFor='email'
+                                                            className='text-[#032282]'
+                                                        >
+                                                            Email
+                                                        </Label>
+                                                        <Input
+                                                            placeholder='Enter email'
+                                                            type='text'
+                                                            id='email'
+                                                            className='py-3 bg-[#F5F9FE]  mt-2'
+                                                            {...register("email", {})}
                                                             disabled
                                                         />
                                                     </div>
+                                                    <div>
+                                                        <Label
+                                                            htmlFor='Phone_number'
+                                                            className='text-[#032282]'
+                                                        >
+                                                            Phone number
+                                                        </Label>
+                                                        <Input
+                                                            placeholder='Enter phone number'
+                                                            type='number'
+                                                            id='phone_number'
+                                                            className='py-3 bg-[#F5F9FE]  mt-2'
+                                                            {...register("phone_number", {})}
+                                                            disabled
+                                                        />
+                                                    </div>
+                                                    <div className="">
+                                                        <Label
+                                                            className='text-[#032282]'
+                                                            htmlFor="State"
+                                                        >
+                                                            State
+                                                        </Label>
+
+                                                        <Controller
+                                                            control={control}
+                                                            name="state"
+                                                            render={({ field: { onChange, value, ref } }) => (
+                                                                <Select
+                                                                    value={stateOptions.find(
+                                                                        (c) => c.value === String(value)
+                                                                    )}
+                                                                    options={stateOptions}
+                                                                    placeholder="Select State"
+                                                                    ref={ref}
+                                                                    onChange={(selectedOption) => {
+                                                                        onChange(selectedOption?.value);
+                                                                        setValue("lga", "");
+                                                                    }}
+                                                                    styles={style}
+                                                                    components={{
+                                                                        IndicatorSeparator: () => null,
+                                                                    }}
+                                                                />
+                                                            )}
+                                                        />
+                                                    </div>
+                                                    <div className="">
+                                                        <Label
+                                                            className='text-[#032282]'
+                                                            htmlFor="State"
+                                                        >
+                                                            Lga
+                                                        </Label>
+
+                                                        <Controller
+                                                            control={control}
+                                                            name="lga"
+                                                            render={({ field: { onChange, value, ref } }) => (
+                                                                <Select
+                                                                    value={lgaOption?.find(
+                                                                        (c) => c.value === String(value)
+                                                                    )}
+                                                                    options={lgaOption}
+                                                                    placeholder="Select Lga"
+                                                                    ref={ref}
+                                                                    onChange={(lgaOption) => {
+                                                                        onChange(lgaOption?.value);
+                                                                    }}
+                                                                    styles={style}
+                                                                    components={{
+                                                                        IndicatorSeparator: () => null,
+                                                                    }}
+                                                                />
+                                                            )}
+                                                        />
+                                                    </div>
+                                                    <div className="">
+                                                        <Label
+                                                            className='text-[#032282]'
+                                                            htmlFor="hospital"
+                                                        >
+                                                            Hospital ({hospitalList?.data?.length ?? 0})
+                                                        </Label>
+                                                        <div className="relative mt-[.25rem]">
+                                                            <Controller
+                                                                control={control}
+                                                                name="hospital"
+                                                                render={({ field }) => (
+                                                                    <Select
+                                                                        {...field}
+                                                                        options={hospitalOptions}
+                                                                        placeholder="Select Hospital"
+                                                                        onChange={(option) => field.onChange(option?.value)}
+                                                                        value={hospitalOptions?.find(
+                                                                            (option) => option.value === field.value
+                                                                        )}
+                                                                        styles={style}
+                                                                        components={{
+                                                                            Option: CustomOption,
+                                                                            IndicatorSeparator: () => null,
+                                                                        }}
+                                                                    />
+                                                                )}
+                                                            />
+                                                            {errors?.hospital && (
+                                                                <p className="text-red-600 text-xs mt-1">
+                                                                    {errors.hospital.message}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <Label
+                                                            className='text-[#032282]'
+                                                            htmlFor='selectedOption'
+                                                        >
+                                                            Select the one to enter, BVN or NIN?
+                                                        </Label>
+                                                        <Controller
+                                                            control={control}
+                                                            name="selectedOption"
+                                                            render={({ field: { onChange, value, ref } }) => (
+
+                                                                <RadioGroup
+                                                                    defaultValue="nin"
+                                                                    id='selectedOption'
+                                                                    onValueChange={onChange}
+                                                                    value={value}
+                                                                    className='px-4 py-3 bg-[#F5F9FE] mt-2'
+                                                                    ref={ref}
+                                                                >
+                                                                    <div className='flex gap-x-4'>
+
+                                                                        <div className="flex items-center space-x-2 bg-white py-2 pl-3 text-[#032282] pr-8 rounded-lg">
+                                                                            <RadioGroupItem value="bvn" id="r1" />
+                                                                            <Label htmlFor="r1" className='text-[#032282]'>BVN</Label>
+                                                                        </div>
+                                                                        <div className="flex items-center space-x-2 bg-white py-2 pl-3 text-[#032282] pr-8 rounded-lg">
+                                                                            <RadioGroupItem value="nin" id="r2" />
+                                                                            <Label htmlFor="r2" className='text-[#032282]'>NIN</Label>
+                                                                        </div>
+                                                                    </div>
+                                                                </RadioGroup>
+                                                            )}
+                                                        />
+                                                    </div>
+                                                    {watchSelectedOption === "bvn" && (
+                                                        <div className="w-full mt-[1rem] text-sm font-normal">
+                                                            <Label
+                                                                className="mb-1 block text-xs text-[#032282]"
+                                                                htmlFor="bvn"
+                                                            >
+                                                                BVN
+                                                            </Label>
+                                                            <div className="relative mt-[.25rem]">
+                                                                <Input2
+                                                                    className={`${errors?.bvn?.message ? "border border-red-700" : ""} text-[#032282] bg-[#F5F9FE] py-6`}
+                                                                    placeholder="Enter BVN"
+                                                                    type="text"
+                                                                    id="bvn"
+                                                                    required
+                                                                    {...register("bvn")}
+
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    {watchSelectedOption === "nin" && (
+                                                        <div className="w-full mt-[1rem] text-sm font-normal">
+                                                            <Label
+                                                                className="mb-1 block text-xs text-[#032282]"
+                                                                htmlFor="nin"
+                                                            >
+                                                                NIN
+                                                            </Label>
+                                                            <div className="relative mt-[.25rem]">
+                                                                <Input2
+                                                                    className={`${errors?.nin?.message ? "border border-red-700" : ""}  bg-[#F5F9FE] py-6`}
+                                                                    placeholder="Enter NIN"
+                                                                    type="text"
+                                                                    id="nin"
+                                                                    required
+                                                                    {...register("nin")}
+                                                                    disabled
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            )}
+                                                <div className='border-b-[0.3px] mt-4'></div>
+                                                <div className='mt-6'>
+                                                    <Button className='bg-[#099976] py-3 px-7 text-xs text-nowrap rounded-10 border-[0.3px] border-[#032282]'>Save Changes</Button>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <div className='border-b-[0.3px] mt-4'></div>
-                                        <div className='mt-6'>
-                                            <Button className='bg-[#099976] py-3 px-7 text-xs text-nowrap rounded-10 border-[0.3px] border-[#032282]'>Save Changes</Button>
-                                        </div>
-                                    </form>
+                                    </section>
                                 </div>
                             </section>
-
+                            <ErrorModal
+                                isErrorModalOpen={isErrorModalOpen}
+                                setErrorModalState={() => {
+                                    setErrorModalState(false);
+                                }}
+                                subheading={
+                                    errorModalMessage ||
+                                    errorMsg ||
+                                    "Please check your inputs and try again."
+                                }
+                            ></ErrorModal>
                         </div>
-                    </section>
-                    <ErrorModal
-                        isErrorModalOpen={isErrorModalOpen}
-                        setErrorModalState={() => {
-                            setErrorModalState(false);
-                        }}
-                        subheading={
-                            errorModalMessage ||
-                            errorMsg ||
-                            "Please check your inputs and try again."
-                        }
-                    ></ErrorModal>
-                </div>
-            )}
+                    )}
         </>
     )
 }
-
-

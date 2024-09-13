@@ -17,40 +17,32 @@ export default function page() {
       answer: "Liberty life is a subsidiary of Liberty Assured and we are committed at providing comprehensive health coverage for all our customers."
     },
     {
-      question: "How can I register to a healthcare plan?",
-      answer: "You can easily register by dialling the USSD code *347*180*9# on any mobile phone. No internet or smartphone is needed, just your Bank Verification Number (BVN)."
+      question: "What does Liberty Life cover?",
+      answer: "Our plans cover a wide range of healthcare services, from basic needs like doctor consultations, medications, and hospitalization to fitness programs and mental healthservices, ensuring all your essential health needs are met."
     },
     {
-      question: "What does LibertyLife Micro Insurance cover?",
-      answer: "The plan covers a wide range of healthcare services, from basic needs like doctor consultations, medications, and hospitalizations to fitness programs and mental health services, ensuring all your essential health needs are met."
-    },
-    {
-      question: "Who is eligible for LibertyLife Micro Insurance?",
-      answer: "All Nigerians with a BVN are eligible to enrol in LibertyLife Micro Insurance. It's especially designed for low-income earners and those who may not have access to traditional health insurance."
-    },
-    {
-      question: "How much does LibertyLife Micro Insurance cost?",
-      answer: "The premiums are tailored to be budget-friendly for the average Nigerian, starting as low as 3,000 Naira. With flexible payment options, you can easily access comprehensive healthcare coverage."
-    },
-    {
-      question: "Can I register or connect to an agent if I have no data or smartphone?",
-      answer: "Yes, you can! With LibertY Life, you don't need data or a smartphone to register or connect with an agent. Simply dial *347*180*9# on any mobile phone, and you're good to go!"
-    },
-    {
-      question: "How do I pay my premiums?",
-      answer: "Premiums can be conveniently paid either through automatic salary deductions for Remita customers or via a virtual account for non-Remita customers. No matter which option you choose, the payment process is seamless."
-    },
-    {
-      question: "What makes Liberty Life Micro Insurance different from other health insurance plans?",
-      answer: "LibertyLife Micro Insurance is specifically designed for affordability and accessibility. It's tailored for low-income earners and those without access to traditional health insurance, and it's easy to register using the USSD code*347*180*9#."
+      question: "Can i register or connect to an agent if i have no data or smartphone?",
+      answer: "Yes, you can! With Liberty Life, you don't need data or a smartphone to register or connect with an agent. Simply dial *347*180*9# on any mobile phone and you are good to go!"
     },
     {
       question: "How does Liberty Life support corporations and businesses?",
-      answer: "Corporations and businesses can offer LibertyLife as a benefit to their employees or staff, providing them with affordable health coverage and peace of mind."
+      answer: "Corporations and businesses can offer Liberty Life as a benefit to their employees or staff, providing them with affordable health coverage and peace of mind."
+    },
+    {
+      question: "Who is eligible to subscribe to Liberty Life's plan? ",
+      answer: "All Nigerians with a BVN are eligible to subscribe to our plans. It's especially designed for low-income earners and those who may not have access to traditional health insurance."
+    },
+    {
+      question: "How affordable are your health plans?",
+      answer: "The premiums are tailored to be budget friendly for the average Nigerian, starting as low 3,000 Naira. With flexible payment options, you can easily access comprehensive healthcare coverage."
+    },
+    {
+      question: "What makes Liberty Life x NEM Health different from other health insurance plans?",
+      answer: "It is specifically designed for affordability and accessibility.It's tailored for low-income earners and those without access to traditional health insurance, and it's easy to register using the USSD code *347*180*9#."
     },
     {
       question: "Would I have 24/7 access to customer support?",
-      answer: "LibertyLife offers dedicated service managers to assist with onboarding, customer support, and retention, ensuring a smooth and positive experience for all potential, new and existing customers."
+      answer: "Liberty Life offers dedicated service managers to assist with onboarding, customer support, and retention, ensuring a smooth and positive experience for all potential, new and existing customers. "
     },
   ]
 
@@ -94,7 +86,7 @@ export default function page() {
       <div className='mt-10 md:-mt-10 flex flex-col md:flex-row gap-4'>
         <ul className='flex flex-col gap-3 basis-1/2'>
           {
-            FAQs.slice(0, 5).map((faq, index) => {
+            FAQs.slice(0, 4).map((faq, index) => {
               const [isOpen, setIsOpen] = useState(false)
 
               return (
@@ -115,7 +107,7 @@ export default function page() {
         </ul>
         <ul className='flex flex-col gap-3 basis-1/2'>
           {
-            FAQs.slice(5, 10).map((faq, index) => {
+            FAQs.slice(4, 8).map((faq, index) => {
               const [isOpen, setIsOpen] = useState(false)
 
               return (

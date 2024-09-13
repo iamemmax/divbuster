@@ -4,49 +4,49 @@ import React from 'react'
 
 interface about {
     vision: string;
-    description:string
+    description: string
 }
 
 interface mission {
-    
-        mission: string;
-        description2: string
+
+    mission: string;
+    description2: string
 }
 
 export default function page() {
 
-    const aboutUs : about[] = [
+    const aboutUs: about[] = [
         {
             vision: 'Our Vision',
-            description: 'To be the leading provider of affordable and accessible health insurance solutions in Nigeria, empowering individuals and communities to live healthier, more secure lives.'
+            description: 'Partnering with NEM insurance, we aim to be the leading provider of affordable and accessible health insurance solutions in Nigeria, empowering individuals and communities to live healthier, more secure lives.'
         },
         {
             vision: 'Our Mission',
-            description: 'To revolutionise the health insurance landscape by offering innovative, customer-centric solutions that meet the diverse needs of all Nigerians, ensuring that quality healthcare is within reach for everyone.'
+            description: 'To revolutionize the health insurance landscape by offering innovative and customer-centric solutions that meet the diverse needs of all Nigerians, ensuring that quality healthcare is within reach for everyone.'
         },
 
     ]
-    const us : mission[] =[
-       
-                {
-                    mission: 'Affordability:',
-                    description2: 'Our plans are designed to fit your budget without compromising on quality healthcare. We offer a range of options that cater to individuals, families, and businesses.'
-                },
-                {
-                    mission: 'Accessibility:',
-                    description2: ' With simple USSD codes, online platforms, and in-person support, enrolling in our health insurance plans is quick and hassle-free.'
-                },
-                {
-                    mission: 'Comprehensive Coverage:',
-                    description2: ' From routine check-ups to emergency care, our plans cover a wide range of healthcare services to keep you, your family and your business healthy.'
-                },
-                {
-                    mission: 'Nationwide Network:',
-                    description2: 'We partner with top hospitals and healthcare providers across Nigeria, giving you access to quality medical care wherever you are.'
-                },
-            ]
-        
-    
+    const us: mission[] = [
+
+        {
+            mission: 'Affordability',
+            description2: 'Our plans are designed to fit your budget without compromising on quality healthcare. We offer a range of options that cater to individuals, families, and businesses.'
+        },
+        {
+            mission: 'Accessibility',
+            description2: ' With simple USSD codes, online platforms, and in-person support, enrolling in our health insurance plans is quick and hassle-free.'
+        },
+        {
+            mission: 'Comprehensive Coverage',
+            description2: ' From routine check-ups to emergency care, our plans cover a wide range of healthcare services to keep you, your family and your business healthy.'
+        },
+        {
+            mission: 'Nationwide Network',
+            description2: 'We partner with top hospitals and healthcare providers across Nigeria, giving you access to quality medical care wherever you are.'
+        },
+    ]
+
+
 
     return (
         <main className=" bg-main text-white size-full py-5 px-6 md:max-lg:px-16 lg:px-12 xl:px-[120px]">
@@ -84,49 +84,44 @@ export default function page() {
                     </div>
                 </div>
                 <div className='mb-16 mt-10 md:mt-0 font-sans'>
-                    <div className='border-[0.3px] border-[#4760FD] rounded-10 px-4 md:px-10 pt-4 md:pt-10 pb-20 text-[#FFFFFFCC]'>
-                        <p className='text-base md:text-lg font-medium pb-4'>Welcome to Liberty Life, where your health is our top priority. Founded with a mission to make quality healthcare accessible to every Nigerian, we are committed to providing comprehensive health insurance solutions tailored to your unique needs.
+                    <div className='px-4 md:px-10 pt-4 md:pt-10 pb-20 lg:pr-60 text-[#CAC9D4]'>
+                        <p className='text-base md:text-lg lg:text-2xl'>Welcome to Liberty Life, where your health is our top priority. In partnership with NEM health. we are dedicated to making quality healthcare accessible to every Nigerian by providing comprehensive health insurance solutions tailored to your unique needs.
                         </p>
-                        <p  className='md:text-lg font-medium pb-4'>At Liberty Life, we believe that health insurance should be affordable, inclusive, and easy to access. Whether you're in the bustling cities or the remote areas, our micro-insurance plans are designed to ensure that you and your loved ones are covered, no matter where you are. With us, you can expect more than just insurance—you can expect peace of mind.
+                        <p className='text-base md:text-lg lg:text-2xl mt-16 pb-4'>We believe that health insurance should be affordable, inclusive, and easy to access. Whether you're in bustling cities or remote areas, our micro-insurance plans, in partnership with NEM health, aredesigned to ensure that you and your loved ones are covered, no matter where you are. With us, you can expect more than just insurance—you can expect peace of mind.
                         </p>
                         {
                             aboutUs?.map((section, index) => (
                                 <div key={index}>
-                                    <div className='pb-4'>
-                                    <div className='font-bold text-xl'>{section.vision}</div>
-                                    <div className=' pt-4'>{section.description}</div>
+                                    <div className='pb-4 mt-11'>
+                                        <div className='font-bold text-xl text-white'>{section.vision}</div>
+                                        <div className=' pt-4'>{section.description}</div>
                                     </div>
-                                </div>
-                            ))
-                        }
-                        <p className='font-bold text-xl'>Why Choose Liberty Life?</p>
-                        {
-                            us?.map((sec, index) => (
-                                <div key={index} className=' mt-4'>
-                                    
-                                    <div> <span className='font-bold text-xl'>{sec.mission}</span> {sec.description2}</div>
                                 </div>
                             ))
                         }
                     </div>
                 </div>
-                <button className='capitalize flex justify-center items-center rounded-full py-3 px-12 mt-4 md:mt-0 bg-[#34307A] bg-opacity-[20%] text-[14px] font-semibold'>benefits</button>
-                <div className=' flex flex-col md:grid md:grid-cols-2 mt-8 gap-3 border-[0.3px] md:border-0 p-4 md:p-0 rounded-xl border-[#407cff59]'>
-                    <span className='bg-[#080D27] md:border-[0.3px] rounded-[10px]  p-6 md:border-[#407cff59]'>
-                        <p className='flex gap-4 text-3xl md:text-[38px] font-bold'>01<span className='text-center text-xs md:text-[15px] font-medium py-2 md:py-4'>premium hospital</span></p>
-                        <p className='text-[10px] md:text-[0.9rem] text-[#CAC9D4] font-normal md:max-w-[438px]'>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
+                <button className='capitalize flex justify-center items-center rounded-full py-3 px-12 mt-4 md:mt-0 bg-[#34307A] bg-opacity-[20%] text-[14px] font-semibold'>Why Choose Liberty Life?</button>
+                <div className=' flex flex-col md:grid md:grid-cols-2 mt-8 gap-3 font-sans'>
+                    <span className='border-[0.3px] border-[#407BFF] border-opacity-[50%] p-6 rounded-10 bg-[#FFFFFF05]'>
+                        <p className='text-white font-medium text-2xl'>Affordability</p>
+                        <p className='text-[10px] md:text-[0.9rem] lg:text-[19px] text-[#CAC9D4] font-normal pt-3'>Our plans are designed to fit your budget without compromising on quality healthcare. We offer a range of options that cater to individuals, families, and businesses.</p>
                     </span>
-                    <span className='bg-[#080D27] md:border-[0.3px] rounded-[10px]  p-6 md:border-[#407cff59]'>
-                        <p className='flex gap-4 text-3xl md:text-[38px] font-bold'>02<span className='text-center text-xs md:text-[15px] font-medium py-2 md:py-4'>Lifestyle Reward</span></p>
-                        <p className='text-[10px] md:text-[0.9rem] text-[#CAC9D4] font-normal md:max-w-[438px]'>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
+                    <span className='border-[0.3px] border-[#407BFF] border-opacity-[50%] p-6 rounded-10 bg-[#FFFFFF05]'>
+                        <p className='text-white font-medium text-2xl'>Comprehensive Coverage</p>
+                        <p className='text-[10px] md:text-[0.9rem] lg:text-[19px] text-[#CAC9D4] font-normal pt-3'>From routine check-ups to emergency care, our plans cover
+                            a wide range of healthcare service to keep you, your family,
+                            and your business healthy.</p>
                     </span>
-                    <span className='bg-[#080D27] md:border-[0.3px] rounded-[10px]  p-6 md:border-[#407cff59]'>
-                        <p className='flex gap-4 text-3xl md:text-[38px] font-bold'>03<span className='text-center text-xs md:text-[15px] font-medium py-2 md:py-4'>Premium Health Policy</span></p>
-                        <p className='text-[10px] md:text-[0.9rem] text-[#CAC9D4] font-normal md:max-w-[438px] '>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
+                    <span className='border-[0.3px] border-[#407BFF] border-opacity-[50%] p-6 rounded-10 bg-[#FFFFFF05]'>
+                        <p className='text-white font-medium text-2xl'>Nationwide Network</p>
+                        <p className='text-[10px] md:text-[0.9rem] lg:text-[19px] text-[#CAC9D4] font-normal pt-3'>We partner with top hospitals and healthcare providers
+                            across the Nigeria through our collaboration with NEM Health,
+                            giving you access to quality medical care wherever you are.</p>
                     </span>
-                    <span className='bg-[#080D27] md:border-[0.3px] rounded-[10px]  p-6 md:border-[#407cff59]'>
-                        <p className='flex gap-4 text-3xl md:text-[38px] font-bold'>04<span className='text-center text-xs md:text-[15px] font-medium py-2 md:py-4'>Affordable Plan</span></p>
-                        <p className='text-[10px] md:text-[0.9rem] text-[#CAC9D4] font-normal md:max-w-[438px]'>Liberty life gives you premium hospitals with good healthcare facilities in your preferred state and local government.You can pick from the numerous hospitals around you.</p>
+                    <span className='border-[0.3px] border-[#407BFF] border-opacity-[50%] p-6 rounded-10 bg-[#FFFFFF05]'>
+                        <p className='text-white font-medium text-2xl'>Accessibility</p>
+                        <p className='text-[10px] md:text-[0.9rem] lg:text-[19px] text-[#CAC9D4] font-normal pt-3'>With simple USSD codes, online platforms, and in-person support, enrolling in our health insurance plans is quick and hassle-free.</p>
                     </span>
                 </div>
                 <div className='pt-[72px]'>

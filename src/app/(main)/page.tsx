@@ -8,6 +8,7 @@ import {
   CheckStar,
   CrossIcon,
   GroupIcon,
+  HandIcon,
   LearnMore,
   Testimonial1,
   Testimonial2,
@@ -94,6 +95,8 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
                 <CheckStar />
               </span>
               Welcome to Liberty Life
+              <span><HandIcon/></span>
+              NEM Health
             </h6>
             <h1
               className={cn(
