@@ -34,6 +34,8 @@ import RemitalPlanModal from "./misc/components/insurance/modals/remital/Remital
 import RemitalModalDetails from "./misc/components/insurance/modals/remital/RemitalModalDetails";
 import CreatepasswordModal from "./misc/components/insurance/modals/remital/CreatePassWordModal";
 import { useSearchParams } from "next/navigation";
+import GenerateReferralModal, { ReferralsuccessProp } from "./misc/components/insurance/modals/referral/GenerateReferralModal";
+import ReferralSuccessModal from "./misc/components/insurance/modals/referral/ReferralSuccessModal";
 
 export default function Home() {
   const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
@@ -54,6 +56,9 @@ export default function Home() {
   const [openNonRemitalDetailModal, setOpenNonRemitalDetailModal] =
     useState(false);
 
+    const [showGenerateReferralModal, setShowGenerateReferralModal] = useState(false)
+    const [showGenerateReferralSuccessModal, setShowGenerateReferralSuccessModal] = useState(false)
+const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [verifyResponse, setVerifyResponse] = useState({
     is_eligible: false,
@@ -72,36 +77,8 @@ export default function Home() {
     }
   }, [getStarted]);
 
-  // const Testimonials = [
-  //   {
-  //     name: "Oluwafisayomi",
-  //     image: "",
-  //     role: "Entrepreneur",
-  //     testimonial:
-  //       "“Thanks to Liberty Life, I don't have to worry about the high cost of health. I got value more than my money.”",
-  //   },
-  //   {
-  //     name: "Mrs. Adebunmi",
-  //     image: "",
-  //     role: "ED at Light Fashion House",
-  //     testimonial:
-  //       "“I and my household now have an HMO without breaking the bank and it comes with a lot of benefits,”",
-  //   },
-  //   {
-  //     name: "Otimeyin Igbene",
-  //     image: "",
-  //     role: "MD/CEO Liberty Assured",
-  //     testimonial:
-  //       "“I am able to enjoy health coverage with my family and employees.Thanks to Liberty Life. Highly recommended for everyone.”",
-  //   },
-  //   {
-  //     name: "Miss Morenike",
-  //     image: "",
-  //     role: "Creatives at Yaks Artistry",
-  //     testimonial:
-  //       "“Good health is underrated and there's nothing as good as having a health cover. It gives me confidence.”",
-  //   },
-  // ];
+
+  
   return (
     <main className="md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
@@ -144,6 +121,8 @@ export default function Home() {
               </span>
             </p>
 
+<div className="flex items-center gap-4 flex-wrap">
+  
             <Button
               className={cn(
                 "flex items-center cursor-pointer justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
@@ -158,22 +137,24 @@ export default function Home() {
                 <RightUpArrow className="" height={12} width={12} />
               </span>
             </Button>
+            <Button
+              className={cn(
+                "flex items-center px-4 cursor-pointer justify-between text-[0.865rem] border-white border-[0.3px] text-white  bg-transparent text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
+                "font-display"
+              )}
+              id="get-insurance-button"
+              variant="outlined"
+              onClick={() => setShowGenerateReferralModal(true)}
+            >
+              Generate referral link
+              <span className="flex items-center bg-white justify-center p-2 rounded-full ml-7">
+                <RightUpArrow className="" height={12} width={12} color="blue"/>
+              </span>
+            </Button>
+</div>
           </div>
+          
           <section className="relative px-5 md:px-0">
-            {/* <div className="">
-              <div className="absolute left-[8%] top-[20%] md:left-[15%] lg:left-[13%] lg:top-[10%] z-10 animate-bounce">
-                <Testimonial1 className="w-[89px] md:w-[140px] lg:w-[146px] h-[54px] md:h-[65px] lg:h-[79px]" />
-              </div>
-              <div className="absolute left-[69%] top-[25%] md:left-[80%] top lg:left-[65%] lg:top-[10%] z-10 animate-bounce">
-                <Testimonial2 className="w-[86px] md:w-[140px] lg:w-[155px] h-[54px] md:h-[65px] lg:h-[80px]" />
-              </div>
-              <div className="absolute top-[60%] left-[6%] md:left-[12%] lg:left-[8%] md:top-[60%] z-10 animate-bounce">
-                <Testimonial3 className="w-[90px] md:w-[139px] h-[54px] md:h-[75px] lg:h-[89px]" />
-              </div>
-              <div className="absolute top-[60%] left-[68%] md:top-[65%] md:left-[77%] lg:left-[65%] z-10 lg:top-[67%] animate-bounce">
-                <Testimonial4 className="w-[92px] md:w-[140px] lg:w-[151px] h-[54px] md:h-[65px] lg:h-[78px]" />
-              </div>
-            </div> */}
             <div
               className={cn(
                 "relative flex items-center justify-center w-full p-5 md:p-0 md:max-w-[500px] overflow-hidden md:ml-28"
@@ -375,6 +356,23 @@ export default function Home() {
           setUserEmail={setUserEmail}
         />
       )}
+      {
+        showGenerateReferralModal && <GenerateReferralModal
+        
+        isBuyPlanModalOpen={showGenerateReferralModal}
+        setBuyPlanModal={setShowGenerateReferralModal}
+        setShowGenerateReferralSuccessModal={setShowGenerateReferralSuccessModal}
+        setReferralResponse={setReferralResponse}
+        />
+      }
+
+      {showGenerateReferralSuccessModal && <ReferralSuccessModal
+      setShowSuccessModal={setShowGenerateReferralSuccessModal}
+      showSuccessModal={showGenerateReferralSuccessModal}
+      referralResponse={referralResponse}
+
+      
+      />}
     </main>
   );
 }

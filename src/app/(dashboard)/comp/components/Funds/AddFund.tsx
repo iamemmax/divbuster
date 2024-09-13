@@ -34,20 +34,7 @@ function AddFundModal({
     value: string;
   }
 
-  const FundDetails: data[] = [
-    {
-      item: "Account name",
-      value: "Olamide Adewale",
-    },
-    {
-      item: "Account no",
-      value: "0182492011",
-    },
-    {
-      item: "Bank name",
-      value: "Wema Bank",
-    },
-  ];
+  
   const { copy } = useClipboard();
   const { data: userData, isLoading } = useUser();
 

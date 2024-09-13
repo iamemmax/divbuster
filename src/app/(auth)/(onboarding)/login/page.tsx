@@ -61,6 +61,7 @@ export default function Login() {
        
      }
    }, [])
+
   const onsubmit = ({ phone_number }: userStatusType) => {
     handleCheckStatus(phone_number, {
       onSuccess: (data: userStatusTypes) => {
@@ -74,15 +75,13 @@ export default function Login() {
       onError: (error) => {
         const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         if (errorModalMessage === "User not found") {
-          referralFromAproko==="aproko-doctor" ? router.push("/plan/aproko-doctor?select-plan=true"):
+          referralFromAproko ==="aproko-doctor" ? router.push("/plan/aproko-doctor?select-plan=true") :
           router.push("/?get-started=true");
         }
         openErrorModalWithMessage(String(errorMessage));
       },
     });
   };
-
-// console.log(aprokoReferral === "aproko-doctor");
 
   return (
     <>
@@ -146,7 +145,6 @@ export default function Login() {
     isErrorModalOpen={isErrorModalOpen}
     setErrorModalState={() => {
       if (errorModalMessage === "User not found") {
-        
           router.push("/?get-started=true");
         
       } else {

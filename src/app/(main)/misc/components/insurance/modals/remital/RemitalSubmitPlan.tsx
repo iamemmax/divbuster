@@ -47,7 +47,7 @@ unique_request_id?:string;
   paystack_link: string;
   amount: number;
   phone_number: string;
-
+  redirect_to_paystack?:boolean;
   "user:"?: User;
 }
 
@@ -118,6 +118,7 @@ const RemitalSubmitPlanModal = ({
                 bank_name: data?.bank_name,
                 paystack_link: data?.paystack_link,
                 phone_number: data?.phone_number,
+                redirect_to_paystack:data?.redirect_to_paystack
               });
               setShowPaymentModal(true);
         tokenStorage.clearReferral()
@@ -159,8 +160,13 @@ const RemitalSubmitPlanModal = ({
                 bank_name: data?.bank_name,
                 paystack_link: data?.paystack_link,
                 phone_number: data?.phone_number,
-              });
-              setShowPaymentModal(true);
+                redirect_to_paystack:Boolean(data?.redirect_to_paystack)         
+                  });
+              if(data?.redirect_to_paystack){
+                setShowPaymentModal(true);
+              }else{
+                router.push(data?.paystack_link)
+              }
         tokenStorage.clearReferral()
 
               // setOpenCheckPhoneNumberModal(false);

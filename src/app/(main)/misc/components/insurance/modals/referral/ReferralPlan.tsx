@@ -44,7 +44,7 @@ import {
   getAmountDeduction,
   getPercentage,
 } from "@/app/(dashboard)/comp/components/plans/util/planCalc";
-import ComingSoonIcon from "../../icons/ComingSoonIcon";
+// import ComingSoonIcon from "../../icons/ComingSoonIcon";
 
 interface Prop {
   setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>;

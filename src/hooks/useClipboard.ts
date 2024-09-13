@@ -1,6 +1,7 @@
 // https://github.com/mantinedev/mantine/blob/61b11aebdce6faf24659c36347ae470e57aa4179/src/mantine-hooks/src/use-clipboard/use-clipboard.ts
 
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function useClipboard({ timeout = 2000 } = {}) {
   const [error, setError] = useState<Error | null>(null);
@@ -19,7 +20,10 @@ export default function useClipboard({ timeout = 2000 } = {}) {
     if ('clipboard' in navigator) {
       navigator.clipboard
         .writeText(valueToCopy)
-        .then(() => handleCopyResult(true))
+        .then(() =>{
+          handleCopyResult(true)
+          toast.success("Copied")
+        })
         .catch(err => setError(err));
     } else {
       setError(new Error('useClipboard: navigator.clipboard is not supported'));

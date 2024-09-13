@@ -44,6 +44,7 @@ import { useUser } from "@/app/(auth)/(onboarding)/misc";
 import { useRenewBeneficiaryList } from "./api/renewBeneficiaries";
 import { PaymentSuccessMsg } from "@/app/(main)/misc/components/insurance/modals/remital/RemitalSubmitPlan";
 import { useMakeRemitalPayment } from "@/app/(main)/misc/components/insurance/api/remital/remitalpayment";
+import { useRouter } from "next/navigation";
 
 export interface successProp {
   account_number: number;
@@ -54,6 +55,7 @@ export interface successProp {
   plan_details: Plandetails;
   paystack_link: string;
   unique_request_id: string;
+  redirect_to_paystack?:boolean;
 }
 
 interface Plandetails {
@@ -163,7 +165,7 @@ function SelectDurationModal({
     setSelectedValue(String(value));
   };
   const { mutate: handlePaymentRequest } = useMakeRemitalPayment();
-
+const router = useRouter()
   const { mutate: addMoreBeneficiary, isLoading: loadingMoreBeneficiary } =
     useAddMoreToBeneficiaryList();
   const { mutate: handleRenewBene, isLoading: loadingRenew } =
@@ -181,7 +183,11 @@ function SelectDurationModal({
           {
             onSuccess: (data: successProp) => {
               setPaymentProp(data);
-              setSelectPlan(true);
+              if(data?.redirect_to_paystack){
+                router.push(data?.paystack_link)
+              }else{
+                setSelectPlan(true);
+              }
             },
             onError: (error) => {
               const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -203,7 +209,11 @@ function SelectDurationModal({
           {
             onSuccess: (data: successProp) => {
               setPaymentProp(data);
-              setSelectPlan(true);
+              if(data?.redirect_to_paystack){
+                router.push(data?.paystack_link)
+              }else{
+                setSelectPlan(true);
+              }
             },
             onError: (error) => {
               const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -242,7 +252,11 @@ function SelectDurationModal({
                   people_added: Number(1),
                 });
             
-              setSelectPlan(true);
+                if(data?.redirect_to_paystack){
+                  router.push(data?.paystack_link)
+                }else{
+                  setSelectPlan(true);
+                }
             },
             onError: (error) => {
               const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -255,9 +269,6 @@ function SelectDurationModal({
           }
         );
       } else {
-    
-  
-
         handleRenewBene(
           {
             beneficiariesList:
@@ -268,7 +279,11 @@ function SelectDurationModal({
           {
             onSuccess: (data: successProp) => {
               setPaymentProp(data);
-              setSelectPlan(true);
+              if(data?.redirect_to_paystack){
+                router.push(data?.paystack_link)
+              }else{
+                setSelectPlan(true);
+              }
             },
             onError: (error) => {
               const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -363,9 +378,8 @@ function SelectDurationModal({
                     onClick={makePayment}
                   >
                     Make payment{" "}
-                    {isLoading ||
-                      loadingRenew ||
-                      (loadingMoreBeneficiary && (
+                    {
+                      (loadingMoreBeneficiary || isLoading || loadingRenew && (
                         <SmallSpinner className="" color="#1B1687" />
                       ))}
                   </Button>
