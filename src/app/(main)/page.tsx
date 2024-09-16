@@ -88,7 +88,7 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
             <h6
               className={cn(
                 "font-display",
-                "flex items-center text-[0.825rem] w-max font-semibold gap-1.5 px-5 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#34307A]/30"
+                "flex items-center text-[.625rem] md:text-[0.825rem] w-max font-semibold gap-1.5 px-5 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#34307A]/30"
               )}
             >
               <span>

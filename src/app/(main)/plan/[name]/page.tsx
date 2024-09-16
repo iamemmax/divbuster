@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 
 
 import { useSearchParams } from "next/navigation";
-import { CheckStar, LearnMore, UnderLine } from "../../misc/icons";
+import { CheckStar, HandIcon, LearnMore, UnderLine } from "../../misc/icons";
 import Marquee from "../../misc/components/Marquee";
 import CheckPhoneNumber from "../../misc/components/insurance/modals/CheckPhoneNumber";
 import RemitalModalDetails from "../../misc/components/insurance/modals/remital/RemitalModalDetails";
@@ -72,7 +72,7 @@ export default function ReferralHome() {
       <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
         <section className="flex flex-col w-full lg:grid grid-cols-[1.5fr_1fr] items-center justify-between sm:max-lg:px-2 md:pt-12 md:pb-6 md:pl-[30px] ">
           <div className="flex flex-col  gap-4  md:gap-6 px-[6rem] max-md:px-6 max-md:py-10">
-            <h6
+          <h6
               className={cn(
                 "font-display",
                 "flex items-center text-[0.825rem] w-max font-semibold gap-1.5 px-5 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#34307A]/30"
@@ -82,6 +82,8 @@ export default function ReferralHome() {
                 <CheckStar />
               </span>
               Welcome to Liberty Life
+              <span><HandIcon/></span>
+              NEM Health
             </h6>
             <h1
               className={cn(
