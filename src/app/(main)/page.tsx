@@ -83,7 +83,7 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
   return (
     <main className="md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
-        <section className="flex flex-col w-full lg:grid grid-cols-[1.5fr_1fr] items-center justify-between sm:max-lg:px-2 md:pt-12 md:pb-6 md:pl-[30px] ">
+        <section className="flex flex-col w-full lg:grid grid-cols-[1.5fr_1fr] items-center justify-between sm:max-lg:px-2 md:pt-6 md:pb-6 md:pl-[30px] ">
           <div className="flex flex-col  gap-4  md:gap-6 px-[6rem] max-md:px-6 max-md:py-10">
             <h6
               className={cn(
@@ -104,10 +104,10 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
                 "flex flex-col font-semibold md:font-bold text-xl md:text-3xl xl:text-6xl gap-2"
               )}
             >
-              <span className="flex items-center flex-wrap leading-tight md:leading-none gap-2">
+              <p className="flex items-center flex-wrap leading-none gap-1">
                 Standard Health
-                <span className="text-[#AFD85B]">Insurance</span>
-              </span>
+                <p className="text-[#AFD85B]">Insurance</p>
+              </p>
               <span className=" mt-0 leading-snug">
                 for you and your family.
               </span>
@@ -167,8 +167,8 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
               <Image
                 alt=""
                 // className={"w-full p-6 rounded-full"}
-                height={600}
-                width={600}
+                height={400}
+                width={400}
                 // src="/images/landing-page/libertyLife.png"
                 src="/images/landing-page/doctorPng.png"
                 className=""
@@ -176,7 +176,7 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
             </div>
           </section>
         </section>
-        <section className="xl:px-[120px] xl:my-12">
+        <section className="xl:px-[120px] xl:my-6">
           <div
             className={cn(
               "px-3 2xl:px-6 flex flex-col items-stretch lg:grid lg:grid-cols-2 gap-4 rounded-[20px] xl:py-8 bg-[#FFFFFF08]"
@@ -184,7 +184,7 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
             >
             <div
               className={cn(
-                "bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-3 md:px-6 flex flex-col md:flex-row gap-4 md:gap-8"
+                "bg-[#1E2954] rounded-[20px] py-4 md:py-4 px-3 md:px-6 flex flex-col md:flex-row gap-4 md:gap-8"
               )}
               >
               <div className="flex flex-col items-start justify-center">
