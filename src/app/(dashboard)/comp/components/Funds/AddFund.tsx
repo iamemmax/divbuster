@@ -68,13 +68,13 @@ function AddFundModal({
                       <div className="gap-x-4">
                         <p className="text-[#FFFFFF99] text-xs">Account no</p>
                         <div className="flex items-center gap-x-2">
-                          <p className="font-sans font-medium ">
+                          <p className="font-sans text-sm font-medium ">
                             {" "}
                             {userData?.account_number}
                           </p>
 
                           <Button
-                            className="mt-5 bg-transparent"
+                           className=" py-0 px-1 bg-transparent"
                             onClick={() => copy(userData?.account_number ?? "")}
                           >
                             <CopyIcon2 />

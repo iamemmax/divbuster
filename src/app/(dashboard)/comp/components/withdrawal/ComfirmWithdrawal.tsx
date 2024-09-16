@@ -139,34 +139,34 @@ const ConfirmWidthrawal = ({
                 </div>
                 <div className="bg-[#282d4a] w-full p-6 mt-3 rounded-2xl space-y-4">
                   <div className="flex items-center  w-full">
-                    <p className="text-white text-opacity-60 w-[9rem] ">
+                    <p className="text-white text-xs md:text-sm   text-opacity-60 w-[7rem] md:w-[9rem] ">
                       Account name
                     </p>
-                    <p className="text-white font-medium text-sm font-display capitalize">
+                    <p className="text-white font-medium text-xs md:text-sm font-display capitalize">
                       {capitalizeFirstLetter(account_name)}
                     </p>
                   </div>
                   <div className="flex items-center  w-full">
-                    <p className="text-white text-opacity-60 w-[9rem] ">
+                    <p className="text-white text-xs md:text-sm  text-opacity-60 w-[7rem] md:w-[9rem] ">
                       Bank name
                     </p>
-                    <p className="text-white font-medium text-sm font-display capitalize">
+                    <p className="text-white font-medium text-xs md:text-sm font-display capitalize">
                       {capitalizeFirstLetter(seletedBankName)}
                     </p>
                   </div>
                   <div className="flex items-center  w-full">
-                    <p className="text-white text-opacity-60 w-[9rem] ">
+                    <p className="text-white text-xs md:text-sm  text-opacity-60  w-[7rem] md:w-[9rem] ">
                       Account no
                     </p>
-                    <p className="text-white font-medium text-sm font-display capitalize">
+                    <p className="text-white font-medium text-xs md:text-sm font-display capitalize">
                       {capitalizeFirstLetter(watchAct?.account_number)}
                     </p>
                   </div>
                   <div className="flex items-center  w-full">
-                    <p className="text-white text-opacity-60 w-[9rem] ">
+                    <p className="text-white text-xs md:text-sm  text-opacity-60 w-[7rem] md:w-[9rem] ">
                       Amount
                     </p>
-                    <p className="text-white font-medium text-sm font-display capitalize">
+                    <p className="text-white font-medium text-xs md:text-sm font-display capitalize">
                       {capitalizeFirstLetter(
                         formatCurrency(
                           Number(removeCommas(String(watchAct?.amount)))
@@ -175,10 +175,10 @@ const ConfirmWidthrawal = ({
                     </p>
                   </div>
                   <div className="flex items-center  w-full">
-                    <p className="text-white text-opacity-60 w-[9rem] ">
+                    <p className="text-white text-xs md:text-sm  text-opacity-60 w-[7rem] md:w-[9rem] ">
                       Narration
                     </p>
-                    <p className="text-white font-medium text-sm font-display capitalize">
+                    <p className="text-white font-medium text-xs md:text-sm font-display capitalize">
                       {capitalizeFirstLetter(watchAct?.narration ?? "")}
                     </p>
                   </div>
