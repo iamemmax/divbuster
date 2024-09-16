@@ -22,8 +22,8 @@ const Marquee = () => {
           "font-display"
         )}
       >
-        <div className="marquee-content">
-          <div className="marquee-list font-clash gap-x-20 justify-center flex items-center  xl:text-xl">
+        <div className="hidden sm:flex marquee-content overflow-x-hidden">
+          <div className="marquee-list font-clash gap-x-10 md:gap-x-20 justify-center flex items-center  xl:text-xl">
             {/* {images?.map((img: string, idx: number) => (
               <Image key={idx} width={120} height={120} alt="logo" src={img} />
             ))} */}
