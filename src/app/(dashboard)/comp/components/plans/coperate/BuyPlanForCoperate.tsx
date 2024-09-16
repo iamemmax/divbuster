@@ -216,7 +216,7 @@ const BuyPlanModalForCoperate = ({
                       </Button>
                     </div>
                   </div>
-                </form> 
+                </form>
               </DialogBody>
             </DialogContent>
           </Dialog>
