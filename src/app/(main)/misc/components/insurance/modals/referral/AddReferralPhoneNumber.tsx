@@ -66,6 +66,7 @@ export interface BeneFicairySuccess {
   unique_request_id: string;
   plan_details: Plandetails;
   phone_number: string;
+  redirect_to_paystack: string;
 }
 
 interface Plandetails {
@@ -97,7 +98,7 @@ const AddRemitalPhoneNumer = ({
   setPaymentData,
   planType,
 }: Prop) => {
-  const aprokoReferral = tokenStorage.getReferral()
+  const aprokoReferral = tokenStorage.getReferral();
   const search = useSearchParams();
   const myReferral = search?.get("referral_code");
   const { name } = useParams();
@@ -109,7 +110,7 @@ const AddRemitalPhoneNumer = ({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       phone_number: "",
-      referral_code:String(aprokoReferral) || myReferral || String(name) || "",
+      referral_code: String(aprokoReferral) || myReferral || String(name) || "",
     },
 
     mode: "onChange",
@@ -157,8 +158,7 @@ const AddRemitalPhoneNumer = ({
               });
               setShowReferralPayment(true);
               setOpenCheckPhoneNumberModal(false);
-              tokenStorage.clearReferral()
-
+              tokenStorage.clearReferral();
             }
           },
           onError: (error) => {
@@ -194,10 +194,14 @@ const AddRemitalPhoneNumer = ({
                 paystack_link: data?.paystack_link,
                 phone_number: data?.phone_number,
               });
-              setShowReferralPayment(true);
-              setOpenCheckPhoneNumberModal(false);
-        tokenStorage.clearReferral()
+              if (data?.redirect_to_paystack) {
+                router.push(data?.paystack_link);
+              } else {
+                setShowReferralPayment(true);
+              }
 
+              setOpenCheckPhoneNumberModal(false);
+              tokenStorage.clearReferral();
             }
           },
           onError: (error) => {
@@ -264,10 +268,10 @@ const AddRemitalPhoneNumer = ({
                     />
 
                     {/* {isLoading && (
-                      <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
-                        <SmallSpinner className="" color="#fff" />
-                      </div>
-                    )} */}
+                        <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
+                          <SmallSpinner className="" color="#fff" />
+                        </div>
+                      )} */}
                   </div>
                 </div>
                 <div
@@ -294,7 +298,7 @@ const AddRemitalPhoneNumer = ({
                 <div className="pb-[2rem]">
                   <Button
                     className=" mt-[3rem] flex items-center justify-center gap-x-2 font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
-                                    shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                                      shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                     type="submit"
                   >
                     Continue{" "}

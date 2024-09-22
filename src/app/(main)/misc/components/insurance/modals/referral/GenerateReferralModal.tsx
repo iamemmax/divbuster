@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Dialog,
   DialogBody,
@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   Button,
-  ComingSoon,
+  ErrorModal,
 } from "@/components/core";
 import { z } from "zod";
 import { Label } from "@radix-ui/react-label";
@@ -16,39 +16,49 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Spinner } from "@/icons/core";
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
 import CloseIcon from "@/app/(main)/misc/icons/CLoseIcon";
-import BeneficiariesModal from "../BeneficariesModal";
 import { useQuery } from "react-query";
 import { getPlan } from "@/app/(main)/misc/components/insurance/api/plan/getPlan";
-import ComingSoonIcon from "@/app/(main)/misc/components/insurance/icons/ComingSoonIcon";
+import { useCreateReferral } from "../../api/referral/generateReferralCode";
+import { formatAxiosErrorMessage } from "@/utils";
+import { AxiosError } from "axios";
+import { useErrorModalState } from "@/hooks";
 
 interface Prop {
   setBuyPlanModal: React.Dispatch<React.SetStateAction<boolean>>;
   isBuyPlanModalOpen: boolean;
-  heading: string;
-  subsection: string;
+  setShowGenerateReferralSuccessModal: Dispatch<SetStateAction<boolean>>
+  setReferralResponse: Dispatch<SetStateAction<ReferralsuccessProp | undefined>>
 }
-
+export interface ReferralsuccessProp {
+  message: string;
+  referral_code: string;
+}
 const formSchema = z.object({
-  beneficiaries: z.array(
-    z.object({
-      name_of_beneficiary: z
+  
+      first_name: z
+        .string()
+        .trim()
+        .min(1, { message: "Please enter the first name." }),
+      last_name: z
         .string()
         .trim()
         .min(1, { message: "Please enter the name." }),
-      phone_number_of_beneficiary: z
+      phone_number: z
         .string()
         .trim()
         .min(10, { message: "Please enter a valid phone number." }),
-      type_of_beneficary: z.enum(["ADULT", "MINOR"]).optional(),
-    })
-  ),
+     
+    
+  
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-const BuyPlanModalForCoperate = ({
+const GenerateReferralModal= ({
   setBuyPlanModal,
   isBuyPlanModalOpen,
+  setShowGenerateReferralSuccessModal,
+  setReferralResponse
 }: Prop) => {
   const {
     control,
@@ -59,41 +69,50 @@ const BuyPlanModalForCoperate = ({
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      beneficiaries: [
-        {
-          name_of_beneficiary: "",
-          phone_number_of_beneficiary: "",
-          type_of_beneficary: "ADULT",
-        },
-      ],
+          first_name: "",
+          phone_number: "",
+         last_name:""
+        
+      
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "beneficiaries",
-  });
+const {mutate:handleGenerateReferral} = useCreateReferral()
 
-  const [beneficiariesList, setBeneficiariesList] = useState<FormValues>();
-  const [showBeneficaries, setShowBeneficaries] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
+  const {
+    isErrorModalOpen,
+    setErrorModalState,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
+  
   const onSubmit = (data: FormValues) => {
-    setBeneficiariesList(data);
-    setShowBeneficaries(true);
+    handleGenerateReferral(
+            data ,
+        {
+          onSuccess: (data:ReferralsuccessProp) => {
+        //    console.log(data);
+        if(data?.referral_code){
+            setReferralResponse({
+                message:data?.message,
+                 referral_code:data?.referral_code
+            })
+            setShowGenerateReferralSuccessModal(true)
+            setBuyPlanModal(false)
+        }
+           
+          },
+          onError: (error) => {
+            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
+            setErrorMsg(error?.response?.data?.error);
+            openErrorModalWithMessage(String(errorMessage));
+          },
+        }
+      );
   };
-  const { data: plansData } = useQuery({
-    queryFn: getPlan,
-    queryKey: ["get-plans"],
-  });
 
   return (
     <>
@@ -105,7 +124,7 @@ const BuyPlanModalForCoperate = ({
             <DialogContent className="!overflow-hidden max-h-[93vh]">
               <DialogHeader className="bg-[#1B1687] font-medium text-[#fff] text-base">
                 <DialogTitle className="font-medium text-[#fff]">
-                  Beneficiary Details
+                Generate Referral Details
                 </DialogTitle>
                 <DialogClose
                   className="rounded-10 bg-transparent border-[0.3px] border-[#407BFF]"
@@ -116,98 +135,88 @@ const BuyPlanModalForCoperate = ({
               </DialogHeader>
 
               <DialogBody className="bg-[#141B3f] w-full !max-h-[86vh]">
-                {/* <ComingSoonIcon /> */}
                 <div className="text-[#fff] font-light text-sm pb-4">
                   <p className="w-4/5 pb-2">
-                    Kindly enter the details below to activate beneficiary.
+                  Kindly enter below your details to generate a referral link.
                   </p>
-                  {fields?.length > 1 && (
+                  {/* {fields?.length > 0 && (
                     <Button className="bg-white mt-2 flex justify-center items-center gap-2 rounded-lg text-[#032282]">
                       People Added
                       <div className="bg-[#E5ECFA] h-[1.375rem] w-[1.375rem] shrink-0 flex justify-center items-center rounded-full">
                         {fields?.length}
                       </div>
                     </Button>
-                  )}
+                  )} */}
                 </div>
                 <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                   <div className="max-h-[50vh] overflow-y-auto">
-                    {fields.map((field, index) => (
-                      <div
-                        key={field.id}
+                  <div
+                       
                         className="w-full mt-[1rem] text-sm font-normal max-h-[60vh] overflow-y-auto"
                       >
                         <div className="flex items-center justify-between">
                           <Label
                             className="mb-1 block text-xs text-[#fff]"
-                            htmlFor={`beneficiaries.${index}.name_of_beneficiary`}
+                            htmlFor={`first_name`}
                           >
-                            Name
+                           First Name
                           </Label>
-                          {fields?.length > 1 && (
-                            <Button
-                              type="button"
-                              className="bg-[#E5ECFA] h-[1.875rem] p-0 w-[1.875rem] shrink-0 flex justify-center items-center rounded-full"
-                              onClick={() => remove(index)}
-                            >
-                              <CloseIcon
-                                color="#032282"
-                                width={18}
-                                height={18}
-                              />
-                            </Button>
-                          )}
+                          
+                          
                         </div>
                         <div className="relative mt-[.25rem]">
                           <input
-                            className={`${errors?.beneficiaries?.[index]?.name_of_beneficiary ? "border border-red-700" : ""} text-[#fff] text-xs outline-none h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                            className={`${errors?.first_name ? "border border-red-700" : ""} text-[#fff] text-xs outline-none h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
                             placeholder="Enter name"
                             type="text"
-                            id={`beneficiaries.${index}.name`}
+                            id={`name`}
                             {...register(
-                              `beneficiaries.${index}.name_of_beneficiary`
+                              `first_name`
                             )}
                           />
                         </div>
                         <div className="mt-3">
                           <Label
                             className="mb-1 block text-xs text-[#fff]"
-                            htmlFor={`beneficiaries.${index}.phone_number_of_beneficiary`}
+                            htmlFor={`last_name`}
+                          >
+                            Last Name
+                          </Label>
+                          <div className="relative mt-[.25rem]">
+                            <input
+                              className={`${errors?.last_name ? "border border-red-700" : ""} text-[#fff] text-xs outline-none rounded-lg px-6 w-full h-[2.875rem] bg-[#2a3150]`}
+                              placeholder="Enter last name"
+                              type="text"
+                              id={`last_name`}
+                              {...register(
+                                `last_name`
+                              )}
+                            />
+                          </div>
+                        </div>
+                        <div className="mt-3">
+                          <Label
+                            className="mb-1 block text-xs text-[#fff]"
+                            htmlFor={`phone_number`}
                           >
                             Phone number
                           </Label>
                           <div className="relative mt-[.25rem]">
                             <input
-                              className={`${errors?.beneficiaries?.[index]?.phone_number_of_beneficiary ? "border border-red-700" : ""} text-[#fff] text-xs outline-none rounded-lg px-6 w-full h-[2.875rem] bg-[#2a3150]`}
+                              className={`${errors?.phone_number ? "border border-red-700" : ""} text-[#fff] text-xs outline-none rounded-lg px-6 w-full h-[2.875rem] bg-[#2a3150]`}
                               placeholder="Enter phone number"
                               type="text"
-                              id={`beneficiaries.${index}.phone_number_of_beneficiary`}
+                              id={`phone_number`}
                               {...register(
-                                `beneficiaries.${index}.phone_number_of_beneficiary`
+                                `phone_number`
                               )}
                             />
                           </div>
                         </div>
                       </div>
-                    ))}
                   </div>
                   <div className="py-6 mt-[1rem]">
                     <div className="w-full flex items-center gap-3 justify-between text-sm font-normal">
-                      <Button
-                        className="text-white w-full rounded-[1.25rem] border-[0.3px] border-white border-opacity-70 py-4"
-                        variant={"outlined"}
-                        type="button"
-                        disabled={!isValid}
-                        onClick={() =>
-                          append({
-                            name_of_beneficiary: "",
-                            phone_number_of_beneficiary: "",
-                            type_of_beneficary: "ADULT",
-                          })
-                        }
-                      >
-                        Add More
-                      </Button>
                       <Button
                         className="flex items-center gap-x-5 justify-center font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                         type="submit"
@@ -220,21 +229,24 @@ const BuyPlanModalForCoperate = ({
               </DialogBody>
             </DialogContent>
           </Dialog>
-          {showBeneficaries && (
-            <BeneficiariesModal
-              showBeneficaries={showBeneficaries}
-              setBeneficiariesList={setBeneficiariesList}
-              setShowBeneficaries={setShowBeneficaries}
-              beneficiariesList={beneficiariesList}
-              remove={remove}
-              planType="CORPORATE"
-              selectedPlan={plansData && plansData[2]?.data}
-            />
-          )}
+
+       
         </div>
       )}
+
+<ErrorModal
+        isErrorModalOpen={isErrorModalOpen}
+        setErrorModalState={() => {
+          setErrorModalState(false);
+        }}
+        subheading={
+          errorModalMessage ||
+      
+          "Please check your inputs and try again."
+        }
+      ></ErrorModal>
     </>
   );
 };
 
-export default BuyPlanModalForCoperate;
+export default GenerateReferralModal

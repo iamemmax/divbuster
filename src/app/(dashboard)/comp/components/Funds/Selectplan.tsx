@@ -424,7 +424,7 @@ console.log(paymentProp,"paymentProp");
                         htmlFor="main"
                         className="flex justify-between gap-20 cursor-pointer"
                       >
-                        <div>Main wallet Balance:</div>
+                        <div>Main wallet </div>
                         <div className="font-medium">
                           {formatCurrency(Number(paymentProp?.wallet_balance))}
                         </div>
@@ -475,7 +475,7 @@ console.log(paymentProp,"paymentProp");
                     className="w-full text-[#1B1687] bg-white py-3.5 font-medium text-sm mt-6 mb-4"
                     // onClick={() => refetch()}
                   >
-                    Continue {isLoading && <SmallSpinner />}
+                    Continue {isLoading && <SmallSpinner color="blue" />}
                   </Button>
                 )}
                 {selectedValue === "transfer" && (
@@ -483,7 +483,7 @@ console.log(paymentProp,"paymentProp");
                     className="w-full text-[#1B1687] mb-4 bg-white py-3.5 font-medium text-sm mt-6"
                     onClick={() => refetch()}
                   >
-                    I have made payment {isLoading && <SmallSpinner />}
+                    I have made payment {isLoading && <SmallSpinner color="blue"/>}
                   </Button>
                 )}
               </article>

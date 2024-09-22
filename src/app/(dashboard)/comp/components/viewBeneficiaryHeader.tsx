@@ -20,7 +20,7 @@ import { getUserCurrentPlan } from "../../dashboard/api/getCurrentPlan";
 interface Prop {
     userData: UserDataTypes | undefined;
     loadinUser: boolean;
-  }
+}
 
 
 
@@ -29,8 +29,8 @@ const ViewBeneficiaryHeader = ({ loadinUser, userData: users }: Prop) => {
         queryFn: () => getUserCurrentPlan(String(users?.phone_number)),
         queryKey: ["fetch-user-current-plan", users?.phone_number],
         enabled: !!users?.phone_number,
-      });
-    
+    });
+
 
     const { data: userData, isLoading } = useUser();
 
@@ -55,7 +55,7 @@ const ViewBeneficiaryHeader = ({ loadinUser, userData: users }: Prop) => {
         queryKey: ["generate-referral-code", userData?.id],
         enabled: false,
         onSuccess: () => {
-            // Invalidate user details query to refetch data
+            // Invalidate user details query to refetch data.
             queryClient.invalidateQueries(["user-details", data?.referral_code]);
         },
     });
@@ -93,15 +93,15 @@ const ViewBeneficiaryHeader = ({ loadinUser, userData: users }: Prop) => {
                             </h2>
                             <div className="flex justify-between items-center w-full ">
                                 <div className="flex items-center gap-x-3 flex-1">
-                                        <div className="">
-                                            <h2 className="text-sm flex text-[#FFFFFFB2] font-medium font-sans">
-                                                <p className="text-[#8490A8] text-sm">Enrolment ID:</p>
-                                                {currentPlan?.enrolement_id
-                                                    ? currentPlan?.enrolement_id
-                                                    : "Nil"}
-                                            </h2>
-                                        </div>
-                                
+                                    <div className="">
+                                        <h2 className="text-sm flex text-[#FFFFFFB2] font-medium font-sans">
+                                            <p className="text-[#8490A8] text-sm">Enrolment ID:</p>
+                                            {currentPlan?.enrolement_id
+                                                ? currentPlan?.enrolement_id
+                                                : "Nil"}
+                                        </h2>
+                                    </div>
+
                                     {userData?.subscription_status === "SUCCESS" ? (
                                         <div className="bg-[#142D22] rounded-lg py-2 px-3 flex items-center gap-[.375rem]">
                                             <ActiveIcon />
