@@ -31,7 +31,7 @@ const LoveOneCard = ({
           <Spinner className="w-4  h-4 " color="#DB8C00" />
         </div>
       ) : (
-        <div className=" bg-[#fbe0f3] h-full flex  justify-center flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
+        <div className=" bg-[#fbe0f3] h-full flex justify-center flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
           <div className="flex items-center gap-x-1">
             <FamilyUserIcon backgroundColor="#f8c5e9" color="#e42eb1" />
             <h2 className="text-sm font-semibold font-sans  text-[#E42EB1]">

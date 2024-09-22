@@ -106,7 +106,7 @@ export default function Home() {
   return (
     <main className="md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
-        <section className="flex flex-col w-full lg:grid grid-cols-[1.5fr_1fr] items-center justify-between sm:max-lg:px-2 md:pt-12 md:pb-6 md:pl-[30px] ">
+        <section className="flex flex-col w-full xl:grid grid-cols-[1.5fr_1fr] items-center justify-between sm:max-lg:px-2 md:pt-12 md:pb-6 md:pl-[30px] ">
           <div className="flex flex-col  gap-4  md:gap-6 px-[6rem] max-md:px-6 max-md:py-10">
             <h6
               className={cn(
@@ -198,7 +198,7 @@ export default function Home() {
         <section className="xl:px-[120px] xl:my-12">
           <div
             className={cn(
-              "px-3 2xl:px-6 flex flex-col items-stretch lg:grid lg:grid-cols-2 gap-4 rounded-[20px] xl:py-8 bg-[#FFFFFF08]"
+              "px-3 2xl:px-6 flex flex-col items-stretch xl:grid xl:grid-cols-2 gap-4 rounded-[20px] xl:py-8 bg-[#FFFFFF08]"
             )}
             >
             <div
