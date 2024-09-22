@@ -25,6 +25,8 @@ import { maskPhoneNumber } from "@/utils/strings";
 import REsetOtpIcon from "@/app/(main)/misc/components/insurance/icons/ResentOtpIcon";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
+import { useResentOtp } from "@/app/(main)/misc/components/insurance/api/remital/resendOtp";
+import { useValidateOtp } from "../../api/validateOtp";
 // import { useChangePassword } from "../../../api/createPassword";
 
 const PasswordFormSchema = z.object({
@@ -78,6 +80,7 @@ const UpdatePassword = () => {
     register,
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<passwordformProps>({
     resolver: zodResolver(PasswordFormSchema),
@@ -140,11 +143,65 @@ const UpdatePassword = () => {
   // mobile responsiveness
   const isMobile = useIsMobile();
 
+  const {mutate:handleVerifyOtp}=useValidateOtp()
+  const { mutate: resendOtpFunc } = useResentOtp();
+const [otpStepComplete, setOtpStepComplete] = React.useState(false)
+
+
+  // resend otp
+  const handleResendOtp = () => {
+    resendOtpFunc(forgetPasswordDetails?.phone_number, {
+      onSuccess: (data) => {
+        console.log(data);
+        // setShowResendOtpButton(false);
+      },
+      onError: (error) => {
+        const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-expect-error
+        setErrorMsg(error?.response?.data?.error);
+
+        openErrorModalWithMessage(String(errorMessage));
+      },
+    });
+    // setResetTimer(true); // Trigger timer reset
+  };
+
+
+
+  const handleComplete = (pin: string) => {
+    setValue("passwordData.otp",pin)
+    handleVerifyOtp(
+      {
+        pin,
+        verifiedPhoneNumber:forgetPasswordDetails?.phone_number,
+      },
+      {
+        onSuccess: (data) => {
+        if(data?.message === "success"){
+          setOtpStepComplete(true)
+        }else{
+          setOtpStepComplete(false)
+        }
+        },
+        onError: (error) => {
+        setValue("passwordData.otp","")
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-expect-error
+          setErrorMsg(error?.response?.data?.error);
+
+          openErrorModalWithMessage(String(errorMessage));
+        },
+      }
+    );
+  };
   return (
     <>
       <LoaderModal isOpen={isLoaderModalOpen} />
 
       <form className="relative z-10" onSubmit={handleSubmit(onsubmit)}>
+      {!otpStepComplete&&  <>
         <div className="py-[.8125rem] text-center my-6 w-full bg-[#21253d] rounded-lg">
           <p className="text-base text-white font-semibold">
             Dial *347*180*52# to get an OTP.
@@ -194,7 +251,9 @@ const UpdatePassword = () => {
                     margin: "auto",
                   }}
                   type="numeric"
-                  secret
+                  secret 
+                  onComplete={handleComplete}
+
                 />
               )}
             />
@@ -204,16 +263,20 @@ const UpdatePassword = () => {
               {/* <Countdown onTimeUp={handleTimeUp} reset={resetTimer} /> */}
             </div>
             {/* {showResendOtpButton && ( */}
-            <button
+            <Button
               type="button"
-              className="flex items-center gap-[.3125rem] text-white text-[.625rem]"
-              // onClick={handleResendOtp}
+              className="flex bg-transparent p-0 items-center gap-[.3125rem] text-white text-[.625rem]"
+              onClick={handleResendOtp}
             >
               <REsetOtpIcon /> Resend OTP
-            </button>
+            </Button>
             {/* )} */}
           </div>
         </div>
+        
+        </>}
+
+       {otpStepComplete&& <>
         <div className={`relative mt-[.25rem] hidden`}>
           <Label
             className="text-white font-sans text-sm mb-2"
@@ -317,6 +380,7 @@ const UpdatePassword = () => {
             "Reset password"
           )}
         </Button>
+        </>}
       </form>
 
       <ErrorModal
