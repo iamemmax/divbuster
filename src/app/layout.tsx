@@ -34,7 +34,8 @@ export default function RootLayout({
 }>) {
   // const { data } = useUser();
   // console.log(data);
-  const url = `https://wa.link/j2dkg7`;
+  // const url = `https://wa.link/j2dkg7`;
+  const url = `https://wa.link/vrg8zn`
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
       <body>
