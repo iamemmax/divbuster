@@ -31,7 +31,7 @@ export default function OnboardingLayout({
             <Link href="/">
               <span className="sr-only">Go home</span>
 
-              <Liberty className="max-sm:max-w-[100px]"/>
+              <Liberty className="max-lg:max-w-[100px]"/>
             </Link>
 
             <LinkButton

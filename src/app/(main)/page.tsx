@@ -57,9 +57,9 @@ export default function Home() {
   const [openNonRemitalDetailModal, setOpenNonRemitalDetailModal] =
     useState(false);
 
-    const [showGenerateReferralModal, setShowGenerateReferralModal] = useState(false)
-    const [showGenerateReferralSuccessModal, setShowGenerateReferralSuccessModal] = useState(false)
-const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
+  const [showGenerateReferralModal, setShowGenerateReferralModal] = useState(false)
+  const [showGenerateReferralSuccessModal, setShowGenerateReferralSuccessModal] = useState(false)
+  const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [verifyResponse, setVerifyResponse] = useState({
     is_eligible: false,
@@ -79,11 +79,11 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
   }, [getStarted]);
 
 
-  
+
   return (
     <main className="md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
-        <section className="flex flex-col w-full lg:grid grid-cols-[1.5fr_1fr] items-center justify-between sm:max-lg:px-2 md:pt-6 md:pb-6 md:pl-[30px] ">
+        <section className="flex flex-col w-full xl:grid grid-cols-[1.5fr_1fr] items-center justify-between sm:max-lg:px-2 md:pt-12 md:pb-6 md:pl-[30px] ">
           <div className="flex flex-col  gap-4  md:gap-6 px-[6rem] max-md:px-6 max-md:py-10">
             <h6
               className={cn(
@@ -95,7 +95,7 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
                 <CheckStar />
               </span>
               Welcome to Liberty Life
-              <span><HandIcon/></span>
+              <span><HandIcon /></span>
               NEM Health
             </h6>
             <h1
@@ -156,11 +156,11 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
             </Button>
 </div>
           </div>
-          
+
           <section className="relative px-5 md:px-0">
             <div
               className={cn(
-                "relative flex items-center justify-center w-full p-5 md:p-0 md:max-w-[500px] overflow-hidden md:ml-28"
+                "relative flex items-center justify-center w-full p-5 lg:pt-5 lg:max-w-[500px] overflow-hidden "
               )}
             >
               {/* <HospitalImage /> */}
@@ -179,14 +179,14 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
         <section className="xl:px-[120px] xl:my-6">
           <div
             className={cn(
-              "px-3 2xl:px-6 flex flex-col items-stretch lg:grid lg:grid-cols-2 gap-4 rounded-[20px] xl:py-8 bg-[#FFFFFF08]"
+              "px-3 2xl:px-6 flex flex-col items-stretch xl:grid xl:grid-cols-2 gap-4 rounded-[20px] xl:py-8 bg-[#FFFFFF08]"
             )}
-            >
+          >
             <div
               className={cn(
                 "bg-[#1E2954] rounded-[20px] py-4 md:py-4 px-3 md:px-6 flex flex-col md:flex-row gap-4 md:gap-8"
               )}
-              >
+            >
               <div className="flex flex-col items-start justify-center">
                 <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-11 md:px-[19px] border-[#475ffd54] bg-[#161D42]">
                   <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
@@ -210,11 +210,11 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
               <div className="flex flex-col items-start justify-center">
                 <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-11 md:px-[19px] border-[#475ffd54] bg-[#161D42]">
                   <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
-                  Comprehensive Plans
+                    Comprehensive Plans
                   </h3>
                   <p className="text-xs md:text-sm text-center mt-2 font-sans text-[#CAC9D4]">
-                  Premium health cover for both corporate and individuals
-                  users.
+                    Premium health cover for both corporate and individuals
+                    users.
                   </p>
                   <div className="hidden md:flex gap-3 py-3">
                     <LinkButton
@@ -234,7 +234,7 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
               className={cn(
                 "bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-4 md:px-8 grid md:grid-cols-2 gap-4 mb-16 md:mb-0 lg:gap-2"
               )}
-              >
+            >
               <div className="flex flex-col items-center justify-center">
                 <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-11 md:px-[19px] border-[#475ffd54] bg-[#161D42]">
                   <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
@@ -258,10 +258,10 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
               <div className="flex flex-col items-start justify-center">
                 <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-5 md:px-[10px] border-[#475ffd54] bg-[#161D42]">
                   <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
-                  Hassle free registration
+                    Hassle free registration
                   </h3>
                   <p className="text-xs md:text-sm text-center mt-2 font-sans text-[#CAC9D4]">
-                  Simply dial the USSD code, *347*180*9#, to connect to one of our agents and take the first step toward better health insurance services
+                    Simply dial the USSD code, *347*180*9#, to connect to one of our agents and take the first step toward better health insurance services
                   </p>
                   <div className="hidden md:flex gap-3 py-1">
                     <LinkButton
@@ -361,20 +361,20 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
       )}
       {
         showGenerateReferralModal && <GenerateReferralModal
-        
-        isBuyPlanModalOpen={showGenerateReferralModal}
-        setBuyPlanModal={setShowGenerateReferralModal}
-        setShowGenerateReferralSuccessModal={setShowGenerateReferralSuccessModal}
-        setReferralResponse={setReferralResponse}
+
+          isBuyPlanModalOpen={showGenerateReferralModal}
+          setBuyPlanModal={setShowGenerateReferralModal}
+          setShowGenerateReferralSuccessModal={setShowGenerateReferralSuccessModal}
+          setReferralResponse={setReferralResponse}
         />
       }
 
       {showGenerateReferralSuccessModal && <ReferralSuccessModal
-      setShowSuccessModal={setShowGenerateReferralSuccessModal}
-      showSuccessModal={showGenerateReferralSuccessModal}
-      referralResponse={referralResponse}
+        setShowSuccessModal={setShowGenerateReferralSuccessModal}
+        showSuccessModal={showGenerateReferralSuccessModal}
+        referralResponse={referralResponse}
 
-      
+
       />}
     </main>
   );

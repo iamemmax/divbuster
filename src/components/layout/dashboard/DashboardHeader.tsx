@@ -61,7 +61,7 @@ export function DashboardHeader() {
       <header className="bg-main px-6  md:px-[4.5rem] lg:px-[7.5rem]  py-6 border-b border-[#2B303C]">
         <div className="z-50 flex items-center justify-between">
           <a href={"/"} className="flex text-white items-center gap-3">
-            <Liberty className="max-sm:max-w-[100px]" />
+            <Liberty className="max-lg:max-w-[100px]" />
             {/* <div className="font-wix-display">
               <h2 className="font-extrabold capitalize text-base md:text-xl text-nowrap leading-3">
                 Liberty Life

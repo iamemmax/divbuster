@@ -42,8 +42,8 @@ export interface PaymentSuccessMsg {
   account_name: string;
   account_no: string;
   bank_name: string;
-  wallet_balance?:string;
-unique_request_id?:string;
+  wallet_balance?: string;
+  unique_request_id?: string;
   paystack_link: string;
   amount: number;
   phone_number: string;
@@ -121,7 +121,7 @@ const RemitalSubmitPlanModal = ({
                 redirect_to_paystack:data?.redirect_to_paystack
               });
               setShowPaymentModal(true);
-        tokenStorage.clearReferral()
+              tokenStorage.clearReferral()
 
               // setOpenShowRemitalPlan(false);
             }
@@ -143,7 +143,7 @@ const RemitalSubmitPlanModal = ({
           phone_number: verifiedPhoneNumber,
           number_of_recipient: Number(planType?.number_of_recipient),
           packages: planType?.play_type,
-          referral_code:""
+          referral_code: ""
         },
         {
           onSuccess: (data: BeneFicairySuccess) => {
@@ -188,7 +188,7 @@ const RemitalSubmitPlanModal = ({
     <>
       <Dialog
         open={showSubmitModal}
-        // onOpenChange={setSixMonthIndividualPlanModal}
+      // onOpenChange={setSixMonthIndividualPlanModal}
       >
         <DialogContent className="!overflow-hidden min-h-[30rem]  max-w-[98%]  w-[26rem]  ">
           <DialogBody className="bg-[#141B3f]  w-[26rem] max-w-[98%] rounded-[1.125rem] border-[0.01px] border-[#407BFF]  border-opacity-50">
