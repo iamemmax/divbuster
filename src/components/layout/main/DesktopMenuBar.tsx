@@ -66,6 +66,7 @@ export function DesktopMenuLink({
   });
   const search = useSearchParams();
   const getStarted = search.get("referral_code");
+  const getPlan = search.get("select-plan");
    const router = useRouter()
  const [referralFromAproko, setReferralFromAproko] = React.useState("")
  React.useEffect(() => {
@@ -81,6 +82,12 @@ export function DesktopMenuLink({
       document.getElementById("get-referral-button")?.click();
     }
   }, [getStarted]);
+
+  React.useEffect(() => {
+   if(getPlan){
+      setOpenReferralModal(true);
+    }
+  }, [getPlan]);
 
   // React.useEffect(() => {
   //   if (referralFromAproko === "aproko-doctor") {
@@ -118,7 +125,7 @@ export function DesktopMenuLink({
               window.location.reload();
             } else if (referralFromAproko === "aproko-doctor") {
               router.push("/plan/aproko-doctor?select-plan=true");
-            } else {
+            }else {
               setOpenReferralModal(true);
             }
           }}

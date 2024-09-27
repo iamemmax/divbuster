@@ -142,7 +142,7 @@ const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
             </Button>
             <Button
               className={cn(
-                "flex items-center px-4 cursor-pointer justify-between text-[0.865rem] border-white border-[0.3px] text-white  bg-transparent text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
+                "flex items-center px-4 cursor-pointer justify-between text-[0.865rem] border-opacity-30 border-white border-[0.3px] text-white  bg-transparent text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
                 "font-display"
               )}
               id="get-insurance-button"
