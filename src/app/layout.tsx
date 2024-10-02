@@ -10,6 +10,7 @@ import { useUser } from "./(auth)/(onboarding)/misc";
 import { Button } from "@/components/core";
 import Image from "next/image";
 import { Toaster } from "react-hot-toast";
+import Script from "next/script";
 
 const sans = DM_Sans({
   subsets: ["latin"],
@@ -35,9 +36,26 @@ export default function RootLayout({
   // const { data } = useUser();
   // console.log(data);
   // const url = `https://wa.link/j2dkg7`;
-  const url = `https://wa.link/vrg8zn`
+  const url = `https://wa.link/vrg8zn`;
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
+      <head>
+        <Script id="google-tag-manager" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-FP57HLE7JF');
+      `}
+        </Script>
+        <Script
+          dangerouslySetInnerHTML={{
+            __html: `src='https://www.googletagmanager.com/gtag/js?id=G-FP57HLE7JF' async defer`,
+          }}
+          id="liberty-life-widget-icon-freshworks"
+        />
+      </head>
       <body>
         <Toaster
           containerStyle={{
@@ -76,6 +94,20 @@ export default function RootLayout({
             </a>
           </div>
         </ReactQueryProvider>
+
+        {/* <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-FP57HLE7JF"
+        ></Script>
+        <Script
+          dangerouslySetInnerHTML={{
+            __html: `  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FP57HLE7JF')`,
+          }}
+          id="chat-email-icon-freshworks"
+        ></Script> */}
       </body>
     </html>
   );
