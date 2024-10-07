@@ -64,7 +64,7 @@ export default function RootLayout({
           position="top-center"
           toastOptions={{
             style: {
-              zIndex: 99999,
+              zIndex: 999999,
             },
           }}
         />
