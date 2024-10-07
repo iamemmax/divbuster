@@ -42,19 +42,20 @@ export default function RootLayout({
       <head>
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
-          window.dataLayer = window.dataLayer || [];
+           window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-FP57HLE7JF');
+  gtag('config', 'AW-16669350340')
       `}
         </Script>
         <Script
           dangerouslySetInnerHTML={{
-            __html: `src='https://www.googletagmanager.com/gtag/js?id=G-FP57HLE7JF' async defer`,
+            __html: `src='hhttps://www.googletagmanager.com/gtag/js?id=AW-16669350340`,
           }}
           id="liberty-life-widget-icon-freshworks"
         />
+
       </head>
       <body>
         <Toaster
