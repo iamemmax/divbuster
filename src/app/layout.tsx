@@ -56,10 +56,26 @@ export default function RootLayout({
 
       <Script
         dangerouslySetInnerHTML={{
-          __html: `src='hhttps://www.googletagmanager.com/gtag/js?id=AW-16669350340`,
+          __html: `src='https://www.googletagmanager.com/gtag/js?id=AW-16669350340' async defer`,
         }}
         id="liberty-life-widget-icon-freshworks"
       />
+
+
+      <Script
+        dangerouslySetInnerHTML={{
+          __html: `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'AW-16669350340');`,
+        }}
+        id="google-tag-new"
+      />
+
+      <Script
+        dangerouslySetInnerHTML={{
+          __html: `src='https://www.googletagmanager.com/gtag/js?id=AW-16669350340' async defer`,
+        }}
+        id="liberty-life-widget-icon-new"
+      />
+
 
       <body>
         <Toaster
