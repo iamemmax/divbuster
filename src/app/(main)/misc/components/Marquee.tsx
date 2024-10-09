@@ -9,12 +9,12 @@ const Marquee = () => {
       <section className="z-50 fixed bottom-0 w-full bg-[#161D42] py-[.375rem] text-lg font-display">
         <div className="marquee-content">
           <div className="marquee-list font-clash flex items-center gap-20 xl:text-xl">
-            <Image
+            {/* <Image
               width={50}
               height={40}
               alt="logo"
               src={"/images/logos/libertyAssured.png"}
-            />
+            /> */}
             <Image
               width={100}
               height={90}
