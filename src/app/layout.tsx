@@ -40,23 +40,27 @@ export default function RootLayout({
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
       <head>
-        <Script id="google-tag-manager" strategy="afterInteractive">
-          {`
-           window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'AW-16669350340')
-      `}
-        </Script>
-        <Script
-          dangerouslySetInnerHTML={{
-            __html: `src='hhttps://www.googletagmanager.com/gtag/js?id=AW-16669350340`,
-          }}
-          id="liberty-life-widget-icon-freshworks"
-        />
 
       </head>
+
+      <Script
+        dangerouslySetInnerHTML={{
+          __html: `window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-16669350340')`,
+        }}
+        id="google-tag-manager"
+      />
+
+      <Script
+        dangerouslySetInnerHTML={{
+          __html: `src='hhttps://www.googletagmanager.com/gtag/js?id=AW-16669350340`,
+        }}
+        id="liberty-life-widget-icon-freshworks"
+      />
+
       <body>
         <Toaster
           containerStyle={{
