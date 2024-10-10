@@ -140,7 +140,7 @@ const AddRemitalPhoneNumer = ({
           phone_number: data?.phone_number,
           number_of_recipient: 1,
           packages: planType?.play_type,
-          referral_code: data?.referral_code as string,
+          referral_code: myReferral as string,
         },
         {
           onSuccess: (data: successProp) => {
@@ -178,7 +178,7 @@ const AddRemitalPhoneNumer = ({
           phone_number: data?.phone_number,
           number_of_recipient: Number(planType?.number_of_recipient),
           packages: planType?.play_type,
-          referral_code: data?.referral_code as string,
+          referral_code: myReferral as string,
         },
         {
           onSuccess: (data: BeneFicairySuccess) => {
