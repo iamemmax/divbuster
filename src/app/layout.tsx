@@ -40,11 +40,23 @@ export default function RootLayout({
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
       <head>
-
-
+        {/* Google Tag Manager Script */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-7E14P91QWY"
+          strategy="afterInteractive" // Ensures it loads after page interactive
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-7E14P91QWY');
+            `,
+          }}
+        />
       </head>
 
-      <Script
+      {/* <Script
         dangerouslySetInnerHTML={{
           __html: `window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -74,7 +86,7 @@ export default function RootLayout({
           __html: `src='https://www.googletagmanager.com/gtag/js?id=AW-16669350340' async defer`,
         }}
         id="liberty-life-widget-icon-new"
-      />
+      /> */}
 
 
       <body>
