@@ -5,6 +5,7 @@ import { Button, LinkButton } from "@/components/core";
 import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
 import { beneficiaryTypeProp } from "../plans/api/fetchBeneficairies";
 import BuyPlanModalForCoperate from "../plans/coperate/BuyPlanForCoperate";
+import UpdateUserAccount from "../beneficiary/UpdateUserAccount";
 interface Prop {
   userData: UserDataTypes | undefined;
   loadinUser: boolean;
@@ -18,8 +19,12 @@ const CorporateCard = ({
   beneficiaryList,
 }: Prop) => {
   const [buyPlanForCoporate, setBuyPlanForCoporate] = useState(false);
+  const [showUserDetailsModal, setShowUserDetailsModal] = useState(false)
+  
   const checkCorporatePaymentStatus =
     userData?.paid_beneficiary_requests?.includes("CORPORATE");
+    const NoUser = userData?.first_name === "" || userData?.first_name===null &&  userData?.last_name ==="" || userData?.last_name===null
+
   return (
     <div className="bg-white rounded-10 p-1">
       {loadingBeneficial || loadinUser ? (
@@ -50,7 +55,9 @@ const CorporateCard = ({
                 <Button
                   // variant={"outlined"}
                   className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
-                  onClick={() => setBuyPlanForCoporate(true)}
+                  onClick={() =>{
+                    NoUser?setShowUserDetailsModal(true):setBuyPlanForCoporate(true)
+                  }}
                 >
                   Add Member
                 </Button>
@@ -58,7 +65,9 @@ const CorporateCard = ({
                 <Button
                   // variant={"outlined"}
                   className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
-                  onClick={() => setBuyPlanForCoporate(true)}
+                  onClick={() =>{
+                    NoUser?setShowUserDetailsModal(true):setBuyPlanForCoporate(true)
+                  }}
                 >
                   Buy Plan
                 </Button>
@@ -83,6 +92,12 @@ const CorporateCard = ({
           subsection="Kindly enter the details below to activate beneficiary ."
         />
       )}
+        {showUserDetailsModal && <UpdateUserAccount
+      openUpdateDetails={showUserDetailsModal}
+      setOpenUpdateDetails={setShowUserDetailsModal}
+      planType="corporate"
+      setOpenPlanModal={setBuyPlanForCoporate}
+      />}
     </div>
   );
 };
