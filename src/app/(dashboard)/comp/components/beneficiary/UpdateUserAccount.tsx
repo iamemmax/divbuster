@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { SetStateAction } from "react";
 import {
   Button,
   Dialog,
@@ -21,27 +21,35 @@ import { Input2 } from "@/components/core/Input2";
 import { formatAxiosErrorMessage, formatCurrency } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useUpdateUserData } from "@/app/(auth)/(onboarding)/api/updateUserAccount";
+import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
 
 interface Prop {
   setOpenUpdateDetails: React.Dispatch<SetStateAction<boolean>>;
   openUpdateDetails: boolean;
- planType:string;
+//  planType:string;
  setOpenPlanModal: React.Dispatch<React.SetStateAction<boolean>>
+ userData: UserDataTypes | undefined
 }
 
 const contactSchema = z.object({
   first_name: z
-    .string({ required_error: "Enter your phone number" })
+    .string({ required_error: "Enter your first number" })
     .trim()
     .min(3, {
-      message: "Phone number ssetShowPaymentModalhould be at least 11 digits",
+      message: "Enter your first name",
     })
     ,
   last_name: z
-    .string({ required_error: "Enter your phone number" })
+    .string({ required_error: "Enter your Last Name" })
     .trim()
     .min(3, {
+      message: "Enter your Last Name",
+    }),
+  phone_number: z
+    .string({ required_error: "Enter your phone number" })
+    .trim()
+    .min(11, {
       message: "Phone number ssetShowPaymentModalhould be at least 11 digits",
     })
     ,
@@ -55,9 +63,9 @@ export type detailRequestType = z.infer<typeof contactSchema>;
 const UpdateUserAccount = ({
   openUpdateDetails,
   setOpenUpdateDetails,
-  planType,
-  setOpenPlanModal
- 
+  // planType,
+  setOpenPlanModal,
+  userData
 }: Prop) => {
  
   const {
@@ -67,14 +75,16 @@ const UpdateUserAccount = ({
   } = useForm<detailRequestType>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
+      first_name:userData?.first_name|| "",
+      last_name: userData?.last_name || "",
+      phone_number:userData?.phone_number
+      
     },
 
     mode: "onChange",
   });
 
-  const [errorMsg, setErrorMsg] = useState("");
+  // const [errorMsg, setErrorMsg] = useState("");
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -83,10 +93,19 @@ const UpdateUserAccount = ({
     errorModalMessage,
   } = useErrorModalState();
  
-  const router = useRouter();
+  const {mutate:handleUpdateUserAcct,isLoading}=useUpdateUserData()
 
-  const onsubmit = (data: detailRequestType) => {
-    // console.log("123");
+  const onsubmit = ({first_name,last_name,phone_number}: detailRequestType) => {
+    handleUpdateUserAcct({first_name,last_name,phone_number},{
+      onSuccess:()=>{
+        setOpenPlanModal(true)
+        setOpenUpdateDetails(false)
+      },
+      onError: (error) => {
+        const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+        openErrorModalWithMessage(String(errorMessage));
+      },
+    })
 
   
   };
@@ -135,9 +154,8 @@ const UpdateUserAccount = ({
                     <Input2
                       className={`${errors?.first_name?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
                       placeholder="Enter your first name"
-                      type="number"
+                      type="text"
                       id="phone"
-                      maxLength={11} // Changed max to maxLength
                       {...register("first_name")}
                     />
 
@@ -160,9 +178,8 @@ const UpdateUserAccount = ({
                     <Input2
                       className={`${errors?.last_name?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
                       placeholder="Enter your last name"
-                      type="number"
+                      type="text"
                       id="phone"
-                      maxLength={11} // Changed max to maxLength
                       {...register("last_name")}
                     />
 
@@ -181,7 +198,9 @@ const UpdateUserAccount = ({
                                       shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                     type="submit"
                   >
-                    Continue
+                    Continue  {isLoading  && (
+                      <SmallSpinner className="" color="blue" />
+                    )}
                         
                   </Button>
                 </div>
@@ -199,7 +218,7 @@ const UpdateUserAccount = ({
         }}
         subheading={
           errorModalMessage ||
-          errorMsg ||
+          // errorMsg ||
           "Please check your inputs and try again."
         }
       ></ErrorModal>

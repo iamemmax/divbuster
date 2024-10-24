@@ -7,6 +7,8 @@ interface planProp {
   number_of_recipient: number;
   duration: number;
   referral_code: string;
+  first_name:string;
+  last_name:string;
 }
 
 export const createReferralBeneficiaries = async ({
@@ -15,6 +17,7 @@ export const createReferralBeneficiaries = async ({
   number_of_recipient,
   duration,
   referral_code,
+  first_name,last_name
 }: planProp) => {
   const response = await adminAxios.post(
     `add_beneficiary_for_un_authenticated_user/`,
@@ -24,6 +27,7 @@ export const createReferralBeneficiaries = async ({
       number_of_recipient,
       duration,
       referral_code,
+      first_name,last_name
     }
   );
   return response?.data;

@@ -95,8 +95,9 @@ const CorporateCard = ({
         {showUserDetailsModal && <UpdateUserAccount
       openUpdateDetails={showUserDetailsModal}
       setOpenUpdateDetails={setShowUserDetailsModal}
-      planType="corporate"
+      // planType="corporate"
       setOpenPlanModal={setBuyPlanForCoporate}
+      userData={userData}
       />}
     </div>
   );

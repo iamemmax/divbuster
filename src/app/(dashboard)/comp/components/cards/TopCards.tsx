@@ -150,7 +150,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                     className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
                     onClick={() => {
 
-                      !NoUser?setShowUserDetailsModal(true):setBuyFamilyPlan(true)}
+                      NoUser?setShowUserDetailsModal(true):setBuyFamilyPlan(true)}
                     }
                       
                   >
@@ -162,7 +162,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                     className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
                     onClick={() => {
 
-                     !NoUser?setShowUserDetailsModal(true):setBuyFamilyPlan(true)
+                     NoUser?setShowUserDetailsModal(true):setBuyFamilyPlan(true)
                     }
                     }
                   >
@@ -218,8 +218,9 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
       {showUserDetailsModal && <UpdateUserAccount
       openUpdateDetails={showUserDetailsModal}
       setOpenUpdateDetails={setShowUserDetailsModal}
-      planType="family"
+      // planType="family"
       setOpenPlanModal={setBuyFamilyPlan}
+      userData={users}
       />}
     </div>
   );

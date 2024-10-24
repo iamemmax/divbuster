@@ -24,7 +24,8 @@ import { useErrorModalState } from "@/hooks";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useCreateReferralPlanRequest } from "../../api/referral/createReferralPlan";
 import { useCreateReferralBeneficiaries } from "../../api/referral/createReferralBeneficies";
-import { tokenStorage } from "@/app/(auth)/(onboarding)/misc";
+import { tokenStorage, UserData } from "@/app/(auth)/(onboarding)/misc";
+import { useCreateUserDetailsRequest } from "../../api/plan/checkUserDetail";
 
 interface Prop {
   setOpenCheckPhoneNumberModal: React.Dispatch<SetStateAction<boolean>>;
@@ -83,6 +84,14 @@ const contactSchema = z.object({
     })
     .max(11),
 
+  first_name: z
+    .string({ required_error: "Enter your phone number" })
+    .trim()
+    .min(3),
+  last_name: z
+    .string({ required_error: "Enter your phone number" })
+    .trim()
+    .min(3),
   referral_code: z
     .string({ required_error: "Enter your phone number" })
     .trim()
@@ -110,12 +119,21 @@ const AddRemitalPhoneNumer = ({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       phone_number: "",
-      referral_code: String(aprokoReferral) || myReferral || String(name) || "",
+      referral_code: aprokoReferral !== null && aprokoReferral !== "" 
+      ? String(aprokoReferral) 
+      : myReferral !== null && myReferral !== "" 
+      ? String(myReferral) 
+      : name 
+      ? String(name) 
+      : ""
+      
     },
 
     mode: "onChange",
   });
 
+  console.log(aprokoReferral);
+  
   const [errorMsg, setErrorMsg] = useState("");
   const {
     isErrorModalOpen,
@@ -129,10 +147,13 @@ const AddRemitalPhoneNumer = ({
   const { mutate: handleCreateBeneficiariesPlan, isLoading: LoadinBene } =
     useCreateReferralBeneficiaries();
   const router = useRouter();
+// const {mutate:handleCheckUserDetail}=useCreateUserDetailsRequest()
+
+
 
   const onsubmit = (data: detailRequestType) => {
-    // console.log("123");
-
+   
+    
     if (planType?.play_type === "INDIVIDUAL") {
       handleCreatePlan(
         {
@@ -141,6 +162,8 @@ const AddRemitalPhoneNumer = ({
           number_of_recipient: 1,
           packages: planType?.play_type,
           referral_code: myReferral as string,
+          first_name:data?.first_name,
+          last_name:data?.last_name
         },
         {
           onSuccess: (data: successProp) => {
@@ -166,7 +189,7 @@ const AddRemitalPhoneNumer = ({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-expect-error
             setErrorMsg(error?.response?.data?.error);
-
+  
             openErrorModalWithMessage(String(errorMessage));
           },
         }
@@ -179,6 +202,8 @@ const AddRemitalPhoneNumer = ({
           number_of_recipient: Number(planType?.number_of_recipient),
           packages: planType?.play_type,
           referral_code: myReferral as string,
+          first_name:data?.first_name,
+          last_name:data?.last_name
         },
         {
           onSuccess: (data: BeneFicairySuccess) => {
@@ -199,7 +224,7 @@ const AddRemitalPhoneNumer = ({
               } else {
                 setShowReferralPayment(true);
               }
-
+  
               setOpenCheckPhoneNumberModal(false);
               tokenStorage.clearReferral();
             }
@@ -209,7 +234,7 @@ const AddRemitalPhoneNumer = ({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-expect-error
             setErrorMsg(error?.response?.data?.error);
-
+  
             openErrorModalWithMessage(String(errorMessage));
           },
         }
@@ -265,6 +290,51 @@ const AddRemitalPhoneNumer = ({
                       id="phone"
                       maxLength={11} // Changed max to maxLength
                       {...register("phone_number")}
+                    />
+
+                    {/* {isLoading && (
+                        <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
+                          <SmallSpinner className="" color="#fff" />
+                        </div>
+                      )} */}
+                  </div>
+                </div>
+
+                <div className="w-full mt-[1rem] text-sm font-normal">
+                  <Label
+                    className="mb-1 block text-xs  text-[#fff]"
+                    htmlFor="phone"
+                  >
+                    First Name
+                  </Label>
+
+                  <div className={`relative mt-[.25rem] `}>
+                    <Input2
+                      className={`${errors?.first_name?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
+                      placeholder="Enter your first name"
+                      type="text"
+                      id="phone"
+                      {...register("first_name")}
+                    />
+
+                 
+                  </div>
+                </div>
+                <div className="w-full mt-[1rem] text-sm font-normal">
+                  <Label
+                    className="mb-1 block text-xs  text-[#fff]"
+                    htmlFor="phone"
+                  >
+                      Last Name
+                  </Label>
+
+                  <div className={`relative mt-[.25rem] `}>
+                    <Input2
+                      className={`${errors?.last_name?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
+                      placeholder="Enter your last name"
+                      type="text"
+                      id="phone"
+                      {...register("last_name")}
                     />
 
                     {/* {isLoading && (

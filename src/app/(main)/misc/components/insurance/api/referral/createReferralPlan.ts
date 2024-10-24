@@ -7,11 +7,13 @@ interface planProp {
   packages: string;
   number_of_recipient: number;
   duration: number;
-  referral_code:string
+  referral_code:string;
+  last_name:string;
+  first_name:string
 }
 
 
-export const createReferralPlanRequest = async ({ packages, referral_code,phone_number,number_of_recipient,duration }: planProp) => {
+export const createReferralPlanRequest = async ({ packages,first_name,last_name, referral_code,phone_number,number_of_recipient,duration }: planProp) => {
     
   const response = await adminAxios.post(`new_user_request/`, {
        package:packages,phone_number,number_of_recipient,duration,referral_code

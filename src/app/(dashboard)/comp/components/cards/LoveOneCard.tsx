@@ -109,8 +109,9 @@ const LoveOneCard = ({
       {showUserDetailsModal && <UpdateUserAccount
       openUpdateDetails={showUserDetailsModal}
       setOpenUpdateDetails={setShowUserDetailsModal}
-      planType="loveOnes"
+      // planType="loveOnes"
       setOpenPlanModal={setBuyPlanForLovedOnes}
+      userData={userData}
       />}
     </div>
   );

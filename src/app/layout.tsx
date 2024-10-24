@@ -77,12 +77,12 @@ export default function RootLayout({
               </Suspense>
             </ProtectedRouteGuard>
           </AuthProvider>
-          <div className="fixed right-6 xl:right-24 bottom-6 z-[999999]">
+          <div className="fixed right-6 xl:right-24 bottom-6 !z-[9999999999999999999999999999999999999999999999999999999999999]">
             <a
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="whatsapp-button  text-white font-bold py-2 px-4 rounded  transition duration-300"
+              className="whatsapp-button !z-[9999999999999999999999999999999999999999999999999999999999999]  text-white font-bold py-2 px-4 rounded  transition duration-300"
             >
               <Button className="bg-transparent animate-pulse">
                 <Image
