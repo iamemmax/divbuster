@@ -14,12 +14,14 @@ import Image from "next/image";
 import MakePaymentModal from "./payment/MakePayment";
 import MakePaymentDetailsModal from "./payment/MakePaymentDetailsModal";
 import SelectDurationModal from "./plans/SelectDurationModal";
+import UpdateUserAccount from "./beneficiary/UpdateUserAccount";
 
 const DashboardPlanHeader = () => {
   const { data: userData, isLoading } = useUser();
   
   const { copy } = useClipboard();
   const queryClient = useQueryClient();
+  const [showUserDetailsModal, setShowUserDetailsModal] = useState(false)
   const [showDurationModal, setShowDurationModal] = useState(false);
   const [showMakePaymentModal, setshowMakePaymentModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -60,6 +62,7 @@ const DashboardPlanHeader = () => {
     userData?.subscription_status === "NOT_ACTIVE" ||
     userData?.subscription_status === "PENDING" ||
     userData?.subscription_status === "FAILED";
+    const NoUser = userData?.first_name === "" || userData?.first_name===null &&  userData?.last_name ==="" || userData?.last_name===null
 
 
 
@@ -81,6 +84,9 @@ const DashboardPlanHeader = () => {
 
     setShowDurationModal(true);
     };
+
+
+
   return (
     <div className=" bg-main py-6 px-6  md:px-[4.5rem] lg:px-[7.5rem]  ">
       {isLoading ? (
@@ -136,8 +142,7 @@ const DashboardPlanHeader = () => {
                   className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
                   onClick={() =>
                     copy(
-                      `https://www.libertylifeplus.com/?referral_code=${userData?.referral_code}` ??
-                        ""
+                      `https://www.libertylifeplus.com/?referral_code=${userData?.referral_code}`
                     )
                   }
                 >
@@ -183,7 +188,10 @@ const DashboardPlanHeader = () => {
             {makePayment && (
               <Button
                 className="bg-[#099976] h-[2.8125rem] text-white  text-xs font-medium"
-                onClick={() => setshowMakePaymentModal(true)}
+                onClick={() =>{ 
+                  NoUser ? setShowUserDetailsModal(true) : setshowMakePaymentModal(true)
+                  
+                  }}
               >
                 Make Payment
               </Button>
@@ -236,6 +244,14 @@ const DashboardPlanHeader = () => {
           actionType="renewal"
         />
       )}
+
+{showUserDetailsModal && <UpdateUserAccount
+      openUpdateDetails={showUserDetailsModal}
+      setOpenUpdateDetails={setShowUserDetailsModal}
+      // planType="family"
+      setOpenPlanModal={setshowMakePaymentModal}
+      userData={userData}
+      />}
     </div>
   );
 };
