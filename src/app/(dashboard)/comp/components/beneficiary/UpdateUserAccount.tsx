@@ -159,11 +159,7 @@ const UpdateUserAccount = ({
                       {...register("first_name")}
                     />
 
-                    {/* {isLoading && (
-                        <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
-                          <SmallSpinner className="" color="#fff" />
-                        </div>
-                      )} */}
+                 
                   </div>
                 </div>
                 <div className="w-full mt-[1rem] text-sm font-normal">

@@ -92,6 +92,15 @@ const AprokoPlanModal = ({setshowAprokoPlanModal,showAprokoPlanModal}:Prop) => {
     queryKey: ["get-referral-name-plans"],
   });
 
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState<{ [key: string]: boolean }>({});
+
+  const handleCheckboxChange = (planId: string) => {
+    setSelectedCheckboxes(prevState => ({
+      ...prevState,
+      [planId]: !prevState[planId], // toggle the checkbox state
+    }));
+  };
+
   //   console.log(plansData);
 
   const [selectedTab, setSelectedTab] = useState(
@@ -102,6 +111,18 @@ const AprokoPlanModal = ({setshowAprokoPlanModal,showAprokoPlanModal}:Prop) => {
     if (plansData) {
       setSelectedTab(plansData[0]?.package_name);
     }
+  }, [plansData]);
+
+  useEffect(() => {
+    const initialCheckboxes: { [key: string]: boolean } = {};
+  
+    plansData?.forEach((healthPlan) => {
+      healthPlan?.data?.forEach((plan) => {
+        initialCheckboxes[plan.id] = true; // set each plan's checkbox to checked initially
+      });
+    });
+  
+    setSelectedCheckboxes(initialCheckboxes);
   }, [plansData]);
 
   const increment = (planId: string) => {
@@ -274,11 +295,25 @@ const AprokoPlanModal = ({setshowAprokoPlanModal,showAprokoPlanModal}:Prop) => {
                           ))}
                         </TabsList>
                       </div> */}
-                      <div className="flex w-full px-6 items-center justify-center">
+                      {/* <div className="flex w-full px-6 items-center justify-center">
                         <TabsList className="flex w-full max-w-full overflow-x-auto scrollbar-hide justify-start md:w-[98%] md:justify-center rounded-[.75rem] bg-[#1D2651] md:max-w-[30rem] md:pl-6 lg:pl-0 border border-[#407BFF]">
                           {plansData?.map((tab, idx: number) => (
                             <TabsTrigger
                               className="inline-flex min-w-max items-center justify-center rounded-xl text-md font-medium text-[#fff] data-[state=active]:shadow-none"
+                              value={tab?.package_name}
+                              key={idx}
+                            >
+                              {tab?.package_name}
+                            </TabsTrigger>
+                          ))}
+                        </TabsList>
+                      </div> */}
+
+<div className="flex w-full px-6 items-center justify-center">
+                        <TabsList className="flex w-[98%] justify-center rounded-[.75rem] bg-[#1D2651] md:max-w-[30rem] md:pl-6 lg:pl-0 border border-[#407BFF]">
+                          {plansData?.map((tab, idx: number) => (
+                            <TabsTrigger
+                              className="inline-flex w-full items-center justify-center rounded-xl text-md font-medium text-[#fff] data-[state=active]:shadow-none"
                               value={tab?.package_name}
                               key={idx}
                             >
@@ -372,7 +407,9 @@ const AprokoPlanModal = ({setshowAprokoPlanModal,showAprokoPlanModal}:Prop) => {
                                         </div>
                                       </div>
                                       {healthPlan.package_name === "FAMILY" && (
-                                        <div className="flex  items-center  justify-center gap-4 px-4">
+                                        <div className="flex flex-col">
+
+<div className="flex  items-center  justify-center gap-4 px-4">
                                           <div className="flex mt-3 rounded-[1.25rem] py-[.3125rem] px-2 space-x-3 items-center border-white border-[0.2px] border-opacity-50 ">
                                             <Button
                                               onClick={() =>
@@ -431,9 +468,34 @@ const AprokoPlanModal = ({setshowAprokoPlanModal,showAprokoPlanModal}:Prop) => {
                                               </svg>
                                             </Button>
                                           </div>
-                                          <div className="flex justify-center rounded-[1.25rem] mt-3 py-[.375rem] px-3 bg-white bg-opacity-10 items-center">
+                                          {/* <div className="flex justify-center rounded-[1.25rem] mt-3 py-[.375rem] px-3 bg-white bg-opacity-10 items-center">
                                             <p className="text-white font-semibold text-xs">
                                               {formatCurrency(
+                                                selectedCheckboxes[plan.id] ?
+                                                getAmountDeduction(
+                                                  Number(
+                                                    removeCommaFromPrice(
+                                                      String(
+                                                        percentageCalc?.base_price
+                                                      )
+                                                    )
+                                                  ),
+                                                  plan?.plan_duration?.duration,
+                                                  planCounts[
+                                                    plan.id.toString()
+                                                  ] || 0,
+                                                  getPercentage(
+                                                    plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
+                                                    planCounts[
+                                                      plan.id.toString()
+                                                    ]
+                                                  )
+                                                  +
+                                                  String(
+                                                    percentageCalc?.base_price
+                                                  ) * plan?.plan_duration?.duration,
+                                                ):
+                                                
                                                 getAmountDeduction(
                                                   Number(
                                                     removeCommaFromPrice(
@@ -455,8 +517,49 @@ const AprokoPlanModal = ({setshowAprokoPlanModal,showAprokoPlanModal}:Prop) => {
                                                 )
                                               )}
                                             </p>
-                                          </div>
+                                          </div> */}
+
+<div className="flex justify-center rounded-[1.25rem] mt-3 py-[.375rem] px-3 bg-white bg-opacity-10 items-center">
+  <p className="text-white font-semibold text-xs">
+    {formatCurrency(
+      (() => {
+        // Base price after removing commas and converting to a number
+        const basePrice = Number(removeCommaFromPrice(String(percentageCalc?.base_price)));
+        
+        // Calculate amount with or without the checkbox adjustment
+        const amount = getAmountDeduction(
+          basePrice,
+          plan?.plan_duration?.duration,
+          planCounts[plan.id.toString()] || 0,
+          getPercentage(
+            plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
+            planCounts[plan.id.toString()]
+          )
+        );
+
+        // Add basePrice * plan duration if checkbox is selected
+        const additionalAmount = selectedCheckboxes[plan.id] ? basePrice * plan?.plan_duration?.duration : 0;
+
+        return amount + additionalAmount; // Final calculated amount
+      })()
+    )}
+  </p>
+</div>
+
+
                                         </div>
+
+
+ <div className="flex items-center mt-4 px-3">
+                    <input
+                      type="checkbox"
+                      checked={selectedCheckboxes[plan.id]}
+                      onChange={() => handleCheckboxChange(String(plan.id))}
+                      className="form-checkbox text-blue-600"
+                    />
+                    <span className="text-white text-xs ml-2">Include owner plan</span>
+                  </div>                             </div>
+                                     
                                       )}
                                     </div>
 
