@@ -6,7 +6,7 @@ type userformProps = {
    
         first_name: string;
         last_name: string;
-    phone_number: string;
+        phone_number: string;
  
 }
 export const updateUserData = async ({ phone_number,first_name,last_name }: userformProps) => {

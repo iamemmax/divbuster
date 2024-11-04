@@ -15,6 +15,7 @@ import MakePaymentModal from "./payment/MakePayment";
 import MakePaymentDetailsModal from "./payment/MakePaymentDetailsModal";
 import SelectDurationModal from "./plans/SelectDurationModal";
 import UpdateUserAccount from "./beneficiary/UpdateUserAccount";
+import ShowProcessingModal from "./payment/ShowProcessingModal";
 
 const DashboardPlanHeader = () => {
   const { data: userData, isLoading } = useUser();
@@ -22,6 +23,7 @@ const DashboardPlanHeader = () => {
   const { copy } = useClipboard();
   const queryClient = useQueryClient();
   const [showUserDetailsModal, setShowUserDetailsModal] = useState(false)
+  const [showProcessingModal, setShowProcessingModal] = useState(false)
   const [showDurationModal, setShowDurationModal] = useState(false);
   const [showMakePaymentModal, setshowMakePaymentModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -242,6 +244,9 @@ const DashboardPlanHeader = () => {
           selectedPlan={plansData && plansData[1]?.data}
           planType={"INDIVIDUAL"}
           actionType="renewal"
+    
+setShowProcessingModal={setShowProcessingModal}
+          
         />
       )}
 
@@ -252,7 +257,15 @@ const DashboardPlanHeader = () => {
       setOpenPlanModal={setshowMakePaymentModal}
       userData={userData}
       />}
+
+{showProcessingModal&&<ShowProcessingModal
+      showProcessing={showProcessingModal}
+      setShowProcessing={setShowProcessingModal}
+      
+      />}
     </div>
+
+    
   );
 };
 

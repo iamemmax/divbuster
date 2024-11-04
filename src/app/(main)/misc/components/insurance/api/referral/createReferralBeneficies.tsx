@@ -7,8 +7,8 @@ interface planProp {
   number_of_recipient: number;
   duration: number;
   referral_code: string;
-  first_name:string;
-  last_name:string;
+  first_name?:string;
+  last_name?:string;
 }
 
 export const createReferralBeneficiaries = async ({

@@ -128,8 +128,8 @@ const ViewBeneficiaryHeader = ({ loadinUser, userData: users }: Prop) => {
                                     className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
                                     onClick={() =>
                                         copy(
-                                            `https://www.libertylifeplus.com/?referral_code=${userData?.referral_code}` ??
-                                            ""
+                                            `https://www.libertylifeplus.com/?referral_code=${userData?.referral_code}` 
+                                            
                                         )
                                     }
                                 >

@@ -67,6 +67,7 @@ interface Plandetails {
 interface UseBooleanStateControlProps {
   isSelectPlanModalOpen: boolean;
   setSelectPlanModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowProcessingModal: React.Dispatch<React.SetStateAction<boolean>>
   beneficiariesList:
   | {
     beneficiaries: {
@@ -88,6 +89,7 @@ function SelectDurationModal({
   selectedPlan,
   planType,
   actionType,
+  setShowProcessingModal
 }: UseBooleanStateControlProps) {
   const {
     isErrorModalOpen,
@@ -97,7 +99,6 @@ function SelectDurationModal({
   } = useErrorModalState();
   const [errorMsg, setErrorMsg] = useState("");
   const { data: users } = useUser();
-  const [SuccessPayment, setSuccessPayment] = useState(false);
   const { mutate: handleAddBeneficiary, isLoading } = useAddbeneficiaries();
   const [paymentProp, setPaymentProp] = useState<successProp>();
   const [SelectPlan, setSelectPlan] = useState(false);
@@ -236,7 +237,10 @@ const router = useRouter()
           },
           {
             onSuccess: (data: PaymentSuccessMsg) => {
-              
+              if(users?.is_a_liberty_staff){
+              setShowProcessingModal(true as boolean)
+              }else{
+
                 setPaymentProp({
                   account_name: data?.account_name,
                   plan_details: {
@@ -257,6 +261,8 @@ const router = useRouter()
                 }else{
                   setSelectPlan(true);
                 }
+              }
+              
             },
             onError: (error) => {
               const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -377,11 +383,10 @@ const router = useRouter()
                     type="submit"
                     onClick={makePayment}
                   >
-                    Make payment{" "}
-                    {
-                      (loadingMoreBeneficiary || isLoading || loadingRenew && (
-                        <SmallSpinner className="" color="#1B1687" />
-                      ))}
+                  {users?.is_a_liberty_staff ? "Continue" : "Make payment"}{" "}
+                  {(loadingMoreBeneficiary || isLoading || loadingRenew) && (
+    <SmallSpinner className="" color="#1B1687" />
+  )}
                   </Button>
                 </div>
               </div>
