@@ -262,6 +262,7 @@ const FamilyBeneficiary = ({
 
     setShowDurationModal(true);
   };
+  const [processing, setProcessing] = useState(false)
 
   return (
     <div className="px-6  md:px-[4.5rem] lg:px-[7.5rem]">
@@ -456,6 +457,7 @@ const FamilyBeneficiary = ({
           selectedPlan={plansData && plansData[1]?.data}
           planType={"FAMILY"}
           actionType="renewal"
+          setShowProcessingModal={setProcessing}
         />
       )}
     </div>

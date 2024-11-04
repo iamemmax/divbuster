@@ -58,7 +58,7 @@ const BeneficiariesModal = ({
   selectedPlan,
 }: Prop) => {
   const [errorMsg, setErrorMsg] = useState("");
-
+const [processing, setProcessing] = useState(false)
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -210,6 +210,7 @@ const BeneficiariesModal = ({
           selectedPlan={selectedPlan}
           planType={planType}
           actionType="makePayment"
+          setShowProcessingModal={setProcessing}
         />
       )}
     </>
