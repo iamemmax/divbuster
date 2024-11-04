@@ -253,6 +253,7 @@ const LovedOnesBeneficiaries = ({
 
     setShowDurationModal(true);
   };
+  const [processing, setProcessing] = useState(false)
   return (
     <div className="px-6  md:px-[4.5rem] lg:px-[7.5rem]">
       <div className=" bg-white px-12 py-10 mt-4 rounded-10 ">
@@ -460,6 +461,7 @@ const LovedOnesBeneficiaries = ({
           selectedPlan={plansData && plansData[0]?.data}
           planType={"LOVE_ONES"}
           actionType="renewal"
+          setShowProcessingModal={setProcessing}
         />
       )}
     </div>

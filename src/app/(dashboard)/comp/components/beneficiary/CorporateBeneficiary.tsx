@@ -251,6 +251,7 @@ const CorporateBeneficiary = ({
 
     setShowDurationModal(true);
   };
+  const [ShowProcessingModal, setShowProcessingModal] = useState(false)
 
   return (
     <div className="px-6  md:px-[4.5rem] lg:px-[7.5rem]">
@@ -483,6 +484,7 @@ const CorporateBeneficiary = ({
           planType="CORPORATE"
           selectedPlan={plansData && plansData[2]?.data}
           actionType="renewal"
+          setShowProcessingModal={setShowProcessingModal}
         />
       )}
     </div>
