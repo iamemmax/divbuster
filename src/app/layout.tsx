@@ -69,7 +69,34 @@ export default function RootLayout({
                     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
                 `}
             </Script>
+            
 
+
+      {/* Heala Configuration */}
+      <Script id="heala-config" strategy="afterInteractive">
+        {`
+          var Heala_config = {
+            floatButtonText: "Consult a Doctor",
+            floatButtonTextColor: "color: #fedf3e",
+            widgetColor: "#a82118",
+            floatButtonImg: "https://dq1z5gvyi71s7.cloudfront.net/heala-file-2023-03-21-15-07-278516.png",
+            floatButtonSize: "small",
+            floatButtonPosition: "right",
+            formLogoUrl: "https://dq1z5gvyi71s7.cloudfront.net/heala-file-2023-03-21-15-07-278516.png",
+            subdomain: "nem-hmo"
+          };
+        `}
+      </Script>
+
+      {/* Heala Widget Loader */}
+      <Script
+        id="heala-loader"
+        src="https://cdn.heala.io/widget.js"
+        type="module"
+        strategy="afterInteractive"
+        defer
+      />
+    
       </head>
       <body>
         <Toaster

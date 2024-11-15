@@ -116,7 +116,7 @@ export default function Home() {
               <span>
                 Get a comprehensive health cover and stand a chance to benefit from
               </span>
-              <span className=" flex flex-wrap">  a lifestyle reward of
+              <span className=" flex flex-wrap">  a lifetime reward of
                 <span className="flex flex-col ml-3 text-white">
                   ₦500,000
                   <UnderLine />
