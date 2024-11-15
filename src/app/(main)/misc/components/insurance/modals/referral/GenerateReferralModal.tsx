@@ -34,27 +34,27 @@ export interface ReferralsuccessProp {
   referral_code: string;
 }
 const formSchema = z.object({
-  
-      first_name: z
-        .string()
-        .trim()
-        .min(1, { message: "Please enter the first name." }),
-      last_name: z
-        .string()
-        .trim()
-        .min(1, { message: "Please enter the name." }),
-      phone_number: z
-        .string()
-        .trim()
-        .min(10, { message: "Please enter a valid phone number." }),
-     
-    
-  
+
+  first_name: z
+    .string()
+    .trim()
+    .min(1, { message: "Please enter the first name." }),
+  last_name: z
+    .string()
+    .trim()
+    .min(1, { message: "Please enter the name." }),
+  phone_number: z
+    .string()
+    .trim()
+    .min(10, { message: "Please enter a valid phone number." }),
+
+
+
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-const GenerateReferralModal= ({
+const GenerateReferralModal = ({
   setBuyPlanModal,
   isBuyPlanModalOpen,
   setShowGenerateReferralSuccessModal,
@@ -69,15 +69,15 @@ const GenerateReferralModal= ({
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-          first_name: "",
-          phone_number: "",
-         last_name:""
-        
-      
+      first_name: "",
+      phone_number: "",
+      last_name: ""
+
+
     },
   });
 
-const {mutate:handleGenerateReferral} = useCreateReferral()
+  const { mutate: handleGenerateReferral } = useCreateReferral()
 
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -86,32 +86,32 @@ const {mutate:handleGenerateReferral} = useCreateReferral()
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
-  
+
   const onSubmit = (data: FormValues) => {
     handleGenerateReferral(
-            data ,
-        {
-          onSuccess: (data:ReferralsuccessProp) => {
-        //    console.log(data);
-        if(data?.referral_code){
+      data,
+      {
+        onSuccess: (data: ReferralsuccessProp) => {
+          //    console.log(data);
+          if (data?.referral_code) {
             setReferralResponse({
-                message:data?.message,
-                 referral_code:data?.referral_code
+              message: data?.message,
+              referral_code: data?.referral_code
             })
             setShowGenerateReferralSuccessModal(true)
             setBuyPlanModal(false)
-        }
-           
-          },
-          onError: (error) => {
-            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-expect-error
-            setErrorMsg(error?.response?.data?.error);
-            openErrorModalWithMessage(String(errorMessage));
-          },
-        }
-      );
+          }
+
+        },
+        onError: (error) => {
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-expect-error
+          setErrorMsg(error?.response?.data?.error);
+          openErrorModalWithMessage(String(errorMessage));
+        },
+      }
+    );
   };
 
   return (
@@ -124,7 +124,7 @@ const {mutate:handleGenerateReferral} = useCreateReferral()
             <DialogContent className="!overflow-hidden max-h-[93vh]">
               <DialogHeader className="bg-[#1B1687] font-medium text-[#fff] text-base">
                 <DialogTitle className="font-medium text-[#fff]">
-                Generate Referral Details
+                  Generate Referral Details
                 </DialogTitle>
                 <DialogClose
                   className="rounded-10 bg-transparent border-[0.3px] border-[#407BFF]"
@@ -137,7 +137,7 @@ const {mutate:handleGenerateReferral} = useCreateReferral()
               <DialogBody className="bg-[#141B3f] w-full !max-h-[86vh]">
                 <div className="text-[#fff] font-light text-sm pb-4">
                   <p className="w-4/5 pb-2">
-                  Kindly enter below your details to generate a referral link.
+                    Kindly enter below your details to generate a referral link.
                   </p>
                   {/* {fields?.length > 0 && (
                     <Button className="bg-white mt-2 flex justify-center items-center gap-2 rounded-lg text-[#032282]">
@@ -150,70 +150,70 @@ const {mutate:handleGenerateReferral} = useCreateReferral()
                 </div>
                 <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                   <div className="max-h-[50vh] overflow-y-auto">
-                  <div
-                       
-                        className="w-full mt-[1rem] text-sm font-normal max-h-[60vh] overflow-y-auto"
-                      >
-                        <div className="flex items-center justify-between">
-                          <Label
-                            className="mb-1 block text-xs text-[#fff]"
-                            htmlFor={`first_name`}
-                          >
-                           First Name
-                          </Label>
-                          
-                          
-                        </div>
+                    <div
+
+                      className="w-full mt-[1rem] text-sm font-normal max-h-[60vh] overflow-y-auto"
+                    >
+                      <div className="flex items-center justify-between">
+                        <Label
+                          className="mb-1 block text-xs text-[#fff]"
+                          htmlFor={`first_name`}
+                        >
+                          First Name
+                        </Label>
+
+
+                      </div>
+                      <div className="relative mt-[.25rem]">
+                        <input
+                          className={`${errors?.first_name ? "border border-red-700" : ""} text-[#fff] text-xs outline-none h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                          placeholder="Enter name"
+                          type="text"
+                          id={`name`}
+                          {...register(
+                            `first_name`
+                          )}
+                        />
+                      </div>
+                      <div className="mt-3">
+                        <Label
+                          className="mb-1 block text-xs text-[#fff]"
+                          htmlFor={`last_name`}
+                        >
+                          Last Name
+                        </Label>
                         <div className="relative mt-[.25rem]">
                           <input
-                            className={`${errors?.first_name ? "border border-red-700" : ""} text-[#fff] text-xs outline-none h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
-                            placeholder="Enter name"
+                            className={`${errors?.last_name ? "border border-red-700" : ""} text-[#fff] text-xs outline-none rounded-lg px-6 w-full h-[2.875rem] bg-[#2a3150]`}
+                            placeholder="Enter last name"
                             type="text"
-                            id={`name`}
+                            id={`last_name`}
                             {...register(
-                              `first_name`
+                              `last_name`
                             )}
                           />
                         </div>
-                        <div className="mt-3">
-                          <Label
-                            className="mb-1 block text-xs text-[#fff]"
-                            htmlFor={`last_name`}
-                          >
-                            Last Name
-                          </Label>
-                          <div className="relative mt-[.25rem]">
-                            <input
-                              className={`${errors?.last_name ? "border border-red-700" : ""} text-[#fff] text-xs outline-none rounded-lg px-6 w-full h-[2.875rem] bg-[#2a3150]`}
-                              placeholder="Enter last name"
-                              type="text"
-                              id={`last_name`}
-                              {...register(
-                                `last_name`
-                              )}
-                            />
-                          </div>
-                        </div>
-                        <div className="mt-3">
-                          <Label
-                            className="mb-1 block text-xs text-[#fff]"
-                            htmlFor={`phone_number`}
-                          >
-                            Phone number
-                          </Label>
-                          <div className="relative mt-[.25rem]">
-                            <input
-                              className={`${errors?.phone_number ? "border border-red-700" : ""} text-[#fff] text-xs outline-none rounded-lg px-6 w-full h-[2.875rem] bg-[#2a3150]`}
-                              placeholder="Enter phone number"
-                              type="text"
-                              id={`phone_number`}
-                              {...register(
-                                `phone_number`
-                              )}
-                            />
-                          </div>
+                      </div>
+                      <div className="mt-3">
+                        <Label
+                          className="mb-1 block text-xs text-[#fff]"
+                          htmlFor={`phone_number`}
+                        >
+                          Phone number
+                        </Label>
+                        <div className="relative mt-[.25rem]">
+                          <input
+                            className={`${errors?.phone_number ? "border border-red-700" : ""} text-[#fff] text-xs outline-none rounded-lg px-6 w-full h-[2.875rem] bg-[#2a3150]`}
+                            placeholder="Enter phone number"
+                            type="text"
+                            id={`phone_number`}
+                            {...register(
+                              `phone_number`
+                            )}
+                          />
                         </div>
                       </div>
+                    </div>
                   </div>
                   <div className="py-6 mt-[1rem]">
                     <div className="w-full flex items-center gap-3 justify-between text-sm font-normal">
@@ -230,18 +230,18 @@ const {mutate:handleGenerateReferral} = useCreateReferral()
             </DialogContent>
           </Dialog>
 
-       
+
         </div>
       )}
 
-<ErrorModal
+      <ErrorModal
         isErrorModalOpen={isErrorModalOpen}
         setErrorModalState={() => {
           setErrorModalState(false);
         }}
         subheading={
           errorModalMessage ||
-      
+
           "Please check your inputs and try again."
         }
       ></ErrorModal>
