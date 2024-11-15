@@ -105,30 +105,6 @@ export default function RootLayout({
             
 
 
-      {/* Heala Configuration */}
-      <Script id="heala-config" strategy="afterInteractive">
-        {`
-          var Heala_config = {
-            floatButtonText: "Consult a Doctor",
-            floatButtonTextColor: "color: #fedf3e",
-            widgetColor: "#a82118",
-            floatButtonImg: "https://dq1z5gvyi71s7.cloudfront.net/heala-file-2023-03-21-15-07-278516.png",
-            floatButtonSize: "small",
-            floatButtonPosition: "right",
-            formLogoUrl: "https://dq1z5gvyi71s7.cloudfront.net/heala-file-2023-03-21-15-07-278516.png",
-            subdomain: "nem-hmo"
-          };
-        `}
-      </Script>
-
-      {/* Heala Widget Loader */}
-      <Script
-        id="heala-loader"
-        src="https://cdn.heala.io/widget.js"
-        type="module"
-        strategy="afterInteractive"
-        defer
-      />
     
       </head>
 
@@ -185,7 +161,7 @@ export default function RootLayout({
               </Suspense>
             </ProtectedRouteGuard>
           </AuthProvider>
-          <div className="fixed right-6 xl:right-24 bottom-6 !z-[9999999999999999999999999999999999999999999999999999999999999]">
+          <div className="fixed right-6 xl:right-20 bottom-24 !z-[9999999999999999999999999999999999999999999999999999999999999]">
             <a
               href={url}
               target="_blank"
@@ -217,7 +193,38 @@ export default function RootLayout({
           }}
           id="chat-email-icon-freshworks"
         ></Script> */}
+
+
       </body>
+      <footer className="mt-0  !z-[9999999999999999999999999999999999999999999999999999999999999]">
+  <Script id="heala-config" strategy="afterInteractive">
+    {`
+      var Heala_config = {
+        floatButtonText: "Consult a Doctor",
+        floatButtonTextColor: "color: #fedf3e",
+        floatButtonImg: "https://dq1z5gvyi71s7.cloudfront.net/heala-file-2023-03-21-15-07-278516.png",
+        floatButtonSize: "small",
+        floatButtonPosition: "right",
+        floatButtonBottomOffset: "180px", // Example property to move it up
+
+        formLogoUrl: "https://dq1z5gvyi71s7.cloudfront.net/heala-file-2023-03-21-15-07-278516.png",
+        subdomain: "nem-hmo"
+      };
+    `}
+  </Script>
+
+  {/* Heala Widget Loader */}
+  <Script
+    id="heala-loader"
+    src="https://cdn.heala.io/widget.js"
+    type="module"
+    strategy="afterInteractive"
+    defer
+  />
+</footer>
+
+
+      {/* Heala Configuration */}
     </html>
   );
 }
