@@ -300,3 +300,6 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }
+#heala-float-button {
+  bottom: 80px !important; /* Adjust to move the button up */
+}
