@@ -89,6 +89,47 @@ export default function RootLayout({
           id="show-banner"
         />
 
+          {/* Hotjar Tracking Code */}
+          <Script id="hotjar-tracking" strategy="afterInteractive">
+                {`
+                    (function(h,o,t,j,a,r){
+                        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                        h._hjSettings={hjid:5195904,hjsv:6};
+                        a=o.getElementsByTagName('head')[0];
+                        r=o.createElement('script');r.async=1;
+                        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                        a.appendChild(r);
+                    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+                `}
+            </Script>
+            
+
+
+      {/* Heala Configuration */}
+      <Script id="heala-config" strategy="afterInteractive">
+        {`
+          var Heala_config = {
+            floatButtonText: "Consult a Doctor",
+            floatButtonTextColor: "color: #fedf3e",
+            widgetColor: "#a82118",
+            floatButtonImg: "https://dq1z5gvyi71s7.cloudfront.net/heala-file-2023-03-21-15-07-278516.png",
+            floatButtonSize: "small",
+            floatButtonPosition: "right",
+            formLogoUrl: "https://dq1z5gvyi71s7.cloudfront.net/heala-file-2023-03-21-15-07-278516.png",
+            subdomain: "nem-hmo"
+          };
+        `}
+      </Script>
+
+      {/* Heala Widget Loader */}
+      <Script
+        id="heala-loader"
+        src="https://cdn.heala.io/widget.js"
+        type="module"
+        strategy="afterInteractive"
+        defer
+      />
+    
       </head>
 
       {/* <Script

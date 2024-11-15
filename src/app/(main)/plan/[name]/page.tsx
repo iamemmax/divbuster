@@ -105,7 +105,7 @@ export default function ReferralHome() {
               </span>
               <span className=" flex flex-wrap">
                 {" "}
-                a lifestyle reward of
+                a lifetime reward of
                 <span className="flex flex-col ml-3 text-white">
                   ₦500,000
                   <UnderLine />
