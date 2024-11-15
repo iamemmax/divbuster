@@ -56,9 +56,9 @@ export default function RootLayout({
           id="liberty-life-widget-icon-freshworks"
         />
 
-          {/* Hotjar Tracking Code */}
-          <Script id="hotjar-tracking" strategy="afterInteractive">
-                {`
+        {/* Hotjar Tracking Code */}
+        <Script id="hotjar-tracking" strategy="afterInteractive">
+          {`
                     (function(h,o,t,j,a,r){
                         h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
                         h._hjSettings={hjid:5195904,hjsv:6};
@@ -68,11 +68,11 @@ export default function RootLayout({
                         a.appendChild(r);
                     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
                 `}
-            </Script>
-            
+        </Script>
 
 
-    
+
+
       </head>
       <body>
         <Toaster
@@ -129,32 +129,6 @@ export default function RootLayout({
 
 
       </body>
-      <footer className="mt-0  !z-[9999999999999999999999999999999999999999999999999999999999999]">
-  <Script id="heala-config" strategy="afterInteractive">
-    {`
-      var Heala_config = {
-        floatButtonText: "Consult a Doctor",
-        floatButtonTextColor: "color: #fedf3e",
-        floatButtonImg: "https://dq1z5gvyi71s7.cloudfront.net/heala-file-2023-03-21-15-07-278516.png",
-        floatButtonSize: "small",
-        floatButtonPosition: "right",
-        floatButtonBottomOffset: "180px", // Example property to move it up
-
-        formLogoUrl: "https://dq1z5gvyi71s7.cloudfront.net/heala-file-2023-03-21-15-07-278516.png",
-        subdomain: "nem-hmo"
-      };
-    `}
-  </Script>
-
-  {/* Heala Widget Loader */}
-  <Script
-    id="heala-loader"
-    src="https://cdn.heala.io/widget.js"
-    type="module"
-    strategy="afterInteractive"
-    defer
-  />
-</footer>
 
 
       {/* Heala Configuration */}
