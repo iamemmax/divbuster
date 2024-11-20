@@ -109,9 +109,9 @@ export function MobileMenuDialog() {
                   //  icon: undefined;
                   //  disabled: boolean;
                   //  isExternal: boolean;
-                  linkGroups.map((link, index) => (
+                  linkGroups?.map((link, index:number) => (
                     <li className="border-b-[0.15px] border-b-white/30 py-5" key={index}>
-                      <Link href={link.link}>{link.text}</Link>
+                      <Link href={link?.link}>{link.text}</Link>
                     </li>
                   ))
                 }

@@ -8,7 +8,6 @@ import { Button } from "@/components/core/Button";
 import { LinkButton } from "@/components/core/LinkButton";
 import { cn } from "@/utils/classNames";
 
-import { DesktopMenuBar } from "./DesktopMenuBar";
 import { MobileMenuDialog } from "./MobileMenuModal";
 import { Liberty, RightUpArrow } from "@/icons/core";
 import {
@@ -61,6 +60,7 @@ const pagesWithColoredBg = [
   "/about-us",
 ];
 import { useAuth } from "@/contexts/authentication"; // Import your authentication context
+import { DesktopMenuBar } from "./DesktopMenuBar";
 
 export function MainHeader() {
   const pathname = usePathname();

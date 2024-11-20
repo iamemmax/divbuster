@@ -26,7 +26,7 @@ import Link from "next/link";
 // import PlanPayment from "./PlanPayment";
 // import RemitalSuccessModal from "./RemitalSuccessModal";
 import { useQuery } from "react-query";
-import { getPlan, PlanData } from "../../api/plan/getPlan";
+import { getPlan, PlanData, plantypes, useGetPlan } from "../../api/plan/getPlan";
 // import { useMakeRemitalPayment } from "../../api/remital/remitalpayment";
 import {
   formatAxiosErrorMessage,
@@ -44,21 +44,27 @@ import {
   getAmountDeduction,
   getPercentage,
 } from "@/app/(dashboard)/comp/components/plans/util/planCalc";
+import AddRemitalPhoneNumer from "./AddReferralPhoneNumber";
+import ReferralPlanPayment from "./RefeerralPayment";
+import { PaymentDataType, PlanTypeTypes } from "@/app/(main)/plan/page";
+// import { PaymentDataType, PlanTypeTypes } from "@/app/(main)/plan/page";
 // import ComingSoonIcon from "../../icons/ComingSoonIcon";
 
 interface Prop {
   setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>;
   openRemitalPlan: boolean;
   userId: string;
-  setOpenCheckPhoneNumberModal: React.Dispatch<React.SetStateAction<boolean>>;
-  referalPlan: React.Dispatch<
-    React.SetStateAction<{
-      duration: string;
-      amount: string;
-      number_of_recipient: string;
-      play_type: string;
-    }>
-  >;
+  // setOpenCheckPhoneNumberModal: React.Dispatch<React.SetStateAction<boolean>>;
+  // referalPlan: React.Dispatch<
+  //   React.SetStateAction<{
+  //     duration: string;
+  //     amount: string;
+  //     number_of_recipient: string;
+  //     play_type: string;
+  //   }>
+  // >;
+  plansData: plantypes[] | undefined;
+  loadingPlan:boolean;
 }
 interface PercentageData {
   [key: number]: number;
@@ -79,9 +85,8 @@ export type PlanType = "family" | "individual" | "corporate";
 const ReferralModalPlan = ({
   openRemitalPlan,
   setOpenShowRemitalPlan,
-  userId,
-  setOpenCheckPhoneNumberModal,
-  referalPlan,
+  plansData,
+  loadingPlan
 }: Prop) => {
   const {
     isErrorModalOpen,
@@ -99,11 +104,24 @@ const ReferralModalPlan = ({
   // const [showSubmitModal, setShowSubmitModal] = useState(false);
   // const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [planCounts, setPlanCounts] = useState<Record<string, number>>({});
-
-  const { data: plansData, isLoading: loadingPlan } = useQuery({
-    queryFn: getPlan,
-    queryKey: ["get-plans"],
+  const [isPhoneNumberModalOpen, setPhoneNumberModalOpen] = useState(false);
+  const [isReferralPaymentOpen, setReferralPaymentOpen] = useState(false);
+  const [planType, setPlanType] = useState<PlanTypeTypes>({
+    duration: "",
+    amount: "",
+    number_of_recipient: "",
+    play_type: "",
   });
+  const [paymentData, setPaymentData] = useState<PaymentDataType>({
+    account_name: "",
+    account_no: "",
+    amount: "",
+    bank_name: "",
+    paystack_link: "",
+    phone_number: "",
+  });
+
+  
   const [selectedCheckboxes, setSelectedCheckboxes] = useState<{ [key: string]: boolean }>({});
 
 const handleCheckboxChange = (planId: string) => {
@@ -211,7 +229,7 @@ const handleCheckboxChange = (planId: string) => {
   
     setSelectedCheckboxes(initialCheckboxes);
   }, [plansData]);
-
+const router = useRouter()
   return (
     <div>
       {loadingPlan ? (
@@ -226,13 +244,13 @@ const handleCheckboxChange = (planId: string) => {
                 <DialogTitle className="text-[#fff] whitespace-nowrap">
                   {selectedTab} PLAN
                 </DialogTitle>
-
                 <DialogClose
-                  className="rounded-lg"
-                  onClick={() => setOpenShowRemitalPlan(false)}
-                >
-                  <button>Close</button>
-                </DialogClose>
+  className="rounded-lg"
+  onClick={() => (window.location.href = "/")}
+>
+  <button>Close</button>
+</DialogClose>
+
               </DialogHeader>
             </div>
 
@@ -564,7 +582,7 @@ const handleCheckboxChange = (planId: string) => {
                                       <Button
                                         className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                         onClick={() => {
-                                          referalPlan({
+                                          setPlanType({
                                             number_of_recipient: String(
                                               planCounts[plan.id.toString()] ||
                                                 0
@@ -606,8 +624,8 @@ const handleCheckboxChange = (planId: string) => {
                                                   ),
                                             play_type: healthPlan?.package_name,
                                           });
-                                          setOpenShowRemitalPlan(false);
-                                          setOpenCheckPhoneNumberModal(true);
+                                          // setOpenShowRemitalPlan(false);
+                                          setPhoneNumberModalOpen(true);
                                         }}
                                       >
                                         Get Insurance
@@ -653,6 +671,25 @@ const handleCheckboxChange = (planId: string) => {
           planType={planType}
         />
       )} */}
+
+
+{isPhoneNumberModalOpen && (
+        <AddRemitalPhoneNumer
+          openCheckPhoneNumberModal={isPhoneNumberModalOpen}
+          setOpenCheckPhoneNumberModal={setPhoneNumberModalOpen}
+          setShowReferralPayment={setReferralPaymentOpen}
+          planType={planType}
+          setPaymentData={setPaymentData}
+        />
+      )}
+      {isReferralPaymentOpen && (
+        <ReferralPlanPayment
+          showReferralPayment={isReferralPaymentOpen}
+          setShowReferralPayment={setReferralPaymentOpen}
+          PaymentInfo={paymentData}
+          setShowReferralPasswordModal={()=>null}
+        />
+      )}
       <ErrorModal
         isErrorModalOpen={isErrorModalOpen}
         setErrorModalState={() => {

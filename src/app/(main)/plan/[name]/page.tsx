@@ -25,6 +25,7 @@ import RemitalPlanModal from "../../misc/components/insurance/modals/remital/Rem
 import NonRemitalModal from "../../misc/components/insurance/modals/non-remital/NonRemitalModal";
 import AprokoPlanModal from "../components/AprokoPlan";
 import { tokenStorage } from "@/app/(auth)/(onboarding)/misc";
+import AprokoPlan from "../components/AprokoPlan";
 
 export default function ReferralHome() {
   const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
@@ -63,6 +64,8 @@ export default function ReferralHome() {
       tokenStorage.setReferral("aproko-doctor");
     }
   }, [getStarted]);
+
+  
 
   return (
     <main className="md:pb-20 w-full bg-main min-h-screen">
@@ -339,9 +342,8 @@ export default function ReferralHome() {
       {/* Aproko */}
 
       {showAprokoPlanModal && (
-        <AprokoPlanModal
-          showAprokoPlanModal={showAprokoPlanModal}
-          setshowAprokoPlanModal={setshowAprokoPlanModal}
+        <AprokoPlan
+        
         />
       )}
     </main>
