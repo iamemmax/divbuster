@@ -289,6 +289,8 @@ export default function Home() {
       </section>
       {/* <Marquee /> */}
 
+      <div className="">
+
       {openCheckPhoneNumberModal && (
         <CheckPhoneNumber
           openCheckPhoneNumberModal={openCheckPhoneNumberModal}
@@ -376,6 +378,8 @@ export default function Home() {
 
 
       />}
+      </div>
+
     </main>
   );
 }

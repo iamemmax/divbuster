@@ -304,7 +304,7 @@ const HospitalAround = () => {
           </div>
         </div>
       </div>
-      <Marquee />
+      {/* <Marquee /> */}
     </div>
   );
 };
