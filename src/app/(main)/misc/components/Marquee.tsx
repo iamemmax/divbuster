@@ -6,7 +6,7 @@ import Image from "next/image";
 const Marquee = () => {
   return (
     <>
-      <section className="z-50 fixed bottom-0 w-full bg-[#161D42] py-[.375rem] text-lg font-display">
+      <section className="!z-50 fixed bottom-0 w-full bg-[#161D42] z- py-[.375rem] text-lg font-display">
         <div className="marquee-content">
           <div className="marquee-list font-clash flex items-center gap-20 xl:text-xl">
             <Image
@@ -60,6 +60,7 @@ const Marquee = () => {
           overflow: hidden;
           position: relative;
           width: 100%;
+          zIndex:50
         }
 
         .marquee-list {

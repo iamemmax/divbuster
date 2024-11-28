@@ -6,11 +6,12 @@ import ReactQueryProvider from "@/lib/reactQuery";
 import { AuthProvider } from "@/contexts/authentication";
 import ProtectedRouteGuard from "./(auth)/(onboarding)/misc/components/ProtectedRouteGuard";
 import { Wrapper } from "./(auth)/(onboarding)/misc/components/Wrapper";
-import { useUser } from "./(auth)/(onboarding)/misc";
+// import { useUser } from "./(auth)/(onboarding)/misc";
 import { Button } from "@/components/core";
 import Image from "next/image";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
+import Marquee from "./(main)/misc/components/Marquee";
 
 const sans = DM_Sans({
   subsets: ["latin"],
@@ -70,11 +71,10 @@ export default function RootLayout({
                 `}
             </Script>
             
-
-
-    
+           
+           
       </head>
-      <body>
+      <body className="!z-[9999999999999999999999999999999999999999]">
         <Toaster
           containerStyle={{
             zIndex: 99999,
@@ -90,71 +90,63 @@ export default function RootLayout({
           <AuthProvider>
             <ProtectedRouteGuard>
               <Suspense fallback={<></>}>
-                <Wrapper>{children}</Wrapper>
+                <Wrapper >{children}</Wrapper>
               </Suspense>
             </ProtectedRouteGuard>
           </AuthProvider>
-          <div className="fixed right-6 xl:right-20 bottom-24 !z-[9999999999999999999999999999999999999999999999999999999999999]">
-            <a
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="whatsapp-button !z-[9999999999999999999999999999999999999999999999999999999999999]  text-white font-bold py-2 px-4 rounded  transition duration-300"
-            >
-              <Button className="bg-transparent animate-pulse">
-                <Image
-                  src={"/images/whatsappIcon.png"}
-                  width={55}
-                  height={55}
-                  alt="chat icon"
-                />
-              </Button>
-            </a>
-          </div>
+          <div className="fixed right-6 flex justify-end items-end flex-col xl:right-0 bottom-20 !z-[9999999999999999999999999999999999999999999999999999999999999]">
+  {/* <!-- Whatsapp Button with Bounce Animation --> */}
+  <a
+    href={url}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="whatsapp-button !z-[9999999999999999999999999999999999999999999999999999999999999] text-white font-bold py-2 px-4 rounded transition duration-300"
+  >
+    <Button className="bg-transparent animate-bounce">
+      <Image
+        src={"/images/whatsappIcon.png"}
+        width={55}
+        height={55}
+        alt="chat icon"
+      />
+    </Button>
+  </a>
+
+  {/* <!-- Consult a Doctor Button with Fade-In Animation --> */}
+  <a
+    href={"https://hmo.heala.io/nemhmo"}
+    target="_blank"
+    rel="noopener noreferrer"
+    title=" Consult a Doctor"
+    className="whatsapp-button !z-[9999999999999999999999999999999999999999999999999999999999999] transition duration-600 delay-100"
+  >
+    <Button className="bg-[#a82118] flex justify-start gap-x-2 items-center text-[#fedf3e] text-base font-medium rounded-[62.4717px] h-[3.4375rem] px-5 font-display animate-pulse">
+      <Image
+        src={"/images/logos/nemicon.png"}
+        width={25}
+        height={25}
+        alt="chat icon"
+      />
+      Consult a Doctor
+    </Button>
+  </a>
+</div>
+
+         
         </ReactQueryProvider>
 
-        {/* <Script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-FP57HLE7JF"
-        ></Script>
-        <Script
-          dangerouslySetInnerHTML={{
-            __html: `  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-FP57HLE7JF')`,
-          }}
-          id="chat-email-icon-freshworks"
-        ></Script> */}
-
+      <Marquee/>
 
       </body>
-      <footer className="mt-0  !z-[9999999999999999999999999999999999999999999999999999999999999]">
-  <Script id="heala-config" strategy="afterInteractive">
-    {`
-      var Heala_config = {
-        floatButtonText: "Consult a Doctor",
-        floatButtonTextColor: "color: #fedf3e",
-        floatButtonImg: "https://dq1z5gvyi71s7.cloudfront.net/heala-file-2023-03-21-15-07-278516.png",
-        floatButtonSize: "small",
-        floatButtonPosition: "right",
-        floatButtonBottomOffset: "180px", // Example property to move it up
 
-        formLogoUrl: "https://dq1z5gvyi71s7.cloudfront.net/heala-file-2023-03-21-15-07-278516.png",
-        subdomain: "nem-hmo"
-      };
-    `}
-  </Script>
+      <footer className="relative">
+    
 
-  {/* Heala Widget Loader */}
-  <Script
-    id="heala-loader"
-    src="https://cdn.heala.io/widget.js"
-    type="module"
-    strategy="afterInteractive"
-    defer
-  />
-</footer>
+   
+    
+      </footer>
+
+
 
 
       {/* Heala Configuration */}

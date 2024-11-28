@@ -266,7 +266,7 @@ export default function ReferralHome() {
           </div>
         </section>
       </section>
-      <Marquee />
+      {/* <Marquee /> */}
 
       {openCheckPhoneNumberModal && (
         <CheckPhoneNumber
