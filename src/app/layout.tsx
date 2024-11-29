@@ -6,10 +6,13 @@ import ReactQueryProvider from "@/lib/reactQuery";
 import { AuthProvider } from "@/contexts/authentication";
 import ProtectedRouteGuard from "./(auth)/(onboarding)/misc/components/ProtectedRouteGuard";
 import { Wrapper } from "./(auth)/(onboarding)/misc/components/Wrapper";
-import { useUser } from "./(auth)/(onboarding)/misc";
+// import { useUser } from "./(auth)/(onboarding)/misc";
 import { Button } from "@/components/core";
 import Image from "next/image";
 import { Toaster } from "react-hot-toast";
+import Script from "next/script";
+import Marquee from "./(main)/misc/components/Marquee";
+import NemLogoIcon from "@/components/icons/NemIcon";
 
 const sans = DM_Sans({
   subsets: ["latin"],
@@ -34,10 +37,45 @@ export default function RootLayout({
 }>) {
   // const { data } = useUser();
   // console.log(data);
-  const url = `https://wa.link/j2dkg7`;
+  // const url = `https://wa.link/j2dkg7`;
+  const url = `https://wa.link/vrg8zn`;
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
-      <body>
+      <head>
+        <Script id="google-tag-manager" strategy="afterInteractive">
+          {`
+           window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-16669350340')
+      `}
+        </Script>
+        <Script
+          dangerouslySetInnerHTML={{
+            __html: `src='hhttps://www.googletagmanager.com/gtag/js?id=AW-16669350340`,
+          }}
+          id="liberty-life-widget-icon-freshworks"
+        />
+
+          {/* Hotjar Tracking Code */}
+          <Script id="hotjar-tracking" strategy="afterInteractive">
+                {`
+                    (function(h,o,t,j,a,r){
+                        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                        h._hjSettings={hjid:5195904,hjsv:6};
+                        a=o.getElementsByTagName('head')[0];
+                        r=o.createElement('script');r.async=1;
+                        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                        a.appendChild(r);
+                    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+                `}
+            </Script>
+            
+           
+           
+      </head>
+      <body className="!z-[9999999999999999999999999999999999999999]">
         <Toaster
           containerStyle={{
             zIndex: 99999,
@@ -45,7 +83,7 @@ export default function RootLayout({
           position="top-center"
           toastOptions={{
             style: {
-              zIndex: 99999,
+              zIndex: 999999,
             },
           }}
         />
@@ -53,29 +91,67 @@ export default function RootLayout({
           <AuthProvider>
             <ProtectedRouteGuard>
               <Suspense fallback={<></>}>
-                <Wrapper>{children}</Wrapper>
+                <Wrapper >{children}</Wrapper>
               </Suspense>
             </ProtectedRouteGuard>
           </AuthProvider>
-          <div className="fixed right-6 xl:right-24 bottom-6 z-[999999]">
-            <a
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="whatsapp-button  text-white font-bold py-2 px-4 rounded  transition duration-300"
-            >
-              <Button className="bg-transparent animate-pulse">
-                <Image
-                  src={"/images/whatsappIcon.png"}
-                  width={55}
-                  height={55}
-                  alt="chat icon"
-                />
-              </Button>
-            </a>
-          </div>
+          <div className="fixed right-6 flex justify-end items-end flex-col xl:right-0 bottom-20 !z-[9999999999999999999999999999999999999999999999999999999999999]">
+  {/* <!-- Whatsapp Button with Bounce Animation --> */}
+  <a
+    href={url}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="whatsapp-button !z-[9999999999999999999999999999999999999999999999999999999999999] text-white font-bold py-2 px-4 rounded transition duration-300"
+  >
+    <Button className="bg-transparent animate-bounce">
+      <Image
+        src={"/images/whatsappIcon.png"}
+        width={55}
+        height={55}
+        alt="chat icon"
+      />
+    </Button>
+  </a>
+
+  {/* <!-- Consult a Doctor Button with Fade-In Animation --> */}
+  <a
+    href={"https://hmo.heala.io/nemhmo"}
+    target="_blank"
+    rel="noopener noreferrer"
+    title=" Consult a Doctor"
+    className="whatsapp-button !z-[9999999999999999999999999999999999999999999999999999999999999] transition duration-600 delay-100"
+  >
+    <Button className="bg-[#a82118] flex justify-start gap-x-2 items-center text-[#fedf3e] text-base font-medium rounded-[62.4717px] h-[3.4375rem] px-5 font-display animate-pulse">
+      <Image
+        src={"/images/logos/nemicon.png"}
+        width={25}
+        height={25}
+        alt="chat icon"
+      />
+      {/* <NemLogoIcon height={30} width={30}/> */}
+      Consult a Doctor
+    </Button>
+  </a>
+</div>
+
+         
         </ReactQueryProvider>
+
+      <Marquee/>
+
       </body>
+
+      <footer className="relative">
+    
+
+   
+    
+      </footer>
+
+
+
+
+      {/* Heala Configuration */}
     </html>
   );
 }

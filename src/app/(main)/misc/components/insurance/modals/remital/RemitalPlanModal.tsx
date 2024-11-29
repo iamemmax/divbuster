@@ -117,6 +117,15 @@ const RemitalPlanModal = ({
     queryKey: ["fetch-percentage-list"],
   });
 
+
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState<{ [key: string]: boolean }>({});
+
+const handleCheckboxChange = (planId: string) => {
+  setSelectedCheckboxes(prevState => ({
+    ...prevState,
+    [planId]: !prevState[planId], // toggle the checkbox state
+  }));
+};
   const user = useDataStore((state) => state?.user);
   const router = useRouter();
 
@@ -228,6 +237,18 @@ const RemitalPlanModal = ({
     }
   }, [plansData]);
 
+
+
+  useEffect(() => {
+    const initialCheckboxes: { [key: string]: boolean } = {};
+    plansData?.forEach((healthPlan) => {
+      healthPlan?.data?.forEach((plan) => {
+        initialCheckboxes[plan.id] = true; // set each plan's checkbox to checked initially
+      });
+    });
+  
+    setSelectedCheckboxes(initialCheckboxes);
+  }, [plansData]);
   return (
     <div>
       {isLoginLoading ? (
@@ -455,30 +476,41 @@ const RemitalPlanModal = ({
                                             </Button>
                                           </div>
                                           <div className="flex justify-center rounded-[1.25rem] mt-3 py-[.375rem] px-3 bg-white bg-opacity-10 items-center">
-                                            <p className="text-white font-semibold text-xs">
-                                              {formatCurrency(
-                                                getAmountDeduction(
-                                                  Number(
-                                                    removeCommaFromPrice(
-                                                      String(
-                                                        percentageCalc?.base_price
-                                                      )
-                                                    )
-                                                  ),
-                                                  plan?.plan_duration?.duration,
-                                                  planCounts[
-                                                    plan.id.toString()
-                                                  ] || 0,
-                                                  getPercentage(
-                                                    plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
-                                                    planCounts[
-                                                      plan.id.toString()
-                                                    ]
-                                                  )
-                                                )
-                                              )}
-                                            </p>
-                                          </div>
+  <p className="text-white font-semibold text-xs">
+    {formatCurrency(
+      (() => {
+        // Base price after removing commas and converting to a number
+        const basePrice = Number(removeCommaFromPrice(String(percentageCalc?.base_price)));
+        
+        // Calculate amount with or without the checkbox adjustment
+        const amount = getAmountDeduction(
+          basePrice,
+          plan?.plan_duration?.duration,
+          planCounts[plan.id.toString()] || 0,
+          getPercentage(
+            plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
+            planCounts[plan.id.toString()]
+          )
+        );
+
+        // Add basePrice * plan duration if checkbox is selected
+        const additionalAmount = selectedCheckboxes[plan.id] ? basePrice * plan?.plan_duration?.duration : 0;
+
+        return amount + additionalAmount; // Final calculated amount
+      })()
+    )}
+  </p>
+</div>
+
+                                          <div className="flex items-center mt-4 px-3">
+                    <input
+                      type="checkbox"
+                      checked={selectedCheckboxes[plan.id]}
+                      onChange={() => handleCheckboxChange(String(plan.id))}
+                      className="form-checkbox text-blue-600"
+                    />
+                    <span className="text-white text-xs ml-2">Include owner plan</span>
+                  </div>  
                                         </div>
                                       )}
                                     </div>

@@ -8,7 +8,6 @@ import { Button } from "@/components/core/Button";
 import { LinkButton } from "@/components/core/LinkButton";
 import { cn } from "@/utils/classNames";
 
-import { DesktopMenuBar } from "./DesktopMenuBar";
 import { MobileMenuDialog } from "./MobileMenuModal";
 import { Liberty, RightUpArrow } from "@/icons/core";
 import {
@@ -61,6 +60,7 @@ const pagesWithColoredBg = [
   "/about-us",
 ];
 import { useAuth } from "@/contexts/authentication"; // Import your authentication context
+import { DesktopMenuBar } from "./DesktopMenuBar";
 
 export function MainHeader() {
   const pathname = usePathname();
@@ -78,7 +78,6 @@ export function MainHeader() {
   //   }
   // }, [users]);
 
-
   return (
     <div className={cn(isColored && "bg-main")}>
       <header
@@ -90,7 +89,7 @@ export function MainHeader() {
         <div className="flex items-center gap-4 lg:gap-10 xl:gap-[5.625rem]">
           <Link href="/">
             <span className="sr-only">Go home</span>
-            <Liberty className="max-sm:max-w-[100px]" />
+            <Liberty className="max-lg:max-w-[100px]" />
             {/* <svg
               fill="none"
               className="max-sm:max-w-[100px]"
@@ -143,7 +142,7 @@ export function MainHeader() {
           {!isAuthenticated ? (
             <a
               className={cn(
-                "hidden md:flex bg-white text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 text-main items-center justify-between rounded-full max-w-max",
+                "hidden lg:flex bg-white text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 text-main items-center justify-between rounded-full max-w-max",
                 "font-display"
               )}
               href="/login"
@@ -156,12 +155,12 @@ export function MainHeader() {
           ) : (
             <a
               className={cn(
-                "hidden md:flex items-center justify-between md:max-lg:text-sm lg:text-base text-white text-left p-0 bg-transparent rounded-full max-w-max",
+                "hidden lg:flex items-center justify-between md:max-lg:text-sm lg:text-base text-white text-left p-0 bg-transparent rounded-full max-w-max",
                 "font-display"
               )}
               href="/dashboard"
-            // target="_blank"
-            // variant="white"
+              // target="_blank"
+              // variant="white"
             >
               Dashboard
             </a>
@@ -218,7 +217,7 @@ export function MainHeader() {
           </ClientOnly>
         </div>
 
-        <div className="flex items-center gap-6 md:hidden">
+        <div className="flex items-center gap-6 lg:hidden">
           <LinkButton
             className="text-base text-white xl:text-xl"
             href={isAuthenticated ? "/dashboard" : "/login"}

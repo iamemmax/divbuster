@@ -212,7 +212,7 @@ export type LoginOtpDto = {
 
 
 export interface UserDataTypes {
-  user_id:string;
+  id: string;
   first_name: string;
   middle_name: string;
   last_name: string;
@@ -238,11 +238,13 @@ export interface UserDataTypes {
   loandisk_borrower_id: string;
   is_remita: boolean;
   is_active: boolean;
+  is_a_liberty_staff: boolean;
   has_created_individual_health: boolean;
   is_staff: string;
   referral_code: string
   subscription_status: "NOT_ACTIVE" | "PENDING" | "PENDING" | "EXPIRED" | "SUCCESS" | "FAILED"
-   paid_beneficiary_requests: string[]
+  paid_beneficiary_requests: string[];
+  profile_image: string
 }
 
 interface Hospitals {

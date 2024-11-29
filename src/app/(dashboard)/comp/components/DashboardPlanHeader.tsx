@@ -13,14 +13,27 @@ import ActiveIcon from "../icons/ActiveIcon";
 import Image from "next/image";
 import MakePaymentModal from "./payment/MakePayment";
 import MakePaymentDetailsModal from "./payment/MakePaymentDetailsModal";
+import SelectDurationModal from "./plans/SelectDurationModal";
+import UpdateUserAccount from "./beneficiary/UpdateUserAccount";
+import ShowProcessingModal from "./payment/ShowProcessingModal";
 
 const DashboardPlanHeader = () => {
   const { data: userData, isLoading } = useUser();
-
+  
   const { copy } = useClipboard();
   const queryClient = useQueryClient();
+  const [showUserDetailsModal, setShowUserDetailsModal] = useState(false)
+  const [showProcessingModal, setShowProcessingModal] = useState(false)
+  const [showDurationModal, setShowDurationModal] = useState(false);
   const [showMakePaymentModal, setshowMakePaymentModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [beneficiariesList, setBeneficiariesList] = useState<{
+    beneficiaries: {
+      name_of_beneficiary: string;
+      phone_number_of_beneficiary: string;
+      type_of_beneficary?: "ADULT" | "MINOR" | undefined;
+    }[];
+  }>();
   const [paymentData, setPaymentData] = useState({
     account_name: "",
     account_no: "",
@@ -28,14 +41,15 @@ const DashboardPlanHeader = () => {
     bank_name: "",
     paystack_link: "",
   });
+
   const {
     data,
     refetch,
 
     isLoading: loadinGenerate,
   } = useQuery({
-    queryFn: () => fetchReferralCode(userData?.user_id as string),
-    queryKey: ["generate-referral-code", userData?.user_id],
+    queryFn: () => fetchReferralCode(userData?.id as string),
+    queryKey: ["generate-referral-code", userData?.id],
     enabled: false,
     onSuccess: () => {
       // Invalidate user details query to refetch data
@@ -50,6 +64,31 @@ const DashboardPlanHeader = () => {
     userData?.subscription_status === "NOT_ACTIVE" ||
     userData?.subscription_status === "PENDING" ||
     userData?.subscription_status === "FAILED";
+    const NoUser = userData?.first_name === "" || userData?.first_name===null &&  userData?.last_name ==="" || userData?.last_name===null
+
+
+
+    const handleRenewOneActionOnSelected = () => {
+      const myList = {
+        name_of_beneficiary: `${userData?.first_name} ${userData?.last_name}`,
+        phone_number_of_beneficiary: userData?.phone_number as string,
+        type_of_beneficary: "ADULT" as
+          | "ADULT"
+          | "MINOR"
+          | undefined,
+      };
+  
+      // Update the beneficiariesList state with the new item inside the beneficiaries array
+     // Update the beneficiariesList state with the new item inside the beneficiaries array
+     setBeneficiariesList({
+      beneficiaries: [myList], // Wrap the single item in an array and assign it to the beneficiaries property
+    });
+
+    setShowDurationModal(true);
+    };
+
+
+
   return (
     <div className=" bg-main py-6 px-6  md:px-[4.5rem] lg:px-[7.5rem]  ">
       {isLoading ? (
@@ -105,8 +144,7 @@ const DashboardPlanHeader = () => {
                   className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
                   onClick={() =>
                     copy(
-                      `https://www.libertylifeplus.com/?referral_code=${userData?.referral_code}` ??
-                        ""
+                      `https://www.libertylifeplus.com/?referral_code=${userData?.referral_code}`
                     )
                   }
                 >
@@ -152,7 +190,10 @@ const DashboardPlanHeader = () => {
             {makePayment && (
               <Button
                 className="bg-[#099976] h-[2.8125rem] text-white  text-xs font-medium"
-                onClick={() => setshowMakePaymentModal(true)}
+                onClick={() =>{ 
+                  NoUser ? setShowUserDetailsModal(true) : setshowMakePaymentModal(true)
+                  
+                  }}
               >
                 Make Payment
               </Button>
@@ -160,7 +201,7 @@ const DashboardPlanHeader = () => {
             {userData?.subscription_status === "EXPIRED" && (
               <Button
                 className="bg-[#099976] h-[2.8125rem] text-white  text-xs font-medium"
-                onClick={() => setshowMakePaymentModal(true)}
+                onClick={handleRenewOneActionOnSelected}
               >
                 Renew plan
               </Button>
@@ -194,7 +235,37 @@ const DashboardPlanHeader = () => {
           PaymentInfo={paymentData}
         />
       )}
+
+{showDurationModal && (
+        <SelectDurationModal
+          isSelectPlanModalOpen={showDurationModal}
+          setSelectPlanModal={setShowDurationModal}
+          beneficiariesList={beneficiariesList}
+          selectedPlan={plansData && plansData[1]?.data}
+          planType={"INDIVIDUAL"}
+          actionType="renewal"
+    
+setShowProcessingModal={setShowProcessingModal}
+          
+        />
+      )}
+
+{showUserDetailsModal && <UpdateUserAccount
+      openUpdateDetails={showUserDetailsModal}
+      setOpenUpdateDetails={setShowUserDetailsModal}
+      // planType="family"
+      setOpenPlanModal={setshowMakePaymentModal}
+      userData={userData}
+      />}
+
+{showProcessingModal&&<ShowProcessingModal
+      showProcessing={showProcessingModal}
+      setShowProcessing={setShowProcessingModal}
+      
+      />}
     </div>
+
+    
   );
 };
 

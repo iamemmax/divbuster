@@ -6,6 +6,7 @@ import { UserDataTypes } from "@/app/(auth)/(onboarding)/misc";
 import { beneficiaryTypeProp } from "../plans/api/fetchBeneficairies";
 import BuyPlanModalForCoperate from "../plans/coperate/BuyPlanForCoperate";
 import BuyPlanModalForLovedOne from "../plans/loved-ones/BuyLovedOnePlan";
+import UpdateUserAccount from "../beneficiary/UpdateUserAccount";
 interface Prop {
   userData: UserDataTypes | undefined;
   loadinUser: boolean;
@@ -21,8 +22,11 @@ const LoveOneCard = ({
   showViewButton = true,
 }: Prop) => {
   const [buyPlanForLovedOnes, setBuyPlanForLovedOnes] = useState(false);
+  const [showUserDetailsModal, setShowUserDetailsModal] = useState(false)
+
   const checkLovedOnesPaymentStatus =
     userData?.paid_beneficiary_requests?.includes("LOVE_ONES");
+    const NoUser = userData?.first_name === "" || userData?.first_name===null &&  userData?.last_name ==="" || userData?.last_name===null
 
   return (
     <div className="bg-white rounded-10 p-1">
@@ -31,7 +35,7 @@ const LoveOneCard = ({
           <Spinner className="w-4  h-4 " color="#DB8C00" />
         </div>
       ) : (
-        <div className=" bg-[#fbe0f3] h-full flex  justify-center flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
+        <div className=" bg-[#fbe0f3] h-full flex justify-center flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
           <div className="flex items-center gap-x-1">
             <FamilyUserIcon backgroundColor="#f8c5e9" color="#e42eb1" />
             <h2 className="text-sm font-semibold font-sans  text-[#E42EB1]">
@@ -61,7 +65,9 @@ const LoveOneCard = ({
                 <Button
                   // variant={"outlined"}
                   className="bg-[#E42EB1] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
-                  onClick={() => setBuyPlanForLovedOnes(true)}
+                  onClick={() =>{
+                    NoUser?setShowUserDetailsModal(true):setBuyPlanForLovedOnes(true)
+                  }}
                 >
                   Add More
                 </Button>
@@ -69,7 +75,9 @@ const LoveOneCard = ({
                 <Button
                   // variant={"outlined"}
                   className="bg-[#E42EB1] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
-                  onClick={() => setBuyPlanForLovedOnes(true)}
+                  onClick={() =>{
+                    NoUser?setShowUserDetailsModal(true):setBuyPlanForLovedOnes(true)
+                  }}
                 >
                   {" "}
                   Buy Plan
@@ -98,6 +106,13 @@ const LoveOneCard = ({
           subsection="Kindly enter the details below to activate beneficiary ."
         />
       )}
+      {showUserDetailsModal && <UpdateUserAccount
+      openUpdateDetails={showUserDetailsModal}
+      setOpenUpdateDetails={setShowUserDetailsModal}
+      // planType="loveOnes"
+      setOpenPlanModal={setBuyPlanForLovedOnes}
+      userData={userData}
+      />}
     </div>
   );
 };

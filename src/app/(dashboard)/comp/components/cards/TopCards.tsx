@@ -26,13 +26,28 @@ import CurrentPlanCard from "./CurrentPlanCard";
 import AddPrinciplePhoneNumer from "../plans/family/AddPrinciplePhoneNumber";
 import CorporateCard from "./CorporateCard";
 import LoveOneCard from "./LoveOneCard";
+import UpdateUserAccount from "../beneficiary/UpdateUserAccount";
 
 // generate Avater
-export const generateAvatars = (count: number) => {
+// export const generateAvatars = (count: number) => {
+//   const avatars = [];
+//   for (let i = 1; i <= count; i++) {
+//     avatars.push({
+//       src: `/images/userIcon.png`,
+//       alt: `User ${i}`,
+//     });
+//   }
+//   return avatars;
+// };
+
+export const generateAvatars = (
+  count: number,
+  srcArray: (string | null)[] = []
+) => {
   const avatars = [];
   for (let i = 1; i <= count; i++) {
     avatars.push({
-      src: `/images/userIcon.png`,
+      src: srcArray[i - 1] || `/images/userIcon.png`, // Use provided src or default image
       alt: `User ${i}`,
     });
   }
@@ -43,24 +58,26 @@ interface Prop {
   loadinUser: boolean;
 }
 const TopCards = ({ userData: users, loadinUser }: Prop) => {
-  const { data, isLoading: loadingAcct } = useQuery({
-    queryFn: () => getUserAccountDetails(String(users?.phone_number)),
-    queryKey: ["fetch-user-acct", users?.phone_number],
-    enabled: !!users?.phone_number,
-  });
+  // const { data, isLoading: loadingAcct } = useQuery({
+  //   queryFn: () => getUserAccountDetails(String(users?.phone_number)),
+  //   queryKey: ["fetch-user-acct", users?.phone_number],
+  //   enabled: !!users?.phone_number,
+  // });
   // const { data: currentPlan, isLoading: loadingPlan } = useQuery({
   //   queryFn: () => getUserCurrentPlan(String(users?.phone_number)),
   //   queryKey: ["fetch-user-current-plan", users?.phone_number],
   //   enabled: !!users?.phone_number,
   // });
 
-  const { data: familyPlanData } = useQuery({
-    queryFn: () => getFamilyPlan(String(users?.phone_number)),
-    queryKey: ["fetch-family-plan", users?.phone_number],
-    enabled: !!users?.phone_number,
-  });
+  // const { data: familyPlanData } = useQuery({
+  //   queryFn: () => getFamilyPlan(String(users?.phone_number)),
+  //   queryKey: ["fetch-family-plan", users?.phone_number],
+  //   enabled: !!users?.phone_number,
+  // });
+
+  const [showUserDetailsModal, setShowUserDetailsModal] = useState(false)
   const { data: beneficiaryList, isLoading: loadingBeneficial } = useQuery({
-    queryFn: getBeneficiaries,
+    queryFn: () => getBeneficiaries(""),
     queryKey: ["fetch-Beneficiaries-list"],
     enabled: !!users?.phone_number,
   });
@@ -76,6 +93,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
   //   users?.subscription_status === "FAILED";
   const checkFamilyPaymentStatus =
     users?.paid_beneficiary_requests?.includes("FAMILY");
+    const NoUser = users?.first_name === "" || users?.first_name===null &&  users?.last_name ==="" || users?.last_name===null
 
   return (
     <div className="">
@@ -130,7 +148,11 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                   <Button
                     variant={"outlined"}
                     className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
-                    onClick={() => setBuyFamilyPlan(true)}
+                    onClick={() => {
+
+                      NoUser?setShowUserDetailsModal(true):setBuyFamilyPlan(true)}
+                    }
+                      
                   >
                     Add Member
                   </Button>
@@ -138,7 +160,11 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                   <Button
                     variant={"outlined"}
                     className="bg-white rounded-md py-[.4375rem] border-[.0125rem] border-opacity-60 border-[#032282] px-[.625rem] text-[#032282] text-[.625rem]"
-                    onClick={() => setBuyFamilyPlan(true)}
+                    onClick={() => {
+
+                     NoUser?setShowUserDetailsModal(true):setBuyFamilyPlan(true)
+                    }
+                    }
                   >
                     Buy Plan
                   </Button>
@@ -188,6 +214,14 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
           subsection="Kindly enter the details below to activate beneficiary ."
         />
       )}
+
+      {showUserDetailsModal && <UpdateUserAccount
+      openUpdateDetails={showUserDetailsModal}
+      setOpenUpdateDetails={setShowUserDetailsModal}
+      // planType="family"
+      setOpenPlanModal={setBuyFamilyPlan}
+      userData={users}
+      />}
     </div>
   );
 };

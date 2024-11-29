@@ -22,6 +22,8 @@ import PlanComfirmationModal from "../remital/PlanComfirmationModal";
 import PlanPayment from "../remital/PlanPayment";
 import { useCreateReferralBeneficiaries } from "../../api/referral/createReferralBeneficies";
 import { BeneFicairySuccess } from "../referral/AddReferralPhoneNumber";
+import { tokenStorage } from "@/app/(auth)/(onboarding)/misc";
+import { useRouter } from "next/navigation";
 
 interface prop {
   setShowSubmitModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,6 +46,9 @@ export interface PaymentSuccessMsg {
   paystack_link: string;
   amount: number;
   phone_number: string;
+  redirect_to_paystack?:boolean;
+
+  
 
   "user:"?: User;
 }
@@ -92,6 +97,7 @@ const NonRemitalSubmitPlanModal = ({
   } = useErrorModalState();
   const { mutate: handleCreateBeneficiariesPlan, isLoading: LoadinBene } =
     useCreateReferralBeneficiaries();
+    const router = useRouter()
   const handlePayment = () => {
     if (planType?.play_type === "INDIVIDUAL") {
       handlePaymentRequest(
@@ -116,6 +122,8 @@ const NonRemitalSubmitPlanModal = ({
                 phone_number: data?.phone_number,
               });
               setShowPaymentModal(true);
+              tokenStorage.clearReferral()
+
               // setOpenShowRemitalPlan(false);
             }
           },
@@ -136,6 +144,7 @@ const NonRemitalSubmitPlanModal = ({
           phone_number: verifiedPhoneNumber,
           number_of_recipient: Number(planType?.number_of_recipient),
           packages: planType?.play_type,
+          referral_code:""
         },
         {
           onSuccess: (data: BeneFicairySuccess) => {
@@ -151,8 +160,13 @@ const NonRemitalSubmitPlanModal = ({
                 paystack_link: data?.paystack_link,
                 phone_number: data?.phone_number,
               });
+              if(data?.redirect_to_paystack){
+                setShowPaymentModal(true);
+              }else{
+                router.push(data?.paystack_link)
+              }
               setShowPaymentModal(true);
-              // setOpenCheckPhoneNumberModal(false);
+              tokenStorage.clearReferral()
             }
           },
           onError: (error) => {

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 
 import { cn } from "@/utils/classNames";
@@ -11,9 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/core";
-import ReferralModalPlan from "@/app/(main)/misc/components/insurance/modals/referral/ReferralPlan";
-import AddRemitalPhoneNumer from "@/app/(main)/misc/components/insurance/modals/referral/AddReferralPhoneNumber";
-import ReferralPlanPayment from "@/app/(main)/misc/components/insurance/modals/referral/RefeerralPayment";
+
 
 interface DesktopMenuLinkProps {
   link: string;
@@ -40,36 +38,7 @@ export function DesktopMenuLink({
 }: DesktopMenuLinkProps) {
   const pathname = usePathname();
   const isSelected = pathname === link;
-  // const { state: isIndividualModalOpen, setTrue: openIndividualModal } =
-  //   useBooleanStateControl();
-  const [openReferralModal, setOpenReferralModal] = React.useState(false);
-  const [openReferralPhonNumber, setOpenReferralPhonNumber] =
-    React.useState(false);
-  const [showReferralPayment, setShowReferralPayment] = React.useState(false);
-  const [showReferralPasswordModal, setShowReferralPasswordModal] =
-    React.useState(false);
-  const [planType, setPlanType] = React.useState({
-    duration: "",
-    amount: "",
-    number_of_recipient: "",
-    play_type: "",
-  });
-  const [paymentData, setPaymentData] = React.useState({
-    account_name: "",
-    account_no: "",
-    amount: "",
-    bank_name: "",
-    paystack_link: "",
-    phone_number: "",
-    // "user:": { address: "", email: "", first_name: "" },
-  });
-  const search = useSearchParams();
-  const getStarted = search.get("referral_code");
-  React.useEffect(() => {
-    if (getStarted) {
-      document.getElementById("get-referral-button")?.click();
-    }
-  }, [getStarted]);
+
   if (isExternal) {
     return (
       <a
@@ -86,54 +55,6 @@ export function DesktopMenuLink({
     );
   }
 
-  if (text === "Plans") {
-    return (
-      <>
-        <button
-          className={cn(
-            "inline-block px-3 py-2.5 text-sm text-white transition-all min-w-max duration-300 ease-in-out hover:-translate-y-0.5 xl:px-6 xl:py-[1.375rem] xl:text-base",
-            isSelected && "font-bold",
-            className
-          )}
-          onClick={() => setOpenReferralModal(true)}
-          id="get-referral-button"
-        >
-          {text}
-        </button>
-        {openReferralModal && (
-          <ReferralModalPlan
-            userId=""
-            openRemitalPlan={openReferralModal}
-            setOpenShowRemitalPlan={setOpenReferralModal}
-            setOpenCheckPhoneNumberModal={setOpenReferralPhonNumber}
-            referalPlan={setPlanType}
-          />
-        )}
-        {openReferralPhonNumber && (
-          <AddRemitalPhoneNumer
-            openCheckPhoneNumberModal={openReferralPhonNumber}
-            setOpenCheckPhoneNumberModal={setOpenReferralPhonNumber}
-            setShowReferralPayment={setShowReferralPayment}
-            planType={planType}
-            //@ts-ignore
-            setPaymentData={setPaymentData}
-          />
-        )}
-
-        {showReferralPayment && (
-          <ReferralPlanPayment
-            showReferralPayment={showReferralPayment}
-            setShowReferralPayment={setShowReferralPayment}
-            setShowReferralPasswordModal={setShowReferralPasswordModal}
-            // setShowPaymentModal
-            // planType={"Family"}
-            //@ts-ignore
-            PaymentInfo={paymentData}
-          />
-        )}
-      </>
-    );
-  }
 
   return disabled ? (
     <>
@@ -194,7 +115,7 @@ export function DesktopMenuLink({
     </Link>
   );
 }
-
+const pathname = typeof window !== "undefined" ? window.location.pathname : "";
 export const linkGroups = [
   {
     link: "/",
@@ -211,7 +132,8 @@ export const linkGroups = [
     isExternal: false,
   },
   {
-    link: "/plan",
+    
+    link: pathname?.includes("/plan/aproko-doctor")?"/plan/aproko-doctor?select-plan=true":"/plan",
     text: "Plans",
     icon: undefined,
     disabled: false,
@@ -234,7 +156,7 @@ export const linkGroups = [
     isExternal: false,
   },
   {
-    // link: "/blogs",
+    link: "/",
     text: "Blogs",
     icon: undefined,
     disabled: false,
@@ -254,6 +176,7 @@ interface DesktopMenuBarProps {
 }
 
 export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
+  const pathname = usePathname();
   const linkGroups = [
     {
       link: "/",
@@ -270,7 +193,8 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
       isExternal: false,
     },
     {
-      link: "/plan",
+      link: pathname?.includes("/plan/aproko-doctor")?"/plan/aproko-doctor?select-plan=true":"/plan",
+
       text: "Plans",
       icon: undefined,
       disabled: false,

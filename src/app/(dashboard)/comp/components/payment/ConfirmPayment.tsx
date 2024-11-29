@@ -38,6 +38,7 @@ interface prop {
     }>
   >;
   setShowPaymentModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowProcessing: React.Dispatch<React.SetStateAction<boolean>>
 }
 interface successProp {
   amount: string;
@@ -53,6 +54,7 @@ const ConfirmPayment = ({
   setPaymentData,
   setShowPaymentModal,
   setSelectPlanModal,
+  setShowProcessing
 }: prop) => {
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -68,12 +70,14 @@ const ConfirmPayment = ({
   const { mutate: handleCreateBeneficiaryPlan, isLoading:loadBeneficiary } = useCreateBeneficiaryPlanRequest();
   //   const router = useRouter();
 const {data:users}  = useUser()
+// console.log(users);
+
   const handlePayment = () => {
     if(planType?.play_type === "INDIVIDUAL"){
       handleCreatePlan(
         {
         plan_duration:planType?.duration,
-        userId:users?.user_id as string,
+        userId:users?.id as string,
         plan_type:planType?.play_type
         },
         {
@@ -82,15 +86,21 @@ const {data:users}  = useUser()
               setErrorMsg(data?.message);
               openErrorModalWithMessage(String(data?.message));
             } else {
-              setPaymentData({
-                account_name: "",
-                account_no: data?.account_no,
-                amount: data?.amount,
-                bank_name: data?.bank_name,
-                paystack_link: data?.paystack_link,
-              });
-              setShowPaymentModal(true);
-              setSelectPlanModal(false);
+              if(users?.is_a_liberty_staff){
+                  setShowProcessing(true)
+                  // setSelectPlanModal(false);
+              }else{
+                setPaymentData({
+                  account_name: "",
+                  account_no: data?.account_no,
+                  amount: data?.amount,
+                  bank_name: data?.bank_name,
+                  paystack_link: data?.paystack_link,
+                });
+                setShowPaymentModal(true);
+                setSelectPlanModal(false);
+
+              }
             }
           },
           onError: (error) => {
@@ -118,16 +128,17 @@ const {data:users}  = useUser()
               setErrorMsg(data?.message);
               openErrorModalWithMessage(String(data?.message));
             } else {
-              setPaymentData({
-                account_name: "",
-                account_no: data?.account_no,
-                amount: data?.amount,
-                bank_name: data?.bank_name,
-                paystack_link: data?.paystack_link,
-              });
-              setShowPaymentModal(true);
-              setSelectPlanModal(false);
-            }
+                setPaymentData({
+                  account_name: "",
+                  account_no: data?.account_no,
+                  amount: data?.amount,
+                  bank_name: data?.bank_name,
+                  paystack_link: data?.paystack_link,
+                });
+                setShowPaymentModal(true);
+                setSelectPlanModal(false);
+              }
+            
           },
           onError: (error) => {
             const errorMessage = formatAxiosErrorMessage(error as AxiosError);

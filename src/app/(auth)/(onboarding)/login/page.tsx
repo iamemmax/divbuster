@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { OnboardingPageWrapper } from "../misc";
+import React, { useEffect, useState } from "react";
+import { OnboardingPageWrapper, tokenStorage } from "../misc";
 import { PhoneLoginForm } from "./misc/components/NewLoginForm";
 import { z } from "zod";
 import { Label } from "@radix-ui/react-label";
@@ -49,6 +49,19 @@ export default function Login() {
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
   const [userPasswordNotSet, setUserPasswordNotSet] = useState(false);
   const { mutate: handleCheckStatus, isLoading } = useCheckUserLoginStatus();
+  
+ const [referralFromAproko, setReferralFromAproko] = useState("")
+ useEffect(() => {
+    const ApprokoReferral = tokenStorage.getReferral()
+    
+    if(ApprokoReferral){
+      setReferralFromAproko(ApprokoReferral)
+     }else{
+       setReferralFromAproko("")
+       
+     }
+   }, [])
+
   const onsubmit = ({ phone_number }: userStatusType) => {
     handleCheckStatus(phone_number, {
       onSuccess: (data: userStatusTypes) => {
@@ -62,6 +75,7 @@ export default function Login() {
       onError: (error) => {
         const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         if (errorModalMessage === "User not found") {
+          referralFromAproko ==="aproko-doctor" ? router.push("/plan/aproko-doctor?select-plan=true") :
           router.push("/?get-started=true");
         }
         openErrorModalWithMessage(String(errorMessage));
@@ -126,21 +140,24 @@ export default function Login() {
           <PhoneLoginForm userPhoneNumber={userPhoneNumber} />
         )}
 
-        {errorModalMessage !== "User not found" && (
-          <ErrorModal
-            isErrorModalOpen={isErrorModalOpen}
-            setErrorModalState={() => {
-              if (errorModalMessage === "User not found") {
-                router.push("/?get-started=true");
-              } else {
-                setErrorModalState(false);
-              }
-            }}
-            subheading={
-              errorModalMessage || "Please check your inputs and try again."
-            }
-          ></ErrorModal>
-        )}
+{errorModalMessage !== "User not found" && (
+  <ErrorModal
+    isErrorModalOpen={isErrorModalOpen}
+    setErrorModalState={() => {
+      if (errorModalMessage === "User not found") {
+          router.push("/?get-started=true");
+        
+      } else {
+        setErrorModalState(false); // Close the modal if the error is not "User not found"
+      }
+    }}
+    subheading={
+      errorModalMessage || "Please check your inputs and try again."
+    }
+  />
+)}
+
+
       </OnboardingPageWrapper>
     </>
   );

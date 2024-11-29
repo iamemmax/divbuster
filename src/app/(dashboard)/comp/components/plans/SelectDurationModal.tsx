@@ -41,6 +41,10 @@ import {
 } from "./util/planCalc";
 import { useAddMoreToBeneficiaryList } from "./api/addMoreBeneficiries";
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
+import { useRenewBeneficiaryList } from "./api/renewBeneficiaries";
+import { PaymentSuccessMsg } from "@/app/(main)/misc/components/insurance/modals/remital/RemitalSubmitPlan";
+import { useMakeRemitalPayment } from "@/app/(main)/misc/components/insurance/api/remital/remitalpayment";
+import { useRouter } from "next/navigation";
 
 export interface successProp {
   account_number: number;
@@ -51,6 +55,7 @@ export interface successProp {
   plan_details: Plandetails;
   paystack_link: string;
   unique_request_id: string;
+  redirect_to_paystack?:boolean;
 }
 
 interface Plandetails {
@@ -62,17 +67,19 @@ interface Plandetails {
 interface UseBooleanStateControlProps {
   isSelectPlanModalOpen: boolean;
   setSelectPlanModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowProcessingModal: React.Dispatch<React.SetStateAction<boolean>>
   beneficiariesList:
-    | {
-        beneficiaries: {
-          name_of_beneficiary: string;
-          phone_number_of_beneficiary: string;
-          type_of_beneficary?: "ADULT" | "MINOR";
-        }[];
-      }
-    | undefined;
+  | {
+    beneficiaries: {
+      name_of_beneficiary: string;
+      phone_number_of_beneficiary: string;
+      type_of_beneficary?: "ADULT" | "MINOR";
+    }[];
+  }
+  | undefined;
   selectedPlan: PlanData[] | undefined;
   planType: string;
+  actionType: string;
 }
 
 function SelectDurationModal({
@@ -81,6 +88,8 @@ function SelectDurationModal({
   beneficiariesList,
   selectedPlan,
   planType,
+  actionType,
+  setShowProcessingModal
 }: UseBooleanStateControlProps) {
   const {
     isErrorModalOpen,
@@ -90,7 +99,6 @@ function SelectDurationModal({
   } = useErrorModalState();
   const [errorMsg, setErrorMsg] = useState("");
   const { data: users } = useUser();
-  const [SuccessPayment, setSuccessPayment] = useState(false);
   const { mutate: handleAddBeneficiary, isLoading } = useAddbeneficiaries();
   const [paymentProp, setPaymentProp] = useState<successProp>();
   const [SelectPlan, setSelectPlan] = useState(false);
@@ -157,54 +165,142 @@ function SelectDurationModal({
   const handleChange = (value: string) => {
     setSelectedValue(String(value));
   };
-
+  const { mutate: handlePaymentRequest } = useMakeRemitalPayment();
+const router = useRouter()
   const { mutate: addMoreBeneficiary, isLoading: loadingMoreBeneficiary } =
     useAddMoreToBeneficiaryList();
+  const { mutate: handleRenewBene, isLoading: loadingRenew } =
+    useRenewBeneficiaryList();
   const makePayment = () => {
-    if (users?.paid_beneficiary_requests?.includes(planType)) {
-      addMoreBeneficiary(
-        {
-          beneficiariesList:
-            beneficiariesList?.beneficiaries as beneficailData[],
-          packages: planType,
-          duration: Number(selectedValue),
-        },
-        {
-          onSuccess: (data: successProp) => {
-            setPaymentProp(data);
-            setSelectPlan(true);
+    if (actionType === "makePayment") {
+      if (users?.paid_beneficiary_requests?.includes(planType)) {
+        addMoreBeneficiary(
+          {
+            beneficiariesList:
+              beneficiariesList?.beneficiaries as beneficailData[],
+            packages: planType,
+            duration: Number(selectedValue),
           },
-          onError: (error) => {
-            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-expect-error
-            setErrorMsg(error?.response?.data?.error);
-            openErrorModalWithMessage(String(errorMessage));
+          {
+            onSuccess: (data: successProp) => {
+              setPaymentProp(data);
+              if(data?.redirect_to_paystack){
+                router.push(data?.paystack_link)
+              }else{
+                setSelectPlan(true);
+              }
+            },
+            onError: (error) => {
+              const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-expect-error
+              setErrorMsg(error?.response?.data?.error);
+              openErrorModalWithMessage(String(errorMessage));
+            },
+          }
+        );
+      } else {
+        handleAddBeneficiary(
+          {
+            beneficiariesList:
+              beneficiariesList?.beneficiaries as beneficailData[],
+            packages: planType,
+            duration: Number(selectedValue),
           },
-        }
-      );
+          {
+            onSuccess: (data: successProp) => {
+              setPaymentProp(data);
+              if(data?.redirect_to_paystack){
+                router.push(data?.paystack_link)
+              }else{
+                setSelectPlan(true);
+              }
+            },
+            onError: (error) => {
+              const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-expect-error
+              setErrorMsg(error?.response?.data?.error);
+              openErrorModalWithMessage(String(errorMessage));
+            },
+          }
+        );
+      }
     } else {
-      handleAddBeneficiary(
-        {
-          beneficiariesList:
-            beneficiariesList?.beneficiaries as beneficailData[],
-          packages: planType,
-          duration: Number(selectedValue),
-        },
-        {
-          onSuccess: (data: successProp) => {
-            setPaymentProp(data);
-            setSelectPlan(true);
+      if (planType === "INDIVIDUAL") {
+        handlePaymentRequest(
+          {
+            duration: Number(selectedValue),
+            userId: users?.id as string,
+            plan_type: planType,
+            number_of_recipient: 1,
           },
-          onError: (error) => {
-            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-expect-error
-            setErrorMsg(error?.response?.data?.error);
-            openErrorModalWithMessage(String(errorMessage));
+          {
+            onSuccess: (data: PaymentSuccessMsg) => {
+              if(users?.is_a_liberty_staff){
+              setShowProcessingModal(true as boolean)
+              }else{
+
+                setPaymentProp({
+                  account_name: data?.account_name,
+                  plan_details: {
+                    plan_duration: Number(selectedValue),
+                    price: data?.amount,
+                    total_price: data?.amount,
+                  },
+                  wallet_balance: Number(data?.wallet_balance),
+                  unique_request_id: String(data?.unique_request_id),
+                  account_number: Number(data?.account_no),
+                  bank_name: data?.bank_name,
+                  paystack_link: data?.paystack_link,
+                  people_added: Number(1),
+                });
+            
+                if(data?.redirect_to_paystack){
+                  router.push(data?.paystack_link)
+                }else{
+                  setSelectPlan(true);
+                }
+              }
+              
+            },
+            onError: (error) => {
+              const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-expect-error
+              setErrorMsg(error?.response?.data?.error);
+
+              openErrorModalWithMessage(String(errorMessage));
+            },
+          }
+        );
+      } else {
+        handleRenewBene(
+          {
+            beneficiariesList:
+              beneficiariesList?.beneficiaries as beneficailData[],
+            packages: planType,
+            duration: Number(selectedValue),
           },
-        }
-      );
+          {
+            onSuccess: (data: successProp) => {
+              setPaymentProp(data);
+              if(data?.redirect_to_paystack){
+                router.push(data?.paystack_link)
+              }else{
+                setSelectPlan(true);
+              }
+            },
+            onError: (error) => {
+              const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-expect-error
+              setErrorMsg(error?.response?.data?.error);
+              openErrorModalWithMessage(String(errorMessage));
+            },
+          }
+        );
+      }
     }
   };
 
@@ -263,20 +359,20 @@ function SelectDurationModal({
 
                 <div className="flex items-center gap-x-2 w-full py-4 bg-black rounded-lg mt-3 justify-center">
                   <p className="text-white text-lg font-bold">Total:</p>
-                  {planType !== "INDIVIDUAL" && (
+                  {planType !== "LOVE_ONES" && (
                     <p className="text-white line-through text-lg text-opacity-80 font-bold">
                       {totalAmount !== null
                         ? formatCurrency(
-                            Number(removeCommaFromPrice(String(totalAmount)))
-                          )
+                          Number(removeCommaFromPrice(String(totalAmount)))
+                        )
                         : "0.00"}
                     </p>
                   )}
                   <p className="text-white text-lg font-bold">
                     {discountedAmount !== null
                       ? formatCurrency(
-                          Number(removeCommaFromPrice(String(discountedAmount)))
-                        )
+                        Number(removeCommaFromPrice(String(discountedAmount)))
+                      )
                       : "0.00"}
                   </p>
                 </div>
@@ -287,11 +383,10 @@ function SelectDurationModal({
                     type="submit"
                     onClick={makePayment}
                   >
-                    Make payment{" "}
-                    {isLoading ||
-                      (loadingMoreBeneficiary && (
-                        <SmallSpinner className="" color="#1B1687" />
-                      ))}
+                  {users?.is_a_liberty_staff ? "Continue" : "Make payment"}{" "}
+                  {(loadingMoreBeneficiary || isLoading || loadingRenew) && (
+    <SmallSpinner className="" color="#1B1687" />
+  )}
                   </Button>
                 </div>
               </div>

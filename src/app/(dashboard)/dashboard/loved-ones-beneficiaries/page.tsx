@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import DashboardPlanHeader from "../../comp/components/DashboardPlanHeader";
 import WalletCard from "../../comp/components/cards/WalletCard";
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
@@ -13,9 +13,10 @@ import LovedOnesBeneficiaries from "../../comp/components/beneficiary/LovedOnesB
 
 const Page = () => {
   const { data: userData, isLoading } = useUser();
+  const [fiterStatus, setFiterStatus] = useState("");
   const { data: beneficiaryList, isLoading: loadingBeneficial } = useQuery({
-    queryFn: getBeneficiaries,
-    queryKey: ["fetch-Beneficiaries-list"],
+    queryFn: () => getBeneficiaries(fiterStatus),
+    queryKey: ["fetch-Beneficiaries-list", fiterStatus],
     enabled: !!userData?.phone_number,
   });
   // const [showViw, setshowViw] = useState(second)
@@ -52,6 +53,7 @@ const Page = () => {
           <LovedOnesBeneficiaries
             beneficiaryList={beneficiaryList && beneficiaryList[2]}
             loading={isLoading}
+            setFiterStatus={setFiterStatus}
           />
         </div>
       </div>

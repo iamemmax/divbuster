@@ -8,6 +8,7 @@ import {
   CheckStar,
   CrossIcon,
   GroupIcon,
+  HandIcon,
   LearnMore,
   Testimonial1,
   Testimonial2,
@@ -34,6 +35,8 @@ import RemitalPlanModal from "./misc/components/insurance/modals/remital/Remital
 import RemitalModalDetails from "./misc/components/insurance/modals/remital/RemitalModalDetails";
 import CreatepasswordModal from "./misc/components/insurance/modals/remital/CreatePassWordModal";
 import { useSearchParams } from "next/navigation";
+import GenerateReferralModal, { ReferralsuccessProp } from "./misc/components/insurance/modals/referral/GenerateReferralModal";
+import ReferralSuccessModal from "./misc/components/insurance/modals/referral/ReferralSuccessModal";
 
 export default function Home() {
   const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
@@ -54,6 +57,9 @@ export default function Home() {
   const [openNonRemitalDetailModal, setOpenNonRemitalDetailModal] =
     useState(false);
 
+  const [showGenerateReferralModal, setShowGenerateReferralModal] = useState(false)
+  const [showGenerateReferralSuccessModal, setShowGenerateReferralSuccessModal] = useState(false)
+  const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [verifyResponse, setVerifyResponse] = useState({
     is_eligible: false,
@@ -72,51 +78,25 @@ export default function Home() {
     }
   }, [getStarted]);
 
-  // const Testimonials = [
-  //   {
-  //     name: "Oluwafisayomi",
-  //     image: "",
-  //     role: "Entrepreneur",
-  //     testimonial:
-  //       "“Thanks to Liberty Life, I don't have to worry about the high cost of health. I got value more than my money.”",
-  //   },
-  //   {
-  //     name: "Mrs. Adebunmi",
-  //     image: "",
-  //     role: "ED at Light Fashion House",
-  //     testimonial:
-  //       "“I and my household now have an HMO without breaking the bank and it comes with a lot of benefits,”",
-  //   },
-  //   {
-  //     name: "Otimeyin Igbene",
-  //     image: "",
-  //     role: "MD/CEO Liberty Assured",
-  //     testimonial:
-  //       "“I am able to enjoy health coverage with my family and employees.Thanks to Liberty Life. Highly recommended for everyone.”",
-  //   },
-  //   {
-  //     name: "Miss Morenike",
-  //     image: "",
-  //     role: "Creatives at Yaks Artistry",
-  //     testimonial:
-  //       "“Good health is underrated and there's nothing as good as having a health cover. It gives me confidence.”",
-  //   },
-  // ];
+
+
   return (
     <main className="md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
-        <section className="flex flex-col w-full lg:grid grid-cols-[1.5fr_1fr] items-center justify-between sm:max-lg:px-2 md:pt-12 md:pb-6 md:pl-[30px] ">
+        <section className="flex flex-col w-full xl:grid grid-cols-[1.5fr_1fr] items-center justify-between sm:max-lg:px-2 md:pt-12 md:pb-6 md:pl-[30px] ">
           <div className="flex flex-col  gap-4  md:gap-6 px-[6rem] max-md:px-6 max-md:py-10">
             <h6
               className={cn(
                 "font-display",
-                "flex items-center text-[0.825rem] w-max font-semibold gap-1.5 px-5 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#34307A]/30"
+                "flex items-center text-[.625rem] md:text-[0.825rem] w-max font-semibold gap-1.5 px-5 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#34307A]/30"
               )}
             >
               <span>
                 <CheckStar />
               </span>
               Welcome to Liberty Life
+              <span><HandIcon /></span>
+              NEM Health
             </h6>
             <h1
               className={cn(
@@ -124,10 +104,10 @@ export default function Home() {
                 "flex flex-col font-semibold md:font-bold text-xl md:text-3xl xl:text-6xl gap-2"
               )}
             >
-              <span className="flex items-center flex-wrap leading-tight md:leading-none gap-2">
+              <p className="flex items-center flex-wrap leading-none gap-1">
                 Standard Health
-                <span className="text-[#AFD85B]">Insurance</span>
-              </span>
+                <p className="text-[#AFD85B]">Insurance</p>
+              </p>
               <span className=" mt-0 leading-snug">
                 for you and your family.
               </span>
@@ -136,7 +116,7 @@ export default function Home() {
               <span>
                 Get a comprehensive health cover and stand a chance to benefit from
               </span>
-              <span className=" flex flex-wrap">  a lifestyle reward of
+              <span className=" flex flex-wrap">  a lifetime reward of
                 <span className="flex flex-col ml-3 text-white">
                   ₦500,000
                   <UnderLine />
@@ -144,6 +124,8 @@ export default function Home() {
               </span>
             </p>
 
+<div className="flex items-center gap-4 flex-wrap">
+  
             <Button
               className={cn(
                 "flex items-center cursor-pointer justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
@@ -158,33 +140,35 @@ export default function Home() {
                 <RightUpArrow className="" height={12} width={12} />
               </span>
             </Button>
+            <Button
+              className={cn(
+                "flex items-center px-4 cursor-pointer justify-between text-[0.865rem] border-opacity-30 border-white border-[0.3px] text-white  bg-transparent text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
+                "font-display"
+              )}
+              id="get-insurance-button"
+              variant="outlined"
+              onClick={() => setShowGenerateReferralModal(true)}
+            >
+              Generate referral link
+              <span className="flex items-center bg-white justify-center p-2 rounded-full ml-7">
+                <RightUpArrow className="" height={12} width={12} color="blue"/>
+              </span>
+            </Button>
+</div>
           </div>
+
           <section className="relative px-5 md:px-0">
-            {/* <div className="">
-              <div className="absolute left-[8%] top-[20%] md:left-[15%] lg:left-[13%] lg:top-[10%] z-10 animate-bounce">
-                <Testimonial1 className="w-[89px] md:w-[140px] lg:w-[146px] h-[54px] md:h-[65px] lg:h-[79px]" />
-              </div>
-              <div className="absolute left-[69%] top-[25%] md:left-[80%] top lg:left-[65%] lg:top-[10%] z-10 animate-bounce">
-                <Testimonial2 className="w-[86px] md:w-[140px] lg:w-[155px] h-[54px] md:h-[65px] lg:h-[80px]" />
-              </div>
-              <div className="absolute top-[60%] left-[6%] md:left-[12%] lg:left-[8%] md:top-[60%] z-10 animate-bounce">
-                <Testimonial3 className="w-[90px] md:w-[139px] h-[54px] md:h-[75px] lg:h-[89px]" />
-              </div>
-              <div className="absolute top-[60%] left-[68%] md:top-[65%] md:left-[77%] lg:left-[65%] z-10 lg:top-[67%] animate-bounce">
-                <Testimonial4 className="w-[92px] md:w-[140px] lg:w-[151px] h-[54px] md:h-[65px] lg:h-[78px]" />
-              </div>
-            </div> */}
             <div
               className={cn(
-                "relative flex items-center justify-center w-full p-5 md:p-0 md:max-w-[500px] overflow-hidden md:ml-28"
+                "relative flex items-center justify-center w-full p-5 lg:pt-5 lg:max-w-[500px] overflow-hidden "
               )}
             >
               {/* <HospitalImage /> */}
               <Image
                 alt=""
                 // className={"w-full p-6 rounded-full"}
-                height={600}
-                width={600}
+                height={400}
+                width={400}
                 // src="/images/landing-page/libertyLife.png"
                 src="/images/landing-page/doctorPng.png"
                 className=""
@@ -192,17 +176,17 @@ export default function Home() {
             </div>
           </section>
         </section>
-        <section className="xl:px-[120px] xl:my-12">
+        <section className="xl:px-[120px] xl:my-6">
           <div
             className={cn(
-              "px-3 2xl:px-6 flex flex-col items-stretch lg:grid lg:grid-cols-2 gap-4 rounded-[20px] xl:py-8 bg-[#FFFFFF08]"
+              "px-3 2xl:px-6 flex flex-col items-stretch xl:grid xl:grid-cols-2 gap-4 rounded-[20px] xl:py-8 bg-[#FFFFFF08]"
             )}
-            >
+          >
             <div
               className={cn(
-                "bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-3 md:px-6 flex flex-col md:flex-row gap-4 md:gap-8"
+                "bg-[#1E2954] rounded-[20px] py-4 md:py-4 px-3 md:px-6 flex flex-col md:flex-row gap-4 md:gap-8"
               )}
-              >
+            >
               <div className="flex flex-col items-start justify-center">
                 <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-11 md:px-[19px] border-[#475ffd54] bg-[#161D42]">
                   <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
@@ -226,11 +210,11 @@ export default function Home() {
               <div className="flex flex-col items-start justify-center">
                 <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-11 md:px-[19px] border-[#475ffd54] bg-[#161D42]">
                   <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
-                  Comprehensive Plans
+                    Comprehensive Plans
                   </h3>
                   <p className="text-xs md:text-sm text-center mt-2 font-sans text-[#CAC9D4]">
-                  Premium health cover for both corporate and individuals
-                  users.
+                    Premium health cover for both corporate and individuals
+                    users.
                   </p>
                   <div className="hidden md:flex gap-3 py-3">
                     <LinkButton
@@ -250,7 +234,7 @@ export default function Home() {
               className={cn(
                 "bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-4 md:px-8 grid md:grid-cols-2 gap-4 mb-16 md:mb-0 lg:gap-2"
               )}
-              >
+            >
               <div className="flex flex-col items-center justify-center">
                 <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-11 md:px-[19px] border-[#475ffd54] bg-[#161D42]">
                   <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
@@ -274,10 +258,10 @@ export default function Home() {
               <div className="flex flex-col items-start justify-center">
                 <div className="border-[0.3px] flex flex-col items-center rounded-xl pt-3 pb-6 md:pb-0 px-5 md:px-[10px] border-[#475ffd54] bg-[#161D42]">
                   <h3 className="font-sans text-base md:text-lg font-medium md:font-semibold text-white">
-                  Hassle free registration
+                    Hassle free registration
                   </h3>
                   <p className="text-xs md:text-sm text-center mt-2 font-sans text-[#CAC9D4]">
-                  Simply dial the USSD code, *347*180*9#, to connect to one of our agents and take the first step toward better health insurance services
+                    Simply dial the USSD code, *347*180*9#, to connect to one of our agents and take the first step toward better health insurance services
                   </p>
                   <div className="hidden md:flex gap-3 py-1">
                     <LinkButton
@@ -303,7 +287,9 @@ export default function Home() {
           </div>
         </section>
       </section>
-      <Marquee />
+      {/* <Marquee /> */}
+
+      <div className="">
 
       {openCheckPhoneNumberModal && (
         <CheckPhoneNumber
@@ -375,6 +361,25 @@ export default function Home() {
           setUserEmail={setUserEmail}
         />
       )}
+      {
+        showGenerateReferralModal && <GenerateReferralModal
+
+          isBuyPlanModalOpen={showGenerateReferralModal}
+          setBuyPlanModal={setShowGenerateReferralModal}
+          setShowGenerateReferralSuccessModal={setShowGenerateReferralSuccessModal}
+          setReferralResponse={setReferralResponse}
+        />
+      }
+
+      {showGenerateReferralSuccessModal && <ReferralSuccessModal
+        setShowSuccessModal={setShowGenerateReferralSuccessModal}
+        showSuccessModal={showGenerateReferralSuccessModal}
+        referralResponse={referralResponse}
+
+
+      />}
+      </div>
+
     </main>
   );
 }

@@ -22,6 +22,7 @@ import PlanPayment from "./PlanPayment";
 import { useRouter } from "next/navigation";
 import { useCreateReferralBeneficiaries } from "../../api/referral/createReferralBeneficies";
 import { BeneFicairySuccess } from "../referral/AddReferralPhoneNumber";
+import { tokenStorage } from "@/app/(auth)/(onboarding)/misc";
 
 interface prop {
   setShowSubmitModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -41,10 +42,12 @@ export interface PaymentSuccessMsg {
   account_name: string;
   account_no: string;
   bank_name: string;
+  wallet_balance?: string;
+  unique_request_id?: string;
   paystack_link: string;
   amount: number;
   phone_number: string;
-
+  redirect_to_paystack?:boolean;
   "user:"?: User;
 }
 
@@ -115,8 +118,11 @@ const RemitalSubmitPlanModal = ({
                 bank_name: data?.bank_name,
                 paystack_link: data?.paystack_link,
                 phone_number: data?.phone_number,
+                redirect_to_paystack:data?.redirect_to_paystack
               });
               setShowPaymentModal(true);
+              tokenStorage.clearReferral()
+
               // setOpenShowRemitalPlan(false);
             }
           },
@@ -137,6 +143,7 @@ const RemitalSubmitPlanModal = ({
           phone_number: verifiedPhoneNumber,
           number_of_recipient: Number(planType?.number_of_recipient),
           packages: planType?.play_type,
+          referral_code: ""
         },
         {
           onSuccess: (data: BeneFicairySuccess) => {
@@ -153,8 +160,15 @@ const RemitalSubmitPlanModal = ({
                 bank_name: data?.bank_name,
                 paystack_link: data?.paystack_link,
                 phone_number: data?.phone_number,
-              });
-              setShowPaymentModal(true);
+                redirect_to_paystack:Boolean(data?.redirect_to_paystack)         
+                  });
+              if(data?.redirect_to_paystack){
+                setShowPaymentModal(true);
+              }else{
+                router.push(data?.paystack_link)
+              }
+        tokenStorage.clearReferral()
+
               // setOpenCheckPhoneNumberModal(false);
             }
           },
@@ -174,7 +188,7 @@ const RemitalSubmitPlanModal = ({
     <>
       <Dialog
         open={showSubmitModal}
-        // onOpenChange={setSixMonthIndividualPlanModal}
+      // onOpenChange={setSixMonthIndividualPlanModal}
       >
         <DialogContent className="!overflow-hidden min-h-[30rem]  max-w-[98%]  w-[26rem]  ">
           <DialogBody className="bg-[#141B3f]  w-[26rem] max-w-[98%] rounded-[1.125rem] border-[0.01px] border-[#407BFF]  border-opacity-50">

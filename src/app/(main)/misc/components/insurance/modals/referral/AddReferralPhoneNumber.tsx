@@ -21,9 +21,11 @@ import { Input2 } from "@/components/core/Input2";
 import { formatAxiosErrorMessage, formatCurrency } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useCreateReferralPlanRequest } from "../../api/referral/createReferralPlan";
 import { useCreateReferralBeneficiaries } from "../../api/referral/createReferralBeneficies";
+import { tokenStorage, UserData } from "@/app/(auth)/(onboarding)/misc";
+import { useCreateUserDetailsRequest } from "../../api/plan/checkUserDetail";
 
 interface Prop {
   setOpenCheckPhoneNumberModal: React.Dispatch<SetStateAction<boolean>>;
@@ -65,6 +67,7 @@ export interface BeneFicairySuccess {
   unique_request_id: string;
   plan_details: Plandetails;
   phone_number: string;
+  redirect_to_paystack: string;
 }
 
 interface Plandetails {
@@ -78,8 +81,17 @@ const contactSchema = z.object({
     .trim()
     .min(10, {
       message: "Phone number ssetShowPaymentModalhould be at least 11 digits",
-    }),
+    })
+    .max(11),
 
+  first_name: z
+    .string({ required_error: "Enter your phone number" })
+    .trim()
+    .min(3),
+  last_name: z
+    .string({ required_error: "Enter your phone number" })
+    .trim()
+    .min(3),
   referral_code: z
     .string({ required_error: "Enter your phone number" })
     .trim()
@@ -95,8 +107,10 @@ const AddRemitalPhoneNumer = ({
   setPaymentData,
   planType,
 }: Prop) => {
+  const aprokoReferral = tokenStorage.getReferral();
   const search = useSearchParams();
   const myReferral = search?.get("referral_code");
+  const { name } = useParams();
   const {
     register,
     handleSubmit,
@@ -105,15 +119,22 @@ const AddRemitalPhoneNumer = ({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       phone_number: "",
-      referral_code: myReferral || "",
+      referral_code: aprokoReferral !== null && aprokoReferral !== "" 
+      ? String(aprokoReferral) 
+      : myReferral !== null && myReferral !== "" 
+      ? String(myReferral) 
+      : name 
+      ? String(name) 
+      : ""
+      
     },
 
     mode: "onChange",
   });
 
+  console.log(aprokoReferral);
+  
   const [errorMsg, setErrorMsg] = useState("");
-  console.log(errors);
-
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -126,10 +147,13 @@ const AddRemitalPhoneNumer = ({
   const { mutate: handleCreateBeneficiariesPlan, isLoading: LoadinBene } =
     useCreateReferralBeneficiaries();
   const router = useRouter();
+// const {mutate:handleCheckUserDetail}=useCreateUserDetailsRequest()
+
+
 
   const onsubmit = (data: detailRequestType) => {
-    // console.log("123");
-
+   
+    
     if (planType?.play_type === "INDIVIDUAL") {
       handleCreatePlan(
         {
@@ -137,6 +161,9 @@ const AddRemitalPhoneNumer = ({
           phone_number: data?.phone_number,
           number_of_recipient: 1,
           packages: planType?.play_type,
+          referral_code: myReferral as string,
+          first_name:data?.first_name,
+          last_name:data?.last_name
         },
         {
           onSuccess: (data: successProp) => {
@@ -154,6 +181,7 @@ const AddRemitalPhoneNumer = ({
               });
               setShowReferralPayment(true);
               setOpenCheckPhoneNumberModal(false);
+              tokenStorage.clearReferral();
             }
           },
           onError: (error) => {
@@ -161,7 +189,7 @@ const AddRemitalPhoneNumer = ({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-expect-error
             setErrorMsg(error?.response?.data?.error);
-
+  
             openErrorModalWithMessage(String(errorMessage));
           },
         }
@@ -173,6 +201,9 @@ const AddRemitalPhoneNumer = ({
           phone_number: data?.phone_number,
           number_of_recipient: Number(planType?.number_of_recipient),
           packages: planType?.play_type,
+          referral_code: myReferral as string,
+          first_name:data?.first_name,
+          last_name:data?.last_name
         },
         {
           onSuccess: (data: BeneFicairySuccess) => {
@@ -188,8 +219,14 @@ const AddRemitalPhoneNumer = ({
                 paystack_link: data?.paystack_link,
                 phone_number: data?.phone_number,
               });
-              setShowReferralPayment(true);
+              if (data?.redirect_to_paystack) {
+                router.push(data?.paystack_link);
+              } else {
+                setShowReferralPayment(true);
+              }
+  
               setOpenCheckPhoneNumberModal(false);
+              tokenStorage.clearReferral();
             }
           },
           onError: (error) => {
@@ -197,7 +234,7 @@ const AddRemitalPhoneNumer = ({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-expect-error
             setErrorMsg(error?.response?.data?.error);
-
+  
             openErrorModalWithMessage(String(errorMessage));
           },
         }
@@ -206,7 +243,7 @@ const AddRemitalPhoneNumer = ({
   };
 
   return (
-    <div className="">
+    <div className="!z-[99999999999999999999999999999999999]">
       {/* <ClientOnly> */}
       <Dialog
         open={openCheckPhoneNumberModal}
@@ -251,18 +288,64 @@ const AddRemitalPhoneNumer = ({
                       placeholder="Enter your phone number"
                       type="number"
                       id="phone"
+                      maxLength={11} // Changed max to maxLength
                       {...register("phone_number")}
                     />
 
                     {/* {isLoading && (
-                      <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
-                        <SmallSpinner className="" color="#fff" />
-                      </div>
-                    )} */}
+                        <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
+                          <SmallSpinner className="" color="#fff" />
+                        </div>
+                      )} */}
+                  </div>
+                </div>
+
+                <div className="w-full mt-[1rem] text-sm font-normal">
+                  <Label
+                    className="mb-1 block text-xs  text-[#fff]"
+                    htmlFor="phone"
+                  >
+                    First Name
+                  </Label>
+
+                  <div className={`relative mt-[.25rem] `}>
+                    <Input2
+                      className={`${errors?.first_name?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
+                      placeholder="Enter your first name"
+                      type="text"
+                      id="phone"
+                      {...register("first_name")}
+                    />
+
+                 
+                  </div>
+                </div>
+                <div className="w-full mt-[1rem] text-sm font-normal">
+                  <Label
+                    className="mb-1 block text-xs  text-[#fff]"
+                    htmlFor="phone"
+                  >
+                      Last Name
+                  </Label>
+
+                  <div className={`relative mt-[.25rem] `}>
+                    <Input2
+                      className={`${errors?.last_name?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
+                      placeholder="Enter your last name"
+                      type="text"
+                      id="phone"
+                      {...register("last_name")}
+                    />
+
+                    {/* {isLoading && (
+                        <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
+                          <SmallSpinner className="" color="#fff" />
+                        </div>
+                      )} */}
                   </div>
                 </div>
                 <div
-                  className={`${myReferral ? "hidden" : ""} w-full mt-[2rem] text-sm font-normal`}
+                  className={`${myReferral || name ? "hidden" : ""} w-full mt-[2rem] text-sm font-normal`}
                 >
                   <Label
                     className="mb-1 block text-xs  text-[#fff]"
@@ -285,14 +368,13 @@ const AddRemitalPhoneNumer = ({
                 <div className="pb-[2rem]">
                   <Button
                     className=" mt-[3rem] flex items-center justify-center gap-x-2 font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
-                                    shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                                      shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                     type="submit"
                   >
                     Continue{" "}
-                    {isLoading ||
-                      (LoadinBene && (
-                        <SmallSpinner className="" color="blue" />
-                      ))}
+                    {(isLoading || LoadinBene) && (
+                      <SmallSpinner className="" color="blue" />
+                    )}
                   </Button>
                 </div>
               </form>
