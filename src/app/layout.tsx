@@ -12,6 +12,7 @@ import Image from "next/image";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import Marquee from "./(main)/misc/components/Marquee";
+import NemLogoIcon from "@/components/icons/NemIcon";
 
 const sans = DM_Sans({
   subsets: ["latin"],
@@ -127,6 +128,7 @@ export default function RootLayout({
         height={25}
         alt="chat icon"
       />
+      {/* <NemLogoIcon height={30} width={30}/> */}
       Consult a Doctor
     </Button>
   </a>
