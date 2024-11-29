@@ -124,37 +124,37 @@ export default function Home() {
               </span>
             </p>
 
-<div className="flex items-center gap-4 flex-wrap">
-  
-            <Button
-              className={cn(
-                "flex items-center cursor-pointer justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
-                "font-display"
-              )}
-              id="get-insurance-button"
-              variant="white"
-              onClick={() => setOpenCheckPhoneNumberModal(true)}
-            >
-              Get insurance
-              <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
-                <RightUpArrow className="" height={12} width={12} />
-              </span>
-            </Button>
-            <Button
-              className={cn(
-                "flex items-center px-4 cursor-pointer justify-between text-[0.865rem] border-opacity-30 border-white border-[0.3px] text-white  bg-transparent text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
-                "font-display"
-              )}
-              id="get-insurance-button"
-              variant="outlined"
-              onClick={() => setShowGenerateReferralModal(true)}
-            >
-              Generate referral link
-              <span className="flex items-center bg-white justify-center p-2 rounded-full ml-7">
-                <RightUpArrow className="" height={12} width={12} color="blue"/>
-              </span>
-            </Button>
-</div>
+            <div className="flex items-center gap-4 flex-wrap">
+
+              <Button
+                className={cn(
+                  "flex items-center cursor-pointer justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
+                  "font-display"
+                )}
+                id="get-insurance-button"
+                variant="white"
+                onClick={() => setOpenCheckPhoneNumberModal(true)}
+              >
+                Get insurance
+                <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
+                  <RightUpArrow className="" height={12} width={12} />
+                </span>
+              </Button>
+              <Button
+                className={cn(
+                  "flex items-center px-4 cursor-pointer justify-between text-[0.865rem] border-opacity-30 border-white border-[0.3px] text-white  bg-transparent text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
+                  "font-display"
+                )}
+                id="get-insurance-button"
+                variant="outlined"
+                onClick={() => setShowGenerateReferralModal(true)}
+              >
+                Generate referral link
+                <span className="flex items-center bg-white justify-center p-2 rounded-full ml-7">
+                  <RightUpArrow className="" height={12} width={12} color="blue" />
+                </span>
+              </Button>
+            </div>
           </div>
 
           <section className="relative px-5 md:px-0">
@@ -362,8 +362,8 @@ export default function Home() {
         />
       )}
       {
-        showGenerateReferralModal && <GenerateReferralModal
-
+        showGenerateReferralModal &&
+        <GenerateReferralModal
           isBuyPlanModalOpen={showGenerateReferralModal}
           setBuyPlanModal={setShowGenerateReferralModal}
           setShowGenerateReferralSuccessModal={setShowGenerateReferralSuccessModal}
