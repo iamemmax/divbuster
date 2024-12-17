@@ -11,11 +11,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderModal } from "@/components/core/LoaderModal";
 import { useBooleanStateControl, useErrorModalState } from "@/hooks";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { FormError, LinkButton } from "@/components/core";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForgetPassword } from "../../api/forgetPassword";
-import { formatAxiosErrorMessage } from "@/utils";
+import { formatAxiosErrorMessage, validatePhoneNumber } from "@/utils";
 import { AxiosError } from "axios";
 import { SmallSpinner } from "@/icons/core";
 import useDataStore from "@/app/store/useStore";
@@ -31,12 +31,13 @@ export function ForgetPasswordForm() {
     useBooleanStateControl();
 
   const PasswordFormSchema = z.object({
-    phone_number: z.string().min(5),
+    phone_number: z.string().min(11),
   });
 
   type passwordformProps = z.infer<typeof PasswordFormSchema>;
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -98,13 +99,43 @@ export function ForgetPasswordForm() {
             Phone Number
           </Label>
 
-          <Input
-            className="login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 outline-none text-sm font-sans font-medium text-white  focus-visible:outline-none placeholder:text-white focus:!bg-white/30 "
-            id="phone"
-            placeholder="Enter Phone no"
-            type="text"
-            {...register("phone_number")}
-          />
+         
+
+
+
+<Controller
+                      control={control}
+                      name={`phone_number`}
+                      render={({ field }) => (
+                        <Input
+                          {...field}
+                          className="login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 outline-none text-sm font-sans font-medium text-white  focus-visible:outline-none placeholder:text-white focus:!bg-white/30 "
+                          id="account_no"
+                          maxLength={11}
+                          placeholder="Phone number"
+                          type="text"
+                          onChange={(e) => {
+                            const validAcctNumber = validatePhoneNumber(
+                              e.target.value
+                            );
+                            field.onChange(validAcctNumber); // Update only with validated value
+                          }}
+                          onKeyDown={(e) => {
+                            // Prevent non-numeric keys (e.g., e, +, -, .)
+                            if (
+                              !/[0-9]/.test(e.key) &&
+                              e.key !== "Backspace" &&
+                              e.key !== "Delete" &&
+                              e.key !== "ArrowLeft" &&
+                              e.key !== "ArrowRight"
+                            ) {
+                              e.preventDefault();
+                            }
+                          }}
+                          // onChange={(e) => field.onChange(e.target.value)}
+                        />
+                      )}
+                    />
 
           {errors?.phone_number && (
             <FormError

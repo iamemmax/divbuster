@@ -1,7 +1,8 @@
+'use client'
 import { DM_Sans, Wix_Madefor_Display } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/utils/classNames";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import ReactQueryProvider from "@/lib/reactQuery";
 import { AuthProvider } from "@/contexts/authentication";
 import ProtectedRouteGuard from "./(auth)/(onboarding)/misc/components/ProtectedRouteGuard";
@@ -12,7 +13,8 @@ import Image from "next/image";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import Marquee from "./(main)/misc/components/Marquee";
-import NemLogoIcon from "@/components/icons/NemIcon";
+import CheckUserHasPlan from "@/app/(main)/misc/components/CheckUserHasPlan";
+// import NemLogoIcon from "@/components/icons/NemIcon";
 
 const sans = DM_Sans({
   subsets: ["latin"],
@@ -35,10 +37,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const { data } = useUser();
-  // console.log(data);
-  // const url = `https://wa.link/j2dkg7`;
+ 
   const url = `https://wa.link/vrg8zn`;
+
+  const [showCheckPlanModal, setShowCheckPlanModal] = useState(false)
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
       <head>
@@ -114,14 +116,16 @@ export default function RootLayout({
   </a>
 
   {/* <!-- Consult a Doctor Button with Fade-In Animation --> */}
-  <a
+  {/* <a
     href={"https://hmo.heala.io/nemhmo"}
     target="_blank"
     rel="noopener noreferrer"
     title=" Consult a Doctor"
     className="whatsapp-button !z-[9999999999999999999999999999999999999999999999999999999999999] transition duration-600 delay-100"
-  >
-    <Button className="bg-[#a82118] flex justify-start gap-x-2 items-center text-[#fedf3e] text-base font-medium rounded-[62.4717px] h-[3.4375rem] px-5 font-display animate-pulse">
+  > */}
+    <Button className="bg-[#a82118] flex justify-start gap-x-2 items-center text-[#fedf3e] text-base font-medium rounded-[62.4717px] h-[3.4375rem] px-5 font-display animate-pulse"
+    onClick={()=>setShowCheckPlanModal(true)}
+    >
       <Image
         src={"/images/logos/nemicon.png"}
         width={25}
@@ -131,9 +135,15 @@ export default function RootLayout({
       {/* <NemLogoIcon height={30} width={30}/> */}
       Consult a Doctor
     </Button>
-  </a>
+  {/* </a> */}
 </div>
 
+      {
+        showCheckPlanModal && <CheckUserHasPlan
+        openCheckPhoneNumberModal={showCheckPlanModal}
+        setOpenCheckPhoneNumberModal={setShowCheckPlanModal}
+        />
+      }
          
         </ReactQueryProvider>
 
@@ -152,6 +162,7 @@ export default function RootLayout({
 
 
       {/* Heala Configuration */}
+
     </html>
   );
 }

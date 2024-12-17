@@ -280,3 +280,8 @@ export const convertStringFractionToPercentage = (value: string): number => {
   const denominator = parseFloat(parts[1]);
   return (numerator / denominator) * 100;
 };
+
+
+export function validatePhoneNumber(phoneNumber: string): string {
+  return /^[0-9]*$/.test(phoneNumber) ? phoneNumber : ""; // Return empty string if non-numeric
+}
