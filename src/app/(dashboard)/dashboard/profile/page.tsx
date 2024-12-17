@@ -107,7 +107,7 @@ const Page = () => {
                         onClick={() =>
                           copy(
                             ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}` ??
-                              ""
+                            ""
                           )
                         }
                       >
@@ -162,6 +162,7 @@ const Page = () => {
               <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-7">
                 <div className="">1</div>
                 <div className="">2 </div>
+
               </div>
             </form>
           </div>
