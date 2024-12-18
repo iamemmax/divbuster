@@ -163,7 +163,7 @@ export default function Home() {
                 "relative flex items-center justify-center w-full p-5 lg:pt-5 lg:max-w-[500px] overflow-hidden "
               )}
             >
-              {/* <HospitalImage /> */}
+              {/* <HospitalImage... /> */}
               <Image
                 alt=""
                 // className={"w-full p-6 rounded-full"}
@@ -291,93 +291,93 @@ export default function Home() {
 
       <div className="">
 
-      {openCheckPhoneNumberModal && (
-        <CheckPhoneNumber
-          openCheckPhoneNumberModal={openCheckPhoneNumberModal}
-          setPhoneNumberCheckResponse={setPhoneNumberCheckResponse}
-          setOpenCheckPhoneNumberModal={setOpenCheckPhoneNumberModal}
-          setOpenRemitalDetailModal={setOpenRemitalDetailModal}
-          setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
-          setVerifiedPhoneNumber={setVerifiedPhoneNumber}
-          setUserId={setUserId}
-          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-          setVerifyResponse={setVerifyResponse}
-          setUserEmail={setUserEmail}
-          setShowPasswordModal={setShowPasswordModal}
-        // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
-        />
-      )}
-      {/* remitals ............................................................ remita.................... */}
-      {openRemitalDetailModal && (
-        <RemitalModalDetails
-          setOpenRemitalDetailModal={setOpenRemitalDetailModal}
-          openRemitalDetailModal={openRemitalDetailModal}
-          phoneNumberCheckResponse={phoneNumberCheckResponse}
-          verifiedPhoneNumber={verifiedPhoneNumber}
-          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-          setUserEmail={setUserEmail}
-        />
-      )}
-      {OpenRemitalUserDetail && (
-        <RemitalUserDetails
-          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-          OpenRemitalUserDetail={OpenRemitalUserDetail}
-          userId={userId}
-          setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-          verifyResponse={verifyResponse}
-          userEmail={userEmail}
-          setShowPasswordModal={setShowPasswordModal}
-        />
-      )}
+        {openCheckPhoneNumberModal && (
+          <CheckPhoneNumber
+            openCheckPhoneNumberModal={openCheckPhoneNumberModal}
+            setPhoneNumberCheckResponse={setPhoneNumberCheckResponse}
+            setOpenCheckPhoneNumberModal={setOpenCheckPhoneNumberModal}
+            setOpenRemitalDetailModal={setOpenRemitalDetailModal}
+            setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
+            setVerifiedPhoneNumber={setVerifiedPhoneNumber}
+            setUserId={setUserId}
+            setOpenRemitalUserDetail={setOpenRemitalUserDetail}
+            setVerifyResponse={setVerifyResponse}
+            setUserEmail={setUserEmail}
+            setShowPasswordModal={setShowPasswordModal}
+          // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
+          />
+        )}
+        {/* remitals ............................................................ remita.................... */}
+        {openRemitalDetailModal && (
+          <RemitalModalDetails
+            setOpenRemitalDetailModal={setOpenRemitalDetailModal}
+            openRemitalDetailModal={openRemitalDetailModal}
+            phoneNumberCheckResponse={phoneNumberCheckResponse}
+            verifiedPhoneNumber={verifiedPhoneNumber}
+            setOpenRemitalUserDetail={setOpenRemitalUserDetail}
+            setUserEmail={setUserEmail}
+          />
+        )}
+        {OpenRemitalUserDetail && (
+          <RemitalUserDetails
+            setOpenRemitalUserDetail={setOpenRemitalUserDetail}
+            OpenRemitalUserDetail={OpenRemitalUserDetail}
+            userId={userId}
+            setOpenShowRemitalPlan={setOpenShowRemitalPlan}
+            verifyResponse={verifyResponse}
+            userEmail={userEmail}
+            setShowPasswordModal={setShowPasswordModal}
+          />
+        )}
 
-      {showPasswordModal && (
-        <CreatepasswordModal
-          userEmail={userEmail}
-          setShowPasswordModal={setShowPasswordModal}
-          showPasswordModal={showPasswordModal}
-          setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-          verifiedPhoneNumber={verifiedPhoneNumber}
-        />
-      )}
-      {openRemitalPlan && (
-        <RemitalPlanModal
-          openRemitalPlan={openRemitalPlan}
-          setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-          userId={userId}
-          verifyResponse={verifyResponse}
-          verifiedPhoneNumber={verifiedPhoneNumber}
-        />
-      )}
-      {openNonRemitalDetailModal && (
-        <NonRemitalModal
-          verifiedPhoneNumber={verifiedPhoneNumber}
-          setPhoneNumberCheckResponse={setPhoneNumberCheckResponse}
-          openNonRemitalDetailModal={openNonRemitalDetailModal}
-          setOpenRemitalDetailModal={setOpenRemitalDetailModal}
-          setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
-          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-          userId={userId}
-          verifyResponse={verifyResponse}
-          setUserEmail={setUserEmail}
-        />
-      )}
-      {
-        showGenerateReferralModal &&
-        <GenerateReferralModal
-          isBuyPlanModalOpen={showGenerateReferralModal}
-          setBuyPlanModal={setShowGenerateReferralModal}
-          setShowGenerateReferralSuccessModal={setShowGenerateReferralSuccessModal}
-          setReferralResponse={setReferralResponse}
-        />
-      }
+        {showPasswordModal && (
+          <CreatepasswordModal
+            userEmail={userEmail}
+            setShowPasswordModal={setShowPasswordModal}
+            showPasswordModal={showPasswordModal}
+            setOpenShowRemitalPlan={setOpenShowRemitalPlan}
+            verifiedPhoneNumber={verifiedPhoneNumber}
+          />
+        )}
+        {openRemitalPlan && (
+          <RemitalPlanModal
+            openRemitalPlan={openRemitalPlan}
+            setOpenShowRemitalPlan={setOpenShowRemitalPlan}
+            userId={userId}
+            verifyResponse={verifyResponse}
+            verifiedPhoneNumber={verifiedPhoneNumber}
+          />
+        )}
+        {openNonRemitalDetailModal && (
+          <NonRemitalModal
+            verifiedPhoneNumber={verifiedPhoneNumber}
+            setPhoneNumberCheckResponse={setPhoneNumberCheckResponse}
+            openNonRemitalDetailModal={openNonRemitalDetailModal}
+            setOpenRemitalDetailModal={setOpenRemitalDetailModal}
+            setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
+            setOpenRemitalUserDetail={setOpenRemitalUserDetail}
+            userId={userId}
+            verifyResponse={verifyResponse}
+            setUserEmail={setUserEmail}
+          />
+        )}
+        {
+          showGenerateReferralModal &&
+          <GenerateReferralModal
+            isBuyPlanModalOpen={showGenerateReferralModal}
+            setBuyPlanModal={setShowGenerateReferralModal}
+            setShowGenerateReferralSuccessModal={setShowGenerateReferralSuccessModal}
+            setReferralResponse={setReferralResponse}
+          />
+        }
 
-      {showGenerateReferralSuccessModal && <ReferralSuccessModal
-        setShowSuccessModal={setShowGenerateReferralSuccessModal}
-        showSuccessModal={showGenerateReferralSuccessModal}
-        referralResponse={referralResponse}
+        {showGenerateReferralSuccessModal && <ReferralSuccessModal
+          setShowSuccessModal={setShowGenerateReferralSuccessModal}
+          showSuccessModal={showGenerateReferralSuccessModal}
+          referralResponse={referralResponse}
 
 
-      />}
+        />}
       </div>
 
     </main>
