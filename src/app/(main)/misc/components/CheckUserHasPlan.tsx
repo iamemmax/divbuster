@@ -71,22 +71,48 @@ const CheckUserHasPlan = ({
   const router = useRouter();
   const {mutate:handleCheck,isLoading}= useCheckUserActivePlan()
 
-  const onsubmit = (data: detailRequestType) => {
-    handleCheck({phone_number:data?.phone_number},{
-        onSuccess:(data)=>{
-if(data){
-  window.open("https://hmo.heala.io/nemhmo", "_blank");
-  setOpenCheckPhoneNumberModal(false)
-}
+//   const onsubmit = (data: detailRequestType) => {
+//     handleCheck({phone_number:data?.phone_number},{
+//         onSuccess:(data)=>{
+// if(data){
+//   window.open("https://hmo.heala.io/nemhmo", "_blank");
+//   setOpenCheckPhoneNumberModal(false)
+// }
 
-        },
-          onError: (error) => {
-                const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+//         },
+//           onError: (error) => {
+//                 const errorMessage = formatAxiosErrorMessage(error as AxiosError);
               
-                openErrorModalWithMessage(String(errorMessage));
-              },
-    })
-  };
+//                 openErrorModalWithMessage(String(errorMessage));
+//               },
+//     })
+//   };
+const onsubmit = (data: detailRequestType) => {
+  handleCheck(
+    { phone_number: data?.phone_number },
+    {
+      onSuccess: (data) => {
+        if (data) {
+          // Dynamically create and append an <a> tag
+          const externalUrl = "https://hmo.heala.io/nemhmo";
+          const a = document.createElement("a");
+          a.href = externalUrl;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          document.body.appendChild(a); // Append the anchor to the DOM
+          a.click(); // Simulate user click
+          document.body.removeChild(a); // Clean up the DOM
+          setOpenCheckPhoneNumberModal(false);
+        }
+      },
+      onError: (error) => {
+        const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+        openErrorModalWithMessage(String(errorMessage));
+      },
+    }
+  );
+};
+
 
   return (
     <div className="">
