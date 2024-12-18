@@ -163,7 +163,7 @@ export default function Home() {
                 "relative flex items-center justify-center w-full p-5 lg:pt-5 lg:max-w-[500px] overflow-hidden "
               )}
             >
-              {/* <HospitalImage... /> */}
+              {/* <HospitalImage....... /> */}
               <Image
                 alt=""
                 // className={"w-full p-6 rounded-full"}
