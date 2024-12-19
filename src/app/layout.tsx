@@ -14,6 +14,7 @@ import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import Marquee from "./(main)/misc/components/Marquee";
 import CheckUserHasPlan from "@/app/(main)/misc/components/CheckUserHasPlan";
+import NemLogoIcon from "@/components/icons/NemIcon";
 // import NemLogoIcon from "@/components/icons/NemIcon";
 
 const sans = DM_Sans({
@@ -110,7 +111,7 @@ export default function RootLayout({
         src={"/images/whatsappIcon.png"}
         width={55}
         height={55}
-        alt="chat icon"
+        alt="whatsapp chat icon"
       />
     </Button>
   </a>
@@ -123,16 +124,16 @@ export default function RootLayout({
     title=" Consult a Doctor"
     className="whatsapp-button !z-[9999999999999999999999999999999999999999999999999999999999999] transition duration-600 delay-100"
   > */}
-    <Button className="bg-[#a82118] flex justify-start gap-x-2 items-center text-[#fedf3e] text-base font-medium rounded-[62.4717px] h-[3.4375rem] px-5 font-display animate-pulse"
+    <Button className="bg-[#9d0b0e] flex justify-start gap-x-1 items-center text-[#fedf3e] text-base font-medium rounded-[62.4717px] h-[3.4375rem] px-5 font-display animate-pulse"
     onClick={()=>setShowCheckPlanModal(true)}
     >
       <Image
-        src={"/images/logos/nemicon.png"}
-        width={25}
-        height={25}
-        alt="chat icon"
+        src={"/images/nemicon.png"}
+        width={30}
+        height={30}
+        alt="logo"
       />
-      {/* <NemLogoIcon height={30} width={30}/> */}
+      {/* <NemLogoIcon height={35} width={35}/> */}
       Consult a Doctor
     </Button>
   {/* </a> */}

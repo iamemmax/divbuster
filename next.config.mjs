@@ -12,6 +12,11 @@ const nextConfig = {
                 hostname: 'dq1z5gvyi71s7.cloudfront.net',
                 pathname: '/**',
             },
+            {
+                protocol: 'https', // Use HTTPS for CloudFront
+                hostname: 'cdn.brandfetch.io',
+                pathname: '/**',
+            },
         ],
     },
 };
