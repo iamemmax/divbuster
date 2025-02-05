@@ -159,8 +159,8 @@ export function MainHeader() {
                 "font-display"
               )}
               href="/dashboard"
-              // target="_blank"
-              // variant="white"
+            // target="_blank"
+            // variant="white"
             >
               Dashboard
             </a>
