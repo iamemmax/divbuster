@@ -124,11 +124,11 @@ export default function RootLayout({
     title=" Consult a Doctor"
     className="whatsapp-button !z-[9999999999999999999999999999999999999999999999999999999999999] transition duration-600 delay-100"
   > */}
-    <Button className="bg-[#9d0b0e] flex justify-start gap-x-1 items-center text-[#fedf3e] text-base font-medium rounded-[62.4717px] h-[3.4375rem] px-5 font-display animate-pulse"
+    <Button className="bg-[#983133] flex justify-start gap-x-1 items-center text-[#fedf3e] text-base font-medium rounded-[62.4717px] h-[3.4375rem] px-5 font-display animate-pulse"
     onClick={()=>setShowCheckPlanModal(true)}
     >
       <Image
-        src={"/images/nemicon.png"}
+         src={"/images/nem.svg"}
         width={30}
         height={30}
         alt="logo"

@@ -383,19 +383,7 @@ const handleCheckboxChange = (planId: string) => {
                                               </p>
                                             )}
                                           </div>
-                                          {/* {healthPlan?.package_name ===
-                                              "FAMILY" && (
-                                              <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
-                                                3 Individuals (3 + 1 free )
-                                              </p>
-                                            )} */}
-                                          {/* {healthPlan?.package_name ===
-                                            "CORPERATE" && (
-                                            <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
-                                              Minimum of{" "}
-                                              {plan?.plan_duration?.min_members}
-                                            </p>
-                                          )} */}
+                                         
                                         </div>
                                         <div className="space-y-[10px] mt-1">
                                           {plan?.descriptions?.map(
@@ -415,7 +403,7 @@ const handleCheckboxChange = (planId: string) => {
                                           )}
                                         </div>
                                       </div>
-                                      {healthPlan.package_name === "FAMILY" && (
+                                      {/* {healthPlan.package_name === "FAMILY" && (
                                         <div className="flex  items-center  justify-center gap-4 px-4">
                                           <div className="flex mt-3 rounded-[1.25rem] py-[.3125rem] px-2 space-x-3 items-center border-white border-[0.2px] border-opacity-50 ">
                                             <Button
@@ -512,7 +500,189 @@ const handleCheckboxChange = (planId: string) => {
                     <span className="text-white text-xs ml-2">Include owner plan</span>
                   </div>  
                                         </div>
-                                      )}
+                                      )} */}
+                                      {healthPlan.package_name === "FAMILY" && (
+                                                                              <div className="flex flex-col">
+                                                                                <div className="flex  items-center  justify-center gap-4 px-4">
+                                                                                  <div className="flex mt-3 rounded-[1.25rem] py-[.3125rem] px-2 space-x-3 items-center border-white border-[0.2px] border-opacity-50 ">
+                                                                                    <Button
+                                                                                      onClick={() =>
+                                                                                        decrement(
+                                                                                          plan.id.toString(),
+                                                                                          plan.plan_duration
+                                                                                            .min_members
+                                                                                        )
+                                                                                      }
+                                                                                      className="bg-transparent py-0 px-1 rounded"
+                                                                                    >
+                                                                                      <svg
+                                                                                        width="16"
+                                                                                        height="16"
+                                                                                        viewBox="0 0 16 16"
+                                                                                        fill="none"
+                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                      >
+                                                                                        <path
+                                                                                          d="M8 1.5C4.416 1.5 1.5 4.416 1.5 8C1.5 11.584 4.416 14.5 8 14.5C11.584 14.5 14.5 11.584 14.5 8C14.5 4.416 11.584 1.5 8 1.5ZM8 2.5C11.0435 2.5 13.5 4.9565 13.5 8C13.5 11.0435 11.0435 13.5 8 13.5C4.9565 13.5 2.5 11.0435 2.5 8C2.5 4.9565 4.9565 2.5 8 2.5ZM5 7.5V8.5H11V7.5H5Z"
+                                                                                          fill="white"
+                                                                                        />
+                                                                                      </svg>
+                                                                                    </Button>
+                                                                                    <div className="text-xs  text-white font-semibold">
+                                                                                      {planCounts[
+                                                                                        plan.id.toString()
+                                                                                      ] || 0}
+                                                                                    </div>
+                                                                                    <Button
+                                                                                      onClick={() =>
+                                                                                        increment(plan.id.toString())
+                                                                                      }
+                                                                                      className="bg-transparent px-1 py-0 rounded"
+                                                                                    >
+                                                                                      <svg
+                                                                                        width="15"
+                                                                                        height="15"
+                                                                                        viewBox="0 0 15 15"
+                                                                                        fill="none"
+                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                      >
+                                                                                        <g clip-path="url(#clip0_5291_1985)">
+                                                                                          <path
+                                                                                            d="M7.03125 0C7.68066 0 8.30322 0.0830078 8.89893 0.249023C9.49463 0.415039 10.0562 0.649414 10.5835 0.952148C11.1108 1.25488 11.5845 1.62109 12.0044 2.05078C12.4243 2.48047 12.7905 2.95654 13.103 3.479C13.4155 4.00146 13.6523 4.56055 13.8135 5.15625C13.9746 5.75195 14.0576 6.37695 14.0625 7.03125C14.0625 7.68066 13.9795 8.30322 13.8135 8.89893C13.6475 9.49463 13.4131 10.0562 13.1104 10.5835C12.8076 11.1108 12.4414 11.5845 12.0117 12.0044C11.582 12.4243 11.106 12.7905 10.5835 13.103C10.061 13.4155 9.50195 13.6523 8.90625 13.8135C8.31055 13.9746 7.68555 14.0576 7.03125 14.0625C6.38184 14.0625 5.75928 13.9795 5.16357 13.8135C4.56787 13.6475 4.00635 13.4131 3.479 13.1104C2.95166 12.8076 2.47803 12.4414 2.05811 12.0117C1.63818 11.582 1.27197 11.106 0.959473 10.5835C0.646973 10.061 0.410156 9.50195 0.249023 8.90625C0.0878906 8.31055 0.00488281 7.68555 0 7.03125C0 6.38184 0.0830078 5.75928 0.249023 5.16357C0.415039 4.56787 0.649414 4.00635 0.952148 3.479C1.25488 2.95166 1.62109 2.47803 2.05078 2.05811C2.48047 1.63818 2.95654 1.27197 3.479 0.959473C4.00146 0.646973 4.56055 0.410156 5.15625 0.249023C5.75195 0.0878906 6.37695 0.00488281 7.03125 0ZM7.03125 13.125C7.59277 13.125 8.13232 13.0518 8.6499 12.9053C9.16748 12.7588 9.65088 12.5537 10.1001 12.29C10.5493 12.0264 10.9619 11.709 11.3379 11.3379C11.7139 10.9668 12.0312 10.5566 12.29 10.1074C12.5488 9.6582 12.7539 9.17236 12.9053 8.6499C13.0566 8.12744 13.1299 7.58789 13.125 7.03125C13.125 6.46973 13.0518 5.93018 12.9053 5.4126C12.7588 4.89502 12.5537 4.41162 12.29 3.9624C12.0264 3.51318 11.709 3.10059 11.3379 2.72461C10.9668 2.34863 10.5566 2.03125 10.1074 1.77246C9.6582 1.51367 9.17236 1.30859 8.6499 1.15723C8.12744 1.00586 7.58789 0.932617 7.03125 0.9375C6.46973 0.9375 5.93018 1.01074 5.4126 1.15723C4.89502 1.30371 4.41162 1.50879 3.9624 1.77246C3.51318 2.03613 3.10059 2.35352 2.72461 2.72461C2.34863 3.0957 2.03125 3.50586 1.77246 3.95508C1.51367 4.4043 1.30859 4.89014 1.15723 5.4126C1.00586 5.93506 0.932617 6.47461 0.9375 7.03125C0.9375 7.59277 1.01074 8.13232 1.15723 8.6499C1.30371 9.16748 1.50879 9.65088 1.77246 10.1001C2.03613 10.5493 2.35352 10.9619 2.72461 11.3379C3.0957 11.7139 3.50586 12.0312 3.95508 12.29C4.4043 12.5488 4.89014 12.7539 5.4126 12.9053C5.93506 13.0566 6.47461 13.1299 7.03125 13.125ZM7.5 6.5625H11.25V7.5H7.5V11.25H6.5625V7.5H2.8125V6.5625H6.5625V2.8125H7.5V6.5625Z"
+                                                                                            fill="white"
+                                                                                          />
+                                                                                        </g>
+                                                                                        <defs>
+                                                                                          <clipPath id="clip0_5291_1985">
+                                                                                            <rect
+                                                                                              width="15"
+                                                                                              height="15"
+                                                                                              fill="white"
+                                                                                            />
+                                                                                          </clipPath>
+                                                                                        </defs>
+                                                                                      </svg>
+                                                                                    </Button>
+                                                                                  </div>
+                                                                                  {/* <div className="flex justify-center rounded-[1.25rem] mt-3 py-[.375rem] px-3 bg-white bg-opacity-10 items-center">
+                                                                                    <p className="text-white font-semibold text-xs">
+                                                                                      {formatCurrency(
+                                                                                        selectedCheckboxes[plan.id] ?
+                                                                                        getAmountDeduction(
+                                                                                          Number(
+                                                                                            removeCommaFromPrice(
+                                                                                              String(
+                                                                                                percentageCalc?.base_price
+                                                                                              )
+                                                                                            )
+                                                                                          ),
+                                                                                          plan?.plan_duration?.duration,
+                                                                                          planCounts[
+                                                                                            plan.id.toString()
+                                                                                          ] || 0,
+                                                                                          getPercentage(
+                                                                                            plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
+                                                                                            planCounts[
+                                                                                              plan.id.toString()
+                                                                                            ]
+                                                                                          )
+                                                                                          +
+                                                                                          String(
+                                                                                            percentageCalc?.base_price
+                                                                                          ) * plan?.plan_duration?.duration,
+                                                                                        ):
+                                                                                        
+                                                                                        getAmountDeduction(
+                                                                                          Number(
+                                                                                            removeCommaFromPrice(
+                                                                                              String(
+                                                                                                percentageCalc?.base_price
+                                                                                              )
+                                                                                            )
+                                                                                          ),
+                                                                                          plan?.plan_duration?.duration,
+                                                                                          planCounts[
+                                                                                            plan.id.toString()
+                                                                                          ] || 0,
+                                                                                          getPercentage(
+                                                                                            plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
+                                                                                            planCounts[
+                                                                                              plan.id.toString()
+                                                                                            ]
+                                                                                          )
+                                                                                        )
+                                                                                      )}
+                                                                                    </p>
+                                                                                  </div> */}
+                                      
+                                                                                  <div className="flex justify-center rounded-[1.25rem] mt-3 py-[.375rem] px-3 bg-white bg-opacity-10 items-center">
+                                                                                    <p className="text-white font-semibold text-xs">
+                                                                                      {formatCurrency(
+                                                                                        (() => {
+                                                                                          // Base price after removing commas and converting to a number
+                                                                                          const basePrice = Number(
+                                                                                            removeCommaFromPrice(
+                                                                                              String(
+                                                                                                percentageCalc?.base_price
+                                                                                              )
+                                                                                            )
+                                                                                          );
+                                      
+                                                                                          // Calculate amount with or without the checkbox adjustment
+                                                                                          const amount =
+                                                                                            getAmountDeduction(
+                                                                                              basePrice,
+                                                                                              plan?.plan_duration
+                                                                                                ?.duration,
+                                                                                              planCounts[
+                                                                                                plan.id.toString()
+                                                                                              ] || 0,
+                                                                                              getPercentage(
+                                                                                                plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
+                                                                                                planCounts[
+                                                                                                  plan.id.toString()
+                                                                                                ]
+                                                                                              )
+                                                                                            );
+                                      
+                                                                                          // Add basePrice * plan duration if checkbox is selected
+                                                                                          const additionalAmount =
+                                                                                            selectedCheckboxes[
+                                                                                              plan.id
+                                                                                            ]
+                                                                                              ? basePrice *
+                                                                                                plan?.plan_duration
+                                                                                                  ?.duration
+                                                                                              : 0;
+                                      
+                                                                                          return (
+                                                                                            amount + additionalAmount
+                                                                                          ); // Final calculated amount
+                                                                                        })()
+                                                                                      )}
+                                                                                    </p>
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div className="flex items-center mt-4 px-3">
+                                                                                  <input
+                                                                                    type="checkbox"
+                                                                                    checked={
+                                                                                      selectedCheckboxes[plan.id] 
+                                                                                    
+                                                                                    }
+                                                                                    onChange={() =>
+                                                                                      handleCheckboxChange(
+                                                                                        String(plan.id)
+                                                                                      )
+                                                                                    }
+                                                                                    className="form-checkbox text-blue-600"
+                                                                                  />
+                                                                                  <span className="text-white text-xs ml-2">
+                                                                                    Include owner plan
+                                                                                  </span>
+                                                                                </div>{" "}
+                                                                              </div>
+                                                                            )}
                                     </div>
 
                                     <div className="border-[.0313rem] border-[#4760FD] rounded-10 -mt-1 flex justify-center items-center w-full py-5">
