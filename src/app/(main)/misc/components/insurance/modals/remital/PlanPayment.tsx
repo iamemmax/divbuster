@@ -31,6 +31,7 @@ import CopyIcon2 from "@/app/(dashboard)/comp/icons/CopyIcon2";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { removeCommas } from "@/utils/numbers";
+import PendingToastContainer from "@/app/(dashboard)/comp/components/loading/PendingLoading";
 
 interface Prop {
   setShowPaymentModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -71,12 +72,15 @@ const PlanPayment = ({
     queryKey: ["confirm-transfer", PaymentInfo?.phone_number],
     enabled: false,
     onSuccess: (data) => {
-      if (data.message !== "success") {
+      if (data.message_code === "001") {
         toast.success(data?.message);
         router.push("/dashboard");
       } else {
-        setErrorMsg(data?.message);
-        openErrorModalWithMessage(String(data?.message));
+        // setErrorMsg(data?.message);
+        // openErrorModalWithMessage(String(data?.message));
+        toast.custom(() => <PendingToastContainer message={data?.message} />, {
+          id: 'pending-toast', // Using the same ID ensures only one "pending-toast" exists
+        });
       }
     },
     onError: (error) => {

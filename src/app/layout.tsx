@@ -14,7 +14,8 @@ import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import Marquee from "./(main)/misc/components/Marquee";
 import CheckUserHasPlan from "@/app/(main)/misc/components/CheckUserHasPlan";
-import NemLogoIcon from "@/components/icons/NemIcon";
+// import NemLogoIcon from "@/components/icons/NemIcon";
+// import Head from "next/head";
 // import NemLogoIcon from "@/components/icons/NemIcon";
 
 const sans = DM_Sans({
@@ -44,7 +45,9 @@ export default function RootLayout({
   const [showCheckPlanModal, setShowCheckPlanModal] = useState(false)
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
+      
       <head>
+     
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
            window.dataLayer = window.dataLayer || [];
@@ -92,7 +95,8 @@ fbq('track', 'PageView');`,
         />
 
            
-           
+           <link rel="shortcut icon" href="/icon.ico" />
+      
       </head>
       <body className="!z-[9999999999999999999999999999999999999999]">
         <Toaster
@@ -140,11 +144,11 @@ fbq('track', 'PageView');`,
     title=" Consult a Doctor"
     className="whatsapp-button !z-[9999999999999999999999999999999999999999999999999999999999999] transition duration-600 delay-100"
   > */}
-    <Button className="bg-[#9d0b0e] flex justify-start gap-x-1 items-center text-[#fedf3e] text-base font-medium rounded-[62.4717px] h-[3.4375rem] px-5 font-display animate-pulse"
+    <Button className="bg-[#983133] flex justify-start gap-x-1 items-center text-[#fedf3e] text-base font-medium rounded-[62.4717px] h-[3.4375rem] px-5 font-display animate-pulse"
     onClick={()=>setShowCheckPlanModal(true)}
     >
       <Image
-        src={"/images/nemicon.png"}
+         src={"/images/nem.svg"}
         width={30}
         height={30}
         alt="logo"

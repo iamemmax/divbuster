@@ -25,6 +25,7 @@ import { useQuery } from "react-query";
 import { confirmTransfer } from "../../api/plan/confirmTransfer";
 import { formatAxiosErrorMessage } from "@/utils";
 import toast from "react-hot-toast";
+import PendingToastContainer from "@/app/(dashboard)/comp/components/loading/PendingLoading";
 
 interface Prop {
   //   userId?: string;
@@ -75,13 +76,16 @@ const ReferralPlanPayment = ({
     queryKey: ["confirm-transfer", PaymentInfo?.phone_number],
     enabled: false,
     onSuccess: (data) => {
-      if (data.message !== "success") {
+      if (data.message_code === "001") {
         tokenStorage.clearReferral()
         toast.success(data?.message);
         router.push("/login");
       } else {
-        setErrorMsg(data?.message);
-        openErrorModalWithMessage(String(data?.message));
+        // setErrorMsg(data?.message);
+        // openErrorModalWithMessage(String(data?.message));
+        toast.custom(() => <PendingToastContainer message={data?.message} />, {
+          id: 'pending-toast', // Using the same ID ensures only one "pending-toast" exists
+        });
       }
     },
     onError: (error) => {
