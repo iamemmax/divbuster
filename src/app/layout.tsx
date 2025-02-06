@@ -14,7 +14,8 @@ import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import Marquee from "./(main)/misc/components/Marquee";
 import CheckUserHasPlan from "@/app/(main)/misc/components/CheckUserHasPlan";
-import NemLogoIcon from "@/components/icons/NemIcon";
+// import NemLogoIcon from "@/components/icons/NemIcon";
+// import Head from "next/head";
 // import NemLogoIcon from "@/components/icons/NemIcon";
 
 const sans = DM_Sans({
@@ -44,7 +45,9 @@ export default function RootLayout({
   const [showCheckPlanModal, setShowCheckPlanModal] = useState(false)
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
+      
       <head>
+     
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
            window.dataLayer = window.dataLayer || [];
@@ -76,7 +79,8 @@ export default function RootLayout({
             </Script>
             
            
-           
+           <link rel="shortcut icon" href="/icon.ico" />
+      
       </head>
       <body className="!z-[9999999999999999999999999999999999999999]">
         <Toaster
