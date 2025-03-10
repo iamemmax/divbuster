@@ -156,9 +156,9 @@ if(data?.user_found === false){
                       )}
                     />
                   {!userPasswordNotSet ? (
-                    <div className="pb-[2rem]">
+                    <div className="">
                       <Button
-                        className=" mt-[3rem] flex items-center justify-center gap-x-2 font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
+                        className=" mt-[5rem] flex items-center justify-center gap-x-2 font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide
                                     shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                         type="submit"
                       >
@@ -178,6 +178,14 @@ if(data?.user_found === false){
                       Create password
                     </LinkButton>
                   )}
+                   <LinkButton
+            href={"/sign-up"}
+            className="my-6 mt-6 block w-full rounded-[20px] bg-[#080D27]  border-[0.5px] border-white border-opacity-40 text-[#fff] font-sans py-[.9375rem] text-base leading-[normal]"
+            type="submit"
+            variant="white"
+          >
+          <p className="text-xs text-[#f4f4f4] text-opacity-60">  Don’t have an account ?  <span className="text-white text-sm text-opacity-100"> Sign up</span></p>
+          </LinkButton>
                 </div>
               </div>
             </form>
