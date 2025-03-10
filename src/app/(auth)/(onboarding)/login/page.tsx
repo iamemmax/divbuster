@@ -5,7 +5,7 @@ import { PhoneLoginForm } from "./misc/components/NewLoginForm";
 import { z } from "zod";
 import { Label } from "@radix-ui/react-label";
 import { Input2 } from "@/components/core/Input2";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, ErrorModal, LinkButton } from "@/components/core";
 import { useCheckUserLoginStatus } from "../api/checkuserStatus";
@@ -20,7 +20,7 @@ const contactSchema = z.object({
   phone_number: z
     .string({ required_error: "Enter your phone number" })
     .trim()
-    .min(10, { message: "Phone number should be at least 11 digits" }),
+    .min(10, { message: "Phone number should be at least 11 digits" }).max(11, { message: "Phone number should be at most 11 digits" }),
 });
 export type userStatusType = z.infer<typeof contactSchema>;
 
@@ -35,6 +35,7 @@ export default function Login() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<userStatusType>({
     resolver: zodResolver(contactSchema),
@@ -57,31 +58,37 @@ export default function Login() {
     if(ApprokoReferral){
       setReferralFromAproko(ApprokoReferral)
      }else{
-       setReferralFromAproko("")
-       
+       setReferralFromAproko("") 
      }
    }, [])
 
-  const onsubmit = ({ phone_number }: userStatusType) => {
+   const onsubmit = ({ phone_number }: userStatusType) => {
     handleCheckStatus(phone_number, {
       onSuccess: (data: userStatusTypes) => {
-        if (data?.has_set_password) {
-          setReturninguser(true);
-        } else {
-          setUserPasswordNotSet(true);
-        }
-        setUserPhoneNumber(data?.phone_number);
-      },
-      onError: (error) => {
+if(data?.user_found === false){
+  if (referralFromAproko === "aproko-doctor") {
+    router.push("/plan/aproko-doctor?select-plan=true");
+  } else {
+    router.push("/?get-started=true");
+  }
+}else{
+  if (data?.has_set_password) {
+    setReturninguser(true);
+  } else {
+    setUserPasswordNotSet(true);
+  }
+  setUserPhoneNumber(data?.phone_number);
+
+}
+},
+
+      onError: (error) => {   
         const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-        if (errorModalMessage === "User not found") {
-          referralFromAproko ==="aproko-doctor" ? router.push("/plan/aproko-doctor?select-plan=true") :
-          router.push("/?get-started=true");
-        }
-        openErrorModalWithMessage(String(errorMessage));
+   openErrorModalWithMessage(String(errorMessage));
       },
     });
   };
+  
 
   return (
     <>
@@ -101,14 +108,53 @@ export default function Login() {
                 </Label>
 
                 <div className={`relative mt-[.25rem] `}>
-                  <Input2
+                  {/* <Input2
                     className={`${errors?.phone_number?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
                     placeholder="Enter your phone number"
                     type="number"
                     id="phone"
-                    {...register("phone_number")}
-                  />
+                    maxLength={11}
 
+                    
+                    {...register("phone_number")}
+                  /> */}
+
+<Controller
+                      control={control}
+                      name={`phone_number`}
+                      render={({ field }) => (
+                        <Input2
+                          {...field}
+                          className="login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 outline-none text-sm font-sans font-medium text-white  focus-visible:outline-none placeholder:text-white focus:!bg-white/30 "
+                          id="account_no"
+                          maxLength={11}
+                          placeholder="Phone number"
+                          type="text"
+                          onChange={(e) => {
+                            const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                            // Handle input sanitization on change (typing)
+                            const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                            field.onChange(validPhoneNumber);
+                          }}
+                          onPaste={(e) => {
+                            const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                            // Intercept paste event to sanitize pasted content
+                            const pastedValue = e.clipboardData.getData('text');
+                            const sanitizedValue = pastedValue.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+                            e.preventDefault(); // Prevent the default paste behavior
+                            field.onChange(sanitizedValue); // Apply sanitized value
+                          }}
+                          
+                          onInput={(e) => {
+                            const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                            // Handle input sanitization on input changes
+                            const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                            field.onChange(validPhoneNumber);
+                          }}
+                          // onChange={(e) => field.onChange(e.target.value)}
+                        />
+                      )}
+                    />
                   {!userPasswordNotSet ? (
                     <div className="pb-[2rem]">
                       <Button
@@ -143,14 +189,7 @@ export default function Login() {
 {errorModalMessage !== "User not found" && (
   <ErrorModal
     isErrorModalOpen={isErrorModalOpen}
-    setErrorModalState={() => {
-      if (errorModalMessage === "User not found") {
-          router.push("/?get-started=true");
-        
-      } else {
-        setErrorModalState(false); // Close the modal if the error is not "User not found"
-      }
-    }}
+    setErrorModalState={setErrorModalState}
     subheading={
       errorModalMessage || "Please check your inputs and try again."
     }
