@@ -118,13 +118,13 @@ fbq('track', 'PageView');`,
               </Suspense>
             </ProtectedRouteGuard>
           </AuthProvider>
-          <div className="fixed right-6 flex justify-end items-end flex-col xl:right-0 bottom-20 !z-[9999999999999999999999999999999999999999999999999999999999999]">
+          <div className="fixed left-0 md:right-6 flex md:justify-end md:items-end flex-col xl:right-0 bottom-4 md:bottom-20 !z-[9999999999999999999999999999999999999999999999999999999999999]">
   {/* <!-- Whatsapp Button with Bounce Animation --> */}
   <a
     href={url}
     target="_blank"
     rel="noopener noreferrer"
-    className="whatsapp-button !z-[9999999999999999999999999999999999999999999999999999999999999] text-white font-bold py-2 px-4 rounded transition duration-300"
+    className="whatsapp-button !z-[9999999999999999999999999999999] text-white font-bold py-2 px-4 rounded transition duration-300"
   >
     <Button className="bg-transparent animate-bounce">
       <Image
@@ -136,14 +136,6 @@ fbq('track', 'PageView');`,
     </Button>
   </a>
 
-  {/* <!-- Consult a Doctor Button with Fade-In Animation --> */}
-  {/* <a
-    href={"https://hmo.heala.io/nemhmo"}
-    target="_blank"
-    rel="noopener noreferrer"
-    title=" Consult a Doctor"
-    className="whatsapp-button !z-[9999999999999999999999999999999999999999999999999999999999999] transition duration-600 delay-100"
-  > */}
     <Button className="bg-[#983133] flex justify-start gap-x-1 items-center text-[#fedf3e] text-base font-medium rounded-[62.4717px] h-[3.4375rem] px-5 font-display animate-pulse"
     onClick={()=>setShowCheckPlanModal(true)}
     >

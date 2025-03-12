@@ -1,4 +1,4 @@
-import { Button, LinkButton } from '@/components/core';
+import { Button, ErrorModal, LinkButton } from '@/components/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Label } from '@radix-ui/react-label';
 import React, { useState } from 'react'
@@ -6,19 +6,26 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import {motion} from "framer-motion"
 import EyeIcon from '@/app/(main)/misc/icons/EyeIcon';
+import { useErrorModalState } from '@/hooks';
+import { useOnboardUser } from '../../api/signup/onboardUser';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { formatAxiosErrorMessage } from '@/utils';
+import { AxiosError } from 'axios';
+import { SmallSpinner } from '@/icons/core';
 
 const formSchema = z
   .object({
     full_name: z
       .string()
       .min(3, { message: "Name should be at least 3 characters" }),
-    phone_number: z
-      .string()
-      .min(11, { message: "Phone number should be at least 11 digits" }),
+      phone_number: z
+    .string()
+    .min(11, { message: "Phone number should be at least 11 digits" })
+    .regex(/^0\d{10}$/, { message: "Phone number must start with 0 and be 11 digits long" }),
     email: z.string().email({ message: "Invalid email address" }),
     bvn: z
-      .string()
-      .min(11, { message: "BVN should be at least 11 digits" }),
+      .string().optional(),
     //   .optional(), // BVN is optional until step 2
     password: z
       .string({ required_error: "Please enter your password." })
@@ -35,7 +42,7 @@ const formSchema = z
         }
       )
      ,
-      date_of_birth: z.string().min(1, {message:'please enter your date of birth'}),
+      dob: z.string().min(1, {message:'please enter your date of birth'}),
     confirm_password: z
       .string({ required_error: "Please enter your password." })
       .trim()
@@ -77,7 +84,7 @@ const SignupForm = () => {
     
         if (step === 1) {
           // Only validate fields for Step 1 (full_name, phone_number, and email)
-          isValid = await trigger(["full_name", "phone_number", "email","date_of_birth"]);
+          isValid = await trigger(["full_name", "phone_number", "email","dob"]);
         } else if (step === 2) {
           // Validate all fields for Step 2 (full_name, phone_number, email, bvn, password, confirm_password)
           isValid = await trigger();
@@ -95,7 +102,39 @@ const SignupForm = () => {
       const togglePassword = () => {
         setPasswordShown(!passwordShown);
       };
-    const onSubmit =()=>{}
+      const {
+        isErrorModalOpen,
+        setErrorModalState,
+        // closeErrorModal,
+        openErrorModalWithMessage,
+        errorModalMessage,
+      } = useErrorModalState();
+    
+      const router = useRouter();
+      const {mutate:handleOnboardUser,isLoading}= useOnboardUser()
+      const onSubmit = (data: FormValues) => {
+        handleOnboardUser(
+            {
+              data
+            },
+            {
+              onSuccess: () => {
+                if(data){
+                  toast.success("Registration Successfull")
+                  router.replace("/login")
+                }
+              },
+              onError: (error) => {
+                const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+           
+                openErrorModalWithMessage(String(errorMessage));
+              },
+            }
+          );
+      };
+
+      console.log(errors);
+      
   return (
     <div className='relative'>
     <form  onSubmit={handleSubmit(onSubmit)}>
@@ -195,21 +234,21 @@ const SignupForm = () => {
             <div className="mb-3">
                         <Label
                           className="mb-1 block text-xs text-[#fff]"
-                          htmlFor={`date_of_birth`}
+                          htmlFor={`dob`}
                         >
                           Date of Birth
                         </Label>
                         <div className="relative mt-[.25rem]">
                           <input
                             className={`${
-                              errors?.date_of_birth
+                              errors?.dob
                                 ? "border border-red-700"
                                 : ""
                             } text-[#fff] text-xs outline-none rounded-lg px-6 w-full h-[2.875rem] bg-[#2a3150]`}
                             placeholder="Enter Date of Birth"
                             type="date"
-                            id={`date_of_birth`}
-                            {...register(`date_of_birth`)}
+                            id={`dob`}
+                            {...register(`dob`)}
                           />
                         </div>
                       </div>
@@ -381,7 +420,7 @@ const SignupForm = () => {
 
             <div className="grid grid-cols-2 items-center w-full gap-[1.3125rem] mt-7">
               <Button
-                className=" text-white py-4 block    rounded-[1.25rem] mt-4"
+                className=" text-white py-4 block  border-[0.3px] border-opacity-65 border-white  rounded-[1.25rem] mt-4"
                 type="button"
                 variant={"outlined"}
                 onClick={handlePrevStep}
@@ -389,10 +428,10 @@ const SignupForm = () => {
                 Back
               </Button>
               <Button
-                className="bg-white block text-primary py-4  rounded-[1.25rem] mt-4"
+                className="bg-white  flex justify-center items-center gap-x-3 text-primary py-4  rounded-[1.25rem] mt-4"
                 type="submit"
               >
-                Sign up
+                Sign up {isLoading&&<SmallSpinner  color="#1B1687" />}
               </Button>
             </div>
           </motion.div>
@@ -402,7 +441,15 @@ const SignupForm = () => {
 
     
     
-    </form></div>
+    </form>
+    <ErrorModal
+                    isErrorModalOpen={isErrorModalOpen}
+                    setErrorModalState={setErrorModalState}
+                    subheading={
+                      errorModalMessage || "Please check your inputs and try again."
+                    }
+                  ></ErrorModal>
+    </div>
   )
 }
 
