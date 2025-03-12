@@ -155,13 +155,13 @@ export const linkGroups = [
     disabled: false,
     isExternal: false,
   },
-  {
-    link: "/",
-    text: "Blogs",
-    icon: undefined,
-    disabled: false,
-    isExternal: false,
-  },
+  // {
+  //   link: "/",
+  //   text: "Blogs",
+  //   icon: undefined,
+  //   disabled: false,
+  //   isExternal: false,
+  // },
   {
     link: "/contact-us",
     text: "Contact us",
@@ -215,13 +215,13 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
       disabled: false,
       isExternal: false,
     },
-    {
-      link: "/faqs",
-      text: "Blogs",
-      icon: undefined,
-      disabled: false,
-      isExternal: false,
-    },
+    // {
+    //   link: "/faqs",
+    //   text: "Blogs",
+    //   icon: undefined,
+    //   disabled: false,
+    //   isExternal: false,
+    // },
     {
       link: "/contact-us",
       text: "Contact us",

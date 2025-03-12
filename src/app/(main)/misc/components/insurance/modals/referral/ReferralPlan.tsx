@@ -263,7 +263,7 @@ const router = useRouter()
                 <>
                   <div className="py-1">
                     <div className="text-[#fff] text-center font-semibold text-3xl">
-                      <DialogDescription className="text-3xl">
+                      <DialogDescription className="text-2xl md:text-3xl">
                         Choose Your Plan
                       </DialogDescription>
                     </div>
@@ -271,20 +271,20 @@ const router = useRouter()
 
                   <div className="flex w-full items-center justify-center">
                     {selectedTab === "INDIVIDUAL" && (
-                      <p className="w-full px-4 md:px-[2rem] text-center  text-base  sm:max-w-[80%] text-[#fff] text-opacity-50 font-medium">
+                      <p className="w-full px-4 md:px-[2rem] text-center text-sm md:text-base  sm:max-w-[80%] text-[#fff] text-opacity-50 font-medium">
                         Individual plan gives you access to health cover for you
                         only, and you stand a chance to enjoy awesome benefits.
                       </p>
                     )}
                     {selectedTab === "FAMILY" && (
-                      <p className="w-full px-4 md:px-[1.5rem] text-center  text-base sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
+                      <p className="w-full px-4 md:px-[1.5rem] text-center text-sm md:text-base sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
                         Family plan gives you access to include up to 6 members
                         of your family. The more you add, the more discount you
                         get.
                       </p>
                     )}
                     {selectedTab === "CORPORATE" && (
-                      <p className="w-full px-4 md:px-[1.5rem] text-center text-base  sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
+                      <p className="w-full px-4 md:px-[1.5rem] text-center text-sm md:text-base  sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
                         Corporate Plan allows you provide premium health
                         coverage for employees.
                       </p>
@@ -297,11 +297,11 @@ const router = useRouter()
                       defaultValue={selectedTab}
                       onValueChange={(e) => setSelectedTab(e)}
                     >
-                      <div className="flex w-full px-6 items-center justify-center">
+                      <div className="flex w-full px-3 md:px-6 items-center justify-center">
                         <TabsList className="flex w-[98%] justify-center rounded-[.75rem] bg-[#1D2651] md:max-w-[30rem] md:pl-6 lg:pl-0 border border-[#407BFF]">
                           {plansData?.map((tab, idx: number) => (
                             <TabsTrigger
-                              className="inline-flex w-full items-center justify-center rounded-xl text-md font-medium text-[#fff] data-[state=active]:shadow-none"
+                              className="inline-flex w-full items-center justify-center rounded-xl text-xs sm:text-md font-medium text-[#fff] data-[state=active]:shadow-none"
                               value={tab?.package_name}
                               key={idx}
                             >
