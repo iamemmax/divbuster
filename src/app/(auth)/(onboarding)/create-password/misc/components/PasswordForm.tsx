@@ -81,6 +81,7 @@ interface User {
   email: string;
   address: string;
 }
+// 201583
 
 interface Hospitals {
   lga: string;
@@ -155,7 +156,7 @@ export function PasswordForm() {
             // } else {
             //   router.push("/login");
             // }
-            router.push("/login");
+            router.push(`/login`);
           }
           // router?.push("/");
         },

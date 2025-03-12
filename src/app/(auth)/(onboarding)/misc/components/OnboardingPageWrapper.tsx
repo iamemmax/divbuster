@@ -44,7 +44,7 @@ export function OnboardingPageWrapper({
 
           {children}
 
-          <p className="relative text-center leading-[normal] text-white text-xs mt-24">
+          <p className="relative text-center leading-[normal] text-white text-xs mt-[3.25rem]">
             © LibertyAssured, All Rights Reserved
           </p>
         </div>
