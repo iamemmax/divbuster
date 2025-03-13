@@ -77,6 +77,9 @@ const config: Config = {
           foreground: 'hsl(var(--card-foreground))',
         },
       },
+      screens: {
+        '3xl': '1920px', // Adjust the value based on the screen size you want
+      },
 
       // maxHeight: {
       //   'modal-content': [
@@ -102,6 +105,7 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       animation: {
+        'spin-slow': 'spin 5s linear infinite',
         'vertical-slide': 'vertical-slide 20s infinite linear',
         'indeterminate-progress': 'indeterminate-progress 1.5s infinite linear',
       },

@@ -37,6 +37,7 @@ import CreatepasswordModal from "./misc/components/insurance/modals/remital/Crea
 import { useSearchParams } from "next/navigation";
 import GenerateReferralModal, { ReferralsuccessProp } from "./misc/components/insurance/modals/referral/GenerateReferralModal";
 import ReferralSuccessModal from "./misc/components/insurance/modals/referral/ReferralSuccessModal";
+import DoctorRoundedIcon from "./misc/icons/DoctorRounded";
 
 export default function Home() {
   const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
@@ -83,8 +84,8 @@ export default function Home() {
   return (
     <main className="md:pb-20 w-full bg-main min-h-screen">
       <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
-        <section className="flex flex-col w-full xl:grid grid-cols-[1.5fr_1fr] items-center justify-between sm:max-lg:px-2 md:pt-12 md:pb-6 md:pl-[30px] ">
-          <div className="flex flex-col  gap-4  md:gap-6 px-[6rem] max-md:px-6 max-md:py-10">
+        <section className=" px-6 md:px-[3rem] 2xl:px-[7.5rem] py-[4.375rem] flex-col flex-wrap xl:flex-row flex ">
+          <div className="flex flex-1 flex-col  gap-4  md:gap-6  max-md:py-10">
             <h6
               className={cn(
                 "font-display",
@@ -98,10 +99,10 @@ export default function Home() {
               <span><HandIcon /></span>
               NEM Health
             </h6>
-            <h1
+            <h2
               className={cn(
                 "font-display",
-                "flex flex-col font-semibold md:font-bold text-xl md:text-3xl xl:text-6xl gap-2"
+                "flex flex-col font-semibold text-[2rem] sm:text-[2.5rem] md:text-[3rem] xl:text-[3.375rem] 2xl:text-[3.4rem] 3xl:text-[4.5rem] gap-2"
               )}
             >
               <p className="flex items-center flex-wrap leading-none gap-1">
@@ -111,7 +112,7 @@ export default function Home() {
               <span className=" mt-0 leading-snug">
                 for you and your family.
               </span>
-            </h1>
+            </h2>
             <p className="xl:max-w-[100%] font-sans text-[0.825rem] md:text-xl text-helper">
               <span>
                 Get a comprehensive health cover and stand a chance to benefit from
@@ -123,6 +124,8 @@ export default function Home() {
                 </span>
               </span>
             </p>
+
+              
 
             <div className="flex items-center gap-4 flex-wrap">
 
@@ -157,23 +160,22 @@ export default function Home() {
             </div>
           </div>
 
-          <section className="relative px-5 md:px-0">
-            <div
-              className={cn(
-                "relative flex items-center justify-center w-full p-5 lg:pt-5 lg:max-w-[500px] overflow-hidden "
-              )}
-            >
-              {/* <HospitalImage... /> */}
-              <Image
-                alt=""
-                // className={"w-full p-6 rounded-full"}
-                height={400}
-                width={400}
-                // src="/images/landing-page/libertyLife.png"
-                src="/images/landing-page/doctorPng.png"
-                className=""
-              />
-            </div>
+          <section className="relative hidden xl:block px-5 md:px-0">
+           
+          <div className="relative flex items-center justify-center rounded-full h-[450px] w-[450px] p-2 overflow-hidden">
+      {/* Spinning border */}
+      <div className="absolute inset-0 border-2 border-dashed border-white animate-spin-slow"></div>
+
+      {/* Static image */}
+      <Image
+        alt="Doctor"
+        height={400}
+        width={400}
+        src="/images/landing-page/doctor2.png"
+        className="z-10" // Keep image on top of the spinning border
+      />
+    </div>
+            {/* </DoctorRoundedIcon> */}
           </section>
         </section>
         <section className="xl:px-[120px] xl:my-6">
@@ -230,9 +232,10 @@ export default function Home() {
               {/* bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-4 md:px-8 flex items-start sm:items-center flex-col md:flex-row  gap-4 mb-16 md:mb-0 lg:gap-2 */}
             </div>
 
+<div className="bg-[#10152e] rounded-[1.25rem] p-6">
             <div
               className={cn(
-                "bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-4 md:px-8 grid md:grid-cols-2 gap-4 mb-16 md:mb-0 lg:gap-2"
+                "bg-[#1E2954] rounded-[20px] py-4 md:py-8 px-4 md:px-8 grid md:grid-cols-2 gap-4  md:mb-0 lg:gap-2"
               )}
             >
               <div className="flex flex-col items-center justify-center">
@@ -284,6 +287,9 @@ export default function Home() {
                 </LinkButton>
               </div>
             </div>
+
+</div>
+
           </div>
         </section>
       </section>
