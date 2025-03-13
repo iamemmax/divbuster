@@ -60,7 +60,7 @@ const PasswordFormSchema = z.object({
       confirm_password: z
         .string({ required_error: "Please enter your password." })
         .trim()
-        .min(1, { message: "Password must be at least 1 characters." }),
+        .min(5, { message: "Password must be at least 5 characters." }),
     })
     .refine((data) => data?.password === data?.confirm_password, {
       message: "Passwords don't match",

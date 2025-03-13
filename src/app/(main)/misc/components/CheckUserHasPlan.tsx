@@ -21,7 +21,7 @@ import { Label } from "@radix-ui/react-label";
 import { Input2 } from "@/components/core/Input2";
 import { useErrorModalState } from "@/hooks";
 import { useRouter } from "next/navigation";
-import { useCreateReferralPlanRequest } from "@/app/(main)/misc/components/insurance/api/referral/createReferralPlan";
+// import { useCreateReferralPlanRequest } from "@/app/(main)/misc/components/insurance/api/referral/createReferralPlan";
 import { formatAxiosErrorMessage, validatePhoneNumber } from "@/utils";
 import { useCheckUserActivePlan } from "@/app/(main)/misc/components/insurance/api/plan/checkUserActiveHealthPlan";
 import { AxiosError } from "axios";
@@ -33,11 +33,10 @@ interface Prop {
 
 const contactSchema = z.object({
   phone_number: z
-    .string({ required_error: "Enter your phone number" })
-    .trim()
-    .min(10, {
-      message: "Phone number ssetShowPaymentModalhould be at least 11 digits",
-    }),
+  .string()
+  .min(11, { message: "Phone number should be at least 11 digits" })
+  .regex(/^0\d{10}$/, { message: "Phone number must start with 0 and be 11 digits long" }),
+
 });
 
 export type detailRequestType = z.infer<typeof contactSchema>;
@@ -156,39 +155,50 @@ const onsubmit = (data: detailRequestType) => {
                   </Label>
 
                   <div className={`relative  `}>
-                    <Controller
-                      control={control}
-                      name={`phone_number`}
-                      render={({ field }) => (
-                        <Input2
-                          {...field}
-                          className={`p-2 w-full h-[3rem] px-3 text-sm focus:outline-none rounded-[.625rem] outline-none text-white border-[.0187rem] ${errors?.phone_number ? "border border-red-700" : "border-[#C4C4C4]"}`}
-                          id="account_no"
-                          maxLength={11}
-                          placeholder="Phone number"
-                          type="text"
-                          onChange={(e) => {
-                            const validAcctNumber = validatePhoneNumber(
-                              e.target.value
-                            );
-                            field.onChange(validAcctNumber); // Update only with validated value
-                          }}
-                          onKeyDown={(e) => {
-                            // Prevent non-numeric keys (e.g., e, +, -, .)
-                            if (
-                              !/[0-9]/.test(e.key) &&
-                              e.key !== "Backspace" &&
-                              e.key !== "Delete" &&
-                              e.key !== "ArrowLeft" &&
-                              e.key !== "ArrowRight"
-                            ) {
-                              e.preventDefault();
-                            }
-                          }}
-                          // onChange={(e) => field.onChange(e.target.value)}
-                        />
-                      )}
-                    />
+                   <Controller
+                                         control={control}
+                                         name={`phone_number`}
+                                         render={({ field }) => (
+                                           <input
+                                             {...field}
+                                             {...field}
+                                       className={`${
+                                         errors?.phone_number ? "border border-red-700" : ""
+                                       } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                                             id="account_no"
+                                             maxLength={11}
+                                             placeholder="Phone number"
+                                             type="text"
+                                             onChange={(e) => {
+                                               const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                               // Handle input sanitization on change (typing)
+                                               const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                               field.onChange(validPhoneNumber);
+                                             }}
+                                             onPaste={(e) => {
+                                               const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                               // Intercept paste event to sanitize pasted content
+                                               const pastedValue = e.clipboardData.getData('text');
+                                               const sanitizedValue = pastedValue.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+                                               e.preventDefault(); // Prevent the default paste behavior
+                                               field.onChange(sanitizedValue); // Apply sanitized value
+                                             }}
+                                             
+                                             onInput={(e) => {
+                                               const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                               // Handle input sanitization on input changes
+                                               const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                               field.onChange(validPhoneNumber);
+                                             }}
+                                             // onChange={(e) => field.onChange(e.target.value)}
+                                           />
+                                         )}
+                                       />
+                     {errors?.phone_number && (
+                <p className="text-red-700 text-xs mt-1">
+                  {errors.phone_number.message}
+                </p>
+              )}
 
                     {/* {isLoading && (
                       <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">

@@ -102,37 +102,38 @@ export default function RootLayout({
               </Suspense>
             </ProtectedRouteGuard>
           </AuthProvider>
-          <div className="fixed left-0 md:right-6 flex md:justify-end md:items-end flex-col xl:right-0 bottom-4 md:bottom-20 !z-[9999999999999999999999999999999999999999999999999999999999999]">
+          <div className="fixed left-1 right-2 flex md:justify-end items-end flex-col xl:right-0 bottom-[2.3rem] md:bottom-20">
   {/* <!-- Whatsapp Button with Bounce Animation --> */}
   <a
     href={url}
     target="_blank"
     rel="noopener noreferrer"
-    className="whatsapp-button !z-[9999999999999999999999999999999] text-white font-bold py-2 px-4 rounded transition duration-300"
+    className="whatsapp-button !z-[9999999999999999999999999999999] text-white font-bold rounded transition duration-300"
   >
     <Button className="bg-transparent animate-bounce">
       <Image
-        src={"/images/whatsappIcon.png"}
-        width={55}
-        height={55}
+        src="/images/whatsappIcon.png"
+        width={30} // Default size for smaller screens
+        height={30} // Default size for smaller screens
         alt="whatsapp chat icon"
+        className="md:w-[3.25rem] md:h-[3.25rem]" // Increase size on medium screens and larger
       />
     </Button>
   </a>
 
-    <Button className="bg-[#983133] flex justify-start gap-x-1 items-center text-[#fedf3e] text-base font-medium rounded-[62.4717px] h-[3.4375rem] px-5 font-display animate-pulse"
-    onClick={()=>setShowCheckPlanModal(true)}
-    >
-      <Image
-         src={"/images/nem.svg"}
-        width={30}
-        height={30}
-        alt="logo"
-      />
-      {/* <NemLogoIcon height={35} width={35}/> */}
-      Consult a Doctor
-    </Button>
-  {/* </a> */}
+  <Button
+    className="bg-[#983133] flex justify-start gap-x-1 items-center text-[#fedf3e] text-xs md:text-base font-medium rounded-[62.4717px] h-[2rem] md:h-[3.4375rem] px-5 font-display animate-pulse"
+    onClick={() => setShowCheckPlanModal(true)}
+  >
+    <Image
+      src="/images/nem.svg"
+      width={20} // Default size for smaller screens
+      height={20} // Default size for smaller screens
+      alt="logo"
+      className="md:w-[43px] md:h-[43px]" // Increase size on medium screens and larger
+    />
+    Consult a Doctor
+  </Button>
 </div>
 
       {
