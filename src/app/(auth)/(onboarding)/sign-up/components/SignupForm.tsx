@@ -133,7 +133,6 @@ const SignupForm = () => {
           );
       };
 
-      console.log(errors);
       
   return (
     <div className='relative'>
@@ -151,13 +150,13 @@ const SignupForm = () => {
             
 
   <div className="mb-3">
-              <Label className="text-white text-sm mb-2" htmlFor="full_name">
+              <Label className="text-white text-xs md:text-sm mb-2" htmlFor="full_name">
                 Full Name
               </Label>
               <input
                 className={`${
                   errors?.full_name ? "border border-red-700" : ""
-                } text-[#fff] text-xs outline-none h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
                 placeholder="Full Name"
                 type="text"
                 id="full_name"
@@ -171,7 +170,7 @@ const SignupForm = () => {
             </div>
 
             <div className="mb-3">
-              <Label className="text-white text-sm mb-2" htmlFor="phone_number">
+              <Label className="text-white text-xs md:text-sm mb-2" htmlFor="phone_number">
                 Phone Number
               </Label>
               <Controller
@@ -182,7 +181,7 @@ const SignupForm = () => {
                     {...field}
                     className={`${
                       errors?.phone_number ? "border border-red-700" : ""
-                    } text-[#fff] text-xs outline-none h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                    } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
                     id="phone_no"
                     maxLength={11}
                     placeholder="Enter Phone number"
@@ -213,13 +212,13 @@ const SignupForm = () => {
             </div>
 
             <div className="mb-3">
-              <Label className="text-white text-sm mb-2" htmlFor="email">
+              <Label className="text-white text-xs md:text-sm mb-2" htmlFor="email">
                 Email Address
               </Label>
               <input
                 className={`${
                   errors?.email ? "border border-red-700" : ""
-                } text-[#fff] text-xs outline-none h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
                 placeholder="Email Address"
                 type="email"
                 id="email"
@@ -244,7 +243,7 @@ const SignupForm = () => {
                               errors?.dob
                                 ? "border border-red-700"
                                 : ""
-                            } text-[#fff] text-xs outline-none rounded-lg px-6 w-full h-[2.875rem] bg-[#2a3150]`}
+                            } text-[#fff] text-xs outline-none rounded-lg px-6 w-full h-[2.4rem] md:h-[2.875rem] bg-[#2a3150]`}
                             placeholder="Enter Date of Birth"
                             type="date"
                             id={`dob`}
@@ -253,10 +252,10 @@ const SignupForm = () => {
                         </div>
                       </div>
 
-            <div className="grid grid-cols-1items-center w-full gap-[1.3125rem] mt-7">
+            <div className="grid grid-cols-1items-center w-full gap-[1.3125rem] mt-3 md:mt-7">
               
               <Button
-                className="bg-white block text-primary py-4  rounded-[1.25rem] mt-4"
+                className="bg-white block text-primary py-3 md:py-4  rounded-[1.25rem] mt-4"
                 type="button"
                 onClick={handleNextStep}
               >
@@ -266,18 +265,15 @@ const SignupForm = () => {
               
               <LinkButton
                         href={"/login"}
-                        className=" block w-full rounded-[20px] bg-[#080D27]  border-[0.5px] border-white border-opacity-40 text-[#fff] font-sans py-[.9375rem] text-base leading-[normal]"
+                        className=" block w-full rounded-[20px] bg-[#080D27]  border-[0.5px] border-white border-opacity-40 text-[#fff] font-sans py-3 md:py-[.9375rem] text-sm md:text-base leading-[normal]"
                         type="submit"
                         variant="white"
                       >
-                      <p className="text-xs text-[#f4f4f4] text-opacity-60">  Already have an account ? <span className="text-white text-sm text-opacity-100"> Login</span></p>
+                      <p className="text-xs text-[#f4f4f4] text-opacity-60">  Already have an account ? <span className="text-white text-xs md:text-sm text-opacity-100"> Login</span></p>
                       </LinkButton>
             </div>
           </motion.div>
         )}
-
-
-
 
 
 
@@ -291,7 +287,7 @@ const SignupForm = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="mb-4">
-              <Label className="text-white text-sm mb-2" htmlFor="bvn">
+              <Label className="text-white text-xs md:text-sm mb-2" htmlFor="bvn">
                 BVN{" "}
                 <span className="text-xxs">
                   (This is a requirement from the CBN to create an account for
@@ -306,7 +302,7 @@ const SignupForm = () => {
                     {...field}
                     className={`${
                       errors?.bvn ? "border border-red-700" : ""
-                    } text-[#fff] text-xs outline-none login-no-chrome-autofill-bg h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                    } text-[#fff] text-xs outline-none login-no-chrome-autofill-bg h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
                     id="bvn"
                     maxLength={11}
                     placeholder="Enter BVN number"
@@ -339,7 +335,7 @@ const SignupForm = () => {
             <div className="mt-4">
               <div>
                 <Label
-                  className="text-white font-sans text-sm mb-2"
+                  className="text-white font-sans text-xs md:text-sm mb-2"
                   htmlFor="password"
                 >
                   Password
@@ -382,7 +378,7 @@ const SignupForm = () => {
 
             <div className="mt-4">
               <Label
-                className="text-white font-sans text-sm mb-2"
+                className="text-white font-sans text-xs md:text-sm mb-2"
                 htmlFor="confirm_password"
               >
                 Confirm Password

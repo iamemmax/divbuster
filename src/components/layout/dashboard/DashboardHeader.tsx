@@ -91,56 +91,10 @@ export function DashboardHeader() {
               </ul>
             </nav>
           </div>
-          <div className="hidden lg:flex">
-            <div className="flex gap-4">
-              <Link href="/">
-                <Button className="rounded-full w-9 h-9 flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
-                  <HomeIcon height={15} width={16} />
-                </Button>
-              </Link>
-              <Button className="rounded-full w-9 h-9 flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
-                <Notifications height={20} width={20} />
-              </Button>
-              {!isLoading && (
-                <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-1">
-                  {/* {`${userData?.first_name?.slice(0, 1) ?? ""}${userData?.last_name?.slice(0, 1) ?? ""}`} */}
+         
 
-                  <img
-                    src="/images/userIcon.png"
-                    style={{ width: "100%", height: "100%" }}
-                    alt="user"
-                  />
-                </Button>
-              )}
-              {/* <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-transparent p-2">
-                <CaretDown />
-              </Button> */}
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-transparent p-2">
-                    <CaretDown />
-                  </Button>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent className="bg-white z-[999] rounded-md shadow-md p-2">
-                  <DropdownMenuItem
-                    className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => router.push("/dashboard/my-profile")}
-                  >
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
-                  <DropdownMenuItem
-                    onClick={handleLogoutClick}
-                    className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
-                  >
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
+<div className="flex items-center gap-x-3 flex-wrap">
+<div className="flex items-center gap-x-3 lg:hidden">
 
           <DrawerMenu
             trigger={
@@ -150,21 +104,22 @@ export function DashboardHeader() {
                   "font-display"
                 )}
               >
-                Menu
+                Menu 
               </Button>
             }
             contentClass="bg-main border-main"
           >
+            
             <div className="text-white p-5 pb-0 gap-5">
               <header className="flex items-center justify-between">
                 <h6 className="font-semibold text-lg">Menu Content</h6>
                 <DrawerClose
                   className={cn(
-                    "bg-white/10 h-8 w-8 rounded-full text-white/50 rotate-12 text-lg hover:text-white",
+                    "bg-white/10 h-8 w-8 flex justify-center items-center  rounded-full text-white/50 rotate-12 text-lg hover:text-white",
                     "font-display"
                   )}
                 >
-                  <CloseIcon />
+                  <CloseIcon color="#fff"/>
                 </DrawerClose>
               </header>
 
@@ -194,6 +149,58 @@ export function DashboardHeader() {
               </ul>
             </div>
           </DrawerMenu>
+</div>
+
+          
+          <div className="flex">
+            <div className="flex gap-4">
+              <Link href="/">
+                <Button className="rounded-full w-9 h-9 hidden lg:flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
+                  <HomeIcon height={15} width={16} />
+                </Button>
+              </Link>
+              <Button className="rounded-full w-9 h-9 hidden lg:flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
+                <Notifications height={20} width={20} />
+              </Button>
+              {!isLoading && (
+                <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-1">
+                  {/* {`${userData?.first_name?.slice(0, 1) ?? ""}${userData?.last_name?.slice(0, 1) ?? ""}`} */}
+
+                  <img
+                    src="/images/userIcon.png"
+                    style={{ width: "100%", height: "100%" }}
+                    alt="user"
+                  />
+                </Button>
+              )}
+             
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="rounded-full -ml-3 w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-transparent p-2">
+                    <CaretDown />
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent className="bg-white z-[999] mt-2 rounded-md shadow-md p-2">
+                  <DropdownMenuItem
+                    className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => router.push("/dashboard/my-profile")}
+                  >
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
+                  <DropdownMenuItem
+                    onClick={handleLogoutClick}
+                    className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
+                  >
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+</div>
         </div>
       </header>
     </>

@@ -18,9 +18,10 @@ import { useRouter } from "next/navigation";
 
 const contactSchema = z.object({
   phone_number: z
-    .string({ required_error: "Enter your phone number" })
-    .trim()
-    .min(10, { message: "Phone number should be at least 11 digits" }).max(11, { message: "Phone number should be at most 11 digits" }),
+  .string()
+  .min(11, { message: "Phone number should be at least 11 digits" })
+  .regex(/^0\d{10}$/, { message: "Phone number must start with 0 and be 11 digits long" }),
+
 });
 export type userStatusType = z.infer<typeof contactSchema>;
 
@@ -123,9 +124,12 @@ if(data?.user_found === false){
                       control={control}
                       name={`phone_number`}
                       render={({ field }) => (
-                        <Input2
+                        <input
                           {...field}
-                          className="login-autofill-text mt-2 login-no-chrome-autofill-bg h-auto rounded-lg  !bg-white/10 px-6 py-3.5 outline-none text-sm font-sans font-medium text-white  focus-visible:outline-none placeholder:text-white focus:!bg-white/30 "
+                          {...field}
+                    className={`${
+                      errors?.phone_number ? "border border-red-700" : ""
+                    } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
                           id="account_no"
                           maxLength={11}
                           placeholder="Phone number"
@@ -155,6 +159,11 @@ if(data?.user_found === false){
                         />
                       )}
                     />
+                     {errors?.phone_number && (
+                <p className="text-red-700 text-xs mt-1">
+                  {errors.phone_number.message}
+                </p>
+              )}
                   {!userPasswordNotSet ? (
                     <div className="">
                       <Button
