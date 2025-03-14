@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaSquareXTwitter, FaLinkedin, FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
+import { FaSquareXTwitter, FaLinkedin, FaFacebookF, FaInstagram, FaTiktok, FaWhatsapp } from "react-icons/fa6";
 import { AboutIcon } from '@/components/icons';
 import Link from 'next/link';
 
@@ -47,34 +47,39 @@ export default function page() {
                                 <p className='font-medium'>27 Alara street, off commercial avenue, Sabo Yaba, Lagos.</p>
                                 <p className='text-[#CAC9D4]'>9:00am - 5pm (Mon-Fri)</p>
                             </div>
-                            <div className='bg-[#FFFFFF0D] py-4 pl-4 md:pl-8 rounded-lg mt-3'>
+                            <div className='bg-[#FFFFFF0D] py-4 pl-4 md:pl-8 rounded-lg mt-3 !z-[9999999999999999]'>
                                 <p className='text-[#CAC9D4] pb-1'>Follow us on social media</p>
-                                <ul className='flex text-white gap-2 md:gap-5'>
-                                    <Link href='https://x.com/libertylifeplus?s=21&t=-L8aIrO3luRw_JZ0xg78FA'>
-                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
+                                <ul className='flex text-white gap-2 '>
+                                <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg z-[999999999999] text-xs md:text-xl'>
+                                    <Link href='https://x.com/libertylifeplus?s=21&t=hiO-PpveLL2MH-_-IPymTg' target='_blank' title='Twitter'>
                                             <FaSquareXTwitter />
-                                        </li>
                                     </Link>
-                                    <Link href='https://www.linkedin.com/showcase/liberty-life/'>
-                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
+                                        </li>
+                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg z-[999999999999] text-xs md:text-xl'>
+                                    <Link href='https://www.linkedin.com/showcase/liberty-life/' target='_blank' title='Linkedin'>
                                             <FaLinkedin />
-                                        </li>
                                     </Link>
-                                    <Link href='https://www.tiktok.com/@libertylifehmo?_t=8orvfqOrIhx&_r=1'>
-                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
+                                        </li>
+                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] z-[999999999999]  rounded-lg text-xs md:text-xl'>
+                                    <Link href='https://www.tiktok.com/@libertylife_ng?_t=ZM-8ue6rP2eqcp&_r=1' target='_blank' title='Tiktok'>
                                             <FaTiktok />
-                                        </li>
                                     </Link>
-                                    <Link href='https://www.facebook.com/profile.php?id=61562985866097https://www.instagram.com/libertylifehmo/ '>
-                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
-                                            <FaFacebookF />
                                         </li>
+                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] z-[999999999999]  rounded-lg text-xs md:text-xl'>
+                                    <Link href='https://bit.ly/CHATLIBERTYLIFE' target='_blank' title='Whatsapp'>
+                                            <FaWhatsapp />
                                     </Link>
-                                    <Link href='https://www.instagram.com/libertylifehmo?igsh=MWs3ZDIya3JubXd6cA%3D%3D&utm_source=qr'>
-                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
+                                        </li>
+                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] z-[999999999999]   rounded-lg text-xs md:text-xl'>
+                                    <Link href='https://www.facebook.com/share/1BKi1NFXdj/' target='_blank' title='Facebook'>
+                                            <FaFacebookF /> 
+                                    </Link>
+                                        </li>
+                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg z-[999999999999] text-xs md:text-xl'>
+                                    <Link href='https://www.instagram.com/libertylifeng?igsh=MTN5anBuanRmYnNneQ%3D%3D&utm_source=qr' target='_blank' title='Instagram'>
                                             <FaInstagram />
-                                        </li>
                                     </Link>
+                                        </li>
                                 </ul>
                             </div>
                         </div>
