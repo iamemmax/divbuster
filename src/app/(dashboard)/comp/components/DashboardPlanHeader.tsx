@@ -99,7 +99,7 @@ const DashboardPlanHeader = () => {
           ...base,
           border: 0,
           background: "#F5F9FE",
-          height: "2.875rem",
+          height: "2rem",
           boxShadow: "none",
           color: "#fff",
           
