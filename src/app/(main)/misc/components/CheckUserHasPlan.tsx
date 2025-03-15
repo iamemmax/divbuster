@@ -47,7 +47,7 @@ const CheckUserHasPlan = ({
 }: Prop) => {
   const {
     control,
-    register,
+ 
     handleSubmit,
     formState: { errors },
   } = useForm<detailRequestType>({
