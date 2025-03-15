@@ -56,10 +56,12 @@ interface Prop {
 }
 
 const contactSchema = z.object({
-  phone_number: z
-    .string({ required_error: "Enter your phone number" })
-    .trim()
-    .min(10, { message: "Phone number should be at least 11 digits" }),
+    phone_number: z
+  .string()
+  .min(11, { message: "Phone number should be at least 11 digits" })
+  .regex(/^0\d{10}$/, { message: "Phone number must start with 0 and be 11 digits long" }),
+
+
 
   referral_code: z.string({ required_error: "Enter your phone number" }).trim(),
 });
@@ -276,7 +278,7 @@ const CheckPhoneNumber = ({
                                           errors?.phone_number ? "border border-red-700" : ""
                                         } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
                                               id="phone_number"
-                                              placeholder="Enter nin"
+                                              placeholder="Enter Phone number"
                                               type="text"
                                               maxLength={11}
                                               onChange={(e) => {
@@ -294,7 +296,7 @@ const CheckPhoneNumber = ({
                                                 e.preventDefault(); // Prevent the default paste behavior
                                                 field.onChange(sanitizedValue); // Apply sanitized value
                                               }}
-                                              
+
                                               onInput={(e) => {
                                                 const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
                                                 // Handle input sanitization on input changes
@@ -305,6 +307,11 @@ const CheckPhoneNumber = ({
                                             />
                                           )}
                                         />
+                                        {errors?.phone_number && (
+                <p className="text-red-700 text-xs mt-1">
+                  {errors.phone_number.message}
+                </p>
+              )}  
 
                     {isLoading && (
                       <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
