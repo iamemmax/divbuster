@@ -13,7 +13,7 @@ import {
 } from "@/components/core";
 import { RightUpArrow, SmallSpinner } from "@/icons/core";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { Input2 } from "@/components/core/Input2";
@@ -112,6 +112,7 @@ const CheckPhoneNumber = ({
   const myReferral = search?.get("referral_code");
   const aprokoReferral = tokenStorage.getReferral()
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -264,13 +265,46 @@ const CheckPhoneNumber = ({
                   </Label>
 
                   <div className={`relative mt-[.25rem] `}>
-                    <Input2
-                      className={`${errors?.phone_number?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
-                      placeholder="Enter your phone number"
-                      type="number"
-                      id="phone"
-                      {...register("phone_number")}
-                    />
+                  <Controller
+                                          control={control}
+                                          name={`phone_number`}
+                                          render={({ field }) => (
+                                            <input
+                                              {...field}
+                                              {...field}
+                                        className={`${
+                                          errors?.phone_number ? "border border-red-700" : ""
+                                        } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                                              id="phone_number"
+                                              placeholder="Enter nin"
+                                              type="text"
+                                              maxLength={11}
+                                              onChange={(e) => {
+                                                const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                                // Handle input sanitization on change (typing)
+                                                const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                                field.onChange(validPhoneNumber);
+                                              }}
+                                              onPaste={(e) => {
+                                                e.target as HTMLInputElement;
+                                                // Intercept paste event to sanitize pasted content
+                                                const pastedValue = e.clipboardData.getData('text');
+                                                // Remove non-numeric characters and limit to 11 digits
+                                                const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
+                                                e.preventDefault(); // Prevent the default paste behavior
+                                                field.onChange(sanitizedValue); // Apply sanitized value
+                                              }}
+                                              
+                                              onInput={(e) => {
+                                                const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                                // Handle input sanitization on input changes
+                                                const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                                field.onChange(validPhoneNumber);
+                                              }}
+                                              // onChange={(e) => field.onChange(e.target.value)}
+                                            />
+                                          )}
+                                        />
 
                     {isLoading && (
                       <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">

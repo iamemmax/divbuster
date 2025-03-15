@@ -124,7 +124,7 @@ export default function page() {
                         <p className='text-[10px] md:text-[0.9rem] lg:text-[19px] text-[#CAC9D4] font-normal pt-3'>With simple USSD codes, online platforms, and in-person support, enrolling in our health insurance plans is quick and hassle-free.</p>
                     </span>
                 </div>
-                <div className='pt-[72px]'>
+                <div className='py-[72px]'>
                     <div className='md:flex flex-row bg-[#FFFFFF0D] gap-36 pt-4 pb-6 sm:py-3 items-center justify-center pr-16 pl-6 rounded-lg'>
                         <p className='text-xs md:text-[14px] lg:text[16px] text-[#FFFFFFCC] md:pb-0 pb-4'>
                             Welcome to Liberty life, where your health and wealth is paramount to us. Enjoy health and wealth!

@@ -57,8 +57,8 @@ const formValues = z.object({
         .trim()
         .min(1, { message: "Please select a hospital." }),
     selectedOption: z.union([z.literal("nin"), z.literal("bvn")]),
-    bvn: z.string().trim(),
-    nin: z.string().trim(),
+    bvn: z.string().trim().optional(),
+    nin: z.string().trim().optional(),
 
 });
 
@@ -201,9 +201,6 @@ export default function Page() {
         label: state,
     }));
 
-    console.log("lga", stateOptions);
-
-    console.log("lga", lgaOption);
 
     const style = {
         control: (base: any) => ({
@@ -256,7 +253,7 @@ export default function Page() {
                 },
             }
         )
-        console.log(data, "datae")
+        
     };
 
 
@@ -338,8 +335,8 @@ export default function Page() {
                     :
                     (
                         <div className='bg-[#F5F9FE]'>
-                            <div className='bg-main min-h-36'></div>
-                            <section className="h-full w-full px-6 md:px-[7.5rem] min-h-screen pb-[1.88rem] relative -mt-32">
+                            
+                            <section className="h-full w-full px-6 md:px-[7.5rem] pb-12 xl:pb-8 relative -mt-32">
                                 <div className='bg-white w-full h-full lg:h-screen mx-auto pt-[2.625rem] px-6 lg:px-[4.5rem] rounded-[.625rem]'>
                                     <p className='text-[#032282] font-sans font-bold text-2xl'>Personal Information</p>
                                     <section className='mt-8 flex flex-col lg:flex-row justify-between'>
@@ -392,8 +389,8 @@ export default function Page() {
                                                     className="flex items-center justify-center flex-col gap-x-2 border-[0.3px] border-[#032282] bg-white px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
                                                     onClick={() =>
                                                         copy(
-                                                            ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}` ??
-                                                            ""
+                                                            ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}`
+                                                            
                                                         )
                                                     }
                                                 >
@@ -628,7 +625,7 @@ export default function Page() {
                                                                     placeholder="Enter BVN"
                                                                     type="text"
                                                                     id="bvn"
-                                                                    required
+                                                                    
                                                                     {...register("bvn")}
 
                                                                 />
@@ -649,7 +646,7 @@ export default function Page() {
                                                                     placeholder="Enter NIN"
                                                                     type="text"
                                                                     id="nin"
-                                                                    required
+                                                                    
                                                                     {...register("nin")}
                                                                     disabled
                                                                 />
@@ -659,7 +656,12 @@ export default function Page() {
                                                 </div>
                                                 <div className='border-b-[0.3px] mt-4'></div>
                                                 <div className='mt-6'>
-                                                    <Button className='bg-[#099976] py-3 px-7 text-xs text-nowrap rounded-10 border-[0.3px] border-[#032282]'>Save Changes</Button>
+                                                    <Button 
+                                                    type='submit'
+                                                    className='bg-[#099976] py-3 px-7 text-xs text-nowrap rounded-10 border-[0.3px] border-[#032282]'
+                                                    >
+                                                        
+                                                        Save Changes {isHandleUpdateProfile && <SmallSpinner color='blue'/>  } </Button>
                                                 </div>
                                             </form>
                                         </div>
@@ -676,7 +678,7 @@ export default function Page() {
                                     errorMsg ||
                                     "Please check your inputs and try again."
                                 }
-                            ></ErrorModal>
+                            ></ErrorModal> 
                         </div>
                     )}
         </>

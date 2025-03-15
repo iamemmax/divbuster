@@ -97,7 +97,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
 
   return (
     <div className="">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 2xl:grid-cols-[1.1fr_1fr_1fr_1fr_1.4fr]">
+      <div className="grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 max-xxscren:gap-2  gap-3 xl:grid-cols-[1.1fr_1fr_1fr_1fr_1.6fr]   3xl:grid-cols-[1.2fr_1fr_1fr_1fr_1.3fr]">
         <CurrentPlanCard loadinUser={loadinUser} userData={users} />
 
         <div className="bg-white rounded-10 p-1">
@@ -106,7 +106,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
               <Spinner className="w-4  h-4 " color="#DB8C00" />
             </div>
           ) : (
-            <div className="bg-[#F0F5FF] h-full flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
+            <div className="bg-[#F0F5FF] h-full flex flex-col shadow-sm rounded-10 px-3 2xl:px-6 py-[.875rem] ">
               <div className="flex-1 py-1">
                 <div className="flex items-center gap-x-1">
                   <FamilyUserIcon />
@@ -143,7 +143,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                   } */}
               </div>
               {/* {!makePayment && ( */}
-              <div className="justify-self-end flex items-center gap-4">
+              <div className="justify-self-end flex items-center gap-3 md:gap-4">
                 {checkFamilyPaymentStatus ? (
                   <Button
                     variant={"outlined"}
@@ -171,10 +171,10 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
                 )}
                 <LinkButton
                   href={"/dashboard/family-beneficiaries"}
-                  className="bg-white rounded-md py-[.4375rem]  px-[.8125rem] text-[#032282] text-[.625rem]"
+                  className="bg-white rounded-md py-[.4375rem]  max-xxscren:px-3  px-4 text-[#032282] text-[.625rem]"
                   // onClick={() => setBuyPlan(true)}
                 >
-                  View benefactors
+                  View 
                 </LinkButton>
               </div>
               {/* )} */}

@@ -111,17 +111,19 @@ export function MainHeader() {
               </span>
             </a>
           ) : (
-            <a
+            <LinkButton
               className={cn(
-                "hidden lg:flex items-center justify-between md:max-lg:text-sm lg:text-base text-white text-left p-0 bg-transparent rounded-full max-w-max",
+                "hidden lg:flex items-center border  justify-between md:max-lg:text-sm  text-primary text-left  bg-white rounded-full max-w-max",
                 "font-display"
               )}
+
               href="/dashboard"
+              // variant={"outlined"}
               // target="_blank"
               // variant="white"
             >
               Dashboard
-            </a>
+            </LinkButton>
           )}
 
           <ClientOnly>

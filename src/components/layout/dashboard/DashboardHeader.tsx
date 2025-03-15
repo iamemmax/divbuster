@@ -93,7 +93,7 @@ export function DashboardHeader() {
           </div>
          
 
-<div className="flex items-center gap-x-3 flex-wrap">
+<div className="flex  items-center gap-x-3 ">
 <div className="flex items-center gap-x-3 lg:hidden">
 
           <DrawerMenu
@@ -152,8 +152,8 @@ export function DashboardHeader() {
 </div>
 
           
-          <div className="flex">
-            <div className="flex gap-4">
+          <div className="flex ">
+            <div className="flex w-full gap-4">
               <Link href="/">
                 <Button className="rounded-full w-9 h-9 hidden lg:flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
                   <HomeIcon height={15} width={16} />

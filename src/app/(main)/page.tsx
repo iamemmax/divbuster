@@ -32,12 +32,14 @@ import RemitalUserDetails from "./misc/components/insurance/modals/remital/Remit
 import RemitalPlanModal from "./misc/components/insurance/modals/remital/RemitalPlanModal";
 import RemitalModalDetails from "./misc/components/insurance/modals/remital/RemitalModalDetails";
 import CreatepasswordModal from "./misc/components/insurance/modals/remital/CreatePassWordModal";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import GenerateReferralModal, { ReferralsuccessProp } from "./misc/components/insurance/modals/referral/GenerateReferralModal";
 import ReferralSuccessModal from "./misc/components/insurance/modals/referral/ReferralSuccessModal";
 import DoctorRoundedIcon from "./misc/icons/DoctorRounded";
 import HealthIcon from "./misc/icons/HealthIcon";
 import UserIcon from "./misc/icons/UserIcon";
+import { useAuth } from "@/contexts/authentication";
+import Loading from "../loading";
 
 export default function Home() {
   const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
@@ -105,7 +107,24 @@ export default function Home() {
       button_name:"Learn more",
     },
   ]
+   const { authState } = useAuth();
+    const { isAuthenticated } = authState;
+    // const [isPageLoading, setIsPageLoading] = useState(true);  // State to manage page loading
+  
+    // // Use useEffect to remove page loading animation after 7 seconds
+    // useEffect(() => {
+    //   const timer = setTimeout(() => {
+    //     setIsPageLoading(false);
+    //   }, 3000); // 7 seconds
+  
+    //   // Cleanup the timeout if the component is unmounted
+    //   return () => clearTimeout(timer);
+    // }, []);
 
+    // if(isPageLoading){
+    //   <Loading/>
+    //   return
+    // }
 
   return (
     <main className=" w-full bg-main ">
@@ -133,7 +152,7 @@ export default function Home() {
             >
               <p className="flex items-center flex-wrap leading-none gap-1">
                 Standard Health
-                <p className="text-[#AFD85B]">Insurance</p>
+                <p className="text-[#AFD85B] pl-1"> Insurance</p>
               </p>
               <span className=" mt-0 leading-snug">
                 for you and your family.
@@ -162,7 +181,9 @@ export default function Home() {
                 )}
                 id="get-insurance-button"
                 variant="white"
-                onClick={() => setOpenCheckPhoneNumberModal(true)}
+                onClick={() =>{
+                  isAuthenticated?window.location.href="/plan":
+                  setOpenCheckPhoneNumberModal(true)}}
               >
                 Get insurance
                 <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">

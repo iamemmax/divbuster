@@ -176,13 +176,14 @@ const onsubmit = (data: detailRequestType) => {
                                                field.onChange(validPhoneNumber);
                                              }}
                                              onPaste={(e) => {
-                                               const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
-                                               // Intercept paste event to sanitize pasted content
-                                               const pastedValue = e.clipboardData.getData('text');
-                                               const sanitizedValue = pastedValue.replace(/[^0-9]/g, ''); // Remove non-numeric characters
-                                               e.preventDefault(); // Prevent the default paste behavior
-                                               field.onChange(sanitizedValue); // Apply sanitized value
-                                             }}
+                                              e.target as HTMLInputElement;
+                                              // Intercept paste event to sanitize pasted content
+                                              const pastedValue = e.clipboardData.getData('text');
+                                              // Remove non-numeric characters and limit to 11 digits
+                                              const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
+                                              e.preventDefault(); // Prevent the default paste behavior
+                                              field.onChange(sanitizedValue); // Apply sanitized value
+                                            }}
                                              
                                              onInput={(e) => {
                                                const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement

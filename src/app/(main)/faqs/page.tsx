@@ -167,7 +167,7 @@ const [verifyResponse, setVerifyResponse] = useState({
           <p className='text-xs md:text-[14px] lg:text[16px] text-[#FFFFFFCC] md:pb-0 pb-4'>
             Can&apos;t find answers you are looking for?, Please kindly get in touch with our support team.
           </p>
-          <button className='flex justify-between  items-center z-[9999999] bg-white text-blue-950 bg rounded-full text-xs py-1 pl-5 pr-2 gap-[18px]' 
+          <button className='flex justify-between  items-center  bg-white text-blue-950 bg rounded-full text-xs py-1 pl-5 pr-2 gap-[18px]' 
            onClick={() => setOpenCheckPhoneNumberModal(true)}>
             Get insurance
             <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
