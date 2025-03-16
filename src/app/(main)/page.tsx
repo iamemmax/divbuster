@@ -2,74 +2,32 @@
 
 import { cn } from "@/utils/classNames";
 import { RightUpArrow } from "@/icons/core";
-import { Button } from "@/components/core";
+import { Button, LoaderModal } from "@/components/core";
 
 import {
   CheckStar,
   HandIcon,
   LearnMore,
-  Testimonial1,
-  Testimonial2,
-  Testimonial3,
-  Testimonial4,
+  
   UnderLine,
 } from "./misc/icons";
-// import {
-//   CheckStar,
-//   CrossIcon,
-//   GroupIcon,
-//   LearnMore,
-//   UnderLine,
-// } from "./misc/icons";
-import Marquee from "./misc/components/Marquee";
+
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import CheckPhoneNumber from "./misc/components/insurance/modals/CheckPhoneNumber";
-
-import NonRemitalModal from "./misc/components/insurance/modals/non-remital/NonRemitalModal";
-import RemitalUserDetails from "./misc/components/insurance/modals/remital/RemitalUserDetails";
-import RemitalPlanModal from "./misc/components/insurance/modals/remital/RemitalPlanModal";
-import RemitalModalDetails from "./misc/components/insurance/modals/remital/RemitalModalDetails";
-import CreatepasswordModal from "./misc/components/insurance/modals/remital/CreatePassWordModal";
-import { useSearchParams } from "next/navigation";
+import {  useSearchParams } from "next/navigation";
 import GenerateReferralModal, { ReferralsuccessProp } from "./misc/components/insurance/modals/referral/GenerateReferralModal";
 import ReferralSuccessModal from "./misc/components/insurance/modals/referral/ReferralSuccessModal";
-import DoctorRoundedIcon from "./misc/icons/DoctorRounded";
 import HealthIcon from "./misc/icons/HealthIcon";
 import UserIcon from "./misc/icons/UserIcon";
+import GetInsuranceButton from "./misc/components/GetIsuranceButton";
+import Loading from "./loading";
 
 export default function Home() {
-  const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
-    useState(false);
-  const [openRemitalDetailModal, setOpenRemitalDetailModal] = useState(false);
-  const [phoneNumberCheckResponse, setPhoneNumberCheckResponse] = useState({
-    id: "",
-    address: "",
-    full_name: "",
-    ministry: "",
-    state: "",
-  });
-  const [OpenRemitalUserDetail, setOpenRemitalUserDetail] = useState(false);
-  const [userId, setUserId] = useState("");
-  const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [openRemitalPlan, setOpenShowRemitalPlan] = useState(false);
-  const [openNonRemitalDetailModal, setOpenNonRemitalDetailModal] =
-    useState(false);
-
-  const [showGenerateReferralModal, setShowGenerateReferralModal] = useState(false)
+   const [showGenerateReferralModal, setShowGenerateReferralModal] = useState(false)
   const [showGenerateReferralSuccessModal, setShowGenerateReferralSuccessModal] = useState(false)
   const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [verifyResponse, setVerifyResponse] = useState({
-    is_eligible: false,
-    nin: "",
-    bvn: "",
-    address: "",
-    email: "",
-    id: "",
-  });
+ const [loading, setLoading] = useState(true)
 
   const search = useSearchParams();
   const getStarted = search.get("get-started");
@@ -80,6 +38,12 @@ export default function Home() {
   }, [getStarted]);
 
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 4000);
+  }, [])
+  
 
   const cardArray1 =[
     {
@@ -105,7 +69,10 @@ export default function Home() {
       button_name:"Learn more",
     },
   ]
-
+   
+  if(loading){
+    return <Loading/>
+  }
 
   return (
     <main className=" w-full bg-main ">
@@ -133,7 +100,7 @@ export default function Home() {
             >
               <p className="flex items-center flex-wrap leading-none gap-1">
                 Standard Health
-                <p className="text-[#AFD85B]">Insurance</p>
+                <p className="text-[#AFD85B] pl-1"> Insurance</p>
               </p>
               <span className=" mt-0 leading-snug">
                 for you and your family.
@@ -155,20 +122,7 @@ export default function Home() {
 
             <div className="flex items-center gap-4 flex-wrap">
 
-              <Button
-                className={cn(
-                  "flex items-center cursor-pointer justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
-                  "font-display"
-                )}
-                id="get-insurance-button"
-                variant="white"
-                onClick={() => setOpenCheckPhoneNumberModal(true)}
-              >
-                Get insurance
-                <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
-                  <RightUpArrow className="" height={12} width={12} />
-                </span>
-              </Button>
+              <GetInsuranceButton/>
               <Button
                 className={cn(
                   "flex items-center px-4 cursor-pointer justify-between text-[0.865rem] border-opacity-30 border-white border-[0.3px] text-white  bg-transparent text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
@@ -185,12 +139,13 @@ export default function Home() {
               </Button>
             </div>
           </div>
+          
 
           <section className="relative hidden xl:block px-5 md:px-0">
            
           <div className="relative flex items-center justify-center rounded-full h-[450px] w-[450px] p-2 overflow-hidden">
       {/* Spinning border */}
-      <div className="absolute inset-0 border-2 border-dashed border-white animate-spin-slow"></div>
+      <div className="absolute inset-0 bg-[url('/images/landing-page/image-circle.svg')] bg-cover bg-no-repeat  animate-spin-slow"/>
 
       {/* Static image */}
       <Image
@@ -243,76 +198,6 @@ export default function Home() {
 
       <div className="">
 
-        {openCheckPhoneNumberModal && (
-          <CheckPhoneNumber
-            openCheckPhoneNumberModal={openCheckPhoneNumberModal}
-            setPhoneNumberCheckResponse={setPhoneNumberCheckResponse}
-            setOpenCheckPhoneNumberModal={setOpenCheckPhoneNumberModal}
-            setOpenRemitalDetailModal={setOpenRemitalDetailModal}
-            setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
-            setVerifiedPhoneNumber={setVerifiedPhoneNumber}
-            setUserId={setUserId}
-            setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-            setVerifyResponse={setVerifyResponse}
-            setUserEmail={setUserEmail}
-            setShowPasswordModal={setShowPasswordModal}
-          // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
-          />
-        )}
-        {/* remitals ............................................................ remita.................... */}
-        {openRemitalDetailModal && (
-          <RemitalModalDetails
-            setOpenRemitalDetailModal={setOpenRemitalDetailModal}
-            openRemitalDetailModal={openRemitalDetailModal}
-            phoneNumberCheckResponse={phoneNumberCheckResponse}
-            verifiedPhoneNumber={verifiedPhoneNumber}
-            setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-            setUserEmail={setUserEmail}
-          />
-        )}
-        {OpenRemitalUserDetail && (
-          <RemitalUserDetails
-            setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-            OpenRemitalUserDetail={OpenRemitalUserDetail}
-            userId={userId}
-            setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-            verifyResponse={verifyResponse}
-            userEmail={userEmail}
-            setShowPasswordModal={setShowPasswordModal}
-          />
-        )}
-
-        {showPasswordModal && (
-          <CreatepasswordModal
-            userEmail={userEmail}
-            setShowPasswordModal={setShowPasswordModal}
-            showPasswordModal={showPasswordModal}
-            setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-            verifiedPhoneNumber={verifiedPhoneNumber}
-          />
-        )}
-        {openRemitalPlan && (
-          <RemitalPlanModal
-            openRemitalPlan={openRemitalPlan}
-            setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-            userId={userId}
-            verifyResponse={verifyResponse}
-            verifiedPhoneNumber={verifiedPhoneNumber}
-          />
-        )}
-        {openNonRemitalDetailModal && (
-          <NonRemitalModal
-            verifiedPhoneNumber={verifiedPhoneNumber}
-            setPhoneNumberCheckResponse={setPhoneNumberCheckResponse}
-            openNonRemitalDetailModal={openNonRemitalDetailModal}
-            setOpenRemitalDetailModal={setOpenRemitalDetailModal}
-            setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
-            setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-            userId={userId}
-            verifyResponse={verifyResponse}
-            setUserEmail={setUserEmail}
-          />
-        )}
         {
           showGenerateReferralModal &&
           <GenerateReferralModal

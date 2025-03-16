@@ -12,6 +12,7 @@ import NonRemitalModal from '../misc/components/insurance/modals/non-remital/Non
 import RemitalModalDetails from '../misc/components/insurance/modals/remital/RemitalModalDetails'
 import RemitalPlanModal from '../misc/components/insurance/modals/remital/RemitalPlanModal'
 import RemitalUserDetails from '../misc/components/insurance/modals/remital/RemitalUserDetails'
+import GetInsuranceButton from '../misc/components/GetIsuranceButton'
 
 
 
@@ -53,35 +54,6 @@ export default function page() {
   ]
 
 
-
-
-  const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
-  useState(false);
-const [openRemitalDetailModal, setOpenRemitalDetailModal] = useState(false);
-const [phoneNumberCheckResponse, setPhoneNumberCheckResponse] = useState({
-  id: "",
-  address: "",
-  full_name: "",
-  ministry: "",
-  state: "",
-});
-const [OpenRemitalUserDetail, setOpenRemitalUserDetail] = useState(false);
-const [userId, setUserId] = useState("");
-const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
-const [userEmail, setUserEmail] = useState("");
-const [openRemitalPlan, setOpenShowRemitalPlan] = useState(false);
-const [openNonRemitalDetailModal, setOpenNonRemitalDetailModal] =
-  useState(false);
-const [showAprokoPlanModal, setshowAprokoPlanModal] = useState(false);
-const [showPasswordModal, setShowPasswordModal] = useState(false);
-const [verifyResponse, setVerifyResponse] = useState({
-  is_eligible: false,
-  nin: "",
-  bvn: "",
-  address: "",
-  email: "",
-  id: "",
-});
 
 
   return (
@@ -167,7 +139,7 @@ const [verifyResponse, setVerifyResponse] = useState({
           <p className='text-xs md:text-[14px] lg:text[16px] text-[#FFFFFFCC] md:pb-0 pb-4'>
             Can&apos;t find answers you are looking for?, Please kindly get in touch with our support team.
           </p>
-          <button className='flex justify-between  items-center z-[9999999] bg-white text-blue-950 bg rounded-full text-xs py-1 pl-5 pr-2 gap-[18px]' 
+          {/* <button className='flex justify-between  items-center  bg-white text-blue-950 bg rounded-full text-xs py-1 pl-5 pr-2 gap-[18px]' 
            onClick={() => setOpenCheckPhoneNumberModal(true)}>
             Get insurance
             <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -175,81 +147,14 @@ const [verifyResponse, setVerifyResponse] = useState({
               <path d="M10.9168 19.6171C11.0334 19.6171 11.1501 19.5587 11.2084 19.5004L19.3751 11.3337C19.5501 11.1587 19.5501 10.9254 19.3751 10.7504C19.2001 10.5754 18.9084 10.5754 18.7334 10.7504L10.5668 18.9171C10.3918 19.0921 10.3918 19.3837 10.5668 19.5587C10.6834 19.6171 10.8001 19.6171 10.9168 19.6171Z" fill="white" />
               <path d="M19.0834 17.4585C19.3167 17.4585 19.55 17.2835 19.55 16.9919V11.0419C19.55 10.8085 19.375 10.5752 19.0834 10.5752H13.075C12.8417 10.5752 12.6084 10.7502 12.6084 11.0419C12.6084 11.3335 12.7834 11.5085 13.075 11.5085H18.6167V17.0502C18.6167 17.2835 18.85 17.4585 19.0834 17.4585Z" fill="white" />
             </svg>
-          </button>
+          </button> */}
+
+            <GetInsuranceButton/>
         </div>
       </div>
 
 
-      {openCheckPhoneNumberModal && (
-        <CheckPhoneNumber
-          openCheckPhoneNumberModal={openCheckPhoneNumberModal}
-          setPhoneNumberCheckResponse={setPhoneNumberCheckResponse}
-          setOpenCheckPhoneNumberModal={setOpenCheckPhoneNumberModal}
-          setOpenRemitalDetailModal={setOpenRemitalDetailModal}
-          setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
-          setVerifiedPhoneNumber={setVerifiedPhoneNumber}
-          setUserId={setUserId}
-          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-          setVerifyResponse={setVerifyResponse}
-          setUserEmail={setUserEmail}
-          setShowPasswordModal={setShowPasswordModal}
-          // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
-        />
-      )}
-      {/* remitals ............................................................ remita.................... */}
-      {openRemitalDetailModal && (
-        <RemitalModalDetails
-          setOpenRemitalDetailModal={setOpenRemitalDetailModal}
-          openRemitalDetailModal={openRemitalDetailModal}
-          phoneNumberCheckResponse={phoneNumberCheckResponse}
-          verifiedPhoneNumber={verifiedPhoneNumber}
-          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-          setUserEmail={setUserEmail}
-        />
-      )}
-      {OpenRemitalUserDetail && (
-        <RemitalUserDetails
-          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-          OpenRemitalUserDetail={OpenRemitalUserDetail}
-          userId={userId}
-          setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-          verifyResponse={verifyResponse}
-          userEmail={userEmail}
-          setShowPasswordModal={setShowPasswordModal}
-        />
-      )}
-
-      {showPasswordModal && (
-        <CreatepasswordModal
-          userEmail={userEmail}
-          setShowPasswordModal={setShowPasswordModal}
-          showPasswordModal={showPasswordModal}
-          setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-          verifiedPhoneNumber={verifiedPhoneNumber}
-        />
-      )}
-      {openRemitalPlan && (
-        <RemitalPlanModal
-          openRemitalPlan={openRemitalPlan}
-          setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-          userId={userId}
-          verifyResponse={verifyResponse}
-          verifiedPhoneNumber={verifiedPhoneNumber}
-        />
-      )}
-      {openNonRemitalDetailModal && (
-        <NonRemitalModal
-          verifiedPhoneNumber={verifiedPhoneNumber}
-          setPhoneNumberCheckResponse={setPhoneNumberCheckResponse}
-          openNonRemitalDetailModal={openNonRemitalDetailModal}
-          setOpenRemitalDetailModal={setOpenRemitalDetailModal}
-          setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
-          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-          userId={userId}
-          verifyResponse={verifyResponse}
-          setUserEmail={setUserEmail}
-        />
-      )}
+    
     </main>
   )
 }

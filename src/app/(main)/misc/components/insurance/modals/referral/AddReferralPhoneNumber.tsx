@@ -14,7 +14,7 @@ import {
 } from "@/components/core";
 import { RightUpArrow, SmallSpinner } from "@/icons/core";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { Input2 } from "@/components/core/Input2";
@@ -77,12 +77,10 @@ interface Plandetails {
 }
 const contactSchema = z.object({
   phone_number: z
-    .string({ required_error: "Enter your phone number" })
-    .trim()
-    .min(10, {
-      message: "Phone number ssetShowPaymentModalhould be at least 11 digits",
-    })
-    .max(11),
+  .string()
+  .min(11, { message: "Phone number should be at least 11 digits" })
+  .regex(/^0\d{10}$/, { message: "Phone number must start with 0 and be 11 digits long" }),
+
 
   first_name: z
     .string({ required_error: "Enter your phone number" })
@@ -112,6 +110,7 @@ const AddRemitalPhoneNumer = ({
   const myReferral = search?.get("referral_code");
   const { name } = useParams();
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -283,13 +282,49 @@ const AddRemitalPhoneNumer = ({
                   </Label>
 
                   <div className={`relative mt-[.25rem] `}>
-                    <Input2
-                      className={`${errors?.phone_number?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
-                      placeholder="Enter your phone number"
-                      type="number"
-                      id="phone"
-                      maxLength={11} // Changed max to maxLength
-                      {...register("phone_number")}
+                  <Controller
+                      control={control}
+                      name={`phone_number`}
+                      render={({ field }) => (
+                        <input
+                          {...field}
+                          {...field}
+                    className={`${
+                      errors?.phone_number ? "border border-red-700" : ""
+                    } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                          id="account_no"
+                          placeholder="Phone number"
+                          type="text"
+                          maxLength={11}
+                          onChange={(e) => {
+                            const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                            // Handle input sanitization on change (typing)
+                            const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                            field.onChange(validPhoneNumber);
+                          }}
+                         
+
+
+                         
+                          onPaste={(e) => {
+                            e.target as HTMLInputElement;
+                            // Intercept paste event to sanitize pasted content
+                            const pastedValue = e.clipboardData.getData('text');
+                            // Remove non-numeric characters and limit to 11 digits
+                            const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
+                            e.preventDefault(); // Prevent the default paste behavior
+                            field.onChange(sanitizedValue); // Apply sanitized value
+                          }}
+                          
+                          onInput={(e) => {
+                            const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                            // Handle input sanitization on input changes
+                            const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                            field.onChange(validPhoneNumber);
+                          }}
+                          // onChange={(e) => field.onChange(e.target.value)}
+                        />
+                      )}
                     />
 
                     {/* {isLoading && (

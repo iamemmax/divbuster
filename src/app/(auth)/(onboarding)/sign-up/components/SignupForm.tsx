@@ -195,11 +195,13 @@ const SignupForm = () => {
                       field.onChange(validPhoneNumber);
                     }}
                     onPaste={(e) => {
-                      const target = e.target as HTMLInputElement;
-                      const pastedValue = e.clipboardData.getData("text");
-                      const sanitizedValue = pastedValue.replace(/[^0-9]/g, "");
-                      e.preventDefault();
-                      field.onChange(sanitizedValue);
+                      e.target as HTMLInputElement;
+                      // Intercept paste event to sanitize pasted content
+                      const pastedValue = e.clipboardData.getData('text');
+                      // Remove non-numeric characters and limit to 11 digits
+                      const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
+                      e.preventDefault(); // Prevent the default paste behavior
+                      field.onChange(sanitizedValue); // Apply sanitized value
                     }}
                   />
                 )}
@@ -313,11 +315,13 @@ const SignupForm = () => {
                       field.onChange(validBvn);
                     }}
                     onPaste={(e) => {
-                      const target = e.target as HTMLInputElement;
-                      const pastedValue = e.clipboardData.getData("text");
-                      const sanitizedValue = pastedValue.replace(/[^0-9]/g, "");
-                      e.preventDefault();
-                      field.onChange(sanitizedValue);
+                      e.target as HTMLInputElement;
+                      // Intercept paste event to sanitize pasted content
+                      const pastedValue = e.clipboardData.getData('text');
+                      // Remove non-numeric characters and limit to 11 digits
+                      const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
+                      e.preventDefault(); // Prevent the default paste behavior
+                      field.onChange(sanitizedValue); // Apply sanitized value
                     }}
                   />
                 )}

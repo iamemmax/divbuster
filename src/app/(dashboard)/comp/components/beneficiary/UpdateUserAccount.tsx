@@ -46,13 +46,11 @@ const contactSchema = z.object({
     .min(3, {
       message: "Enter your Last Name",
     }),
-  phone_number: z
-    .string({ required_error: "Enter your phone number" })
-    .trim()
-    .min(11, {
-      message: "Phone number ssetShowPaymentModalhould be at least 11 digits",
-    })
-    ,
+    phone_number: z
+    .string()
+    .min(11, { message: "Phone number should be at least 11 digits" })
+    .regex(/^0\d{10}$/, { message: "Phone number must start with 0 and be 11 digits long" }),
+    
   
 
    

@@ -28,35 +28,14 @@ import { tokenStorage } from "@/app/(auth)/(onboarding)/misc";
 import AprokoPlan from "../components/AprokoPlan";
 import HealthIcon from "../../misc/icons/HealthIcon";
 import UserIcon from "../../misc/icons/UserIcon";
+import GetInsuranceButton from "../../misc/components/GetIsuranceButton";
+import Loading from "../../loading";
 
 export default function ReferralHome() {
-  const [openCheckPhoneNumberModal, setOpenCheckPhoneNumberModal] =
-    useState(false);
-  const [openRemitalDetailModal, setOpenRemitalDetailModal] = useState(false);
-  const [phoneNumberCheckResponse, setPhoneNumberCheckResponse] = useState({
-    id: "",
-    address: "",
-    full_name: "",
-    ministry: "",
-    state: "",
-  });
-  const [OpenRemitalUserDetail, setOpenRemitalUserDetail] = useState(false);
-  const [userId, setUserId] = useState("");
-  const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [openRemitalPlan, setOpenShowRemitalPlan] = useState(false);
-  const [openNonRemitalDetailModal, setOpenNonRemitalDetailModal] =
-    useState(false);
+  
   const [showAprokoPlanModal, setshowAprokoPlanModal] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [verifyResponse, setVerifyResponse] = useState({
-    is_eligible: false,
-    nin: "",
-    bvn: "",
-    address: "",
-    email: "",
-    id: "",
-  });
+  const [loading, setLoading] = useState(true)
+
 
   const search = useSearchParams();
   const getStarted = search.get("select-plan");
@@ -95,6 +74,16 @@ export default function ReferralHome() {
       button_name:"Learn more",
     },
   ]
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 4000);
+  }, [])
+
+  if(loading){
+    return <Loading/>
+  }
 
   return (
     <main className="md:pb-20 w-full bg-main min-h-screen">
@@ -144,21 +133,7 @@ export default function ReferralHome() {
        
                    <div className="flex items-center gap-4 flex-wrap">
        
-                     <Button
-                       className={cn(
-                         "flex items-center cursor-pointer justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
-                         "font-display"
-                       )}
-                       id="get-insurance-button"
-                       variant="white"
-                       onClick={() => setOpenCheckPhoneNumberModal(true)}
-                     >
-                       Get insurance
-                       <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
-                         <RightUpArrow className="" height={12} width={12} />
-                       </span>
-                     </Button>
-                    
+                  <GetInsuranceButton/>
                    </div>
                  </div>
        
@@ -166,8 +141,8 @@ export default function ReferralHome() {
                   
                  <div className="relative flex items-center justify-center rounded-full h-[450px] w-[450px] p-2 overflow-hidden">
              {/* Spinning border */}
-             <div className="absolute inset-0 border-2 border-dashed border-white animate-spin-slow"></div>
-       
+             <div className="absolute inset-0 bg-[url('/images/landing-page/image-circle.svg')] bg-cover bg-no-repeat  animate-spin-slow"/>
+
              {/* Static image */}
              <Image
                alt="Doctor"
@@ -215,78 +190,7 @@ export default function ReferralHome() {
         </div>
         </section>
       </section>
-      {/* <Marquee /> */}
-
-      {openCheckPhoneNumberModal && (
-        <CheckPhoneNumber
-          openCheckPhoneNumberModal={openCheckPhoneNumberModal}
-          setPhoneNumberCheckResponse={setPhoneNumberCheckResponse}
-          setOpenCheckPhoneNumberModal={setOpenCheckPhoneNumberModal}
-          setOpenRemitalDetailModal={setOpenRemitalDetailModal}
-          setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
-          setVerifiedPhoneNumber={setVerifiedPhoneNumber}
-          setUserId={setUserId}
-          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-          setVerifyResponse={setVerifyResponse}
-          setUserEmail={setUserEmail}
-          setShowPasswordModal={setShowPasswordModal}
-          // setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
-        />
-      )}
-      {/* remitals ............................................................ remita.................... */}
-      {openRemitalDetailModal && (
-        <RemitalModalDetails
-          setOpenRemitalDetailModal={setOpenRemitalDetailModal}
-          openRemitalDetailModal={openRemitalDetailModal}
-          phoneNumberCheckResponse={phoneNumberCheckResponse}
-          verifiedPhoneNumber={verifiedPhoneNumber}
-          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-          setUserEmail={setUserEmail}
-        />
-      )}
-      {OpenRemitalUserDetail && (
-        <RemitalUserDetails
-          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-          OpenRemitalUserDetail={OpenRemitalUserDetail}
-          userId={userId}
-          setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-          verifyResponse={verifyResponse}
-          userEmail={userEmail}
-          setShowPasswordModal={setShowPasswordModal}
-        />
-      )}
-
-      {showPasswordModal && (
-        <CreatepasswordModal
-          userEmail={userEmail}
-          setShowPasswordModal={setShowPasswordModal}
-          showPasswordModal={showPasswordModal}
-          setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-          verifiedPhoneNumber={verifiedPhoneNumber}
-        />
-      )}
-      {openRemitalPlan && (
-        <RemitalPlanModal
-          openRemitalPlan={openRemitalPlan}
-          setOpenShowRemitalPlan={setOpenShowRemitalPlan}
-          userId={userId}
-          verifyResponse={verifyResponse}
-          verifiedPhoneNumber={verifiedPhoneNumber}
-        />
-      )}
-      {openNonRemitalDetailModal && (
-        <NonRemitalModal
-          verifiedPhoneNumber={verifiedPhoneNumber}
-          setPhoneNumberCheckResponse={setPhoneNumberCheckResponse}
-          openNonRemitalDetailModal={openNonRemitalDetailModal}
-          setOpenRemitalDetailModal={setOpenRemitalDetailModal}
-          setOpenNonRemitalDetailModal={setOpenNonRemitalDetailModal}
-          setOpenRemitalUserDetail={setOpenRemitalUserDetail}
-          userId={userId}
-          verifyResponse={verifyResponse}
-          setUserEmail={setUserEmail}
-        />
-      )}
+     
 
       {/* Aproko */}
 

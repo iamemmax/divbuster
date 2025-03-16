@@ -17,7 +17,7 @@ const Dashboard = () => {
    
       <DashboardPlanHeader />
       <div className="w-full h-12 bg-main py-10"></div>
-      <div className=" relative w-full px-6  md:px-[4.5rem] lg:px-[7.5rem]  h-full ">
+      <div className=" relative w-full px-3  md:px-[3rem] 2xl:[4rem]  3xl:px-[7.5rem]  h-full ">
         <div className="relative">
           <div className=" inset-x-0 top-[-4rem] absolute">
             <div className="">

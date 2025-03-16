@@ -15,6 +15,7 @@ import { useErrorModalState } from "@/hooks";
 import { SmallSpinner } from "@/icons/core";
 import { userStatusTypes } from "../types/userStatusTypes";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/authentication";
 
 const contactSchema = z.object({
   phone_number: z
@@ -68,9 +69,9 @@ export default function Login() {
       onSuccess: (data: userStatusTypes) => {
 if(data?.user_found === false){
   if (referralFromAproko === "aproko-doctor") {
-    router.push("/plan/aproko-doctor?select-plan=true");
+    router.replace("/plan/aproko-doctor?select-plan=true");
   } else {
-    router.push("/?get-started=true");
+    router.replace("/?get-started=true");
   }
 }else{
   if (data?.has_set_password) {
@@ -89,6 +90,14 @@ if(data?.user_found === false){
       },
     });
   };
+ const { authState } = useAuth();
+  const { isAuthenticated } = authState;
+  useEffect(() => {
+   if(isAuthenticated){
+    router.replace("/");
+   }
+  }, [isAuthenticated])
+  
   
 
   return (
@@ -119,7 +128,6 @@ if(data?.user_found === false){
                     
                     {...register("phone_number")}
                   /> */}
-
 <Controller
                       control={control}
                       name={`phone_number`}
@@ -131,20 +139,25 @@ if(data?.user_found === false){
                       errors?.phone_number ? "border border-red-700" : ""
                     } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
                           id="account_no"
-                          maxLength={11}
                           placeholder="Phone number"
                           type="text"
+                          maxLength={11}
                           onChange={(e) => {
                             const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
                             // Handle input sanitization on change (typing)
                             const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
                             field.onChange(validPhoneNumber);
                           }}
+                         
+
+
+                         
                           onPaste={(e) => {
-                            const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                            e.target as HTMLInputElement;
                             // Intercept paste event to sanitize pasted content
                             const pastedValue = e.clipboardData.getData('text');
-                            const sanitizedValue = pastedValue.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+                            // Remove non-numeric characters and limit to 11 digits
+                            const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
                             e.preventDefault(); // Prevent the default paste behavior
                             field.onChange(sanitizedValue); // Apply sanitized value
                           }}
