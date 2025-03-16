@@ -113,7 +113,7 @@ export function MainHeader() {
 
         <DesktopMenuBar isColored={isColored} />
 
-        <div className="flex items-center gap-[31px]">
+        <div className="flex items-center md:gap-[31px]">
           {!isAuthenticated ? (
             <a
               className={cn(
@@ -132,7 +132,7 @@ export function MainHeader() {
           <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="rounded-full text-sm bg-white text-black flex justify-center items-center shrink-0 px-4">
-          Menu
+        Dashboard
           <CaretDown color="#000" />
         </Button>
       </DropdownMenuTrigger>
@@ -212,14 +212,14 @@ export function MainHeader() {
           </ClientOnly>
         </div>
 
-        <div className="flex items-center gap-6 lg:hidden">
+        <div className=" items-center  hidden">
           <LinkButton
             className="text-base text-white xl:text-xl"
             href={isAuthenticated ? "/dashboard" : "/login"}
             size="unstyled"
             variant="unstyled"
           >
-            {isAuthenticated ? "Dashboard" : " Login"}
+            {isAuthenticated && " Login"}
           </LinkButton>
 
           <MobileMenuDialog />

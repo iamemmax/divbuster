@@ -86,7 +86,7 @@ export default function ReferralHome() {
   }
 
   return (
-    <main className="md:pb-20 w-full bg-main min-h-screen">
+    <main className="w-full bg-main h-full">
       <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
             <section className=" px-6 md:px-[3rem] 2xl:px-[7.5rem] p-[4.375rem] pb-6 flex-col flex-wrap xl:flex-row flex ">
                  <div className="flex flex-1 flex-col  gap-4  md:gap-6  max-md:py-10">

@@ -76,7 +76,7 @@ export default function Home() {
 
   return (
     <main className=" w-full bg-main ">
-      <section className="bg-main w-full !mb-0 text-white shadow-sm  ">
+      <section className="bg-main w-full sm:!mb-0 text-white shadow-sm  ">
         <section className=" px-6 md:px-[3rem] 2xl:px-[7.5rem] p-[4.375rem] pb-6 flex-col flex-wrap xl:flex-row flex ">
           <div className="flex flex-1 flex-col  gap-4  md:gap-6  max-md:py-10">
             <h6
@@ -159,8 +159,8 @@ export default function Home() {
             {/* </DoctorRoundedIcon> */}
           </section>
         </section>
-        <section className="px-4 md:px-[3rem] 2xl:px-[7.5rem]">
-        <div className="bg-[#10152e] rounded-[1.25rem] w-full md:p-6 grid-cols-1 md:grid-cols-2 grid gap-4">
+        <section className="px-4 md:px-[3rem] 2xl:px-[7.5rem] ">
+        <div className="bg-[#10152e] rounded-[1.25rem]  w-full md:p-6 grid-cols-1 md:grid-cols-2 grid gap-4  mb-20 md:mb-0">
 <div className="bg-[#1E2954] relative p-6 py-[2rem]  rounded-[20px]">
   <div className=" grid grid-cols-1 md:grid-cols-2 items-center gap-4">
 {
@@ -184,8 +184,8 @@ export default function Home() {
     <div key={id} className="bg-[#161d42] py-4 px-6 xl:px-[1.6rem] rounded-lg flex flex-col justify-center items-center">
       <h3 className="text-lg font-medium text-white">{card?.title}</h3>
       <p className="text-sm text-[#CAC9D4] text-center">{card.desc}</p>
-      <Button className="bg-transparent cursor-pointer pb-0 z-[999999] mt-1">{card?.button_name}<LearnMore/></Button>
-    </div>
+      <Button className="bg-transparent cursor-pointer pb-0  mt-1">{card?.button_name}<LearnMore/></Button>
+    </div>  
   ))
 }
 

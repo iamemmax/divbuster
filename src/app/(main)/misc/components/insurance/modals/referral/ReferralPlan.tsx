@@ -229,7 +229,6 @@ const handleCheckboxChange = (planId: string) => {
   
     setSelectedCheckboxes(initialCheckboxes);
   }, [plansData]);
-const router = useRouter()
   return (
     <div>
       {loadingPlan ? (
@@ -291,7 +290,7 @@ const router = useRouter()
                     )}
                   </div>
 
-                  <div className="max-h-[52vh]  3xl:max-h-[60vh] overflow-y-auto 2xl:min-h-[409px] rounded-b-lg md:mb-[2rem] md:w-full mt-5 md:mt-6">
+                  <div className="max-h-[53vh]  3xl:max-h-[63.6vh] overflow-y-auto 2xl:min-h-[409px] rounded-b-lg  md:w-full mt-5 md:mt-6">
                     <Tabs
                       className=""
                       defaultValue={selectedTab}
@@ -311,7 +310,7 @@ const router = useRouter()
                         </TabsList>
                       </div>
 
-            =
+            
                       {plansData?.map((healthPlan, idx: number) => (
                         <TabsContent
                           key={idx}
@@ -321,17 +320,17 @@ const router = useRouter()
                           <div
                              className={`${
                               healthPlan?.data?.length > 2
-                                ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-8 gap-x-[1rem] px-6 h-full"
+                                ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-start  justify-start h-full  gap-y-8 gap-x-[1rem] px-6 "
                                 : "w-full flex flex-col md:flex-row gap-[1rem] px-6 items-center justify-center"
                             }`}
                           >
                             {healthPlan?.data?.map((plan, idxx: number) => (
                               <div
-                                className="flex flex-col w-full items-center justify-center"
+                                className="flex flex-col h-full w-full items-center justify-center"
                                 key={idxx}
                               >
-                                <div className="w-full">
-                                  <div className="border-[0.3px] relative border-[#4760FD] rounded-[1.25rem] bg-[#1A234C]">
+                               
+                                  <div className="border-[0.3px] relative border-[#4760FD] items-stretch rounded-[1.25rem] bg-[#1A234C]">
                                     <div className="w-full py-8  relative">
                                       <div className="absolute -top-6 flex justify-center items-start w-full">
                                         <UserIcons width={65} height={65} />
@@ -523,7 +522,7 @@ const router = useRouter()
 
                                   
 
-<div className="border-[.0313rem] border-[#4760FD] rounded-10 -mt-2 flex justify-center items-center w-full py-5">
+<div className="border-[.0313rem] border-[#4760FD] rounded-10 -mt-2  flex justify-center  items-stretch w-full py-5">
             <Button
               className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
               onClick={() => {
@@ -555,7 +554,7 @@ const router = useRouter()
             </Button>
           </div>
                                   </div>
-                                </div>
+                            
                               </div>
                             ))}
                           </div>
