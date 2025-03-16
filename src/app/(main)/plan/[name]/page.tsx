@@ -29,11 +29,13 @@ import AprokoPlan from "../components/AprokoPlan";
 import HealthIcon from "../../misc/icons/HealthIcon";
 import UserIcon from "../../misc/icons/UserIcon";
 import GetInsuranceButton from "../../misc/components/GetIsuranceButton";
+import Loading from "../../loading";
 
 export default function ReferralHome() {
   
   const [showAprokoPlanModal, setshowAprokoPlanModal] = useState(false);
- 
+  const [loading, setLoading] = useState(true)
+
 
   const search = useSearchParams();
   const getStarted = search.get("select-plan");
@@ -72,6 +74,16 @@ export default function ReferralHome() {
       button_name:"Learn more",
     },
   ]
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 4000);
+  }, [])
+
+  if(loading){
+    return <Loading/>
+  }
 
   return (
     <main className="md:pb-20 w-full bg-main min-h-screen">
@@ -129,8 +141,8 @@ export default function ReferralHome() {
                   
                  <div className="relative flex items-center justify-center rounded-full h-[450px] w-[450px] p-2 overflow-hidden">
              {/* Spinning border */}
-             <div className="absolute inset-0 border-2 border-dashed border-white animate-spin-slow"></div>
-       
+             <div className="absolute inset-0 bg-[url('/images/landing-page/image-circle.svg')] bg-cover bg-no-repeat  animate-spin-slow"/>
+
              {/* Static image */}
              <Image
                alt="Doctor"

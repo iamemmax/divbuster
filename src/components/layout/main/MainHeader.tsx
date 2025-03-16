@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 
 import { Button } from "@/components/core/Button";
@@ -19,6 +19,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
   Input,
 } from "@/components/core";
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
@@ -61,6 +66,9 @@ const pagesWithColoredBg = [
 ];
 import { useAuth } from "@/contexts/authentication"; // Import your authentication context
 import { DesktopMenuBar } from "./DesktopMenuBar";
+import { CaretDown } from "@/components/icons";
+import router from "next/router";
+import { useQueryClient } from "react-query";
 
 export function MainHeader() {
   const pathname = usePathname();
@@ -78,6 +86,15 @@ export function MainHeader() {
   //   }
   // }, [users]);
 
+
+  const { replace } = useRouter();
+  const queryClient = useQueryClient();
+  const { authDispatch } = useAuth();
+  const handleLogoutClick = () => {
+    if (authDispatch) authDispatch({ type: "LOGOUT" });
+    queryClient.clear();
+    replace("/login");
+  };
   return (
     <div className={cn(isColored && "bg-main")}>
       <header
@@ -111,19 +128,37 @@ export function MainHeader() {
               </span>
             </a>
           ) : (
-            <LinkButton
-              className={cn(
-                "hidden lg:flex items-center border  justify-between md:max-lg:text-sm  text-primary text-left  bg-white rounded-full max-w-max",
-                "font-display"
-              )}
+            <div className=" flex items-center">
+          <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button className="rounded-full text-sm bg-white text-black flex justify-center items-center shrink-0 px-4">
+          Menu
+          <CaretDown color="#000" />
+        </Button>
+      </DropdownMenuTrigger>
 
-              href="/dashboard"
-              // variant={"outlined"}
-              // target="_blank"
-              // variant="white"
-            >
-              Dashboard
-            </LinkButton>
+      <DropdownMenuContent className="bg-white z-[999999] rounded-md shadow-md p-2">
+        {/* Wrap each item in a Link */}
+        <DropdownMenuItem className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer">
+          <Link href="/dashboard">
+            Dashboard
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer">
+          <Link href="/dashboard/my-profile">
+            Profile
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
+        <DropdownMenuItem
+          onClick={handleLogoutClick}
+          className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
+        >
+          Logout
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+            </div>
           )}
 
           <ClientOnly>

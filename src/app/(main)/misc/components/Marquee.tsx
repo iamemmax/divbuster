@@ -6,7 +6,7 @@ import Image from "next/image";
 const Marquee = () => {
   return (
     <>
-      <section className="!z-50 fixed bottom-0 w-full bg-[#161D42] py-1 md:py-[.375rem] text-sm font-display">
+      <section className="!z-40 fixed bottom-0 w-full bg-[#161D42] py-1 md:py-[.375rem] text-sm font-display">
         <div className="marquee-content">
           <div className="marquee-list font-clash flex items-center gap-20 xl:text-xl">
             <Image

@@ -311,7 +311,7 @@ const router = useRouter()
                         </TabsList>
                       </div>
 
-                      {/*  PLAN */}
+            =
                       {plansData?.map((healthPlan, idx: number) => (
                         <TabsContent
                           key={idx}
@@ -319,7 +319,11 @@ const router = useRouter()
                           value={healthPlan?.package_name}
                         >
                           <div
-                            className={`${healthPlan?.data?.length > 2 ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-8  gap-x-[1rem] px-6 " : " w-full flex flex-col md:flex-row gap-[1rem] px-6 items-center justify-center"}`}
+                             className={`${
+                              healthPlan?.data?.length > 2
+                                ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-8 gap-x-[1rem] px-6 h-full"
+                                : "w-full flex flex-col md:flex-row gap-[1rem] px-6 items-center justify-center"
+                            }`}
                           >
                             {healthPlan?.data?.map((plan, idxx: number) => (
                               <div
@@ -362,19 +366,7 @@ const router = useRouter()
                                               </p>
                                             )}
                                           </div>
-                                          {/* {healthPlan?.package_name ===
-                                              "FAMILY" && (
-                                              <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
-                                                3 Individuals (3 + 1 free )
-                                              </p>
-                                            )} */}
-                                          {/* {healthPlan?.package_name ===
-                                            "CORPERATE" && (
-                                            <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
-                                              Minimum of{" "}
-                                              {plan?.plan_duration?.min_members}
-                                            </p>
-                                          )} */}
+                                       
                                         </div>
                                         <div className="space-y-[10px] mt-1">
                                           {plan?.descriptions?.map(
@@ -529,64 +521,51 @@ const router = useRouter()
                                       )}
                                     </div>
 
-                                    <div className="border-[.0313rem] border-[#4760FD] rounded-10 -mt-2 flex justify-center items-center w-full py-5">
-                                      <Button
-                                        className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
-                                        onClick={() => {
-                                          setPlanType({
-                                            number_of_recipient: String(
-                                              planCounts[plan.id.toString()] ||
-                                                0
-                                            ),
-                                            duration: String(
-                                              plan?.plan_duration?.duration
-                                            ),
-                                            amount:
-                                              healthPlan?.package_name ===
-                                              "FAMILY"
-                                                ? formatCurrency(
-                                                    getAmountDeduction(
-                                                      Number(
-                                                        removeCommaFromPrice(
-                                                          String(
-                                                            percentageCalc?.base_price
-                                                          )
-                                                        )
-                                                      ),
-                                                      plan?.plan_duration
-                                                        ?.duration,
-                                                      planCounts[
-                                                        plan.id.toString()
-                                                      ] || 0,
-                                                      getPercentage(
-                                                        plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
-                                                        planCounts[
-                                                          plan.id.toString()
-                                                        ]
-                                                      )
-                                                    )
-                                                  )
-                                                : formatCurrency(
-                                                    Number(
-                                                      removeCommaFromPrice(
-                                                        String(plan?.price)
-                                                      )
-                                                    )
-                                                  ),
-                                            play_type: healthPlan?.package_name,
-                                          });
-                                          // setOpenShowRemitalPlan(false);
-                                          setPhoneNumberModalOpen(true);
-                                        }}
-                                      >
-                                        Get Insurance
-                                      </Button>
-                                    </div>
+                                  
+
+<div className="border-[.0313rem] border-[#4760FD] rounded-10 -mt-2 flex justify-center items-center w-full py-5">
+            <Button
+              className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+              onClick={() => {
+                setPlanType({
+                  number_of_recipient: String(planCounts[plan.id.toString()] || 0),
+                  duration: String(plan?.plan_duration?.duration),
+                  amount:
+                    healthPlan?.package_name === "FAMILY"
+                      ? formatCurrency(
+                          getAmountDeduction(
+                            Number(removeCommaFromPrice(String(percentageCalc?.base_price))),
+                            plan?.plan_duration?.duration,
+                            planCounts[plan.id.toString()] || 0,
+                            getPercentage(
+                              plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
+                              planCounts[
+                                plan.id.toString()
+                              ]
+                            )
+                          )
+                        )
+                      : formatCurrency(Number(removeCommaFromPrice(String(plan?.price)))),
+                  play_type: healthPlan?.package_name,
+                });
+                setPhoneNumberModalOpen(true);
+              }}
+            >
+              Get Insurance
+            </Button>
+          </div>
                                   </div>
                                 </div>
                               </div>
                             ))}
                           </div>
+
+
+
+
+
+
+                          
                         </TabsContent>
                       ))}
                     </Tabs>

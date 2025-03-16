@@ -47,8 +47,6 @@ export function DashboardHeader() {
 
   const { replace } = useRouter();
   const queryClient = useQueryClient();
-  // const user = await getAuthenticatedUser();
-  //     authDispatch({ type: "LOGIN", payload: user });
   const { authDispatch } = useAuth();
   const handleLogoutClick = () => {
     if (authDispatch) authDispatch({ type: "LOGOUT" });
@@ -153,7 +151,7 @@ export function DashboardHeader() {
 
           
           <div className="flex ">
-            <div className="flex w-full gap-4">
+            <div className="flex items-center w-full gap-4">
               <Link href="/">
                 <Button className="rounded-full w-9 h-9 hidden lg:flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
                   <HomeIcon height={15} width={16} />
@@ -162,23 +160,17 @@ export function DashboardHeader() {
               <Button className="rounded-full w-9 h-9 hidden lg:flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
                 <Notifications height={20} width={20} />
               </Button>
-              {!isLoading && (
-                <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-1">
-                  {/* {`${userData?.first_name?.slice(0, 1) ?? ""}${userData?.last_name?.slice(0, 1) ?? ""}`} */}
-
-                  <img
-                    src="/images/userIcon.png"
-                    style={{ width: "100%", height: "100%" }}
-                    alt="user"
-                  />
-                </Button>
-              )}
-             
-
+              
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button className="rounded-full -ml-3 w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-transparent p-2">
-                    <CaretDown />
+                  <Button className="rounded-full  text-sm text-white flex justify-center items-center shrink-0 bg-transparent p-2">
+                  {!isLoading && (
+                <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-1">
+                  {`${userData?.first_name?.slice(0, 1) ?? ""}${userData?.last_name?.slice(0, 1) ?? ""}`}
+
+                 
+                </Button>
+              )} <CaretDown />
                   </Button>
                 </DropdownMenuTrigger>
 
@@ -198,6 +190,8 @@ export function DashboardHeader() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+             
+
             </div>
           </div>
 </div>

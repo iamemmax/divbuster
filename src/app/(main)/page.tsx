@@ -2,51 +2,32 @@
 
 import { cn } from "@/utils/classNames";
 import { RightUpArrow } from "@/icons/core";
-import { Button } from "@/components/core";
+import { Button, LoaderModal } from "@/components/core";
 
 import {
   CheckStar,
   HandIcon,
   LearnMore,
-  Testimonial1,
-  Testimonial2,
-  Testimonial3,
-  Testimonial4,
+  
   UnderLine,
 } from "./misc/icons";
-// import {
-//   CheckStar,
-//   CrossIcon,
-//   GroupIcon,
-//   LearnMore,
-//   UnderLine,
-// } from "./misc/icons";
-import Marquee from "./misc/components/Marquee";
+
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import CheckPhoneNumber from "./misc/components/insurance/modals/CheckPhoneNumber";
-
-import NonRemitalModal from "./misc/components/insurance/modals/non-remital/NonRemitalModal";
-import RemitalUserDetails from "./misc/components/insurance/modals/remital/RemitalUserDetails";
-import RemitalPlanModal from "./misc/components/insurance/modals/remital/RemitalPlanModal";
-import RemitalModalDetails from "./misc/components/insurance/modals/remital/RemitalModalDetails";
-import CreatepasswordModal from "./misc/components/insurance/modals/remital/CreatePassWordModal";
-import { useRouter, useSearchParams } from "next/navigation";
+import {  useSearchParams } from "next/navigation";
 import GenerateReferralModal, { ReferralsuccessProp } from "./misc/components/insurance/modals/referral/GenerateReferralModal";
 import ReferralSuccessModal from "./misc/components/insurance/modals/referral/ReferralSuccessModal";
-import DoctorRoundedIcon from "./misc/icons/DoctorRounded";
 import HealthIcon from "./misc/icons/HealthIcon";
 import UserIcon from "./misc/icons/UserIcon";
-import { useAuth } from "@/contexts/authentication";
-import Loading from "../loading";
 import GetInsuranceButton from "./misc/components/GetIsuranceButton";
+import Loading from "./loading";
 
 export default function Home() {
    const [showGenerateReferralModal, setShowGenerateReferralModal] = useState(false)
   const [showGenerateReferralSuccessModal, setShowGenerateReferralSuccessModal] = useState(false)
   const [referralResponse, setReferralResponse] = useState<ReferralsuccessProp>()
- 
+ const [loading, setLoading] = useState(true)
 
   const search = useSearchParams();
   const getStarted = search.get("get-started");
@@ -57,6 +38,12 @@ export default function Home() {
   }, [getStarted]);
 
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 4000);
+  }, [])
+  
 
   const cardArray1 =[
     {
@@ -83,6 +70,9 @@ export default function Home() {
     },
   ]
    
+  if(loading){
+    return <Loading/>
+  }
 
   return (
     <main className=" w-full bg-main ">
@@ -149,12 +139,13 @@ export default function Home() {
               </Button>
             </div>
           </div>
+          
 
           <section className="relative hidden xl:block px-5 md:px-0">
            
           <div className="relative flex items-center justify-center rounded-full h-[450px] w-[450px] p-2 overflow-hidden">
       {/* Spinning border */}
-      <div className="absolute inset-0 border-2 border-dashed border-white animate-spin-slow"></div>
+      <div className="absolute inset-0 bg-[url('/images/landing-page/image-circle.svg')] bg-cover bg-no-repeat  animate-spin-slow"/>
 
       {/* Static image */}
       <Image

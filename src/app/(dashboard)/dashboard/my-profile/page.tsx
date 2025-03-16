@@ -4,16 +4,16 @@
 import Image from 'next/image'
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 
-import { Button, ErrorModal, FormError, Input, RadioGroup, RadioGroupItem, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core'
+import { Button, ErrorModal, FormError, Input, RadioGroup, RadioGroupItem,  } from '@/components/core'
 import { useQuery, useQueryClient } from 'react-query'
 import { fetchReferralCode } from '../api/referral/fetchReferralCode'
-import { UserDataTypes, useUser } from '@/app/(auth)/(onboarding)/misc'
+import {  useUser } from '@/app/(auth)/(onboarding)/misc'
 import { Label } from '@radix-ui/react-label'
 import { Controller, useForm, useWatch } from 'react-hook-form'
-import { string, z } from 'zod'
+import {  z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useClipboard, useErrorModalState } from '@/hooks'
-import { fetchHospitalListByLga, fetchRegionByState, fetchStateList, useUserHospitalChoice } from '@/app/(main)/misc/components/insurance/api/remital/remtalUserDetails'
+import { fetchHospitalListByLga, fetchRegionByState, fetchStateList } from '@/app/(main)/misc/components/insurance/api/remital/remtalUserDetails'
 import { capitalizeFirstLetter, formatAxiosErrorMessage } from '@/utils'
 
 import Select, { components } from "react-select";
@@ -66,21 +66,21 @@ const baseSchema = z.object({
 
 });
 
-// Extend the base schema for NIN
-const ninSchema = baseSchema.extend({
-    nin: z
-        .string()
-        .trim()
-        .min(10, { message: "NIN should be at least 10 digits" }),
-});
+// // Extend the base schema for NIN
+// const ninSchema = baseSchema.extend({
+//     nin: z
+//         .string()
+//         .trim()
+//         .min(10, { message: "NIN should be at least 10 digits" }),
+// });
 
-// Extend the base schema for BVN
-const bvnSchema = baseSchema.extend({
-    bvn: z
-        .string()
-        .trim()
-        .min(11, { message: "BVN should be at least 11 digits" }),
-});
+// // Extend the base schema for BVN
+// const bvnSchema = baseSchema.extend({
+//     bvn: z
+//         .string()
+//         .trim()
+//         .min(11, { message: "BVN should be at least 11 digits" }),
+// });
 
 export default function Page() {
 
@@ -187,8 +187,8 @@ export default function Page() {
 
         return () => clearTimeout(timer);
     }, []);
-    const { mutate: handleSubmitHospital } =
-        useUserHospitalChoice();
+    // const { mutate: handleSubmitHospital } =
+    //     useUserHospitalChoice();
     // const router = useRouter();
 
 
@@ -258,9 +258,9 @@ export default function Page() {
 
 
 
-    interface Prop {
-        userData: UserDataTypes | undefined;
-    }
+    // interface Prop {
+    //     userData: UserDataTypes | undefined;
+    // }
 
     const CustomOption = (props: any) => {
         const { data } = props;
@@ -342,15 +342,17 @@ export default function Page() {
                                     <section className='mt-8 flex flex-col lg:flex-row justify-between'>
                                         <div className='flex justify-between items-center gap-4'>
                                             <div className='flex justify-center'>
-                                                <div className='relative w-[100px] h-[100px] rounded-full overflow-hidden'>
-                                                    <Image
-                                                        alt="profile"
-                                                        src={profilePic || userData?.profile_image || '/images/userIcon.png'}
-                                                        className="rounded-full"
-                                                        fill
-                                                        objectFit='cover'
-                                                    />
-                                                </div>
+                                               
+<div className="relative w-[100px] h-[100px] rounded-full overflow-hidden">
+  <Image
+    alt="profile"
+    // If profile_image is not a valid URL, fallback to default
+    src={profilePic && (profilePic.startsWith('http://') || profilePic.startsWith('https://')) ? profilePic : userData?.profile_image && (userData.profile_image.startsWith('http://') || userData.profile_image.startsWith('https://')) ? userData.profile_image : '/images/userIcon.png'}
+    className="rounded-full"
+    layout="fill"
+    objectFit="cover"
+  />
+</div>
                                                 <div className='mt-[3.8rem] -ml-[1.5rem] z-[2]'>
                                                     <Photo onClick={handleClick} />
                                                 </div>

@@ -14,7 +14,7 @@ import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import Marquee from "./(main)/misc/components/Marquee";
 import CheckUserHasPlan from "@/app/(main)/misc/components/CheckUserHasPlan";
-import Loading from "./loading";
+import Loading from "./(main)/loading";
 
 const sans = DM_Sans({
   subsets: ["latin"],
