@@ -110,9 +110,9 @@ const GenerateReferralModal = ({
   return (
     <>
      
-        <div className="rounded-xl">
+        <div className="rounded-xl z-[9999999999999] ">
           <Dialog open={isBuyPlanModalOpen}>
-            <DialogContent className="!overflow-hidden max-h-[93vh]">
+            <DialogContent className="!overflow-hidden  z-[9999999999999]  max-h-[93vh]">
               <DialogHeader className="bg-[#1B1687] font-medium text-[#fff] text-base">
                 <DialogTitle className="font-medium text-[#fff]">
                   Generate Referral Details
