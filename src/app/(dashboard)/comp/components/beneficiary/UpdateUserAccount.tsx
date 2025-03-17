@@ -156,7 +156,11 @@ const UpdateUserAccount = ({
                       id="phone"
                       {...register("first_name")}
                     />
-
+  {errors?.first_name && (
+                <p className="text-red-700 text-xs mt-1">
+                  {errors.first_name.message}
+                </p>
+              )}
                  
                   </div>
                 </div>
@@ -177,11 +181,11 @@ const UpdateUserAccount = ({
                       {...register("last_name")}
                     />
 
-                    {/* {isLoading && (
-                        <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
-                          <SmallSpinner className="" color="#fff" />
-                        </div>
-                      )} */}
+{errors?.last_name && (
+                <p className="text-red-700 text-xs mt-1">
+                  {errors.last_name.message}
+                </p>
+              )}
                   </div>
                 </div>
             

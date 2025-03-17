@@ -11,7 +11,7 @@ import {
 } from "@/components/core";
 import { z } from "zod";
 import { Label } from "@radix-ui/react-label";
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Spinner } from "@/icons/core";
 import { useUser } from "@/app/(auth)/(onboarding)/misc";
@@ -38,8 +38,9 @@ const formSchema = z.object({
       phone_number_of_beneficiary: z
         .string()
         .trim()
-        .min(10, { message: "Please enter a valid phone number." }),
-      type_of_beneficary: z.enum(["ADULT", "MINOR"]).optional(),
+        .min(11, { message: "Phone number should be at least 11 digits" })
+        .regex(/^0\d{10}$/, { message: "Phone number must start with 0 and be 11 digits long" }),
+             type_of_beneficary: z.enum(["ADULT", "MINOR"]).optional(),
     })
   ),
 });
@@ -168,6 +169,12 @@ const BuyPlanModalForCoperate = ({
                               `beneficiaries.${index}.name_of_beneficiary`
                             )}
                           />
+
+{errors?.beneficiaries?.[index]?.name_of_beneficiary && (
+                <p className="text-red-700 text-xs mt-1">
+                  {errors?.beneficiaries?.[index]?.name_of_beneficiary.message}
+                </p>
+              )}
                         </div>
                         <div className="mt-3">
                           <Label
@@ -177,15 +184,56 @@ const BuyPlanModalForCoperate = ({
                             Phone number
                           </Label>
                           <div className="relative mt-[.25rem]">
-                            <input
-                              className={`${errors?.beneficiaries?.[index]?.phone_number_of_beneficiary ? "border border-red-700" : ""} text-[#fff] text-xs outline-none rounded-lg px-6 w-full h-[2.875rem] bg-[#2a3150]`}
-                              placeholder="Enter phone number"
-                              type="text"
-                              id={`beneficiaries.${index}.phone_number_of_beneficiary`}
-                              {...register(
-                                `beneficiaries.${index}.phone_number_of_beneficiary`
-                              )}
-                            />
+                          <Controller
+                                                  control={control}
+                                                  name={`beneficiaries.${index}.phone_number_of_beneficiary`}
+                                                  render={({ field }) => (
+                                                    <input
+                                                      {...field}
+                                                      {...field}
+                                                className={`${
+                                                  errors?.beneficiaries?.[index]?.phone_number_of_beneficiary ? "border border-red-700" : ""
+                                                } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                                                      id="account_no"
+                                                      placeholder="Phone number"
+                                                      type="text"
+                                                      maxLength={11}
+                                                      onChange={(e) => {
+                                                        const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                                        // Handle input sanitization on change (typing)
+                                                        const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                                        field.onChange(validPhoneNumber);
+                                                      }}
+                                                     
+                            
+                            
+                                                     
+                                                      onPaste={(e) => {
+                                                        e.target as HTMLInputElement;
+                                                        // Intercept paste event to sanitize pasted content
+                                                        const pastedValue = e.clipboardData.getData('text');
+                                                        // Remove non-numeric characters and limit to 11 digits
+                                                        const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
+                                                        e.preventDefault(); // Prevent the default paste behavior
+                                                        field.onChange(sanitizedValue); // Apply sanitized value
+                                                      }}
+                                                      
+                                                      onInput={(e) => {
+                                                        const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                                        // Handle input sanitization on input changes
+                                                        const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                                        field.onChange(validPhoneNumber);
+                                                      }}
+                                                      // onChange={(e) => field.onChange(e.target.value)}
+                                                    />
+                                                  )}
+                                                />
+                         
+                          {errors?.beneficiaries?.[index]?.phone_number_of_beneficiary && (
+                <p className="text-red-700 text-xs mt-1">
+                  {errors?.beneficiaries?.[index]?.phone_number_of_beneficiary.message}
+                </p>
+              )}
                           </div>
                         </div>
                       </div>

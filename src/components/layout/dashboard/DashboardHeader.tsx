@@ -7,10 +7,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 import CaretDown from "./CaretDown";
-import Logo from "@/app/(dashboard)/comp/icons/logo";
 import HomeIcon from "@/app/(dashboard)/comp/icons/home";
 import Notifications from "@/app/(dashboard)/comp/icons/notification";
-import { getAuthenticatedUser, useUser } from "@/app/(auth)/(onboarding)/misc";
+import {  useUser } from "@/app/(auth)/(onboarding)/misc";
 import CloseIcon from "@/app/(main)/misc/icons/CLoseIcon";
 import {
   DropdownMenu,

@@ -155,15 +155,15 @@ const DashboardPlanHeader = () => {
       ) : (
         <div className="bg-main w-full flex justify-between flex-wrap  gap-3 items-center   ">
           <div className="flex items-center  gap-x-3 ">
-            <div className="text-white h-[2.5rem] w-[2.5rem]">
-              <Image
-                alt="user icon"
-                src={`/images/userIcon.png`}
-                height={40}
-                width={40}
-                className="rounded-full"
-              />
-            </div>
+          <div className="text-white h-[2.5rem] w-[2.5rem] relative">
+  <Image
+    alt="user icon"
+    src={userData?.profile_image || `/images/userIcon.png`}
+    layout="fill"
+    className="rounded-full object-cover"
+  />
+</div>
+
             <div className="flex  flex-col ">
               <h2 className="text-white text-sm md:text-base font-medium">
                 {capitalizeFirstLetter(String(userData?.first_name ??""))}{" "}
