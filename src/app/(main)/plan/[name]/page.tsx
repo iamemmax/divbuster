@@ -130,7 +130,6 @@ export default function ReferralHome() {
                    </p>
        
                      
-       
                    <div className="flex items-center gap-4 flex-wrap">
        
                   <GetInsuranceButton/>
