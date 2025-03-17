@@ -178,7 +178,7 @@ const BuyPlanModal = ({ setBuyPlanModal, isBuyPlanModalOpen }: Prop) => {
                           />
                             {errors?.beneficiaries?.[index]?.name_of_beneficiary && (
                 <p className="text-red-700 text-xs mt-1">
-                  {errors?.beneficiaries?.[index]?.name_of_beneficiary.message}
+                  {errors?.beneficiaries?.[index]?.name_of_beneficiary?.message}
                 </p>
               )}
                         </div>
@@ -237,7 +237,7 @@ const BuyPlanModal = ({ setBuyPlanModal, isBuyPlanModalOpen }: Prop) => {
                           </div>
                           {errors?.beneficiaries?.[index]?.phone_number_of_beneficiary && (
                 <p className="text-red-700 text-xs mt-1">
-                  {errors?.beneficiaries?.[index]?.phone_number_of_beneficiary.message}
+                  {errors?.beneficiaries?.[index]?.phone_number_of_beneficiary?.message}
                 </p>
               )}
                         </div>

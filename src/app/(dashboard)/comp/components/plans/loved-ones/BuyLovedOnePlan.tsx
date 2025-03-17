@@ -169,7 +169,7 @@ const BuyPlanModalForLovedOne = ({
                           />
                           {errors?.beneficiaries?.[index]?.name_of_beneficiary && (
                 <p className="text-red-700 text-xs mt-1">
-                  {errors.beneficiaries?.[index]?.name_of_beneficiary.message}
+                  {errors.beneficiaries?.[index]?.name_of_beneficiary?.message}
                 </p>
               )}
                         </div>
@@ -231,7 +231,7 @@ const BuyPlanModalForLovedOne = ({
                                                      
                                                       {errors?.beneficiaries?.[index]?.phone_number_of_beneficiary && (
                                             <p className="text-red-700 text-xs mt-1">
-                                              {errors?.beneficiaries?.[index]?.phone_number_of_beneficiary.message}
+                                              {errors?.beneficiaries?.[index]?.phone_number_of_beneficiary?.message}
                                             </p>
                                           )}
                           </div>
