@@ -6,6 +6,13 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import Image from 'next/image'
 import { cn } from '@/utils/classNames'
 import { CaretDown, Icon } from '@/components/icons'
+import CreatepasswordModal from '../misc/components/insurance/modals/remital/CreatePassWordModal'
+import CheckPhoneNumber from '../misc/components/insurance/modals/CheckPhoneNumber'
+import NonRemitalModal from '../misc/components/insurance/modals/non-remital/NonRemitalModal'
+import RemitalModalDetails from '../misc/components/insurance/modals/remital/RemitalModalDetails'
+import RemitalPlanModal from '../misc/components/insurance/modals/remital/RemitalPlanModal'
+import RemitalUserDetails from '../misc/components/insurance/modals/remital/RemitalUserDetails'
+import GetInsuranceButton from '../misc/components/GetIsuranceButton'
 
 
 
@@ -47,8 +54,10 @@ export default function page() {
   ]
 
 
+
+
   return (
-    <main className='bg-main text-white size-full py-5 px-6 md:max-lg:px-16 lg:px-12 xl:px-[120px]'>
+    <main className='bg-main text-white h-full size-full py-5 px-6 md:max-lg:px-16 lg:px-12 xl:px-[120px]'>
       <div className='flex flex-col lg:flex-row justify-between mt-16'>
         <div className='md:basis-1/2'>
           <button className='capitalize flex justify-center items-center rounded-full pl-6 pr-[78px] py-4 bg-[#34307A] bg-opacity-[20%] text-[14px] font-semibold gap-2'>
@@ -68,19 +77,13 @@ export default function page() {
         <div className=' md:basis-1/2 overflow-hidden max-md:mt-6 max-md:max-w-[400px]'>
           <Image
             src="/images/faqs/box-gradient.png"
-            className='scale-150 max-md:hidden'
-            width={500}
-            height={500}
+            width={289}
+            height={259}
+            className='scale-150 md:w-[500px] md:h-[500px]'
             alt=''
             objectFit='contain'
           />
-          <Image
-            src="/images/faqs/mobile-box-gradient.png "
-            className='md:hidden'
-            width={500}
-            height={150}
-            alt=''
-          />
+         
         </div>
       </div>
       <div className='mt-10 md:-mt-10 flex flex-col md:flex-row gap-4'>
@@ -131,21 +134,27 @@ export default function page() {
         </ul>
       </div>
 
-      <div className='pt-[72px]'>
+      <div className='mb-[12rem] mt-6 md:my-14 md:mt-[5rem]'>
         <div className='md:flex flex-row bg-[#FFFFFF0D] gap-36 pt-4 pb-6 sm:py-3 items-center justify-center pr-16 pl-6 rounded-lg'>
           <p className='text-xs md:text-[14px] lg:text[16px] text-[#FFFFFFCC] md:pb-0 pb-4'>
             Can&apos;t find answers you are looking for?, Please kindly get in touch with our support team.
           </p>
-          <button className='flex justify-between items-center bg-white text-blue-950 bg rounded-full text-xs py-1 pl-5 pr-2 gap-[18px]'>
+          {/* <button className='flex justify-between  items-center  bg-white text-blue-950 bg rounded-full text-xs py-1 pl-5 pr-2 gap-[18px]' 
+           onClick={() => setOpenCheckPhoneNumberModal(true)}>
             Get insurance
             <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="15" cy="15" r="15" fill="#032282" />
               <path d="M10.9168 19.6171C11.0334 19.6171 11.1501 19.5587 11.2084 19.5004L19.3751 11.3337C19.5501 11.1587 19.5501 10.9254 19.3751 10.7504C19.2001 10.5754 18.9084 10.5754 18.7334 10.7504L10.5668 18.9171C10.3918 19.0921 10.3918 19.3837 10.5668 19.5587C10.6834 19.6171 10.8001 19.6171 10.9168 19.6171Z" fill="white" />
               <path d="M19.0834 17.4585C19.3167 17.4585 19.55 17.2835 19.55 16.9919V11.0419C19.55 10.8085 19.375 10.5752 19.0834 10.5752H13.075C12.8417 10.5752 12.6084 10.7502 12.6084 11.0419C12.6084 11.3335 12.7834 11.5085 13.075 11.5085H18.6167V17.0502C18.6167 17.2835 18.85 17.4585 19.0834 17.4585Z" fill="white" />
             </svg>
-          </button>
+          </button> */}
+
+            <GetInsuranceButton/>
         </div>
       </div>
+
+
+    
     </main>
   )
 }

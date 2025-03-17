@@ -32,7 +32,7 @@ const CorporateCard = ({
           <Spinner className="w-4  h-4 " color="#DB8C00" />
         </div>
       ) : (
-        <div className="bg-[#FFFAF0] h-full justify-center flex flex-col shadow-sm rounded-10  px-6 py-[.875rem] ">
+        <div className="bg-[#FFFAF0] h-full justify-center flex flex-col shadow-sm rounded-10 px-2 2xl:px-6 py-[.875rem] ">
           <div className="">
             <div className="flex items-center gap-x-1">
               <FamilyUserIcon backgroundColor="#FFF2D9" color="#DB8C00" />
@@ -50,11 +50,11 @@ const CorporateCard = ({
                 <p className="text-xxs text-[#DB8C00]">Employees</p>
               </div>
             </div>
-            <div className="justify-self-end flex mt-4 px-2 items-center gap-4">
+            <div className=" flex mt-4 px-2 items-center  gap-2 md:gap-4">
               {checkCorporatePaymentStatus ? (
                 <Button
                   // variant={"outlined"}
-                  className="bg-[#DB8C00] rounded-md py-[.4375rem]  px-[.625rem] text-[#fff] text-[.625rem]"
+                  className="bg-[#DB8C00] rounded-md py-[.4375rem]   px-[.625rem] text-[#fff] text-[.625rem]"
                   onClick={() =>{
                     NoUser?setShowUserDetailsModal(true):setBuyPlanForCoporate(true)
                   }}
@@ -74,7 +74,7 @@ const CorporateCard = ({
               )}
               <LinkButton
                 href={"/dashboard/corporate-beneficiaries"}
-                className="bg-[#FFE9BC] rounded-md py-[.4375rem]  px-[.8125rem] text-[#DB8C00] text-[.625rem]"
+                className="bg-[#FFE9BC] rounded-md py-[.4375rem] max-xxscren:px-2 px-4 text-[#DB8C00] text-[.625rem]"
                 // onClick={() => setBuyPlan(true)}
               >
                 View

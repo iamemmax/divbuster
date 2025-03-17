@@ -6,50 +6,57 @@ import Image from "next/image";
 const Marquee = () => {
   return (
     <>
-      <section className="z-50 fixed bottom-0 w-full bg-[#161D42] py-[.375rem] text-lg font-display">
+      <section className="!z-40 fixed bottom-0 w-full bg-[#161D42] py-1 md:py-[.375rem] text-sm font-display">
         <div className="marquee-content">
           <div className="marquee-list font-clash flex items-center gap-20 xl:text-xl">
+            <Image
+              width={40}
+              height={30}
+              alt="logo"
+              src={"/images/logos/libertyAssured.png"}
+              className="md:w-[3rem] "
+            />
+            <Image
+              width={70}
+              height={70}
+              alt="logo"
+              src={"/images/logos/libertyPay.png"}
+               className="md:w-[4rem] "
+            />
             <Image
               width={50}
               height={40}
               alt="logo"
-              src={"/images/logos/libertyAssured.png"}
-            />
-            <Image
-              width={100}
-              height={90}
-              alt="logo"
-              src={"/images/logos/libertyPay.png"}
-            />
-            <Image
-              width={60}
-              height={50}
-              alt="logo"
               src={"/images/logos/seed&pennies.png"}
+               className="md:w-[3rem] "
             />
             <Image
-              width={60}
-              height={40}
+              width={50}
+              height={30}
               alt="logo"
               src={"/images/logos/paybox360.png"}
+               className="md:w-[3rem] "
             />
             <Image
-              width={100}
-              height={50}
+              width={70}
+              height={40}
               alt="logo"
               src={"/images/logos/whispersms.png"}
+                className="md:w-[5rem] "
             />
             <Image
-              width={110}
-              height={60}
+              width={90}
+              height={50}
               alt="logo"
               src={"/images/logos/getlinked.png"}
+                className="md:w-[5rem] "
             />
             <Image
-              width={30}
+              width={25}
               height={20}
               alt="logo"
               src={"/images/logos/winwise.png"}
+                className="md:w-[1.6rem] "
             />
           </div>
         </div>
@@ -60,6 +67,7 @@ const Marquee = () => {
           overflow: hidden;
           position: relative;
           width: 100%;
+          zIndex:50
         }
 
         .marquee-list {

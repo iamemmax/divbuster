@@ -1,4 +1,6 @@
 export interface userStatusTypes {
+  message:string;
+user_found:boolean;
   id: string;
   last_login: null;
   is_superuser: boolean;

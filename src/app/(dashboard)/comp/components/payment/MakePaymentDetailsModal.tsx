@@ -24,6 +24,7 @@ import { formatAxiosErrorMessage } from "@/utils";
 import toast from "react-hot-toast";
 import PayStatckIcon from "@/app/(main)/misc/components/insurance/icons/PayStackIcon";
 import { confirmTransfer } from "@/app/(main)/misc/components/insurance/api/plan/confirmTransfer";
+import PendingToastContainer from "../loading/PendingLoading";
 
 interface Prop {
   //   userId?: string;
@@ -58,12 +59,15 @@ const MakePaymentDetailsModal = ({
     queryKey: ["confirm-transfer", users?.phone_number],
     enabled: false,
     onSuccess: (data) => {
-      if (data.message !== "success") {
+      if (data.message_code === "001") {
         toast.success(data?.message);
         router.push("/dashboard");
       } else {
-        setErrorMsg(data?.message);
-        openErrorModalWithMessage(String(data?.message));
+        // setErrorMsg(data?.message);
+        // openErrorModalWithMessage(String(data?.message));
+        toast.custom(() => <PendingToastContainer message={data?.message} />, {
+          id: 'pending-toast', // Using the same ID ensures only one "pending-toast" exists
+        });
       }
     },
     onError: (error) => {

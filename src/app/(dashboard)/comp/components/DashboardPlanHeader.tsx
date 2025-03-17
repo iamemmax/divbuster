@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Button } from "@/components/core";
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/core";
 import CopyIcon3 from "../icons/CopyIcon3";
 import { SmallSpinner } from "@/icons/core";
 import { capitalizeFirstLetter } from "@/utils";
@@ -16,6 +16,12 @@ import MakePaymentDetailsModal from "./payment/MakePaymentDetailsModal";
 import SelectDurationModal from "./plans/SelectDurationModal";
 import UpdateUserAccount from "./beneficiary/UpdateUserAccount";
 import ShowProcessingModal from "./payment/ShowProcessingModal";
+import Select, { SingleValue } from "react-select";
+
+interface ReferralOption {
+  name: string;
+  value: string;
+}
 
 const DashboardPlanHeader = () => {
   const { data: userData, isLoading } = useUser();
@@ -88,9 +94,59 @@ const DashboardPlanHeader = () => {
     };
 
 
+    const style = {
+      control: (base: any) => ({
+          ...base,
+          border: 0,
+          background: "#F5F9FE",
+          height: "2rem",
+          boxShadow: "none",
+          color: "#fff",
+          
+      }),
+      option: (provided: any) => ({
+          ...provided,
+          color: "#333",
+          background: "#fff",
+          fontSize: "12px",
+          
+          "&:hover": {
+              background: "#F5F9FE",
+          },
+      }),
+      singleValue: (provided: any) => ({
+          ...provided,
+          color: "#032282",
+          fontSize: "12px",
+          textTransform: "capitalize",
+      }),
+      placeholder: (base:any) => ({
+        ...base,
+        fontSize: '0.75rem', // Reduce the font size of the placeholder text
+        color: '#a0aec0', // Optional: you can customize the color of the placeholder too
+      }),
+  };
+  
+  const referralOption = [
+    {name:"Referral code", value:`${  userData?.referral_code}`},
+  {name:"Referral Links", value:`https://www.libertylifeplus.com/plan?referral_code=${userData?.referral_code}`}]
+      const selectRefferalOptions = referralOption?.map((link) => ({
+          value: link?.value,
+          label: link?.name,
+         
+      }));
 
-  return (
-    <div className=" bg-main py-6 px-6  md:px-[4.5rem] lg:px-[7.5rem]  ">
+      const [selectedOption, setSelectedOption] = useState<SingleValue<{ value: string; label: string }>>(null);
+    
+    
+      // Handle when an option is selected
+      const handleSelectChange = (selected: SingleValue<{ value: string; label: string }>) => {
+        setSelectedOption(selected);
+    
+        copy(`${selected?.value}`)
+      };
+      return (
+    <div className=" bg-main py-6 px-3  md:px-[4.5rem] lg:px-[7.5rem]  ">
       {isLoading ? (
         <div className="w-full h-24 flex justify-center items-center">
           {" "}
@@ -110,11 +166,11 @@ const DashboardPlanHeader = () => {
             </div>
             <div className="flex  flex-col ">
               <h2 className="text-white text-sm md:text-base font-medium">
-                {capitalizeFirstLetter(String(userData?.first_name))}{" "}
-                {capitalizeFirstLetter(String(userData?.last_name))}
+                {capitalizeFirstLetter(String(userData?.first_name ??""))}{" "}
+                {capitalizeFirstLetter(String(userData?.last_name??""))}
               </h2>
-              <div className="flex justify-between items-center w-full ">
-                <div className="flex items-center gap-x-3 flex-1">
+              <div className="flex justify-between flex-wrap items-center w-full ">
+                <div className="flex items-center flex-wrap gap-3 flex-1">
                   <p className="text-[#6E6E8B] text-xs md:text-sm font-medium">
                     Welcome, How are you today?
                   </p>
@@ -137,14 +193,15 @@ const DashboardPlanHeader = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center   gap-2  ">
+          <div className="flex items-center   flex-wrap  gap-2  ">
             {userData?.referral_code ? (
-              <div className="flex items-center gap-2">
+              <>
+              <div className="hidden  lg:flex items-center gap-2">
                 <div
-                  className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
+                  className=" flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
                   onClick={() =>
                     copy(
-                      `https://www.libertylifeplus.com/?referral_code=${userData?.referral_code}`
+                      `https://www.libertylifeplus.com/plan?referral_code=${userData?.referral_code}`
                     )
                   }
                 >
@@ -153,7 +210,7 @@ const DashboardPlanHeader = () => {
                   </p>
                   <div className="flex">
                     <p className="text-white max-w-[6.25rem] text-xxs truncate">
-                      {`https://www.libertylifeplus.com/?referral_code=${userData?.referral_code}`}
+                      {`https://www.libertylifeplus.com/plan?referral_code=${userData?.referral_code}`}
                     </p>
                     <Button className=" text-white px-0  py-[.0625rem]  flex items-start bg-transparent text-xs font-medium">
                       <CopyIcon3 height={15} width={15} />
@@ -162,7 +219,7 @@ const DashboardPlanHeader = () => {
                 </div>
 
                 <div
-                  className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-6 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
+                  className="flex items-center justify-center flex-col gap-x-2 bg-[#21253d] px-3 md:px-6 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
                   onClick={() => copy(userData?.referral_code ?? "")}
                 >
                   <p className="text-white text-xxs text-opacity-60">
@@ -178,6 +235,27 @@ const DashboardPlanHeader = () => {
                   </div>
                 </div>
               </div>
+              <div className="lg:hidden">
+                                                                  
+
+
+
+<Select
+        options={selectRefferalOptions}
+        defaultValue={selectRefferalOptions[0]??null}  // Pass the formatted options to React Select
+        onChange={handleSelectChange}    // Handle change
+        placeholder="Select Referral" // Placeholder text
+        className="react-select-container"  // You can style it with Tailwind
+        classNamePrefix="react-select" // Custom prefix for custom styles
+        styles={style}
+        isSearchable={false}
+        components={{
+            IndicatorSeparator: () => null,
+        }}
+      />
+      
+              </div>
+              </>
             ) : (
               <Button onClick={() => refetch()}>
                 {loadinGenerate ? (
@@ -208,7 +286,7 @@ const DashboardPlanHeader = () => {
             )}
             {userData?.subscription_status === "SUCCESS" && (
               <Button
-                className="bg-[#099976] h-[2.8125rem] text-white text-xs font-medium"
+                className="bg-[#099976] md:h-[2.8125rem] text-white text-xs font-medium"
                 disabled
               >
                 {userData?.subscription_status === "SUCCESS" && "Active"}

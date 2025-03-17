@@ -35,7 +35,7 @@ export function OnboardingPageWrapper({
           </h1>
           <p
             className={cn(
-              "relative mb-9 text-xs leading-[normal] text-opacity-70 text-white lg:text-sm text-left max-w-[391px]"
+              "relative mb-6 md:mb-9 text-xs leading-[normal] text-opacity-70 text-white lg:text-sm text-left max-w-[391px]"
             )}
           >
             {" "}
@@ -44,7 +44,7 @@ export function OnboardingPageWrapper({
 
           {children}
 
-          <p className="relative text-center leading-[normal] text-white text-xs mt-24">
+          <p className="relative text-center leading-[normal] text-white text-xs mt-[3.25rem]">
             © LibertyAssured, All Rights Reserved
           </p>
         </div>

@@ -26,7 +26,7 @@ import Link from "next/link";
 // import PlanPayment from "./PlanPayment";
 // import RemitalSuccessModal from "./RemitalSuccessModal";
 import { useQuery } from "react-query";
-import { getPlan, PlanData } from "../../api/plan/getPlan";
+import { getPlan, PlanData, plantypes, useGetPlan } from "../../api/plan/getPlan";
 // import { useMakeRemitalPayment } from "../../api/remital/remitalpayment";
 import {
   formatAxiosErrorMessage,
@@ -44,21 +44,27 @@ import {
   getAmountDeduction,
   getPercentage,
 } from "@/app/(dashboard)/comp/components/plans/util/planCalc";
+import AddRemitalPhoneNumer from "./AddReferralPhoneNumber";
+import ReferralPlanPayment from "./RefeerralPayment";
+import { PaymentDataType, PlanTypeTypes } from "@/app/(main)/plan/page";
+// import { PaymentDataType, PlanTypeTypes } from "@/app/(main)/plan/page";
 // import ComingSoonIcon from "../../icons/ComingSoonIcon";
 
 interface Prop {
   setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>;
   openRemitalPlan: boolean;
   userId: string;
-  setOpenCheckPhoneNumberModal: React.Dispatch<React.SetStateAction<boolean>>;
-  referalPlan: React.Dispatch<
-    React.SetStateAction<{
-      duration: string;
-      amount: string;
-      number_of_recipient: string;
-      play_type: string;
-    }>
-  >;
+  // setOpenCheckPhoneNumberModal: React.Dispatch<React.SetStateAction<boolean>>;
+  // referalPlan: React.Dispatch<
+  //   React.SetStateAction<{
+  //     duration: string;
+  //     amount: string;
+  //     number_of_recipient: string;
+  //     play_type: string;
+  //   }>
+  // >;
+  plansData: plantypes[] | undefined;
+  loadingPlan:boolean;
 }
 interface PercentageData {
   [key: number]: number;
@@ -78,10 +84,9 @@ export type PlanType = "family" | "individual" | "corporate";
 
 const ReferralModalPlan = ({
   openRemitalPlan,
-  setOpenShowRemitalPlan,
-  userId,
-  setOpenCheckPhoneNumberModal,
-  referalPlan,
+  // setOpenShowRemitalPlan,
+  plansData,
+  loadingPlan
 }: Prop) => {
   const {
     isErrorModalOpen,
@@ -99,11 +104,24 @@ const ReferralModalPlan = ({
   // const [showSubmitModal, setShowSubmitModal] = useState(false);
   // const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [planCounts, setPlanCounts] = useState<Record<string, number>>({});
-
-  const { data: plansData, isLoading: loadingPlan } = useQuery({
-    queryFn: getPlan,
-    queryKey: ["get-plans"],
+  const [isPhoneNumberModalOpen, setPhoneNumberModalOpen] = useState(false);
+  const [isReferralPaymentOpen, setReferralPaymentOpen] = useState(false);
+  const [planType, setPlanType] = useState<PlanTypeTypes>({
+    duration: "",
+    amount: "",
+    number_of_recipient: "",
+    play_type: "",
   });
+  const [paymentData, setPaymentData] = useState<PaymentDataType>({
+    account_name: "",
+    account_no: "",
+    amount: "",
+    bank_name: "",
+    paystack_link: "",
+    phone_number: "",
+  });
+
+  
   const [selectedCheckboxes, setSelectedCheckboxes] = useState<{ [key: string]: boolean }>({});
 
 const handleCheckboxChange = (planId: string) => {
@@ -179,7 +197,7 @@ const handleCheckboxChange = (planId: string) => {
     const percentageData = percentageCalc?.percentage_data[type];
 
     if (!percentageData) {
-      console.error(`No data found for type: ${type}`);
+      // console.error(`No data found for type: ${type}`);
       return 0; // or handle this case as needed
     }
 
@@ -191,11 +209,11 @@ const handleCheckboxChange = (planId: string) => {
       if (typeof value === "number") {
         return value;
       } else {
-        console.error(`Unexpected type for key ${key}: ${typeof value}`);
+        // console.error(`Unexpected type for key ${key}: ${typeof value}`);
         return 0; // or handle unexpected type
       }
     } else {
-      console.warn(`Key ${key} not found in percentageData for type: ${type}`);
+      // console.warn(`Key ${key} not found in percentageData for type: ${type}`);
       return 0; // or some default value if the key doesn't exist
     }
   }
@@ -211,7 +229,6 @@ const handleCheckboxChange = (planId: string) => {
   
     setSelectedCheckboxes(initialCheckboxes);
   }, [plansData]);
-
   return (
     <div>
       {loadingPlan ? (
@@ -220,19 +237,19 @@ const handleCheckboxChange = (planId: string) => {
         </div>
       ) : (
         <Dialog open={openRemitalPlan}>
-          <DialogContent className="!overflow-hidden rounded-[1.125rem]  min-h-[90vh] max-h-[97vh] px-4 w-full md:min-h-[55rem]">
+          <DialogContent className="!overflow-hidden rounded-[1.125rem]   px-4 w-full">
             <div className="md:w-full flex justify-between items-center">
               <DialogHeader className="bg-[#1B1687]  w-full !justify-between">
                 <DialogTitle className="text-[#fff] whitespace-nowrap">
                   {selectedTab} PLAN
                 </DialogTitle>
-
                 <DialogClose
-                  className="rounded-lg"
-                  onClick={() => setOpenShowRemitalPlan(false)}
-                >
-                  <button>Close</button>
-                </DialogClose>
+  className="rounded-lg"
+  onClick={() => (window.location.href = "/")}
+>
+  <button>Close</button>
+</DialogClose>
+
               </DialogHeader>
             </div>
 
@@ -244,8 +261,8 @@ const handleCheckboxChange = (planId: string) => {
               ) : (
                 <>
                   <div className="py-1">
-                    <div className="text-[#fff] text-center font-semibold text-3xl">
-                      <DialogDescription className="text-3xl">
+                    <div className="text-[#fff] text-center font-semibold ">
+                      <DialogDescription className="text-sm 2xl:text-lg 3xl:text-3xl">
                         Choose Your Plan
                       </DialogDescription>
                     </div>
@@ -253,37 +270,37 @@ const handleCheckboxChange = (planId: string) => {
 
                   <div className="flex w-full items-center justify-center">
                     {selectedTab === "INDIVIDUAL" && (
-                      <p className="w-full px-4 md:px-[2rem] text-center  text-base  sm:max-w-[80%] text-[#fff] text-opacity-50 font-medium">
+                      <p className="w-full px-4 md:px-[2rem] text-center text-sm md:text-sm xl:text-base sm:max-w-[80%] text-[#fff] text-opacity-50 font-medium">
                         Individual plan gives you access to health cover for you
                         only, and you stand a chance to enjoy awesome benefits.
                       </p>
                     )}
                     {selectedTab === "FAMILY" && (
-                      <p className="w-full px-4 md:px-[1.5rem] text-center  text-base sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
+                      <p className="w-full px-4 md:px-[1.5rem] text-center text-sm md:text-sm xl:text-basesm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
                         Family plan gives you access to include up to 6 members
                         of your family. The more you add, the more discount you
                         get.
                       </p>
                     )}
                     {selectedTab === "CORPORATE" && (
-                      <p className="w-full px-4 md:px-[1.5rem] text-center text-base  sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
+                      <p className="w-full px-4 md:px-[1.5rem] text-center text-sm md:text-sm xl:text-base sm:max-w-[90%] text-[#fff] text-opacity-50 font-medium">
                         Corporate Plan allows you provide premium health
                         coverage for employees.
                       </p>
                     )}
                   </div>
 
-                  <div className="max-h-[60vh] overflow-y-auto md:min-h-[409px] rounded-b-lg md:mb-[2rem] md:w-full mt-5 md:mt-6">
+                  <div className="max-h-[53vh]  3xl:max-h-[63.6vh] overflow-y-auto 2xl:min-h-[409px] rounded-b-lg  md:w-full mt-5 md:mt-6">
                     <Tabs
                       className=""
                       defaultValue={selectedTab}
                       onValueChange={(e) => setSelectedTab(e)}
                     >
-                      <div className="flex w-full px-6 items-center justify-center">
+                      <div className="flex w-full px-3 md:px-6 items-center justify-center">
                         <TabsList className="flex w-[98%] justify-center rounded-[.75rem] bg-[#1D2651] md:max-w-[30rem] md:pl-6 lg:pl-0 border border-[#407BFF]">
                           {plansData?.map((tab, idx: number) => (
                             <TabsTrigger
-                              className="inline-flex w-full items-center justify-center rounded-xl text-md font-medium text-[#fff] data-[state=active]:shadow-none"
+                              className="inline-flex w-full items-center justify-center rounded-xl text-xs  2xl:text-sm font-medium text-[#fff] data-[state=active]:shadow-none"
                               value={tab?.package_name}
                               key={idx}
                             >
@@ -293,7 +310,7 @@ const handleCheckboxChange = (planId: string) => {
                         </TabsList>
                       </div>
 
-                      {/*  PLAN */}
+            
                       {plansData?.map((healthPlan, idx: number) => (
                         <TabsContent
                           key={idx}
@@ -301,15 +318,19 @@ const handleCheckboxChange = (planId: string) => {
                           value={healthPlan?.package_name}
                         >
                           <div
-                            className={`${healthPlan?.data?.length > 2 ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-8  gap-x-[1rem] px-6 " : " w-full flex flex-col md:flex-row gap-[1rem] px-6 items-center justify-center"}`}
+                             className={`${
+                              healthPlan?.data?.length > 2
+                                ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-start  justify-start h-full  gap-y-8 gap-x-[1rem] px-6 "
+                                : "w-full flex flex-col md:flex-row gap-[1rem] px-6 items-center justify-center"
+                            }`}
                           >
                             {healthPlan?.data?.map((plan, idxx: number) => (
                               <div
-                                className="flex flex-col w-full items-center justify-center"
+                                className="flex flex-col h-full w-full items-center justify-center"
                                 key={idxx}
                               >
-                                <div className="w-full">
-                                  <div className="border-[0.3px] relative border-[#4760FD] rounded-[1.25rem] bg-[#1A234C]">
+                               
+                                  <div className="border-[0.3px] relative border-[#4760FD] items-stretch rounded-[1.25rem] bg-[#1A234C]">
                                     <div className="w-full py-8  relative">
                                       <div className="absolute -top-6 flex justify-center items-start w-full">
                                         <UserIcons width={65} height={65} />
@@ -344,19 +365,7 @@ const handleCheckboxChange = (planId: string) => {
                                               </p>
                                             )}
                                           </div>
-                                          {/* {healthPlan?.package_name ===
-                                              "FAMILY" && (
-                                              <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
-                                                3 Individuals (3 + 1 free )
-                                              </p>
-                                            )} */}
-                                          {/* {healthPlan?.package_name ===
-                                            "CORPERATE" && (
-                                            <p className="text-xs py-1 text-[#D1D3DB] text-opacity-80 font-normal">
-                                              Minimum of{" "}
-                                              {plan?.plan_duration?.min_members}
-                                            </p>
-                                          )} */}
+                                       
                                         </div>
                                         <div className="space-y-[10px] mt-1">
                                           {plan?.descriptions?.map(
@@ -439,56 +448,7 @@ const handleCheckboxChange = (planId: string) => {
                                                 </svg>
                                               </Button>
                                             </div>
-                                            {/* <div className="flex justify-center rounded-[1.25rem] mt-3 py-[.375rem] px-3 bg-white bg-opacity-10 items-center">
-                                              <p className="text-white font-semibold text-xs">
-                                                {formatCurrency(
-                                                  selectedCheckboxes[plan.id] ?
-                                                  getAmountDeduction(
-                                                    Number(
-                                                      removeCommaFromPrice(
-                                                        String(
-                                                          percentageCalc?.base_price
-                                                        )
-                                                      )
-                                                    ),
-                                                    plan?.plan_duration?.duration,
-                                                    planCounts[
-                                                      plan.id.toString()
-                                                    ] || 0,
-                                                    getPercentage(
-                                                      plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
-                                                      planCounts[
-                                                        plan.id.toString()
-                                                      ]
-                                                    )
-                                                    +
-                                                    String(
-                                                      percentageCalc?.base_price
-                                                    ) * plan?.plan_duration?.duration,
-                                                  ):
-                                                  
-                                                  getAmountDeduction(
-                                                    Number(
-                                                      removeCommaFromPrice(
-                                                        String(
-                                                          percentageCalc?.base_price
-                                                        )
-                                                      )
-                                                    ),
-                                                    plan?.plan_duration?.duration,
-                                                    planCounts[
-                                                      plan.id.toString()
-                                                    ] || 0,
-                                                    getPercentage(
-                                                      plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
-                                                      planCounts[
-                                                        plan.id.toString()
-                                                      ]
-                                                    )
-                                                  )
-                                                )}
-                                              </p>
-                                            </div> */}
+                                          
 
                                             <div className="flex justify-center rounded-[1.25rem] mt-3 py-[.375rem] px-3 bg-white bg-opacity-10 items-center">
                                               <p className="text-white font-semibold text-xs">
@@ -560,64 +520,51 @@ const handleCheckboxChange = (planId: string) => {
                                       )}
                                     </div>
 
-                                    <div className="border-[.0313rem] border-[#4760FD] rounded-10 -mt-2 flex justify-center items-center w-full py-5">
-                                      <Button
-                                        className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
-                                        onClick={() => {
-                                          referalPlan({
-                                            number_of_recipient: String(
-                                              planCounts[plan.id.toString()] ||
-                                                0
-                                            ),
-                                            duration: String(
-                                              plan?.plan_duration?.duration
-                                            ),
-                                            amount:
-                                              healthPlan?.package_name ===
-                                              "FAMILY"
-                                                ? formatCurrency(
-                                                    getAmountDeduction(
-                                                      Number(
-                                                        removeCommaFromPrice(
-                                                          String(
-                                                            percentageCalc?.base_price
-                                                          )
-                                                        )
-                                                      ),
-                                                      plan?.plan_duration
-                                                        ?.duration,
-                                                      planCounts[
-                                                        plan.id.toString()
-                                                      ] || 0,
-                                                      getPercentage(
-                                                        plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
-                                                        planCounts[
-                                                          plan.id.toString()
-                                                        ]
-                                                      )
-                                                    )
-                                                  )
-                                                : formatCurrency(
-                                                    Number(
-                                                      removeCommaFromPrice(
-                                                        String(plan?.price)
-                                                      )
-                                                    )
-                                                  ),
-                                            play_type: healthPlan?.package_name,
-                                          });
-                                          setOpenShowRemitalPlan(false);
-                                          setOpenCheckPhoneNumberModal(true);
-                                        }}
-                                      >
-                                        Get Insurance
-                                      </Button>
-                                    </div>
+                                  
+
+<div className="border-[.0313rem] border-[#4760FD] rounded-10 -mt-2  flex justify-center  items-stretch w-full py-5">
+            <Button
+              className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+              onClick={() => {
+                setPlanType({
+                  number_of_recipient: String(planCounts[plan.id.toString()] || 0),
+                  duration: String(plan?.plan_duration?.duration),
+                  amount:
+                    healthPlan?.package_name === "FAMILY"
+                      ? formatCurrency(
+                          getAmountDeduction(
+                            Number(removeCommaFromPrice(String(percentageCalc?.base_price))),
+                            plan?.plan_duration?.duration,
+                            planCounts[plan.id.toString()] || 0,
+                            getPercentage(
+                              plan?.plan_duration?.plan_type?.name?.toLowerCase() as PlanType,
+                              planCounts[
+                                plan.id.toString()
+                              ]
+                            )
+                          )
+                        )
+                      : formatCurrency(Number(removeCommaFromPrice(String(plan?.price)))),
+                  play_type: healthPlan?.package_name,
+                });
+                setPhoneNumberModalOpen(true);
+              }}
+            >
+              Get Insurance
+            </Button>
+          </div>
                                   </div>
-                                </div>
+                            
                               </div>
                             ))}
                           </div>
+
+
+
+
+
+
+                          
                         </TabsContent>
                       ))}
                     </Tabs>
@@ -653,6 +600,25 @@ const handleCheckboxChange = (planId: string) => {
           planType={planType}
         />
       )} */}
+
+
+{isPhoneNumberModalOpen && (
+        <AddRemitalPhoneNumer
+          openCheckPhoneNumberModal={isPhoneNumberModalOpen}
+          setOpenCheckPhoneNumberModal={setPhoneNumberModalOpen}
+          setShowReferralPayment={setReferralPaymentOpen}
+          planType={planType}
+          setPaymentData={setPaymentData}
+        />
+      )}
+      {isReferralPaymentOpen && (
+        <ReferralPlanPayment
+          showReferralPayment={isReferralPaymentOpen}
+          setShowReferralPayment={setReferralPaymentOpen}
+          PaymentInfo={paymentData}
+          setShowReferralPasswordModal={()=>null}
+        />
+      )}
       <ErrorModal
         isErrorModalOpen={isErrorModalOpen}
         setErrorModalState={() => {
@@ -669,3 +635,9 @@ const handleCheckboxChange = (planId: string) => {
 };
 
 export default ReferralModalPlan;
+
+
+
+
+
+

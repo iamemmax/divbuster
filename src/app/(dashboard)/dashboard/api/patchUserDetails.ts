@@ -9,8 +9,8 @@ interface UserDetailsDTO {
     state: string
     lga: string
     hospital: string
-    bvn:string
-    nin:string
+    bvn?:string
+    nin?:string
 }
 
 export const updateUserDetails = async ({ name, email, bvn, hospital,lga, nin, phone_number, state}: UserDetailsDTO) => {

@@ -1,7 +1,8 @@
 import React from 'react'
-import { FaSquareXTwitter, FaLinkedin, FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
+import { FaSquareXTwitter, FaLinkedin, FaFacebookF, FaInstagram, FaTiktok, FaWhatsapp } from "react-icons/fa6";
 import { AboutIcon } from '@/components/icons';
 import Link from 'next/link';
+import GetInsuranceButton from '../misc/components/GetIsuranceButton';
 
 export default function page() {
     return (
@@ -47,39 +48,60 @@ export default function page() {
                                 <p className='font-medium'>27 Alara street, off commercial avenue, Sabo Yaba, Lagos.</p>
                                 <p className='text-[#CAC9D4]'>9:00am - 5pm (Mon-Fri)</p>
                             </div>
-                            <div className='bg-[#FFFFFF0D] py-4 pl-4 md:pl-8 rounded-lg mt-3'>
+                            <div className='bg-[#FFFFFF0D] py-4 pl-4 md:pl-8 rounded-lg mt-3 !z-[9999999999999999]'>
                                 <p className='text-[#CAC9D4] pb-1'>Follow us on social media</p>
-                                <ul className='flex text-white gap-2 md:gap-5'>
-                                    <Link href='https://x.com/libertylifeplus?s=21&t=-L8aIrO3luRw_JZ0xg78FA'>
-                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
+                                <ul className='flex text-white gap-2 '>
+                                <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg z-[999999999999] text-xs md:text-xl'>
+                                    <Link href='https://x.com/libertylifeplus?s=21&t=hiO-PpveLL2MH-_-IPymTg' target='_blank' title='Twitter'>
                                             <FaSquareXTwitter />
-                                        </li>
                                     </Link>
-                                    <Link href='https://www.linkedin.com/showcase/liberty-life/'>
-                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
+                                        </li>
+                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg z-[999999999999] text-xs md:text-xl'>
+                                    <Link href='https://www.linkedin.com/showcase/liberty-life/' target='_blank' title='Linkedin'>
                                             <FaLinkedin />
-                                        </li>
                                     </Link>
-                                    <Link href='https://www.tiktok.com/@libertylifehmo?_t=8orvfqOrIhx&_r=1'>
-                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
+                                        </li>
+                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] z-[999999999999]  rounded-lg text-xs md:text-xl'>
+                                    <Link href='https://www.tiktok.com/@libertylife_ng?_t=ZM-8ue6rP2eqcp&_r=1' target='_blank' title='Tiktok'>
                                             <FaTiktok />
-                                        </li>
                                     </Link>
-                                    <Link href='https://www.facebook.com/profile.php?id=61562985866097https://www.instagram.com/libertylifehmo/ '>
-                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
-                                            <FaFacebookF />
                                         </li>
+                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] z-[999999999999]  rounded-lg text-xs md:text-xl'>
+                                    <Link href='https://bit.ly/CHATLIBERTYLIFE' target='_blank' title='Whatsapp'>
+                                            <FaWhatsapp />
                                     </Link>
-                                    <Link href='https://www.instagram.com/libertylifehmo?igsh=MWs3ZDIya3JubXd6cA%3D%3D&utm_source=qr'>
-                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg text-xs md:text-xl'>
+                                        </li>
+                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] z-[999999999999]   rounded-lg text-xs md:text-xl'>
+                                    <Link href='https://www.facebook.com/share/1BKi1NFXdj/' target='_blank' title='Facebook'>
+                                            <FaFacebookF /> 
+                                    </Link>
+                                        </li>
+                                        <li className='p-1 md:p-1.5 bg-[#FFFFFF1A] rounded-lg z-[999999999999] text-xs md:text-xl'>
+                                    <Link href='https://www.instagram.com/libertylifeng?igsh=MTN5anBuanRmYnNneQ%3D%3D&utm_source=qr' target='_blank' title='Instagram'>
                                             <FaInstagram />
-                                        </li>
                                     </Link>
+                                        </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
+  <div className='py-[3rem]'>
+                    <div className='md:flex flex-row bg-[#FFFFFF0D] gap-36 pt-4 pb-6 sm:py-3 items-center justify-center pr-16 pl-6 rounded-lg'>
+                        <p className='text-xs md:text-[14px] lg:text[16px] text-[#FFFFFFCC] md:pb-0 pb-4'>
+                            Welcome to Liberty life, where your health and wealth is paramount to us. Enjoy health and wealth!
+                        </p>
+                        {/* <button className='flex justify-between items-center bg-white text-blue-950 bg rounded-full text-xs py-1 pl-5 pr-2 gap-[18px]'>
+                            Get insurance
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="15" cy="15" r="15" fill="#032282" />
+                                <path d="M10.9168 19.6171C11.0334 19.6171 11.1501 19.5587 11.2084 19.5004L19.3751 11.3337C19.5501 11.1587 19.5501 10.9254 19.3751 10.7504C19.2001 10.5754 18.9084 10.5754 18.7334 10.7504L10.5668 18.9171C10.3918 19.0921 10.3918 19.3837 10.5668 19.5587C10.6834 19.6171 10.8001 19.6171 10.9168 19.6171Z" fill="white" />
+                                <path d="M19.0834 17.4585C19.3167 17.4585 19.55 17.2835 19.55 16.9919V11.0419C19.55 10.8085 19.375 10.5752 19.0834 10.5752H13.075C12.8417 10.5752 12.6084 10.7502 12.6084 11.0419C12.6084 11.3335 12.7834 11.5085 13.075 11.5085H18.6167V17.0502C18.6167 17.2835 18.85 17.4585 19.0834 17.4585Z" fill="white" />
+                            </svg>
+                        </button> */}
 
+                        <GetInsuranceButton/>
+                    </div>
+                </div>
                 </div>
             </div>
         </main>

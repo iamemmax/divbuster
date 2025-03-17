@@ -106,8 +106,7 @@ const Page = () => {
                         className="flex items-center border-[0.3px] border-[#032282] justify-center flex-col gap-x-2 bg-transparent px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
                         onClick={() =>
                           copy(
-                            ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}` ??
-                              ""
+                            `https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}`
                           )
                         }
                       >
@@ -162,6 +161,7 @@ const Page = () => {
               <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-7">
                 <div className="">1</div>
                 <div className="">2 </div>
+
               </div>
             </form>
           </div>

@@ -59,8 +59,8 @@ const baseSchema = z.object({
     .email({ message: "Invalid email format" })
     .min(1, { message: "Email is required" }),
   selectedOption: z.union([z.literal("nin"), z.literal("bvn")]),
-  bvn: z.string().trim(),
-  nin: z.string().trim(),
+  bvn: z.string().optional(),
+  nin: z.string().optional(),
 });
 
 // Extend the base schema for NIN
@@ -215,9 +215,11 @@ const NonRemitalModal = ({
                   Email
                 </Label>
                 <div className="relative mt-[.25rem]">
-                  <Input2
-                    className={`${errors?.email?.message ? "border border-red-700" : ""} text-[#fff]`}
-                    placeholder="Enter email"
+                  <input
+                     className={`${
+                      errors?.email ? "border border-red-700" : ""
+                    } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+placeholder="Enter email"
                     type="text"
                     id="email"
                     {...register("email")}
@@ -267,14 +269,58 @@ const NonRemitalModal = ({
                     BVN
                   </Label>
                   <div className="relative mt-[.25rem]">
-                    <Input2
+                    {/* <Input2
                       className={`${errors?.bvn?.message ? "border border-red-700" : ""} text-[#fff]`}
                       placeholder="Enter BVN"
                       type="text"
                       id="bvn"
-                      required
+                      // required
+                      
                       {...register("bvn")}
-                    />
+                    /> */}
+
+
+
+                    <Controller
+                                          control={control}
+                                          name={`bvn`}
+                                          render={({ field }) => (
+                                            <input
+                                              {...field}
+                                              {...field}
+                                        className={`${
+                                          errors?.bvn ? "border border-red-700" : ""
+                                        } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                                              id="bvn"
+                                              placeholder="Enter BVN"
+                                              type="text"
+                                              maxLength={11}
+                                              onChange={(e) => {
+                                                const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                                // Handle input sanitization on change (typing)
+                                                const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                                field.onChange(validPhoneNumber);
+                                              }}
+                                              onPaste={(e) => {
+                                                e.target as HTMLInputElement;
+                                                // Intercept paste event to sanitize pasted content
+                                                const pastedValue = e.clipboardData.getData('text');
+                                                // Remove non-numeric characters and limit to 11 digits
+                                                const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
+                                                e.preventDefault(); // Prevent the default paste behavior
+                                                field.onChange(sanitizedValue); // Apply sanitized value
+                                              }}
+                                              
+                                              onInput={(e) => {
+                                                const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                                // Handle input sanitization on input changes
+                                                const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                                field.onChange(validPhoneNumber);
+                                              }}
+                                              // onChange={(e) => field.onChange(e.target.value)}
+                                            />
+                                          )}
+                                        />
                   </div>
                 </div>
               )}
@@ -287,14 +333,55 @@ const NonRemitalModal = ({
                     NIN
                   </Label>
                   <div className="relative mt-[.25rem]">
-                    <Input2
+                    {/* <Input2
                       className={`${errors?.nin?.message ? "border border-red-700" : ""} text-[#fff]`}
                       placeholder="Enter NIN"
                       type="text"
                       id="nin"
                       required
                       {...register("nin")}
-                    />
+                    /> */}
+                  
+<Controller
+                                          control={control}
+                                          name={`nin`}
+                                          render={({ field }) => (
+                                            <input
+                                              {...field}
+                                              {...field}
+                                        className={`${
+                                          errors?.nin ? "border border-red-700" : ""
+                                        } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                                              id="nin"
+                                              placeholder="Enter nin"
+                                              type="text"
+                                              maxLength={11}
+                                              onChange={(e) => {
+                                                const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                                // Handle input sanitization on change (typing)
+                                                const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                                field.onChange(validPhoneNumber);
+                                              }}
+                                              onPaste={(e) => {
+                                                e.target as HTMLInputElement;
+                                                // Intercept paste event to sanitize pasted content
+                                                const pastedValue = e.clipboardData.getData('text');
+                                                // Remove non-numeric characters and limit to 11 digits
+                                                const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
+                                                e.preventDefault(); // Prevent the default paste behavior
+                                                field.onChange(sanitizedValue); // Apply sanitized value
+                                              }}
+                                              
+                                              onInput={(e) => {
+                                                const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                                // Handle input sanitization on input changes
+                                                const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                                field.onChange(validPhoneNumber);
+                                              }}
+                                              // onChange={(e) => field.onChange(e.target.value)}
+                                            />
+                                          )}
+                                        />
                   </div>
                 </div>
               )}

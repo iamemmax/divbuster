@@ -4,16 +4,16 @@
 import Image from 'next/image'
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 
-import { Button, ErrorModal, FormError, Input, RadioGroup, RadioGroupItem, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core'
+import { Button, ErrorModal, FormError, Input, RadioGroup, RadioGroupItem, } from '@/components/core'
 import { useQuery, useQueryClient } from 'react-query'
 import { fetchReferralCode } from '../api/referral/fetchReferralCode'
-import { UserDataTypes, useUser } from '@/app/(auth)/(onboarding)/misc'
+import { useUser } from '@/app/(auth)/(onboarding)/misc'
 import { Label } from '@radix-ui/react-label'
 import { Controller, useForm, useWatch } from 'react-hook-form'
-import { string, z } from 'zod'
+import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useClipboard, useErrorModalState } from '@/hooks'
-import { fetchHospitalListByLga, fetchRegionByState, fetchStateList, useUserHospitalChoice } from '@/app/(main)/misc/components/insurance/api/remital/remtalUserDetails'
+import { fetchHospitalListByLga, fetchRegionByState, fetchStateList } from '@/app/(main)/misc/components/insurance/api/remital/remtalUserDetails'
 import { capitalizeFirstLetter, formatAxiosErrorMessage } from '@/utils'
 
 import Select, { components } from "react-select";
@@ -57,8 +57,8 @@ const formValues = z.object({
         .trim()
         .min(1, { message: "Please select a hospital." }),
     selectedOption: z.union([z.literal("nin"), z.literal("bvn")]),
-    bvn: z.string().trim(),
-    nin: z.string().trim(),
+    bvn: z.string().trim().optional(),
+    nin: z.string().trim().optional(),
 
 });
 
@@ -66,21 +66,21 @@ const baseSchema = z.object({
 
 });
 
-// Extend the base schema for NIN
-const ninSchema = baseSchema.extend({
-    nin: z
-        .string()
-        .trim()
-        .min(10, { message: "NIN should be at least 10 digits" }),
-});
+// // Extend the base schema for NIN
+// const ninSchema = baseSchema.extend({
+//     nin: z
+//         .string()
+//         .trim()
+//         .min(10, { message: "NIN should be at least 10 digits" }),
+// });
 
-// Extend the base schema for BVN
-const bvnSchema = baseSchema.extend({
-    bvn: z
-        .string()
-        .trim()
-        .min(11, { message: "BVN should be at least 11 digits" }),
-});
+// // Extend the base schema for BVN
+// const bvnSchema = baseSchema.extend({
+//     bvn: z
+//         .string()
+//         .trim()
+//         .min(11, { message: "BVN should be at least 11 digits" }),
+// });
 
 export default function Page() {
 
@@ -123,7 +123,7 @@ export default function Page() {
             hospital: "",
             lga: "",
             state: userData?.state,
-            name: userData?.first_name,
+            name: `${userData?.first_name} ${userData?.middle_name} ${userData?.last_name}`, 
             phone_number: userData?.phone_number
         },
     });
@@ -187,8 +187,8 @@ export default function Page() {
 
         return () => clearTimeout(timer);
     }, []);
-    const { mutate: handleSubmitHospital } =
-        useUserHospitalChoice();
+    // const { mutate: handleSubmitHospital } =
+    //     useUserHospitalChoice();
     // const router = useRouter();
 
 
@@ -201,9 +201,6 @@ export default function Page() {
         label: state,
     }));
 
-    console.log("lga", stateOptions);
-
-    console.log("lga", lgaOption);
 
     const style = {
         control: (base: any) => ({
@@ -256,14 +253,14 @@ export default function Page() {
                 },
             }
         )
-        console.log(data, "datae")
+
     };
 
 
 
-    interface Prop {
-        userData: UserDataTypes | undefined;
-    }
+    // interface Prop {
+    //     userData: UserDataTypes | undefined;
+    // }
 
     const CustomOption = (props: any) => {
         const { data } = props;
@@ -338,20 +335,21 @@ export default function Page() {
                     :
                     (
                         <div className='bg-[#F5F9FE]'>
-                            <div className='bg-main min-h-36'></div>
-                            <section className="h-full w-full px-6 md:px-[7.5rem] min-h-screen pb-[1.88rem] relative -mt-32">
+                            <section className=" w-full px-6 md:px-[7.5rem] pb-12 xl:pb-8 relative ">
                                 <div className='bg-white w-full h-full lg:h-screen mx-auto pt-[2.625rem] px-6 lg:px-[4.5rem] rounded-[.625rem]'>
                                     <p className='text-[#032282] font-sans font-bold text-2xl'>Personal Information</p>
                                     <section className='mt-8 flex flex-col lg:flex-row justify-between'>
                                         <div className='flex justify-between items-center gap-4'>
                                             <div className='flex justify-center'>
-                                                <div className='relative w-[100px] h-[100px] rounded-full overflow-hidden'>
+
+                                                <div className="relative w-[100px] h-[100px] rounded-full overflow-hidden">
                                                     <Image
                                                         alt="profile"
-                                                        src={profilePic || userData?.profile_image || '/images/userIcon.png'}
+                                                        // If profile_image is not a valid URL, fallback to default
+                                                        src={profilePic && (profilePic.startsWith('http://') || profilePic.startsWith('https://')) ? profilePic : userData?.profile_image && (userData.profile_image.startsWith('http://') || userData.profile_image.startsWith('https://')) ? userData.profile_image : '/images/userIcon.png'}
                                                         className="rounded-full"
-                                                        fill
-                                                        objectFit='cover'
+                                                        layout="fill"
+                                                        objectFit="cover"
                                                     />
                                                 </div>
                                                 <div className='mt-[3.8rem] -ml-[1.5rem] z-[2]'>
@@ -392,8 +390,8 @@ export default function Page() {
                                                     className="flex items-center justify-center flex-col gap-x-2 border-[0.3px] border-[#032282] bg-white px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
                                                     onClick={() =>
                                                         copy(
-                                                            ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}` ??
-                                                            ""
+                                                            ` https://liberty-life.vercel.app/?get-started=true&referral_code=${userData?.referral_code}`
+
                                                         )
                                                     }
                                                 >
@@ -441,7 +439,7 @@ export default function Page() {
                                                             Name
                                                         </Label>
                                                         <Input
-                                                            placeholder='Enter name'
+                                                            placeholder='Enter full name'
                                                             type='text'
                                                             id='name'
                                                             className='py-3 bg-[#F5F9FE] mt-2'
@@ -628,9 +626,7 @@ export default function Page() {
                                                                     placeholder="Enter BVN"
                                                                     type="text"
                                                                     id="bvn"
-                                                                    required
                                                                     {...register("bvn")}
-
                                                                 />
                                                             </div>
                                                         </div>
@@ -649,9 +645,7 @@ export default function Page() {
                                                                     placeholder="Enter NIN"
                                                                     type="text"
                                                                     id="nin"
-                                                                    required
                                                                     {...register("nin")}
-                                                                    disabled
                                                                 />
                                                             </div>
                                                         </div>
@@ -659,7 +653,12 @@ export default function Page() {
                                                 </div>
                                                 <div className='border-b-[0.3px] mt-4'></div>
                                                 <div className='mt-6'>
-                                                    <Button className='bg-[#099976] py-3 px-7 text-xs text-nowrap rounded-10 border-[0.3px] border-[#032282]'>Save Changes</Button>
+                                                    <Button
+                                                        type='submit'
+                                                        className='bg-[#099976] py-3 px-7 text-xs text-nowrap rounded-10 border-[0.3px] border-[#032282]'
+                                                    >
+
+                                                        Save Changes {isHandleUpdateProfile && <SmallSpinner color='blue' />} </Button>
                                                 </div>
                                             </form>
                                         </div>

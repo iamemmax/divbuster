@@ -1,4 +1,5 @@
 import { adminAxios } from "@/lib/axios";
+import { useQuery } from "react-query";
 
 
 export interface plantypes {
@@ -30,4 +31,11 @@ export const getPlan = async ( ) => {
     return data as plantypes[]
      
 };
+export const useGetPlan = ()=>{
+ return useQuery({
+    queryFn: getPlan,
+    queryKey: ["get-plans"],
+  });
+
+}
 

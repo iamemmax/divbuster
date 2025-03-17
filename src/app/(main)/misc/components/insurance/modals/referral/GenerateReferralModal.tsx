@@ -11,13 +11,9 @@ import {
 } from "@/components/core";
 import { z } from "zod";
 import { Label } from "@radix-ui/react-label";
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Spinner } from "@/icons/core";
-import { useUser } from "@/app/(auth)/(onboarding)/misc";
-import CloseIcon from "@/app/(main)/misc/icons/CLoseIcon";
-import { useQuery } from "react-query";
-import { getPlan } from "@/app/(main)/misc/components/insurance/api/plan/getPlan";
+import { SmallSpinner, Spinner } from "@/icons/core";
 import { useCreateReferral } from "../../api/referral/generateReferralCode";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
@@ -38,17 +34,15 @@ const formSchema = z.object({
   first_name: z
     .string()
     .trim()
-    .min(1, { message: "Please enter the first name." }),
+    .min(1, { message: "Please enter  First name." }),
   last_name: z
     .string()
     .trim()
-    .min(1, { message: "Please enter the name." }),
-  phone_number: z
+    .min(1, { message: "Please enter Last name." }),
+    phone_number: z
     .string()
-    .trim()
-    .min(10, { message: "Please enter a valid phone number." }),
-
-
+    .min(11, { message: "Phone number should be at least 11 digits" })
+    .regex(/^0\d{10}$/, { message: "Phone number must start with 0 and be 11 digits long" }),
 
 });
 
@@ -77,9 +71,8 @@ const GenerateReferralModal = ({
     },
   });
 
-  const { mutate: handleGenerateReferral } = useCreateReferral()
+  const { mutate: handleGenerateReferral,isLoading } = useCreateReferral()
 
-  const [isLoading, setIsLoading] = useState(false);
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -116,12 +109,10 @@ const GenerateReferralModal = ({
 
   return (
     <>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <div className="rounded-xl">
+     
+        <div className="rounded-xl z-[9999999999999] ">
           <Dialog open={isBuyPlanModalOpen}>
-            <DialogContent className="!overflow-hidden max-h-[93vh]">
+            <DialogContent className="!overflow-hidden  z-[9999999999999]  max-h-[93vh]">
               <DialogHeader className="bg-[#1B1687] font-medium text-[#fff] text-base">
                 <DialogTitle className="font-medium text-[#fff]">
                   Generate Referral Details
@@ -175,6 +166,11 @@ const GenerateReferralModal = ({
                           )}
                         />
                       </div>
+                      {errors?.first_name && (
+                <p className="text-red-700 text-xs mt-1">
+                  {errors.first_name.message}
+                </p>
+              )}
                       <div className="mt-3">
                         <Label
                           className="mb-1 block text-xs text-[#fff]"
@@ -193,6 +189,11 @@ const GenerateReferralModal = ({
                             )}
                           />
                         </div>
+                        {errors?.last_name && (
+                <p className="text-red-700 text-xs mt-1">
+                  {errors.last_name.message}
+                </p>
+              )}
                       </div>
                       <div className="mt-3">
                         <Label
@@ -202,16 +203,56 @@ const GenerateReferralModal = ({
                           Phone number
                         </Label>
                         <div className="relative mt-[.25rem]">
-                          <input
-                            className={`${errors?.phone_number ? "border border-red-700" : ""} text-[#fff] text-xs outline-none rounded-lg px-6 w-full h-[2.875rem] bg-[#2a3150]`}
-                            placeholder="Enter phone number"
-                            type="text"
-                            id={`phone_number`}
-                            {...register(
-                              `phone_number`
-                            )}
-                          />
+                        <Controller
+                      control={control}
+                      name={`phone_number`}
+                      render={({ field }) => (
+                        <input
+                          {...field}
+                          {...field}
+                    className={`${
+                      errors?.phone_number ? "border border-red-700" : ""
+                    } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                          id="account_no"
+                          placeholder="Phone number"
+                          type="text"
+                          maxLength={11}
+                          onChange={(e) => {
+                            const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                            // Handle input sanitization on change (typing)
+                            const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                            field.onChange(validPhoneNumber);
+                          }}
+                         
+
+
+                         
+                          onPaste={(e) => {
+                            e.target as HTMLInputElement;
+                            // Intercept paste event to sanitize pasted content
+                            const pastedValue = e.clipboardData.getData('text');
+                            // Remove non-numeric characters and limit to 11 digits
+                            const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
+                            e.preventDefault(); // Prevent the default paste behavior
+                            field.onChange(sanitizedValue); // Apply sanitized value
+                          }}
+                          
+                          onInput={(e) => {
+                            const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                            // Handle input sanitization on input changes
+                            const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                            field.onChange(validPhoneNumber);
+                          }}
+                          // onChange={(e) => field.onChange(e.target.value)}
+                        />
+                      )}
+                    />
                         </div>
+                        {errors?.phone_number && (
+                <p className="text-red-700 text-xs mt-1">
+                  {errors.phone_number.message}
+                </p>
+              )}
                       </div>
                     </div>
                   </div>
@@ -221,7 +262,7 @@ const GenerateReferralModal = ({
                         className="flex items-center gap-x-5 justify-center font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                         type="submit"
                       >
-                        Continue
+                        Continue {isLoading && <SmallSpinner color="blue"/>}
                       </Button>
                     </div>
                   </div>
@@ -232,7 +273,7 @@ const GenerateReferralModal = ({
 
 
         </div>
-      )}
+      
 
       <ErrorModal
         isErrorModalOpen={isErrorModalOpen}

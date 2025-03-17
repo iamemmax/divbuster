@@ -14,14 +14,10 @@ import {
 } from "@/components/core";
 import { RightUpArrow, SmallSpinner } from "@/icons/core";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
-import { Input2 } from "@/components/core/Input2";
-import { formatAxiosErrorMessage } from "@/utils";
-import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
-import { useRouter } from "next/navigation";
 import { useCreateReferralPlanRequest } from "@/app/(main)/misc/components/insurance/api/referral/createReferralPlan";
 
 interface Prop {
@@ -39,11 +35,9 @@ interface successProp {
 }
 const contactSchema = z.object({
   phone_number: z
-    .string({ required_error: "Enter your phone number" })
-    .trim()
-    .min(10, {
-      message: "Phone number ssetShowPaymentModalhould be at least 11 digits",
-    }),
+  .string()
+  .min(11, { message: "Phone number should be at least 11 digits" })
+  .regex(/^0\d{10}$/, { message: "Phone number must start with 0 and be 11 digits long" }),
 });
 
 export type detailRequestType = z.infer<typeof contactSchema>;
@@ -54,7 +48,7 @@ const AddPrinciplePhoneNumer = ({
   setBuyFamilyPlan,
 }: Prop) => {
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<detailRequestType>({
@@ -73,40 +67,15 @@ const AddPrinciplePhoneNumer = ({
     isErrorModalOpen,
     setErrorModalState,
     // closeErrorModal,
-    openErrorModalWithMessage,
+    // openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
-  const { mutate: handleCreatePlan, isLoading } =
+  const {  isLoading } =
     useCreateReferralPlanRequest();
-  const router = useRouter();
 
-  const onsubmit = (data: detailRequestType) => {
+  const onsubmit = () => {
     setBuyFamilyPlan(true);
-    // console.log("123");
-    // handleCreatePlan(
-    //   {
-    //     duration: Number(planType?.duration),
-    //     phone_number: data?.phone_number,
-    //     number_of_recipient: Number(planType?.number_of_recipient),
-    //     packages: planType?.play_type,
-    //   },
-    //   {
-    //     onSuccess: (data: successProp) => {
-    //       if (data?.message) {
-    //         setErrorMsg(data?.message);
-    //         openErrorModalWithMessage(String(data?.message));
-    //       } else {
-    //       }
-    //     },
-    //     onError: (error) => {
-    //       const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-    //       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //       //@ts-expect-error
-    //       setErrorMsg(error?.response?.data?.error);
-    //       openErrorModalWithMessage(String(errorMessage));
-    //     },
-    //   }
-    // );
+   
   };
 
   return (
@@ -151,13 +120,55 @@ const AddPrinciplePhoneNumer = ({
                   </Label>
 
                   <div className={`relative mt-[.25rem] `}>
-                    <Input2
-                      className={`${errors?.phone_number?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
-                      placeholder="Enter your phone number"
-                      type="number"
-                      id="phone"
-                      {...register("phone_number")}
+                  <Controller
+                      control={control}
+                      name={`phone_number`}
+                      render={({ field }) => (
+                        <input
+                          {...field}
+                          {...field}
+                    className={`${
+                      errors?.phone_number ? "border border-red-700" : ""
+                    } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                          id="account_no"
+                          placeholder="Phone number"
+                          type="text"
+                          maxLength={11}
+                          onChange={(e) => {
+                            const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                            // Handle input sanitization on change (typing)
+                            const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                            field.onChange(validPhoneNumber);
+                          }}
+                         
+
+
+                         
+                          onPaste={(e) => {
+                            e.target as HTMLInputElement;
+                            // Intercept paste event to sanitize pasted content
+                            const pastedValue = e.clipboardData.getData('text');
+                            // Remove non-numeric characters and limit to 11 digits
+                            const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
+                            e.preventDefault(); // Prevent the default paste behavior
+                            field.onChange(sanitizedValue); // Apply sanitized value
+                          }}
+                          
+                          onInput={(e) => {
+                            const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                            // Handle input sanitization on input changes
+                            const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                            field.onChange(validPhoneNumber);
+                          }}
+                          // onChange={(e) => field.onChange(e.target.value)}
+                        />
+                      )}
                     />
+                     {errors?.phone_number && (
+                <p className="text-red-700 text-xs mt-1">
+                  {errors.phone_number.message}
+                </p>
+              )}
 
                     {/* {isLoading && (
                       <div className=" absolute top-[1.3rem] transform -translate-y-1/2 right-[1rem]">
