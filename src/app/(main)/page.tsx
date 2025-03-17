@@ -2,7 +2,7 @@
 
 import { cn } from "@/utils/classNames";
 import { RightUpArrow } from "@/icons/core";
-import { Button, LoaderModal } from "@/components/core";
+import { Button, LinkButton, LoaderModal } from "@/components/core";
 
 import {
   CheckStar,
@@ -152,7 +152,7 @@ export default function Home() {
         alt="Doctor"
         height={400}
         width={400}
-        src="/images/landing-page/doctor2.png"
+        src="/images/landing-page/libertyLife.png"
         className="z-10" // Keep image on top of the spinning border
       />
     </div>
@@ -184,7 +184,7 @@ export default function Home() {
     <div key={id} className="bg-[#161d42] py-4 px-6 xl:px-[1.6rem] rounded-lg flex flex-col justify-center items-center">
       <h3 className="text-lg font-medium text-white">{card?.title}</h3>
       <p className="text-sm text-[#CAC9D4] text-center">{card.desc}</p>
-      <Button className="bg-transparent cursor-pointer pb-0  mt-1">{card?.button_name}<LearnMore/></Button>
+      <LinkButton href={"/about-us"} className="bg-transparent cursor-pointer pb-0  mt-1">{card?.button_name}<LearnMore/></LinkButton>
     </div>  
   ))
 }
