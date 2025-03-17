@@ -32,7 +32,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
- 
+
   const url = `https://wa.link/vrg8zn`;
 
   const [showCheckPlanModal, setShowCheckPlanModal] = useState(false)
@@ -55,9 +55,9 @@ export default function RootLayout({
           id="liberty-life-widget-icon-freshworks"
         />
 
-          {/* Hotjar Tracking Code */}
-          <Script id="hotjar-tracking" strategy="afterInteractive">
-                {`
+        {/* Hotjar Tracking Code */}
+        <Script id="hotjar-tracking" strategy="afterInteractive">
+          {`
                     (function(h,o,t,j,a,r){
                         h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
                         h._hjSettings={hjid:5195904,hjsv:6};
@@ -67,11 +67,27 @@ export default function RootLayout({
                         a.appendChild(r);
                     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
                 `}
-            </Script>
-            
-           
-           <link rel="shortcut icon" href="/icon.ico" />
-      
+        </Script>
+
+        <Script
+          dangerouslySetInnerHTML={{
+            __html: `!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1565590854136448');
+fbq('track', 'PageView');`,
+          }}
+          id="show-facebook-pixel"
+        />
+
+
+        <link rel="shortcut icon" href="/icon.ico" />
+
       </head>
       <body className="!z-[9999999999999999999999999999999999999999]">
         <Toaster
@@ -88,66 +104,71 @@ export default function RootLayout({
         <ReactQueryProvider>
           <AuthProvider>
             <ProtectedRouteGuard>
-            <Suspense fallback={<Loading />}> {/* Using the Loading component here */}
+              <Suspense fallback={<Loading />}> {/* Using the Loading component here */}
                 <Wrapper>{children}</Wrapper>
               </Suspense>
             </ProtectedRouteGuard>
           </AuthProvider>
           <div className=" flex items-end w-full justify-end ">
-          <div className="fixed right-2 flex  max-w-[400px]  md:justify-end items-end flex-col xl:right-0 bottom-[2.3rem] md:bottom-20">
-  {/* <!-- Whatsapp Button with Bounce Animation --> */}
-  <a
-    href={url}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="whatsapp-button !z-[] text-white font-bold rounded transition duration-300"
-  >
-    <Button className="bg-transparent animate-bounce">
-      <Image
-        src="/images/whatsappIcon.png"
-        width={30} // Default size for smaller screens
-        height={30} // Default size for smaller screens
-        alt="whatsapp chat icon"
-        className="md:w-[3.25rem] md:h-[3.25rem]" // Increase size on medium screens and larger
-      />
-    </Button>
-  </a>
+            <div className="fixed right-2 flex  max-w-[400px]  md:justify-end items-end flex-col xl:right-0 bottom-[2.3rem] md:bottom-20">
+              {/* <!-- Whatsapp Button with Bounce Animation --> */}
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="whatsapp-button !z-[] text-white font-bold rounded transition duration-300"
+              >
+                <Button className="bg-transparent animate-bounce">
+                  <Image
+                    src="/images/whatsappIcon.png"
+                    width={30} // Default size for smaller screens
+                    height={30} // Default size for smaller screens
+                    alt="whatsapp chat icon"
+                    className="md:w-[3.25rem] md:h-[3.25rem]" // Increase size on medium screens and larger
+                  />
+                </Button>
+              </a>
 
-  <Button
-    className="bg-[#983133] flex justify-start gap-x-1 items-center text-[#fedf3e] mr-5 text-xs md:text-base font-medium rounded-[62.4717px] h-[2rem] md:h-[3.4375rem] px-5 font-display animate-pulse"
-    onClick={() => setShowCheckPlanModal(true)}
-  >
-    <Image
-      src="/images/nem.svg"
-      width={20} // Default size for smaller screens
-      height={20} // Default size for smaller screens
-      alt="logo"
-      className="md:w-[43px] md:h-[43px]" // Increase size on medium screens and larger
-    />
-    Consult a Doctor
-  </Button>
-</div>
+              <Button
+                className="bg-[#983133] flex justify-start gap-x-1 items-center text-[#fedf3e] mr-5 text-xs md:text-base font-medium rounded-[62.4717px] h-[2rem] md:h-[3.4375rem] px-5 font-display animate-pulse"
+                onClick={() => setShowCheckPlanModal(true)}
+              >
+                <Image
+                  src="/images/nem.svg"
+                  width={20} // Default size for smaller screens
+                  height={20} // Default size for smaller screens
+                  alt="logo"
+                  className="md:w-[43px] md:h-[43px]" // Increase size on medium screens and larger
+                />
+                Consult a Doctor
+              </Button>
+            </div>
 
           </div>
 
-      {
-        showCheckPlanModal && <CheckUserHasPlan
-        openCheckPhoneNumberModal={showCheckPlanModal}
-        setOpenCheckPhoneNumberModal={setShowCheckPlanModal}
-        />
-      }
-         
+          {
+            showCheckPlanModal && <CheckUserHasPlan
+              openCheckPhoneNumberModal={showCheckPlanModal}
+              setOpenCheckPhoneNumberModal={setShowCheckPlanModal}
+            />
+          }
+
         </ReactQueryProvider>
 
-     
 
+
+        <noscript
+          dangerouslySetInnerHTML={{
+            __html: `<img height="1" width="1" style="display:none"src="https://www.facebook.com/tr?id=1565590854136448&ev=PageView&noscript=1"/>`,
+          }}
+        />
       </body>
 
       <footer className="relative">
-    
- <Marquee/>
-   
-    
+
+        <Marquee />
+
+
       </footer>
 
 

@@ -88,112 +88,107 @@ export function DashboardHeader() {
               </ul>
             </nav>
           </div>
-         
 
-<div className="flex  items-center gap-x-3 ">
-<div className="flex items-center gap-x-3 lg:hidden">
 
-          <DrawerMenu
-            trigger={
-              <Button
-                className={cn(
-                  "lg:hidden bg-white/10 px-5 py-2.5 rounded-full",
-                  "font-display"
-                )}
-              >
-                Menu 
-              </Button>
-            }
-            contentClass="bg-main border-main"
-          >
-            
-            <div className="text-white p-5 pb-0 gap-5">
-              <header className="flex items-center justify-between">
-                <h6 className="font-semibold text-lg">Menu Content</h6>
-                <DrawerClose
-                  className={cn(
-                    "bg-white/10 h-8 w-8 flex justify-center items-center  rounded-full text-white/50 rotate-12 text-lg hover:text-white",
-                    "font-display"
-                  )}
-                >
-                  <CloseIcon color="#fff"/>
-                </DrawerClose>
-              </header>
+          <div className="flex  items-center gap-x-3 ">
+            <div className="flex items-center gap-x-3 lg:hidden">
 
-              <ul
-                className={cn(
-                  "font-display",
-                  "flex flex-col gap-8 font-normal mt-10"
-                )}
-              >
-                {navLinks?.map((link, idx: number) => (
-                  <li
-                    className="border-b-[.0094rem] border-b-white/30 p-2"
-                    key={idx}
+              <DrawerMenu
+                trigger={
+                  <Button
+                    className={cn(
+                      "lg:hidden bg-white/10 px-5 py-2.5 rounded-full",
+                      "font-display"
+                    )}
                   >
-                    <a
-                      href={link?.link}
-                      className={cn(
-                        "text-white text-sm text-opacity-65 hover:text-main-bg",
-                        pathname === link.link && "text-main-bg font-bold"
-                      )}
-                      title={link?.title}
-                    >
-                      {link?.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </DrawerMenu>
-</div>
-
-          
-          <div className="flex ">
-            <div className="flex items-center w-full gap-4">
-              <Link href="/">
-                <Button className="rounded-full w-9 h-9 hidden lg:flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
-                  <HomeIcon height={15} width={16} />
-                </Button>
-              </Link>
-              <Button className="rounded-full w-9 h-9 hidden lg:flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
-                <Notifications height={20} width={20} />
-              </Button>
-              
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button className="rounded-full  text-sm text-white flex justify-center items-center shrink-0 bg-transparent p-2">
-                  {!isLoading && (
-                <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-1">
-                  {`${userData?.first_name?.slice(0, 1) ?? ""}${userData?.last_name?.slice(0, 1) ?? ""}`}
-
-                 
-                </Button>
-              )} <CaretDown />
+                    Menu
                   </Button>
-                </DropdownMenuTrigger>
+                }
+                contentClass="bg-main border-main"
+              >
 
-                <DropdownMenuContent className="bg-white z-[999] mt-2 rounded-md shadow-md p-2">
-                  <DropdownMenuItem
-                    className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => router.push("/dashboard/my-profile")}
-                  >
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
-                  <DropdownMenuItem
-                    onClick={handleLogoutClick}
-                    className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
-                  >
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-             
+                <div className="text-white p-5 pb-0 gap-5">
+                  <header className="flex items-center justify-between">
+                    <h6 className="font-semibold text-lg">Menu Content</h6>
+                    <DrawerClose
+                      className={cn(
+                        "bg-white/10 h-8 w-8 flex justify-center items-center  rounded-full text-white/50 rotate-12 text-lg hover:text-white",
+                        "font-display"
+                      )}
+                    >
+                      <CloseIcon color="#fff" />
+                    </DrawerClose>
+                  </header>
 
+                  <ul
+                    className={cn(
+                      "font-display",
+                      "flex flex-col gap-8 font-normal mt-10"
+                    )}
+                  >
+                    {navLinks?.map((link, idx: number) => (
+                      <li
+                        className="border-b-[.0094rem] border-b-white/30 p-2"
+                        key={idx}
+                      >
+                        <a
+                          href={link?.link}
+                          className={cn(
+                            "text-white text-sm text-opacity-65 hover:text-main-bg",
+                            pathname === link.link && "text-main-bg font-bold"
+                          )}
+                          title={link?.title}
+                        >
+                          {link?.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </DrawerMenu>
+            </div>
+
+            <div className="flex ">
+              <div className="flex items-center w-full gap-4">
+                <Link href="/">
+                  <Button className="rounded-full w-9 h-9 hidden lg:flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
+                    <HomeIcon height={15} width={16} />
+                  </Button>
+                </Link>
+                <Button className="rounded-full w-9 h-9 hidden lg:flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-2">
+                  <Notifications height={20} width={20} />
+                </Button>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button className="rounded-full  text-sm text-white flex justify-center items-center shrink-0 bg-transparent p-2">
+                      {!isLoading && (
+                        <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-1">
+                          {`${userData?.first_name?.slice(0, 1) ?? ""}${userData?.last_name?.slice(0, 1) ?? ""}`}
+                        </Button>
+                      )} <CaretDown />
+                    </Button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent className="bg-white z-[999] mt-2 rounded-md shadow-md p-2">
+                    <DropdownMenuItem
+                      className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => router.push("/dashboard/my-profile")}
+                    >
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
+                    <DropdownMenuItem
+                      onClick={handleLogoutClick}
+                      className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
+                    >
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
           </div>
-</div>
         </div>
       </header>
     </>

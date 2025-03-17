@@ -61,7 +61,7 @@ interface hopitalChoiceProp {
   provider_id: string;
 }
 
-export const userHospitalChoice = async ({ userId, state, hospital, provider_id, lga, email}: hopitalChoiceProp) => {
+export const userHospitalChoice = async ({ userId, state, hospital, provider_id, lga, email }: hopitalChoiceProp) => {
 
   const response = await adminAxios.put(`/accept_users_hospital/${userId}`, {
     email,
