@@ -12,12 +12,19 @@ import {
 import { useErrorModalState } from "@/hooks";
 import SelectPlanModal from "../Funds/Selectplan";
 import { capitalizeFirstLetter } from "@/utils";
-import { UseFieldArrayRemove } from "react-hook-form";
+import { UseFieldArrayAppend, UseFieldArrayRemove } from "react-hook-form";
 import SelectDurationModal from "./SelectDurationModal";
 import {
   PlanData,
   plantypes,
 } from "@/app/(main)/misc/components/insurance/api/plan/getPlan";
+
+
+interface Beneficiary {
+  name_of_beneficiary: string;
+  phone_number_of_beneficiary: string;
+  type_of_beneficary: "ADULT" | "CHILD"; // Adjust type as needed
+}
 
 interface Prop {
   setShowBeneficaries: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,6 +52,13 @@ interface Prop {
       | undefined
     >
   >;
+  append: UseFieldArrayAppend<{
+    beneficiaries: {
+        name_of_beneficiary: string;
+        phone_number_of_beneficiary: string;
+        type_of_beneficary?: "ADULT" | "MINOR" | undefined;
+    }[];
+}, "beneficiaries">
   selectedPlan: PlanData[] | undefined;
 }
 
@@ -56,8 +70,9 @@ const BeneficiariesModal = ({
   remove,
   planType,
   selectedPlan,
+  append
 }: Prop) => {
-  const [errorMsg, setErrorMsg] = useState("");
+  // const [errorMsg, setErrorMsg] = useState("");
 const [processing, setProcessing] = useState(false)
   const {
     isErrorModalOpen,
@@ -71,6 +86,34 @@ const [processing, setProcessing] = useState(false)
   const submitBeneficaries = () => {
     setShowDurationModal(true);
   };
+
+
+
+  // This effect will run when the beneficiaries list becomes empty
+  useEffect(() => {
+    if (beneficiariesList?.beneficiaries.length === 0) {
+      append({
+        name_of_beneficiary: "",
+        phone_number_of_beneficiary: "",
+        type_of_beneficary: "ADULT",
+      });
+      setShowBeneficaries(false); // Close the modal after appending
+    }
+  }, [beneficiariesList?.beneficiaries, append]);
+
+  const handleRemove = (idx:number) => {
+    // Remove from react-hook-form array
+    remove(idx);
+
+    
+    setBeneficiariesList((prev) => {
+      const updatedBeneficiaries = (prev?.beneficiaries || []).filter(
+        (_, index) => index !== idx
+      );
+      return { beneficiaries: updatedBeneficiaries };
+    });
+  };
+
   return (
     <>
       <div className="rounded-xl">
@@ -137,24 +180,17 @@ const [processing, setProcessing] = useState(false)
                           >
                             Edit
                           </Button>
-                          <Button
-                            className="text-white rounded-[1.25rem] border-[0.3px] border-white border-opacity-70 py-1"
-                            variant={"outlined"}
-                            type="button"
-                            onClick={() => {
-                              remove(idx);
-                              setBeneficiariesList((prev) => {
-                                if (!prev) return prev;
-                                return {
-                                  beneficiaries: prev?.beneficiaries.filter(
-                                    (_, index) => index !== idx
-                                  ),
-                                };
-                              });
-                            }}
-                          >
-                            Remove
-                          </Button>
+                        <Button
+  className="text-white rounded-[1.25rem] border-[0.3px] border-white border-opacity-70 py-1"
+  variant="outlined"
+  type="button"
+ onClick={() => handleRemove(idx)}
+>
+  Remove
+</Button>
+
+
+
                         </div>
                       </div>
                     </div>
@@ -196,7 +232,6 @@ const [processing, setProcessing] = useState(false)
           }}
           subheading={
             errorModalMessage ||
-            errorMsg ||
             "Please check your inputs and try again."
           }
         />

@@ -212,14 +212,25 @@ export function MainHeader() {
           </ClientOnly>
         </div>
 
-        <div className=" items-center  hidden">
+        <div className="flex md:hidden  gap-x-4 items-center ">
           <LinkButton
             className="text-base text-white xl:text-xl"
             href={isAuthenticated ? "/dashboard" : "/login"}
             size="unstyled"
             variant="unstyled"
           >
-            {isAuthenticated && " Login"}
+            {!isAuthenticated &&<p
+              className={cn(
+                "flex lg:hidden bg-white text-[0.865rem] text-left py-1.5 pr-1 pl-3 text-main items-center justify-between rounded-full ",
+                "font-display"
+              )}
+              // href="/login"
+            >
+              Login
+              <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-2">
+                <RightUpArrow className="" height={10} width={10} />
+              </span>
+            </p>}
           </LinkButton>
 
           <MobileMenuDialog />

@@ -97,7 +97,7 @@ const TopCards = ({ userData: users, loadinUser }: Prop) => {
 
   return (
     <div className="">
-      <div className="grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 max-xxscren:gap-2  gap-3 xl:grid-cols-[1.1fr_1fr_1fr_1fr_1.6fr]   3xl:grid-cols-[1.2fr_1fr_1fr_1fr_1.3fr]">
+      <div className="flex flex-col sm:grid sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 max-xxscren:gap-2  gap-3 xl:grid-cols-[1.1fr_1fr_1fr_1fr_1.6fr]   3xl:grid-cols-[1.2fr_1fr_1fr_1fr_1.3fr]">
         <CurrentPlanCard loadinUser={loadinUser} userData={users} />
 
         <div className="bg-white rounded-10 p-1">

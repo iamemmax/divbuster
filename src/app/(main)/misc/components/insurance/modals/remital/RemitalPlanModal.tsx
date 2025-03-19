@@ -249,6 +249,9 @@ const handleCheckboxChange = (planId: string) => {
   
     setSelectedCheckboxes(initialCheckboxes);
   }, [plansData]);
+
+
+  
   return (
     <div>
       {isLoginLoading ? (

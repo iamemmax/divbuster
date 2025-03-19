@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 
 
 export const updateUserImage = async ( file:any ) => {
-    console.log(file);
+    // console.log(file);
     
     const formData = new FormData()
     formData.append('file', file)

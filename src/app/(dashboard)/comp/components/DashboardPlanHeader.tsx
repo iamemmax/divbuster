@@ -146,7 +146,7 @@ const DashboardPlanHeader = () => {
         copy(`${selected?.value}`)
       };
       return (
-    <div className=" bg-main py-6 px-3  md:px-[4.5rem] lg:px-[7.5rem]  ">
+    <div className=" bg-main py-6 px-6  lg:px-[4.5rem] 2xl:px-[7.5rem]  ">
       {isLoading ? (
         <div className="w-full h-24 flex justify-center items-center">
           {" "}

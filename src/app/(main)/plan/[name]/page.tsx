@@ -16,14 +16,7 @@ import { useEffect, useState } from "react";
 
 import { useSearchParams } from "next/navigation";
 import { CheckStar, HandIcon, LearnMore, UnderLine } from "../../misc/icons";
-import Marquee from "../../misc/components/Marquee";
-import CheckPhoneNumber from "../../misc/components/insurance/modals/CheckPhoneNumber";
-import RemitalModalDetails from "../../misc/components/insurance/modals/remital/RemitalModalDetails";
-import RemitalUserDetails from "../../misc/components/insurance/modals/remital/RemitalUserDetails";
-import CreatepasswordModal from "../../misc/components/insurance/modals/remital/CreatePassWordModal";
-import RemitalPlanModal from "../../misc/components/insurance/modals/remital/RemitalPlanModal";
-import NonRemitalModal from "../../misc/components/insurance/modals/non-remital/NonRemitalModal";
-import AprokoPlanModal from "../components/AprokoPlan";
+
 import { tokenStorage } from "@/app/(auth)/(onboarding)/misc";
 import AprokoPlan from "../components/AprokoPlan";
 import HealthIcon from "../../misc/icons/HealthIcon";
