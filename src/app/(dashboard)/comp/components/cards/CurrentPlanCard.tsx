@@ -27,11 +27,11 @@ const CurrentPlanCard = ({ loadinUser, userData: users }: Prop) => {
           <Spinner className="w-4  h-4 " color="#DB8C00" />
         </div>
       ) : (
-        <>
+        <div className="w-full">
           <div className="py-[.1875rem] bg-[#31D0AA26] w-[4.625rem] px-2 rounded-lg">
             <p className="text-[.625rem] text-[#099976] ">Current plan</p>
           </div>
-          <div className=" mt-[.625rem] grid w-full  grid-cols-2 ">
+          <div className=" grid w-full  grid-cols-2 ">
             <div className="mt-3">
               <h2 className="text-xs text-[#032282] font-medium font-sans">
                 {currentPlan?.enrolee_name ? currentPlan?.enrolee_name : "Nil"}
@@ -76,9 +76,10 @@ const CurrentPlanCard = ({ loadinUser, userData: users }: Prop) => {
               <p className="text-[#8490A8] text-[.625rem]">Expires on</p>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
+   
   );
 };
 

@@ -34,11 +34,11 @@ const formSchema = z.object({
   first_name: z
     .string()
     .trim()
-    .min(1, { message: "Please enter  First name." }),
+    .min(1, { message: "Please enter  First name." }).refine(value => !/\d/.test(value), { message: "First name must not contain numbers" }),
   last_name: z
     .string()
     .trim()
-    .min(1, { message: "Please enter Last name." }),
+    .min(1, { message: "Please enter Last name." }).refine(value => !/\d/.test(value), { message: "Last name must not contain numbers" }),
     phone_number: z
     .string()
     .min(11, { message: "Phone number should be at least 11 digits" })

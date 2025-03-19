@@ -85,11 +85,11 @@ const contactSchema = z.object({
   first_name: z
     .string({ required_error: "Enter your phone number" })
     .trim()
-    .min(3),
+    .min(3)    .refine(value => !/\d/.test(value), { message: "First Name must not contain numbers" }),
   last_name: z
     .string({ required_error: "Enter your phone number" })
     .trim()
-    .min(3),
+    .min(3)    .refine(value => !/\d/.test(value), { message: "Last Name must not contain numbers" }),
   referral_code: z
     .string({ required_error: "Enter your phone number" })
     .trim()

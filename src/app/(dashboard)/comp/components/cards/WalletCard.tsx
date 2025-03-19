@@ -64,6 +64,7 @@ const WalletCard = ({ loadinUser, userData: users }: Prop) => {
   }
   // col-span-2 p-1 md:col-span-[1.5fr] 2xl:col-span-1
   return (
+  
     <div className="bg-white rounded-10  max-xl:col-span-2 ">
       {loadingWallet || loadinUser ? (
         <div className="flex justify-center h-full items-center w-full py-6">
@@ -91,7 +92,7 @@ const WalletCard = ({ loadinUser, userData: users }: Prop) => {
               </h2>
             </div>
 
-            <div className="">
+            <div className="mt-3">
               <Button
                 className="bg-[#fff] flex items-center justify-center gap-2 text-xs font-semibold text-[#099976] px-3 py-2 rounded-md"
                 onClick={() => setAddFund(true)}
@@ -122,7 +123,7 @@ const WalletCard = ({ loadinUser, userData: users }: Prop) => {
                 ) ?? 0}
               </h2>
             </div>
-            <div className="flex w-full items-center flex-wrap xl:flex-nowrap gap-2 2xl:gap-4">
+            <div className="flex w-full items-center  mt-3 flex-wrap xl:flex-nowrap gap-2 2xl:gap-4">
               <Button
                 className=" py-2 px-2 bg-white rounded-10 text-[#099976] font-semibold"
                 onClick={() => setshowWithdrawalModal(true)}
@@ -132,7 +133,7 @@ const WalletCard = ({ loadinUser, userData: users }: Prop) => {
               <LinkButton
                 title="View Referral"
                 href={"/dashboard/view-referrals"}
-                className="py-2  bg-white [@media-screen:280px] max-xxscren:px-2   px-6 md:px-3 2xl:px-6  text-xs rounded-10 text-[#099976] font-semibold"
+                className="py-2  bg-white [@media-screen:280px] max-xxscren:px-2   px-5 md:px-3 2xl:px-6  text-xs rounded-10 text-[#099976] font-semibold"
               >
                 View 
               </LinkButton>

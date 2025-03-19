@@ -34,7 +34,7 @@ const formSchema = z.object({
       name_of_beneficiary: z
         .string()
         .trim()
-        .min(1, { message: "Please enter the name." }),
+        .min(1, { message: "Please enter the name." }).refine(value => !/\d/.test(value), { message: "Name must not contain numbers" }),
       phone_number_of_beneficiary: z
         .string()
         .trim()
@@ -275,6 +275,7 @@ const BuyPlanModalForCoperate = ({
               setShowBeneficaries={setShowBeneficaries}
               beneficiariesList={beneficiariesList}
               remove={remove}
+              append={append}
               planType="CORPORATE"
               selectedPlan={plansData && plansData[2]?.data}
             />

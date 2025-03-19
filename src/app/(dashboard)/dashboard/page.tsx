@@ -1,7 +1,6 @@
 "use client";
-import { Button } from "@/components/core";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
+
+import React from "react";
 import TopCards from "../comp/components/cards/TopCards";
 import HospitalAround from "../comp/components/cards/hospital/table/HospitalAround";
 import HospitalVisited from "../comp/components/cards/hospital/table/HospitalVisited";
@@ -17,7 +16,7 @@ const Dashboard = () => {
    
       <DashboardPlanHeader />
       <div className="w-full h-12 bg-main py-10"></div>
-      <div className=" relative w-full px-3  md:px-[3rem] 2xl:[4rem]  3xl:px-[7.5rem]  h-full ">
+      <div className=" relative w-full px-6  lg:px-[4.5rem] 2xl:px-[7.5rem]  h-full ">
         <div className="relative">
           <div className=" inset-x-0 top-[-4rem] absolute">
             <div className="">

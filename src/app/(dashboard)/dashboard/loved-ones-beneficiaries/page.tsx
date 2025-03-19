@@ -25,7 +25,7 @@ const Page = () => {
     <div className="relative bg-[#f5f9fe] w-full h-screen">
       <DashboardPlanHeader />
 
-      <div className="bg-main px-6 flex items-start md:px-[4.5rem] lg:px-[7.5rem]">
+      <div className="bg-main flex items-start px-3  md:px-[4.5rem] lg:px-[7.5rem]px-6  lg:px-[4.5rem] 2xl:px-[7.5rem]">
         <LinkButton
           href={"/dashboard"}
           className="flex items px-0 bg-transparent gap-3"
@@ -39,17 +39,18 @@ const Page = () => {
       <div className="w-full h-12 bg-main py-10"></div>
       <div className="relative ">
         <div className=" inset-x-0 top-[-4rem] absolute">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 2xl:grid-cols-[1.1fr_1fr_1.4fr_1fr] px-6  md:px-[4.5rem] lg:px-[7.5rem] ">
-            <CurrentPlanCard loadinUser={isLoading} userData={userData} />
-            <LoveOneCard
-              loadinUser={isLoading}
-              userData={userData}
-              loadingBeneficial={loadingBeneficial}
-              beneficiaryList={beneficiaryList}
-              showViewButton={false}
-            />
-            <WalletCard loadinUser={isLoading} userData={userData} />
-          </div>
+        <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-[1.1fr_1fr_1.4fr] 3xl:grid-cols-[1.1fr_1fr_1.4fr_1fr] gap-3 px-6 lg:px-[4.5rem] 2xl:px-[7.5rem]">
+  <CurrentPlanCard loadinUser={isLoading} userData={userData} />
+  <LoveOneCard
+    loadinUser={isLoading}
+    userData={userData}
+    loadingBeneficial={loadingBeneficial}
+    beneficiaryList={beneficiaryList}
+    showViewButton={false}
+  />
+  <WalletCard loadinUser={isLoading} userData={userData} />
+</div>
+
           <LovedOnesBeneficiaries
             beneficiaryList={beneficiaryList && beneficiaryList[2]}
             loading={isLoading}

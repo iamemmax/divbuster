@@ -265,7 +265,7 @@ const FamilyBeneficiary = ({
   const [processing, setProcessing] = useState(false)
 
   return (
-    <div className="px-6  md:px-[4.5rem] lg:px-[7.5rem]">
+    <div className="px-6  lg:px-[4.5rem] 2xl:px-[7.5rem]">
       <div className=" bg-white px-12 py-10 mt-4 rounded-10 ">
         <div className="flex justify-between flex-wrap items-center">
           <div className="flex items-center flex-wrap gap-2">

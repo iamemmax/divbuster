@@ -16,7 +16,6 @@ import {
 import CopyIcon from "@/app/(dashboard)/comp/icons/CopyIcon";
 import PayStatckIcon from "../../icons/PayStackIcon";
 import Link from "next/link";
-import { PaymentSuccessMsg } from "../remital/RemitalSubmitPlan";
 import { AxiosError } from "axios";
 import { useClipboard, useErrorModalState } from "@/hooks";
 import { tokenStorage, useUser } from "@/app/(auth)/(onboarding)/misc";

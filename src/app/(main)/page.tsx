@@ -75,8 +75,8 @@ export default function Home() {
   }
 
   return (
-    <main className=" w-full bg-main ">
-      <section className="bg-main w-full sm:!mb-0 text-white shadow-sm  ">
+    <main className=" w-full bg-main">
+      <section className="bg-main w-full sm:!mb-0 text-white shadow-sm  h-full ">
         <section className=" px-6 md:px-[3rem] 2xl:px-[7.5rem] p-[4.375rem] pb-6 flex-col flex-wrap xl:flex-row flex ">
           <div className="flex flex-1 flex-col  gap-4  md:gap-6  max-md:py-10">
             <h6
