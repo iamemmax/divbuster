@@ -516,7 +516,7 @@ const ReferralModalPlan = ({
                                     <Button
                                       className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                       onClick={() => {
-                                        if(isAuthenticated){
+                                        if(!isAuthenticated){
                                           setPlanType({
                                             number_of_recipient: String(planCounts[plan.id.toString()] || 0),
                                             duration: String(plan?.plan_duration?.duration),
@@ -541,7 +541,7 @@ const ReferralModalPlan = ({
                                           setPhoneNumberModalOpen(true);
 
                                         }else{
-                                          router.push("/dashbaord")
+                                          router.push("/dashboard")
                                         }
                                       }}
                                     >

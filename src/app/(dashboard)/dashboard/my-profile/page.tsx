@@ -29,6 +29,7 @@ import { useUpdateUserImage } from "../api/patchUserImage"
 import type { AxiosError } from "axios"
 import { CopyIcon4, Delete, Photo, Upload } from "../../comp/icons"
 import { useUpdateRemoveUserImage } from "../api/profile/patchRemoveUserImage"
+import { deleteFromCloudinary, uploadToCloudinary } from "../../comp/components/plans/util/cloudinery"
 
 // interface Prop {
 //     setShowPasswordModal: Dispatch<SetStateAction<boolean>>
@@ -94,7 +95,10 @@ export default function Page() {
     const { isErrorModalOpen, setErrorModalState, openErrorModalWithMessage, errorModalMessage } = useErrorModalState()
 
     const [errorMsg, setErrorMsg] = useState("")
-
+const [profileImage, setProfileImage] = useState({
+    img_id:"",
+    img_url:""
+})
     const {
         control,
         handleSubmit,
@@ -280,9 +284,26 @@ export default function Page() {
 
     const { mutate: handleUpload, isLoading: isUploadingImage } = useUpdateUserImage()
 
-    const handleFileUpload = () => {
+    const handleFileUpload = async() => {
+        if(profileImage?.img_id !==""){
+            await deleteFromCloudinary(profileImage?.img_id as string)
+        }
+        const {id,secure_url}= await uploadToCloudinary(selectedFile as File)
+        if(secure_url){
+            setProfilePic(secure_url)
+            setProfileImage({
+                img_id:id,
+                img_url:secure_url
+            })
+            
+        }
+        // console.log(id, secure_url);
+        
         handleUpload(
-            {selectedFile:selectedFile as File}
+            {profile_image:{
+                img_id:String(id),
+                img_url:secure_url
+            }}
             , {
                 onSuccess: (data) => {
                     //   setBuyPlanModal;
@@ -301,9 +322,10 @@ export default function Page() {
 
 
     const {mutate:handleRemove}= useUpdateRemoveUserImage()
-    const handleDelete = (file:string) => {
-        setProfilePic("");
-
+    const handleDelete = async(file:string) => {
+      await deleteFromCloudinary(profileImage?.img_id as string)
+      setProfilePic("");
+      setProfileImage({img_id:"",img_url:""})
         handleRemove(
     file,
              {
@@ -322,14 +344,9 @@ export default function Page() {
             })
     };
 
-    // // Add this effect to clear BVN when NIN is selected and vice versa
-    // useEffect(() => {
-    //     if (watchSelectedOption === "nin") {
-    //         setValue("bvn", "")
-    //     } else if (watchSelectedOption === "bvn") {
-    //         setValue("nin", "")
-    //     }
-    // }, [watchSelectedOption, setValue])
+    
+    console.log(profileImage);
+    
 
     return (
         <>
@@ -345,17 +362,17 @@ export default function Page() {
                             <section className="mt-8 flex flex-col lg:flex-row justify-between">
                                 <div className="flex justify-between items-center gap-4">
                                     <div className="flex justify-center">
-                                        <div className="relative w-[100px] h-[100px] rounded-full overflow-hidden">
+                                        <div className="relative w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-full overflow-hidden">
                                             <Image
                                                 alt="profile"
                                                 // If profile_image is not a valid URL, fallback to default
                                                 src={
                                                     profilePic && (profilePic.startsWith("http://") || profilePic.startsWith("https://"))
                                                         ? profilePic
-                                                        : userData?.profile_image &&
-                                                            (userData.profile_image.startsWith("http://") ||
-                                                                userData.profile_image.startsWith("https://"))
-                                                            ? userData.profile_image
+                                                        : profileImage?.img_url &&
+                                                            (profileImage?.img_url.startsWith("http://") ||
+                                                                profileImage?.img_url.startsWith("https://"))
+                                                            ? profileImage?.img_url
                                                             : "/images/userIcon.png"
                                                 }
                                                 className="rounded-full"
@@ -363,18 +380,19 @@ export default function Page() {
                                                 objectFit="cover"
                                             />
                                         </div>
-                                        <div className="mt-[3.8rem] -ml-[1.5rem] z-[2]">
+                                        <div className="mt-[2rem] md:mt-[3.8rem] -ml-[1.5rem] z-[2]">
                                             <Photo onClick={handleClick} />
                                         </div>
                                         <input
                                             type="file"
                                             ref={fileInputRef}
+                                            accept="*/images"
                                             style={{ display: "none" }}
                                             onChange={handleProfilePicChange}
                                         />
                                     </div>
-                                    {profilePic && (
-                                        <>
+                                    {(profilePic !=="")&& (
+                                       
                                             <Button
                                                 className="bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3"
                                                 id="upload"
@@ -384,9 +402,9 @@ export default function Page() {
                                                 <p className="text-[#032282] font-medium">Upload</p>
                                                 {isUploadingImage && <SmallSpinner color="#032282" />}
                                             </Button>
-                                        </>
+                                 
                                     )}
-                                  {selectedFile!==null ||profilePic&&  <Button className="bg-[#F5F9FE] gap-1 px-4 py-3" onClick={()=>handleDelete("")}>
+                                  {profileImage?.img_id!==""&&  <Button className="bg-[#F5F9FE] gap-1 px-4 py-3" onClick={()=>handleDelete("")}>
                                         <Delete />
                                         <p className="text-[#032282] font-medium">Remove</p>
                                     </Button>}
@@ -716,7 +734,7 @@ export default function Page() {
                                             )}
                                         </div>
                                         <div className="border-b-[0.3px] mt-4"></div>
-                                        <div className="mt-6">
+                                        <div className="mt-6 max-md:pb-10">
                                             <Button
                                                 type="submit"
                                                 className="bg-[#099976] py-3 px-7 text-xs text-nowrap rounded-10 border-[0.3px] border-[#032282]"

@@ -89,7 +89,7 @@ fbq('track', 'PageView');`,
         <link rel="shortcut icon" href="/icon.ico" />
 
       </head>
-      <body className="!z-[9999999999999999999999999999999999999999]">
+      <body className="!z-[9999999999999999999999999999999999999999] bg-main">
         <Toaster
           containerStyle={{
             zIndex: 99999,
