@@ -133,7 +133,7 @@ const WalletCard = ({ loadinUser, userData: users }: Prop) => {
               <LinkButton
                 title="View Referral"
                 href={"/dashboard/view-referrals"}
-                className="py-2  bg-white [@media-screen:280px] max-xxscren:px-2   px-5 md:px-3 2xl:px-6  text-xs rounded-10 text-[#099976] font-semibold"
+                className="py-2  bg-white [@media-screen:290px] max-xxscren:px-3   px-5 md:px-3 2xl:px-6  text-xs rounded-10 text-[#099976] font-semibold"
               >
                 View 
               </LinkButton>

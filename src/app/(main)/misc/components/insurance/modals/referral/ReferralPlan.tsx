@@ -218,7 +218,7 @@ const ReferralModalPlan = ({
 
   const { authState } = useAuth();
   const { isAuthenticated } = authState;
-  console.log(isAuthenticated,"isAuthenticated");
+  // console.log(isAuthenticated,"isAuthenticated");
   
   return (
     <div>

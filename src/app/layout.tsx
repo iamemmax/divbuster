@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { DM_Sans, Wix_Madefor_Display } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/utils/classNames";
@@ -32,10 +32,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const url = `https://wa.link/vrg8zn`;
 
-  const [showCheckPlanModal, setShowCheckPlanModal] = useState(false)
+  const [showCheckPlanModal, setShowCheckPlanModal] = useState(false);
   return (
     <html className={cn(sans.variable, display.variable)} lang="en">
       <head>
@@ -72,22 +71,31 @@ export default function RootLayout({
         <Script
           dangerouslySetInnerHTML={{
             __html: `!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1565590854136448');
-fbq('track', 'PageView');`,
-          }}
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '1565590854136448');
+            fbq('track', 'PageView');`,
+                      }}
           id="show-facebook-pixel"
         />
-
+        <Script
+          dangerouslySetInnerHTML={{
+            __html: `
+            !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){
+              s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+            },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
+            a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+            twq('config','pc1n8');
+          `,
+          }}
+        />
 
         <link rel="shortcut icon" href="/icon.ico" />
-
       </head>
       <body className="!z-[9999999999999999999999999999999999999999] bg-main">
         <Toaster
@@ -104,7 +112,9 @@ fbq('track', 'PageView');`,
         <ReactQueryProvider>
           <AuthProvider>
             <ProtectedRouteGuard>
-              <Suspense fallback={<Loading />}> {/* Using the Loading component here */}
+              <Suspense fallback={<Loading />}>
+                {" "}
+                {/* Using the Loading component here */}
                 <Wrapper>{children}</Wrapper>
               </Suspense>
             </ProtectedRouteGuard>
@@ -143,19 +153,15 @@ fbq('track', 'PageView');`,
                 Consult a Doctor
               </Button>
             </div>
-
           </div>
 
-          {
-            showCheckPlanModal && <CheckUserHasPlan
+          {showCheckPlanModal && (
+            <CheckUserHasPlan
               openCheckPhoneNumberModal={showCheckPlanModal}
               setOpenCheckPhoneNumberModal={setShowCheckPlanModal}
             />
-          }
-
+          )}
         </ReactQueryProvider>
-
-
 
         <noscript
           dangerouslySetInnerHTML={{
@@ -165,17 +171,10 @@ fbq('track', 'PageView');`,
       </body>
 
       <footer className="relative">
-
         <Marquee />
-
-
       </footer>
 
-
-
-
       {/* Heala Configuration */}
-
     </html>
   );
 }
