@@ -12,13 +12,14 @@ const Dashboard = () => {
   const { data: userData, isLoading } = useUser();
 
   return (
-    <div className="relative bg-[#f5f9fe] w-full h-screen">
+    <div className="relative bg-[#f5f9fe] overflow-y-auto w-full h-[100vh]">
    
       <DashboardPlanHeader />
       <div className="w-full h-12 bg-main py-10"></div>
-      <div className=" relative w-full px-6  lg:px-[4.5rem] 2xl:px-[7.5rem]  h-full ">
+      <div className=" relative w-full px-3 sm:px-6  lg:px-[4.5rem] 2xl:px-[7.5rem]  h-full ">
         <div className="relative">
-          <div className=" inset-x-0 top-[-4rem] absolute">
+          <div className=" inset-x-0 top-[-4rem] absolute ">
+            <div className=" w-full">
             <div className="">
               <TopCards userData={userData} loadinUser={isLoading} />
             </div>
@@ -30,8 +31,10 @@ const Dashboard = () => {
                 <HospitalVisited userData={userData} loadinUser={isLoading} />
               </div>
             </div>
-            <div className="bg-white shadow-sm rounded-10 py-[1.125rem] px-4 mt-4">
+            <div className="bg-white shadow-sm rounded-10 py-[1.125rem] px-4 mt-4  max-md:pb-[8rem]">
               <TransactionsTable userData={userData} loadinUser={isLoading} />
+            </div>
+
             </div>
           </div>
         </div>

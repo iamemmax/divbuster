@@ -55,7 +55,7 @@ export function DashboardHeader() {
 
   return (
     <>
-      <header className="bg-main px-6  lg:px-[4.5rem] 2xl:px-[7.5rem]  py-6 border-b border-[#2B303C]">
+      <header className="bg-main px-6  lg:px-[4.5rem] 2xl:px-[7.5rem] py-3 md:py-6 border-b border-[#2B303C]">
         <div className="z-50 flex items-center justify-between">
           <a href={"/"} className="flex text-white items-center gap-3">
             <Liberty className="max-lg:max-w-[100px]" />
