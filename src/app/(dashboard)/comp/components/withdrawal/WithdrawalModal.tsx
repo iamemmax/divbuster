@@ -226,6 +226,7 @@ const WithDrawalModal = ({
                         <Select
                           value={bankOptions?.find((c) => c.value === value)}
                           options={bankOptions}
+                          isSearchable={false}
                           placeholder="Select Bank"
                           ref={ref}
                           onChange={(bankOption) => {
