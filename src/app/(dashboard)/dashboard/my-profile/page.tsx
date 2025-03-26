@@ -31,20 +31,7 @@ import { CopyIcon4, Delete, Photo, Upload } from "../../comp/icons"
 import { useUpdateRemoveUserImage } from "../api/profile/patchRemoveUserImage"
 import { deleteFromCloudinary, uploadToCloudinary } from "../../comp/components/plans/util/cloudinery"
 
-// interface Prop {
-//     setShowPasswordModal: Dispatch<SetStateAction<boolean>>
-//     OpenRemitalUserDetail: true
-//     userId: string
-//     userEmail: string
-//     setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>
-//     verifyResponse: {
-//         nin: string
-//         bvn: string
-//         address: string
-//         email: string
-//         id: string
-//     }
-// }
+
 
 const formValues = z.object({
     name: z.string().trim(),
@@ -57,24 +44,6 @@ const formValues = z.object({
     bvn: z.string().trim().optional(),
     nin: z.string().trim().optional(),
 })
-
-const baseSchema = z.object({})
-
-// // Extend the base schema for NIN
-// const ninSchema = baseSchema.extend({
-//     nin: z
-//         .string()
-//         .trim()
-//         .min(10, { message: "NIN should be at least 10 digits" }),
-// });
-
-// // Extend the base schema for BVN
-// const bvnSchema = baseSchema.extend({
-//     bvn: z
-//         .string()
-//         .trim()
-//         .min(11, { message: "BVN should be at least 11 digits" }),
-// });
 
 export default function Page() {
     const { data: userData, isLoading: isloadingUserdata } = useUser()
@@ -95,10 +64,10 @@ export default function Page() {
     const { isErrorModalOpen, setErrorModalState, openErrorModalWithMessage, errorModalMessage } = useErrorModalState()
 
     const [errorMsg, setErrorMsg] = useState("")
-const [profileImage, setProfileImage] = useState({
-    img_id:"",
-    img_url:""
-})
+    const [profileImage, setProfileImage] = useState({
+        img_id: "",
+        img_url: ""
+    })
     const {
         control,
         handleSubmit,
@@ -128,6 +97,7 @@ const [profileImage, setProfileImage] = useState({
             setValue("phone_number", userData?.phone_number || "")
             setValue("email", userData?.email || "")
             setValue("state", userData?.state || "")
+            setValue("lga", userData?.lga || "")
             setValue("nin", userData?.nin || "")
             setValue("bvn", userData?.bvn || "")
             setValue("hospitals", typeof userData?.hospitals === "string" ? userData?.hospitals : "")
@@ -231,8 +201,8 @@ const [profileImage, setProfileImage] = useState({
                 state: data.state,
                 lga: data.lga,
                 hospitals: data.hospitals,
-                bvn: data?.selectedOption === "bvn"? data?.bvn:"",
-                nin: data?.selectedOption === "nin"? data?.nin:"",
+                bvn: data?.selectedOption === "bvn" ? data?.bvn : "",
+                nin: data?.selectedOption === "nin" ? data?.nin : "",
             },
             {
                 onSuccess: () => {
@@ -284,30 +254,32 @@ const [profileImage, setProfileImage] = useState({
 
     const { mutate: handleUpload, isLoading: isUploadingImage } = useUpdateUserImage()
 
-    const handleFileUpload = async() => {
-        if(profileImage?.img_id !==""){
+    const handleFileUpload = async () => {
+        if (profileImage?.img_id !== "") {
             await deleteFromCloudinary(profileImage?.img_id as string)
         }
-        const {id,secure_url}= await uploadToCloudinary(selectedFile as File)
-        if(secure_url){
+        const { id, secure_url } = await uploadToCloudinary(selectedFile as File)
+        if (secure_url) {
             setProfilePic(secure_url)
             setProfileImage({
-                img_id:id,
-                img_url:secure_url
+                img_id: id,
+                img_url: secure_url
             })
-            
+
         }
         // console.log(id, secure_url);
-        
+
         handleUpload(
-            {profile_image:{
-                img_id:String(id),
-                img_url:secure_url
-            }}
+            {
+                profile_image: {
+                    img_id: String(id),
+                    img_url: secure_url
+                }
+            }
             , {
                 onSuccess: (data) => {
                     //   setBuyPlanModal;
-                    queryClient.invalidateQueries({queryKey:[["user-details"]]});
+                    queryClient.invalidateQueries({ queryKey: [["user-details"]] });
                     setProfilePic('');
                 },
                 onError: (error) => {
@@ -321,14 +293,14 @@ const [profileImage, setProfileImage] = useState({
     };
 
 
-    const {mutate:handleRemove}= useUpdateRemoveUserImage()
-    const handleDelete = async(file:string) => {
-      await deleteFromCloudinary(profileImage?.img_id as string)
-      setProfilePic("");
-      setProfileImage({img_id:"",img_url:""})
+    const { mutate: handleRemove } = useUpdateRemoveUserImage()
+    const handleDelete = async (file: string) => {
+        await deleteFromCloudinary(profileImage?.img_id as string)
+        setProfilePic("");
+        setProfileImage({ img_id: "", img_url: "" })
         handleRemove(
-    file,
-             {
+            file,
+            {
                 onSuccess: (data) => {
                     //   setBuyPlanModal;
                     queryClient.invalidateQueries(["user-details"]);
@@ -344,9 +316,9 @@ const [profileImage, setProfileImage] = useState({
             })
     };
 
-    
-    console.log(profileImage);
-    
+
+    // console.log(profileImage);
+
 
     return (
         <>
@@ -386,32 +358,33 @@ const [profileImage, setProfileImage] = useState({
                                         <input
                                             type="file"
                                             ref={fileInputRef}
-                                            accept="*/images"
+                                            accept="image/*"
                                             style={{ display: "none" }}
                                             onChange={handleProfilePicChange}
                                         />
+
                                     </div>
-                                    {(profilePic !=="")&& (
-                                       
-                                            <Button
-                                                className="bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3"
-                                                id="upload"
-                                                onClick={handleFileUpload}
-                                            >
-                                                <Upload />
-                                                <p className="text-[#032282] font-medium">Upload</p>
-                                                {isUploadingImage && <SmallSpinner color="#032282" />}
-                                            </Button>
-                                 
+                                    {(profilePic !== "" && profilePic !== null) && (
+
+                                        <Button
+                                            className="bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3"
+                                            id="upload"
+                                            onClick={handleFileUpload}
+                                        >
+                                            <Upload />
+                                            <p className="text-[#032282] font-medium">Upload</p>
+                                            {isUploadingImage && <SmallSpinner color="#032282" />}
+                                        </Button>
+
                                     )}
-                                  {profileImage?.img_id!==""&&  <Button className="bg-[#F5F9FE] gap-1 px-4 py-3" onClick={()=>handleDelete("")}>
+                                    {profileImage?.img_id !== "" && <Button className="bg-[#F5F9FE] gap-1 px-4 py-3" onClick={() => handleDelete("")}>
                                         <Delete />
                                         <p className="text-[#032282] font-medium">Remove</p>
                                     </Button>}
 
                                 </div>
 
-                                <div className="flex flex-col md:flex-row gap-4 justify-between items-center mt-3 lg:mt-0">
+                                <div className="flex flex-col md:flex-row gap-4 justify-between items-centereferra lg:mt-0">
                                     <div className="flex items-center gap-2">
                                         <div
                                             className="flex items-center justify-center flex-col gap-x-2 border-[0.3px] border-[#032282] bg-white px-4 rounded-lg cursor-pointer border-opacity-70 py-[.5625rem] "
@@ -618,50 +591,49 @@ const [profileImage, setProfileImage] = useState({
 
 
 
-                          <Controller
-                                                  control={control}
-                                                  name={`bvn`}
-                                                  render={({ field }) => (
-                                                    <input
-                                                      {...field}
-                                                      {...field}
-                                                className={`${
-                                                  errors?.bvn ? "border border-red-700" : ""
-                                                }  text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#F5F9FE]`}
-                                                      id="account_no"
-                                                      placeholder="Enter bvn"
-                                                      type="text"
-                                                      maxLength={11}
-                                                      onChange={(e) => {
-                                                        const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
-                                                        // Handle input sanitization on change (typing)
-                                                        const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
-                                                        field.onChange(validPhoneNumber);
-                                                      }}
-                                                     
-                            
-                            
-                                                     
-                                                      onPaste={(e) => {
-                                                        e.target as HTMLInputElement;
-                                                        // Intercept paste event to sanitize pasted content
-                                                        const pastedValue = e.clipboardData.getData('text');
-                                                        // Remove non-numeric characters and limit to 11 digits
-                                                        const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
-                                                        e.preventDefault(); // Prevent the default paste behavior
-                                                        field.onChange(sanitizedValue); // Apply sanitized value
-                                                      }}
-                                                      
-                                                      onInput={(e) => {
-                                                        const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
-                                                        // Handle input sanitization on input changes
-                                                        const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
-                                                        field.onChange(validPhoneNumber);
-                                                      }}
-                                                      // onChange={(e) => field.onChange(e.target.value)}
-                                                    />
-                                                  )}
-                                                />
+                                                        <Controller
+                                                            control={control}
+                                                            name={`bvn`}
+                                                            render={({ field }) => (
+                                                                <input
+                                                                    {...field}
+                                                                    {...field}
+                                                                    className={`${errors?.bvn ? "border border-red-700" : ""
+                                                                        }  text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#F5F9FE]`}
+                                                                    id="account_no"
+                                                                    placeholder="Enter bvn"
+                                                                    type="text"
+                                                                    maxLength={11}
+                                                                    onChange={(e) => {
+                                                                        const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                                                        // Handle input sanitization on change (typing)
+                                                                        const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                                                        field.onChange(validPhoneNumber);
+                                                                    }}
+
+
+
+
+                                                                    onPaste={(e) => {
+                                                                        e.target as HTMLInputElement;
+                                                                        // Intercept paste event to sanitize pasted content
+                                                                        const pastedValue = e.clipboardData.getData('text');
+                                                                        // Remove non-numeric characters and limit to 11 digits
+                                                                        const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
+                                                                        e.preventDefault(); // Prevent the default paste behavior
+                                                                        field.onChange(sanitizedValue); // Apply sanitized value
+                                                                    }}
+
+                                                                    onInput={(e) => {
+                                                                        const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                                                        // Handle input sanitization on input changes
+                                                                        const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                                                        field.onChange(validPhoneNumber);
+                                                                    }}
+                                                                // onChange={(e) => field.onChange(e.target.value)}
+                                                                />
+                                                            )}
+                                                        />
 
 
 
@@ -685,50 +657,49 @@ const [profileImage, setProfileImage] = useState({
                                                         /> */}
 
 
-                                                                                  <Controller
-                                                                                                          control={control}
-                                                                                                          name={`nin`}
-                                                                                                          render={({ field }) => (
-                                                                                                            <input
-                                                                                                              {...field}
-                                                                                                              {...field}
-                                                                                                        className={`${
-                                                                                                          errors?.nin ? "border border-red-700" : ""
-                                                                                                        }  text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#F5F9FE]`}
-                                                                                                              id="account_no"
-                                                                                                              placeholder="Enter nin"
-                                                                                                              type="text"
-                                                                                                              maxLength={11}
-                                                                                                              onChange={(e) => {
-                                                                                                                const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
-                                                                                                                // Handle input sanitization on change (typing)
-                                                                                                                const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
-                                                                                                                field.onChange(validPhoneNumber);
-                                                                                                              }}
-                                                                                                             
-                                                                                    
-                                                                                    
-                                                                                                             
-                                                                                                              onPaste={(e) => {
-                                                                                                                e.target as HTMLInputElement;
-                                                                                                                // Intercept paste event to sanitize pasted content
-                                                                                                                const pastedValue = e.clipboardData.getData('text');
-                                                                                                                // Remove non-numeric characters and limit to 11 digits
-                                                                                                                const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
-                                                                                                                e.preventDefault(); // Prevent the default paste behavior
-                                                                                                                field.onChange(sanitizedValue); // Apply sanitized value
-                                                                                                              }}
-                                                                                                              
-                                                                                                              onInput={(e) => {
-                                                                                                                const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
-                                                                                                                // Handle input sanitization on input changes
-                                                                                                                const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
-                                                                                                                field.onChange(validPhoneNumber);
-                                                                                                              }}
-                                                                                                              // onChange={(e) => field.onChange(e.target.value)}
-                                                                                                            />
-                                                                                                          )}
-                                                                                                        />
+                                                        <Controller
+                                                            control={control}
+                                                            name={`nin`}
+                                                            render={({ field }) => (
+                                                                <input
+                                                                    {...field}
+                                                                    {...field}
+                                                                    className={`${errors?.nin ? "border border-red-700" : ""
+                                                                        }  text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#F5F9FE]`}
+                                                                    id="account_no"
+                                                                    placeholder="Enter nin"
+                                                                    type="text"
+                                                                    maxLength={11}
+                                                                    onChange={(e) => {
+                                                                        const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                                                        // Handle input sanitization on change (typing)
+                                                                        const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                                                        field.onChange(validPhoneNumber);
+                                                                    }}
+
+
+
+
+                                                                    onPaste={(e) => {
+                                                                        e.target as HTMLInputElement;
+                                                                        // Intercept paste event to sanitize pasted content
+                                                                        const pastedValue = e.clipboardData.getData('text');
+                                                                        // Remove non-numeric characters and limit to 11 digits
+                                                                        const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
+                                                                        e.preventDefault(); // Prevent the default paste behavior
+                                                                        field.onChange(sanitizedValue); // Apply sanitized value
+                                                                    }}
+
+                                                                    onInput={(e) => {
+                                                                        const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
+                                                                        // Handle input sanitization on input changes
+                                                                        const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
+                                                                        field.onChange(validPhoneNumber);
+                                                                    }}
+                                                                // onChange={(e) => field.onChange(e.target.value)}
+                                                                />
+                                                            )}
+                                                        />
                                                     </div>
                                                 </div>
                                             )}

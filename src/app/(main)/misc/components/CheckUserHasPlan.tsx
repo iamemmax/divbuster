@@ -92,16 +92,26 @@ const onsubmit = (data: detailRequestType) => {
     {
       onSuccess: (data) => {
         if (data) {
-          // Dynamically create and append an <a> tag
           const externalUrl = "https://hmo.heala.io/nemhmo";
-          const a = document.createElement("a");
-          a.href = externalUrl;
-          a.target = "_blank";
-          a.rel = "noopener noreferrer";
-          document.body.appendChild(a); // Append the anchor to the DOM
-          a.click(); // Simulate user click
-          document.body.removeChild(a); // Clean up the DOM
-          setOpenCheckPhoneNumberModal(false);
+
+          // Check if we are on a mobile device (this can be customized based on your needs)
+          const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+          if (isMobile) {
+            // For mobile, use window.location for redirection
+            window.location.href = externalUrl;
+          } else {
+            // For desktop, create and click an <a> tag
+            const a = document.createElement("a");
+            a.href = externalUrl;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            document.body.appendChild(a);
+            a.click(); // Simulate the user click
+            document.body.removeChild(a); // Clean up the DOM
+          }
+
+          setOpenCheckPhoneNumberModal(false); // Close the modal after redirection
         }
       },
       onError: (error) => {
@@ -111,6 +121,7 @@ const onsubmit = (data: detailRequestType) => {
     }
   );
 };
+
 
 
   return (

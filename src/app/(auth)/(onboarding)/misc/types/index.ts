@@ -225,6 +225,7 @@ export interface UserDataTypes {
   organization: string;
   date_of_birth: string;
   state: string;
+  lga: string;
   due_date: string;
   wema_account_details: string;
   account_number: string;

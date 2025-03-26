@@ -58,22 +58,7 @@ interface Prop {
   loadinUser: boolean;
 }
 const TopCards = ({ userData: users, loadinUser }: Prop) => {
-  // const { data, isLoading: loadingAcct } = useQuery({
-  //   queryFn: () => getUserAccountDetails(String(users?.phone_number)),
-  //   queryKey: ["fetch-user-acct", users?.phone_number],
-  //   enabled: !!users?.phone_number,
-  // });
-  // const { data: currentPlan, isLoading: loadingPlan } = useQuery({
-  //   queryFn: () => getUserCurrentPlan(String(users?.phone_number)),
-  //   queryKey: ["fetch-user-current-plan", users?.phone_number],
-  //   enabled: !!users?.phone_number,
-  // });
-
-  // const { data: familyPlanData } = useQuery({
-  //   queryFn: () => getFamilyPlan(String(users?.phone_number)),
-  //   queryKey: ["fetch-family-plan", users?.phone_number],
-  //   enabled: !!users?.phone_number,
-  // });
+  
 
   const [showUserDetailsModal, setShowUserDetailsModal] = useState(false)
   const { data: beneficiaryList, isLoading: loadingBeneficial } = useQuery({

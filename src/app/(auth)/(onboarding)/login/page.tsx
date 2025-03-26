@@ -69,9 +69,9 @@ export default function Login() {
       onSuccess: (data: userStatusTypes) => {
 if(data?.user_found === false){
   if (referralFromAproko === "aproko-doctor") {
-    router.replace("/plan/aproko-doctor?select-plan=true");
+    router.replace("/sign-up");
   } else {
-    router.replace("/?get-started=true");
+    router.replace("/sign-up");
   }
 }else{
   if (data?.has_set_password) {
@@ -118,16 +118,7 @@ if(data?.user_found === false){
                 </Label>
 
                 <div className={`relative mt-[.25rem] `}>
-                  {/* <Input2
-                    className={`${errors?.phone_number?.message ? "border border-red-700" : ""} h-12 rounded-lg text-[#fff]`}
-                    placeholder="Enter your phone number"
-                    type="number"
-                    id="phone"
-                    maxLength={11}
-
-                    
-                    {...register("phone_number")}
-                  /> */}
+                 
 <Controller
                       control={control}
                       name={`phone_number`}
