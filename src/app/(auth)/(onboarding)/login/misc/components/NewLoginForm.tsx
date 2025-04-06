@@ -28,7 +28,7 @@ const PasswordInput: React.FunctionComponent = () => {
   return (
     <div className="mt-3 flex items-center overflow-hidden rounded-lg !bg-white/30 transition duration-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 focus-within:ring-offset-[#403C3A]">
       <input
-        className="login-autofill-text login-no-chrome-autofill-bg h-auto min-w-0 grow !bg-transparent py-3.5 pl-6 text-base font-medium text-white placeholder:text-white focus-visible:outline-none"
+        className="login-autofill-text  h-[2.4rem] md:h-[2.875rem] login-no-chrome-autofill-bg min-w-0 grow !bg-transparent py-3.5 pl-6 text-base font-medium text-white placeholder:text-white focus-visible:outline-none"
         id="password"
         // inputMode="numeric"
         name="password"

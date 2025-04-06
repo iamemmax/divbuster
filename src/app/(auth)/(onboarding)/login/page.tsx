@@ -4,7 +4,6 @@ import { OnboardingPageWrapper, tokenStorage } from "../misc";
 import { PhoneLoginForm } from "./misc/components/NewLoginForm";
 import { z } from "zod";
 import { Label } from "@radix-ui/react-label";
-import { Input2 } from "@/components/core/Input2";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, ErrorModal, LinkButton } from "@/components/core";
@@ -139,10 +138,7 @@ if(data?.user_found === false){
                             const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
                             field.onChange(validPhoneNumber);
                           }}
-                         
-
-
-                         
+                        
                           onPaste={(e) => {
                             e.target as HTMLInputElement;
                             // Intercept paste event to sanitize pasted content

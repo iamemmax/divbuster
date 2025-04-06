@@ -8,15 +8,15 @@ interface UserDetailsDTO {
     phone_number : string
     state: string
     lga: string
-    hospitals: string
+    address: string
     bvn?:string
     nin?:string
 }
 
-export const updateUserDetails = async ({ name, email, bvn, hospitals,lga, nin, phone_number, state}: UserDetailsDTO) => {
+export const updateUserDetails = async ({ name, email, bvn, address,lga, nin, phone_number, state}: UserDetailsDTO) => {
     const response = await adminAxios.patch('/user/update_user_details/', {
         
-        name, email, bvn, hospitals,lga, nin, phone_number, state
+        name, email, bvn, address,lga, nin, phone_number, state
     })
     return response?.data
 }

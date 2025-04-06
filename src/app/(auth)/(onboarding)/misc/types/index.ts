@@ -246,6 +246,12 @@ export interface UserDataTypes {
   subscription_status: "NOT_ACTIVE" | "PENDING" | "PENDING" | "EXPIRED" | "SUCCESS" | "FAILED"
   paid_beneficiary_requests: string[];
   profile_image: string
+  profile_image_object: Profileimageobject;
+
+}
+  interface Profileimageobject {
+    img_id: string;
+    img_url: string;
 }
 
 interface Hospitals {
@@ -254,3 +260,5 @@ interface Hospitals {
   hospital: string;
   provider_id: string;
 }
+
+
