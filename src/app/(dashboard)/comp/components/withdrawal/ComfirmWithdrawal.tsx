@@ -92,9 +92,13 @@ const ConfirmWidthrawal = ({
       },
       {
         onSuccess: (data: verifySuccessdata) => {
+          if(data){
+            queryClient.invalidateQueries(["fetch-wallet-balance"]);
+            setshowWithdrawalSuccessModal(true);
+            setshowConfirmationModal(false)
+
+          }
           //   setBuyPlanModal;
-          queryClient.invalidateQueries(["fetch-wallet-balance"]);
-          setshowWithdrawalSuccessModal(true);
           // setshowWithdrawalModal(false);
         },
         onError: (error) => {

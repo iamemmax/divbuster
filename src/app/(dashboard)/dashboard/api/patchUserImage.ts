@@ -12,7 +12,7 @@ export const updateUserImage = async ( {profile_image:{img_id,img_url}}:Prop ) =
     
     // const formData = new FormData()
     // formData.append('file', file)
-    const response = await adminAxios.patch('user/update_user_profile_image/', {profile_image:{
+    const response = await adminAxios.patch('user/update_user_profile_image_object/', {profile_image:{
         img_id,
         img_url
     }})

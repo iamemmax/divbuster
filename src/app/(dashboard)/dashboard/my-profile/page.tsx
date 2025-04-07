@@ -13,15 +13,15 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useClipboard, useErrorModalState } from "@/hooks"
 import {
-    fetchHospitalListByLga,
+    // fetchHospitalListByLga,
     fetchRegionByState,
     fetchStateList,
 } from "@/app/(main)/misc/components/insurance/api/remital/remtalUserDetails"
-import { capitalizeFirstLetter, formatAxiosErrorMessage } from "@/utils"
+import {  formatAxiosErrorMessage } from "@/utils"
 
 import Select, { components } from "react-select"
 import { SmallSpinner, Spinner } from "@/icons/core"
-import { Input2 } from "@/components/core/Input2"
+// import { Input2 } from "@/components/core/Input2"
 import { useUpdateUserDetails } from "../api/patchUserDetails"
 // import { getUserDetails, useGetUserDetails } from '../api/getUserDetails'
 import toast from "react-hot-toast"
@@ -39,7 +39,8 @@ const formValues = z.object({
     email: z.string().email({ message: "Invalid email format" }).min(1, { message: "Email is required" }),
     state: z.string().trim().min(1, { message: "Please select a state." }),
     lga: z.string().trim().min(1, { message: "Please select a lga." }),
-    hospitals: z.string().trim().min(1, { message: "Please select a hospital." }),
+    address: z.string().trim().min(1, { message: "Please select a address." }),
+    // hospitals: z.string().trim().min(1, { message: "Please select a hospital." }),
     selectedOption: z.union([z.literal("nin"), z.literal("bvn")]),
     bvn: z.string().trim().optional(),
     nin: z.string().trim().optional(),
@@ -63,10 +64,10 @@ export default function Page() {
 
     const { isErrorModalOpen, setErrorModalState, openErrorModalWithMessage, errorModalMessage } = useErrorModalState()
 
-    const [errorMsg, setErrorMsg] = useState("")
+    // const [errorMsg, setErrorMsg] = useState("")
     const [profileImage, setProfileImage] = useState({
-        img_id: "",
-        img_url: ""
+        img_id: userData?.profile_image_object?.img_id || "",
+        img_url: userData?.profile_image_object?.img_url || "",
     })
     const {
         control,
@@ -78,7 +79,7 @@ export default function Page() {
         resolver: zodResolver(formValues),
         defaultValues: {
             email: userData?.email || "",
-            hospitals: typeof userData?.hospitals === "string" ? userData?.hospitals : "",
+            address: typeof userData?.address || "",
             lga: "",
             state: userData?.state || "",
             name: `${userData?.first_name || ""} ${userData?.middle_name || ""} ${userData?.last_name || ""}`.trim(),
@@ -90,20 +91,24 @@ export default function Page() {
     })
 
     type formValues = z.infer<typeof formValues>
-
     useEffect(() => {
         if (!isloadingUserdata && userData) {
-            setValue("name", `${userData?.first_name || ""} ${userData?.middle_name || ""} ${userData?.last_name || ""}`.trim(),)
-            setValue("phone_number", userData?.phone_number || "")
-            setValue("email", userData?.email || "")
-            setValue("state", userData?.state || "")
-            setValue("lga", userData?.lga || "")
-            setValue("nin", userData?.nin || "")
-            setValue("bvn", userData?.bvn || "")
-            setValue("hospitals", typeof userData?.hospitals === "string" ? userData?.hospitals : "")
-            // setProfilePic(userData?.profile_image || '/images/userIcon.png')
+            setProfileImage({
+                img_id: userData?.profile_image_object?.img_id || "",
+                img_url: userData?.profile_image_object?.img_url || "",
+            });
+            setValue("name", `${userData?.first_name || ""} ${userData?.middle_name || ""} ${userData?.last_name || ""}`.trim());
+            setValue("phone_number", userData?.phone_number || "");
+            setValue("email", userData?.email || "");
+            setValue("state", userData?.state || "");
+            setValue("lga", userData?.lga || "");
+            setValue("nin", userData?.nin || "");
+            setValue("bvn", userData?.bvn || "");
+            setValue("address", userData?.address || "");
+            // setValue("hospitals", typeof userData?.hospitals === "string" ? userData?.hospitals : "");
         }
-    }, [isloadingUserdata, userData, setValue])
+    }, [isloadingUserdata, userData, setValue]);
+    
 
     const watchSelectedOption = useWatch({
         control,
@@ -132,23 +137,15 @@ export default function Page() {
 
     const uniqueStates = Array.from(new Set(stateList))
 
-    const { data: hospitalList } = useQuery({
-        queryFn: () => fetchHospitalListByLga(selectedlga),
-        queryKey: ["fetch-hospital-list", selectedlga],
-    })
+    // const { data: hospitalList } = useQuery({
+    //     queryFn: () => fetchHospitalListByLga(selectedlga),
+    //     queryKey: ["fetch-hospital-list", selectedlga],
+    // })
 
     const [isLoading, setIsLoading] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false)
-        }, 3000)
-
-        return () => clearTimeout(timer)
-    }, [])
-    // const { mutate: handleSubmitHospital } =
-    //     useUserHospitalChoice();
-    // const router = useRouter();
+    
 
     const stateOptions = uniqueStates?.map((state) => ({
         value: state,
@@ -184,12 +181,12 @@ export default function Page() {
         }),
     }
 
-    const hospitalOptions = hospitalList?.data?.map((hospital) => ({
-        value: capitalizeFirstLetter(hospital.name),
-        label: hospital?.name,
-        name: hospital?.name,
-        address: hospital?.address,
-    }))
+    // const hospitalOptions = hospitalList?.data?.map((hospital) => ({
+    //     value: capitalizeFirstLetter(hospital.name),
+    //     label: hospital?.name,
+    //     name: hospital?.name,
+    //     address: hospital?.address,
+    // }))
 
     const { mutate: handleUpdateProfile, isLoading: isHandleUpdateProfile } = useUpdateUserDetails()
     const onSubmit = (data: formValues) => {
@@ -200,7 +197,7 @@ export default function Page() {
                 phone_number: data.phone_number,
                 state: data.state,
                 lga: data.lga,
-                hospitals: data.hospitals,
+                address: data.address,
                 bvn: data?.selectedOption === "bvn" ? data?.bvn : "",
                 nin: data?.selectedOption === "nin" ? data?.nin : "",
             },
@@ -234,7 +231,7 @@ export default function Page() {
 
     const handleClick = () => {
         if (fileInputRef.current) {
-            ; (fileInputRef.current as HTMLInputElement).click()
+            (fileInputRef.current as HTMLInputElement).click()
         }
     }
 
@@ -250,11 +247,13 @@ export default function Page() {
             }
             reader.readAsDataURL(file)
         }
+        event.target.value =""
     }
 
     const { mutate: handleUpload, isLoading: isUploadingImage } = useUpdateUserImage()
 
     const handleFileUpload = async () => {
+        setIsLoading(true)
         if (profileImage?.img_id !== "") {
             await deleteFromCloudinary(profileImage?.img_id as string)
         }
@@ -265,10 +264,10 @@ export default function Page() {
                 img_id: id,
                 img_url: secure_url
             })
-
+            setIsLoading(false)
         }
         // console.log(id, secure_url);
-
+        
         handleUpload(
             {
                 profile_image: {
@@ -277,52 +276,55 @@ export default function Page() {
                 }
             }
             , {
-                onSuccess: (data) => {
+                onSuccess: () => {
                     //   setBuyPlanModal;
-                    queryClient.invalidateQueries({ queryKey: [["user-details"]] });
+                    queryClient.invalidateQueries({ queryKey: ["user-details"] });
                     setProfilePic('');
                 },
                 onError: (error) => {
                     const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    //@ts-expect-error
-                    setErrorMsg(error?.response?.data?.error);
+                    
                     openErrorModalWithMessage(String(errorMessage));
                 },
             })
-    };
+        };
+        
 
-
-    const { mutate: handleRemove } = useUpdateRemoveUserImage()
+    // const { mutate: handleRemove } = useUpdateRemoveUserImage()
     const handleDelete = async (file: string) => {
+        setIsDeleting(true)
+        
         await deleteFromCloudinary(profileImage?.img_id as string)
         setProfilePic("");
         setProfileImage({ img_id: "", img_url: "" })
-        handleRemove(
-            file,
+        setIsDeleting(false)
+        handleUpload(
             {
+                profile_image: {
+                    img_id: String(""),
+                    img_url: ""
+                }
+            }
+            , {
                 onSuccess: (data) => {
                     //   setBuyPlanModal;
-                    queryClient.invalidateQueries(["user-details"]);
+                    queryClient.invalidateQueries({ queryKey: ["user-details"] });
                     setProfilePic('');
                 },
                 onError: (error) => {
                     const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    //@ts-expect-error
-                    setErrorMsg(error?.response?.data?.error);
+                   
                     openErrorModalWithMessage(String(errorMessage));
                 },
             })
     };
 
 
-    // console.log(profileImage);
 
 
     return (
         <>
-            {isLoading || isloadingUserdata ? (
+            { isloadingUserdata ? (
                 <div className="flex items-center justify-center min-h-[60vh]">
                     <Spinner />
                 </div>
@@ -352,7 +354,7 @@ export default function Page() {
                                                 objectFit="cover"
                                             />
                                         </div>
-                                        <div className="mt-[2rem] md:mt-[3.8rem] -ml-[1.5rem] z-[2]">
+                                        <div className="mt-[2rem] md:mt-[3.8rem] cursor-pointer -ml-[1.5rem] z-[2]">
                                             <Photo onClick={handleClick} />
                                         </div>
                                         <input
@@ -365,21 +367,25 @@ export default function Page() {
 
                                     </div>
                                     {(profilePic !== "" && profilePic !== null) && (
-
-                                        <Button
+<>
+                                       {!isDeleting&& <Button
                                             className="bg-[#F5F9FE] gap-1 border-[0.3px] border-[#032282] px-4 py-3"
                                             id="upload"
                                             onClick={handleFileUpload}
                                         >
                                             <Upload />
                                             <p className="text-[#032282] font-medium">Upload</p>
-                                            {isUploadingImage && <SmallSpinner color="#032282" />}
-                                        </Button>
+                                            {(isUploadingImage||isLoading) && <SmallSpinner color="#032282" />}
+                                        </Button>}
+</>
 
                                     )}
-                                    {profileImage?.img_id !== "" && <Button className="bg-[#F5F9FE] gap-1 px-4 py-3" onClick={() => handleDelete("")}>
+                                    {userData?.profile_image_object?.img_id !== ""  &&
+                                    
+                                    <Button className="bg-[#F5F9FE] gap-1 px-4 py-3" onClick={() => handleDelete("")}>
                                         <Delete />
                                         <p className="text-[#032282] font-medium">Remove</p>
+                                           {(isUploadingImage||isDeleting) && <SmallSpinner color="#032282" />}
                                     </Button>}
 
                                 </div>
@@ -517,28 +523,17 @@ export default function Page() {
                                             </div>
                                             <div className="">
                                                 <Label className="text-[#032282]" htmlFor="hospital">
-                                                    Hospital ({hospitalList?.data?.length ?? 0})
+                                                  Address
                                                 </Label>
                                                 <div className="relative mt-[.25rem]">
-                                                    <Controller
-                                                        control={control}
-                                                        name="hospitals"
-                                                        render={({ field }) => (
-                                                            <Select
-                                                                {...field}
-                                                                options={hospitalOptions}
-                                                                placeholder="Select Hospital"
-                                                                onChange={(option) => field.onChange(option?.value)}
-                                                                value={hospitalOptions?.find((option) => option.value === field.value)}
-                                                                styles={style}
-                                                                components={{
-                                                                    Option: CustomOption,
-                                                                    IndicatorSeparator: () => null,
-                                                                }}
-                                                            />
-                                                        )}
-                                                    />
-                                                    {errors?.hospitals && <p className="text-red-600 text-xs mt-1">{errors.hospitals.message}</p>}
+                                                <Input
+                                                    placeholder="Enter Address"
+                                                    type="text"
+                                                    id="name"
+                                                    className="py-3 bg-[#F5F9FE] mt-2"
+                                                    {...register("address", {})}
+                                                />
+                                                    {errors?.address && <p className="text-red-600 text-xs mt-1">{errors.address.message}</p>}
                                                 </div>
                                             </div>
                                             <div>
@@ -723,7 +718,7 @@ export default function Page() {
                         setErrorModalState={() => {
                             setErrorModalState(false)
                         }}
-                        subheading={errorModalMessage || errorMsg || "Please check your inputs and try again."}
+                        subheading={errorModalMessage || "Please check your inputs and try again."}
                     ></ErrorModal>
                 </div>
             )}

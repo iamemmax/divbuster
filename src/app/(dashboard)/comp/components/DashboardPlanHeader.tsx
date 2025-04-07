@@ -158,7 +158,7 @@ const DashboardPlanHeader = () => {
           <div className="text-white h-[2.5rem] w-[2.5rem] relative">
   <Image
     alt="user icon"
-    src={userData?.profile_image || `/images/userIcon.png`}
+    src={userData?.profile_image_object?.img_url || `/images/userIcon.png`}
     layout="fill"
     className="rounded-full object-cover"
   />
