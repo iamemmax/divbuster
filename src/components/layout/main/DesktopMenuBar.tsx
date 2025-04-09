@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/core";
+import { useAuth } from "@/contexts/authentication";
 
 
 interface DesktopMenuLinkProps {
@@ -177,6 +178,9 @@ interface DesktopMenuBarProps {
 
 export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
   const pathname = usePathname();
+  const { authState } = useAuth();
+  const { isAuthenticated } = authState;
+
   const linkGroups = [
     {
       link: "/",
@@ -193,8 +197,7 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
       isExternal: false,
     },
     {
-      link: pathname?.includes("/plan/aproko-doctor")?"/plan/aproko-doctor?select-plan=true":"/plan",
-
+      link: pathname?.includes("/plan/aproko-doctor") ? "/plan/aproko-doctor?select-plan=true" : "/plan",
       text: "Plans",
       icon: undefined,
       disabled: false,
@@ -215,13 +218,6 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
       disabled: false,
       isExternal: false,
     },
-    // {
-    //   link: "/faqs",
-    //   text: "Blogs",
-    //   icon: undefined,
-    //   disabled: false,
-    //   isExternal: false,
-    // },
     {
       link: "/contact-us",
       text: "Contact us",
@@ -229,13 +225,27 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
       disabled: false,
       isExternal: false,
     },
+    ...(isAuthenticated
+      ? [
+          {
+            link: "/dashboard",
+            text: "Dashboard",
+            icon: undefined,
+            disabled: false,
+            isExternal: false,
+          },
+        ]
+      : []),
   ];
+
+
+  
 
   return (
     <nav className="hidden md:block">
       <ul
         className={cn(
-          "flex font-display items-center text-sm gap-x-px transition-all duration-300 ease-in-out",
+          "flex font-display items-center text-sm gap-x-1 transition-all duration-300 ease-in-out",
           isColored && "bg-transparent"
         )}
       >

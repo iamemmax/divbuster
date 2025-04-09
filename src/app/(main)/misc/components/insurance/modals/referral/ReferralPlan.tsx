@@ -310,19 +310,19 @@ const ReferralModalPlan = ({
                         >
                           <div
                             className={`${healthPlan?.data?.length > 2
-                                ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-start  justify-start h-full  gap-y-8 gap-x-[1rem] px-6 "
-                                : "w-full flex flex-col md:flex-row gap-[1rem] px-6 items-center justify-center"
+                                ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:items-start  justify-start h-full  gap-y-8 lg:gap-x-[1rem] px-3 lg:px-6 "
+                                : "w-full flex flex-col md:flex-row gap-[1rem] px-3 lg:px-6 lg:items-center justify-center"
                               }`}
                           >
                             {healthPlan?.data?.map((plan, idxx: number) => (
                               <div
-                                className="flex flex-col h-full w-full items-center justify-center"
+                                className="flex flex-col h-full w-full sm:items-center justify-center"
                                 key={idxx}
                               >
 
                                 <div className="border-[0.3px] relative border-[#4760FD] items-stretch rounded-[1.25rem] bg-[#1A234C]">
                                   <div className="w-full py-8  relative">
-                                    <div className="absolute -top-6 flex justify-center items-start w-full">
+                                    <div className="absolute -top-6 flex justify-center lg:items-start w-full">
                                       <UserIcons width={65} height={65} />
                                     </div>
                                     <div className="mt-4">

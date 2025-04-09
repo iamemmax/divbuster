@@ -326,12 +326,15 @@ const MakePaymentModal = ({
                                             className="md:mt-6 mt-3 rounded-10 w-full py-10 lg:py-4"
                                             value={healthPlan?.package_name}
                                           >
-                          <div
-                            className={`${healthPlan?.data?.length > 2 ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-8  gap-x-[1rem] px-6 " : " w-full flex flex-col md:flex-row gap-[1rem] px-6 items-center justify-center"}`}
+                        <div
+                            className={`${healthPlan?.data?.length > 2
+                                ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:items-start  justify-start h-full  gap-y-8 lg:gap-x-[1rem] px-3 lg:px-6 "
+                                : "w-full flex flex-col md:flex-row gap-[1rem] px-3 lg:px-6 lg:items-center justify-center"
+                              }`}
                           >
                             {healthPlan?.data?.map((plan, idxx: number) => (
                               <div
-                                className="flex flex-col w-full items-center justify-center"
+                                className="flex flex-col h-full w-full sm:items-center justify-center"
                                 key={idxx}
                               >
                                 <div className="w-full">

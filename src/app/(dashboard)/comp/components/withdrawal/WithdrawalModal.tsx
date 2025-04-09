@@ -215,36 +215,39 @@ const WithDrawalModal = ({
                     >
                       Select Bank
                     </Label>
-                    <div className={`${
-                                                  errors?.bankData?.bank_code ? "border border-red-700" : ""
-                                                } text-[#fff] text-xs outline-none  rounded-lg w-full px-6 bg-[#2a3150]`}>
-
-                    <Controller
-                      control={control}
-                      name="bankData.bank_code"
-                      render={({ field: { onChange, value, ref } }) => (
-                        <Select
-                          value={bankOptions?.find((c) => c.value === value)}
-                          options={bankOptions}
-                          isSearchable={false}
-                          placeholder="Select Bank"
-                          ref={ref}
-                          onChange={(bankOption) => {
-                            onChange(bankOption?.value);
-                          }}
-                          styles={style}
-                          components={{
-                            IndicatorSeparator: () => null,
-                          }}
-                        />
-                      )}
-                    />
-                                                </div>
+                    <div
+                      className={`${
+                        errors?.bankData?.bank_code
+                          ? "border border-red-700"
+                          : ""
+                      } text-[#fff] text-xs outline-none  rounded-lg w-full px-6 bg-[#2a3150]`}
+                    >
+                      <Controller
+                        control={control}
+                        name="bankData.bank_code"
+                        render={({ field: { onChange, value, ref } }) => (
+                          <Select
+                            value={bankOptions?.find((c) => c.value === value)}
+                            options={bankOptions}
+                            isSearchable={false}
+                            placeholder="Select Bank"
+                            ref={ref}
+                            onChange={(bankOption) => {
+                              onChange(bankOption?.value);
+                            }}
+                            styles={style}
+                            components={{
+                              IndicatorSeparator: () => null,
+                            }}
+                          />
+                        )}
+                      />
+                    </div>
                     {errors?.bankData?.bank_code && (
-                <p className="text-red-700 text-xs mt-1">
-                  {errors?.bankData?.bank_code?.message}
-                </p>
-              )}
+                      <p className="text-red-700 text-xs mt-1">
+                        {errors?.bankData?.bank_code?.message}
+                      </p>
+                    )}
                   </div>
                   <div className="w-full mt-[1rem] text-sm font-normal">
                     <Label
@@ -254,57 +257,62 @@ const WithDrawalModal = ({
                       Account Number
                     </Label>
                     <div className="relative mt-[.25rem]">
- <Controller
-                                                  control={control}
-                                                  name={`bankData.account_number`}
-                                                  render={({ field }) => (
-                                                    <input
-                                                      {...field}
-                                                      {...field}
-                                                className={`${
-                                                  errors?.bankData?.account_number ? "border border-red-700" : ""
-                                                } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
-                                                      id="account_no"
-                                                      placeholder="Enter Account no"
-                                                      type="text"
-                                                      maxLength={11}
-                                                      onChange={(e) => {
-                                                        const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
-                                                        // Handle input sanitization on change (typing)
-                                                        const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
-                                                        field.onChange(validPhoneNumber);
-                                                      }}
-                                                     
-                            
-                            
-                                                     
-                                                      onPaste={(e) => {
-                                                        e.target as HTMLInputElement;
-                                                        // Intercept paste event to sanitize pasted content
-                                                        const pastedValue = e.clipboardData.getData('text');
-                                                        // Remove non-numeric characters and limit to 11 digits
-                                                        const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
-                                                        e.preventDefault(); // Prevent the default paste behavior
-                                                        field.onChange(sanitizedValue); // Apply sanitized value
-                                                      }}
-                                                      
-                                                      onInput={(e) => {
-                                                        const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
-                                                        // Handle input sanitization on input changes
-                                                        const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
-                                                        field.onChange(validPhoneNumber);
-                                                      }}
-                                                      // onChange={(e) => field.onChange(e.target.value)}
-                                                    />
-                                                  )}
-                                                />
+                      <Controller
+                        control={control}
+                        name={`bankData.account_number`}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            {...field}
+                            className={`${
+                              errors?.bankData?.account_number
+                                ? "border border-red-700"
+                                : ""
+                            } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                            id="account_no"
+                            placeholder="Enter Account no"
+                            type="text"
+                            maxLength={11}
+                            onChange={(e) => {
+                              const target = e.target as HTMLInputElement; // Casting e.target to HTMLInputElement
+                              // Handle input sanitization on change (typing)
+                              const validPhoneNumber = target.value.replace(
+                                /[^0-9]/g,
+                                ""
+                              );
+                              field.onChange(validPhoneNumber);
+                            }}
+                            onPaste={(e) => {
+                              e.target as HTMLInputElement;
+                              // Intercept paste event to sanitize pasted content
+                              const pastedValue =
+                                e.clipboardData.getData("text");
+                              // Remove non-numeric characters and limit to 11 digits
+                              const sanitizedValue = pastedValue
+                                .replace(/[^0-9]/g, "")
+                                .slice(0, 11); // Only allow first 11 digits
+                              e.preventDefault(); // Prevent the default paste behavior
+                              field.onChange(sanitizedValue); // Apply sanitized value
+                            }}
+                            onInput={(e) => {
+                              const target = e.target as HTMLInputElement; // Casting e.target to HTMLInputElement
+                              // Handle input sanitization on input changes
+                              const validPhoneNumber = target.value.replace(
+                                /[^0-9]/g,
+                                ""
+                              );
+                              field.onChange(validPhoneNumber);
+                            }}
+                            // onChange={(e) => field.onChange(e.target.value)}
+                          />
+                        )}
+                      />
 
-
-{errors?.bankData?.account_number && (
-                <p className="text-red-700 text-xs mt-1">
-                  {errors?.bankData?.account_number?.message}
-                </p>
-              )}
+                      {errors?.bankData?.account_number && (
+                        <p className="text-red-700 text-xs mt-1">
+                          {errors?.bankData?.account_number?.message}
+                        </p>
+                      )}
                     </div>
                     {loadingSubmit && (
                       <div className="py-3">
@@ -325,57 +333,62 @@ const WithDrawalModal = ({
                       Amount
                     </Label>
                     <div className="relative mt-[.25rem]">
- <Controller
-                                                  control={control}
-                                                  name={`bankData.amount`}
-                                                  render={({ field }) => (
-                                                    <input
-                                                      {...field}
-                                                      {...field}
-                                                className={`${
-                                                  errors?.bankData?.amount ? "border border-red-700" : ""
-                                                } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
-                                                      id="account_no"
-                                                      placeholder="Enter Amount"
-                                                      type="text"
-                                                      maxLength={11}
-                                                      onChange={(e) => {
-                                                        const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
-                                                        // Handle input sanitization on change (typing)
-                                                        const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
-                                                        field.onChange(validPhoneNumber);
-                                                      }}
-                                                     
-                            
-                            
-                                                     
-                                                      onPaste={(e) => {
-                                                        e.target as HTMLInputElement;
-                                                        // Intercept paste event to sanitize pasted content
-                                                        const pastedValue = e.clipboardData.getData('text');
-                                                        // Remove non-numeric characters and limit to 11 digits
-                                                        const sanitizedValue = pastedValue.replace(/[^0-9]/g, '').slice(0, 11); // Only allow first 11 digits
-                                                        e.preventDefault(); // Prevent the default paste behavior
-                                                        field.onChange(sanitizedValue); // Apply sanitized value
-                                                      }}
-                                                      
-                                                      onInput={(e) => {
-                                                        const target = e.target as HTMLInputElement;  // Casting e.target to HTMLInputElement
-                                                        // Handle input sanitization on input changes
-                                                        const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
-                                                        field.onChange(validPhoneNumber);
-                                                      }}
-                                                      // onChange={(e) => field.onChange(e.target.value)}
-                                                    />
-                                                  )}
-                                                />
+                      <Controller
+                        control={control}
+                        name={`bankData.amount`}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            {...field}
+                            className={`${
+                              errors?.bankData?.amount
+                                ? "border border-red-700"
+                                : ""
+                            } text-[#fff] text-xs outline-none h-[2.4rem] md:h-[2.875rem] rounded-lg w-full px-6 bg-[#2a3150]`}
+                            id="account_no"
+                            placeholder="Enter Amount"
+                            type="text"
+                            maxLength={11}
+                            onChange={(e) => {
+                              const target = e.target as HTMLInputElement; // Casting e.target to HTMLInputElement
+                              // Handle input sanitization on change (typing)
+                              const validPhoneNumber = target.value.replace(
+                                /[^0-9]/g,
+                                ""
+                              );
+                              field.onChange(validPhoneNumber);
+                            }}
+                            onPaste={(e) => {
+                              e.target as HTMLInputElement;
+                              // Intercept paste event to sanitize pasted content
+                              const pastedValue =
+                                e.clipboardData.getData("text");
+                              // Remove non-numeric characters and limit to 11 digits
+                              const sanitizedValue = pastedValue
+                                .replace(/[^0-9]/g, "")
+                                .slice(0, 11); // Only allow first 11 digits
+                              e.preventDefault(); // Prevent the default paste behavior
+                              field.onChange(sanitizedValue); // Apply sanitized value
+                            }}
+                            onInput={(e) => {
+                              const target = e.target as HTMLInputElement; // Casting e.target to HTMLInputElement
+                              // Handle input sanitization on input changes
+                              const validPhoneNumber = target.value.replace(
+                                /[^0-9]/g,
+                                ""
+                              );
+                              field.onChange(validPhoneNumber);
+                            }}
+                            // onChange={(e) => field.onChange(e.target.value)}
+                          />
+                        )}
+                      />
 
-
-{errors?.bankData?.amount && (
-                <p className="text-red-700 text-xs mt-1">
-                  {errors?.bankData?.amount?.message}
-                </p>
-              )}
+                      {errors?.bankData?.amount && (
+                        <p className="text-red-700 text-xs mt-1">
+                          {errors?.bankData?.amount?.message}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="w-full mt-[1rem] text-sm font-normal">
@@ -398,6 +411,7 @@ const WithDrawalModal = ({
                   <div className="pb-[2rem]">
                     <Button
                       className="mt-[3.5rem] flex items-center gap-x-5 justify-center font-display focus:shadow-outline w-full rounded-2xl bg-[#fff] p-4 py-3 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
+                      disabled={!accountName}
                       type="submit"
                     >
                       Continue

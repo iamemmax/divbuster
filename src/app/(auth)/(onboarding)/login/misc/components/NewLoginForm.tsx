@@ -100,8 +100,10 @@ export function PhoneLoginForm({ userPhoneNumber }: GetStartedProps) {
     };
 
     postLogIn(updatedData, {
-      onSuccess: () => {
-        router.push("/dashboard");
+      onSuccess: (data) => {
+        if(Boolean(data?.data?.status) === true){
+          router.replace("/dashboard");
+        }
       },
       onError: (error) => {
         const errorMessage = formatAxiosErrorMessage(error as AxiosError);

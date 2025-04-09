@@ -74,7 +74,7 @@ export function MainHeader() {
   const pathname = usePathname();
   const { authState } = useAuth();
   const isColored = pagesWithColoredBg.includes(pathname);
-  const { data: users } = useUser();
+ const { data: userData, isLoading } = useUser();
   const [open, setOpen] = React.useState(false);
   const { isAuthenticated } = authState;
   // const [userActive, setUserActive] = React.useState(false);
@@ -129,35 +129,36 @@ export function MainHeader() {
             </a>
           ) : (
             <div className=" flex items-center">
+          <div className="hidden lg:flex gap-4">
+           
           <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button className="rounded-full text-sm bg-white text-black flex justify-center items-center shrink-0 px-4">
-        Dashboard
-          <CaretDown color="#000" />
-        </Button>
-      </DropdownMenuTrigger>
+                  <DropdownMenuTrigger asChild>
+                    <Button className="rounded-full  text-sm text-white flex justify-center items-center shrink-0 bg-transparent p-2">
+                      {!isLoading && (
+                        <Button className="rounded-full w-9 h-9 text-sm text-white flex justify-center items-center shrink-0 bg-[#FFFFFF4D] p-1">
+                          {`${userData?.first_name?.slice(0, 1) ?? ""}${userData?.last_name?.slice(0, 1) ?? ""}`}
+                        </Button>
+                      )} <CaretDown />
+                    </Button>
+                  </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="bg-white z-[999999] rounded-md shadow-md p-2">
-        {/* Wrap each item in a Link */}
-        <DropdownMenuItem className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer">
-          <Link href="/dashboard">
-            Dashboard
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer">
-          <Link href="/dashboard/my-profile">
-            Profile
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
-        <DropdownMenuItem
-          onClick={handleLogoutClick}
-          className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
-        >
-          Logout
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+                  <DropdownMenuContent className="bg-white z-[999] mt-2 rounded-md shadow-md p-2">
+                    <DropdownMenuItem
+                      className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => router.push("/dashboard/my-profile")}
+                    >
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
+                    <DropdownMenuItem
+                      onClick={handleLogoutClick}
+                      className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
+                    >
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+    </div>
             </div>
           )}
 
