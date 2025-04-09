@@ -34,11 +34,15 @@ interface successProp {
   message: string;
 }
 const contactSchema = z.object({
-  phone_number: z
-  .string()
-  .min(11, { message: "Phone number should be at least 11 digits" })
-  .regex(/^0\d{10}$/, { message: "Phone number must start with 0 and be 11 digits long" }),
-});
+   phone_number: z
+      .string()
+      .min(11, { message: "Phone number should be at least 11 digits" })
+      .regex(
+        /^(080|070|090|081|091)\d{8}$/, // Matches numbers starting with 080, 070, 090, 081, or 091 followed by 8 more digits
+        {
+          message: "Invalid phone number. It should start with 080, 070, 090, 081, or 091 and be 11 digits long.",
+        }
+      ), });
 
 export type detailRequestType = z.infer<typeof contactSchema>;
 

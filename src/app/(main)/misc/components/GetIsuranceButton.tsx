@@ -50,7 +50,7 @@ export default function GetInsuranceButton() {
        <div className="">
            <Button
                 className={cn(
-                  "flex items-center cursor-pointer justify-between text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
+                  "flex items-center cursor-pointer justify-between text-black text-xs max-xxscren:text-xxs md:text-[0.865rem] text-left py-1.5 pr-1.5 pl-4 mt-4 rounded-full max-w-max",
                   "font-display"
                 )}
                 id="get-insurance-button"
@@ -60,7 +60,7 @@ export default function GetInsuranceButton() {
                   setOpenCheckPhoneNumberModal(true)}}
               >
                 Get insurance
-                <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-7">
+                <span className="flex items-center justify-center p-2 rounded-full bg-main-light ml-2 sm:ml-4 md:ml-7">
                   <RightUpArrow className="" height={12} width={12} />
                 </span>
               </Button>

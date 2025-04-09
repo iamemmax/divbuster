@@ -210,9 +210,7 @@ const BuyPlanModal = ({ setBuyPlanModal, isBuyPlanModalOpen }: Prop) => {
                                                         const validPhoneNumber = target.value.replace(/[^0-9]/g, '');
                                                         field.onChange(validPhoneNumber);
                                                       }}
-                                                     
-                            
-                            
+                                                    
                                                      
                                                       onPaste={(e) => {
                                                         e.target as HTMLInputElement;
