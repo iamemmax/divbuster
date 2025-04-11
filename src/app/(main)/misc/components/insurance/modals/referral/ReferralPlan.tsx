@@ -24,7 +24,7 @@ import UserIcons from "../../icons/Usericon";
 import Link from "next/link";
 
 import { useQuery } from "react-query";
-import {  plantypes } from "../../api/plan/getPlan";
+import { plantypes } from "../../api/plan/getPlan";
 import {
   formatCurrency,
   removeCommaFromPrice,
@@ -46,7 +46,7 @@ interface Prop {
   setOpenShowRemitalPlan: Dispatch<SetStateAction<boolean>>;
   openRemitalPlan: boolean;
   userId: string;
- 
+
   plansData: plantypes[] | undefined;
   loadingPlan: boolean;
 }
@@ -219,7 +219,7 @@ const ReferralModalPlan = ({
   const { authState } = useAuth();
   const { isAuthenticated } = authState;
   // console.log(isAuthenticated,"isAuthenticated");
-  
+
 
 
 
@@ -228,10 +228,10 @@ const ReferralModalPlan = ({
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     };
-  
+
     setVh(); // Run initially
     window.addEventListener("resize", setVh); // Update on resize
-  
+
     return () => window.removeEventListener("resize", setVh);
   }, []);
 
@@ -243,7 +243,7 @@ const ReferralModalPlan = ({
         </div>
       ) : (
         <Dialog open={openRemitalPlan}>
-          <DialogContent className="!overflow-hidden rounded-[1.125rem]   px-4 w-full">
+          <DialogContent className="h-[650px] md:h-auto !overflow-hidden rounded-[1.125rem]   md:px-4 w-full">
             <div className="md:w-full flex justify-between items-center">
               <DialogHeader className="bg-[#1B1687]  w-full !justify-between">
                 <DialogTitle className="text-[#fff] whitespace-nowrap">
@@ -326,8 +326,8 @@ const ReferralModalPlan = ({
                         >
                           <div
                             className={`${healthPlan?.data?.length > 2
-                                ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:items-start  justify-start h-full  gap-y-8 lg:gap-x-[1rem] px-3 lg:px-6 "
-                                : "w-full flex flex-col md:flex-row gap-[1rem] px-3 lg:px-6 lg:items-center justify-center"
+                              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:items-start  justify-start h-full  gap-y-8 lg:gap-x-[1rem] px-3 lg:px-6 "
+                              : "w-full flex flex-col md:flex-row gap-[1rem] px-3 lg:px-6 lg:items-center justify-center"
                               }`}
                           >
                             {healthPlan?.data?.map((plan, idxx: number) => (
@@ -532,7 +532,7 @@ const ReferralModalPlan = ({
                                     <Button
                                       className="rounded-3xl font-display focus:shadow-outline w-[10rem] bg-[#fff] p-4 py-2 font-semibold tracking-wide shadow-lg transition-colors delay-150 ease-in-out hover:bg-slate-300 focus:outline-none text-[#1B1687]"
                                       onClick={() => {
-                                        if(!isAuthenticated){
+                                        if (!isAuthenticated) {
                                           setPlanType({
                                             number_of_recipient: String(planCounts[plan.id.toString()] || 0),
                                             duration: String(plan?.plan_duration?.duration),
@@ -556,7 +556,7 @@ const ReferralModalPlan = ({
                                           });
                                           setPhoneNumberModalOpen(true);
 
-                                        }else{
+                                        } else {
                                           router.push("/dashboard")
                                         }
                                       }}
