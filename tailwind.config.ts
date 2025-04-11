@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      height: {
+        'ios-safe': '-webkit-fill-available'
+      },
       backgroundPosition: {
         'bottom-right-offset': 'bottom -10% right -10%',
       },

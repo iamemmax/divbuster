@@ -310,4 +310,7 @@ body {
 
 
 
-
+.ios-height-fix {
+  height: 100%;
+  height: -webkit-fill-available;
+}

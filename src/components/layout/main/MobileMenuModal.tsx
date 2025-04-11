@@ -13,6 +13,7 @@ import { Button, Dialog, DialogBody, DialogClose, DialogContent, DialogDescripti
 import { DrawerClose } from '@/components/core/Drawer';
 import { cn } from '@/utils/classNames';
 import { linkGroups } from './DesktopMenuBar';
+import { useAuth } from '@/contexts/authentication';
 
 // const staggerSpring = {
 //   animate: {
@@ -37,7 +38,9 @@ export function MobileMenuDialog() {
   } = useBooleanStateControl();
 
   useRouteChangeEvent(() => closeModal());
-
+  const pathname = usePathname();
+  const { authState } = useAuth();
+  const { isAuthenticated } = authState;
   return (
     <>
       {/* <DrawerMenu
@@ -109,11 +112,16 @@ export function MobileMenuDialog() {
                   //  icon: undefined;
                   //  disabled: boolean;
                   //  isExternal: boolean;
-                  linkGroups?.map((link, index:number) => (
+                  <>
+                 { linkGroups?.map((link, index:number) => (
                     <li className="border-b-[0.15px] border-b-white/30 py-5" key={index}>
                       <Link href={link?.link}>{link.text}</Link>
                     </li>
-                  ))
+                  ))}
+                 {isAuthenticated&& <li className="border-b-[0.15px] border-b-white/30 py-5" >
+                      <Link href={`/dashboard`}>Dashboard</Link>
+                    </li>}
+                  </>
                 }
               </ul>
             </nav>

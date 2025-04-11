@@ -250,7 +250,8 @@ const ReferralModalPlan = ({
                   <Spinner color="white" />
                 </div>
               ) : (
-                <>
+                // <div className="max-xxscren:max-h-[57vh] min-h-[53vh] max-h-[58vh]  3xl:max-h-[67.6vh] overflow-y-auto 2xl:min-h-[409px]">
+                <div className="max-xxscren:max-h-[80vh] min-h-[53vh] w-full max-h-[80vh] 3xl:max-h-[80vh] overflow-y-auto 2xl:min-h-[409px]">
                   <div className="py-1">
                     <div className="text-[#fff] text-center font-semibold ">
                       <DialogDescription className="text-sm 2xl:text-lg 3xl:text-3xl">
@@ -281,17 +282,17 @@ const ReferralModalPlan = ({
                     )}
                   </div>
 
-                  <div className="max-h-[53vh]  3xl:max-h-[63.6vh] overflow-y-auto 2xl:min-h-[409px] rounded-b-lg  md:w-full mt-5 md:mt-6">
+                  <div className=" rounded-b-lg w-full  md:w-full mt-5 md:mt-6">
                     <Tabs
                       className=""
                       defaultValue={selectedTab}
                       onValueChange={(e) => setSelectedTab(e)}
                     >
                       <div className="flex w-full px-3 md:px-6 items-center justify-center">
-                        <TabsList className="flex w-[98%] justify-center rounded-[.75rem] bg-[#1D2651] md:max-w-[30rem] md:pl-6 lg:pl-0 border border-[#407BFF]">
+                        <TabsList className="flex w-[98%] justify-center overflow-x-auto rounded-[.75rem]  bg-[#1D2651] md:max-w-[30rem] md:pl-6 lg:pl-0 border border-[#407BFF]">
                           {plansData?.map((tab, idx: number) => (
                             <TabsTrigger
-                              className="inline-flex w-full items-center justify-center rounded-xl text-xs  2xl:text-sm font-medium text-[#fff] data-[state=active]:shadow-none"
+                              className="inline-flex w-full items-center max-md:px-0 justify-center rounded-xl text-xs  2xl:text-sm font-medium text-[#fff] data-[state=active]:shadow-none"
                               value={tab?.package_name}
                               key={idx}
                             >
@@ -581,7 +582,7 @@ const ReferralModalPlan = ({
                       Skip
                     </Button> */}
                   </div>
-                </>
+                </div>
               )}
             </DialogBody>
           </DialogContent>

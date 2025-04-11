@@ -18,9 +18,10 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@radix-ui/react-dropdown-menu";
-import { useQueryClient } from "react-query";
-import { useAuth } from "@/contexts/authentication";
+// import { useQueryClient } from "react-query";
+// import { useAuth } from "@/contexts/authentication";
 import { Liberty } from "@/icons/core";
+import LogoutModal from "./LogoutModal";
 export function DashboardHeader() {
   const { data: userData, isLoading } = useUser();
   const pathname = usePathname(); // Get the current pathname
@@ -44,14 +45,9 @@ export function DashboardHeader() {
     },
   ];
 
-  const { replace } = useRouter();
-  const queryClient = useQueryClient();
-  const { authDispatch } = useAuth();
-  const handleLogoutClick = () => {
-    if (authDispatch) authDispatch({ type: "LOGOUT" });
-    queryClient.clear();
-    replace("/login");
-  };
+
+
+  const [showLogoutModal, setShowLogoutModal] = React.useState(false)
 
   return (
     <>
@@ -172,6 +168,12 @@ export function DashboardHeader() {
 
                   <DropdownMenuContent className="bg-white z-[999] mt-2 rounded-md shadow-md p-2">
                     <DropdownMenuItem
+                      className="p-2 border-b  text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => router.push("/")}
+                    >
+                      Home
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
                       className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
                       onClick={() => router.push("/dashboard/my-profile")}
                     >
@@ -179,7 +181,7 @@ export function DashboardHeader() {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
                     <DropdownMenuItem
-                      onClick={handleLogoutClick}
+                      onClick={()=>setShowLogoutModal(true)}
                       className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
                     >
                       Logout
@@ -190,6 +192,10 @@ export function DashboardHeader() {
             </div>
           </div>
         </div>
+
+        {
+          showLogoutModal && <LogoutModal setShowSuccessModal={setShowLogoutModal} showSuccessModal={showLogoutModal}/>
+        }
       </header>
     </>
   );
