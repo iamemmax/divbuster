@@ -260,7 +260,8 @@ const handleCheckboxChange = (planId: string) => {
         </div>
       ) : (
         <Dialog open={openRemitalPlan}>
-          <DialogContent className="!overflow-hidden rounded-[1.125rem]  min-h-[90vh] max-h-[97vh] px-4 w-full md:min-h-[55rem]">
+          <DialogContent className="!overflow-hidden rounded-[1.125rem] min-h-[96dvh] max-h-[98dvh] px-4 w-full md:min-h-[55rem]"
+          >
             <div className="md:w-full flex justify-between items-center">
               <DialogHeader className="bg-[#1B1687]  w-full !justify-between">
                 <DialogTitle className="text-[#fff] whitespace-nowrap">
@@ -610,8 +611,8 @@ const handleCheckboxChange = (planId: string) => {
                   <div
                     className={`flex sm:flex-row justify-between  px-6 w-full pb-1 items-center ${selectedTab === "Individual" ? " mt-[1rem]" : ""} gap-1 flex-nowrap`}
                   >
-                    <Link href={"#"} className="text-[#AFD85B] text-sm">
-                      <span className="text-[#747577]">
+                    <Link href={"#"} className="text-[#AFD85B] text-xs md:text-sm">
+                      <span className="text-[#747577] max-md:text-xs">
                         Terms & Conditions Apply:
                       </span>{" "}
                       libertyaasured.com

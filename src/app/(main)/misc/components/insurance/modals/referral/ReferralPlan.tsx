@@ -220,6 +220,21 @@ const ReferralModalPlan = ({
   const { isAuthenticated } = authState;
   // console.log(isAuthenticated,"isAuthenticated");
   
+
+
+
+  useEffect(() => {
+    const setVh = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+  
+    setVh(); // Run initially
+    window.addEventListener("resize", setVh); // Update on resize
+  
+    return () => window.removeEventListener("resize", setVh);
+  }, []);
+
   return (
     <div>
       {loadingPlan ? (
@@ -251,7 +266,7 @@ const ReferralModalPlan = ({
                 </div>
               ) : (
                 // <div className="max-xxscren:max-h-[57vh] min-h-[53vh] max-h-[58vh]  3xl:max-h-[67.6vh] overflow-y-auto 2xl:min-h-[409px]">
-                <div className="max-xxscren:max-h-[80vh] min-h-[53vh] w-full max-h-[80vh] 3xl:max-h-[80vh] overflow-y-auto 2xl:min-h-[409px]">
+                <div className="max-h-[calc(var(--vh,1vh)*80)] overflow-y-auto min-h-[calc(var(--vh,1vh)*53)]">
                   <div className="py-1">
                     <div className="text-[#fff] text-center font-semibold ">
                       <DialogDescription className="text-sm 2xl:text-lg 3xl:text-3xl">
