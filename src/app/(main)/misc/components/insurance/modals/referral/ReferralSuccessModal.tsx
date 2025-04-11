@@ -23,7 +23,7 @@ const ReferralSuccessModal = ({
 
   return (
     <Dialog open={showSuccessModal}>
-      <DialogContent className="!overflow-hidden md:w-[26rem] border-[0.01px] border-opacity-90 border-[#407BFF] ">
+      <DialogContent className="!overflow-hidden w-full h-[25rem] md:w-[26rem] border-[0.01px] border-opacity-90 border-[#407BFF] ">
         <DialogBody className="bg-[#141B3f] w-full  ">
           <div className="py-1 pb-4">
             <div className="">
