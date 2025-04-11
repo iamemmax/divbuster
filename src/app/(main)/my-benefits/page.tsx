@@ -4,9 +4,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { ArrowDown, CaretDown } from '@/components/icons'
 import { cn } from '@/utils/classNames'
 import { useState } from 'react'
-import PolicyExclusions from '../../comp/components/cards/policy/PolicyExclusions'
-import TermsAndConditions from '../../comp/components/cards/policy/TermsAndConditions'
+import TermsAndConditions from '../../(dashboard)/comp/components/cards/policy/TermsAndConditions'
 import { Value } from '@radix-ui/react-select'
+import PolicyExclusions from '@/app/(dashboard)/comp/components/cards/policy/PolicyExclusions'
 
 
 interface props{

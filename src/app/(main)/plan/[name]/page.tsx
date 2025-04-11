@@ -82,55 +82,61 @@ export default function ReferralHome() {
     <main className="w-full bg-main h-full">
        <section className="bg-main w-full sm:!mb-0 text-white shadow-sm  h-full ">
             <section className=" px-6 md:px-[3rem] 2xl:px-[7.5rem] p-[4.375rem] pb-6 flex-col flex-wrap xl:flex-row flex ">
-              <div className="flex flex-1 flex-col  gap-4  md:gap-6  max-md:py-10">
-                <div className="flex items-center flex-wrap gap-5">
-                <h6
-                  className={cn(
-                    "font-display",
-                    "flex items-center text-[.625rem] md:text-[0.825rem] w-max font-semibold gap-1.5 px-5 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#34307A]/30"
-                  )}
-                >
-                  <span>
-                    <CheckStar />
-                  </span>
-                  Welcome to Liberty Life
-                  <span><HandIcon /></span>
-                  NEM Health
-                </h6>
-    <LinkButton 
-    className="flex items-center  text-lg w-max font-semibold gap-1.5 px-8 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#f9ab21]/60" href={"https://wa.link/vrg8zn"} target="_blank" title="Talk to Sales">Talk to Sales</LinkButton>
-                </div>
-                <h2
-                  className={cn(
-                    "font-display",
-                    "flex flex-col font-semibold max-xxscren:text-[1.2rem] text-[1.4rem] sm:text-[2.5rem] md:text-[3rem] xl:text-[3.375rem] 2xl:text-[3.4rem] 3xl:text-[4.5rem] gap-2"
-                  )}
-                >
-                  <p className="flex items-center flex-wrap leading-none gap-1">
-                    Standard Health
-                    <p className="text-[#AFD85B] pl-1"> Insurance</p>
-                  </p>
-                  <span className=" mt-0 leading-snug">
-                    for you and your family.
-                  </span>
-                </h2>
-                <p className="max-w-[40.75rem] font-sans text-[0.725rem] md:text-xl text-helper">
-      Get a comprehensive health cover and stand a chance to benefit from
-      a lifetime reward of
-      <span className="ml-2 text-white inline-block relative">
-        ₦500,000
-        <UnderLine className="absolute top-3 md:top-5 left-0 w-full" />
-      </span>
-    </p>
-    
-                  
-    
-                <div className="flex items-center   gap-2 md:gap-4 ">
-    
-                  <GetInsuranceButton/>
-                
-                </div>
-              </div>
+            <div className="flex flex-1 flex-col  gap-4  md:gap-6  max-md:py-10">
+                      <div className="flex items-start  flex-nowrap gap-2 md:gap-5">
+                        <h6
+                          className={cn(
+                            "font-display",
+                            "flex items-center text-[.625rem] md:text-[0.825rem] w-max font-semibold md:gap-1.5 px-5 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#34307A]/30"
+                          )}
+                        >
+                          {/* <span>
+                            <CheckStar />
+                          </span> */}
+                           Liberty Life
+                          <span>
+                            <HandIcon />
+                          </span>
+                          NEM Health
+                        </h6>
+                        <LinkButton
+                          className="flex items-center border-opacity-40 border-white text-white text-xs md:text-base w-max max-xxscren:px-4 px-6 font-semibold  py-3 rounded-full "
+                         variant={"outlined"}
+                          href={"https://wa.link/vrg8zn"}
+                          target="_blank"
+                          title="Talk to Sales"
+                        >
+                          Talk to Sales
+                        </LinkButton>
+                      </div>
+                      <h2
+                        className={cn(
+                          "font-display",
+                          "flex flex-col font-semibold max-xxscren:text-[1.2rem] text-[1.4rem] sm:text-[2.5rem] md:text-[3rem] xl:text-[3.375rem] 2xl:text-[3.4rem] 3xl:text-[4.5rem] gap-2"
+                        )}
+                      >
+                        <p className="flex items-center flex-wrap leading-none gap-1">
+                          Standard Health
+                          <p className="text-[#AFD85B] pl-1"> Insurance</p>
+                        </p>
+                        <span className=" mt-0 leading-snug">
+                          for you and your family.
+                        </span>
+                      </h2>
+                      <p className="max-w-[40.75rem] font-sans text-[0.725rem] md:text-xl text-helper">
+                        Get a comprehensive health cover and stand a chance to benefit
+                        from a lifetime reward of
+                        <span className="ml-2 text-white inline-block relative">
+                          ₦500,000
+                          <UnderLine className="absolute top-3 md:top-5 left-0 w-full" />
+                        </span>
+                      </p>
+          
+                      <div className="flex items-center   gap-2 md:gap-4 ">
+                        <GetInsuranceButton />
+                      
+                      </div>
+                    </div>
               
     
               <section className="relative hidden xl:block px-5 md:px-0">

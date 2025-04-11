@@ -79,7 +79,7 @@ export function MobileMenuDialog() {
 
       <Dialog open={isModalOpen} onOpenChange={setModalState}>
         <DialogTrigger
-          className={cn("xl:hidden bg-white/10 px-5 py-2.5 rounded-full text-white", "font-display")}
+          className={cn("md:hidden bg-white/10 px-5 py-2.5 rounded-full text-white", "font-display")}
           size="unstyled"
           variant="white"
         >

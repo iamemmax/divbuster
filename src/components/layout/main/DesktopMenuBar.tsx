@@ -44,7 +44,7 @@ export function DesktopMenuLink({
     return (
       <a
         className={cn(
-          "inline-block px-3 py-2.5 text-sm min-w-max text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 xl:px-6 xl:py-[1.375rem] xl:text-base",
+          "inline-block px-3 py-2.5 text-sm min-w-max text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 xl:px-4 xl:py-[1.375rem] xl:text-base",
           className
         )}
         href={link}
@@ -61,7 +61,7 @@ export function DesktopMenuLink({
     <>
       <button
         className={cn(
-          "inline-block cursor-not-allowed px-3 py-2.5 text-sm min-w-max text-white opacity-50 xl:px-6 xl:py-[1.375rem] xl:text-base",
+          "inline-block cursor-not-allowed px-3 py-2.5 text-sm min-w-max text-white opacity-50 xl:px-4 xl:py-[1.375rem] xl:text-base",
           isSelected && "font-bold",
           className
         )}
@@ -74,7 +74,7 @@ export function DesktopMenuLink({
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "flex gap-2 px-3 py-2.5 text-sm text-white transition-all min-w-max duration-300 ease-in-out hover:-translate-y-0.5 xl:px-6 xl:py-[1.375rem] xl:text-base",
+          "flex gap-2 px-3 py-2.5 text-sm text-white transition-all  duration-300 ease-in-out hover:-translate-y-0.5 xl:px-4 xl:py-[1.375rem] xl:text-base",
           isSelected && "font-bold",
           className
         )}
@@ -106,7 +106,7 @@ export function DesktopMenuLink({
   ) : (
     <Link
       className={cn(
-        "inline-block px-3 py-2.5 text-sm text-white transition-all min-w-max duration-300 ease-in-out hover:-translate-y-0.5 xl:px-6 xl:py-[1.375rem] xl:text-base",
+        "inline-block px-3 py-2.5 text-sm text-white transition-all min-w-max duration-300 ease-in-out hover:-translate-y-0.5 xl:px-4 xl:py-[1.375rem] xl:text-base",
         isSelected && "font-bold",
         className
       )}
@@ -170,6 +170,13 @@ export const linkGroups = [
     disabled: false,
     isExternal: false,
   },
+  {
+    link: "/my-benefits",
+    text: "Benefits",
+    icon: undefined,
+    disabled: false,
+    isExternal: false,
+  },
 ];
 
 interface DesktopMenuBarProps {
@@ -212,6 +219,13 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
       isExternal: false,
     },
     {
+      link: "/my-benefits",
+      text: "Benefits",
+      icon: undefined,
+      disabled: false,
+      isExternal: false,
+    },
+    {
       link: "/faqs",
       text: "FAQs",
       icon: undefined,
@@ -245,7 +259,7 @@ export function DesktopMenuBar({ isColored }: DesktopMenuBarProps) {
     <nav className="hidden md:block">
       <ul
         className={cn(
-          "flex font-display items-center text-sm gap-x-1 transition-all duration-300 ease-in-out",
+          "flex font-display items-center text-sm gap-x-0 transition-all duration-300 ease-in-out",
           isColored && "bg-transparent"
         )}
       >

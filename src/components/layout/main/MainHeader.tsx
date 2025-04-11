@@ -217,7 +217,7 @@ export function MainHeader() {
           </ClientOnly>
         </div>
 
-        <div className="flex md:hidden  gap-x-4 items-center ">
+        <div className="flex lg:hidden  gap-x-4 items-center ">
           <LinkButton
             className="text-base text-white xl:text-xl"
             href={isAuthenticated ? "/dashboard" : "/login"}

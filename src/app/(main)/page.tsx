@@ -76,26 +76,27 @@ export default function Home() {
   return (
     <main className=" w-full bg-main">
       <section className="bg-main w-full sm:!mb-0 text-white shadow-sm  h-full ">
-        <section className=" px-6 md:px-[3rem] 2xl:px-[7.5rem] p-[4.375rem] pb-6 flex-col flex-wrap xl:flex-row flex ">
+        <section className=" px-6 md:px-[3rem] 2xl:px-[7.5rem] max-md:py-4  md:p-[4.375rem] md:pb-6 flex-col  flex-wrap xl:flex-row flex ">
           <div className="flex flex-1 flex-col  gap-4  md:gap-6  max-md:py-10">
-            <div className="flex items-center flex-wrap gap-5">
+            <div className="flex items-start  flex-nowrap gap-2 md:gap-5">
               <h6
                 className={cn(
                   "font-display",
-                  "flex items-center text-[.625rem] md:text-[0.825rem] w-max font-semibold gap-1.5 px-5 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#34307A]/30"
+                  "flex items-center text-[.625rem] md:text-[0.825rem] w-max font-semibold md:gap-1.5 px-5 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#34307A]/30"
                 )}
               >
-                <span>
+                {/* <span>
                   <CheckStar />
-                </span>
-                Welcome to Liberty Life
+                </span> */}
+                 Liberty Life
                 <span>
                   <HandIcon />
                 </span>
                 NEM Health
               </h6>
               <LinkButton
-                className="flex items-center text-sm md:text-lg w-max font-semibold gap-1.5 px-8 py-1.5 md:py-3 mb-2.5 rounded-full bg-[#34307A]"
+                className="flex items-center border-opacity-40 border-white text-white text-xs md:text-base w-max max-xxscren:px-4 px-6 font-semibold  py-3 rounded-full "
+               variant={"outlined"}
                 href={"https://wa.link/vrg8zn"}
                 target="_blank"
                 title="Talk to Sales"
@@ -130,7 +131,7 @@ export default function Home() {
               <GetInsuranceButton />
               <Button
                 className={cn(
-                  "flex items-center  px-4 cursor-pointer justify-between max-xxscren:text-xxs  max-sm:p-3 text-xs sm:text-[0.865rem] border-opacity-30 border-white border-[0.3px] text-white  bg-transparent text-left  pr-1 md:pl-4 mt-4 rounded-full max-w-max",
+                  "flex items-center  px-4 cursor-pointer justify-between max-xxscren:text-xxs  max-sm:p-3 text-xs sm:text-[0.865rem] border-opacity-30 border-white border-[0.3px] text-white  bg-transparent text-left  pr-3 md:pl-4 mt-4 rounded-full max-w-max",
                   "font-display"
                 )}
                 id="get-insurance-button"
