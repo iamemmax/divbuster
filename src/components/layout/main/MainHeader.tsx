@@ -69,6 +69,7 @@ import { DesktopMenuBar } from "./DesktopMenuBar";
 import { CaretDown } from "@/components/icons";
 import router from "next/router";
 import { useQueryClient } from "react-query";
+import LogoutModal from "../dashboard/LogoutModal";
 
 export function MainHeader() {
   const pathname = usePathname();
@@ -87,14 +88,17 @@ export function MainHeader() {
   // }, [users]);
 
 
-  const { replace } = useRouter();
-  const queryClient = useQueryClient();
-  const { authDispatch } = useAuth();
-  const handleLogoutClick = () => {
-    if (authDispatch) authDispatch({ type: "LOGOUT" });
-    queryClient.clear();
-    replace("/login");
-  };
+  // const { replace } = useRouter();
+  // const queryClient = useQueryClient();
+  // const { authDispatch } = useAuth();
+  // const handleLogoutClick = () => {
+  //   if (authDispatch) authDispatch({ type: "LOGOUT" });
+  //   queryClient.clear();
+  //   replace("/login");
+  // };
+
+  const [showLogoutModal, setShowLogoutModal] = React.useState(false)
+ 
   return (
     <div className={cn(isColored && "bg-main")}>
       <header
@@ -151,7 +155,7 @@ export function MainHeader() {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
                     <DropdownMenuItem
-                      onClick={handleLogoutClick}
+                      onClick={()=>setShowLogoutModal(true)}
                       className="p-2 rounded-md text-sm text-gray-800 hover:bg-gray-100 cursor-pointer"
                     >
                       Logout
@@ -237,6 +241,10 @@ export function MainHeader() {
           <MobileMenuDialog />
         </div>
       </header>
+
+      {
+           showLogoutModal && <LogoutModal setShowSuccessModal={setShowLogoutModal} showSuccessModal={showLogoutModal}/>
+         }
     </div>
   );
 }

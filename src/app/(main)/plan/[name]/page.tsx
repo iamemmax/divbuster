@@ -176,8 +176,13 @@ export default function ReferralHome() {
         <div key={id} className="bg-[#161d42] py-4 px-6 xl:px-[1.6rem] rounded-lg flex flex-col justify-center items-center">
           <h3 className="text-lg font-medium text-white">{card?.title}</h3>
           <p className="text-sm text-[#CAC9D4] text-center">{card.desc}</p>
-          <LinkButton href={"/about-us"} className="bg-transparent cursor-pointer pb-0  mt-1">{card?.button_name}<LearnMore/></LinkButton>
-        </div>  
+          <LinkButton
+                      href={"/about-us"}
+                      className="bg-transparent text-[#AFD85B] cursor-pointer pb-0  mt-1"
+                    >
+                      {card?.button_name}
+                      <LearnMore color="#AFD85B" />
+                    </LinkButton>        </div>  
       ))
     }
     

@@ -202,10 +202,10 @@ export default function Home() {
                     </p>
                     <LinkButton
                       href={"/about-us"}
-                      className="bg-transparent cursor-pointer pb-0  mt-1"
+                      className="bg-transparent text-[#AFD85B] cursor-pointer pb-0  mt-1"
                     >
                       {card?.button_name}
-                      <LearnMore />
+                      <LearnMore color="#AFD85B" />
                     </LinkButton>
                   </div>
                 ))}
