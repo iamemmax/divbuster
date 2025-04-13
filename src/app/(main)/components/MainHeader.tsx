@@ -1,61 +1,60 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import OpticalLogo from '@/app/icons/Logo';
-import RightArrowIcon from '@/app/icons/RightArrow';
-import { Button, LinkButton } from '@/components/core';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from "react";
+import OpticalLogo from "@/app/icons/Logo";
+import RightArrowIcon from "@/app/icons/RightArrow";
+import { Button, LinkButton } from "@/components/core";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const MainHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navlinks = [
-    { title: 'Home', href: '/' },
-    { title: 'About', href: '/about' },
-    { title: 'Contact', href: '/contact' },
-    { title: 'FAQs', href: '/faqs' },
-    { title: 'Blog', href: '/blog' },
+    { title: "Home", href: "/" },
+    { title: "About", href: "/about" },
+    { title: "Contact", href: "/contact" },
+    { title: "FAQs", href: "/faqs" },
+    { title: "Blog", href: "/blog" },
   ];
-
 
   // Simpler menu variants
   const menuVariants = {
     closed: {
-      clipPath: 'circle(0% at calc(100% - 40px) 40px)',
+      clipPath: "circle(0% at calc(100% - 40px) 40px)",
       opacity: 0.9,
       transition: {
         duration: 0.5,
         ease: [0.4, 0, 0.2, 1],
         when: "afterChildren",
         staggerChildren: 0.05,
-        staggerDirection: -1
-      }
+        staggerDirection: -1,
+      },
     },
     open: {
-      clipPath: 'circle(150% at calc(100% - 40px) 40px)',
+      clipPath: "circle(150% at calc(100% - 40px) 40px)",
       opacity: 1,
       transition: {
         duration: 0.7,
         ease: [0.4, 0, 0.2, 1],
         when: "beforeChildren",
         staggerChildren: 0.07,
-        delayChildren: 0.1
-      }
-    }
+        delayChildren: 0.1,
+      },
+    },
   };
 
   // Simpler item variants
   const itemVariants = {
     closed: { y: 20, opacity: 0 },
-    open: { 
-      y: 0, 
+    open: {
+      y: 0,
       opacity: 1,
       transition: {
         type: "spring",
         stiffness: 300,
-        damping: 24
-      }
-    }
+        damping: 24,
+      },
+    },
   };
 
   // Wave animation for the menu background
@@ -66,10 +65,10 @@ export const MainHeader = () => {
         y: {
           repeat: Infinity,
           duration: 2,
-          ease: "easeInOut"
-        }
-      }
-    }
+          ease: "easeInOut",
+        },
+      },
+    },
   };
 
   return (
@@ -77,7 +76,7 @@ export const MainHeader = () => {
       {/* Desktop Header */}
       <header className="hidden lg:flex justify-between w-full items-center py-2">
         <LinkButton
-          className="text-white font-verdana font-bold text-xl flex p-0 items-center gap-2"
+          className="text-white bg-transparent font-verdana font-bold text-xl flex p-0 items-center gap-2"
           href="/"
         >
           <OpticalLogo /> Opticraft Trading
@@ -88,7 +87,7 @@ export const MainHeader = () => {
             {navlinks.map((link, index) => (
               <li key={index}>
                 <LinkButton
-                  className="text-white font-outfit text-base p-0 font-normal"
+                  className="text-white bg-transparent font-outfit text-base p-0 font-normal"
                   href={link.href}
                 >
                   {link.title}
@@ -99,10 +98,21 @@ export const MainHeader = () => {
         </nav>
 
         <Button className="bg-white text-sm text-[#2B3AA6] rounded-10 rounded-s-[24px] rounded-e-[24px] gap-4 flex items-center px-6 py-[0.625rem] font-outfit">
-          Get Started <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M8.9813 3.64671C9.07505 3.55308 9.20213 3.50049 9.33463 3.50049C9.46714 3.50049 9.59422 3.55308 9.68797 3.64671L13.688 7.64672C13.7816 7.74047 13.8342 7.86755 13.8342 8.00005C13.8342 8.13255 13.7816 8.25963 13.688 8.35338L9.68797 12.3534C9.64219 12.4025 9.58699 12.4419 9.52566 12.4692C9.46433 12.4966 9.39812 12.5113 9.33098 12.5124C9.26385 12.5136 9.19716 12.5013 9.1349 12.4761C9.07264 12.451 9.01609 12.4136 8.96861 12.3661C8.92113 12.3186 8.8837 12.262 8.85855 12.1998C8.83341 12.1375 8.82106 12.0708 8.82224 12.0037C8.82342 11.9366 8.83812 11.8704 8.86545 11.809C8.89278 11.7477 8.93218 11.6925 8.9813 11.6467L12.128 8.50005H2.66797C2.53536 8.50005 2.40818 8.44737 2.31442 8.3536C2.22065 8.25983 2.16797 8.13266 2.16797 8.00005C2.16797 7.86744 2.22065 7.74026 2.31442 7.6465C2.40818 7.55273 2.53536 7.50005 2.66797 7.50005H12.128L8.9813 4.35338C8.88767 4.25963 8.83507 4.13255 8.83507 4.00005C8.83507 3.86755 8.88767 3.74047 8.9813 3.64671Z" fill="#2B3AA6"/>
-</svg>
-
+          Get Started{" "}
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M8.9813 3.64671C9.07505 3.55308 9.20213 3.50049 9.33463 3.50049C9.46714 3.50049 9.59422 3.55308 9.68797 3.64671L13.688 7.64672C13.7816 7.74047 13.8342 7.86755 13.8342 8.00005C13.8342 8.13255 13.7816 8.25963 13.688 8.35338L9.68797 12.3534C9.64219 12.4025 9.58699 12.4419 9.52566 12.4692C9.46433 12.4966 9.39812 12.5113 9.33098 12.5124C9.26385 12.5136 9.19716 12.5013 9.1349 12.4761C9.07264 12.451 9.01609 12.4136 8.96861 12.3661C8.92113 12.3186 8.8837 12.262 8.85855 12.1998C8.83341 12.1375 8.82106 12.0708 8.82224 12.0037C8.82342 11.9366 8.83812 11.8704 8.86545 11.809C8.89278 11.7477 8.93218 11.6925 8.9813 11.6467L12.128 8.50005H2.66797C2.53536 8.50005 2.40818 8.44737 2.31442 8.3536C2.22065 8.25983 2.16797 8.13266 2.16797 8.00005C2.16797 7.86744 2.22065 7.74026 2.31442 7.6465C2.40818 7.55273 2.53536 7.50005 2.66797 7.50005H12.128L8.9813 4.35338C8.88767 4.25963 8.83507 4.13255 8.83507 4.00005C8.83507 3.86755 8.88767 3.74047 8.9813 3.64671Z"
+              fill="#2B3AA6"
+            />
+          </svg>
         </Button>
       </header>
 
@@ -161,8 +171,8 @@ export const MainHeader = () => {
                   key={i}
                   className="absolute bottom-0 w-full h-24 opacity-20"
                   style={{
-                    backgroundColor: '#5968C5',
-                    borderRadius: '50% 50% 0 0',
+                    backgroundColor: "#5968C5",
+                    borderRadius: "50% 50% 0 0",
                     left: 0,
                     right: 0,
                     height: `${110 + i * 40}px`,
@@ -172,12 +182,12 @@ export const MainHeader = () => {
                   animate="animate"
                   custom={i}
                   transition={{
-                    delay: i * 0.2
+                    delay: i * 0.2,
                   }}
                 />
               ))}
             </div>
-            
+
             {/* Interactive particles */}
             <div className="absolute inset-0 pointer-events-none">
               {[...Array(6)].map((_, i) => (
@@ -191,12 +201,12 @@ export const MainHeader = () => {
                   animate={{
                     y: [0, -30, 0],
                     opacity: [0.1, 0.7, 0.1],
-                    scale: [1, 1.5, 1]
+                    scale: [1, 1.5, 1],
                   }}
                   transition={{
                     duration: 2 + Math.random() * 2,
                     repeat: Infinity,
-                    delay: Math.random() * 1
+                    delay: Math.random() * 1,
                   }}
                 />
               ))}
@@ -205,7 +215,7 @@ export const MainHeader = () => {
             <nav className="flex justify-center items-center h-full relative z-10 px-6">
               <ul className="flex flex-col justify-center items-center w-full">
                 {navlinks.map((link, index) => (
-                  <motion.li 
+                  <motion.li
                     key={index}
                     variants={itemVariants}
                     className="my-4 overflow-hidden"
@@ -217,9 +227,9 @@ export const MainHeader = () => {
                     >
                       <span className="relative">
                         {link.title}
-                        <motion.span 
+                        <motion.span
                           className="absolute bottom-0 left-0 w-0 h-0.5 bg-white"
-                          whileHover={{ width: '100%' }}
+                          whileHover={{ width: "100%" }}
                           transition={{ duration: 0.2 }}
                         />
                       </span>

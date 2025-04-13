@@ -7,12 +7,14 @@ import BannerLeftContainer from './components/BannerLeftContainer';
 import BannerRightContainer from './components/BannerRightContainer';
 import Marquee from './components/Marquee';
 import AboutSection from './components/AboutSection';
+import BenefitsSection from './components/BenefitsSection';
+import StepSection from './components/StepSection';
 
 const Page = () => {
   return (
     <div className="h-screen overflow-y-scroll scroll-smooth snap-y snap-mandatory">
       {/* Fixed Header */}
-      <div className="fixed top-0 left-0 w-full z-20 bg-black">
+      <div className="fixed top-0 left-0 w-full z-20">
         <div className="text-white w-full px-4 md:px-[2rem] xl:px-[4.5rem] pt-[1rem] xl:pt-[1.25rem]">
           <MainHeader />
         </div>
@@ -26,7 +28,7 @@ const Page = () => {
         transition={{ duration: 0.6 }}
       >
         <div className="grid grid-cols-1 xl:grid-cols-2 mt-[3rem] xl:mt-[4.5rem] flex-1">
-          <div className="px-4 max-lg:py-16 md:px-[2rem] xl:px-[4.5rem]">
+          <div className="px-4 max-lg:py-16 md:px-[2rem] xl:px-[4.5rem] max-md:max-w-[100%] max-xl:max-w-[60%]">
             <BannerLeftContainer />
           </div>
           <div className="h-full max-xl:hidden">
@@ -41,13 +43,32 @@ const Page = () => {
 
       {/* Section 2 - About */}
       <motion.section
-        className="snap-start min-h-screen px-4 max-lg:py-16 md:px-[2rem] xl:px-[4.5rem] flex items-center justify-center bg-[#080628]"
+        className="snap-start min-h-screen  flex items-center  px-4 md:px-[2rem] xl:px-[4.5rem] justify-center bg-[#080628]"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
         <AboutSection />
+      </motion.section>
+      {/* Section 2 - About */}
+      <motion.section
+        className="snap-start min-h-screen  flex items-center justify-center px-4 md:px-[2rem] pb-5 xl:pb-[50px] xl:px-[4.5rem] bg-[#0C0A3A]"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <BenefitsSection />
+      </motion.section>
+      <motion.section
+        className="snap-start min-h-screen  flex items-center justify-center px-4 md:px-[2rem] pb-5 xl:pb-[50px] xl:px-[4.5rem] bg-[#0C0A3A]"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <StepSection />
       </motion.section>
     </div>
   );

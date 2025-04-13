@@ -36,7 +36,7 @@ const BannerLeftContainer = () => {
         <CheckIcon />
       </div>
       <div className="mt-2">
-        <h2 className="text-white font-verdana font-bold max-sm:text-[2rem] text-[3rem] md:text-[2.6rem]  xl:leading-tight xl:text-[3.375rem] 3xl:text-[4.8rem]">Unleash your <span className="text-[#4649E5]">Financial Trading</span> Possibilities.</h2>
+        <h2 className="text-white font-verdana font-bold max-sm:text-[2rem] text-[3rem] md:text-[2.6rem]  xl:leading-tight xl:text-[4.375rem] 3xl:text-[4.8rem]">Unleash your <span className="text-[#4649E5]">Financial Trading</span> Possibilities.</h2>
       <p className="mt-4 max-xxscren:text-sm max-w-[95%] xl:max-w-[75%] text-base xl:text-lg  font-outfit text-white/70">Building wealth takes more than just a savings account.
       its about taking control of your future with strategic trading investments.</p>
       </div>
