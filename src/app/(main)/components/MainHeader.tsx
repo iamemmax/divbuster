@@ -75,9 +75,9 @@ export const MainHeader = () => {
   return (
     <div className="relative w-full">
       {/* Desktop Header */}
-      <header className="hidden lg:flex justify-between items-center p-4">
+      <header className="hidden lg:flex justify-between w-full items-center py-2">
         <LinkButton
-          className="text-white font-verdana font-bold text-xl flex items-center gap-2"
+          className="text-white font-verdana font-bold text-xl flex p-0 items-center gap-2"
           href="/"
         >
           <OpticalLogo /> Opticraft Trading
@@ -98,13 +98,16 @@ export const MainHeader = () => {
           </ul>
         </nav>
 
-        <Button className="bg-white text-sm text-[#2B3AA6] rounded-10 gap-4 flex items-center px-6 py-[0.625rem] font-outfit">
-          Get Started <RightArrowIcon />
+        <Button className="bg-white text-sm text-[#2B3AA6] rounded-10 rounded-s-[24px] rounded-e-[24px] gap-4 flex items-center px-6 py-[0.625rem] font-outfit">
+          Get Started <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M8.9813 3.64671C9.07505 3.55308 9.20213 3.50049 9.33463 3.50049C9.46714 3.50049 9.59422 3.55308 9.68797 3.64671L13.688 7.64672C13.7816 7.74047 13.8342 7.86755 13.8342 8.00005C13.8342 8.13255 13.7816 8.25963 13.688 8.35338L9.68797 12.3534C9.64219 12.4025 9.58699 12.4419 9.52566 12.4692C9.46433 12.4966 9.39812 12.5113 9.33098 12.5124C9.26385 12.5136 9.19716 12.5013 9.1349 12.4761C9.07264 12.451 9.01609 12.4136 8.96861 12.3661C8.92113 12.3186 8.8837 12.262 8.85855 12.1998C8.83341 12.1375 8.82106 12.0708 8.82224 12.0037C8.82342 11.9366 8.83812 11.8704 8.86545 11.809C8.89278 11.7477 8.93218 11.6925 8.9813 11.6467L12.128 8.50005H2.66797C2.53536 8.50005 2.40818 8.44737 2.31442 8.3536C2.22065 8.25983 2.16797 8.13266 2.16797 8.00005C2.16797 7.86744 2.22065 7.74026 2.31442 7.6465C2.40818 7.55273 2.53536 7.50005 2.66797 7.50005H12.128L8.9813 4.35338C8.88767 4.25963 8.83507 4.13255 8.83507 4.00005C8.83507 3.86755 8.88767 3.74047 8.9813 3.64671Z" fill="#2B3AA6"/>
+</svg>
+
         </Button>
       </header>
 
       {/* Mobile Header */}
-      <header className="flex lg:hidden justify-between items-center p-4">
+      <header className="flex lg:hidden justify-between   items-center py-4 pr-4">
         <LinkButton
           className="text-white font-verdana p-0 font-bold text-lg flex items-center gap-2"
           href="/"
