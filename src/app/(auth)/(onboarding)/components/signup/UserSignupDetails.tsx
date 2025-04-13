@@ -52,7 +52,7 @@ const UserSignupDetails = ({onNext}: prop) => {
         </div>
       </div>
 
-<form onSubmit={handleSubmit(onSubmit)}>
+<form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
       <div className="mt-6">
         <div className="mt-[.5rem]">
           <Label

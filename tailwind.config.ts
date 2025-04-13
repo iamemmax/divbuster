@@ -111,11 +111,17 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       animation: {
+        "slowSpin": 'spin 40s linear infinite', // You can change the speed here
         'spin-slow': 'spin 5s linear infinite',
         'vertical-slide': 'vertical-slide 20s infinite linear',
         'indeterminate-progress': 'indeterminate-progress 1.5s infinite linear',
       },
       keyframes: {
+
+        pulseBackground: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.03)' },
+        },
         'vertical-slide': {
           '0%': {
             transform: 'translate(0px, 0px)',
