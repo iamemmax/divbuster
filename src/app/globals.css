@@ -7,6 +7,20 @@ html {
 }
 
 
+@font-face {
+  font-family: 'verdana';
+  src: url('/fonts/verdana.ttf') format('truetype');
+  font-weight: 400; /* Normal */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'verdana';
+  src: url('/fonts/verdana-bold.ttf') format('truetype');
+  font-weight: 700; /* Bold */
+  font-style: normal;
+}
+
 @layer base {
   :root {
     --light-bg: rgb(246, 248, 253);
@@ -25,8 +39,8 @@ html {
 
     --solid-underline: #5879fd;
 
-    --main: #080D27;
-    --main-light: #032282;
+    --main: #02010D;
+    --main-light: #080D27;
     --main-bg: #f2f5ff;
     --helper: #CAC9D4B2;
     --helper-dark: #8C8CA1;
@@ -118,6 +132,7 @@ html {
 .rdp-vhidden {
   @apply hidden;
 }
+
 
 * {
   scroll-behavior: smooth;

@@ -1,20 +1,14 @@
 "use client";
-import { DM_Sans, Wix_Madefor_Display } from "next/font/google";
+import { DM_Sans, Wix_Madefor_Display,Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/utils/classNames";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import ReactQueryProvider from "@/lib/reactQuery";
 import { AuthProvider } from "@/contexts/authentication";
-import ProtectedRouteGuard from "./(auth)/(onboarding)/misc/components/ProtectedRouteGuard";
-import { Wrapper } from "./(auth)/(onboarding)/misc/components/Wrapper";
 // import { useUser } from "./(auth)/(onboarding)/misc";
-import { Button } from "@/components/core";
-import Image from "next/image";
 import { Toaster } from "react-hot-toast";
-import Script from "next/script";
-import Marquee from "./(main)/misc/components/Marquee";
-import CheckUserHasPlan from "@/app/(main)/misc/components/CheckUserHasPlan";
-import Loading from "./(main)/loading";
+import ProtectedRouteGuard from "./(auth)/(onboarding)/misc/ProtectedRouteGuard";
+import { Wrapper } from "./(auth)/(onboarding)/misc/Wrapper";
 
 const sans = DM_Sans({
   subsets: ["latin"],
@@ -26,78 +20,26 @@ const display = Wix_Madefor_Display({
   variable: "--font-display",
   display: "swap",
 });
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const url = `https://wa.link/vrg8zn`;
 
-  const [showCheckPlanModal, setShowCheckPlanModal] = useState(false);
   return (
-    <html className={cn(sans.variable, display.variable)} lang="en">
+    <html className={cn(sans.variable, display.variable, outfit.variable)} lang="en">
       <head>
-        <Script id="google-tag-manager" strategy="afterInteractive">
-          {`
-           window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-16669350340')
-      `}
-        </Script>
-        <Script
-          dangerouslySetInnerHTML={{
-            __html: `src='hhttps://www.googletagmanager.com/gtag/js?id=AW-16669350340`,
-          }}
-          id="liberty-life-widget-icon-freshworks"
-        />
-
-        {/* Hotjar Tracking Code */}
-        <Script id="hotjar-tracking" strategy="afterInteractive">
-          {`
-                    (function(h,o,t,j,a,r){
-                        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-                        h._hjSettings={hjid:5195904,hjsv:6};
-                        a=o.getElementsByTagName('head')[0];
-                        r=o.createElement('script');r.async=1;
-                        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-                        a.appendChild(r);
-                    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-                `}
-        </Script>
-
-        <Script
-          dangerouslySetInnerHTML={{
-            __html: `!function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '1565590854136448');
-            fbq('track', 'PageView');`,
-                      }}
-          id="show-facebook-pixel"
-        />
-        <Script
-          dangerouslySetInnerHTML={{
-            __html: `
-            !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){
-              s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
-            },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
-            a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
-            twq('config','pc1n8');
-          `,
-          }}
-        />
+       
 
         <link rel="shortcut icon" href="/icon.ico" />
       </head>
-      <body className="!z-[9999999999999999999999999999999999999999] bg-main">
+      <body className=" bg-main">
         <Toaster
           containerStyle={{
             zIndex: 99999,
@@ -112,67 +54,18 @@ export default function RootLayout({
         <ReactQueryProvider>
           <AuthProvider>
             <ProtectedRouteGuard>
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={"Loading"}>
                 {" "}
                 {/* Using the Loading component here */}
                 <Wrapper>{children}</Wrapper>
               </Suspense>
             </ProtectedRouteGuard>
           </AuthProvider>
-          <div className=" flex items-end w-full justify-end ">
-            <div className="fixed right-2 flex  max-w-[400px]  md:justify-end items-end flex-col xl:right-0 bottom-[2.3rem] md:bottom-20">
-              {/* <!-- Whatsapp Button with Bounce Animation --> */}
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="whatsapp-button !z-[] text-white font-bold rounded transition duration-300"
-              >
-                <Button className="bg-transparent animate-bounce">
-                  <Image
-                    src="/images/whatsappIcon.png"
-                    width={30} // Default size for smaller screens
-                    height={30} // Default size for smaller screens
-                    alt="whatsapp chat icon"
-                    className="md:w-[3.25rem] md:h-[3.25rem]" // Increase size on medium screens and larger
-                  />
-                </Button>
-              </a>
+          
 
-              <Button
-                className="bg-[#983133] flex justify-start gap-x-1 items-center text-[#fedf3e] mr-5 text-xs md:text-base font-medium rounded-[62.4717px] h-[2rem] md:h-[3.4375rem] px-5 font-display animate-pulse"
-                onClick={() => setShowCheckPlanModal(true)}
-              >
-                <Image
-                  src="/images/nem.svg"
-                  width={20} // Default size for smaller screens
-                  height={20} // Default size for smaller screens
-                  alt="logo"
-                  className="md:w-[43px] md:h-[43px]" // Increase size on medium screens and larger
-                />
-                Consult a Doctor
-              </Button>
-            </div>
-          </div>
-
-          {showCheckPlanModal && (
-            <CheckUserHasPlan
-              openCheckPhoneNumberModal={showCheckPlanModal}
-              setOpenCheckPhoneNumberModal={setShowCheckPlanModal}
-            />
-          )}
+         
         </ReactQueryProvider>
-
-        <noscript
-          dangerouslySetInnerHTML={{
-            __html: `<img height="1" width="1" style="display:none"src="https://www.facebook.com/tr?id=1565590854136448&ev=PageView&noscript=1"/>`,
-          }}
-        />
-      </body>
-
-      <footer className="relative">
-        <Marquee />
-      </footer>
+</body>
 
       {/* Heala Configuration */}
     </html>

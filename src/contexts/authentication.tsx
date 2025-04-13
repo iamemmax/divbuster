@@ -9,13 +9,9 @@ import {
   deleteAxiosDefaultToken,
   setAxiosDefaultToken,
 } from "@/lib/axios";
-import {
-  AuthState,
-  AuthAction,
-  tokenStorage,
-  AuthDispatch,
-  getAuthenticatedUser,
-} from "@/app/(auth)/(onboarding)/misc";
+import { AuthState, AuthAction, AuthDispatch } from "@/app/(auth)/(onboarding)/misc/types";
+import { tokenStorage } from "@/app/(auth)/(onboarding)/misc/utils";
+
 
 const initialAuthState: AuthState = {
   isAuthenticated: false,
@@ -54,29 +50,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     initialAuthState
   );
 
-  React.useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = tokenStorage.getToken();
+  // React.useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const token = tokenStorage.getToken();
 
-        if (token === null || token === undefined) {
-          return;
-        }
+  //       if (token === null || token === undefined) {
+  //         return;
+  //       }
 
-        setAxiosDefaultToken(token, adminAxios);
+  //       setAxiosDefaultToken(token, adminAxios);
 
-        const user = await getAuthenticatedUser();
-        authDispatch({ type: "LOGIN", payload: user });
-      } catch (err) {
-        tokenStorage.clearToken();
-        deleteAxiosDefaultToken();
-      } finally {
-        authDispatch({ type: "STOP_LOADING" });
-      }
-    };
+  //       const user = await {getAuthenticatedUser()};
+  //       authDispatch({ type: "LOGIN", payload: user });
+  //     } catch (err) {
+  //       tokenStorage.clearToken();
+  //       deleteAxiosDefaultToken();
+  //     } finally {
+  //       authDispatch({ type: "STOP_LOADING" });
+  //     }
+  //   };
 
-    fetchUser();
-  }, []);
+  //   fetchUser();
+  // }, []);
 
   return (
     <AuthContext.Provider value={{ authState, authDispatch }}>

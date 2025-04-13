@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-sort-props */
 "use client";
 
-import CloseIcon from "@/app/(main)/misc/icons/CLoseIcon";
+import CloseIcon from "@/app/icons/CloseIcon";
 import { Button } from "./Button";
 import {
   Dialog,

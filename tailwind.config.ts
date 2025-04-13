@@ -15,9 +15,11 @@ const config: Config = {
         'bottom-right-offset': 'bottom -10% right -10%',
       },
       fontFamily: {
+        verdana: ['verdana', 'sans-serif'],
         sans: ['var(--font-sans)'],
         heading: ['var(--font-heading)'],
         display: ['var(--font-display)'],
+        outfit: ['var(--font-outfit)'],
       },
       fontSize: {
         xxs: '.625rem',
