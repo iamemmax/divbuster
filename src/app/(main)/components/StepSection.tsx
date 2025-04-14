@@ -104,7 +104,7 @@ const StepSection = () => {
                     </div>}
                     
                     {/* Content - alternating sides on larger screens */}
-                    <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-16 text-right' : 'md:pl-16 text-left'} flex flex-col ${index % 2 === 0 ? 'md:items-end' : 'md:items-start'}`}>
+                    <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-16 text-right' : 'md:pl-16 text-left'} flex flex-col ${index % 2 === 0 ? 'items-end' : 'items-start'}`}>
                       <div className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} gap-x-4 mb-0`}>
                         <h3 className="font-verdana text-[1.5rem] 2xl:text-[2rem] font-bold text-white order-1">{step.title}</h3>
                         <span className={`font-verdana text-[2rem] text-white text-opacity-30 font-bold ${index % 2 === 0 ? 'order-0' : 'order-1'}`}>{step.number}</span>
