@@ -84,13 +84,13 @@ const StepSection = () => {
               {/* Steps container with the vertical line */}
               <div className="relative grid gap-12 items-start mt-9 ">
                 {/* Vertical line - Fixed positioning to align with first and last dots */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-[#1E40AF] via-white to-[#1E40AF]" 
-                     style={{
-                       top: '10px', /* Aligns with first dot */
-                       bottom: '10px', /* Stops before the button area */
-                       height: 'calc(100% - 20px)' /* Precise height control */
-                     }}>
-                </div>
+                <div
+  className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-[#1E40AF] via-white to-[#1E40AF] z-10"
+  style={{
+    top: '30px',  // 👈 Push this down as needed (try 40px–60px)
+    bottom: '0'
+  }}
+/>
                 
                 {stepsData?.map((step, index) => (
                   <div 
@@ -98,7 +98,8 @@ const StepSection = () => {
                     className={`relative flex ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center`}
                   >
                     {/* Timeline dot - Centered precisely */}
-                   {step?.showDot&& <div className="absolute top-1 left-1/2 transform -translate-x-1/2 z-20">
+                   {step?.showDot&& <div className="absolute top-6 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+
                       <div className={`w-5 h-5 rounded-full border-2 ${step.isActive ? 'bg-[#1E40AF]  border-[#1E40AF]' : step.isCompleted ? 'bg-white border-white' : 'bg-transparent border-gray-600'}`}></div>
                     </div>}
                     
