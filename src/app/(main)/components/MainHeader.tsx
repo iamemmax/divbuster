@@ -74,7 +74,7 @@ export const MainHeader = () => {
   return (
     <div className="relative w-full">
       {/* Desktop Header */}
-      <header className="hidden lg:flex justify-between w-full items-center py-2">
+      <header className="hidden lg:flex justify-between w-full bg-[bg-[#080D27] items-center py-2">
         <LinkButton
           className="text-white bg-transparent font-verdana font-bold text-xl flex p-0 items-center gap-2"
           href="/"

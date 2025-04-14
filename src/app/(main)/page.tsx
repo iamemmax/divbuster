@@ -14,7 +14,7 @@ const Page = () => {
   return (
     <div className="h-screen overflow-y-scroll scroll-smooth snap-y snap-mandatory">
       {/* Fixed Header */}
-      <div className="fixed top-0 left-0 w-full z-20">
+      <div className="fixed top-0 left-0 w-full z-20 ">
         <div className="text-white w-full px-4 md:px-[2rem] xl:px-[4.5rem] pt-[1rem] xl:pt-[1.25rem]">
           <MainHeader />
         </div>
@@ -62,7 +62,7 @@ const Page = () => {
         <BenefitsSection />
       </motion.section>
       <motion.section
-        className="snap-start min-h-screen  flex items-center justify-center px-4 md:px-[2rem] pb-5 xl:pb-[50px] xl:px-[4.5rem] bg-[#0C0A3A]"
+        className="snap-start min-h-screen  flex items-center justify-center  bg-[#0C0A3A]"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
