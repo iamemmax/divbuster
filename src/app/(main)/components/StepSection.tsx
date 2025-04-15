@@ -69,7 +69,7 @@ const StepSection = () => {
   return (
     <>
       <div className='w-full'>
-        <div className="bg-[#080628] w-full rounded-t-[150px] h-full px-4 md:px-[2rem] pt-[4.5rem] pb-5 xl:pb-[50px] xl:px-[4.5rem]">
+        <div className="bg-[#080628] bg-[url('/images/homepage/map.png')] px-6 bg-no-repeat bg-cover h-full md:px-[2rem] pt-[4.5rem] pb-5 xl:pb-[50px] xl:px-[4.5rem]">
           <div className="flex flex-col items-center justify-center text-center">
             <h2 className="font-verdana font-bold text-[6rem] sm:text-[4rem] md:text-[7.5rem] text-white text-opacity-10 leading-none">
               GET STARTED
@@ -79,7 +79,7 @@ const StepSection = () => {
             </p>
           </div>
           
-          <div className="bg-[url('/imagess/homepage/map.svg')] px-6 bg-no-repeat bg-cover">
+          <div className="">
             <div className="relative flex justify-center items-center flex-col w-full">
               {/* Steps container with the vertical line */}
               <div className="relative grid gap-10 items-start mt-9  w-full lg:max-w-[700px] 3xl:max-w-[900px] ">
@@ -109,7 +109,7 @@ const StepSection = () => {
                         <h3 className="font-verdana max-xxscren:text-sm text-base sm:text-[1.5rem] 2xl:text-[2rem] font-bold text-white order-1">{step.title}</h3>
                         <span className={`font-verdana text-[2rem] text-white text-opacity-30 font-bold ${index % 2 === 0 ? 'order-0' : 'order-1'}`}>{step.number}</span>
                       </div>
-                      <p className="text-white text-opacity-30 max-xxscren:text-xs font-outfit text-sm md:text-base max-w-[250px] 2xl:max-w-[330px]">{step?.description}</p>
+                      <p className="text-white text-opacity-30 max-xxscren:text-xs font-outfit text-sm md:text-base max-w-[250px] 2xl:max-w-[290px]">{step?.description}</p>
                     </div>
                     
                     {/* Empty div for spacing on the other side */}
@@ -117,6 +117,7 @@ const StepSection = () => {
                   </div>
                 ))}
               </div>
+             
               
               {/* Get Started button */}
               <div className="flex justify-center mt-6">

@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import Lottie from 'lottie-react';
 import loadingAnimationData from './asset/loading-animation.json';
