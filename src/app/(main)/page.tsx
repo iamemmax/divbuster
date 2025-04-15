@@ -14,7 +14,7 @@ const Page = () => {
   return (
     <div className="h-screen overflow-y-scroll scroll-smooth snap-y snap-mandatory">
       {/* Fixed Header */}
-      <div className="fixed top-0 left-0 w-full z-20 ">
+      <div className="fixed top-0 left-0 z-[9999] w-full  ">
         <div className="text-white w-full px-4 md:px-[2rem] xl:px-[4.5rem] pt-[1rem] xl:pt-[1.25rem]">
           <MainHeader />
         </div>
@@ -22,12 +22,12 @@ const Page = () => {
 
       {/* Section 1 - Banner + Marquee */}
       <motion.section
-        className="relative snap-start pt-[80px] h-screen flex flex-col justify-between"
+        className="relative snap-start pt-[80px] h-screen  flex flex-col justify-between"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="grid grid-cols-1 xl:grid-cols-2 mt-[3rem] xl:mt-[4.5rem] flex-1">
+        <div className="grid grid-cols-1 xl:grid-cols-2 mt-[3rem] xl:mt-[4.5rem] first-line: flex-1">
           <div className="px-4 max-lg:py-16 md:px-[2rem] xl:px-[4.5rem] max-md:max-w-[100%] max-xl:max-w-[60%]">
             <BannerLeftContainer />
           </div>
@@ -36,14 +36,14 @@ const Page = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 w-full z-10 shadow-md">
+        <div className="absolute max-xxscren:bottom-[5rem] bottom-[8rem] lg:bottom-0 left-0 w-full z-10 shadow-md">
           <Marquee />
         </div>
       </motion.section>
 
       {/* Section 2 - About */}
       <motion.section
-        className="snap-start min-h-screen  flex items-center  px-4 md:px-[2rem] xl:px-[4.5rem] justify-center bg-[#080628]"
+        className="snap-start min-h-screen  flex items-center bg-[url('/images/homepage/landing-page-bg.svg')]  bg-no-repeat bg-cover  px-4 md:px-[2rem] xl:px-[4.5rem] justify-center bg-[#080628]"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}

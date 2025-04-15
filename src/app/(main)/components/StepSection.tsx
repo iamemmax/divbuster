@@ -71,18 +71,18 @@ const StepSection = () => {
       <div className='w-full'>
         <div className="bg-[#080628] w-full rounded-t-[150px] h-full px-4 md:px-[2rem] pt-[4.5rem] pb-5 xl:pb-[50px] xl:px-[4.5rem]">
           <div className="flex flex-col items-center justify-center text-center">
-            <h2 className="font-verdana font-bold text-[6rem] sm:text-[8rem] md:text-[7.5rem] text-white text-opacity-10 leading-none">
+            <h2 className="font-verdana font-bold text-[6rem] sm:text-[4rem] md:text-[7.5rem] text-white text-opacity-10 leading-none">
               GET STARTED
             </h2>
-            <p className="font-outfit font-bold text-2xl sm:text-3xl lg:text-[3rem] max-w-[53.125rem] text-white -mt-5 leading-[3rem] sm:leading-[3.5rem]">
+            <p className="font-outfit font-bold text-xl sm:text-[1.5rem] lg:text-[3rem] max-w-[53.125rem] text-white -mt-5 leading-[3rem] sm:leading-[3.5rem]">
               Simple Steps to Get Started
             </p>
           </div>
           
-          <div className="bg-[url('/imagess/homepage/map.svg')] bg-no-repeat bg-cover">
-            <div className="relative mt-20">
+          <div className="bg-[url('/imagess/homepage/map.svg')] px-6 bg-no-repeat bg-cover">
+            <div className="relative flex justify-center items-center flex-col w-full">
               {/* Steps container with the vertical line */}
-              <div className="relative grid gap-12 items-start mt-9 ">
+              <div className="relative grid gap-10 items-start mt-9  w-full lg:max-w-[700px] 3xl:max-w-[900px] ">
                 {/* Vertical line - Fixed positioning to align with first and last dots */}
                 <div
   className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-[#1E40AF] via-white to-[#1E40AF] z-10"
@@ -104,12 +104,12 @@ const StepSection = () => {
                     </div>}
                     
                     {/* Content - alternating sides on larger screens */}
-                    <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-16 text-right' : 'md:pl-16 text-left'} flex flex-col ${index % 2 === 0 ? 'items-end' : 'items-start'}`}>
+                    <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-16 text-right' : 'md:pl-16 text-left'} flex flex-col ${index % 2 === 0 ? 'items-start' : 'items-end'}`}>
                       <div className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} gap-x-4 mb-0`}>
-                        <h3 className="font-verdana text-[1.5rem] 2xl:text-[2rem] font-bold text-white order-1">{step.title}</h3>
+                        <h3 className="font-verdana max-xxscren:text-sm text-base sm:text-[1.5rem] 2xl:text-[2rem] font-bold text-white order-1">{step.title}</h3>
                         <span className={`font-verdana text-[2rem] text-white text-opacity-30 font-bold ${index % 2 === 0 ? 'order-0' : 'order-1'}`}>{step.number}</span>
                       </div>
-                      <p className="text-white text-opacity-30 font-outfit text-base max-w-[330px]">{step?.description}</p>
+                      <p className="text-white text-opacity-30 max-xxscren:text-xs font-outfit text-sm md:text-base max-w-[250px] 2xl:max-w-[330px]">{step?.description}</p>
                     </div>
                     
                     {/* Empty div for spacing on the other side */}

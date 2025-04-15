@@ -22,7 +22,7 @@ const OnboardingLayout = ({
       </div>
         
         {/* Scrollable content area */}
-        <div className="">
+        <div className="mt-5 bg-[url('/images/homepage/landing-page-bg.svg')]  bg-no-repeat bg-cover">
           {children}
         </div>
       </div>

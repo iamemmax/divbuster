@@ -39,11 +39,11 @@ const AboutSection = () => {
             </div>
           </div>
 
-          <h2 className="text-[2.5rem] sm:text-[3.5rem] 3xl:text-[5rem] font-verdana font-bold text-white text-opacity-30 leading-tight">
+          <h2 className="text-[3rem] max-xxscren:text-[1.8rem] lg:text-[2.5rem] 3xl:text-[5rem] font-verdana font-bold text-white text-opacity-30 leading-tight">
             Opticraft Trading Platform
           </h2>
 
-          <p className="leading-relaxed font-outfit text-xl">
+          <p className="leading-relaxed font-outfit text-sm 2xl:text-xl">
             Opticraft is a cutting-edge trading investment platform designed to
             empower traders with real-time market insights, AI-driven trading
             signals, and secure investment solutions. Our goal is to make
@@ -61,27 +61,27 @@ const AboutSection = () => {
         </div>
 
         {/* Right Side Images with Framer Animation */}
-        <div className="hidden lg:flex flex-col relative items-end justify-end w-full">
+        <div className="hidden max-lg:-mt-10 sm:flex flex-col relative items-end justify-end w-full">
           {/* First Image */}
           <motion.div
-            className="2xl:pr-[7rem]"
+            className="pr-[5rem] 2xl:pr-[7rem]"
             initial={{ opacity: 0, x: 100 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true }}
           >
-            <AboutDashboardImage1 />
+            <AboutDashboardImage1 className="max-lg:max-w-[400px] max-2xl:max-w-[350px]" />
           </motion.div>
 
           {/* Second Image */}
           <motion.div
-            className="-mt-[3.125rem] z-50"
+            className="-mt-[10rem] max-2xl:-mt-[10rem] max-3xl:-mt-[3.125rem] z-50"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
             viewport={{ once: true }}
           >
-            <AboutImageDashboard2 />
+            <AboutImageDashboard2 className="max-lg:max-w-[400px] max-2xl:max-w-[350px]" />
           </motion.div>
         </div>
       </div>
