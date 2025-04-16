@@ -72,7 +72,7 @@ export const MainHeader = () => {
   };
 
   return (
-    <div className="relative z-[9999999999] w-full">
+    <div className="relative z-[9999999999999999999999] w-full">
       {/* Desktop Header */}
       <header className="hidden lg:flex justify-between w-full items-center py-2">
         <LinkButton
@@ -117,9 +117,9 @@ export const MainHeader = () => {
       </header>
 
       {/* Mobile Header */}
-      <header className="flex lg:hidden justify-between   items-center py-4 pr-4">
+      <header className="flex lg:hidden justify-between z-[] w-full   items-center py-4 pr-4">
         <LinkButton
-          className="text-white font-verdana p-0 font-bold text-lg flex items-center gap-2"
+          className="text-white font-verdana p-0 font-bold text-lg bg-transparent flex items-center gap-2"
           href="/"
         >
           <OpticalLogo /> Opticraft

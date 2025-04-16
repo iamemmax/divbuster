@@ -9,7 +9,8 @@ import { AuthProvider } from "@/contexts/authentication";
 import { Toaster } from "react-hot-toast";
 import ProtectedRouteGuard from "./(auth)/(onboarding)/misc/ProtectedRouteGuard";
 import { Wrapper } from "./(auth)/(onboarding)/misc/Wrapper";
-import LoadingAnimation from "./(main)/components/animation/LoadingAnimation";
+import FullPageLoader from "./(main)/loading";
+import PageLoadWrapper from "./(main)/components/PageLoadWrapper";
 
 const sans = DM_Sans({
   subsets: ["latin"],
@@ -55,11 +56,12 @@ export default function RootLayout({
         <ReactQueryProvider>
           <AuthProvider>
             <ProtectedRouteGuard>
-              <Suspense fallback={<LoadingAnimation/>}>
-                {" "}
-                {/* Using the Loading component here */}
-                <Wrapper>{children}</Wrapper>
-              </Suspense>
+            <Suspense fallback={<FullPageLoader />}>
+  <PageLoadWrapper>
+    <Wrapper>{children}</Wrapper>
+  </PageLoadWrapper>
+</Suspense>
+
             </ProtectedRouteGuard>
           </AuthProvider>
           

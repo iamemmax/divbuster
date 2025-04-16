@@ -8,7 +8,7 @@ import { Button } from "@/components/core";
 
 const AboutSection = () => {
   return (
-    <section className="flex items-center h-screen w-full text-white px-4">
+    <section className="flex items-center h-screen w-full text-white px-4 overflow-x-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 w-full">
         {/* Left Side Content */}
         <div className="flex flex-col justify-center space-y-6 3xl:max-w-[95%]">
@@ -75,7 +75,7 @@ const AboutSection = () => {
 
           {/* Second Image */}
           <motion.div
-            className="-mt-[10rem] max-2xl:-mt-[10rem] max-3xl:-mt-[3.125rem] z-50"
+            className="-mt-[10rem] lg:-mt-[12rem] 3xl:-mt-[6.125rem] z-50"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}

@@ -9,6 +9,8 @@ import Marquee from './components/Marquee';
 import AboutSection from './components/AboutSection';
 import BenefitsSection from './components/BenefitsSection';
 import StepSection from './components/StepSection';
+import LoadingAnimation from './components/animation/LoadingAnimation';
+import FullPageLoader from './loading';
 
 const Page = () => {
   return (
@@ -20,6 +22,7 @@ const Page = () => {
         </div>
       </div>
 
+{/* <FullPageLoader/> */}
       {/* Section 1 - Banner + Marquee */}
       <motion.section
         className="relative snap-start pt-[80px] h-screen  flex flex-col justify-between"
@@ -27,23 +30,23 @@ const Page = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="grid grid-cols-1 xl:grid-cols-2 mt-[3rem] xl:mt-[4.5rem] first-line: flex-1">
+        <div className="grid grid-cols-1 xl:grid-cols-2 mt-[3rem]  xl:mt-[4.5rem] first-line: flex-1">
           <div className="px-4 max-lg:py-16 md:px-[2rem] xl:px-[4.5rem] max-md:max-w-[100%] max-xl:max-w-[60%]">
             <BannerLeftContainer />
           </div>
-          <div className="h-full max-xl:hidden">
+          <div className="h-full max-xl:hidden overflow-hidden">
             <BannerRightContainer />
           </div>
         </div>
 
-        <div className="absolute max-xxscren:bottom-[5rem] bottom-[8rem] lg:bottom-0 left-0 w-full z-10 shadow-md">
+        <div className="absolute max-xxscren:bottom-[5rem] bottom-[8rem] lg:bottom-0 2xl:-bottom-3 left-0 w-full z-10 shadow-md">
           <Marquee />
         </div>
       </motion.section>
 
       {/* Section 2 - About */}
       <motion.section
-        className="snap-start min-h-screen  flex items-center bg-[url('/images/homepage/landing-page-bg.svg')]  bg-no-repeat bg-cover  px-4 md:px-[2rem] xl:px-[4.5rem] justify-center bg-[#080628]"
+        className="snap-start min-h-screen  flex items-center bg-[url('/images/homepage/landing-page-bg.svg')]  bg-no-repeat bg-cover  px-4 md:px-[2rem] xl:px-[4.5rem] justify-center"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
