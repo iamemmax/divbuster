@@ -74,7 +74,7 @@ export const MainHeader = () => {
   return (
     <div className="relative z-[9999999999999999999999] w-full">
       {/* Desktop Header */}
-      <header className="hidden lg:flex justify-between w-full items-center py-2">
+      <header className="hidden bg-blue-900   px-4 md:px-[2rem] xl:px-[4.5rem] pt-[1rem] xl:pt-[1.25rem] lg:flex justify-between w-full items-center py-2">
         <LinkButton
           className="text-white bg-transparent font-verdana font-bold text-xl flex p-0 items-center gap-2"
           href="/"
@@ -117,7 +117,7 @@ export const MainHeader = () => {
       </header>
 
       {/* Mobile Header */}
-      <header className="flex lg:hidden justify-between z-[] w-full   items-center py-4 pr-4">
+      <header className="flex lg:hidden justify-between bg-blue-900  px-8 md:px-[2rem] xl:px-[4.5rem] pt-[1rem]  w-full   items-center py-4 pr-11">
         <LinkButton
           className="text-white font-verdana p-0 font-bold text-lg bg-transparent flex items-center gap-2"
           href="/"

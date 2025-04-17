@@ -85,7 +85,7 @@ const config: Config = {
       screens: {
         '3xl': '1920px', // Adjust the value based on the screen size you want
         'xxscren': '370px', // Add custom screen size for 350px
-        
+       '4xl': '2160px', // Good for ultra-wide or 4K screens
       },
 
       // maxHeight: {

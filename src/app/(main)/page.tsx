@@ -9,29 +9,20 @@ import Marquee from './components/Marquee';
 import AboutSection from './components/AboutSection';
 import BenefitsSection from './components/BenefitsSection';
 import StepSection from './components/StepSection';
-import LoadingAnimation from './components/animation/LoadingAnimation';
-import FullPageLoader from './loading';
 
 const Page = () => {
   return (
-    <div className="h-screen overflow-y-scroll scroll-smooth snap-y snap-mandatory">
-      {/* Fixed Header */}
-      <div className="fixed top-0 left-0 z-[9999] w-full  ">
-        <div className="text-white w-full px-4 md:px-[2rem] xl:px-[4.5rem] pt-[1rem] xl:pt-[1.25rem]">
-          <MainHeader />
-        </div>
-      </div>
-
-{/* <FullPageLoader/> */}
-      {/* Section 1 - Banner + Marquee */}
+    <div className=" overflow-y-scroll">
+       {/* scroll-smooth snap-y snap-mandatory */}
+    
       <motion.section
-        className="relative snap-start pt-[80px] h-screen  flex flex-col justify-between"
+        className="relative snap-start h-screen  flex flex-col justify-between"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="grid grid-cols-1 xl:grid-cols-2 mt-[3rem]  xl:mt-[4.5rem] first-line: flex-1">
-          <div className="px-4 max-lg:py-16 md:px-[2rem] xl:px-[4.5rem] max-md:max-w-[100%] max-xl:max-w-[60%]">
+        <div className="grid grid-cols-1 xl:grid-cols-2  first-line: flex-1">
+          <div className="px-4 max-lg:py-16 border flex justify-center items-center md:px-[2rem] xl:px-[4.5rem] max-md:max-w-[100%] max-xl:max-w-[55%]">
             <BannerLeftContainer />
           </div>
           <div className="h-full max-xl:hidden overflow-hidden">
@@ -39,9 +30,7 @@ const Page = () => {
           </div>
         </div>
 
-        <div className="absolute max-xxscren:bottom-[5rem] bottom-[8rem] lg:bottom-0 2xl:-bottom-3 left-0 w-full z-10 shadow-md">
-          <Marquee />
-        </div>
+       
       </motion.section>
 
       {/* Section 2 - About */}
@@ -73,6 +62,12 @@ const Page = () => {
       >
         <StepSection />
       </motion.section>
+
+
+
+      <div className="fixed bottom-0 lg:bottom-0 2xl:-bottom-0 left-0 w-full z-[9999999999999999999] shadow-md">
+          <Marquee />
+        </div>
     </div>
   );
 };

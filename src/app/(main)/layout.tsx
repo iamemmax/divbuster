@@ -16,7 +16,7 @@ const OnboardingLayout = ({
   return (
     <div className='w-full h-screen '>
     <div className="fixed top-0 left-0 w-full z-20">
-        <div className="text-white w-full px-4 md:px-[2rem] xl:px-[4.5rem] pt-[1rem] xl:pt-[1.25rem]">
+        <div className="text-white w-full ">
           <MainHeader />
         </div>
       </div>
