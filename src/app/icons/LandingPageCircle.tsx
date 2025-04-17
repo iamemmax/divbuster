@@ -1,0 +1,134 @@
+import * as React from "react";
+import { SVGProps } from "react";
+const LandingPageCircle = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    width={1240}
+    height={1240}
+    viewBox="0 0 1240 1240"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <g filter="url(#filter0_f_4256_3207)">
+      <circle cx={620} cy={620} r={370} stroke="#4453DD" strokeWidth={60} />
+    </g>
+    <circle
+      cx={620}
+      cy={620}
+      r={355}
+      stroke="url(#paint0_linear_4256_3207)"
+      strokeWidth={40}
+    />
+    <g filter="url(#filter1_d_4256_3207)">
+      <circle cx={268} cy={556} r={30} fill="#4453DD" />
+    </g>
+    <g filter="url(#filter2_d_4256_3207)">
+      <circle cx={948} cy={486} r={30} fill="#4453DD" />
+    </g>
+    <defs>
+      <filter
+        id="filter0_f_4256_3207"
+        x={0}
+        y={0}
+        width={1240}
+        height={1240}
+        filterUnits="userSpaceOnUse"
+        colorInterpolationFilters="sRGB"
+      >
+        <feFlood floodOpacity={0} result="BackgroundImageFix" />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="BackgroundImageFix"
+          result="shape"
+        />
+        <feGaussianBlur
+          stdDeviation={110}
+          result="effect1_foregroundBlur_4256_3207"
+        />
+      </filter>
+      <filter
+        id="filter1_d_4256_3207"
+        x={234}
+        y={526}
+        width={68}
+        height={68}
+        filterUnits="userSpaceOnUse"
+        colorInterpolationFilters="sRGB"
+      >
+        <feFlood floodOpacity={0} result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dy={4} />
+        <feGaussianBlur stdDeviation={2} />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_4256_3207"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_4256_3207"
+          result="shape"
+        />
+      </filter>
+      <filter
+        id="filter2_d_4256_3207"
+        x={914}
+        y={456}
+        width={68}
+        height={68}
+        filterUnits="userSpaceOnUse"
+        colorInterpolationFilters="sRGB"
+      >
+        <feFlood floodOpacity={0} result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dy={4} />
+        <feGaussianBlur stdDeviation={2} />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_4256_3207"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_4256_3207"
+          result="shape"
+        />
+      </filter>
+      <linearGradient
+        id="paint0_linear_4256_3207"
+        x1={620}
+        y1={245}
+        x2={620}
+        y2={995}
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stopColor="#4453DD" />
+        <stop offset={1} stopColor="#CB6D43" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
+export default LandingPageCircle;

@@ -75,7 +75,7 @@ const AboutSection = () => {
 
           {/* Second Image */}
           <motion.div
-            className="-mt-[10rem] lg:-mt-[12rem] 3xl:-mt-[6.125rem] z-50"
+            className="-mt-[10rem] lg:-mt-[12rem] 3xl:-mt-[6.125rem] "
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}

@@ -21,11 +21,11 @@ const Page = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="grid grid-cols-1 xl:grid-cols-2  first-line: flex-1">
-          <div className="px-4 max-lg:py-16 border flex justify-center items-center md:px-[2rem] xl:px-[4.5rem] max-md:max-w-[100%] max-xl:max-w-[55%]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 relative z-10 overflow-x-hidden  overflow-hidden first-line: flex-1">
+          <div className="px-4 max-lg:py-16  flex justify-center relative items-center md:px-[2rem] xl:px-[4.5rem] max-md:max-w-[100%] max-lg:max-w-[55%]">
             <BannerLeftContainer />
           </div>
-          <div className="h-full max-xl:hidden overflow-hidden">
+          <div className="h-full max-lg:hidden   relative overflow-hidden">
             <BannerRightContainer />
           </div>
         </div>
@@ -35,7 +35,7 @@ const Page = () => {
 
       {/* Section 2 - About */}
       <motion.section
-        className="snap-start min-h-screen  flex items-center bg-[url('/images/homepage/landing-page-bg.svg')]  bg-no-repeat bg-cover  px-4 md:px-[2rem] xl:px-[4.5rem] justify-center"
+        className="snap-start min-h-screen   flex items-center  bg-[url('/imagess/homepage/landing-page-bg.svg')] z-[999999]   bg-no-repeat bg-cover  px-4 md:px-[2rem] xl:px-[4.5rem] justify-center"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}

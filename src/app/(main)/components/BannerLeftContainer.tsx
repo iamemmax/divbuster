@@ -28,7 +28,7 @@ const BannerLeftContainer = () => {
         },
     ]
   return (
-    <div className="">
+    <div className="  -mt-[5rem]">
       <div className="flex items-center bg-[#070430] gap-2 px-4 sm:py-[.625rem] max-xxscren:-mt-10 rounded-[1.875rem] max-w-[20rem] sm:max-w-[22.5rem]  justify-center">
         <p className="text-white text-xs sm:text-sm font-outfit font-medium">
           Your number one trading investment platform
@@ -36,8 +36,8 @@ const BannerLeftContainer = () => {
         <CheckIcon />
       </div>
       <div className="mt-2">
-        <h2 className="text-white font-verdana font-bold max-sm:text-[2rem] max-xxscren:text-[1.6rem] max-md:text-[4rem]  lg:text-[2.4em] 3xl:text-[4rem] 4xl:text-[4.8rem]">Unleash your <span className="text-[#4649E5]">Financial Trading</span> Possibilities.</h2>
-      <p className="mt-4 max-xxscren:text-sm max-w-[95%] xl:max-w-[75%] text-base xl:text-lg  font-outfit text-white/70">Building wealth takes more than just a savings account.
+        <h2 className="text-white font-verdana font-bold max-sm:text-[2rem] max-xxscren:text-[1.6rem] max-md:text-[4rem]  lg:text-[2.4em] 3xl:text-[4.5rem] 4xl:text-[4.8rem]">Unleash your <span className="text-[#4649E5]">Financial Trading</span> Possibilities.</h2>
+      <p className="mt-4 max-xxscren:text-sm max-w-[95%] 2xl:max-w-[75%] text-base xl:text-lg  font-outfit text-white/70">Building wealth takes more than just a savings account.
       its about taking control of your future with strategic trading investments.</p>
       </div>
       <div className=" mt-5 xl:mt-8 flex items-center  gap-x-[4.5rem]">
