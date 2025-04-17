@@ -35,7 +35,7 @@ const Page = () => {
 
       {/* Section 2 - About */}
       <motion.section
-        className="snap-start min-h-screen   flex items-center  bg-[url('/imagess/homepage/landing-page-bg.svg')] z-[999999]   bg-no-repeat bg-cover  px-4 md:px-[2rem] xl:px-[4.5rem] justify-center"
+        className="snap-start min-h-screen   flex items-center  bg-[url('/images/homepage/landing-page-bg.svg')] z-[999999]   bg-no-repeat bg-cover  px-4 md:px-[2rem] xl:px-[4.5rem] justify-center"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
