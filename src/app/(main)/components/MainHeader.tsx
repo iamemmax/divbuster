@@ -72,7 +72,7 @@ export const MainHeader = () => {
   };
 
   return (
-    <div className="relative z-[9999999999999999999999] w-full">
+    <div className="relative z-[9999999999999999999999999999999999999] w-full">
       {/* Desktop Header */}
       <header className="hidden bg-blue-900   px-4 md:px-[2rem] xl:px-[4.5rem] pt-[1rem] xl:pt-[1.25rem] lg:flex justify-between w-full items-center py-2">
         <LinkButton
@@ -158,7 +158,7 @@ export const MainHeader = () => {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="lg:hidden fixed top-0 left-0 w-full h-screen bg-[#4649E5]/95 text-white z-40 flex flex-col overflow-hidden"
+            className="lg:hidden fixed top-0 left-0 w-full h-screen  bg-[#4649E5]/95 text-white  flex flex-col overflow-hidden"
             variants={menuVariants}
             initial="closed"
             animate="open"

@@ -42,10 +42,10 @@ const BannerLeftContainer = () => {
       </div>
       <div className=" mt-5 xl:mt-8 flex items-center  gap-x-[4.5rem]">
         <div className="flex items-center  gap-6">
-        <Button className="bg-white max-xxscren:text-xs text-sm text-[#2B3AA6] rounded-10 rounded-s-[24px] rounded-e-[24px] gap-4 flex items-center  xl:px-6 py-[0.625rem] px-3 md:px-4 font-outfit">
+        <Button className="bg-white max-xxscren:text-xs text-sm text-[#2B3AA6] rounded-10 rounded-s-[24px] rounded-e-[24px] gap-4 flex items-center  2xl:px-6 py-[0.625rem] px-3 md:px-4 font-outfit">
           Get Started <RightArrowIcon color="#fff" background="#2B3AA6"/>
         </Button>
-        <Button className="bg-transparent max-xxscren:text-xs text-sm border-white text-white  border-opacity-60 rounded-10 rounded-s-[24px] rounded-e-[24px] gap-4 flex items-center xl:px-6 px-3 md-px-4 py-[0.625rem] font-outfit" variant={"outlined"}>
+        <Button className="bg-transparent max-xxscren:text-xs text-sm border-white text-white  border-opacity-60 rounded-10 rounded-s-[24px] rounded-e-[24px] gap-4 flex items-center 2xl:px-6 px-3 md-px-4 py-[0.625rem] font-outfit" variant={"outlined"}>
         See how it works <PlayIcon />
         </Button>
         </div>

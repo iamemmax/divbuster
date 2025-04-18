@@ -1,5 +1,5 @@
 "use client";
-import { DM_Sans, Wix_Madefor_Display,Outfit } from "next/font/google";
+import { DM_Sans, Wix_Madefor_Display, Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/utils/classNames";
 import { Suspense } from "react";
@@ -33,12 +33,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
-    <html className={cn(sans.variable, display.variable, outfit.variable)} lang="en">
+    <html
+      className={cn(sans.variable, display.variable, outfit.variable)}
+      lang="en"
+    >
       <head>
-       
-
         <link rel="shortcut icon" href="/icon.ico" />
       </head>
       <body className=" bg-main">
@@ -56,19 +56,15 @@ export default function RootLayout({
         <ReactQueryProvider>
           <AuthProvider>
             <ProtectedRouteGuard>
-            <Suspense fallback={<FullPageLoader />}>
-  <PageLoadWrapper>
-    <Wrapper>{children}</Wrapper>
-  </PageLoadWrapper>
-</Suspense>
-
+              <Suspense fallback={<FullPageLoader />}>
+                <PageLoadWrapper>
+                  <Wrapper>{children}</Wrapper>
+                </PageLoadWrapper>
+              </Suspense>
             </ProtectedRouteGuard>
           </AuthProvider>
-          
-
-         
         </ReactQueryProvider>
-</body>
+      </body>
 
       {/* Heala Configuration */}
     </html>

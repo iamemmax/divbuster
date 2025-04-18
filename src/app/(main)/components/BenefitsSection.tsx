@@ -41,7 +41,7 @@ const BenefitsSection = () => {
 <div className="w-full mt-3">
   {/* Header Section */}
   <div className="flex flex-col items-center justify-center text-center">
-    <h2 className="font-verdana font-bold text-[6rem] sm:text-[8rem] md:text-[11.25rem] text-white text-opacity-10 underline leading-none">
+    <h2 className="font-verdana font-bold text-[4rem] sm:text-[6rem] md:text-[11.25rem] text-white text-opacity-10 underline leading-none">
       BENEFITS
     </h2>
     <p className="font-outfit font-bold text-2xl sm:text-3xl lg:text-[3rem] max-w-[53.125rem] text-white -mt-16 sm:-mt-24 xl:-mt-28 leading-[3rem] sm:leading-[3.5rem]">
