@@ -6,8 +6,8 @@ import PlayStore from "./landing-images/PlayStore";
 
 const GetAppSection = () => {
   return (
-    <div className="py-[6.375rem] mb-8 sm:px-[2rem] md:px-[8.9375rem] w-full">
-      <div className="bg-gradient-to-r from-[#0C0A3A] grid grid-cols-1 sm:grid-cols-[1.5fr_1fr] md:grid-cols-[1.2fr_1fr] w-full to-[#171D33] 0% py-[4.625rem] px-[2rem] md:px-[2.625rem] rounded-lg">
+    <div className="py-[6.375rem] mb-8 sm:px-[2rem] xl:px-[8.9375rem] w-full">
+      <div className="bg-gradient-to-r from-[#0C0A3A] grid grid-cols-1 lg:grid-cols-[1fr_1fr] xl:grid-cols-[1.2fr_1fr] w-full to-[#171D33] 0% py-[4.625rem] px-[2rem] md:px-[2.625rem] rounded-lg">
         <div className="">
           <h2 className="font-verdana font-bold text-[1.2rem] md:text-[1.8rem] xl:text-[2.25rem] text-white">
             Get The App Now
@@ -26,10 +26,7 @@ const GetAppSection = () => {
         </div>
         <div className="relative  h-full">
           <div className="sm:absolute top-[-7rem] 2xl:top-[-8rem] right-0">
-            <PhoneImage
-              height={410}
-              className="max-xl:h-[23.75rem]   max-md:w-[12.5rem] "
-            />
+            <PhoneImage height={410} className="max-xl:h-[23.75rem]  " />
           </div>
         </div>
       </div>
