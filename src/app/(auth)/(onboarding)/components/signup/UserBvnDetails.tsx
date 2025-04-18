@@ -76,7 +76,7 @@ const UserBvnDetails = ({onNext,onPrev}: prop) => {
                     errors?.bvn
                       ? "border border-red-700"
                       : "border-[0.3px] border-[#696969]"
-                  } text-[#fff] text-xs outline-none h-[2.75rem] md:h-[3rem] rounded-lg w-full px-6 bg-[#02010D]`}
+                  } text-[#fff] text-xs outline-none h-[2.75rem]  md:h-[3.375rem] border-opacity-70 rounded-lg w-full px-6 bg-[#02010D]`}
                   id="account_no"
                   placeholder="Enter your BVN"
                   type="text"

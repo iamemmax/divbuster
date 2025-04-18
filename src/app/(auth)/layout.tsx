@@ -24,8 +24,8 @@ const OnboardingLayout = ({
   }, []);
 
   return (
-    <div className='w-full h-screen overflow-hidden grid grid-cols-1 lg:grid-cols-2' style={{ height: 'var(--app-height)' }}>
-      <div className="w-full h-full flex flex-col overflow-hidden">
+    <div className={`w-full h-screen bg-[url('/images/homepage/landing-page-bg.svg')]  overflow-hidden grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] `}  style={{ height: 'var(--app-height)' }}>
+      <div className="w-full h-full bg-[#02010D]  flex flex-col overflow-hidden">
         {/* Fixed header section */}
         <div className="flex justify-between items-center w-full px-4 md:px-[2rem] xl:px-[4.5rem] py-6  xl:pt-[2rem]">
           <div>
@@ -41,8 +41,11 @@ const OnboardingLayout = ({
         </div>
         
         {/* Scrollable content area */}
-        <div className="flex-1 overflow-y-auto px-4 md:px-[2rem] bg-[#02010D] xl:px-[4.5rem] mt-[1rem] xl:mt-[2rem] pb-[2.625rem]">
+        <div className="flex-1 overflow-y-auto px-4 md:px-[2rem]  flex justify-center items-center mt-[1rem] xl:mt-[2rem] pb-[2.625rem]">
+          <div className="w-full max-w-[40.75rem] ">
+
           {children}
+          </div>
         </div>
       </div>
       <div className="max-lg:hidden w-full  border-l border-[#4453DD] bg-[url('/images/onboarding/phone-img.svg')] max-xl:bg-contain bg-no-repeat bg-[position:center_right] xl:bg-[position:bottom_right]">
@@ -52,3 +55,5 @@ const OnboardingLayout = ({
 }
 
 export default OnboardingLayout
+
+// bg-[url('/images/homepage/landing-page-bg.svg')] 

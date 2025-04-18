@@ -36,7 +36,7 @@ const ForgetPassword = () => {
       {step === 1 && (
         <motion.div
         animate="animate"
-        className="h-full"
+        className="h-full "
           exit="exit"
           initial="initial"
           key="step1"

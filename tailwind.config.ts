@@ -113,7 +113,7 @@ const config: Config = {
       },
       animation: {
         "slowSpin": 'spin 40s linear infinite', // You can change the speed here
-        'spin-slow': 'spin 5s linear infinite',
+        'spin-slow': 'spin 10s linear infinite',
         'vertical-slide': 'vertical-slide 20s infinite linear',
         'indeterminate-progress': 'indeterminate-progress 1.5s infinite linear',
       },

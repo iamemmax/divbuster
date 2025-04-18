@@ -79,7 +79,7 @@ const LoginPage = () => {
                     errors?.phone_number
                       ? "border border-red-700"
                       : "border-[0.3px] border-[#696969]"
-                  } text-[#fff] text-xs outline-none h-[2.75rem] md:h-[3rem] rounded-lg w-full px-6 bg-transparent`}
+                  } text-[#fff] text-xs outline-none h-[2.75rem]  md:h-[3.375rem] border-opacity-70 rounded-lg w-full px-6 bg-transparent`}
                   id="account_no"
                   placeholder="Enter your phone number"
                   type="text"
@@ -127,7 +127,7 @@ const LoginPage = () => {
               errors?.password
                 ? "border border-red-700"
                 : "border-[0.3px] border-[#696969]"
-            } flex items-center relative w-full pr-10 md:pr-16 bg-transparent rounded-lg h-[2.75rem] md:h-[3rem]`}
+            } flex items-center relative w-full pr-10 md:pr-16 bg-transparent rounded-lg h-[2.75rem]  md:h-[3.375rem] border-opacity-70`}
           >
             <input
               className="login-autofill-text login-no-chrome-autofill-bg h-auto min-w-0 grow bg-transparent py-3.5 pl-6 text-sm font-medium text-white  focus-visible:outline-none"
@@ -155,7 +155,7 @@ const LoginPage = () => {
         <div className="flex justify-between items-center mt-2">
           <div className="flex items-center gap-[9px]">
             <input
-              className="h-3 w-3"
+              className="h-3 w-3 border-opacity-30"
               id="keep_me_logged"
               type="checkbox"
               checked={keepMeLoggedIn}

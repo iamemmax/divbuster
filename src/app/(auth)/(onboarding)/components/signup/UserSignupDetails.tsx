@@ -37,7 +37,7 @@ const UserSignupDetails = ({onNext}: prop) => {
     }
   }
   return (
-    <div className="text-white overflow-y-auto relative border-[.0187rem] py-6 xl:py-[1.75rem]  border-[#4649E5] px-6 md:px-[50px] 2xl:px-[6.1875rem] rounded-[1.25rem]">
+    <div className="text-white overflow-y-auto relative border-[.0187rem] py-6 xl:py-[1.75rem]  border-[#4649E5] px-6 md:px-[50px] rounded-[1.25rem]">
       <div className="">
         <h2 className="text-white font-verdana font-bold text-[1.25rem] xl:text-[1.75rem]">
           Let’s Get Started
@@ -62,7 +62,7 @@ const UserSignupDetails = ({onNext}: prop) => {
             Full Name*
           </Label>
           <input
-            className={`${errors?.full_name ? "border border-red-700" : "border-[0.3px] border-[#696969]"} text-[#fff] text-xs outline-none  h-[2.75rem] md:h-[3rem] rounded-lg w-full px-6 bg-[#02010D]`}
+            className={`${errors?.full_name ? "border border-red-700" : "border-[0.3px] border-[#696969]"} text-[#fff] text-xs outline-none border-opacity-70  h-[2.75rem] md:h-[3.375rem] rounded-lg w-full px-6 bg-[#02010D]`}
             placeholder="Enter your full name"
             type="text"
             id={`full_name`}
@@ -94,7 +94,7 @@ const UserSignupDetails = ({onNext}: prop) => {
                     errors?.phone_number
                       ? "border border-red-700"
                       : "border-[0.3px] border-[#696969]"
-                  } text-[#fff] text-xs outline-none h-[2.75rem] md:h-[3rem] rounded-lg w-full px-6 bg-[#02010D]`}
+                  } text-[#fff] text-xs outline-none h-[2.75rem]  md:h-[3.375rem] border-opacity-70 rounded-lg w-full px-6 bg-[#02010D]`}
                   id="account_no"
                   placeholder="Enter your phone number"
                   type="text"
@@ -148,7 +148,7 @@ const UserSignupDetails = ({onNext}: prop) => {
             Email*
           </Label>
           <input
-            className={`${errors?.email ? "border border-red-700" : "border-[0.3px] border-[#696969]"} text-[#fff] text-xs outline-none  h-[2.75rem] md:h-[3rem] rounded-lg w-full px-6 bg-[#02010D]`}
+            className={`${errors?.email ? "border border-red-700" : "border-[0.3px] border-[#696969]"} text-[#fff] text-xs outline-none  h-[2.75rem]  md:h-[3.375rem] border-opacity-70 rounded-lg w-full px-6 bg-[#02010D]`}
             placeholder="Enter your email"
             type="text"
             id={`email`}
@@ -169,7 +169,7 @@ const UserSignupDetails = ({onNext}: prop) => {
             Referral Code (Optional)
           </Label>
           <input
-            className={`${errors?.referral ? "border border-red-700" : "border-[0.3px] border-[#696969]"} text-[#fff] text-xs outline-none  h-[2.75rem] md:h-[3rem] rounded-lg w-full px-6 bg-[#02010D]`}
+            className={`${errors?.referral ? "border border-red-700" : "border-[0.3px] border-[#696969]"} text-[#fff] text-xs outline-none  h-[2.75rem]  md:h-[3.375rem] border-opacity-70 rounded-lg w-full px-6 bg-[#02010D]`}
             placeholder="Enter referral code"
             type="text"
             id={`referral`}

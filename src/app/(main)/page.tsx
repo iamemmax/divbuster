@@ -38,7 +38,7 @@ const Page = () => {
 
       {/* Section 2 - About */}
       <motion.section
-        className="snap-start min-h-screen   flex items-center  bg-[url('/images/homepage/landing-page-bg.svg')] z-[999999]   bg-no-repeat bg-cover  px-4 md:px-[2rem] xl:px-[4.5rem] justify-center"
+        className="snap-start min-h-screen   flex items-center  bg-[url('/images/homepage/landing-page-bg-2.svg')] z-[999999] bg-[position:top]  bg-no-repeat bg-cover  px-4 md:px-[2rem] xl:px-[4.5rem] justify-center"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -48,7 +48,7 @@ const Page = () => {
       </motion.section>
       {/* Section 2 - About */}
       <motion.section
-        className="snap-start min-h-screen  flex items-center justify-center px-4 md:px-[2rem] pb-5 xl:pb-[50px] xl:px-[4.5rem] bg-[#0C0A3A]"
+        className="snap-start min-h-screen  flex items-center justify-center px-4 md:px-[2rem] pb-5 xl:py-[50px] xl:px-[4.5rem] bg-[#0C0A3A]"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -57,7 +57,7 @@ const Page = () => {
         <BenefitsSection />
       </motion.section>
       <motion.section
-        className="snap-start min-h-screen  flex items-center justify-center  bg-[#0C0A3A]"
+        className="snap-start min-h-screen bg-[url('/images/homepage/map.svg')]  rounded-t-md bg-cover  bg-no-repeat bg-opacity-50  flex items-center justify-center"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}

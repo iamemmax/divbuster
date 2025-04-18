@@ -70,8 +70,8 @@ const StepSection = () => {
   ];
 
   return (
-    <div className="w-full">
-      <div className="bg-[#080628] bg-[url('/images/homepage/map.svg')] px-6 bg-no-repeat bg-cover h-full md:px-[2rem] pt-[4.5rem] pb-5 xl:pb-[50px] xl:px-[4.5rem]">
+    <div className="">
+      <div className=" px-6 bg-no-repeat bg-cover h-full md:px-[2rem] pt-[4.5rem] pb-5 xl:pb-[50px] xl:px-[4.5rem]">
         <div className="flex flex-col items-center justify-center text-center">
           <h2 className="font-verdana font-bold max-xxscren:text-[3rem] text-[2rem] sm:text-[3rem] lg:text-[7.5rem] text-white text-opacity-10 leading-none">
             GET STARTED

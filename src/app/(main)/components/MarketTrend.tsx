@@ -1,8 +1,8 @@
 import { Button } from '@/components/core'
 import React from 'react'
 import { motion } from 'framer-motion'
-import TrendingDashboard from './landing-images/TrendingDashboard1'
-import TrendingDashboardImage2 from './landing-images/TrendingDashboardImage2'
+import TrendingDashboard from '../../icons/TrendingDashboard1'
+import TrendingDashboardImage2 from '../../icons/TrendingDashboardImage2'
 
 const MarketTrend = () => {
   return (

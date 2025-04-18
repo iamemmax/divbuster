@@ -2,8 +2,8 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import AboutDashboardImage1 from "@/app/(main)/components/landing-images/AboutDashboardImage1";
-import AboutImageDashboard2 from "@/app/(main)/components/landing-images/AboutImage2";
+import AboutDashboardImage1 from "@/app/icons/AboutDashboardImage1";
+import AboutImageDashboard2 from "@/app/icons/AboutImage2";
 import { Button } from "@/components/core";
 
 const AboutSection = () => {
