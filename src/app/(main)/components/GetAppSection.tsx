@@ -6,8 +6,8 @@ import PlayStore from "./landing-images/PlayStore";
 
 const GetAppSection = () => {
   return (
-    <div className="py-[6.375rem] mb-8 sm:px-[2rem] xl:px-[8.9375rem] w-full">
-      <div className="bg-gradient-to-r from-[#0C0A3A] grid grid-cols-1 lg:grid-cols-[1fr_1fr] xl:grid-cols-[1.2fr_1fr] w-full to-[#171D33] 0% py-[4.625rem] px-[2rem] md:px-[2.625rem] rounded-lg">
+    <div className="py-[6.375rem] mb-8 sm:px-[1rem] xl:px-[4.9375rem] w-full">
+      <div className="bg-gradient-to-r from-[#0C0A3A] grid grid-cols-1 lg:grid-cols-2 w-full to-[#171D33] 0% py-[4.625rem] px-[1.625rem] rounded-lg">
         <div className="">
           <h2 className="font-verdana font-bold text-[1.2rem] md:text-[1.8rem] xl:text-[2.25rem] text-white">
             Get The App Now
@@ -25,13 +25,13 @@ const GetAppSection = () => {
           </div>
         </div>
         <div className="relative  h-full">
-          <div className="sm:absolute top-[-7rem] 2xl:top-[-8rem] right-0">
-            <PhoneImage height={410} className="max-xl:h-[23.75rem]  " />
+          <div className="lg:absolute top-[-7rem] 2xl:top-[-8rem] right-0">
+            <PhoneImage height={410} className=" max-md:w-[400px]" />
           </div>
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-[#0C0A3A] mt-[3.5rem] flex items-center justify-between  w-full to-[#171D33] 0% py-[1.8125rem] px-[2rem] md:px-[2.625rem] rounded-lg">
+      <div className="bg-gradient-to-r from-[#0C0A3A] mt-[3.5rem] flex items-center justify-between  w-full to-[#171D33] 0% py-[1.8125rem] px-[1rem] rounded-lg">
         <p className="text-white text-opacity-70 font-outfit md:text-[0.8rem] xl:text-[1.1rem] 2xl:text-[1.3rem]  font-normal">
           Get ready to invest on Opticraft trading platform and enjoy maximum
           profit
