@@ -14,7 +14,7 @@ export const MainHeader = () => {
     { title: "About", href: "/about" },
     { title: "Contact", href: "/contact" },
     { title: "FAQs", href: "/faqs" },
-    { title: "Blog", href: "/blog" },
+    // { title: "Blog", href: "/blog" },
   ];
 
   // Simpler menu variants

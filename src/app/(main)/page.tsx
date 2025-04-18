@@ -1,23 +1,24 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { MainHeader } from './components/MainHeader';
-import BannerLeftContainer from './components/BannerLeftContainer';
-import BannerRightContainer from './components/BannerRightContainer';
-import Marquee from './components/Marquee';
-import AboutSection from './components/AboutSection';
-import BenefitsSection from './components/BenefitsSection';
-import StepSection from './components/StepSection';
-import MarketTrend from './components/MarketTrend';
-import FaqSection from './components/FaqSection';
-import GetAppSection from './components/GetAppSection';
+import React from "react";
+import { motion } from "framer-motion";
+import { MainHeader } from "./components/MainHeader";
+import BannerLeftContainer from "./components/BannerLeftContainer";
+import BannerRightContainer from "./components/BannerRightContainer";
+import Marquee from "./components/Marquee";
+import AboutSection from "./components/AboutSection";
+import BenefitsSection from "./components/BenefitsSection";
+import StepSection from "./components/StepSection";
+import MarketTrend from "./components/MarketTrend";
+import FaqSection from "./components/FaqSection";
+import GetAppSection from "./components/GetAppSection";
+import Footer from "./components/Footer";
 
 const Page = () => {
   return (
     <div className=" overflow-y-scroll pb-[5rem]">
-       {/* scroll-smooth snap-y snap-mandatory */}
-    
+      {/* scroll-smooth snap-y snap-mandatory */}
+
       <motion.section
         className="relative snap-start h-screen  flex flex-col justify-between"
         initial={{ opacity: 0, y: 30 }}
@@ -32,8 +33,6 @@ const Page = () => {
             <BannerRightContainer />
           </div>
         </div>
-
-       
       </motion.section>
 
       {/* Section 2 - About */}
@@ -95,11 +94,19 @@ const Page = () => {
         <GetAppSection />
       </motion.section>
 
-
+      <motion.section
+        className="snap-start    flex items-center   z-[999999] bg-[#02010d]  px-4 md:px-[2rem] xl:px-[4.5rem] justify-center"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <Footer />
+      </motion.section>
 
       <div className="fixed bottom-0 lg:bottom-0 2xl:-bottom-0 left-0 w-full z-[99999999999] shadow-md">
-          <Marquee />
-        </div>
+        <Marquee />
+      </div>
     </div>
   );
 };
