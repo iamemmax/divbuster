@@ -5,6 +5,7 @@ import OpticalLogo from "@/app/icons/Logo";
 import RightArrowIcon from "@/app/icons/RightArrow";
 import { Button, LinkButton } from "@/components/core";
 import { motion, AnimatePresence } from "framer-motion";
+import { toggleBodyScroll } from '@/utils/inputs';
 
 export const MainHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,6 +23,11 @@ export const MainHeader = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [scrolled]);
+
+  useEffect(() => {
+    toggleBodyScroll(menuOpen);
+    return () => toggleBodyScroll(false);
+  }, [menuOpen]);
 
   const navlinks = [
     { title: "Home", href: "/" },
@@ -86,7 +92,7 @@ export const MainHeader = () => {
   };
 
   return (
-    <div className="relative z-[9999999999999999999999999999999999999] w-full">
+    <div className="relative  w-full">
       {/* Desktop Header */}
       <motion.header 
         className={`hidden fixed w-full bg-blue-900 px-4 md:px-[2rem] xl:px-[4.5rem] lg:flex justify-between items-center py-6 transition-all duration-300 ${
@@ -141,9 +147,9 @@ export const MainHeader = () => {
 
       {/* Mobile Header */}
       <motion.header 
-        className={`flex lg:hidden fixed w-full bg-blue-900 px-8 md:px-[2rem] xl:px-[4.5rem] pt-[1rem] items-center py-4 pr-11 transition-all duration-300 ${
+        className={`flex justify-between lg:hidden fixed w-full bg-blue-900 px-4 md:px-[2rem] xl:px-[4.5rem] pt-[1rem] items-center py-6 pr-11 transition-all duration-300 ${
           scrolled ? 'bg-opacity-95 backdrop-blur-sm shadow-lg' : 'bg-opacity-0'
-        }`}
+        } ${menuOpen ? 'z-[100001]' : 'z-50'}`}
         initial={{ backgroundColor: "rgba(30, 58, 138, 0)" }}
         animate={{ 
           backgroundColor: scrolled ? "rgba(30, 58, 138, 0.95)" : "rgba(30, 58, 138, 0)",
@@ -190,7 +196,7 @@ export const MainHeader = () => {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="lg:hidden fixed top-0 left-0 w-full h-screen  bg-[#4649E5]/95 text-white  flex flex-col overflow-hidden"
+            className="lg:hidden fixed top-0 left-0 w-full h-screen z-[100000] bg-[#4649E5]/95 text-white flex flex-col overflow-hidden"
             variants={menuVariants}
             initial="closed"
             animate="open"

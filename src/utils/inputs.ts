@@ -42,3 +42,11 @@ export const checkIsIOS = () =>
   ].includes(navigator.platform) ||
   // iPad on iOS 13 detection
   (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+
+export const toggleBodyScroll = (disable: boolean) => {
+  if (disable) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+};

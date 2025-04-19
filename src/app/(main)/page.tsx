@@ -26,7 +26,7 @@ const Page = () => {
         transition={{ duration: 0.6 }}
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 relative z-10 overflow-x-hidden  overflow-hidden first-line: flex-1">
-          <div className="px-4 max-lg:py-16  flex justify-center relative items-center md:px-[2rem] xl:px-[4.5rem] max-md:max-w-[100%] max-lg:max-w-[55%]">
+          <div className=" max-lg:py-16  flex justify-center relative items-center md:px-[2rem] xl:px-[4.5rem] max-md:max-w-[100%] max-lg:max-w-[55%]">
             <BannerLeftContainer />
           </div>
           <div className="h-full max-lg:hidden   relative overflow-hidden">
@@ -107,7 +107,7 @@ const Page = () => {
         <Footer />
       </motion.section>
 
-      <div className="fixed bottom-0 lg:bottom-0 2xl:-bottom-0 left-0 w-full z-[99999999999] shadow-md">
+      <div className="fixed bottom-0 lg:bottom-0 2xl:-bottom-0 left-0 w-full z-[99999] shadow-md">
         <Marquee />
       </div>
     </div>
