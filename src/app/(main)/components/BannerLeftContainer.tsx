@@ -4,7 +4,7 @@ import PlayIcon from "@/app/icons/PlayIcon";
 import RightArrowIcon from "@/app/icons/RightArrow";
 import UserGroupIcon from "@/app/icons/UserGroupIcon";
 import WaveIcon from "@/app/icons/WaveIcon";
-import { Button } from "@/components/core";
+import { Button, LinkButton } from "@/components/core";
 import React from "react";
 import Marquee from "./Marquee";
 
@@ -42,9 +42,9 @@ const BannerLeftContainer = () => {
       </div>
       <div className=" mt-5 xl:mt-8 flex items-center gap-x-4  xl:gap-x-[2rem] 2xl:gap-x-[4.5rem]">
         <div className="flex items-center gap-3  sm:gap-6">
-        <Button className="bg-white max-xxscren:text-xs text-sm text-[#2B3AA6] rounded-10 rounded-s-[24px] rounded-e-[24px] gap-4 flex items-center  2xl:px-6 py-[0.625rem] px-3 md:px-4 font-outfit">
+        <LinkButton href={"/login"} className="bg-white max-xxscren:text-xs text-sm text-[#2B3AA6] rounded-10 rounded-s-[24px] rounded-e-[24px] gap-4 flex items-center  2xl:px-6 py-[0.625rem] px-3 md:px-4 font-outfit">
           Get Started <RightArrowIcon color="#fff" background="#2B3AA6"/>
-        </Button>
+        </LinkButton>
         <Button className="bg-transparent max-xxscren:text-xs text-sm border-white text-white  border-opacity-60 rounded-10 rounded-s-[24px] rounded-e-[24px] gap-4 flex items-center 2xl:px-6 px-3 md-px-4 py-[0.625rem] font-outfit" variant={"outlined"}>
         See how it works <PlayIcon />
         </Button>
