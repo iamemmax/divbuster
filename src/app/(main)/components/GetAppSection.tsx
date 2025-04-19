@@ -6,33 +6,33 @@ import PlayStore from "./landing-images/PlayStore";
 
 const GetAppSection = () => {
   return (
-    <div className="py-[6.375rem] mb-8 sm:px-[1rem] xl:px-[4.9375rem] w-full">
-      <div className="bg-gradient-to-r from-[#0C0A3A] grid grid-cols-1 lg:grid-cols-2 w-full to-[#171D33] 0% py-[4.625rem] px-[1.625rem] rounded-lg">
-        <div className="">
+    <div className="py-6 md:py-[6.375rem] sm:px-[1rem] xl:px-[6.9375rem] w-full">
+      <div className="bg-gradient-to-r from-[#0C0A3A] grid grid-cols-1 py-8 md:py-[3.125rem] md:grid-cols-[1.2fr_1fr]  w-full to-[#171D33] 0% px-6  md:px-[2.625rem] rounded-lg">
+        <div className=" w-full flex gap-3 flex-col justify-center items-start">
           <h2 className="font-verdana font-bold text-[1.2rem] md:text-[1.8rem] xl:text-[2.25rem] text-white">
             Get The App Now
           </h2>
-          <p className="text-white text-opacity-70 font-outfit md:text-[1.1rem] xl:text-[1.3rem] 2xl:text-[2.2rem] md:max-w-[80%] 2xl:max-w-[700px] font-normal">
+          <p className="text-white text-opacity-70 font-outfit md:text-[1.1rem] xl:text-[1.3rem] 2xl:text-[2rem]  xl:max-w-[80%]   font-normal">
             You can download the mobile app on Google Play store or Apple store{" "}
           </p>
-          <div className="py-6 flex items-center gap-4">
+          <div className="md:py-6 py-3 flex items-center  gap-4">
             <LinkButton href={"#"} className="p-0 bg-transparent">
-              <AppStore />
+              <AppStore className="max-sm:w-[120px]" />
             </LinkButton>
             <LinkButton href={"#"} className="p-0 bg-transparent">
-              <PlayStore />
+              <PlayStore className="max-sm:w-[120px]" />
             </LinkButton>
           </div>
         </div>
-        <div className="relative  h-full">
-          <div className="lg:absolute top-[-7rem] 2xl:top-[-8rem] right-0">
-            <PhoneImage height={410} className=" max-md:w-[400px]" />
+        <div className="relative max-md:hidden ">
+          <div className=" absolute -top-[7.6rem] 2xl:top-[-6rem] right-0">
+            <PhoneImage className="w-[100%] h-[430px]"/>
           </div>
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-[#0C0A3A] mt-[3.5rem] flex items-center justify-between  w-full to-[#171D33] 0% py-[1.8125rem] px-[1rem] rounded-lg">
-        <p className="text-white text-opacity-70 font-outfit md:text-[0.8rem] xl:text-[1.1rem] 2xl:text-[1.3rem]  font-normal">
+      <div className="bg-gradient-to-r from-[#0C0A3A] mt-6  md:mt-[3.2rem] flex items-center justify-between flex-wrap gap-6  w-full to-[#171D33]  py-[1.8125rem] px-6 md:px-[2.625rem] rounded-lg">
+        <p className="text-white text-opacity-70 font-outfit md:text-[0.8rem] text-sm md:max-w-[330px] xl:text-[0.9rem]  font-normal">
           Get ready to invest on Opticraft trading platform and enjoy maximum
           profit
         </p>

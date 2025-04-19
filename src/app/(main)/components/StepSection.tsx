@@ -82,7 +82,7 @@ const StepSection = () => {
         </div>
 
         <div className="relative flex justify-center items-center flex-col w-full mt-3">
-          <div className="relative grid gap-10 sm:gap-14 items-start mt-9 w-full lg:max-w-[700px] 2xl:max-w-[900px]">
+          <div className="relative grid gap-5 sm:gap-14 items-start mt-9 w-full lg:max-w-[700px] 2xl:max-w-[900px]">
             {/* Vertical line */}
             <div
               className="hidden sm:block absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-[#1E40AF] via-white to-[#1E40AF] z-10"
@@ -101,7 +101,7 @@ const StepSection = () => {
               >
                 {/* Dot */}
                 {step?.showDot && (
-                  <div className="absolute top-6 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+                  <div className="hidden sm:block absolute top-6 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
                     <div
                       className={`w-5 h-5 rounded-full border-2 ${
                         step.isActive
@@ -128,7 +128,7 @@ const StepSection = () => {
                     } w-full`}
                   >
                     <div className="grid grid-cols-[1fr_4fr] items-start gap-x-4 w-full">
-                      <span className="font-verdana text-[2rem] text-white text-opacity-30 font-bold shrink-0 leading-none">
+                      <span className="font-verdana text-[1.5rem] sm:text-[2rem] text-white text-opacity-30 font-bold shrink-0 leading-none">
                         {step.number}
                       </span>
                       <div>

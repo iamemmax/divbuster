@@ -53,7 +53,7 @@ const BenefitsSection = () => {
   <div className="bg-white w-full rounded-[20px] grid grid-cols-1 lg:grid-cols-2 px-6 sm:px-[2.625rem] py-8 sm:py-[3.3125rem] mt-5 xl:mt-[52px] gap-10 sm:gap-16">
     {/* Left Content */}
     <div className="flex flex-col justify-between space-y-8">
-      <p className="font-verdana font-bold text-3xl sm:text-5xl text-[#02010D1A] text-opacity-10">
+      <p className="font-verdana font-bold max-xxscren:text-2xl text-3xl sm:text-5xl text-[#02010D1A] text-opacity-5">
         Opticraft Trading Platform
       </p>
 
@@ -105,8 +105,8 @@ const BenefitsSection = () => {
           />
 <div className="flex justify-center items-center w-full">
 
-<div className="absolute bottom-1 lg:bottom-10 py-3 xl:py-[1.5625rem] rounded-10 px-6 flex justify-between items-center  bg-white w-[95%] ">
-                <h2 className="text-sm xl:text-[1.5rem] font-outfit font-medium text-[#02010D]">
+<div className="absolute bottom-2 lg:bottom-10 py-3 xl:py-[1.5625rem] rounded-10 px-3 sm:px-6 flex justify-between items-center  bg-white w-[95%] ">
+                <h2 className="text-xxs sm:text-sm xl:text-[1.5rem] font-outfit font-medium text-[#02010D]">
                   {slides[activeIndex].content}
                 </h2>
                 <LinkButton

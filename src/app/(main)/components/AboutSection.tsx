@@ -39,7 +39,7 @@ const AboutSection = () => {
             </div>
           </div>
 
-          <h2 className="text-[3rem] max-xxscren:text-[1.8rem] lg:text-[2.5rem] 3xl:text-[5rem] font-verdana font-bold text-white text-opacity-30 leading-tight">
+          <h2 className="text-[2rem] max-xxscren:text-[1rem] lg:text-[2.5rem] 3xl:text-[5rem] font-verdana font-bold text-white text-opacity-30 leading-tight">
             Opticraft Trading Platform
           </h2>
 

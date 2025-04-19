@@ -1,5 +1,6 @@
 import OpticalLogo from "@/app/icons/Logo";
 import { LinkButton } from "@/components/core";
+import Link from "next/link";
 import React from "react";
 
 const Footer = () => {
@@ -38,14 +39,14 @@ const Footer = () => {
   return (
     <div className="py-[4.5rem] px-4">
       <div className="grid grid-cols-2 gap-[1.75rem] xl:gap-[2.375rem] 2xl:gap-[4.375rem]  sm:grid-cols-[1.4fr_1fr_1fr] lg:grid-cols-[1.3fr_1fr_1fr_1fr] 2xl:grid-cols-[1.2fr_1fr_1fr_1fr]">
-        <div className="max-xxscren:col-span-2">
+        <div className="max-md:col-span-2">
           <LinkButton
             className="text-white bg-transparent font-verdana font-bold text-lg p-0 gap-2"
             href="/"
           >
             <OpticalLogo /> Opticraft Trading
           </LinkButton>
-          <p className="font-outfit text-sm mt-3 max-w-[80%] text-white text-opacity-70">
+          <p className="font-outfit text-xs sm:text-sm mt-3 md:max-w-[80%] text-white text-opacity-70">
             Building wealth takes more than just a savings account. its about
             taking control of your future with strategic trading investments.
           </p>
@@ -58,12 +59,12 @@ const Footer = () => {
             <ul className="flex  mt-4 flex-col gap-3">
               {footerNav?.map((nav, idx: number) => (
                 <li key={idx}>
-                  <a
-                    className="text-white font-outfit font-normal text-sm"
+                  <Link
+                    className="text-white text-opacity-70 font-outfit font-normal text-xs sm:text-sm"
                     href="#"
                   >
                     {nav?.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -77,22 +78,22 @@ const Footer = () => {
             <ul className="flex  mt-4 flex-col gap-3">
               {footerLinks?.map((nav, idx: number) => (
                 <li key={idx}>
-                  <a
-                    className="text-white font-outfit font-normal text-sm"
+                  <Link
+                    className="text-white text-opacity-70 font-outfit font-normal text-xs sm:text-sm"
                     href="#"
                   >
                     {nav?.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </nav>
         </div>
-        <div className="">
+        <div className="max-md:col-span-2">
           <p className="text-white font-outfit font-semibold text-sm uppercase">
             CONTACT US
           </p>
-          <p className="font-outfit text-sm mt-4 text-white text-opacity-80 max-w-[300px]">
+          <p className="font-outfit text-xs sm:text-sm mt-4 text-white text-opacity-70  lg:max-w-[300px]">
             Send us a message or call us 70-3234-7071 You can also send us an
             email at Opticraftrade@gmail.com
           </p>

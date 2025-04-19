@@ -93,7 +93,7 @@ const FaqSection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-[3rem] max-xxscren:text-[1.8rem] lg:text-[2.5rem] 3xl:text-[3.5rem] font-verdana font-bold text-white text-opacity-30 leading-tight"
+            className="text-[2rem] max-xxscren:text-[1.5rem] lg:text-[2.5rem] 3xl:text-[3.5rem] font-verdana font-bold text-white text-opacity-30 leading-tight"
           >
             Frequently Asked Questions
           </motion.h2>
@@ -102,7 +102,7 @@ const FaqSection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="leading-relaxed font-outfit text-sm 2xl:text-xl max-w-[90%]"
+            className="leading-relaxed font-outfit text-sm 2xl:text-xl md:max-w-[90%]"
           >
             Do you want to see more question?, navigate to our FAQs page and if
             you have more questions, reach out to our sales team.
@@ -115,7 +115,7 @@ const FaqSection = () => {
             className="mt-5"
           >
             <div className="flex gap-4 mt-6">
-              <LinkButton href={"#"} className="flex items-center gap-2 bg-white text-[#0A0B20] hover:bg-gray-200 transition-colors px-4 py-2 rounded-10 font-bold">
+              <LinkButton href={"#"} className="flex items-center gap-2 bg-white text-[#0A0B20] max-sm:text-xxs hover:bg-gray-200 transition-colors max-xxscren:px-2 px-4 py-2 rounded-10 font-bold">
                 Contact Sales
                 <svg
                   width="24"
@@ -132,7 +132,7 @@ const FaqSection = () => {
                 </svg>
               </LinkButton>
               <LinkButton href={"#"}
-                className="flex items-center gap-2 bg-transparent text-whit border-white border-opacity-50 hover:bg-gray-200 transition-colors px-4 py-2 rounded-10 font-bold"
+                className="flex items-center  max-sm:text-xxs gap-2 bg-transparent text-whit border-white border-opacity-50 hover:bg-gray-200 transition-colors  max-xxscren:px-2 px-4 py-2 rounded-10 font-bold"
                 variant={"outlined"}>
               
                 See More Questions
@@ -156,14 +156,14 @@ const FaqSection = () => {
                 className="bg-white bg-opacity-10 rounded-lg overflow-hidden"
               >
                 <Accordion.Header>
-                  <Accordion.Trigger className="group flex items-center justify-between w-full px-6 py-4 text-left">
-                    <span className="font-medium text-base">
+                  <Accordion.Trigger className="group flex items-center justify-between w-full px-4 md:px-6 py-4 text-left">
+                    <span className="font-medium text-sm md:text-base">
                       {faq.question}
                     </span>
                     <ChevronDownIcon className="w-6 h-6 transition-transform duration-300 group-data-[state=open]:rotate-180" />
                   </Accordion.Trigger>
                 </Accordion.Header>
-                <Accordion.Content className="px-6 pb-4  mt-1 text-sm text-white text-opacity-80">
+                <Accordion.Content className="px-3 md:px-6 pb-4  mt-1 text-xs md:text-sm text-white text-opacity-80">
                   {faq.answer}
                 </Accordion.Content>
               </Accordion.Item>
