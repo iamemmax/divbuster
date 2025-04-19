@@ -1,6 +1,11 @@
 import * as React from "react";
 import { SVGProps } from "react";
-const LandingPageCircle = (props: SVGProps<SVGSVGElement>) => (
+
+interface LandingPageCircleProps extends SVGProps<SVGSVGElement> {
+  className?: string;
+}
+
+const LandingPageCircle = (props: LandingPageCircleProps) => (
   <svg
     width={1240}
     height={1240}
@@ -8,6 +13,16 @@ const LandingPageCircle = (props: SVGProps<SVGSVGElement>) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
+    style={{ 
+      userSelect: 'none', 
+      pointerEvents: 'none',
+      WebkitUserSelect: 'none',
+      MozUserSelect: 'none',
+      msUserSelect: 'none',
+      ...props.style 
+    }}
+    // draggable="false"
+    onDragStart={(e) => e.preventDefault()}
   >
     <g filter="url(#filter0_f_4256_3207)">
       <circle cx={620} cy={620} r={370} stroke="#4453DD" strokeWidth={60} />
