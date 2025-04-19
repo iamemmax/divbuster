@@ -16,7 +16,7 @@ import Footer from "./components/Footer";
 
 const Page = () => {
   return (
-    <div className=" overflow-y-scroll pb-[5rem]">
+    <div className=" overflow-y-scroll pb-[3rem]">
       {/* scroll-smooth snap-y snap-mandatory */}
 
       <motion.section

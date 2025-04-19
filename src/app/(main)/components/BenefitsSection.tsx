@@ -53,7 +53,7 @@ const BenefitsSection = () => {
   <div className="bg-white w-full rounded-[20px] grid grid-cols-1 lg:grid-cols-2 px-6 sm:px-[2.625rem] py-8 sm:py-[3.3125rem] mt-5 xl:mt-[52px] gap-10 sm:gap-16">
     {/* Left Content */}
     <div className="flex flex-col justify-between space-y-8">
-      <p className="font-verdana font-bold max-xxscren:text-2xl text-3xl sm:text-5xl text-[#02010D1A] text-opacity-5">
+      <p className="font-verdana font-bold max-xxscren:text-2xl text-3xl sm:text-5xl xl:text-[3.75rem] text-[#02010D1A] text-opacity-5">
         Opticraft Trading Platform
       </p>
 

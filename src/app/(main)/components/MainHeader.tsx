@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import OpticalLogo from "@/app/icons/Logo";
 import RightArrowIcon from "@/app/icons/RightArrow";
 import { Button, LinkButton } from "@/components/core";
@@ -8,6 +8,20 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export const MainHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Add scroll event listener
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [scrolled]);
 
   const navlinks = [
     { title: "Home", href: "/" },
@@ -74,7 +88,16 @@ export const MainHeader = () => {
   return (
     <div className="relative z-[9999999999999999999999999999999999999] w-full">
       {/* Desktop Header */}
-      <header className="hidden bg-blue-900   px-4 md:px-[2rem] xl:px-[4.5rem] pt-[1rem] xl:pt-[1.25rem] lg:flex justify-between w-full items-center py-2">
+      <motion.header 
+        className={`hidden fixed w-full bg-blue-900 px-4 md:px-[2rem] xl:px-[4.5rem] lg:flex justify-between items-center py-6 transition-all duration-300 ${
+          scrolled ? 'bg-opacity-95 backdrop-blur-sm shadow-lg' : 'bg-opacity-0'
+        }`}
+        initial={{ backgroundColor: "rgba(30, 58, 138, 0)" }}
+        animate={{ 
+          backgroundColor: scrolled ? "rgba(30, 58, 138, 0.95)" : "rgba(30, 58, 138, 0)",
+        }}
+        transition={{ duration: 0.3 }}
+      >
         <LinkButton
           className="text-white bg-transparent font-verdana font-bold text-xl flex p-0 items-center gap-2"
           href="/"
@@ -114,10 +137,19 @@ export const MainHeader = () => {
             />
           </svg>
         </Button>
-      </header>
+      </motion.header>
 
       {/* Mobile Header */}
-      <header className="flex lg:hidden justify-between bg-blue-900  px-8 md:px-[2rem] xl:px-[4.5rem] pt-[1rem]  w-full   items-center py-4 pr-11">
+      <motion.header 
+        className={`flex lg:hidden fixed w-full bg-blue-900 px-8 md:px-[2rem] xl:px-[4.5rem] pt-[1rem] items-center py-4 pr-11 transition-all duration-300 ${
+          scrolled ? 'bg-opacity-95 backdrop-blur-sm shadow-lg' : 'bg-opacity-0'
+        }`}
+        initial={{ backgroundColor: "rgba(30, 58, 138, 0)" }}
+        animate={{ 
+          backgroundColor: scrolled ? "rgba(30, 58, 138, 0.95)" : "rgba(30, 58, 138, 0)",
+        }}
+        transition={{ duration: 0.3 }}
+      >
         <LinkButton
           className="text-white font-verdana p-0 font-bold text-lg bg-transparent flex items-center gap-2"
           href="/"
@@ -152,7 +184,7 @@ export const MainHeader = () => {
             />
           </div>
         </motion.button>
-      </header>
+      </motion.header>
 
       {/* Mobile Dropdown with Creative Animation */}
       <AnimatePresence>

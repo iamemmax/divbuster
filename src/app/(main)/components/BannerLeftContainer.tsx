@@ -40,7 +40,7 @@ const BannerLeftContainer = () => {
       <p className="mt-4 max-xxscren:text-sm max-w-[95%] 2xl:max-w-[75%] text-base xl:text-lg  font-outfit text-white/70">Building wealth takes more than just a savings account.
       its about taking control of your future with strategic trading investments.</p>
       </div>
-      <div className=" mt-5 xl:mt-8 flex items-center gap-x-4  sm:gap-x-[4.5rem]">
+      <div className=" mt-5 xl:mt-8 flex items-center gap-x-4  xl:gap-x-[2rem] 2xl:gap-x-[4.5rem]">
         <div className="flex items-center gap-3  sm:gap-6">
         <Button className="bg-white max-xxscren:text-xs text-sm text-[#2B3AA6] rounded-10 rounded-s-[24px] rounded-e-[24px] gap-4 flex items-center  2xl:px-6 py-[0.625rem] px-3 md:px-4 font-outfit">
           Get Started <RightArrowIcon color="#fff" background="#2B3AA6"/>
