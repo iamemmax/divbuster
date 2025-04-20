@@ -149,7 +149,7 @@ export const MainHeader = () => {
       <motion.header 
         className={`flex justify-between lg:hidden fixed w-full bg-blue-900 px-4 md:px-[2rem] xl:px-[4.5rem] pt-[1rem] items-center py-6 pr-11 transition-all duration-300 ${
           scrolled ? 'bg-opacity-95 backdrop-blur-sm shadow-lg' : 'bg-opacity-0'
-        } ${menuOpen ? 'z-[100001]' : 'z-50'}`}
+        } ${menuOpen ? 'z-[9999999999999]' : 'z-[9999999'}`}
         initial={{ backgroundColor: "rgba(30, 58, 138, 0)" }}
         animate={{ 
           backgroundColor: scrolled ? "rgba(30, 58, 138, 0.95)" : "rgba(30, 58, 138, 0)",

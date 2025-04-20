@@ -28,7 +28,7 @@ const BannerLeftContainer = () => {
         },
     ]
   return (
-    <div className=" max-sm:px-4 -mt-[5rem]">
+    <div className=" px-4 -mt-[5rem]">
       <div className="flex items-center bg-[#070430] gap-2 sm:px-4 sm:py-[.625rem] max-xxscren:-mt-10 rounded-[1.875rem] max-w-[22rem] sm:max-w-[22.5rem]  justify-center">
         <p className="text-white max-xxscren:text-[11px] text-xs sm:text-sm font-outfit font-medium">
           Your number one trading investment platform
