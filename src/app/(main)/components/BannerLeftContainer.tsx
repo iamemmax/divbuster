@@ -6,7 +6,7 @@ import UserGroupIcon from "@/app/icons/UserGroupIcon";
 import WaveIcon from "@/app/icons/WaveIcon";
 import { Button, LinkButton } from "@/components/core";
 import React from "react";
-import Marquee from "./Marquee";
+// import Marquee from "./Marquee";
 
 const BannerLeftContainer = () => {
 

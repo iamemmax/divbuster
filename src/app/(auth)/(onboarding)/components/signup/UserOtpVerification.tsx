@@ -7,7 +7,7 @@ import PinInput from "react-pin-input";
 import { Button } from "@/components/core";
 
 import { useClipboard } from "@/hooks";
-import useIsMobile from "@/components/hooks/UseMobile";
+import useIsMobile from "@/hooks/UseMobile";
 import MessageIcon from "@/app/icons/MessageIcon";
 
 interface prop {

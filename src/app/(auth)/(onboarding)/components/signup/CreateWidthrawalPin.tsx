@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import PinInput from "react-pin-input";
 import { Button, LinkButton } from "@/components/core";
 
-import useIsMobile from "@/components/hooks/UseMobile";
+import useIsMobile from "@/hooks/UseMobile";
 
 interface prop {
   onNext: (value: SetStateAction<number>) => void;

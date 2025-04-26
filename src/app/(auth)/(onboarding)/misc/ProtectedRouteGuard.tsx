@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/authentication"; // Import your authentication context
-import { Liberty } from "@/icons/core";
+import LoadingAnimation from "@/app/(main)/components/animation/LoadingAnimation";
 // import { useUser } from "../api";
 
 interface ProtectedRouteProps {
@@ -30,11 +30,12 @@ export default function ProtectedRouteGuard({ children }: ProtectedRouteProps) {
   //   }
   // }, [isLoading, isAuthenticated, path, router]);
 
-  if ((isLoading || !isAuthenticated) && protectedRoutes.includes(path)) {
+  // if ((isLoading || !isAuthenticated) && protectedRoutes.includes(path)) {
+  if (!isLoading) {
     return (
       <div className="flex h-screen w-screen bg-[url('/images/landing-page/background-loading.jpg')] bg-no-repeat bg-cover bg-center items-center justify-center">
         <div className="flex h-screen w-screen  backdrop-blur-md bg-[#080D27]/90 items-center justify-center">
-        <Liberty/>
+        <LoadingAnimation/>
         </div>
       </div>
     );
