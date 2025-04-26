@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
@@ -9,6 +10,7 @@ import ProfileIcon from '@/app/icons/(dashboard)/ProfileIcon';
 import SettingsIcon from '@/app/icons/(dashboard)/SettingsIcon';
 import TradingIcon from '@/app/icons/(dashboard)/TrandingIcon';
 import TransactionIcon from '@/app/icons/(dashboard)/TransactionIcon';
+import { useActivePath } from '@/utils/navigation';
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -16,6 +18,8 @@ interface MobileNavProps {
 }
 
 const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose }) => {
+  const isActive = useActivePath();
+  
   const navLinks = [
     {
       title: "Home",
@@ -93,11 +97,17 @@ const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose }) => {
                     <li key={idx}>
                       <Link
                         href={link.href}
-                        className="flex items-center gap-3 text-white/80 hover:text-white hover:bg-[#4453DD]/10 rounded-lg px-4 py-3 transition-colors"
+                        className={`flex items-center gap-3 font-verdana text-sm py-3 px-4 rounded-lg transition-all duration-200
+                          ${isActive(link.href)
+                            ? 'bg-[#4453DD]/10 text-white border-l-[4px] border-[#4453DD]'
+                            : 'text-white/80 hover:bg-[#4453DD]/10 hover:text-white'
+                          }`}
                         onClick={onClose}
                       >
-                        <span className="w-6 h-6">{link.icon}</span>
-                        <span className="font-verdana text-sm">{link.title}</span>
+                        <span className={`w-6 h-6 ${isActive(link.href) ? 'text-[#4453DD]' : ''}`}>
+                          {link.icon}
+                        </span>
+                        <span>{link.title}</span>
                       </Link>
                     </li>
                   ))}
@@ -124,3 +134,4 @@ const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose }) => {
 };
 
 export default MobileNav;
+

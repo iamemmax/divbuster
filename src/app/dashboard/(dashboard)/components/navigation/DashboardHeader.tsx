@@ -3,14 +3,21 @@ import { Button } from '@/components/core'
 import { CaretDown } from '@/components/icons'
 import Image from 'next/image'
 import React from 'react'
+import { usePathname } from 'next/navigation'
 
 interface DashboardHeaderProps {
   onMenuClick?: () => void;
 }
 
+const getPageTitle = (pathname: string): string => {
+  const pathSegments = pathname.split('/').filter(segment => segment.length > 0);
+  const lastSegment = pathSegments[pathSegments.length - 1];
+  return lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1);
+}
+
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onMenuClick }) => {
   return (
-    <div className='flex justify-between items-center px-4 lg:px-[2.625rem] border-b-[.0187rem] border-[#4453DD] border-opacity-75 py-4 lg:py-[2.39rem] w-full'>
+    <div className='flex justify-between items-center px-4 lg:px-[2.625rem] border-b-[.0187rem] border-[#4453DD] border-opacity-50 h-[4.375rem] md:h-[5.625rem] w-full'>
       <div className="flex items-center gap-4">
         {/* Mobile Menu Button */}
         <button
@@ -33,13 +40,13 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onMenuClick }) => {
             />
           </svg>
         </button>
-        <h2 className='text-white font-bold font-verdana text-xl lg:text-2xl'>Profile</h2>
+        <h2 className='text-white font-bold font-verdana text-sm lg:text-2xl'>{getPageTitle(usePathname())}</h2>
       </div>
       <div className="flex items-center gap-4">
-        <div className="w-[2.5rem] h-[2.5rem] rounded-full flex justify-center items-center bg-[#122251]"><Button className="p-0 bg-transparent">
+      <div className="md:w-[2.5rem] md:h-[2.5rem] h-[2rem] w-[2rem] rounded-full flex justify-center items-center bg-[#122251]"><Button className="p-0 bg-transparent">
         <NotificationIcon/>
           </Button></div>
-        <div className="w-[2.5rem] h-[2.5rem] rounded-full flex justify-center items-center bg-[#122251]">
+        <div className="md:w-[2.5rem] md:h-[2.5rem] h-[2rem] w-[2rem] rounded-full flex justify-center items-center bg-[#122251]">
           <Image
           alt=''
           className='rounded-full'
@@ -51,7 +58,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onMenuClick }) => {
         </div>
         
         <div className="flex items-end gap-2">
-          <div className="text-[#A6A6A6] font-verdana font-normal text-sm"> 
+          <div className="text-[#A6A6A6] font-verdana font-normal text-sm max-sm:hidden"> 
             <h2 className='text-white font-verdana font-bold text-sm '>Annabelle Amapiano</h2>
             <p className='text-white/70 font-outfit text-xxs font-medium'>annabelleamapiano@gmail.com</p>
           </div>
