@@ -101,7 +101,7 @@ const Sidebar = () => {
         <div className={`flex flex-col mt-[2.75rem] gap-[3rem] justify-between h-full ${isCollapsed ? 'px-2' : 'px-[1.875rem]'}`}>
           <div className="flex-1 mb-auto h-full">
             <nav>
-              <ul className='flex flex-col gap-1 xl:gap-3'>
+              <ul className='flex flex-col gap-3'>
                 {navLinks?.map((links,idx:number)=>(
                   <li className='' key={idx}>
                     <Link 
