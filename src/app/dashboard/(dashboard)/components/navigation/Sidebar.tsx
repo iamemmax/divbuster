@@ -44,7 +44,7 @@ const Sidebar = () => {
     },
     {
         title:"Referral",
-        href:"/referral",
+        href:"/dashboard/referral",
         icon:<HistoryIcon/>
     },
     {

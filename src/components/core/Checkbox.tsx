@@ -2,7 +2,6 @@
 
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import * as React from 'react';
-
 import { cn } from '@/utils/classNames';
 
 const Checkbox = React.forwardRef<
@@ -11,28 +10,28 @@ const Checkbox = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CheckboxPrimitive.Root
     className={cn(
-      'peer h-4 w-4 shrink-0 rounded border-[1.5px] border-[#032282] ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
+      'peer h-6 w-6 shrink-0 rounded-[4px] border border-white/60 bg-transparent ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-[#2c3144] data-[state=checked]:border-[#2c3144]',
       className
     )}
     ref={ref}
     {...props}
   >
     <CheckboxPrimitive.Indicator
-      className={cn('flex items-center justify-center text-current')}
+      className={cn('flex items-center justify-center text-white')}
     >
       <svg
-        className="size-3"
-        viewBox="0 0 256 256"
+        width="14"
+        height="14"
+        viewBox="0 0 14 14"
+        fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <rect fill="none" height="256" width="256" />
-        <polyline
-          fill="none"
-          points="40 144 96 200 224 72"
+        <path
+          d="M11.6667 3.5L5.25 9.91667L2.33333 7"
           stroke="currentColor"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeWidth="16"
         />
       </svg>
     </CheckboxPrimitive.Indicator>

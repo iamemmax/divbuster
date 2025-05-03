@@ -23,7 +23,8 @@ const UserSignupDetails = ({onNext}: prop) => {
     resolver: zodResolver(signUpUserSchema),
     defaultValues: {
       email: "",
-      full_name: "",
+      first_name: "",
+      last_name: "",
       phone_number: "",
       referral: "",
     },
@@ -59,19 +60,40 @@ const UserSignupDetails = ({onNext}: prop) => {
             className="mb-1 block text-sm font-outfit text-[#fff]"
             htmlFor={``}
           >
-            Full Name*
+            FIrst Name*
           </Label>
           <input
-            className={`${errors?.full_name ? "border border-red-700" : "border-[0.3px] border-[#696969]"} text-[#fff] text-xs outline-none border-opacity-70  h-[2.75rem] md:h-[3.375rem] rounded-lg w-full px-6 bg-[#02010D]`}
-            placeholder="Enter your full name"
+            className={`${errors?.first_name ? "border border-red-700" : "border-[0.3px] border-[#696969]"} text-[#fff] text-xs outline-none border-opacity-70  h-[2.75rem] md:h-[3.375rem] rounded-lg w-full px-6 bg-[#02010D]`}
+            placeholder="Enter your first name"
             type="text"
-            id={`full_name`}
-            {...register(`full_name`)}
+            id={`first_name`}
+            {...register(`first_name`)}
           />
 
-          {errors?.full_name && (
+          {errors?.first_name && (
             <p className="text-red-700 text-xs mt-1">
-              {errors?.full_name?.message}
+              {errors?.first_name?.message}
+            </p>
+          )}
+        </div>
+        <div className="mt-[.5rem]">
+          <Label
+            className="mb-1 block text-sm font-outfit text-[#fff]"
+            htmlFor={``}
+          >
+            Last Name*
+          </Label>
+          <input
+            className={`${errors?.last_name ? "border border-red-700" : "border-[0.3px] border-[#696969]"} text-[#fff] text-xs outline-none border-opacity-70  h-[2.75rem] md:h-[3.375rem] rounded-lg w-full px-6 bg-[#02010D]`}
+            placeholder="Enter your last name"
+            type="text"
+            id={`last_name`}
+            {...register(`last_name`)}
+          />
+
+          {errors?.last_name && (
+            <p className="text-red-700 text-xs mt-1">
+              {errors?.last_name?.message}
             </p>
           )}
         </div>

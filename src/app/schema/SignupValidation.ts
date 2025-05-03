@@ -1,9 +1,13 @@
 import { z } from "zod";
 export const signUpUserSchema = z.object({
-    full_name: z
+    first_name: z
         .string()
         .trim()
-        .min(1, { message: "Please enter the name." }).refine(value => !/\d/.test(value), { message: "Name must not contain numbers" }),
+        .min(1, { message: "Please enter the first name." }).refine(value => !/\d/.test(value), { message: "First name must not contain numbers" }),
+    last_name: z
+        .string()
+        .trim()
+        .min(1, { message: "Please enter the last name." }).refine(value => !/\d/.test(value), { message: "Last name must not contain numbers" }),
     referral: z
         .string()
         .trim()

@@ -117,7 +117,7 @@ const LoginPage = () => {
           </div>
         </div>
 
-        {/* Password Input */}
+             {/* Password Input */}
         <div className="mt-4">
           <Label className="mb-1 block text-sm font-outfit text-[#fff]">
             Password*

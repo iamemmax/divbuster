@@ -2,7 +2,7 @@
 import CameraIcon from "@/app/icons/(dashboard)/CameraIcon";
 import CopyIcon from "@/app/icons/(dashboard)/CopyIcon";
 import DeleteIcon from "@/app/icons/(dashboard)/DeleteIcon";
-import UploadIcon from "@/app/icons/(dashboard)/UploadIcon";
+// import UploadIcon from "@/app/icons/(dashboard)/UploadIcon";
 import { Button } from "@/components/core";
 import useClipboard from "@/hooks/useClipboard copy";
 import { SmallSpinner } from "@/icons/core";
