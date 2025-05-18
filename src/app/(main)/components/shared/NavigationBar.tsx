@@ -43,7 +43,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onItemClick }) => {
     },
     {
       name: "Dive Buddies",
-      icon: <BuddiesIcon color={isActive("/div-buddies") ? "#F7931D" : "#4F4F4F"}  className={`text-[#4F4F4F] dark:text-white ${isActive("/div-buddies") ? "text-orange-500" : ""}`}
+      icon: <BuddiesIcon className={cn(isActive("/div-buddies") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")}
+  
       />,
       link: "/div-buddies",
       hasBarge: false,
@@ -51,42 +52,42 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onItemClick }) => {
     },
     {
       name: "Dive Log",
-      icon: <LogIcon color={isActive("/div-log") ? "#F7931D" : "#4F4F4F"}/>,
+      icon: <LogIcon className={cn(isActive("/div-log") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")}    />,
       link: "/div-log",
       hasBarge: false,
       bargeText: "",
     },
     {
       name: "Dive Sites",
-      icon: <LocationIcon color={isActive("/dive-sites") ? "#F7931D" : "#4F4F4F"} />,
+      icon: <LocationIcon className={cn(isActive("/dive-sites") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
       link: "/dive-sites",
       hasBarge: false,
       bargeText: "",
     },
     {
       name: "Buddy Finder",
-      icon: <BuddyIcon color={isActive("/div-finder") ? "#F7931D" : "#4F4F4F"}/>,
+      icon: <BuddyIcon className={cn(isActive("/div-finder") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
       link: "/div-finder",
       hasBarge: true,
       bargeText: "New",
     },
     {
       name: "Bookings",
-      icon: <BookingIcon color={isActive("/bookings") ? "#F7931D" : "#4F4F4F"}/>,
+      icon: <BookingIcon className={cn(isActive("/bookings") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
       link: "/bookings",
       hasBarge: false,
       bargeText: "",
     },
     {
       name: "My Profile",
-      icon: <ProfileIcon color={isActive("/profile") ? "#F7931D" : "#4F4F4F"}/>,
+      icon: <ProfileIcon className={cn(isActive("/profile") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
       link: "/profle",
       hasBarge: false,
       bargeText: "",
     },
     {
       name: "Insurance",
-      icon: <InsuranceIcon      color={isActive("/insurance") ? "#F7931D" : "#4F4F4F"}/>,
+      icon: <InsuranceIcon className={cn(isActive("/insurance") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
       link: "/insurance",
       hasBarge: false,
       bargeText: "",

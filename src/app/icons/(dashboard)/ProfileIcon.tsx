@@ -1,20 +1,23 @@
+import { cn } from "@/utils/classNames";
 import * as React from "react";
 import { SVGProps } from "react";
 
-const ProfileIcon = ({ color = "#4F4F4F", ...props }: SVGProps<SVGSVGElement> & { color?: string }) => (
+const ProfileIcon = ({ color,className, ...props }: SVGProps<SVGSVGElement> & { color?: string }) => (
   <svg
     width={15}
     height={19}
     viewBox="0 0 15 19"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+        className={cn("text-[#F7931D] dark:text-white", className)}
+    
     {...props}
   >
     <path
       fillRule="evenodd"
       clipRule="evenodd"
       d="M11.2432 5.0567C11.2432 7.9322 9.50617 10.4 7.19317 10.4C4.87837 10.4 3.14317 7.9322 3.14317 5.0558C3.14317 2.1812 4.63717 0.5 7.19317 0.5C9.74917 0.5 11.2432 2.1803 11.2432 5.0567ZM0.084965 16.8278C0.431465 17.24 1.92366 18.5 7.19317 18.5C12.4627 18.5 13.954 17.24 14.3014 16.8287C14.3336 16.7892 14.3574 16.7435 14.3713 16.6944C14.3852 16.6454 14.389 16.594 14.3824 16.5434C14.3032 15.7496 13.5886 12.2 7.19317 12.2C0.797765 12.2 0.0831649 15.7496 0.00306493 16.5434C-0.00345294 16.594 0.000449874 16.6455 0.0145341 16.6945C0.0286182 16.7436 0.0525864 16.7883 0.084965 16.8278Z"
-      fill={color}
+      fill={color || "currentColor"}
     />
   </svg>
 );

@@ -1,3 +1,6 @@
+# Add the second repository as a remote named "second-repo"
+git remote add second-repo https://github.com/bart-cb/divebusters_frontend.git
+
 # Get current branch name
 BRANCH=$(git branch --show-current)
 
