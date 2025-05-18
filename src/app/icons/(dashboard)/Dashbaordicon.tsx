@@ -8,8 +8,6 @@ interface CustomSVGProps extends SVGProps<SVGSVGElement> {
 }
 
 const DashboardIcon = ({ color, className, ...props }: CustomSVGProps) => {
-  // Use className to determine the fill color, with a fallback to the color prop or default
-  const fillColor = color || "currentColor";
   
   return (
     <svg
