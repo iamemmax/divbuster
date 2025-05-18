@@ -36,7 +36,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onItemClick }) => {
   const navigationArray = [
     {
       name: "Dashboard",
-      icon: <DashboardIcon  darkModeColor="#ffffff" color={isActive("/") ? "#F7931D" : "#4F4F4F"}  />,
+      icon: <DashboardIcon className={cn(isActive("/") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
       link: "/",
       hasBarge: false,
       bargeText: "",
@@ -86,7 +86,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onItemClick }) => {
     },
     {
       name: "Insurance",
-      icon: <InsuranceIcon color={isActive("/insurance") ? "#F7931D" : "#4F4F4F"}/>,
+      icon: <InsuranceIcon      color={isActive("/insurance") ? "#F7931D" : "#4F4F4F"}/>,
       link: "/insurance",
       hasBarge: false,
       bargeText: "",

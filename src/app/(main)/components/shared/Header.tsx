@@ -101,17 +101,17 @@ const Header = ({ subtitle, title }: HeaderProps) => {
         <div className="hidden md:flex items-center gap-2 xl:gap-4">
           <Button className="bg-transparent p-0">
             <div className="border border-[#EEEEEE] flex justify-center items-center w-[2rem] xl:w-[2.5rem] h-[2rem] xl:h-[2.5rem] rounded-full ">
-              <WarningIcon />
+              <WarningIcon className="text-[#132346] dark:text-white"  />
             </div>
           </Button>
           <Button className="bg-transparent p-0">
             <div className="border border-[#EEEEEE] flex justify-center items-center w-[2rem] xl:w-[2.5rem] h-[2rem] xl:h-[2.5rem] rounded-full ">
-              <MessageIcon />
+              <MessageIcon className="text-[#132346] dark:text-white" />
             </div>
           </Button>
           <Button className="bg-transparent p-0">
             <div className="border border-[#EEEEEE] flex justify-center items-center w-[2rem] xl:w-[2.5rem] h-[2rem] xl:h-[2.5rem] rounded-full ">
-              <NotificationIcon />
+              <NotificationIcon className="text-[#132346] dark:text-white" />
             </div>
           </Button>
         </div>
@@ -208,19 +208,19 @@ const Header = ({ subtitle, title }: HeaderProps) => {
               <div className="p-2">
                 <div className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
                   <div className="border border-[#EEEEEE] dark:border-gray-600 flex justify-center items-center w-8 h-8 rounded-full">
-                    <WarningIcon />
+                    <WarningIcon className="text-[#132346] dark:text-white" />
                   </div>
                   <span className="text-sm font-medium text-gray-700 dark:text-white/70">Alerts</span>
                 </div>
                 <div className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
-                  <div className="border border-[#EEEEEE] dark:border-gray-600 flex justify-center items-center w-8 h-8 rounded-full">
-                    <MessageIcon color="blue" className="text-[#132346]"/>
+                  <div className="border border-[#EEEEEE]  dark:border-gray-600 flex justify-center items-center w-8 h-8 rounded-full">
+                    <MessageIcon className="text-[#132346] dark:text-white"/>
                   </div>
                   <span className="text-sm font-medium text-gray-700 dark:text-white/70">Messages</span>
                 </div>
                 <div className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
                   <div className="border border-[#EEEEEE] dark:border-gray-600 flex justify-center items-center w-8 h-8 rounded-full">
-                    <NotificationIcon />
+                    <NotificationIcon className="text-[#132346] dark:text-white"/>
                   </div>
                   <span className="text-sm font-medium text-gray-700 dark:text-white/70">Notifications</span>
                 </div>
