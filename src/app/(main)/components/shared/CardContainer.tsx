@@ -20,6 +20,8 @@ const CardContainer = () => {
         </div>
         
         {/* New container with #132346 background */}
+        {/* New container with #132346 background */}
+        {/* New container with #132346 background */}
         <div className="px-2">
         <div className="-mt-2 z-10 flex flex-col relative gap-4 rounded-10 px-[1.125rem] py-2 bg-[#132346]">
          
