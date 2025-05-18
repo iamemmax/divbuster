@@ -1,1 +1,6 @@
-chmod +x push-to-repos.sh
+# Get current branch name
+BRANCH=$(git branch --show-current)
+
+# Push to both repositories
+git push origin $BRANCH
+git push second-repo $BRANCH
