@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -20,6 +21,7 @@ const config: Config = {
         heading: ['var(--font-heading)'],
         display: ['var(--font-display)'],
         outfit: ['var(--font-outfit)'],
+        archivo: ['var(--font-archivo)'],
       },
       fontSize: {
         xxs: '.625rem',

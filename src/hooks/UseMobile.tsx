@@ -1,20 +1,25 @@
+"use client"
 import { useState, useEffect } from "react";
 
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState(false);
+export default function useIsMobile() {
+  // Initialize with null to indicate "not determined yet"
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
+    // Set initial value immediately on mount
+    setIsMobile(window.innerWidth < 768);
+    
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 450);
+      setIsMobile(window.innerWidth < 768);
     };
 
-    handleResize();
+    // Add event listener
     window.addEventListener("resize", handleResize);
 
+    // Clean up
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return isMobile;
-};
-
-export default useIsMobile;
+  // Return false during SSR, then the actual value once determined
+  return isMobile === null ? false : isMobile;
+}

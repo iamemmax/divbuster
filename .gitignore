@@ -2,6 +2,9 @@
 
 .env
 
+# Git scripts
+push-to-repos.sh
+
 # dependencies
 /node_modules
 /.pnp

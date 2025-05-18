@@ -1,0 +1,155 @@
+"use client"
+import React, { useEffect, useState } from "react";
+import { cn } from "@/utils/classNames";
+import { useActivePath } from "@/utils/navigation";
+import Link from "next/link";
+import useIsMobile from "@/hooks/UseMobile";
+import BookingIcon from "@/app/icons/(dashboard)/BookingIcon";
+import BuddiesIcon from "@/app/icons/(dashboard)/BuddiesIcon";
+import BuddyIcon from "@/app/icons/(dashboard)/BuddyIcon";
+import InsuranceIcon from "@/app/icons/(dashboard)/InsuranceIcon";
+import LocationIcon from "@/app/icons/(dashboard)/LocationIcon";
+import LogIcon from "@/app/icons/(dashboard)/LogIcon";
+import ProfileIcon from "@/app/icons/(dashboard)/ProfileIcon";
+import DashboardIcon from "@/app/icons/(dashboard)/Dashbaordicon";
+
+interface NavigationBarProps {
+  onItemClick?: () => void;
+}
+
+const NavigationBar: React.FC<NavigationBarProps> = ({ onItemClick }) => {
+  const isActive = useActivePath();
+  const isMobile = useIsMobile();
+  const [mounted, setMounted] = useState(false);
+  
+  // Handle initial mounting
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  const handleItemClick = () => {
+    if (onItemClick) {
+      onItemClick();
+    }
+  };
+  
+  const navigationArray = [
+    {
+      name: "Dashboard",
+      icon: <DashboardIcon  darkModeColor="#ffffff" color={isActive("/") ? "#F7931D" : "#4F4F4F"}  />,
+      link: "/",
+      hasBarge: false,
+      bargeText: "",
+    },
+    {
+      name: "Dive Buddies",
+      icon: <BuddiesIcon color={isActive("/div-buddies") ? "#F7931D" : "#4F4F4F"}  className={`text-[#4F4F4F] dark:text-white ${isActive("/div-buddies") ? "text-orange-500" : ""}`}
+      />,
+      link: "/div-buddies",
+      hasBarge: false,
+      bargeText: "",
+    },
+    {
+      name: "Dive Log",
+      icon: <LogIcon color={isActive("/div-log") ? "#F7931D" : "#4F4F4F"}/>,
+      link: "/div-log",
+      hasBarge: false,
+      bargeText: "",
+    },
+    {
+      name: "Dive Sites",
+      icon: <LocationIcon color={isActive("/dive-sites") ? "#F7931D" : "#4F4F4F"} />,
+      link: "/dive-sites",
+      hasBarge: false,
+      bargeText: "",
+    },
+    {
+      name: "Buddy Finder",
+      icon: <BuddyIcon color={isActive("/div-finder") ? "#F7931D" : "#4F4F4F"}/>,
+      link: "/div-finder",
+      hasBarge: true,
+      bargeText: "New",
+    },
+    {
+      name: "Bookings",
+      icon: <BookingIcon color={isActive("/bookings") ? "#F7931D" : "#4F4F4F"}/>,
+      link: "/bookings",
+      hasBarge: false,
+      bargeText: "",
+    },
+    {
+      name: "My Profile",
+      icon: <ProfileIcon color={isActive("/profile") ? "#F7931D" : "#4F4F4F"}/>,
+      link: "/profle",
+      hasBarge: false,
+      bargeText: "",
+    },
+    {
+      name: "Insurance",
+      icon: <InsuranceIcon color={isActive("/insurance") ? "#F7931D" : "#4F4F4F"}/>,
+      link: "/insurance",
+      hasBarge: false,
+      bargeText: "",
+    },
+  ];
+  
+  // If not mounted yet, render a placeholder
+  if (!mounted) {
+    return (
+      <div className="animate-pulse">
+        <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded mb-3"></div>
+        <div className="space-y-3">
+          {[1, 2, 3, 4, 5].map(i => (
+            <div key={i} className="h-10 bg-gray-200 dark:bg-gray-800 rounded"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={cn(
+      "transition-all duration-300"
+    )}>
+      <h2 className={cn(
+        "text-[#BDBDBD] uppercase font-archivo font-medium",
+        isMobile ? "text-[14px]" : "text-[17px]"
+      )}>
+        MENU
+      </h2>
+      <div className="mt-3">
+        <nav>
+            <ul className="flex flex-col gap-3">
+                {
+                    navigationArray.map((item) => (
+                        <li key={item.name}>
+                            <Link href={item.link} onClick={handleItemClick}>
+                                <div className={cn(
+                                  "flex items-center gap-4 py-2 px-3 transition-all duration-200",
+                                  isActive(item.link) && "bg-[#F7931D]/10 text-[#F7931D] py-[11px] border-l-[4px] border-[#F7931D] rounded-[.25rem]"
+                                )}>
+                                    <div className={cn(
+                                      isActive(item.link) ? "text-[#F7931D]" : "text-[#4F4F4F] w-[20px]"
+                                    )}>
+                                      {item.icon}
+                                    </div>
+                                    <div className={cn(
+                                      "font-medium font-archivo",
+                                      isMobile ? "text-xs" : "text-sm",
+                                      isActive(item.link) ? "text-[#F7931D]" : "text-[#4F4F4F] dark:text-white"
+                                    )}>
+                                        {item.name}
+                                    </div>
+                                </div>
+                            </Link>
+                        </li>
+                    ))
+                }
+            </ul>
+        </nav>
+      </div>
+    </div>
+  );
+};
+
+export default NavigationBar;

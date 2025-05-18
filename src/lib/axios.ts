@@ -18,5 +18,10 @@ export const setAxiosDefaultToken = (
 };
 
 export const deleteAxiosDefaultToken = () => {
+  console.log("deleteAxiosDefaultToken: Removing Authorization header");
+  console.log("deleteAxiosDefaultToken: Before deletion", adminAxios.defaults.headers.common.Authorization ? "Authorization header exists" : "No Authorization header");
+  
   delete adminAxios.defaults.headers.common.Authorization;
+  
+  console.log("deleteAxiosDefaultToken: After deletion", adminAxios.defaults.headers.common.Authorization ? "Authorization header still exists" : "Authorization header removed");
 };

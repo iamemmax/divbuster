@@ -45,55 +45,34 @@ html {
     --helper: #CAC9D4B2;
     --helper-dark: #8C8CA1;
     --body: #4A4A68;
+  }
 
-    --input-bg: #f5f7f9;
-    --input-placeholder: #818181;
-
-    --card-border: #ececec;
-
-    --sidebar-link-active: #192749;
-
-    --sb-track-color: #d1d5db;
-    --sb-thumb-color: #6b7280;
-    --sb-size: 10px;
-
-    --marketing-dark: #002756;
-    --marketing-light: #eaf2ff;
-    --marketing-light-2: #eaf2ff;
-    --marketing-light-text: #768eaa;
-
-    --test-gradient: #9a580d;
-
-    /* Shadcn Colors */
-
-    --background: 0 0% 100%;
-    --foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 100% 50%;
-    --destructive-foreground: 210 40% 98%;
-
-    --ring: 215 20.2% 65.1%;
+  .dark {
+    --light-bg: #121212;
+    --dash-dark-bg: #07112d;
+    --dash-light-bg: #121212;
+    
+    --dark-text: #e8e8e8;
+    --light-text: #e0e0e0;
+    --light-dark-text: #e8e8e8;
+    
+    --label-text: #d0d0d0;
+    
+    --main: #121212;
+    --main-light: #1e1e1e;
+    --main-bg: #1a1a1a;
+    --helper: #6c6c6c;
+    --helper-dark: #8C8CA1;
+    --body: #d0d0d0;
+    
+    --input-bg: #2a2a2a;
+    --input-placeholder: #a0a0a0;
+    
+    --card-border: #333333;
+    
+    --sidebar-link-active: #F7931D;
+    
+    color-scheme: dark;
   }
 }
 
@@ -328,4 +307,34 @@ body {
 .ios-height-fix {
   height: 100%;
   height: -webkit-fill-available;
+}
+
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: var(--app-height);
+  }
+}
+
+/* Fix for iOS height issues */
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: var(--app-height);
+  }
+}
+
+/* Animation for indeterminate progress bar */
+@keyframes indeterminate-progress {
+  0% {
+    transform: translateX(-100%) scaleX(0.5);
+  }
+  50% {
+    transform: translateX(0%) scaleX(0.5);
+  }
+  100% {
+    transform: translateX(100%) scaleX(0.5);
+  }
+}
+
+.animate-indeterminate-progress {
+  animation: indeterminate-progress 1.5s infinite linear;
 }

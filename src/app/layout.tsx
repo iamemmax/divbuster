@@ -1,16 +1,23 @@
 "use client";
-import { DM_Sans, Wix_Madefor_Display, Outfit } from "next/font/google";
+import { DM_Sans, Wix_Madefor_Display, Outfit, Archivo } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/utils/classNames";
 import { Suspense } from "react";
 import ReactQueryProvider from "@/lib/reactQuery";
 import { AuthProvider } from "@/contexts/authentication";
-// import { useUser } from "./(auth)/(onboarding)/misc";
 import { Toaster } from "react-hot-toast";
-import ProtectedRouteGuard from "./(auth)/(onboarding)/misc/ProtectedRouteGuard";
-import { Wrapper } from "./(auth)/(onboarding)/misc/Wrapper";
 import FullPageLoader from "./(main)/loading";
-import PageLoadWrapper from "./(main)/components/PageLoadWrapper";
+import ProtectedRouteGuard from "./(auth)/ProtectedRouteGuard";
+import { Wrapper } from "./(auth)/Wrapper";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { RouteChangeLoader } from "@/components/core/RouteChangeLoader";
+
+// Updated Google Client ID from environment variables
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || 
+                         process.env.NEXT_PUBLIC_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY || 
+                         "330089517652-9e8jm4e8bus6ckpi0ml934dfq3lkqm76.apps.googleusercontent.com";
+
+console.log("Using Google Client ID:", GOOGLE_CLIENT_ID);
 
 const sans = DM_Sans({
   subsets: ["latin"],
@@ -27,6 +34,11 @@ const outfit = Outfit({
   variable: "--font-outfit",
   display: "swap",
 });
+const archivo = Archivo({
+  subsets: ["latin"],
+  variable: "--font-archivo",
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
@@ -35,13 +47,10 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      className={cn(sans.variable, display.variable, outfit.variable)}
+      className={cn(sans.variable, display.variable, outfit.variable, archivo.variable)}
       lang="en"
     >
-      <head>
-        <link rel="shortcut icon" href="/icon.ico" />
-      </head>
-      <body className=" bg-main">
+      <body className="">
         <Toaster
           containerStyle={{
             zIndex: 99999,
@@ -53,20 +62,23 @@ export default function RootLayout({
             },
           }}
         />
-        <ReactQueryProvider>
-          <AuthProvider>
-            <ProtectedRouteGuard>
-              <Suspense fallback={<FullPageLoader />}>
-                <PageLoadWrapper>
+        <GoogleOAuthProvider 
+          clientId={GOOGLE_CLIENT_ID}
+          onScriptLoadSuccess={() => console.log("Google OAuth script loaded successfully")}
+          // onScriptLoadError={(error) => console.error("Google script load error:", error)}
+        >
+          <ReactQueryProvider>
+            <AuthProvider>
+              <ProtectedRouteGuard>
+                <RouteChangeLoader />
+                <Suspense fallback={<FullPageLoader />}>
                   <Wrapper>{children}</Wrapper>
-                </PageLoadWrapper>
-              </Suspense>
-            </ProtectedRouteGuard>
-          </AuthProvider>
-        </ReactQueryProvider>
+                </Suspense>
+              </ProtectedRouteGuard>
+            </AuthProvider>
+          </ReactQueryProvider>
+        </GoogleOAuthProvider>
       </body>
-
-      {/* Heala Configuration */}
     </html>
   );
 }

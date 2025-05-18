@@ -16,4 +16,5 @@ export { default as useMediaQuery } from './useMediaQuery';
 
 export { default as useWindowWidth } from './useWindowWidth';
 
+export { default as useIsMobile } from './UseMobile';
 
