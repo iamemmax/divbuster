@@ -15,12 +15,17 @@ export default function Error({
     console.error('Error caught in auth layout:', error)
   }, [error])
 
+  // Check if error message contains specific text to provide better guidance
+  const isBasicInfoError = error.message?.includes('basicInfo') || false
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
       <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md max-w-md w-full">
         <h2 className="text-2xl font-bold text-red-600 mb-4">Authentication Error</h2>
         <p className="text-gray-700 dark:text-gray-300 mb-6">
-          There was a problem with the authentication system.
+          {isBasicInfoError 
+            ? "There was a problem with your registration data. Please try again."
+            : "There was a problem with the authentication system."}
         </p>
         <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded mb-6 overflow-auto max-h-40">
           <p className="font-mono text-sm text-gray-800 dark:text-gray-200">

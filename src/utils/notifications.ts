@@ -35,3 +35,19 @@ export const launchNotification = (type: ToastNotification, text: string) => {
     },
   });
 };
+
+/**
+ * Display an error notification toast
+ * @param message The error message to display
+ */
+export const showErrorNotification = (message: string) => {
+  launchNotification('error', message);
+};
+
+/**
+ * Display a success notification toast
+ * @param message The success message to display
+ */
+export const showSuccessNotification = (message: string) => {
+  launchNotification('success', message);
+};

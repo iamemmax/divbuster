@@ -18,16 +18,22 @@ interface GoogleAuthPayload {
   provider: string;
   access_token: string;
   lang: string;
+  is_auth_code?: boolean;
 }
 
 // Function to handle Google authentication
 const googleAuth = async (token: string, language: string = "english") => {
   console.log("Google auth called with token:", token ? "Token exists" : "No token");
   
+  // Determine if this is an access token or authorization code
+  const isAuthCode = token.length < 100; // Authorization codes are typically shorter
+  
   const payload: GoogleAuthPayload = {
     provider: "google",
     access_token: token,
-    lang: language
+    lang: language,
+    // Add a flag to indicate if this is an authorization code
+    is_auth_code: isAuthCode
   };
   
   return adminAxios.post<GoogleAuthResponse>("auth/google", payload);
@@ -59,6 +65,7 @@ export const useGoogleAuth = () => {
     }
   );
 };
+
 
 
 

@@ -95,22 +95,20 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   
   // Check if a date is selected
   const isDateSelected = (date: Date) => {
-    if (!dateRange.startDate || !dateRange.endDate) return false;
+    if (!dateRange.startDate || !dateRange.endDate) {
+      return dateRange.startDate?.getTime() === date.getTime();
+    }
     
-    return (
-      date >= dateRange.startDate &&
-      date <= dateRange.endDate
-    );
+    const time = date.getTime();
+    return time >= dateRange.startDate.getTime() && time <= dateRange.endDate.getTime();
   };
   
   // Check if a date is the start or end of the range
   const isRangeEndpoint = (date: Date) => {
     if (!dateRange.startDate || !dateRange.endDate) return false;
     
-    return (
-      date.getTime() === dateRange.startDate.getTime() ||
-      date.getTime() === dateRange.endDate.getTime()
-    );
+    const time = date.getTime();
+    return time === dateRange.startDate.getTime() || time === dateRange.endDate.getTime();
   };
   
   // Handle date click
@@ -298,15 +296,13 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                     className={`
                       text-center h-9 w-9 flex justify-center items-center text-xs rounded-full cursor-pointer
                       ${!day.isCurrentMonth ? 'text-gray-400 dark:text-gray-600' : 'text-gray-800 dark:text-gray-200'}
-                      ${isDateSelected(day.date) && !isRangeEndpoint(day.date) ? 'bg-[#F7931D]/10' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}
-                      ${isRangeEndpoint(day.date) ? 'bg-[#F7931D] text-white hover:bg-[#F7931D]' : ''}
-                      ${dateRange.startDate && dateRange.endDate && day.date > dateRange.startDate && day.date < dateRange.endDate ? 'bg-[#F7931D]/10 ' : ''}
+                      ${isDateSelected(day.date) ? 'bg-[#F7931D]/10' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}
+                      ${isRangeEndpoint(day.date) ? '!bg-[#F7931D] text-white hover:!bg-[#F7931D]' : ''}
                       relative
                     `}
                     onClick={() => handleDateClick(day.date)}
                   >
                     {day.date.getDate()}
-                    {/* Only show dots for specific dates that have events/data */}
                     {/* {[6, 13].includes(day.date.getDate()) && day.isCurrentMonth && (
                       <span className="absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#F7931D] rounded-full"></span>
                     )} */}
@@ -345,16 +341,14 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                     className={`
                       text-center h-9 w-9 flex justify-center items-center text-xs rounded-full cursor-pointer
                       ${!day.isCurrentMonth ? 'text-gray-400 dark:text-gray-600' : 'text-gray-800 dark:text-gray-200'}
-                      ${isDateSelected(day.date) && !isRangeEndpoint(day.date) ? 'bg-[#F7931D]/10' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}
-                      ${isRangeEndpoint(day.date) ? 'bg-[#F7931D] text-white hover:bg-[#F7931D]' : ''}
-                      ${dateRange.startDate && dateRange.endDate && day.date > dateRange.startDate && day.date < dateRange.endDate ? 'bg-[#F7931D]/10' : ''}
+                      ${isDateSelected(day.date) ? 'bg-[#F7931D]/10' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}
+                      ${isRangeEndpoint(day.date) ? '!bg-[#F7931D] text-white hover:!bg-[#F7931D]' : ''}
                       relative
                     `}
                     onClick={() => handleDateClick(day.date)}
                   >
                     {day.date.getDate()}
-                    {/* Only show dots for specific dates that have events/data */}
-                    {/* {[].includes(day.date.getDate()) && day.isCurrentMonth && (
+                    {/* {[13].includes(day.date.getDate()) && day.isCurrentMonth && (
                       <span className="absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#F7931D] rounded-full"></span>
                     )} */}
                   </div>
@@ -399,5 +393,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 };
 
 export default DateRangePicker;
+
+
 
 

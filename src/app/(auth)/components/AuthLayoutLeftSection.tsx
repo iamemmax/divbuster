@@ -24,16 +24,19 @@ const AuthLayoutLeftSection = () => {
     },
   ];
 
+  const isFirstSlide = currentSlide === 0;
+  const isLastSlide = currentSlide === sliderContent.length - 1;
+
   const nextSlide = () => {
-    setCurrentSlide((prev) =>
-      prev === sliderContent.length - 1 ? 0 : prev + 1
-    );
+    if (!isLastSlide) {
+      setCurrentSlide((prev) => prev + 1);
+    }
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) =>
-      prev === 0 ? sliderContent.length - 1 : prev - 1
-    );
+    if (!isFirstSlide) {
+      setCurrentSlide((prev) => prev - 1);
+    }
   };
 
   return (
@@ -68,9 +71,14 @@ const AuthLayoutLeftSection = () => {
           <div className="flex justify-end gap-3">
             <motion.button
               onClick={prevSlide}
-              className="rounded-[1.75rem] border border-white/50 w-[2.1875rem] h-[2.8125rem] flex items-center justify-center"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              disabled={isFirstSlide}
+              className={`w-[2.1875rem] h-[2.8125rem] rounded-[1.75rem] border-[#FEF6F4] border flex items-center justify-center transition-all duration-200 ${
+                isFirstSlide 
+                  ? 'bg-orange-300 cursor-not-allowed opacity-50' 
+                  : 'bg-orange-400 hover:bg-orange-500'
+              }`}
+              whileHover={!isFirstSlide ? { scale: 1.1 } : {}}
+              whileTap={!isFirstSlide ? { scale: 0.9 } : {}}
             >
               <svg
                 width="17"
@@ -81,7 +89,7 @@ const AuthLayoutLeftSection = () => {
               >
                 <path
                   d="M15.5 8.5H1.5M1.5 8.5L8.5 15.5M1.5 8.5L8.5 1.5"
-                  stroke="#AAAFB5"
+                  stroke="white"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -90,9 +98,14 @@ const AuthLayoutLeftSection = () => {
             </motion.button>
             <motion.button
               onClick={nextSlide}
-              className="w-[2.1875rem] h-[2.8125rem] rounded-[1.75rem] border-[#FEF6F4] border bg-orange-400 flex items-center justify-center"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              disabled={isLastSlide}
+              className={`w-[2.1875rem] h-[2.8125rem] rounded-[1.75rem] border-[#FEF6F4] border flex items-center justify-center transition-all duration-200 ${
+                isLastSlide 
+                  ? 'bg-orange-300 cursor-not-allowed opacity-50' 
+                  : 'bg-orange-400 hover:bg-orange-500'
+              }`}
+              whileHover={!isLastSlide ? { scale: 1.1 } : {}}
+              whileTap={!isLastSlide ? { scale: 0.9 } : {}}
             >
               <svg
                 width="25"

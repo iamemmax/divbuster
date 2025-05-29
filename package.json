@@ -1,5 +1,5 @@
 {
-  "name": "Optical",
+  "name": "Divbuster",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -54,12 +54,14 @@
     "react-use-measure": "^2.1.1",
     "react-wrap-balancer": "^1.1.1",
     "recharts": "^2.15.3",
+    "react-phone-input-2": "^2.15.1",
     "sass": "^1.77.0",
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.3.0",
     "vaul": "^0.9.0",
     "zod": "^3.23.8",
-    "zustand": "^4.5.4"
+    "zustand": "^4.5.4",
+    "qrcode.react": "^3.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",

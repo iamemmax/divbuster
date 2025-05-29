@@ -19,6 +19,14 @@ const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
 
 console.log("Using Google Client ID:", GOOGLE_CLIENT_ID);
 
+// Add this to get the current origin for redirect URIs
+const getOrigin = () => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  return '';
+};
+
 const sans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -65,7 +73,6 @@ export default function RootLayout({
         <GoogleOAuthProvider 
           clientId={GOOGLE_CLIENT_ID}
           onScriptLoadSuccess={() => console.log("Google OAuth script loaded successfully")}
-          // onScriptLoadError={(error) => console.error("Google script load error:", error)}
         >
           <ReactQueryProvider>
             <AuthProvider>

@@ -26,3 +26,17 @@ export const loginUserSchema = z.object({
 
   
   });
+
+export const forgetPasswordUserSchema = z.object({
+    
+    email: z
+    .string({ required_error: "Please enter your email." })
+    .trim()
+    .min(1, { message: "Enter your email." })
+    .email("Invalid email"),
+  
+  
+   
+
+  
+  });

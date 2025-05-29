@@ -338,3 +338,92 @@ body {
 .animate-indeterminate-progress {
   animation: indeterminate-progress 1.5s infinite linear;
 }
+
+/* Phone input styling - refined for Nigerian format */
+.phone-input-container {
+  width: 100%;
+
+  font-family: var(--font-archivo);
+}
+
+.phone-input-container .selected-flag {
+  background-color: transparent !important;
+  border-right: 1px solid #E2E8F0;
+  padding: 0 8px 0 12px;
+}
+
+.phone-input-container .selected-flag:hover,
+.phone-input-container .selected-flag:focus {
+  background-color: rgba(0, 0, 0, 0.02) !important;
+}
+
+.phone-input-container .flag-dropdown {
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.phone-input-container .country-list {
+  margin: 8px 0 0;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-height: 300px;
+}
+
+.phone-input-container .country-list .country {
+  padding: 8px 10px;
+  font-family: var(--font-archivo);
+}
+
+.phone-input-container .country-list .country.highlight {
+  background-color: rgba(247, 147, 29, 0.1);
+}
+
+.phone-input-container .country-list .country:hover {
+  background-color: rgba(247, 147, 29, 0.05);
+}
+
+.phone-input-container .country-list .country-name {
+  font-size: 14px;
+  color: #1E1B39;
+}
+
+.phone-input-container .country-list .dial-code {
+  color: #8D9196;
+}
+
+.phone-input-container input.form-control {
+  width: 100% !important;
+  padding-left: 60px !important; /* Ensure space for country code */
+}
+
+.phone-input-container .react-tel-input .flag {
+  width: 20px;
+  height: 15px;
+}
+
+.phone-input-container .search-box {
+  padding: 10px;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.phone-input-container .search-box input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  font-family: var(--font-archivo);
+  font-size: 14px;
+}
+
+.phone-input-error .selected-flag {
+  border-color: #ef4444 !important;
+}
+
+.phone-input-error input {
+  border-color: #ef4444 !important;
+}
+.react-tel-input .form-control {
+  height: 2.625rem !important;
+}
