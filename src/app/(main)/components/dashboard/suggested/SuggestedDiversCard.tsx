@@ -44,7 +44,6 @@ export function SuggestedDiverCard({ name, location, date, profileImage, backgro
       </span>
     )}
   </div>
-{/* *** */}
   <div className="flex flex-col gap-y-[.3125rem] h-[5rem]">
     <h2 className="font-archivo font-semibold text-xl text-[#1F2C37]">
       {name ?? ''}

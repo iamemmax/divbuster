@@ -1,9 +1,36 @@
-# Add the second repository as a remote named "second-repo"
-git remote add second-repo https://github.com/bart-cb/divebusters_frontend.git
+# Check if second-repo remote exists
+if ! git remote | grep -q "second-repo"; then
+  echo "Adding second-repo remote..."
+  git remote add second-repo https://github.com/bart-cb/divebusters_frontend.git
+fi
+
+# Verify remote URLs
+echo "Verifying remote URLs..."
+git remote -v
 
 # Get current branch name
 BRANCH=$(git branch --show-current)
+echo "Current branch: $BRANCH"
+
+# Stage all changes
+echo "Staging all changes..."
+git add .
+
+# Commit with a message
+echo "Committing with message: \"update\""
+git commit -m "update"
 
 # Push to both repositories
+echo "Pushing to origin..."
 git push origin $BRANCH
+
+echo "Pushing to second-repo..."
 git push second-repo $BRANCH
+
+# If push fails, try setting upstream
+if [ $? -ne 0 ]; then
+  echo "Push failed. Trying to set upstream branch..."
+  git push -u second-repo $BRANCH
+fi
+
+echo "Push completed!"
