@@ -44,7 +44,7 @@ export function SuggestedDiverCard({ name, location, date, profileImage, backgro
       </span>
     )}
   </div>
-
+{/* *** */}
   <div className="flex flex-col gap-y-[.3125rem] h-[5rem]">
     <h2 className="font-archivo font-semibold text-xl text-[#1F2C37]">
       {name ?? ''}
@@ -53,8 +53,6 @@ export function SuggestedDiverCard({ name, location, date, profileImage, backgro
     <p className="font-archivo font-medium text-[#78828A] text-sm">{date}</p>
   </div>
 </div>
-
-
  <div
   className="relative h-[240px]  mt-[.9375rem] w-full rounded-[1rem] bg-no-repeat bg-cover"
   style={{ backgroundImage: `url(${backgroundImage})` }}
