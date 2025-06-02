@@ -1,12 +1,26 @@
-# Check if second-repo remote exists
-if ! git remote | grep -q "second-repo"; then
-  echo "Adding second-repo remote..."
-  git remote add second-repo https://github.com/bart-cb/divebusters_frontend.git
-fi
+#!/bin/bash
+set -e  # Exit immediately if a command exits with a non-zero status
+
+# Function to check if a command succeeded
+check_result() {
+  if [ $? -ne 0 ]; then
+    echo "Error: $1"
+    exit 1
+  fi
+}
+
+# Remove second-repo if it exists and add it again
+echo "Removing existing second-repo remote (if any)..."
+git remote remove second-repo 2>/dev/null || true
+
+echo "Adding second-repo remote..."
+git remote add second-repo https://github.com/bart-cb/divebusters_frontend.git
+check_result "Failed to add remote"
 
 # Verify remote URLs
 echo "Verifying remote URLs..."
 git remote -v
+check_result "Failed to list remotes"
 
 # Get current branch name
 BRANCH=$(git branch --show-current)
@@ -15,22 +29,34 @@ echo "Current branch: $BRANCH"
 # Stage all changes
 echo "Staging all changes..."
 git add .
+check_result "Failed to stage changes"
 
 # Commit with a message
 echo "Committing with message: \"update\""
-git commit -m "update"
+git commit -m "update" || echo "No changes to commit"
 
-# Push to both repositories
+# Push to origin
 echo "Pushing to origin..."
 git push origin $BRANCH
+check_result "Failed to push to origin"
 
-echo "Pushing to second-repo..."
-git push second-repo $BRANCH
-
-# If push fails, try setting upstream
-if [ $? -ne 0 ]; then
-  echo "Push failed. Trying to set upstream branch..."
-  git push -u second-repo $BRANCH
-fi
+# Try different methods to push to second-repo
+echo "Pushing to second-repo (attempt 1)..."
+git push second-repo $BRANCH || {
+  echo "First push attempt failed. Trying with -u option..."
+  git push -u second-repo $BRANCH || {
+    echo "Second push attempt failed. Trying with force option..."
+    git push -f second-repo $BRANCH || {
+      echo "All push attempts failed. Trying to change remote URL to SSH..."
+      git remote set-url second-repo git@github.com:bart-cb/divebusters_frontend.git
+      echo "Remote URL changed to SSH. Trying push again..."
+      git push second-repo $BRANCH || {
+        echo "ERROR: All attempts to push to second-repo failed."
+        echo "Please check your permissions and authentication for the repository."
+        exit 1
+      }
+    }
+  }
+}
 
 echo "Push completed!"
