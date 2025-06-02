@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import { tokenStorage } from "@/app/(auth)/utils";
 import { adminAxios, deleteAxiosDefaultToken, setAxiosDefaultToken } from "@/lib/axios";
+import { UserDataProp } from "./types";
 
 // Define types
 export interface User {
@@ -123,7 +124,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         adminAxios
           .get("/profile")
           .then((response) => {
-            const userData = response.data?.data;
+            const userData = response.data?.data as UserDataProp;
             if (userData) {
               authDispatch({ type: "LOGIN", payload: userData });
             } else {

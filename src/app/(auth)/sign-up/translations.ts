@@ -150,6 +150,7 @@ export interface Translations {
     resendButton: string;
     resendingText: string;
     closeButton: string;
+    backToLoginButton: string;
     // Add password-related fields
     passwordLabel: string;
     passwordPlaceholder: string;
@@ -337,6 +338,7 @@ title:"Kindly verify account to continue"
       resendButton: "Resend",
       resendingText: "Resending...",
       closeButton: "Close",
+      backToLoginButton: "Back to Login",
       // Add password-related translations
       passwordLabel: "New Password",
       passwordPlaceholder: "Enter your new password",
@@ -517,6 +519,7 @@ title:"Por favor verifica tu cuenta para continuar"
       resendButton: "Reenviar",
       resendingText: "Reenviando...",
       closeButton: "Cerrar",
+      backToLoginButton: "Volver al Inicio de Sesión",
       // Add password-related translations in Spanish
       passwordLabel: "Nueva Contraseña",
       passwordPlaceholder: "Ingresa tu nueva contraseña",
@@ -697,6 +700,7 @@ title:"Por favor verifica tu cuenta para continuar"
       resendButton: "Renvoyer",
       resendingText: "Renvoi en cours...",
       closeButton: "Fermer",
+      backToLoginButton: "Retour à la Connexion",
       // Add password-related translations in French
       passwordLabel: "Nouveau Mot de Passe",
       passwordPlaceholder: "Entrez votre nouveau mot de passe",
@@ -878,6 +882,7 @@ title:"Por favor verifica tu cuenta para continuar"
       resendButton: "Opnieuw verzenden",
       resendingText: "Opnieuw verzenden...",
       closeButton: "Sluiten",
+      backToLoginButton: "Terug naar Inloggen",
       // Add password-related translations in Dutch
       passwordLabel: "Nieuw Wachtwoord",
       passwordPlaceholder: "Voer je nieuwe wachtwoord in",

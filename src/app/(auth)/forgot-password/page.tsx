@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { forgetPasswordUserSchema } from "../schema";
-import { Button, ErrorModal } from "@/components/core";
+import { Button, ErrorModal, LinkButton } from "@/components/core";
 import Link from "next/link";
 import { useAuth } from "@/contexts/authentication";
 import { useErrorModalState } from "@/hooks";
@@ -16,10 +16,9 @@ import { AxiosError } from "axios";
 import { Language } from "../sign-up/translations";
 import UpdatePassword from "./UpdatePassword";
 import { useResendVerifyEmail } from "../api/verification/resendVerification";
+import SuccessMessage from "@/components/core/SuccessMessageModal";
 
 type LoginStep = "forget-password" | "update-password";
-
-// Create translations object for login page
 
 export type forgetDetailsValue = z.infer<typeof forgetPasswordUserSchema>;
 
@@ -29,7 +28,15 @@ const ForgetPasswordPage = () => {
   const [currentStep, setCurrentStep] = useState<LoginStep>("forget-password");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const lang = localStorage.getItem("preferredLanguage");
+  // Safe localStorage access with fallback
+  const [language, setLanguage] = useState<string>("en");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const lang = localStorage.getItem("preferredLanguage");
+      setLanguage(lang || "en");
+    }
+  }, []);
 
   const {
     isErrorModalOpen,
@@ -53,6 +60,7 @@ const ForgetPasswordPage = () => {
 
   const { mutate: resendverifyEmail, isLoading: isLoading } =
     useResendVerifyEmail();
+
   // Watch for authentication state changes
   useEffect(() => {
     if (authState.isAuthenticated && !authState.isLoading) {
@@ -64,36 +72,40 @@ const ForgetPasswordPage = () => {
   const stepOrder: LoginStep[] = [
     "forget-password",
     "update-password",
-    // 'mfa-verification'
   ];
+
   const getStepIndex = (step: LoginStep) => stepOrder.indexOf(step);
 
   const handleNext = () => {
     const currentIndex = getStepIndex(currentStep);
     const nextIndex = currentIndex + 1;
-
-    setCurrentStep(stepOrder[nextIndex]);
+    if (nextIndex < stepOrder.length) {
+      setCurrentStep(stepOrder[nextIndex]);
+    }
   };
 
   const goToPreviousStep = () => {
     const currentIndex = getStepIndex(currentStep);
     const prevIndex = currentIndex - 1;
-    setCurrentStep(stepOrder[prevIndex]);
+    if (prevIndex >= 0) {
+      setCurrentStep(stepOrder[prevIndex]);
+    }
+  };
+
+  const handleCloseSuccessMessage = () => {
+    setSuccessMessage(null);
   };
 
   const onSubmit = (data: forgetDetailsValue) => {
     resendverifyEmail(
       {
         email: data.email,
-        lang: String(lang) || "en",
+        lang: language,
       },
       {
         onSuccess: () => {
           setSuccessMessage("Verification Code sent to your email");
           handleNext();
-          setTimeout(() => {
-            setSuccessMessage(null), 5000;
-          });
         },
         onError: (error) => {
           const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -106,36 +118,38 @@ const ForgetPasswordPage = () => {
   const renderCurrentStep = () => {
     const stepComponents = {
       "forget-password": (
-        <div className="md:px-[30px] px-6 py-[30px]  xl:px-[9.125rem] xl:py-[7rem]">
-          <div className="flex justify-center mb-7 items-center lg:hidden ">
+        <div className="md:px-[30px] px-6 py-[30px] h-full xl:px-[9.125rem] xl:py-[7rem]">
+          <div className="flex justify-center mb-7 items-center lg:hidden">
             <DiveBusterBlackLogo />
           </div>
           <div className="flex justify-center items-center flex-col">
             <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39]">
               Forget Password
             </h2>
-            <p className="font-archivo text-[#8D9196] font-medium text-xs 2xl:text-base">
+            <p className="font-archivo text-[#8D9196] font-medium text-xs 2xl:text-base text-center mt-2">
               Please enter your email address to reset your password
             </p>
           </div>
           <div className="mt-[1.3125rem]">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex flex-col ">
+              <div className="flex flex-col">
                 <label
                   htmlFor="email"
-                  className="font-archivo text-[#1E293B] text-base font-medium"
+                  className="font-archivo text-[#1E293B] text-base font-medium mb-2"
                 >
                   Email
                 </label>
                 <input
-                  type="text"
-                  placeholder={"enter Email"}
+                  type="email"
+                  placeholder="Enter email"
                   id="email"
-                  className={`border ${errors.email ? "border-red-500" : "border-[#E2E8F0]"} outline-none py-[.8125rem] text-black text-sm bg-transparent font-archivo rounded-lg px-[.875rem]`}
+                  className={`border ${
+                    errors.email ? "border-red-500" : "border-[#E2E8F0]"
+                  } outline-none py-[.8125rem] text-black text-sm bg-transparent font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                   {...register("email")}
                 />
                 {errors?.email && (
-                  <p className="text-red-900 text-xs font-archivo">
+                  <p className="text-red-500 text-xs font-archivo mt-1">
                     {errors?.email?.message}
                   </p>
                 )}
@@ -143,11 +157,28 @@ const ForgetPasswordPage = () => {
 
               <Button
                 type="submit"
-                className="bg-[#F7931D] border flex items-center justify-center gap-x-3 border-[#F7931D] font-archivo font-semibold text-base mt-5 w-full h-[50px]"
+                disabled={isLoading || !isValid}
+                className="bg-[#F7931D] hover:bg-[#E8821A] disabled:opacity-50 disabled:cursor-not-allowed border flex items-center justify-center gap-x-3 border-[#F7931D] font-archivo font-semibold text-base mt-5 w-full h-[50px] transition-colors"
               >
-                Submit {isLoading && <SmallSpinner color="#fff" />}
+                {isLoading ? (
+                  <>
+                    Sending... <SmallSpinner color="#fff" />
+                  </>
+                ) : (
+                  "Submit"
+                )}
               </Button>
             </form>
+
+            <div className="mt-6 text-center">
+              <LinkButton
+              variant={"outlined"}
+                href="/login"
+                className="text-[#F7931D] border border-[#F7931D] w-full hover:text-[#E8821A] font-archivo text-sm font-medium transition-colors"
+              >
+                Back to Login
+              </LinkButton>
+            </div>
           </div>
 
           <ErrorModal
@@ -158,38 +189,27 @@ const ForgetPasswordPage = () => {
             subheading={
               errorModalMessage || "Please check your inputs and try again."
             }
-          ></ErrorModal>
+          />
         </div>
       ),
 
       "update-password": (
-        <>
+        <div className="w-full h-full">
           {successMessage && (
-            <div className="mb-4 w-full">
-              <div className="bg-green-100 border w-full border-green-400 text-green-700 px-4 py-3 rounded relative">
-                <span className="block sm:inline">{successMessage}</span>
-                <span
-                  className="absolute top-0 bottom-0 right-0 px-4 py-3"
-                  onClick={() => setSuccessMessage(null)}
-                >
-                  <svg
-                    className="fill-current h-6 w-6 text-green-500"
-                    role="button"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <title>Close</title>
-                  </svg>
-                </span>
-              </div>
+            <div className="px-6 pt-6">
+              <SuccessMessage
+                message={successMessage}
+                onClose={handleCloseSuccessMessage}
+                autoHide={true}
+                autoHideDuration={8000}
+              />
             </div>
           )}
-
           <UpdatePassword
             email={watchEmail}
             goToPreviousStep={goToPreviousStep}
           />
-        </>
+        </div>
       ),
     };
     return stepComponents[currentStep];

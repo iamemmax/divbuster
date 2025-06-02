@@ -104,7 +104,7 @@ const DiveProfileForm = ({
             control={control}
             render={({ field }) => (
               <PhoneInput
-                country={'ng'} // Changed to Nigeria based on the +234 code in your screenshot
+                country={'nl'} // Changed to Netherlands
                 value={field.value}
                 onChange={field.onChange}
                 inputProps={{
@@ -241,6 +241,7 @@ const DiveProfileForm = ({
 };
 
 export default DiveProfileForm;
+
 
 
 

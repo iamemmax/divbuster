@@ -22,6 +22,21 @@ const nextConfig = {
           hostname: 'cdn.brandfetch.io',
           pathname: '/**',
         },
+        {
+          protocol: 'https',
+          hostname: 'images.unsplash.com',
+          pathname: '/**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'be-test.divebusters.app',
+          pathname: '/**',
+        },
+        {
+          protocol: 'http',
+          hostname: 'be-test.divebusters.app',
+          pathname: '/**',
+        },
       ],
     },
     async headers() {

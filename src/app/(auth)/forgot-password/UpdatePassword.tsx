@@ -7,11 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useResendVerifyEmail } from "../api/verification/resendVerification";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
-import { Button, ErrorModal } from "@/components/core";
+import { Button, ErrorModal, LinkButton } from "@/components/core";
 import { SmallSpinner } from "@/icons/core";
 import EyeIcon from "@/app/icons/EyeIcon";
 import { useUpdatePassword } from "../api/forget-password/reset-password";
 import { useRouter } from "next/navigation";
+import SuccessMessage from "@/components/core/SuccessMessageModal";
 
 type UpdatePasswordFormValues = {
   otp: string;
@@ -114,6 +115,11 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
       }
     );
   };
+
+   const handleCloseSuccessMessage = () => {
+    setSuccessMessage(null);
+  };
+
   
   return (
     <div className="md:px-[30px] px-6 py-[30px] h-full border xl:px-[9.125rem] xl:py-[7rem]">
@@ -122,26 +128,15 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
         className="w-full h-full flex flex-col items-center justify-center"
       >
         {successMessage && (
-          <div className="mb-4 w-full">
-            <div className="bg-green-100 border w-full border-green-400 text-green-700 px-4 py-3 rounded relative">
-              <span className="block sm:inline">{successMessage}</span>
-              <span
-                className="absolute top-0 bottom-0 right-0 px-4 py-3"
-                onClick={() => setSuccessMessage(null)}
-              >
-                <svg
-                  className="fill-current h-6 w-6 text-green-500"
-                  role="button"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <title>{t.emailVerification.closeButton}</title>
-                  <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-                </svg>
-              </span>
+            <div className="px-6 pt-6 w-full">
+              <SuccessMessage
+                message={successMessage}
+                onClose={handleCloseSuccessMessage}
+                autoHide={true}
+                autoHideDuration={8000}
+              />
             </div>
-          </div>
-        )}
+          )}
         
         <div className="flex justify-center items-center py-3 flex-col">
           <h2 className="font-archivo text-[1.2rem] 2xl:text-[1.5rem] font-semibold text-[#1E1B39]">
@@ -261,6 +256,15 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
         >
           {t.emailVerification.submitButton} {isLoading && <SmallSpinner color="#fff" />}
         </Button>
+        <div className="mt-6 text-center w-full">
+              <LinkButton
+              variant={"outlined"}
+                href="/login"
+                className="text-[#F7931D] border border-[#F7931D] w-full hover:text-[#E8821A] font-archivo text-sm font-medium transition-colors"
+              >
+              {t.emailVerification.backToLoginButton}
+              </LinkButton>
+            </div>
       </form>
 
       <ErrorModal

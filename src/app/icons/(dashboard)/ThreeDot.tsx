@@ -13,7 +13,7 @@ const ThreeDot = ({ color, className, ...props }: ThreeDotProps) => (
     viewBox="0 0 4 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={cn("text-[#F7931D] dark:text-white", className)}
+    className={cn("text-[#98A2B3] dark:text-white", className)}
     {...props}
   >
     <path

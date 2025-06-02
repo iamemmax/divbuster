@@ -6,10 +6,12 @@ import { useAuth } from '@/contexts/authentication'
 import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput';
 import { ActionDropdown } from '@/components/core/ActionDropdown';
 import MonthlySnapShot from './components/dashboard/MonthlySnapShot'
+import DivingTab from './components/dashboard/Divertab'
+import SuggestedDIverTabs from './components/dashboard/SuggestedDIverTabs'
 // import { ChevronRightIcon } from '@heroicons/react/24/outline'
 
 const Page = () => {
-  const { authState, authDispatch } = useAuth();
+  const { authState } = useAuth();
   const { user} = authState;
 
   return (
@@ -20,13 +22,13 @@ const Page = () => {
       />
       
       {/* Dashboard content */}
-      <div className="mt-[3.125rem] px-[1.875rem]">
+      <div className="mt-[3.125rem] px-[1.875rem] h-[83vh] overflow-y-auto">
         {/* Search and action bar */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div className="relative w-full md:w-96">
             <DebouncedSearchInput 
               placeholder="Search for buddies, dive sites, dive plans" 
-              onSearch={(value) => console.log('Searching for:', value)}
+              onSearch={(value) => value}
               debounceTime={300}
             />
           </div>
@@ -52,6 +54,12 @@ const Page = () => {
         <div className="">
 
         <MonthlySnapShot/>
+        <div className="">
+          <SuggestedDIverTabs />
+        </div>
+        <div className="">
+          <DivingTab/>
+        </div>
         </div>
     
       </div>

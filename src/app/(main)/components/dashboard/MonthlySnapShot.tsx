@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { MonthlyTabs } from "@/components/core/MonthlyTabs";
-import { Button } from "@/components/core";
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  Switch,
+} from "@/components/core";
 import DateRangePicker from "@/components/core/DateRangePicker";
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
+import { useAuth } from "@/contexts/authentication";
+import { UserDataProp } from "@/contexts/types";
+import DashboardIcon from "@/app/icons/(dashboard)/Dashbaordicon";
+import { ToggleSwitch } from "@/components/core/Toggle";
+import { info } from "console";
+import Link from "next/link";
 
 // Define types for our stats
 interface StatItem {
@@ -42,32 +55,7 @@ const MonthlySnapShot = () => {
       change: { percent: "2%", isPositive: false },
     },
   ];
-  
-  // Data for last month
-  const lastMonthStats: StatItem[] = [
-    {
-      title: "Total Dives",
-      value: "12",
-      change: { percent: "8%", isPositive: true },
-    },
-    {
-      title: "Total Bottom Time",
-      value: "10h 12m",
-      change: { percent: "5%", isPositive: true },
-    },
-    {
-      title: "Dive Spots",
-      value: "4",
-      change: { percent: "0%", isPositive: false },
-    },
-    {
-      title: "Maximum Depth",
-      value: "18m",
-      suffix: "(59 ft)",
-      change: { percent: "15%", isPositive: true },
-    },
-  ];
-  
+
   // Custom period data (placeholder)
   const customStats: StatItem[] = [
     {
@@ -92,21 +80,27 @@ const MonthlySnapShot = () => {
       change: { percent: "10%", isPositive: true },
     },
   ];
-    
+
   const [activeTab, setActiveTab] = useState<
     "this-month" | "last-month" | "custom"
   >("this-month");
-  
+
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [customDateRange, setCustomDateRange] = useState<CustomDateRange>({
     startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     endDate: new Date(),
   });
-  
+
   // Format date for display
   const formatDateRange = (start: Date, end: Date) => {
-    const startStr = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    const endStr = end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const startStr = start.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+    const endStr = end.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
     return `${startStr} - ${endStr}`;
   };
 
@@ -127,18 +121,46 @@ const MonthlySnapShot = () => {
   };
 
   // Get the appropriate stats based on the active tab
-  const getActiveStats = () => {
-    switch (activeTab) {
-      case "this-month":
-        return thisMonthStats;
-      case "last-month":
-        return lastMonthStats;
-      case "custom":
-        return customStats;
-      default:
-        return thisMonthStats;
-    }
-  };
+  // const getActiveStats = () => {
+  //   switch (activeTab) {
+  //     case "this-month":
+  //       return thisMonthStats;
+  //     case "last-month":
+  //       return lastMonthStats;
+  //     case "custom":
+  //       return customStats;
+  //     default:
+  //       return thisMonthStats;
+  //   }
+  // };
+
+  const [toggle, setToggle] = useState(false);
+  const { authState } = useAuth();
+  const { user } = authState;
+  const userData = user as UserDataProp;
+
+  const stats = [
+    {
+      name: "Total Dives",
+      value: userData.dashboard_analysis?.dives,
+      lastMonth: userData.dashboard_analysis?.dives_last_month,
+    },
+    {
+      name: "Total Bottom Time",
+      value: userData.dashboard_analysis?.bottom_time,
+      lastMonth: userData.dashboard_analysis?.bottom_time_last_month,
+    },
+    {
+      name: "Dive Spots",
+      value: userData.dashboard_analysis?.dive_spots,
+      lastMonth: userData.dashboard_analysis?.dive_spots_last_month,
+    },
+    {
+      name: "Maximum Depth",
+      value: `${userData.dashboard_analysis?.max_depth}`,
+      lastMonth: userData.dashboard_analysis?.max_depth_last_month,
+    },
+  ];
 
   return (
     <div>
@@ -152,13 +174,13 @@ const MonthlySnapShot = () => {
             <div className="flex mt-2 md:mt-0">
               <MonthlyTabs value={activeTab} onChange={handleTabChange} />
             </div>
-            
+
             {activeTab === "custom" && !showDatePicker && (
-              <button 
+              <button
                 onClick={() => setShowDatePicker(true)}
                 className="mt-2 text-sm text-blue-600 dark:text-blue-400 hover:underline"
               >
-                {formatDateRange(customDateRange.startDate, customDateRange.endDate)}
+                {/* {formatDateRange(customDateRange.startDate, customDateRange.endDate)} */}
               </button>
             )}
           </div>
@@ -178,105 +200,89 @@ const MonthlySnapShot = () => {
           </div>
         )}
 
-        {/* Token Balance */}
-        <div className="bg-[#FFF5F5] dark:bg-red-900/10 rounded-lg p-4 mb-6">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-              <h3 className="text-gray-700 dark:text-gray-300 font-medium">
-                Total Token Balance:
-              </h3>
-              <span className="ml-2 text-gray-900 dark:text-white font-semibold">
-                {activeTab === "this-month" ? "2,700" : 
-                 activeTab === "last-month" ? "2,450" : "3,200"}
-              </span>
+        <div className="flex justify-between bg-[#F044380D]/5 p-4 w-full rounded-sm items-center">
+          <div className="flex items-center gap-[3.5rem]">
+            <div className="flex items-center gap-[.625rem]">
+              <DashboardIcon width={20} height={20} color="#F04438" />
+              <p className="text-sm font-medium text-[#F04438] font-archivo dark:text-gray-300">
+                Total Token Balance: {userData?.wallet?.balance ?? 0}
+              </p>
             </div>
-            <button className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+            <div className=" flex items-center">
+              <ToggleSwitch
+                isOn={toggle}
+                onToggle={setToggle}
+                size="small"
+                label=""
+                id="small-toggle"
+                className=""
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-[10px] ">
+            <p className="text-xs sm:text-sm  text-[#09090B] font-archivo dark:text-gray-300">
               View History
-              {/* <ChevronRightIcon className="w-4 h-4 ml-1" /> */}
-            </button>
+            </p>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9 18L15 12L9 6"
+                stroke="#F9A602"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
           </div>
         </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {getActiveStats().map((stat, index) => (
+        <div className="grid max-xxscren:grid-cols-1 grid-cols-2 lg:grid-cols-4 gap-4 mt-[1.25rem]">
+          {stats?.map((stat, index) => (
             <div
               key={index}
-              className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-100 dark:border-gray-700 shadow-sm"
+              className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-[#EAECF0]"
             >
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">
-                  {stat.title}
+              <div className="flex justify-between items-center">
+                <h3 className="text-sm font-medium text-[#667085] font-archivo dark:text-white">
+                  {stat.name}
                 </h3>
-                <Button className="text-gray-400 bg-transparent p-1 hover:text-gray-600 dark:hover:text-gray-300">
-                  <svg
-                    width="4"
-                    height="16"
-                    viewBox="0 0 4 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button className="p-0 bg-transparent">
+                      {" "}
+                      <ThreeDot />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="min-w-40 bg-white rounded-md py-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
+                    sideOffset={5}
                   >
-                    <path
-                      d="M1.99935 8.83331C2.45959 8.83331 2.83268 8.46022 2.83268 7.99998C2.83268 7.53974 2.45959 7.16665 1.99935 7.16665C1.53911 7.16665 1.16602 7.53974 1.16602 7.99998C1.16602 8.46022 1.53911 8.83331 1.99935 8.83331Z"
-                      stroke="#98A2B3"
-                      strokeWidth="1.66667"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M1.99935 2.99998C2.45959 2.99998 2.83268 2.62688 2.83268 2.16665C2.83268 1.70641 2.45959 1.33331 1.99935 1.33331C1.53911 1.33331 1.16602 1.70641 1.16602 2.16665C1.16602 2.62688 1.53911 2.99998 1.99935 2.99998Z"
-                      stroke="#98A2B3"
-                      strokeWidth="1.66667"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M1.99935 14.6666C2.45959 14.6666 2.83268 14.2935 2.83268 13.8333C2.83268 13.3731 2.45959 13 1.99935 13C1.53911 13 1.16602 13.3731 1.16602 13.8333C1.16602 14.2935 1.53911 14.6666 1.99935 14.6666Z"
-                      stroke="#98A2B3"
-                      strokeWidth="1.66667"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </Button>
+                    <DropdownMenuItem
+                      className='group text-[13px] leading-none text-violet11 w-full rounded-[3px] hover:bg-[#eee] flex items-center h-[25px]  py-4 
+                         cursor-pointer select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"'
+                    >
+                      <Button className="flex bg-transparent text-black  w-full px-0 items-center gap-1">
+                        Update
+                      </Button>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className='group text-[13px] leading-none text-violet11 rounded-[3px] hover:bg-[#eee] flex items-center h-[25px]  py-4 
+                         cursor-pointer select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"'
+                    >
+                      <Button className="flex bg-transparent text-black  items-center  w-full px-0 gap-1">
+                        Delete
+                      </Button>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
-              <div className="flex justify-between items-end">
-                <div>
-                  <span className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {stat.value}
-                  </span>
-                  {stat.suffix && (
-                    <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">
-                      {stat.suffix}
-                    </span>
-                  )}
-                </div>
-                <div
-                  className={`flex items-center ${stat.change.isPositive ? "text-green-500" : "text-red-500"} text-sm font-medium`}
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d={
-                        stat.change.isPositive
-                          ? "M8 12V4M8 4L4 8M8 4L12 8"
-                          : "M8 4V12M8 12L4 8M8 12L12 8"
-                      }
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <span className="ml-1">{stat.change.percent}</span>
-                </div>
-              </div>
+              <p className="text-2xl font-semibold mt-2">{stat.value}</p>
+           
             </div>
           ))}
         </div>

@@ -33,35 +33,39 @@ export function ErrorModal({
       <DialogContent>
         <DialogHeader className="bg-white flex justify-between items-start">
           <svg
-            width="70"
-            height="70"
-            viewBox="0 0 50 50"
+            width="56"
+            height="56"
+            viewBox="0 0 56 56"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <circle cx="25" cy="25" r="25" fill="#FFEBEB" />
-            <path
-              opacity="0.4"
-              d="M25 38.3327C32.3638 38.3327 38.3333 32.3631 38.3333 24.9993C38.3333 17.6356 32.3638 11.666 25 11.666C17.6362 11.666 11.6667 17.6356 11.6667 24.9993C11.6667 32.3631 17.6362 38.3327 25 38.3327Z"
-              fill="#EF4444"
+            <rect x="4" y="4" width="48" height="48" rx="24" fill="#FEE4E2" />
+            <rect
+              x="4"
+              y="4"
+              width="48"
+              height="48"
+              rx="24"
+              stroke="#FEF3F2"
+              stroke-width="8"
             />
             <path
-              d="M25 27.3327C25.5467 27.3327 26 26.8793 26 26.3327V19.666C26 19.1193 25.5467 18.666 25 18.666C24.4533 18.666 24 19.1193 24 19.666V26.3327C24 26.8793 24.4533 27.3327 25 27.3327Z"
-              fill="#EF4444"
-            />
-            <path
-              d="M26.2267 29.8259C26.16 29.6659 26.0667 29.5192 25.9467 29.3859C25.8133 29.2659 25.6667 29.1725 25.5067 29.1059C25.1867 28.9725 24.8133 28.9725 24.4933 29.1059C24.3333 29.1725 24.1867 29.2659 24.0533 29.3859C23.9333 29.5192 23.84 29.6659 23.7733 29.8259C23.7067 29.9859 23.6667 30.1592 23.6667 30.3325C23.6667 30.5059 23.7067 30.6792 23.7733 30.8392C23.84 31.0125 23.9333 31.1459 24.0533 31.2792C24.1867 31.3992 24.3333 31.4925 24.4933 31.5592C24.6533 31.6259 24.8267 31.6659 25 31.6659C25.1733 31.6659 25.3467 31.6259 25.5067 31.5592C25.6667 31.4925 25.8133 31.3992 25.9467 31.2792C26.0667 31.1459 26.16 31.0125 26.2267 30.8392C26.2933 30.6792 26.3333 30.5059 26.3333 30.3325C26.3333 30.1592 26.2933 29.9859 26.2267 29.8259Z"
-              fill="#EF4444"
+              d="M28 24V28M28 32H28.01M38 28C38 33.5228 33.5228 38 28 38C22.4772 38 18 33.5228 18 28C18 22.4772 22.4772 18 28 18C33.5228 18 38 22.4772 38 28Z"
+              stroke="#D92D20"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
             />
           </svg>
+
           <DialogClose className="ml-auto bg-[#F2F5FF] rounded  text-red-900  flex justify-center items-center">
-            <CloseIcon />
+            <CloseIcon  color="black" className="text-black dark:text-white" />
           </DialogClose>
         </DialogHeader>
 
         <DialogBody className="p-0 text-left">
           <div className="px-8 pb-6 ">
-            <DialogTitle className="font-heading  text-[#EF4444] w-4/5 font-nunito text-lg font-medium">
+            <DialogTitle className="font-heading  text-[#F7931D] w-4/5 font-nunito text-lg font-medium">
               {heading}
             </DialogTitle>
             <DialogDescription className="text-[#667085] text-sm font-nunito py-2">
@@ -72,7 +76,7 @@ export function ErrorModal({
           {children}
           <div className="px-8 pb-12">
             <Button
-              className="grow bg-[#EF4444] px-1.5 sm:text-sm w-full md:px-[3.1875rem]"
+              className="grow bg-[#F7931D] px-1.5 sm:text-sm w-full md:px-[3.1875rem]"
               size="lg"
               type="button"
               onClick={() => {
