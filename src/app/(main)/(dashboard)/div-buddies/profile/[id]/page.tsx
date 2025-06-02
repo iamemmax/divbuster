@@ -11,6 +11,8 @@ import { cn } from "@/utils/classNames";
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
 import AngleLeft from "@/app/icons/(dashboard)/AngleLeft";
 import AngleRight from "@/app/icons/(dashboard)/AngleRight";
+import PlusIcon from "@/app/icons/(dashboard)/PlusIcon";
+import AddIcon from "@/app/icons/(dashboard)/AddIcon";
 export default function DivingProfile() {
   const buddies = [
     {
@@ -18,6 +20,7 @@ export default function DivingProfile() {
       rating: 4,
       reviews: 22,
       avatar: "PB",
+      img:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=40&h=40&fit=crop&crop=face",
       color: "bg-purple-100 text-purple-700",
     },
     {
@@ -26,6 +29,7 @@ export default function DivingProfile() {
       reviews: 29,
       avatar: "LS",
       color: "bg-green-100 text-green-700",
+      img:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face",
     },
     {
       name: "Demi Wilkinson",
@@ -33,6 +37,7 @@ export default function DivingProfile() {
       reviews: 22,
       avatar: "DW",
       color: "bg-blue-100 text-blue-700",
+      img:"https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=40&h=40&fit=crop&crop=face",
     },
     {
       name: "Candice Wu",
@@ -40,6 +45,7 @@ export default function DivingProfile() {
       reviews: 22,
       avatar: "CW",
       color: "bg-pink-100 text-pink-700",
+      img:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face",
     },
     {
       name: "Natali Craig",
@@ -47,6 +53,7 @@ export default function DivingProfile() {
       reviews: 22,
       avatar: "NC",
       color: "bg-yellow-100 text-yellow-700",
+      img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face",
     },
     {
       name: "Orlando Diggs",
@@ -54,6 +61,7 @@ export default function DivingProfile() {
       reviews: 22,
       avatar: "OD",
       color: "bg-indigo-100 text-indigo-700",
+      img:"https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=80&h=80&fit=crop",
     },
   ];
 
@@ -462,23 +470,34 @@ export default function DivingProfile() {
           <div className=" border border-[#EAECF0] rounded-lg ">
             <div className="bg-white rounded-lg shadow-sm">
               <div className="p-4 border-b border-gray-100">
-                <h3 className="font-medium text-gray-900">Bart's Buddies</h3>
-                <p className="text-sm text-gray-500">46 Dive Buddies</p>
+                <h3 className="font-semibold font-archivo text-base text-[#101828]">Bart's Buddies</h3>
+                <p className="text-xs text-[#78828A] font-medium font-archivo">46 Dive Buddies</p>
               </div>
               <div className="p-4">
-                <div className="space-y-3">
-                  {buddies.map((buddy, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-medium ${buddy.color}`}
-                      >
-                        {buddy.avatar}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
-                          {buddy.name}
-                        </p>
-                        <div className="flex items-center space-x-1">
+                <div className="">
+                
+
+                    {buddies.map((buddy, index) => (
+                <div key={index} className="relative flex items-center justify-between py-3">
+                  {/* Connecting line */}
+                  {index < buddies.length - 1 && (
+                    <div className="absolute left-5 top-12 w-[2px] h-6 bg-gray-200"></div>
+                  )}
+                  
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div className="relative z-10 flex-shrink-0">
+                      <img
+                        src={buddy.img}
+                        alt={buddy.name}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                      
+                        <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white"></div>
+                     
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-gray-900 text-sm truncate">{buddy.name}</div>
+                      <div className="flex items-center space-x-1">
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
@@ -489,17 +508,23 @@ export default function DivingProfile() {
                             {buddy.reviews} Reviews
                           </span>
                         </div>
-                      </div>
-                      <button className="w-6 h-6 border-2 border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-50 text-sm font-medium">
-                        +
-                      </button>
                     </div>
-                  ))}
+                  </div>
+                  <button className="flex items-center justify-center hover:border-orange-500 hover:bg-orange-50 transition-colors p-1 flex-shrink-0">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9 15H11V11H15V9H11V5H9V9H5V11H9V15ZM10 20C8.61667 20 7.31667 19.7417 6.1 19.225C4.88333 18.6917 3.825 17.975 2.925 17.075C2.025 16.175 1.30833 15.1167 0.775 13.9C0.258333 12.6833 0 11.3833 0 10C0 8.61667 0.258333 7.31667 0.775 6.1C1.30833 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.31667 6.1 0.799999C7.31667 0.266666 8.61667 0 10 0C11.3833 0 12.6833 0.266666 13.9 0.799999C15.1167 1.31667 16.175 2.025 17.075 2.925C17.975 3.825 18.6833 4.88333 19.2 6.1C19.7333 7.31667 20 8.61667 20 10C20 11.3833 19.7333 12.6833 19.2 13.9C18.6833 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6917 13.9 19.225C12.6833 19.7417 11.3833 20 10 20ZM10 18C12.2333 18 14.125 17.225 15.675 15.675C17.225 14.125 18 12.2333 18 10C18 7.76667 17.225 5.875 15.675 4.325C14.125 2.775 12.2333 2 10 2C7.76667 2 5.875 2.775 4.325 4.325C2.775 5.875 2 7.76667 2 10C2 12.2333 2.775 14.125 4.325 15.675C5.875 17.225 7.76667 18 10 18Z" fill="#A9B0C2"/>
+                    </svg>
+                  </button>
                 </div>
-                <button className="w-full mt-4 text-center text-sm text-gray-600 hover:text-gray-800">
-                  View more
-                </button>
+              ))}
+                </div>
               </div>
+                <div className="flex py-3 justify-center items-center w-full">
+
+                <Button variant={"outlined"} className=" mt-4 text-center text-sm text-gray-600 hover:text-gray-800">
+                  View more
+                </Button>
+                </div>
             </div>
           </div>
 
