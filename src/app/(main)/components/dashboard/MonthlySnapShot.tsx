@@ -31,31 +31,7 @@ interface CustomDateRange {
 }
 
 const MonthlySnapShot = () => {
-  // Data for this month
-  const thisMonthStats: StatItem[] = [
-    {
-      title: "Total Dives",
-      value: "16",
-      change: { percent: "10%", isPositive: true },
-    },
-    {
-      title: "Total Bottom Time",
-      value: "9h 56m",
-      change: { percent: "2%", isPositive: false },
-    },
-    {
-      title: "Dive Spots",
-      value: "5",
-      change: { percent: "12%", isPositive: true },
-    },
-    {
-      title: "Maximum Depth",
-      value: "15m",
-      suffix: "(45 ft)",
-      change: { percent: "2%", isPositive: false },
-    },
-  ];
-
+  
   // Custom period data (placeholder)
   const customStats: StatItem[] = [
     {
@@ -91,18 +67,7 @@ const MonthlySnapShot = () => {
     endDate: new Date(),
   });
 
-  // Format date for display
-  const formatDateRange = (start: Date, end: Date) => {
-    const startStr = start.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-    const endStr = end.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-    return `${startStr} - ${endStr}`;
-  };
+ 
 
   // Handle tab change
   const handleTabChange = (tab: "this-month" | "last-month" | "custom") => {

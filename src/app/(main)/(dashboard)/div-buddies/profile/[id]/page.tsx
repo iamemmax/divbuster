@@ -11,59 +11,60 @@ import { cn } from "@/utils/classNames";
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
 import AngleLeft from "@/app/icons/(dashboard)/AngleLeft";
 import AngleRight from "@/app/icons/(dashboard)/AngleRight";
-import PlusIcon from "@/app/icons/(dashboard)/PlusIcon";
-import AddIcon from "@/app/icons/(dashboard)/AddIcon";
+
+
+
+export const buddies = [
+  {
+    name: "Phoenix Baker",
+    rating: 4,
+    reviews: 22,
+    avatar: "PB",
+    img:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=40&h=40&fit=crop&crop=face",
+    color: "bg-purple-100 text-purple-700",
+  },
+  {
+    name: "Lana Steiner",
+    rating: 5,
+    reviews: 29,
+    avatar: "LS",
+    color: "bg-green-100 text-green-700",
+    img:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face",
+  },
+  {
+    name: "Demi Wilkinson",
+    rating: 4,
+    reviews: 22,
+    avatar: "DW",
+    color: "bg-blue-100 text-blue-700",
+    img:"https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=40&h=40&fit=crop&crop=face",
+  },
+  {
+    name: "Candice Wu",
+    rating: 4,
+    reviews: 22,
+    avatar: "CW",
+    color: "bg-pink-100 text-pink-700",
+    img:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face",
+  },
+  {
+    name: "Natali Craig",
+    rating: 4,
+    reviews: 22,
+    avatar: "NC",
+    color: "bg-yellow-100 text-yellow-700",
+    img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face",
+  },
+  {
+    name: "Orlando Diggs",
+    rating: 4,
+    reviews: 22,
+    avatar: "OD",
+    color: "bg-indigo-100 text-indigo-700",
+    img:"https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=80&h=80&fit=crop",
+  },
+];
 export default function DivingProfile() {
-  const buddies = [
-    {
-      name: "Phoenix Baker",
-      rating: 4,
-      reviews: 22,
-      avatar: "PB",
-      img:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=40&h=40&fit=crop&crop=face",
-      color: "bg-purple-100 text-purple-700",
-    },
-    {
-      name: "Lana Steiner",
-      rating: 5,
-      reviews: 29,
-      avatar: "LS",
-      color: "bg-green-100 text-green-700",
-      img:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face",
-    },
-    {
-      name: "Demi Wilkinson",
-      rating: 4,
-      reviews: 22,
-      avatar: "DW",
-      color: "bg-blue-100 text-blue-700",
-      img:"https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=40&h=40&fit=crop&crop=face",
-    },
-    {
-      name: "Candice Wu",
-      rating: 4,
-      reviews: 22,
-      avatar: "CW",
-      color: "bg-pink-100 text-pink-700",
-      img:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face",
-    },
-    {
-      name: "Natali Craig",
-      rating: 4,
-      reviews: 22,
-      avatar: "NC",
-      color: "bg-yellow-100 text-yellow-700",
-      img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face",
-    },
-    {
-      name: "Orlando Diggs",
-      rating: 4,
-      reviews: 22,
-      avatar: "OD",
-      color: "bg-indigo-100 text-indigo-700",
-      img:"https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=80&h=80&fit=crop",
-    },
-  ];
 
   const diveSiteInfo = getDiveSiteInfo({
     latitude: 6.6237432,
