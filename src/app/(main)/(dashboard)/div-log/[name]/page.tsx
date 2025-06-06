@@ -7,6 +7,10 @@ import { diveLogData } from '../components'
 import Image from 'next/image'
 import { Button } from '@/components/core'
 import DiveTimeChart from '../components/TimeChart'
+import ThreeDot from '@/app/icons/(dashboard)/ThreeDot'
+import { CylinderIcon } from '@/app/icons/(dashboard)/CylinderIcon'
+import DiveLogCharts from '../components/DiveLogCharts'
+import SingleDIveLogSidebar from '../components/SingleDiveLogSidebar'
 
 const DiveLogId = () => {
     const params = useParams()
@@ -19,6 +23,29 @@ const metrics = [
     { label: "Max Depth", value: "24.3m" },
     { label: "Water", value: "Salt" }
   ];
+  
+  const cylinderData = [
+    {
+      id: 1,
+      volume: "12L",
+      startPressure: {
+        bar: 200,
+        psi: 1600,
+      },
+      endPressure: {
+        bar: 50,
+        psi: 750,
+      },
+      pressureUsed: {
+        bar: 150,
+        psi: 1200,
+      },
+      cylinderType: "Aluminum",
+      gas: "EAN32",
+    },
+  ];
+
+ 
   return (
    <div className="text-black dark:text-white">
 
@@ -315,9 +342,107 @@ const metrics = [
     {/* </div> */}
             
             <DiveTimeChart/>
+
+             <div className=" border border-[#EAECF0] rounded-lg mt-[1.875rem] w-full  p-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-medium text-[#101828] font-archivo">
+                      Air Usage
+                    </h3>
+                    <Button className="bg-transparent p-0 rounded-2xl text-[#F7931D] text-sm font-medium ">
+                      <ThreeDot />
+                    </Button>
+                  </div>
+
+                  <div className=" w-full mt-2">
+                    {cylinderData.map((cylinder) => (
+                      <div
+                        className="w-full grid grid-cols-[3fr_1fr]"
+                        key={cylinder?.id}
+                      >
+                        <div className="bg-[#fef6f4] rounded-s-[1.25rem] py-[1.1875rem] px-5 lg:px-[2.3125rem] grid grid-cols-[1fr_3fr_3fr] gap-3 lg:gap-9">
+                          <div className="flex items-end">
+                            <CylinderIcon
+                              volume={cylinder?.volume}
+                              className="w-8 h-16"
+                              bgColor='#132346'
+                              textColor='#fff'
+                            />
+                          </div>
+                          <div className="flex flex-col gap-5 justify-between">
+                            <div className="">
+                              <p className=" text-xs lg:text-sm font-archivo text-[#132346] font-medium py-1">
+                                Start Pressure
+                              </p>
+                              <h3 className="font-archivo font-semibold text-base lg:text-xl text-[#132346]">
+                                {" "}
+                                {cylinder.startPressure.bar} bar
+                              </h3>
+                              <p className="font-archivo font-medium text-[#132346] text-sm">
+                                {cylinder?.startPressure?.psi}
+                              </p>
+                            </div>
+                            <div className="">
+                              <p className=" text-xs lg:text-sm font-archivo text-[#132346] font-medium py-1">
+                                Cylinder Type
+                              </p>
+                              <h3 className="font-archivo font-semibold text-base lg:text-xl text-[#132346]">
+                                {" "}
+                                {cylinder.cylinderType} bar
+                              </h3>
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-5 justify-between">
+                            <div className="">
+                              <p className=" text-xs lg:text-sm font-archivo text-[#132346] font-medium py-1">
+                                End Pressure
+                              </p>
+                              <h3 className="font-archivo font-semibold text-base lg:text-xl text-[#132346]">
+                                {" "}
+                                {cylinder.endPressure.bar} Bar
+                              </h3>
+                              <p className="font-archivo font-medium text-[#132346] text-sm">
+                                {cylinder?.endPressure?.psi}
+                              </p>
+                            </div>
+                            <div className="">
+                              <p className=" text-xs lg:text-sm font-archivo text-[#132346] font-medium py-1">
+                                Gas
+                              </p>
+                              <h3 className="font-archivo font-semibold text-base lg:text-xl text-[#132346]">
+                                {" "}
+                                {cylinder.gas}
+                              </h3>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-full rounded-e-[1.25rem] bg-[#E4881C] flex flex-col gap-5 justify-center items-center py-[2.125rem] px-5 lg:px-[2.3125rem]">
+                          <div className="">
+                            <p className=" text-xs lg:text-sm font-archivo text-white font-medium py-1">
+                              Pressure Used
+                            </p>
+                            <h3 className="font-archivo font-semibold text-base lg:text-xl text-white">
+                              {" "}
+                              {cylinder.pressureUsed.bar} Bar
+                            </h3>
+                            <p className="font-archivo font-medium text-white text-sm">
+                              {cylinder?.pressureUsed?.psi}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                </div>
+
+                <DiveLogCharts/>
        </div>
+
+
         </div>
-        <div className=""></div>
+        <div className="">
+            <SingleDIveLogSidebar/>
+        </div>
 
         </div>
 </div>

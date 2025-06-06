@@ -427,3 +427,19 @@ body {
 .react-tel-input .form-control {
   height: 2.625rem !important;
 }
+
+
+/* Global CSS or your component's stylesheet */
+.custom-quill .ql-container {
+  min-height: 100px; /* container that wraps the editor */
+  border-radius:10px;
+}
+
+.custom-quill .ql-editor {
+  min-height: 50px; /* actual editable area */
+  max-height: 500px;
+  overflow-y: auto;
+  margin-top: 10px;
+  border-top: 1.5px solid #eee;
+  border-radius:10px !important;
+}

@@ -101,11 +101,7 @@ export const diveLogData = [
       engagement: {
         likeable: true,
         text: "Loved this night dive",
-        actions: {
-          like: { icon: "❤️", enabled: true, color: "#E91E63" },
-          comment: { icon: "💬", enabled: true, color: "#9C27B0" },
-          share: { icon: "📤", enabled: true, color: "#03A9F4" }
-        }
+        
       }
     },
     technical: {
