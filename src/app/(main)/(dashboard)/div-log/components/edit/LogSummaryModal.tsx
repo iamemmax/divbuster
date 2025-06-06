@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core';
 import { Clock } from 'lucide-react';
 import { CaretDown } from '@/components/icons';
+import { UnsavedChangesModal } from './UnsavedChangeModal';
+import { DiveLogUpdatedModal } from './DiveLogUpdatedModal';
 
 // Define the validation schema with Zod
 const logSummarySchema = z.object({
@@ -22,7 +24,7 @@ export type LogSummaryFormValues = z.infer<typeof logSummarySchema>;
 
 interface LogSummaryModalProps {
   isOpen?: boolean;
-  onClose?: () => void;
+  onClose: () => void;
   initialData?: Partial<LogSummaryFormValues>;
   // onSave: (data: LogSummaryFormValues) => void;
 }
@@ -32,6 +34,8 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
   onClose,
   initialData = {},
 }) => {
+    const [showDiscardModal, setShowDiscardModal] = useState(false)
+    const [showUpdatedModal, setShowUpdatedModal] = useState(false)
   const {
     register,
     handleSubmit,
@@ -54,6 +58,7 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
   const onSubmit = (data: LogSummaryFormValues) => {
     // onSave(data);
     // onClose();
+    setShowUpdatedModal(true)
   };
 
   if (!isOpen) return null;
@@ -218,7 +223,7 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
           
             
                     <div className="py-4 border-t border-gray-200 flex justify-end space-x-2">
-                      <Button type="button" variant="outlined" onClick={onClose}>
+                      <Button type="button" variant="outlined" onClick={()=>setShowDiscardModal(true)}>
                         Cancel
                       </Button>
                       <Button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white">
@@ -227,6 +232,22 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
                     </div>
         </form>
       </div>
+      {
+                  showDiscardModal && <UnsavedChangesModal
+                  isOpen={showDiscardModal}
+                  onClose={()=>setShowDiscardModal(false)}
+                  onDiscard={()=>onClose()}
+                  // onSave={()=>void}
+                  
+                  />
+                }
+          
+                {
+                  showUpdatedModal && <DiveLogUpdatedModal
+                 isOpen={showUpdatedModal}
+                 onClose={()=>onClose()} 
+                  />
+                }
     </div>
   );
 };

@@ -8,6 +8,7 @@ import EnvironmentalCondition from './edit/EnvironmentalCondition';
 import DiveComputer from './edit/DiveComputer';
 import AddDiveBuddyToLogModal from './edit/AddDivBuddyToLog';
 import AddDiveNotes from './edit/AddDiveNotes';
+import DivePhotoUploader from './edit/DivePhotoUploader';
 
 
 const SingleDiveLogSidebar = () => {
@@ -19,6 +20,7 @@ const [showEnvironmentalModalOpen, setShowEnvironmentalModalOpen] = useState(fal
 const [showdiveComputer, setShowdiveComputer] = useState(false)
 const [showAddDiveToLog, setShowAddDiveToLog] = useState(false)
 const [showNoteModal, setShowNoteModal] = useState(false)
+const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -44,7 +46,8 @@ const [showNoteModal, setShowNoteModal] = useState(false)
     },
     { 
       title: "Add Photos/Videos", 
-      icon: ChevronRight 
+      icon: ChevronRight ,
+      onClick: () => setShowDiveUploaderModal(true) 
     },
     { 
       title: "Add Air Usage", 
@@ -137,6 +140,11 @@ const [showNoteModal, setShowNoteModal] = useState(false)
     {showNoteModal &&  <AddDiveNotes
         isOpen={showNoteModal}
         onClose={() => setShowNoteModal(false)}
+       
+      />}
+    {showDiveUploaderModal &&  <DivePhotoUploader
+        isOpen={showDiveUploaderModal}
+        onClose={() => setShowDiveUploaderModal(false)}
        
       />}
     </div>

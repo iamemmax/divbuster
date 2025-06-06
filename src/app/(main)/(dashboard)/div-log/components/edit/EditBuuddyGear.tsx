@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button, Dialog, DialogBody, DialogContent, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core';
 import { Clock } from 'lucide-react';
 import { CaretDown } from '@/components/icons';
+import { UnsavedChangesModal } from './UnsavedChangeModal';
+import { DiveLogUpdatedModal } from './DiveLogUpdatedModal';
 
 // Define the validation schema with Zod
 const advancedDetailsSchema = z.object({
@@ -22,7 +24,7 @@ export type GearLogDetailsFormValues = z.infer<typeof advancedDetailsSchema>;
 
 interface AdvancedDetailsModalProps {
   isOpen?: boolean;
-  onClose?: () => void;
+  onClose: () => void;
   initialData?: Partial<GearLogDetailsFormValues>;
   // onSave: (data: GearLogDetailsFormValues) => void;
 }
@@ -33,6 +35,8 @@ const EditBuuddyGear: React.FC<AdvancedDetailsModalProps> = ({
   initialData = {},
   // onSave,
 }) => {
+      const [showDiscardModal, setShowDiscardModal] = useState(false)
+      const [showUpdatedModal, setShowUpdatedModal] = useState(false)
   const {
     register,
     handleSubmit,
@@ -55,6 +59,7 @@ const EditBuuddyGear: React.FC<AdvancedDetailsModalProps> = ({
   const onSubmit = (data: GearLogDetailsFormValues) => {
     // onSave(data);
     // onClose();
+    setShowUpdatedModal(true)
   };
 
   if (!isOpen) return null;
@@ -279,7 +284,7 @@ const EditBuuddyGear: React.FC<AdvancedDetailsModalProps> = ({
           
           
                   <div className="py-4 border-t border-gray-200 flex justify-end space-x-2">
-                    <Button type="button" variant="outlined" onClick={onClose}>
+                    <Button type="button" variant="outlined"   onClick={()=>setShowDiscardModal(true)}>
                       Cancel
                     </Button>
                     <Button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white">
@@ -288,6 +293,22 @@ const EditBuuddyGear: React.FC<AdvancedDetailsModalProps> = ({
                   </div>
         </form>
     </div>
+    {
+            showDiscardModal && <UnsavedChangesModal
+            isOpen={showDiscardModal}
+            onClose={()=>setShowDiscardModal(false)}
+            onDiscard={()=>onClose()}
+            // onSave={()=>void}
+            
+            />
+          }
+    
+          {
+            showUpdatedModal && <DiveLogUpdatedModal
+           isOpen={showUpdatedModal}
+           onClose={()=>onClose()} 
+            />
+          }
         </DialogBody>
              </DialogContent>
            </Dialog> 
