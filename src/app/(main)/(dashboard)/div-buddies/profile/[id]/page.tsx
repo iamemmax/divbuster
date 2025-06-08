@@ -189,9 +189,9 @@ export default function DivingProfile() {
                       <ShareIcon />
                       <span>Share Profile</span>
                     </Button>
-                    <Button className="flex items-center space-x-2 px-4 py-[.625rem] rounded-lg bg-[#F7931D] text-white  text-sm hover:bg-orange-600">
+                    <LinkButton href={"/messages"} className="flex items-center space-x-2 px-4 py-[.625rem] rounded-lg bg-[#F7931D] text-white  text-sm hover:bg-orange-600">
                       <span>Send Message</span>
-                    </Button>
+                    </LinkButton>
                   </div>
                 </div>
               </div>

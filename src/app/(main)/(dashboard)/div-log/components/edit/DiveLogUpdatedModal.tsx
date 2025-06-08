@@ -7,7 +7,6 @@ import {
   DialogTitle,
   Button
 } from "@/components/core";
-import { Check } from "lucide-react";
 
 interface DiveLogUpdatedModalProps {
   isOpen: boolean;
