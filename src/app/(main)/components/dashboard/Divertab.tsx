@@ -112,37 +112,44 @@ const DivingTab: React.FC<DivingAppProps> = ({
   };
 
   return (
-  <div className="bg-white grid items-start grid-cols-1 md:grid-cols-[2fr_1fr] gap-[2.5rem] 2xl:grid-cols-[3fr_1fr]">
-    {/* Header Tabs */}
-    <div className="">
-    <nav className="flex border-b border-gray-200 col-span-full" role="tablist">
-      {tabs.map((tab) => (
-        <a
-          key={tab.id}
-          href={tab.href}
-          onClick={(e) => handleTabClick(e, tab.id)}
-          className={`px-6 py-4 text-sm font-medium relative transition-colors duration-200 ${
-            activeTab === tab.id
-              ? 'text-orange-500 border-b-2 border-orange-500'
-              : 'text-gray-600 hover:text-gray-800'
-          }`}
-          role="tab"
-          aria-selected={activeTab === tab.id}
-          aria-controls={`tabpanel-${tab.id}`}
-        >
-          {tab.label}
-        </a>
-      ))}
-    </nav>
+  <div className="bg-white grid grid-cols-1 lg:gap-6 md:grid-cols-[2fr_1fr] 2xl:grid-cols-[3fr_1fr] items-start  lg:px-8 py-6">
+  {/* Main Content Column */}
+  <div className="flex flex-col col-span-full md:col-span-1">
+    {/* Tabs Header */}
+    <nav
+    className="flex overflow-x-auto border-b mt-5 border-gray-200 scrollbar-hide"
+    role="tablist"
+  >
+    {tabs?.map((tab) => (
+      <a
+        key={tab.id}
+        href={tab.href}
+        onClick={(e) => handleTabClick(e, tab.id)}
+        className={`flex-shrink-0 whitespace-nowrap px-4 lg:px-6 py-3 text-xs sm:text-sm font-medium transition-colors duration-200 ${
+          activeTab === tab.id
+            ? 'text-orange-500 border-b-2 border-orange-500'
+            : 'text-gray-600 hover:text-gray-800'
+        }`}
+        role="tab"
+        aria-selected={activeTab === tab.id}
+        aria-controls={`tabpanel-${tab.id}`}
+      >
+        {tab.label}
+      </a>
+    ))}
+  </nav>
 
-    {/* Main Content */}
-    <div className="col-span-full">{renderTabContent()}</div>
 
-    </div>
-
-    {/* Optional Sidebar (Right column) */}
-    <aside><DiveActivitySideBar/></aside>
+    {/* Main Tab Content */}
+    <div className="mt-4">{renderTabContent()}</div>
   </div>
+
+  {/* Sidebar Column */}
+  <aside className="w-full md:w-auto">
+    <DiveActivitySideBar />
+  </aside>
+</div>
+
 
   );
 };

@@ -22,7 +22,7 @@ const Page = () => {
       />
       
       {/* Dashboard content */}
-      <div className="mt-[3.125rem] px-[1.875rem] h-[83vh] overflow-y-auto">
+      <div className="mt-[3.125rem] px-6 lg:px-[1.875rem] h-[83vh] overflow-y-auto">
         {/* Search and action bar */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div className="relative w-full md:w-96">

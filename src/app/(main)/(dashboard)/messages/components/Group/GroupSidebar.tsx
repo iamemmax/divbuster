@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { GroupChat } from "../GroupMessages";
 import { Edit3, Search, MoreVertical, Archive, Trash2 } from "lucide-react";
+import StartNewGroupMessageModal from "../modals/group/StartNewGroupMessageModal";
+import AddNewGroupMembersModal, { members } from "../modals/group/AddGroupMembers";
+import CreateGroupChatForm from "../modals/group/CreateGroupChat";
 
 
 type Message = {
@@ -19,6 +22,7 @@ const GroupSidebar = ({ groupChats, selectedGroup, onSelectGroup, onDelete, onAr
   const [searchQuery, setSearchQuery] = useState('');
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const menuRef = React.useRef<HTMLDivElement | null>(null);
+  
 
   // Close dropdown menu if clicking outside
   React.useEffect(() => {
@@ -79,9 +83,7 @@ const GroupSidebar = ({ groupChats, selectedGroup, onSelectGroup, onDelete, onAr
               {groupChats?.length ?? 0}
             </span>
           </div>
-          <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Edit groups">
-            <Edit3 className="h-4 w-4 text-gray-600" />
-          </button>
+          
         </div>
 
         {/* Search */}
@@ -227,6 +229,8 @@ const GroupSidebar = ({ groupChats, selectedGroup, onSelectGroup, onDelete, onAr
           );
         })}
       </div>
+
+
     </div>
   );
 };

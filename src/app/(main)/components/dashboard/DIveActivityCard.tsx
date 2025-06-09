@@ -290,40 +290,35 @@ const DiveActivityCard = () => {
 
                 </div>
                   {/* Dive Stats Bar */}
-          <div className=" mt-4">
-            <div className=" text-black rounded-lg py-2  relative">
-             
+         <div className="mt-4">
+  <div className="text-black rounded-lg py-2 relative">
+    {/* Stats Row */}
+    <div className="flex  flex-wrap lg:gap-[3.125rem] gap-4 items-start sm:items-center mt-2 text-xs">
+      
+      <div className="flex flex-col gap-y-2">
+        <div className="opacity-80">Max Depth</div>
+        <div className="font-semibold text-lg">{activity.maxDepth}</div>
+      </div>
 
-              {/* Stats Row */}
-              <div className="flex gap-[3.125rem] items-center mt-2 text-xs">
-                <div className="flex flex-col gap-y-2">
-                  <div className="opacity-80">Max Depth</div>
-                  <div className="font-semibold text-lg">
-                    {activity.maxDepth}
-                  </div>
-                </div>
+      <div className="flex flex-col gap-y-2">
+        <div className="opacity-80">Time in</div>
+        <div className="font-semibold text-lg">{activity.timeIn}</div>
+      </div>
 
-                <div className="flex flex-col gap-y-2">
-                  <div className="opacity-80">Time in</div>
-                  <div className="font-semibold text-lg">{activity.timeIn}</div>
-                </div>
+      <div className="flex flex-col gap-y-2">
+        <div className="opacity-80">Time out</div>
+        <div className="font-semibold text-lg">{activity.timeOut}</div>
+      </div>
 
-                <div className="flex flex-col gap-y-2">
-                  <div className="opacity-80">Time out</div>
-                  <div className="font-semibold text-lg">
-                    {activity.timeOut}
-                  </div>
-                </div>
+      <div className="flex flex-col gap-y-2">
+        <div className="opacity-80">Bottom Time</div>
+        <div className="font-semibold text-lg">{activity.bottomTime}</div>
+      </div>
 
-                <div className="flex flex-col gap-y-2">
-                  <div className="opacity-80">Bottom Time</div>
-                  <div className="font-semibold text-lg">
-                    {activity.bottomTime}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    </div>
+  </div>
+</div>
+
               </div>
             </div>
            
@@ -344,7 +339,7 @@ const DiveActivityCard = () => {
 
           {/* Action Buttons */}
    {/* Action Buttons */}
-          <div className="flex items-center justify-between p-4 pt-0 mt-7">
+          <div className="flex items-center flex-wrap gap-4 justify-between p-4 pt-0 mt-7">
             <div className="flex items-center gap-1">
               {/* Profile pictures of likers */}
               <div className="flex -space-x-2">

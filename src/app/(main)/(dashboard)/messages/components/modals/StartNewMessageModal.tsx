@@ -101,12 +101,12 @@ export default function StartNewMessageModal({isOpen,onClose,onSelectMessage}:pr
     
       </div>
       <p className="text-sm text-gray-600 mb-4 px-7 mt-5">
-        <span className="font-semibold text-base md:text-xl font-archivo text-[#1F2C37]">Buddies on DiveBusters {`(${buddies?.length})`}</span>   
+        <span className="font-semibold text-base md:text-xl font-archivo text-[#1F2C37] ">Buddies on DiveBusters {`(${buddies?.length})`}</span>   
       </p>
 
       <ul className="space-y-6 px-6 pb-9 max-h-[65vh] overflow-y-auto py-4">
         {buddies.map((buddy, index) => (
-          <li key={index} className="flex items-center space-x-4" onClick={()=>{
+          <li key={index} className="flex items-center space-x-4 cursor-pointer" onClick={()=>{
             onSelectMessage(buddy)
             onClose()
           }}>

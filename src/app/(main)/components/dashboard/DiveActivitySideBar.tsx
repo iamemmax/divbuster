@@ -46,7 +46,7 @@ const DiveActivitySideBar = () => {
   );
 
   return (
-    <div className="max-w-md mx-auto bg-gray-50 min-h-screen p-4 px-6">
+    <div className="lg:max-w-md mx-auto bg-gray-50 min-h-screen lg:p-4 lg:px-6">
       <div className="bg-white rounded-2xl shadow-sm border border-[#DBDADE] p-6">
         {/* Header */}
         <div className="flex justify-between border-b pb-[.5313rem]  items-start mb-6">

@@ -45,11 +45,11 @@ export function SuggestedDiverCard({ name, location, date, profileImage, backgro
     )}
   </div>
   <div className="flex flex-col gap-y-[.3125rem] h-[5rem]">
-    <h2 className="font-archivo font-semibold text-xl text-[#1F2C37]">
+    <h2 className="font-archivo font-semibold text-base md:text-xl text-[#1F2C37]">
       {name ?? ''}
     </h2>
-    <p className="font-archivo font-medium text-[#78828A] text-base">{location}</p>
-    <p className="font-archivo font-medium text-[#78828A] text-sm">{date}</p>
+    <p className="font-archivo font-medium text-[#78828A] text-sm md:text-base">{location}</p>
+    <p className="font-archivo font-medium text-[#78828A] text-xs md:text-sm">{date}</p>
   </div>
 </div>
  <div
@@ -64,7 +64,7 @@ export function SuggestedDiverCard({ name, location, date, profileImage, backgro
     <div>
       {/* Add Buddy Button */}
       <LinkButton href={"/div-buddies/add-new-buddy"} className="absolute right-4 top-4 flex items-center gap-1 rounded-full border border-white/70 bg-transparent px-4 py-2 text-white font-archivo text-base font-medium transition-colors hover:bg-black/50">
-        <span className="text-xl">
+        <span className="text-sm lg:text-xl">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                xmlns="http://www.w3.org/2000/svg">
             <path d="M9.99935 4.16663V15.8333M4.16602 9.99996H15.8327"

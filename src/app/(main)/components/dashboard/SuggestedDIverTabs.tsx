@@ -96,31 +96,35 @@ const SuggestedDIverTabs: React.FC<DivingAppProps> = ({
   };
 
   return (
-    <div className="w-full mx-auto bg-white ">
+    <div className="w-full bg-white ">
       {/* Header Tabs */}
-      <nav className="flex border-b border-gray-200" role="tablist">
-        {tabs.map((tab) => (
-          <a
-            key={tab.id}
-            href={tab.href}
-            onClick={(e) => handleTabClick(e, tab.id)}
-            className={`px-6 py-4 text-sm font-medium relative transition-colors duration-200 ${
-              activeTab === tab.id
-                ? 'text-orange-500 border-b-2 border-orange-500'
-                : 'text-gray-600 hover:text-gray-800'
-            }`}
-            role="tab"
-            aria-selected={activeTab === tab.id}
-            aria-controls={`tabpanel-${tab.id}`}
-          >
-            {tab.label}
-          </a>
-        ))}
-      </nav>
+     <nav
+  className="flex overflow-x-auto whitespace-nowrap border-b border-gray-200 scrollbar-hide"
+  role="tablist"
+>
+  {tabs.map((tab) => (
+    <a
+      key={tab.id}
+      href={tab.href}
+      onClick={(e) => handleTabClick(e, tab.id)}
+      className={`flex-shrink-0 px-4 lg:px-6 py-3 text-xs sm:text-base font-medium transition-colors duration-200 ${
+        activeTab === tab.id
+          ? 'text-orange-500 border-b-2 border-orange-500'
+          : 'text-gray-600 hover:text-gray-800'
+      }`}
+      role="tab"
+      aria-selected={activeTab === tab.id}
+      aria-controls={`tabpanel-${tab.id}`}
+    >
+      {tab.label}
+    </a>
+  ))}
+</nav>
+
 
       <div className="flex">
         {/* Main Content */}
-        <main className="flex-1 p-6" role="main">
+        <main className="flex-1  lg:px-6 py-6" role="main">
           
           <div
             id={`tabpanel-${activeTab}`}
