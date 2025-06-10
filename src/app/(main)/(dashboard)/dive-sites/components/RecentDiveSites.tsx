@@ -4,7 +4,7 @@ import { usefetchDiveSites } from '../../api/div-sites/fetch-dive-sites'
 import Image from 'next/image'
 import { Button, LoaderModal } from '@/components/core'
 import { useFetchCountry } from '../../api/fetchCountry'
-import { Heart, HeartIcon } from 'lucide-react'
+import HeartIcon from '@/app/icons/(dashboard)/HeartIcon'
 
 const RecentDiveSites = () => {
     const {data,isLoading} = usefetchDiveSites()
@@ -45,9 +45,8 @@ isLoading ?<LoaderModal/> :
      {/* Coordinates Overlay */}
      <div className="absolute top-2 left-4 text-white py-4 px-6 md:px-[2.75rem] w-full">
        <div className="flex justify-end max-md:pr-2 items-center w-full">
-         <Button  className="bg-white px-[1.0688rem] py-[.5206rem] rounded-2xl text-[#F7931D] text-xs font-medium flex items-center gap-[.3125rem]">
-           <HeartIcon/>
-           
+         <Button  className="bg-white px-[1.0688rem] py-[.5206rem] rounded-2xl text-[#4D5869] font-archivo text-xs font-medium flex items-center gap-[.3125rem]">
+           <HeartIcon/>           
            Add to Favourite
          </Button>
        </div>
