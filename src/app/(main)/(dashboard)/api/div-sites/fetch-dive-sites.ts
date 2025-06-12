@@ -11,10 +11,10 @@ interface Data {
   count: number;
   next: string;
   previous: null;
-  results: Result[];
+  results: diveSiteResult[];
 }
 
-interface Result {
+export interface diveSiteResult {
   id: number;
   average_rating: number;
   ranking: string;

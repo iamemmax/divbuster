@@ -1,27 +1,83 @@
 "use client"
-import React from 'react'
-import { usefetchDiveSites } from '../../api/div-sites/fetch-dive-sites'
+import React, { useState } from 'react'
+import { diveSiteResult, usefetchDiveSites } from '../../api/div-sites/fetch-dive-sites'
 import Image from 'next/image'
-import { Button, LoaderModal } from '@/components/core'
+import { Button, ErrorModal, LoaderModal } from '@/components/core'
 import { useFetchCountry } from '../../api/fetchCountry'
 import HeartIcon from '@/app/icons/(dashboard)/HeartIcon'
+import ShareIcon2 from '@/app/icons/(dashboard)/ShareIcon2'
+import MessageIcon2 from '@/app/icons/(dashboard)/MessageIcon2'
+import LikeIcon from '@/app/icons/(dashboard)/LikeIcon'
+import { useAddFouriteDivSIte } from '../../api/div-sites/add-favorite-dive-site'
+import { useAuth } from '@/contexts/authentication'
+import { UserDataProp } from '@/contexts/types'
+import { SmallSpinner } from '@/icons/core'
+import { useQueryClient } from 'react-query'
+import { useErrorModalState } from '@/hooks'
+import { formatAxiosErrorMessage } from '@/utils'
+import { AxiosError } from 'axios'
+import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput'
 
 const RecentDiveSites = () => {
+  const [search, setSearch] = useState("")
+  const {
+      isErrorModalOpen,
+      setErrorModalState,
+      openErrorModalWithMessage,
+      errorModalMessage,
+    } = useErrorModalState();
+     const { authState } = useAuth();
+      const { user} = authState;
+       const userData = user as UserDataProp;
+      
     const {data,isLoading} = usefetchDiveSites()
     const {data:country}= useFetchCountry()
     const getCountry = (id:number) =>{
         const filterCountry = country?.results?.find((con) =>con?.id === id)
         return filterCountry
     }
+  const queryClient = useQueryClient();
+  
+  const {mutate:handleAddTofavorite, isLoading:isAddingFav} = useAddFouriteDivSIte()
+  const handleSave =(item:diveSiteResult)=>{
+    handleAddTofavorite({
+      action:"add",
+      dive_site_id:item?.id,
+      lang:userData?.profile_details?.language
+      
+    },
+    {
+      onSuccess:()=>{
+        queryClient.invalidateQueries(["div-sites"]);
+        
+      },
+      onError:(error)=>{
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+                openErrorModalWithMessage(String(errorMessage));
+      }
+    },
+    
+  )
+}
+
+
   return (
     <div>
 {
 isLoading ?<LoaderModal/> :
 <>
-
+<div className="mt-8 py-4">
+ <DebouncedSearchInput
+              placeholder="Search for Date, dive sites, longitude and Latitude"
+              onSearch={(value) => setSearch(value)}
+              debounceTime={300}
+              value={search}
+              inputClassName='h-[3.5rem] rounded-lg'
+            />
+</div>
 {data?.data?.results?.map((item, idx: number) => (
  <div
-   className="bg-white rounded-lg  cursor-pointer p-[1.875rem] px-4 "
+   className="bg-white rounded-lg   cursor-pointer py-[1.3rem] px-4 "
    key={idx}
    
  >
@@ -45,8 +101,8 @@ isLoading ?<LoaderModal/> :
      {/* Coordinates Overlay */}
      <div className="absolute top-2 left-4 text-white py-4 px-6 md:px-[2.75rem] w-full">
        <div className="flex justify-end max-md:pr-2 items-center w-full">
-         <Button  className="bg-white px-[1.0688rem] py-[.5206rem] rounded-2xl text-[#4D5869] font-archivo text-xs font-medium flex items-center gap-[.3125rem]">
-           <HeartIcon/>           
+         <Button  className="bg-white px-[1.0688rem] py-[.5206rem] rounded-2xl text-[#4D5869] font-archivo text-xs font-medium flex items-center gap-[.3125rem]" onClick={()=>handleSave(item)}>
+          {isAddingFav?<SmallSpinner color='#F7931D'/>: <HeartIcon/>   }        
            Add to Favourite
          </Button>
        </div>
@@ -151,26 +207,26 @@ isLoading ?<LoaderModal/> :
      </div>
    </div>
 
-   {/* <div className="mt-3 flex justify-between flex-wrap gap-3 items-center">
+   <div className="mt-3 flex justify-between flex-wrap gap-3 items-center">
      <div className="flex items-center gap-2">
              <div className="flex -space-x-1">
-               {item?.social?.photos?.thumbnails?.slice(0, 4).map((avatar, index) => (
+               {/* {datas[0]?.social?.photos?.thumbnails?.slice(0, 4).map((avatar, index) => ( */}
                  <img
-                   key={index}
-                   src={avatar}
+                //    key={index}
+                   src={"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face"}
                    alt=""
                    className="w-10 h-10 rounded-full border border-white object-cover"
                  />
-               ))}
-               {item?.social?.photos?.count > 4 && (
+            {/*    ))} */}
+               {/* {item?.social?.photos?.count > 4 && ( */}
                  <div className="flex items-center gap-2">
 
                  <div className="w-10 h-10 rounded-full bg-gray-200 border border-white flex items-center justify-center text-xs text-gray-600">
-                   +{item?.social?.photos?.count - 4} 
+                   {/* +{item?.social?.photos?.count - 4}  */} +1
                  </div>
                    <p className="text-sm font-archivo font-medium text-[#475467]">Like this dive</p>
                  </div>
-               )}
+               {/* )} */}
              </div>
            </div>
            <div className="flex items-center gap-3 relative">
@@ -189,12 +245,23 @@ isLoading ?<LoaderModal/> :
              <ShareIcon2/>
             </Button>
            </div>
-   </div> */}
+   </div> 
  </div>
 ))}
 </>
 
 }
+
+ <ErrorModal
+        isErrorModalOpen={isErrorModalOpen}
+        setErrorModalState={() => {
+          setErrorModalState(false);
+        }}
+        subheading={
+          errorModalMessage ||
+          "Please check your inputs and try again."
+        }
+      ></ErrorModal>
     </div>
   )
 }
