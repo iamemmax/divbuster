@@ -81,7 +81,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onItemClick }) => {
     {
       name: "My Profile",
       icon: <ProfileIcon className={cn(isActive("/profile") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
-      link: "/profle",
+      link: "/profile",
       hasBarge: false,
       bargeText: "",
     },
