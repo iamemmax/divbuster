@@ -13,8 +13,9 @@ import {
 } from "@/components/core";
 import { CaretDown } from "@/components/icons";
 import AngleRight from "@/app/icons/(dashboard)/AngleRight";
-import { useAuth } from "@/contexts/authentication";
+import { useAuth, User } from "@/contexts/authentication";
 import PersonalQRCode from "./PersonalQrcode";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
 // Zod schema for form validation
 const profileSchema = z.object({
@@ -42,25 +43,35 @@ interface ProfilePictureSectionProps {
 const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
   profileImage,
   onImageChange,
-  onDeleteAccount,
+  
 }) => {
+      const { authState } = useAuth();
+        const { user} = authState;
+         const userData = user as User;
   
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+     const handleClose = ()=>setIsDeleteModalOpen(false)
+     const handleDelete = ()=>setIsDeleting(false)
   return (
   <div>
-    <h3 className="text-lg font-semibold text-gray-900 mb-4">
+    <h3 className="md:text-lg text-sm font-semibold text-gray-900 my-4">
       Profile picture
     </h3>
-    <div className="flex items-center gap-4">
-      <div className="relative">
+    <div className="flex flex-wrap  items-start  md:items-center gap-4">
+      <div className="flex items-center gap-3">
+      <div className="relative shrink-0">
         <img
           src={profileImage}
           alt="Profile"
-          className="w-24 h-24 shrink-0 rounded-full object-cover border-1 border-gray-200"
+          className="w-12 h-12 md:w-20 md:h-20 shrink-0 rounded-full object-cover border-1 border-gray-200"
         />
       </div>
-      <div className="flex gap-3">
-        <label className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md text-sm font-medium cursor-pointer transition-colors">
+<div className="">
+   <label className="bg-orange-500 hover:bg-orange-600 max-xxscren:text-xxs text-white px-4  py-2 rounded-md  text-xs text-nowrap lg:text-sm font-medium cursor-pointer transition-colors">
           Change picture
           <input
             type="file"
@@ -69,23 +80,37 @@ const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
             className="hidden"
           />
         </label>
+</div>
+      </div>
+      <div className="flex flex-wrap gap-3">
+       
         <button
           type="button"
           onClick={()=>setIsModalOpen(true)}
-          className="bg-gray-200 hover:bg-gray-300 text-[#09090B] px-4 py-2 rounded-md text-sm font-medium transition-colors"
+          className="bg-gray-200 hover:bg-gray-300 text-[#09090B] max-xxscren:text-xxs px-4 py-2 text-nowrap rounded-md text-xs lg:text-sm font-medium transition-colors"
         >
           View Personal QR Code
         </button>
         <button
           type="button"
-          onClick={onDeleteAccount}
-          className="bg-[#FEE4E2] hover:bg-red-200 text-[#FF0000] px-4 py-2 rounded-md text-sm font-medium transition-colors"
+          onClick={()=>setIsDeleteModalOpen(true)}
+          className="bg-[#FEE4E2] hover:bg-red-200 text-[#FF0000] max-xxscren:text-xxs px-4 py-2 text-nowrap rounded-md text-xs lg:text-sm font-medium transition-colors"
         >
           Delete Account
         </button>
       </div>
     </div>
-     {isModalOpen&& <PersonalQRCode isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>}
+     {isModalOpen&& <PersonalQRCode isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} userData={userData}/>}
+
+     {
+      isDeleteModalOpen &&  <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={handleClose}
+        onConfirm={handleDelete}
+        loading={isDeleting}
+        // setIsDeleting={setIsDeleting}
+      />
+     }
     
   </div>
 
@@ -95,7 +120,7 @@ const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
 
 // Footer Links Component
 const FooterLinks = () => (
-  <div className="mt-12 space-y-4">
+  <div className="mt-12 space-y-4 max-w-5xl">
     <button className="flex items-center py-4 px-5 rounded-10 justify-between  text-xs w-full text-left text-[#333333] border border-[#EBEBEB] hover:text-gray-900 transition-colors">
       <span>Terms of Use & Privacy Policy</span>
       <AngleRight/>
@@ -183,7 +208,7 @@ const ProfileSettings = () => {
               <h3 className="text-lg font-semibold text-gray-900 mb-6">
                 Profile name
               </h3>
-              <div className="bg-[#FDFDFC] max-w-[1300px] 2xl:pr-12 rounded-10 p-2 md:p-5 lg:p-10">
+              <div className="bg-[#FDFDFC] border border-[#EBEBEB] max-w-5xl 2xl:pr-12 rounded-10 p-2 md:p-5 lg:p-10">
                 <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr] py-4 items-center gap-2 ">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Full Name
@@ -197,7 +222,7 @@ const ProfileSettings = () => {
                           <input
                             {...field}
                             type="text"
-                            className={`w-full px-4 py-3 border  ${errors?.first_name ? "border-red-500" : "border-gray-300"} rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                            className={`w-full px-4 py-3 border text-xs md:text-sm ${errors?.first_name ? "border-red-500" : "border-gray-300"} rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                             placeholder="Enter first_name"
                           />
                         )}
@@ -216,7 +241,7 @@ const ProfileSettings = () => {
                           <input
                             {...field}
                             type="text"
-                            className={`w-full px-4 py-3 border  ${errors?.last_name ? "border-red-500" : "border-gray-300"} rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                            className={`w-full px-4 py-3 border text-xs md:text-sm ${errors?.last_name ? "border-red-500" : "border-gray-300"} rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                             placeholder="Enter last_name"
                           />
                         )}
@@ -244,7 +269,7 @@ const ProfileSettings = () => {
                           type="text"
                           className={`border ${
                             errors.email ? "border-red-500" : "border-[#E2E8F0]"
-                          } outline-none py-[.8125rem] w-full text-black text-sm flex-1 bg-white font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
+                          } outline-none py-[.8125rem] w-full text-black  flex-1 text-xs md:text-sm bg-white font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                           placeholder="Enter email address"
                         />
                       )}
@@ -257,7 +282,7 @@ const ProfileSettings = () => {
                   </div>
                 </div>
                 
-                <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr]  border-[#EAECF0] border-opacity-50 py-4 items-center gap-2 sm:gap-5">
+                <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr] text-xs md:text-sm  border-[#EAECF0] border-opacity-50 py-4 items-center gap-2 sm:gap-5">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                   Gender
                   </label>
@@ -275,7 +300,7 @@ const ProfileSettings = () => {
                               errors.gender
                                 ? "border-red-500"
                                 : "border-[#E2E8F0]"
-                            } outline-none py-[.8125rem] w-full text-black text-sm flex-1 bg-white font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
+                            } outline-none py-[.8125rem] w-full text-black  flex-1 text-xs md:text-sm bg-white font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                           >
                             <SelectValue placeholder="Select Date" />
                             <div className="absolute right-4">
@@ -300,7 +325,7 @@ const ProfileSettings = () => {
                   </div>
                 </div>
 
-                <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr]  border-[#EAECF0] border-opacity-50 py-4 items-center gap-2 sm:gap-5">
+                <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr]   border-[#EAECF0] border-opacity-50 py-4 items-center gap-2 sm:gap-5">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Add Bio
                   </label>
@@ -314,7 +339,7 @@ const ProfileSettings = () => {
                           type="text"
                           className={`border ${
                             errors.bio ? "border-red-500" : "border-[#E2E8F0]"
-                          } outline-none py-[.8125rem] w-full text-black text-sm flex-1 bg-white font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
+                          } outline-none py-[.8125rem] w-full text-black  flex-1 text-xs md:text-sm bg-white font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                           placeholder="Add your Bio (Optional)"
                         />
                       )}
@@ -340,7 +365,7 @@ const ProfileSettings = () => {
                           type="text"
                           className={`border ${
                             errors.weight ? "border-red-500" : "border-[#E2E8F0]"
-                          } outline-none py-[.8125rem] w-full text-black text-sm flex-1 bg-white font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
+                          } outline-none py-[.8125rem] w-full text-black text-xs md:text-sm flex-1 bg-white font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                           placeholder="70kg"
                         />
                       )}
@@ -366,7 +391,7 @@ const ProfileSettings = () => {
                           type="text"
                           className={`border ${
                             errors.height ? "border-red-500" : "border-[#E2E8F0]"
-                          } outline-none py-[.8125rem] w-full text-black text-sm flex-1 bg-white font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
+                          } outline-none py-[.8125rem] w-full text-blacktext-xs md:text-smflex-1 bg-white font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                           placeholder="70m"
                         />
                       )}
@@ -392,7 +417,7 @@ const ProfileSettings = () => {
                           type="text"
                           className={`border ${
                             errors.body_size ? "border-red-500" : "border-[#E2E8F0]"
-                          } outline-none py-[.8125rem] w-full text-black text-sm flex-1 bg-white font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
+                          } outline-none py-[.8125rem] w-full text-black text-xs md:text-sm flex-1 bg-white font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                           placeholder="70kg"
                         />
                       )}
@@ -409,7 +434,7 @@ const ProfileSettings = () => {
 
             {/* Submit Button */}
 
-            <div className="flex justify-end">
+            <div className="flex justify-end max-w-5xl ">
               <button
                 type="submit"
                 disabled={isSubmitting}

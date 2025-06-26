@@ -89,7 +89,7 @@ const SettingsTab = () => {
     <div>
       <Header title="Settings" subtitle="" />
 
-      <div className="font-archivo p-6 h-[80vh] overflow-y-auto">
+      <div className="font-archivo p-3 md:p-6 h-[80vh] overflow-y-auto">
         <div className="mb-8">
           <h1 className="text-base md:xl: lg:text-2xl font-medium  text-[#1D2939]">
             System settings

@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { X, QrCode } from 'lucide-react';
 import QRCode from 'qrcode';
 import LocationIcconbg from '@/app/icons/(dashboard)/LocationIconbg';
+import { User } from '@/contexts/authentication';
+import Image from 'next/image';
 
 interface prop{
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
-     isModalOpen: boolean
+     isModalOpen: boolean;
+     userData: User
 }
-const PersonalQRCode = ({isModalOpen,setIsModalOpen}:prop) => {
+const PersonalQRCode = ({isModalOpen,setIsModalOpen, userData}:prop) => {
   const [qrCodeDataURL, setQrCodeDataURL] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -83,10 +86,15 @@ const PersonalQRCode = ({isModalOpen,setIsModalOpen}:prop) => {
             {/* Header */}
             <div className="flex items-center justify-between p-6 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-teal-500 flex items-center justify-center">
-                  <div className="w-8 h-8 rounded-full bg-white opacity-80"></div>
-                </div>
-                <h2 className="text-xl font-semibold text-gray-900">Personal QR Code</h2>
+                <div className="md:w-12 md:h-12 w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-teal-500 flex items-center justify-center">
+  <Image
+    alt='profile'
+    src={userData?.profile_details?.profile_picture}
+    width={48}
+    height={48}
+    className='object-cover rounded-full w-full h-full'
+  />
+</div>
               </div>
               <button 
                 onClick={closeModal}
@@ -95,10 +103,13 @@ const PersonalQRCode = ({isModalOpen,setIsModalOpen}:prop) => {
                 <X className="w-6 h-6 text-gray-500" />
               </button>
             </div>
+<div className="px-6 py-2">
+                <h2 className="md:text-xl font-archivo  text-sm font-semibold text-[#101828]">Personal QR Code</h2>
 
+</div>
             {/* QR Code Section */}
             <div className="px-6 pb-6">
-              <div className="bg-gray-50 rounded-2xl p-8 relative">
+              <div className="bg-gray-50 rounded-[1.25rem] p-[1.375rem] relative">
                 {/* QR Code */}
                 <div className="w-full h-64 bg-white rounded-lg border-2 border-gray-100 relative overflow-hidden flex items-center justify-center">
                   {isLoading ? (
@@ -130,18 +141,18 @@ const PersonalQRCode = ({isModalOpen,setIsModalOpen}:prop) => {
                 </div>
 
                 {/* Dive ID */}
-                <div className="flex items-center justify-center mt-6 gap-4">
-                  <span className="text-gray-600 font-medium">Dive ID:</span>
-                  <span className="text-gray-900 font-semibold text-lg">Bart000134</span>
+                <div className="flex items-center justify-center gap-x-2 mt-1">
+                  <span className="text-[#344054] text-sm font-archivo font-medium">Dive ID:</span>
+                  <span className="text-[#101828] font-archivo font-semibold text-base">Bart000134</span>
                 </div>
               </div>
             </div>
 
             {/* Bottom Section */}
-            <div className="px-6 pb-6">
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Share QR Code</h3>
-                <p className="text-gray-600 leading-relaxed">
+            <div className="px-6 pb-6 ">
+              <div className="mb-6 grid grid-cols-2">
+                <h3 className="md:text-sm text-xs font-archivo font-semibold text-gray-900 mb-2">Share QR Code</h3>
+                <p className="text-gray-600 leading-relaxed font-archivo text-xs md:text-sm">
                   Your friends on DiveBusters can scan this code to start a chat with you.{' '}
                   <span className="text-orange-500 font-medium cursor-pointer hover:underline">
                     Learn more.
@@ -153,11 +164,11 @@ const PersonalQRCode = ({isModalOpen,setIsModalOpen}:prop) => {
               <div className="flex gap-3">
                 <button 
                   onClick={closeModal}
-                  className="flex-1 py-3 px-4 text-gray-700 font-medium rounded-xl border border-gray-300 hover:bg-gray-50 transition-colors"
+                  className="flex-1 py-[.5625rem] px-0 md:px-4  text-gray-700 font-medium text-sm rounded-xl border border-gray-300 hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
-                <button className="flex-1 py-3 px-4 bg-orange-500 text-white text-sm font-medium rounded-xl hover:bg-orange-600 transition-colors">
+                <button className="flex-1 py-[.5625rem] md:px-4 px-3 text-nowrap  bg-orange-500 text-white text-xs md:text-sm font-medium rounded-xl hover:bg-orange-600 transition-colors">
                   Share QR Code/Dive ID
                 </button>
               </div>
