@@ -22,7 +22,7 @@ const Messages = () => {
     const [showAddGroupMemberModal, setShowAddGroupMemberModal] = useState(false)
     const [showCreateGroupChat, setShowCreateGroupChat] = useState(false)
      const [suggestedMembers, setSuggestedMembers] = useState<members[]>([]);
-  const tabs = ["Recent", "Groups", "Archive"];
+  const tabs = ["Recent", "Groups"];
 
   return (
     <div>
@@ -96,7 +96,7 @@ const Messages = () => {
             setSelectedGroup={setSelectedGroup}
           />
         )}
-        {activeTab === "Archive" && <AchiveMessages />}
+        {/* {activeTab === "Archive" && <AchiveMessages />} */}
 
         {showNewMessageModal && (
           <StartNewMessageModal

@@ -44,10 +44,9 @@ const outfit = Outfit({
 });
 const archivo = Archivo({
   subsets: ["latin"],
-  variable: "--font-archivo",
-  display: "swap",
-});
-
+  weight: ["400", "500", "600", "700"], // Choose desired weights
+  variable: "--font-archivo",          // optional: for Tailwind integration
+})
 export default function RootLayout({
   children,
 }: Readonly<{

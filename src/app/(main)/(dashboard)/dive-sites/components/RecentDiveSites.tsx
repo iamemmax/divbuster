@@ -28,7 +28,7 @@ const RecentDiveSites = () => {
     } = useErrorModalState();
      const { authState } = useAuth();
       const { user} = authState;
-       const userData = user as UserDataProp;
+       const userData = user;
       
     const {data,isLoading} = usefetchDiveSites()
     const {data:country}= useFetchCountry()
@@ -43,7 +43,7 @@ const RecentDiveSites = () => {
     handleAddTofavorite({
       action:"add",
       dive_site_id:item?.id,
-      lang:userData?.profile_details?.language
+      lang:String(userData?.profile_details?.language)
       
     },
     {

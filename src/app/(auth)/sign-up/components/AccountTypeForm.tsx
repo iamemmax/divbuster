@@ -17,7 +17,7 @@ import { useFetchCountry } from "@/app/(main)/(dashboard)/api/fetchCountry";
 import DiveBusterBlackLogo from "@/components/icons/DiveBusterBlackLogo";
 
 // Helper function to convert Unicode code points to emoji
-const unicodeToEmoji = (unicodeString: string) => {
+export const unicodeToEmoji = (unicodeString: string) => {
   if (!unicodeString || typeof unicodeString !== 'string') return '';
   
   // Split the string by spaces to get individual code points
