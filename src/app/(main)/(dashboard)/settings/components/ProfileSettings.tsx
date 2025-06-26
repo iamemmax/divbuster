@@ -16,6 +16,7 @@ import AngleRight from "@/app/icons/(dashboard)/AngleRight";
 import { useAuth, User } from "@/contexts/authentication";
 import PersonalQRCode from "./PersonalQrcode";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import { ConfirmSaveModal } from "@/app/(main)/components/shared/modal/ConfirmSave";
 
 // Zod schema for form validation
 const profileSchema = z.object({
@@ -53,9 +54,14 @@ const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+      const [showConfirmSaveModal, setShowConfirmSaveModal] = useState(false);
 
      const handleClose = ()=>setIsDeleteModalOpen(false)
-     const handleDelete = ()=>setIsDeleting(false)
+     const handleDelete = ()=>{
+      setShowConfirmSaveModal(true)
+      setIsDeleting(false)
+    
+    }
   return (
   <div>
     <h3 className="md:text-lg text-sm font-semibold text-gray-900 my-4">
@@ -108,10 +114,22 @@ const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
         onClose={handleClose}
         onConfirm={handleDelete}
         loading={isDeleting}
+
+
         // setIsDeleting={setIsDeleting}
       />
      }
-    
+{showConfirmSaveModal && (
+          <ConfirmSaveModal
+            isOpen={showConfirmSaveModal}
+            onSave={() => {
+              setShowConfirmSaveModal(false);
+              handleClose();
+            }}
+            title="Account Deleted"
+            description="You have successfully deleted your account. You will be redirected to our official page in a minute."
+          />
+        )}
   </div>
 
   )
