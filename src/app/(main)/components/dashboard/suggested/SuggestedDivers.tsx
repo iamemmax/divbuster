@@ -1,8 +1,7 @@
 import React from 'react'
 import { SuggestedDiverCard } from './SuggestedDiversCard'
 import { Diver } from './types'
-import { useAuth } from '@/contexts/authentication'
-import { UserDataProp } from '@/contexts/types'
+import { useAuth, User } from '@/contexts/authentication'
 import { LocationDisplay } from '@/utils/GetLocationFromCordinate'
 
   
@@ -11,7 +10,7 @@ import { LocationDisplay } from '@/utils/GetLocationFromCordinate'
 const SuggestedDivers = () => {
       const { authState } = useAuth();
       const { user} = authState;
-       const userData = user as UserDataProp;
+       const userData = user as User;
       
        
   return (

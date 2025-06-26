@@ -10,7 +10,7 @@ import {
 } from "@/components/core";
 import DateRangePicker from "@/components/core/DateRangePicker";
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
-import { useAuth } from "@/contexts/authentication";
+import { useAuth, User } from "@/contexts/authentication";
 import { UserDataProp } from "@/contexts/types";
 import DashboardIcon from "@/app/icons/(dashboard)/Dashbaordicon";
 import { ToggleSwitch } from "@/components/core/Toggle";
@@ -102,7 +102,7 @@ const MonthlySnapShot = () => {
   const [toggle, setToggle] = useState(false);
   const { authState } = useAuth();
   const { user } = authState;
-  const userData = user as UserDataProp;
+  const userData = user as User;
 
   const stats = [
     {
