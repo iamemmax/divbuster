@@ -1,12 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/shared/Header";
-import ProfileSettings from "./components/ProfileSettings";
-import UserSetting from "./components/UserSetting";
-import SubscriptionSettings from "./components/Subscription";
 import { useAuth } from "@/contexts/authentication";
-import UnitAndMeasurement from "./components/UnitAndMeasurement";
-import DivingComputer from "./components/DIvingComputer";
+import ManageToken from "./components/ManageToken";
+import MyInvoicesNamagement from "./components/invoices/InvoiceMagement";
+import CardManagement from "./components/MyCards";
 
 interface TabItem {
   id: string;
@@ -14,26 +12,22 @@ interface TabItem {
   href: string;
 }
 const SettingsTab = () => {
-  const [activeTab, setActiveTab] = useState<string>("profile");
+  const [activeTab, setActiveTab] = useState<string>("manage-token");
 
   const tabs: TabItem[] = [
-    { id: "profile", label: "Profile", href: "?tab=profile" },
-    { id: "UserSettings", label: "User Settings", href: "?tab=userSettings" },
+    { id: "manage-token", label: "Manage Token", href: "?tab=manageToken" },
+    { id: "myCards", label: "My Cards", href: "?tab=myCards" },
     {
-      id: "MySubscription",
-      label: "My Subscription",
-      href: "?tab=mySubscription",
+      id: "invoices",
+      label: "Invoices",
+      href: "?tab=invoices",
     },
     {
-      id: "Units & Measurement",
-      label: "Units & Measurement",
-      href: "?tab=unit&measurement",
+      id: "orders",
+      label: "Orders",
+      href: "?tab=orders",
     },
-    {
-      id: "DivingComputer",
-      label: "Diving Computer",
-      href: "?tab=divingComputer",
-    },
+    
     
    
   ];
@@ -68,36 +62,36 @@ const SettingsTab = () => {
      const { user} = authState;
   const renderTabContent = (): JSX.Element => {
     switch (activeTab) {
-      case "profile":
+      case "manage-token":
         return (
           <div>
-            <ProfileSettings />
+           <ManageToken user={user}/>
           </div>
         );
-      case "UserSettings":
-        return <div><UserSetting/></div>;
-      case "MySubscription":
-        return <div><SubscriptionSettings user={user}/></div>;
+      case "myCards":
+        return <div><CardManagement user={user}/></div>;
+      case "invoices":
+        return <div><MyInvoicesNamagement/></div>;
       case "Units & Measurement":
-        return <div><UnitAndMeasurement user={user}/></div>;
+        return <div>4</div>;
       case "DivingComputer":
-        return <div><DivingComputer/></div>;
+        return <div>5</div>;
       default:
         return <div>Content not found</div>;
     }
   };
 
   return (
-    <div>
-      <Header title="Settings" subtitle="" />
+    <div className="w-full">
+      <Header title="Token Management" subtitle="" />
 
-      <div className="font-archivo p-3 md:p-6 h-[80vh] overflow-y-auto">
+      <div className="font-archivo w-full p-3 md:p-6 h-[80vh] overflow-y-auto">
         <div className="mb-8">
           <h1 className="text-base md:xl: lg:text-2xl font-medium  text-[#1D2939]">
-            System settings
+           Token Management
           </h1>
           <p className="text-[#475467] font-medium text-xs sm:text-sm">
-            Set up your business account here if you haven't.
+           Manage your account token here. 
           </p>
         </div>
         <nav
@@ -125,17 +119,7 @@ const SettingsTab = () => {
 ))}
 {/* </div> */}
 
-<a
-              href={"/token-management"}
-              className={`flex-shrink-0 whitespace-nowrap px-8 py-[10px] text-xs sm:text-sm font-medium transition-colors duration-200 ${
-               activeTab === "token-management"
-                  ? "text-white  bg-[#F7931D]": "bg-[#fff] text-black border border-[#D0D5DD] border-opacity-50"
-              }`}
-              role="tab"
-           
-            >
-             Token Management
-            </a>
+
         </nav>
 
         {/* Main Content */}
