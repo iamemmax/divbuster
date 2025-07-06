@@ -5,11 +5,14 @@ import RecentTokenTransaction from './manageToken/RecentTokenTransaction';
 import ManageTokenHeader from './manageToken/ManageTokenHeader';
 import RecentFundTransactions from './manageToken/FundTransaction';
 import TokenSpent from './manageToken/TokenSpent';
+import AddTokenModal from './modals/AddTokenModal';
 interface prop{
     user: User | null
 }
 const ManageToken = ({user}:prop) => {
   const [activeSection, setActiveSection] = useState('resetnt-token');
+
+    const [showTokenModal, setShowTokenModal] = useState(false)
 
   const sidebarItems = [
     {
@@ -53,7 +56,7 @@ const ManageToken = ({user}:prop) => {
             {/* <p className='py-1 font-archivo text-sm text-[#71717A]'>You are currently on a One (1) Year Solid Plan.</p> */}
         </div>
         <div className="">
-            <ManageTokenHeader/>
+            <ManageTokenHeader onAddTokens={()=>setShowTokenModal(true)}/>
         </div>
         <div className="space-y-4">
           {sidebarItems.map((item, index) => (
@@ -94,6 +97,13 @@ const ManageToken = ({user}:prop) => {
        
         {renderComponent()}
       </div>
+
+      {
+        showTokenModal && <AddTokenModal
+        isOpen={showTokenModal}
+        setIsOpen={setShowTokenModal}
+        />
+      }
     </div>
   );
 };

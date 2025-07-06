@@ -15,12 +15,44 @@ import AppleCardIcon from "@/app/icons/(dashboard)/card/AppleCardIcon";
 import MastercardIcon from "@/app/icons/(dashboard)/card/MatercardIcon";
 import PaypalIcon from "@/app/icons/(dashboard)/card/PaypalIcon";
 import StripeCardIcon from "@/app/icons/(dashboard)/card/StripeCardIcon";
+import AddNewCardForm from "./modals/AddCard";
+import ViewCardDetails from "./modals/ViewCardDetails";
+import AddTokenModal from "./modals/AddTokenModal";
 
 interface prop {
   user: User | null;
 }
+ export interface cardProp {
+    id: number;
+    name: string;
+    holder: string;
+    number: string;
+    expiry: string;
+    balance: string;
+    cvv:string;
+    gateway: string;
+}
+export   const getGatewayDisplay = (gateway: string) => {
+    switch (gateway) {
+      case "visa":
+        return <VisaCardIcon width={30} height={30}/>;
+      case "master":
+        return <MastercardIcon width={30} height={30}/>;
+      case "stripe":
+        return <StripeCardIcon width={30} height={30} />;
+      case "paypal":
+        return <PaypalIcon width={30} height={30}/>;
+      case "applepay":
+        return <AppleCardIcon width={30} height={30}/>;
+      default:
+        return <span className="text-gray-500">{gateway}</span>;
+    }
+  };
 const CardManagement = ({ user }: prop) => {
   const [currentCard, setCurrentCard] = useState(0);
+  const [isOpenCardModal, setIsOpenCardModal] = useState(false)
+  const [isOpenCardDeatilsModal, setIsOpenDetailsCardModal] = useState(false)
+  const [selectedCard, setSelectedCard] = useState<cardProp>()
 
   const cards = [
     {
@@ -31,6 +63,7 @@ const CardManagement = ({ user }: prop) => {
       expiry: "06/24",
       balance: "$1,240.40",
       gateway: "master",
+      cvv:"234"
     },
     {
       id: 2,
@@ -40,6 +73,17 @@ const CardManagement = ({ user }: prop) => {
       expiry: "06/25",
       balance: "$2,850.75",
       gateway: "visa",
+      cvv:"234"
+    },
+    {
+      id: 4,
+      name: "DiveBusters.",
+      holder: "EMMANUEL AYODEJI",
+      number: "1234 1234 1234 5678",
+      expiry: "06/25",
+      balance: "$2,850.75",
+      gateway: "paypal",
+      cvv:"234"
     },
   ];
 
@@ -67,22 +111,7 @@ const CardManagement = ({ user }: prop) => {
     },
   ];
 
-  const getGatewayDisplay = (gateway: string) => {
-    switch (gateway) {
-      case "visa":
-        return <VisaCardIcon width={30} height={30}/>;
-      case "master":
-        return <MastercardIcon width={30} height={30}/>;
-      case "stripe":
-        return <StripeCardIcon width={30} height={30} />;
-      case "paypal":
-        return <PaypalIcon width={30} height={30}/>;
-      case "applepay":
-        return <AppleCardIcon width={30} height={30}/>;
-      default:
-        return <span className="text-gray-500">{gateway}</span>;
-    }
-  };
+
   const nextCard = () => {
     setCurrentCard((prev) => (prev + 1) % cards.length);
   };
@@ -96,6 +125,7 @@ const CardManagement = ({ user }: prop) => {
   };
 
   return (
+    <div className="w-full">
     <div className="py-8 max-w-7xl">
       <div className="">
         {/* Header */}
@@ -115,7 +145,7 @@ const CardManagement = ({ user }: prop) => {
                 <RefreshCw className="w-4 h-4" />
                 Refresh
               </button>
-              <button className="flex items-center gap-2 px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
+              <button className="flex items-center gap-2 px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors" onClick={()=>setIsOpenCardModal(true)}>
                 Add New Card
               </button>
             </div>
@@ -192,7 +222,12 @@ const CardManagement = ({ user }: prop) => {
                       style={{
                         transform: `translateX(-${currentCard * 160}px)`,
                       }}
-                      onClick={() => goToCard(idx)}
+                      onClick={() =>{
+                         goToCard(idx)
+                        setIsOpenDetailsCardModal(true)
+                        setSelectedCard(card)
+                        }
+                        }
                     >
                       <div className="flex items-center justify-between mb-8">
                         <h3
@@ -312,6 +347,22 @@ const CardManagement = ({ user }: prop) => {
           </div>
         </div>
       </div>
+
+      </div>
+      {
+        isOpenCardModal && <AddNewCardForm
+        isOpen={isOpenCardModal}
+        setIsOpenCardModal={setIsOpenCardModal}
+        />
+      }
+      {
+        isOpenCardDeatilsModal && <ViewCardDetails
+        isOpen={isOpenCardDeatilsModal}
+        setIsOpenCardModal={setIsOpenDetailsCardModal}
+        selectedCard={selectedCard}
+        />
+      }
+      
     </div>
   );
 };

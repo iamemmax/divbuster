@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/authentication";
 import ManageToken from "./components/ManageToken";
 import MyInvoicesNamagement from "./components/invoices/InvoiceMagement";
 import CardManagement from "./components/MyCards";
+import MyOrderMangement from "./components/orders/ordersMagement";
 
 interface TabItem {
   id: string;
@@ -72,10 +73,9 @@ const SettingsTab = () => {
         return <div><CardManagement user={user}/></div>;
       case "invoices":
         return <div><MyInvoicesNamagement/></div>;
-      case "Units & Measurement":
-        return <div>4</div>;
-      case "DivingComputer":
-        return <div>5</div>;
+      case "orders":
+        return <div><MyOrderMangement/></div>;
+    
       default:
         return <div>Content not found</div>;
     }

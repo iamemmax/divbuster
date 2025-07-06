@@ -17,6 +17,7 @@ const ManageTokenHeader: React.FC<TokenBalanceCardProps> = ({
   onInvoice,
   onDownload
 }) => {
+  
   return (
     <div className="">
       {/* Token Balance Card */}
