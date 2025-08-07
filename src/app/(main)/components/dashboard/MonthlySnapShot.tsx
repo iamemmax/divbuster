@@ -85,19 +85,7 @@ const MonthlySnapShot = () => {
     // For now, we'll just use the placeholder customStats
   };
 
-  // Get the appropriate stats based on the active tab
-  // const getActiveStats = () => {
-  //   switch (activeTab) {
-  //     case "this-month":
-  //       return thisMonthStats;
-  //     case "last-month":
-  //       return lastMonthStats;
-  //     case "custom":
-  //       return customStats;
-  //     default:
-  //       return thisMonthStats;
-  //   }
-  // };
+  
 
   const [toggle, setToggle] = useState(false);
   const { authState } = useAuth();
@@ -170,9 +158,10 @@ const MonthlySnapShot = () => {
   <div className="flex flex-wrap items-start sm:items-center gap-10 lg:gap-[3.5rem] w-full sm:w-auto">
     <div className="flex items-center gap-[0.625rem]">
       <DashboardIcon width={20} height={20} color="#F04438" />
-      <p className="text-sm font-medium text-[#F04438] font-archivo dark:text-gray-300">
-        Total Token Balance: {userData?.wallet?.balance ?? 0}
-      </p>
+<p className="text-sm font-medium text-[#F04438] font-archivo dark:text-gray-300 flex items-center gap-1">
+  <span>Total Token Balance:</span>
+  {toggle ? userData?.wallet?.balance ?? 0 : <span className="text-[#F04438] text-2xl mt-2 ">*******</span>}
+</p>
     </div>
     <div className="flex items-center">
       <ToggleSwitch
@@ -183,11 +172,12 @@ const MonthlySnapShot = () => {
         id="small-toggle"
         className=""
       />
+
     </div>
   </div>
 
   {/* Right Section */}
-  <div className="flex items-center gap-2 sm:gap-[10px]">
+  <Link href={"/token-management"} className="flex items-center gap-2 sm:gap-[10px]">
     <p className="text-xs sm:text-sm text-[#09090B] font-archivo dark:text-gray-300">
       View History
     </p>
@@ -206,7 +196,7 @@ const MonthlySnapShot = () => {
         strokeLinejoin="round"
       />
     </svg>
-  </div>
+  </Link>
 </div>
 
 {/* Responsive Stats Grid */}

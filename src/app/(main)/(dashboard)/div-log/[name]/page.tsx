@@ -109,76 +109,7 @@ const metrics = [
                       </svg>
                     </div>
                   </div>
-                  {/* <div className="relative" ref={dropdownRef}>
-                    <button
-                      onClick={handleToggle}
-                      onKeyDown={handleKeyDown}
-                      className={`flex items-center space-x-2 px-4 py-2 border rounded-lg cursor-pointer hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${getColorClasses(currentOption.color).bg} ${getColorClasses(currentOption.color).border}`}
-                      aria-expanded={isOpen}
-                      aria-haspopup="true"
-                    >
-                      <div
-                        className={getColorClasses(currentOption?.color).icon}
-                      >
-                        {currentOption?.icon}
-                      </div>
-                      <span
-                        className={`font-medium text-sm font-archivo ${getColorClasses(currentOption?.color).text}`}
-                      >
-                        {currentOption?.label}
-                      </span>
-                      <div
-                        className={`${getColorClasses(currentOption?.color).icon} transition-transform ${isOpen ? "rotate-180" : ""}`}
-                      >
-                        <svg
-                          width="11"
-                          height="7"
-                          viewBox="0 0 11 7"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M1 1.25L5.5 5.75L10 1.25"
-                            stroke="currentColor"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </div>
-                    </button>
-
-                    {isOpen && (
-                      <div className="absolute top-full left-0 mt-1 min-w-[200px] bg-white rounded-lg border border-gray-200 shadow-lg py-1 z-50">
-                        {visibilityOptions.map((option: VisibilityOption) => (
-                          <button
-                            key={option.value}
-                            onClick={() => handleSelect(option)}
-                            onKeyDown={(e: React.KeyboardEvent) => {
-                              if (e.key === "Enter" || e.key === " ") {
-                                e.preventDefault();
-                                handleSelect(option);
-                              }
-                            }}
-                            className={`w-full flex items-center space-x-2 px-3 py-2 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none ${
-                              selectedVisibility === option.value
-                                ? "bg-gray-50"
-                                : ""
-                            }`}
-                          >
-                            <div className={getColorClasses(option.color).icon}>
-                              {option.icon}
-                            </div>
-                            <span
-                              className={`font-medium ${getColorClasses(option.color).text}`}
-                            >
-                              {option.label}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div> */}
+                 
                 </div>
               </div>
             </div>

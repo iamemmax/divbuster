@@ -1,12 +1,17 @@
 {
-  "name": "Divbuster",
+  "name": "divbuster",
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "analyze": "cross-env ANALYZE=true next build",
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "build": "cross-env NODE_ENV=production next build",
+    "start": "cross-env NODE_ENV=production HOST=localhost next start",
+    "lint": "next lint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage",
+    "production": "npm run build && npm run start"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^9.5.0",
@@ -77,6 +82,7 @@
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.3",
     "eslint-config-prettier": "^9.1.0",

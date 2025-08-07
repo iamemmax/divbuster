@@ -14,10 +14,7 @@ import { RouteChangeLoader } from "@/components/core/RouteChangeLoader";
 
 // Updated Google Client ID from environment variables
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || 
-                         process.env.NEXT_PUBLIC_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY || 
-                         "330089517652-9e8jm4e8bus6ckpi0ml934dfq3lkqm76.apps.googleusercontent.com";
-
-console.log("Using Google Client ID:", GOOGLE_CLIENT_ID);
+                         process.env.NEXT_PUBLIC_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
 
 // Add this to get the current origin for redirect URIs
 const getOrigin = () => {
@@ -70,7 +67,7 @@ export default function RootLayout({
           }}
         />
         <GoogleOAuthProvider 
-          clientId={GOOGLE_CLIENT_ID}
+          clientId={GOOGLE_CLIENT_ID as string}
           onScriptLoadSuccess={() => console.log("Google OAuth script loaded successfully")}
         >
           <ReactQueryProvider>

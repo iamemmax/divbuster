@@ -36,7 +36,7 @@ export const DebouncedSearchInput = React.forwardRef<HTMLInputElement, Debounced
 
     const iconElement = icon || (
       <svg
-        className="text-gray-400"
+        className="text-gray-400 dark:text-gray-500"
         width="20"
         height="20"
         viewBox="0 0 24 24"
@@ -53,7 +53,7 @@ export const DebouncedSearchInput = React.forwardRef<HTMLInputElement, Debounced
       </svg>
     );
 
-    const iconClasses = "absolute top-1/2 transform -translate-y-1/2 text-gray-400";
+    const iconClasses = "absolute top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500";
     const leftIcon = iconPosition === 'left';
     
     return (
@@ -69,7 +69,7 @@ export const DebouncedSearchInput = React.forwardRef<HTMLInputElement, Debounced
           onChange={handleChange}
           placeholder={placeholder}
           className={cn(
-            "w-full px-[1.025rem] py-[.5125rem] rounded-[.2562rem] border border-gray-200 dark:border-gray-700 bg-white dark:bg-white focus:outline-none text-sm font-archivo text-[#99999966]/40 font-normal",
+            "w-full px-[1.025rem] py-[.5125rem] rounded-[.2562rem] border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-sm font-archivo text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 font-normal",
             leftIcon ? 'pl-10' : 'pr-10',
             inputClassName,
             className
