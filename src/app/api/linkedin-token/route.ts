@@ -8,12 +8,10 @@ export async function POST(request: NextRequest) {
       grant_type: "authorization_code",
       code,
       redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/linkedin-callback`,
-      client_id: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID || 
-                process.env.NEXT_PUBLIC_SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY || 
-                "78wzse3yn4ke8g",
-      client_secret: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET || 
-                    process.env.NEXT_PUBLIC_SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET || 
-                    "WPL_AP1.A8WOUrwghwZTjUTA.pnZrQg==",
+      client_id: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID ||
+        process.env.NEXT_PUBLIC_SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY as string,
+      client_secret: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET ||
+        process.env.NEXT_PUBLIC_SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET as string,
     });
 
     const response = await fetch(

@@ -94,8 +94,7 @@ const SocialAuth = () => {
   // LinkedIn login
   const { linkedInLogin } = useLinkedIn({
     clientId:
-      process.env.NEXT_PUBLIC_SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY ||
-      "78wzse3yn4ke8g",
+      process.env.NEXT_PUBLIC_SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY as string,
     redirectUri: origin ? `${origin}/linkedin-callback` : "",
     scope: "r_emailaddress r_liteprofile",
     onSuccess: (code) => {
