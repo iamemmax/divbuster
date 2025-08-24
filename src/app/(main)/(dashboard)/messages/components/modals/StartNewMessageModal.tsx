@@ -92,38 +92,50 @@ interface prop{
 }
 export default function StartNewMessageModal({isOpen,onClose,onSelectMessage}:prop) {
   return (
-     <Dialog open={isOpen} >
-      <DialogContent className="sm:max-w-[50.25rem] bg-[#F9FAFB] rounded-lg">
-    <div className="w-full mx-auto  bg-[#F9FAFB] rounded-xl shadow">
-      <div className="p-7 border-b border-gray-400 border-opacity-50 ">
-        <h2 className=" text-xl md:text-[1.875rem] font-archivo font-semibold text-[#101828]">Start a New Message</h2>
-
-    
+    <Dialog open={isOpen}>
+  <DialogContent className="sm:max-w-[50.25rem] bg-[#F9FAFB] dark:bg-[#1A1D21] rounded-lg">
+    <div className="w-full mx-auto bg-[#F9FAFB] dark:bg-[#1A1D21] rounded-xl shadow">
+      <div className="p-7 border-b border-gray-400 border-opacity-50 dark:border-gray-600">
+        <h2 className="text-xl md:text-[1.875rem] font-archivo font-semibold text-[#101828] dark:text-gray-100">
+          Start a New Message
+        </h2>
       </div>
-      <p className="text-sm text-gray-600 mb-4 px-7 mt-5">
-        <span className="font-semibold text-base md:text-xl font-archivo text-[#1F2C37] ">Buddies on DiveBusters {`(${buddies?.length})`}</span>   
+
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 px-7 mt-5">
+        <span className="font-semibold text-base md:text-xl font-archivo text-[#1F2C37] dark:text-gray-200">
+          Buddies on DiveBusters {`(${buddies?.length})`}
+        </span>
       </p>
 
       <ul className="space-y-6 px-6 pb-9 max-h-[65vh] overflow-y-auto py-4">
         {buddies.map((buddy, index) => (
-          <li key={index} className="flex items-center space-x-4 cursor-pointer" onClick={()=>{
-            onSelectMessage(buddy)
-            onClose()
-          }}>
+          <li
+            key={index}
+            className="flex items-center space-x-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg transition"
+            onClick={() => {
+              onSelectMessage(buddy);
+              onClose();
+            }}
+          >
             <img
               src={buddy.avatar}
               alt={buddy.name}
               className="md:w-[4.375rem] md:h-[4.375rem] shrink-0 w-9 h-9 rounded-full object-cover"
             />
             <div>
-              <p className="md:text-lg text-base font-archivo font-medium text-[#101828]">{buddy.name}</p>
-              <p className="md:text-sm text-xs font-archivo truncate text-[#4F4F4F] ">{buddy.description}</p>
+              <p className="md:text-lg text-base font-archivo font-medium text-[#101828] dark:text-gray-100">
+                {buddy.name}
+              </p>
+              <p className="md:text-sm text-xs font-archivo truncate text-[#4F4F4F] dark:text-gray-400">
+                {buddy.description}
+              </p>
             </div>
           </li>
         ))}
       </ul>
     </div>
-    </DialogContent>
-    </Dialog>
+  </DialogContent>
+</Dialog>
+
   );
 }

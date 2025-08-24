@@ -11,11 +11,19 @@ import ThreeDot from '@/app/icons/(dashboard)/ThreeDot'
 import { CylinderIcon } from '@/app/icons/(dashboard)/CylinderIcon'
 import DiveLogCharts from '../components/DiveLogCharts'
 import SingleDIveLogSidebar from '../components/SingleDiveLogSidebar'
+import { usefetchSingleDivLog } from '../../api/div-logs/fetchSingleDivLog'
+import { useAuth } from '@/contexts/authentication'
+import moment from 'moment'
+import { useFetchCountry } from '../../api/fetchCountry'
+import { LocationDisplay } from '@/utils/GetLocationFromCordinate'
 
 const DiveLogId = () => {
     const params = useParams()
-
- const singleDivLog = diveLogData?.find((_item) => slugify(_item?.dive.title) === params?.name);
+    const { authState } = useAuth();
+      const { user } = authState;
+      const { data: fetchCountry } = useFetchCountry();
+const {data}=usefetchSingleDivLog(params?.id as string)
+ const singleDivLog = diveLogData?.find((_item) => slugify(_item?.dive.title) === params?.id);
 const metrics = [
     { label: "Dive Time", value: "33:48" },
     { label: "Air", value: "Gas" },
@@ -44,7 +52,10 @@ const metrics = [
       gas: "EAN32",
     },
   ];
-
+ const getCountry = (id: number) => {
+    const filterCountry = fetchCountry?.results?.find((con) => con?.id === id);
+    return filterCountry;
+  };
  
   return (
    <div className="text-black dark:text-white">
@@ -72,25 +83,33 @@ const metrics = [
             <div className="flex items-center justify-between w-full  mb-6">
               <div className="flex items-start space-x-4 w-full">
                 <div className="relative shrink-0 md:h-[60px]  md:w-[60px] h-[40px] w-[40px] rounded-full">
-                  <Image
-                    src={singleDivLog?.diver.profileImage as string}
-                    alt="img"
-                    fill
-                    className="object-cover rounded-full" // or object-contain, depending on your desired behavior
-                  />
+                 <Image
+                                        src={
+                                          (user?.profile_details?.profile_picture as string) ??
+                                          "/"
+                                        }
+                                        alt="img"
+                                        fill
+                                        className="object-cover rounded-full" // or object-contain, depending on your desired behavior
+                                      />
                 </div>
                 <div className=" flex items-start w-full  justify-between">
                   <div className="flex flex-col flex-1">
                     <h2 className="text-sm md:text-lg font-medium text-[#1F2C37] font-archivo">
-                      {singleDivLog?.diver.name}
+                      {data?.data?.name}
                     </h2>
                     <p className="text-[#78828A] font-archivo font-medium text-xxs md:text-sm py-2">
-                      {singleDivLog?.post.timestamp} <span className="px-2"> • </span>
-                      {singleDivLog?.post.time}
-                    </p>
+                                             {moment(data?.data?.dive_plan?.created_on).format(
+                                               "dddd, MMMM D, YYYY"
+                                             )}
+                                             <span className="px-2"> • </span>
+                                             {moment(data?.data?.dive_plan?.created_on).format(
+                                               "hh:mm A"
+                                             )}
+                                           </p>
                     <div className="mt-2 flex items-center gap-2">
                       <h2 className="text-sm md:text-xl font-archivo font-medium text-[#132346]">
-                        {singleDivLog?.dive.title}
+                        {data?.data?.dive_plan?.dive_site?.title}
                       </h2>
                       <svg
                         width="20"
@@ -122,7 +141,7 @@ const metrics = [
               <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
-                  backgroundImage: `url(${singleDivLog?.location.backgroundImage})`,
+                  // backgroundImage: `url(${singleDivLog?.location.backgroundImage})`,
                 }}
               ></div>
 
@@ -163,17 +182,29 @@ const metrics = [
                 <div className="">
                   <div className="flex items-center flex-wrap gap-[10px]">
                     <div className="relative h-[40px] rounded w-[52px]">
-                      <Image
-                        src={String(singleDivLog?.location.backgroundImage)}
-                        alt="img"
-                        fill
-                        className="object-cover rounded" // or object-contain, depending on your desired behavior
-                      />
+                       <Image
+                                                    src={`https://flagcdn.com/${getCountry(Number(data?.data?.dive_plan?.dive_site?.country))?.alpha2code?.toLowerCase()}.svg`}
+                                                    alt="img"
+                                                    fill
+                                                    className="object-cover rounded" // or object-contain, depending on your desired behavior
+                                                  />
+                      
+                                                  <img
+                                                    src={`https://flagcdn.com/${getCountry(Number(data?.data?.dive_plan?.dive_site?.country))?.alpha2code?.toLowerCase()}.svg`}
+                                                    alt={`${getCountry(data?.data?.id as number)?.name} flag`}
+                                                    className="w-5 h-5 rounded-sm object-cover"
+                                                  />
                     </div>
 
                     <div className="flex items-center gap-[10px]">
                       <p className="text-white font-archivo font-semibold text-xs md:text-lg">
-                        {singleDivLog?.location.site}
+                        <LocationDisplay
+                                                 lat={data?.data?.dive_plan?.dive_site?.lag as string}
+                                                 lon={data?.data?.dive_plan?.dive_site?.lon as string}
+                                                 fallback="Location unavailable"
+                                                 showTime={false}
+                                                 timeFormat="relative"
+                                               />
                       </p>
                       <div className="flex items-center bg-[#C5EFFF] max-w-[100px] justify-center gap-[.3531rem] py-1 px-[.4063rem] rounded-10 ">
                         <svg
@@ -196,7 +227,7 @@ const metrics = [
                           </defs>
                         </svg>
                         <p className="font-archivo text-xxs text-[#132346] font-semibold">
-                          Rank:{singleDivLog?.location.rank}
+                          Rank:{data?.data?.dive_plan?.dive_site?.ranking}
                         </p>
                       </div>
                       <svg
@@ -242,11 +273,11 @@ const metrics = [
                     <p className="text-xs text-[#F7F7F7] md:text-base font-archivo ">
                       Latitude:{" "}
                       <span className="font-semibold">
-                        {singleDivLog?.location.coordinates.latitude}{" "}
+                        {data?.data?.dive_plan?.latitude}{" "}
                       </span>{" "}
                       <span className="px-2">•</span> Longitude:{" "}
                       <span className="font-semibold">
-                        {singleDivLog?.location.coordinates.longitude}
+                        {data?.data?.dive_plan?.longitude}
                       </span>
                     </p>
                     <p></p>

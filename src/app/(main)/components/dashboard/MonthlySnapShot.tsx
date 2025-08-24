@@ -11,7 +11,6 @@ import {
 import DateRangePicker from "@/components/core/DateRangePicker";
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
 import { useAuth, User } from "@/contexts/authentication";
-import { UserDataProp } from "@/contexts/types";
 import DashboardIcon from "@/app/icons/(dashboard)/Dashbaordicon";
 import { ToggleSwitch } from "@/components/core/Toggle";
 import { info } from "console";
@@ -25,37 +24,14 @@ interface StatItem {
   change: { percent: string; isPositive: boolean };
 }
 
-interface CustomDateRange {
+export interface CustomDateRange {
   startDate: Date;
   endDate: Date;
 }
 
 const MonthlySnapShot = () => {
   
-  // Custom period data (placeholder)
-  const customStats: StatItem[] = [
-    {
-      title: "Total Dives",
-      value: "42",
-      change: { percent: "25%", isPositive: true },
-    },
-    {
-      title: "Total Bottom Time",
-      value: "28h 45m",
-      change: { percent: "18%", isPositive: true },
-    },
-    {
-      title: "Dive Spots",
-      value: "9",
-      change: { percent: "50%", isPositive: true },
-    },
-    {
-      title: "Maximum Depth",
-      value: "22m",
-      suffix: "(72 ft)",
-      change: { percent: "10%", isPositive: true },
-    },
-  ];
+ 
 
   const [activeTab, setActiveTab] = useState<
     "this-month" | "last-month" | "custom"
@@ -95,23 +71,23 @@ const MonthlySnapShot = () => {
   const stats = [
     {
       name: "Total Dives",
-      value: userData.dashboard_analysis?.dives,
-      lastMonth: userData.dashboard_analysis?.dives_last_month,
+      value: userData?.dashboard_analysis?.dives,
+      lastMonth: userData?.dashboard_analysis?.dives_last_month,
     },
     {
       name: "Total Bottom Time",
-      value: userData.dashboard_analysis?.bottom_time,
-      lastMonth: userData.dashboard_analysis?.bottom_time_last_month,
+      value: userData?.dashboard_analysis?.bottom_time,
+      lastMonth: userData?.dashboard_analysis?.bottom_time_last_month,
     },
     {
       name: "Dive Spots",
-      value: userData.dashboard_analysis?.dive_spots,
-      lastMonth: userData.dashboard_analysis?.dive_spots_last_month,
+      value: userData?.dashboard_analysis?.dive_spots,
+      lastMonth: userData?.dashboard_analysis?.dive_spots_last_month,
     },
     {
       name: "Maximum Depth",
-      value: `${userData.dashboard_analysis?.max_depth}`,
-      lastMonth: userData.dashboard_analysis?.max_depth_last_month,
+      value: `${userData?.dashboard_analysis?.max_depth}`,
+      lastMonth: userData?.dashboard_analysis?.max_depth_last_month,
     },
   ];
 

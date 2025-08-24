@@ -909,7 +909,9 @@ title:"Por favor verifica tu cuenta para continuar"
       errors: {
         mfaCodeRequired: "MFA-code is verplicht"
       }
-    }
+    },
+
+    
   },
   // de: {
   //   basicInfo: {

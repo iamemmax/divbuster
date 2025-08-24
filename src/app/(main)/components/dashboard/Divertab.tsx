@@ -72,14 +72,6 @@ const DivingTab: React.FC<DivingAppProps> = ({
 
 
 
-  const stats: DiveStat[] = [
-    { label: 'Dive Activities / Week', value: '2' },
-    { label: 'Avg. Distance / Week', value: '12m' },
-    { label: 'Avg. Divespot / Week', value: '2' },
-    { label: 'Avg. Bottom Time / Week', value: '3h 34m' },
-    { label: 'Avg. Depth / Week', value: '4m(ft)' }
-  ];
-
   const renderTabContent = (): JSX.Element => {
     switch (activeTab) {
       case 'friend-activities':
@@ -112,33 +104,32 @@ const DivingTab: React.FC<DivingAppProps> = ({
   };
 
   return (
-  <div className="bg-white grid grid-cols-1 lg:gap-6 md:grid-cols-[2fr_1fr] 2xl:grid-cols-[3fr_1fr] items-start  lg:px-8 py-6">
+ <div className="bg-white dark:bg-gray-900 grid grid-cols-1 lg:gap-6 md:grid-cols-[2fr_1fr] 2xl:grid-cols-[3fr_1fr] items-start lg:px-8 py-6 transition-colors duration-200">
   {/* Main Content Column */}
   <div className="flex flex-col col-span-full md:col-span-1">
     {/* Tabs Header */}
     <nav
-    className="flex overflow-x-auto border-b mt-5 border-gray-200 scrollbar-hide"
-    role="tablist"
-  >
-    {tabs?.map((tab) => (
-      <a
-        key={tab.id}
-        href={tab.href}
-        onClick={(e) => handleTabClick(e, tab.id)}
-        className={`flex-shrink-0 whitespace-nowrap px-4 lg:px-6 py-3 text-xs sm:text-sm font-medium transition-colors duration-200 ${
-          activeTab === tab.id
-            ? 'text-orange-500 border-b-2 border-orange-500'
-            : 'text-gray-600 hover:text-gray-800'
-        }`}
-        role="tab"
-        aria-selected={activeTab === tab.id}
-        aria-controls={`tabpanel-${tab.id}`}
-      >
-        {tab.label}
-      </a>
-    ))}
-  </nav>
-
+      className="flex overflow-x-auto border-b mt-5 border-gray-200 dark:border-gray-700 scrollbar-hide transition-colors duration-200"
+      role="tablist"
+    >
+      {tabs?.map((tab) => (
+        <a
+          key={tab.id}
+          href={tab.href}
+          onClick={(e) => handleTabClick(e, tab.id)}
+          className={`flex-shrink-0 whitespace-nowrap px-4 lg:px-6 py-3 text-xs sm:text-sm font-medium transition-colors duration-200 ${
+            activeTab === tab.id
+              ? 'text-orange-500 dark:text-orange-400 border-b-2 border-orange-500 dark:border-orange-400'
+              : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
+          }`}
+          role="tab"
+          aria-selected={activeTab === tab.id}
+          aria-controls={`tabpanel-${tab.id}`}
+        >
+          {tab.label}
+        </a>
+      ))}
+    </nav>
 
     {/* Main Tab Content */}
     <div className="mt-4">{renderTabContent()}</div>

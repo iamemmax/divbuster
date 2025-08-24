@@ -100,123 +100,111 @@ export default function AddNewGroupMembersModal({
   };
 
   return (
-    <Dialog open={isOpen}>
-      <DialogContent className="sm:max-w-[50.25rem] bg-[#F9FAFB] rounded-lg">
-        <div className="w-full mx-auto bg-[#F9FAFB] rounded-xl shadow">
-          <div className="p-7 border-b border-gray-400 border-opacity-50">
-            <h2 className="text-xl md:text-[1.875rem] font-archivo font-semibold text-[#101828]">
-              Create a New Group
-            </h2>
-          </div>
+ <Dialog open={isOpen}>
+  <DialogContent className="sm:max-w-[50.25rem] bg-[#F9FAFB] dark:bg-[#1A1D21] rounded-lg">
+    <div className="w-full mx-auto bg-[#F9FAFB] dark:bg-[#1A1D21] rounded-xl shadow">
+      <div className="p-7 border-b border-gray-400 border-opacity-50 dark:border-gray-600">
+        <h2 className="text-xl md:text-[1.875rem] font-archivo font-semibold text-[#101828] dark:text-gray-100">
+          Create a New Group
+        </h2>
+      </div>
 
-          {suggestedMembers?.length > 0 && (
-            <>
-              <div className="p-7">
-                <h3 className="text-sm font-medium text-gray-700 mb-2">
-                  Selected Dive Buddies
-                </h3>
-                <div className="flex items-center flex-wrap gap-6 overflow-x-auto pb-2">
-                  {suggestedMembers?.map((buddy, index) => (
-                    <div
-                      key={index}
-                      className="flex flex-col items-center relative"
-                    >
-                      <img
-                        src={buddy?.avatar}
-                        alt={buddy?.name}
-                        className="w-14 h-14 rounded-full object-cover"
-                      />
-                      <Button
-                        className="absolute bottom-5 right-0 h-[1.3625rem] w-[1.3625rem] flex justify-center items-center -mt-2 -mr-2 bg-[#EEEFF0] border rounded-full p-0.5 hover:bg-gray-100"
-                        onClick={() => handleRemoveMember(buddy?.id)}
-                      >
-                        <CloseIcon color="#A9B0C2" />
-                      </Button>
-                      <span className="text-xs text-gray-600 mt-1">
-                        {buddy.name}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <hr className="m1-4 border-gray-300" />
-            </>
-          )}
-
-          <p className="text-sm text-gray-600 mb-4 px-7 mt-5">
-            <span className="font-semibold text-base md:text-xl font-archivo text-[#1F2C37]">
-              Add member from your Buddy list
-            </span>
-          </p>
-
-          <ul className="space-y-6 px-6 pb-9 max-h-[55vh] overflow-y-auto py-4">
-            {buddies
-              .filter((buddy) => !selectedMemberIds.includes(String(buddy.id)))
-              .map((buddy, index) => (
-                <li
+      {suggestedMembers?.length > 0 && (
+        <>
+          <div className="p-7">
+            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Selected Dive Buddies
+            </h3>
+            <div className="flex items-center flex-wrap gap-6 overflow-x-auto pb-2">
+              {suggestedMembers?.map((buddy, index) => (
+                <div
                   key={index}
-                  className="flex itemscenter space-x-4 cursor-pointer"
-                  onClick={() => {
-                    if (!selectedMemberIds.includes(String(buddy.id))) {
-                      setSelectedMemberIds((prev) => [
-                        ...prev,
-                        String(buddy.id),
-                      ]);
-                      setSuggestedMembers((prev) => [
-                        {
-                          avatar: buddy.avatar,
-                          id: String(buddy.id),
-                          name: buddy.name,
-                          description:""
-                        },
-                        ...prev,
-                      ]);
-                    }
-                  }}
+                  className="flex flex-col items-center relative"
                 >
                   <img
-                    src={buddy.avatar}
-                    alt={buddy.name}
-                    className="md:w-[4.375rem] md:h-[4.375rem] shrink-0 w-9 h-9 rounded-full object-cover"
+                    src={buddy?.avatar}
+                    alt={buddy?.name}
+                    className="w-14 h-14 rounded-full object-cover"
                   />
-                  <div>
-                    <p className="md:text-lg text-base font-archivo font-medium text-[#101828]">
-                      {buddy.name}
-                    </p>
-                    <p className="md:text-sm text-xs font-archivo truncate text-[#4F4F4F] ">
-                      {buddy.description || "No description available"}
-                    </p>
-                  </div>
-                </li>
+                  <Button
+                    className="absolute bottom-5 right-0 h-[1.3625rem] w-[1.3625rem] flex justify-center items-center -mt-2 -mr-2 bg-[#EEEFF0] dark:bg-gray-700 border rounded-full p-0.5 hover:bg-gray-100 dark:hover:bg-gray-600"
+                    onClick={() => handleRemoveMember(buddy?.id)}
+                  >
+                    <CloseIcon color="#A9B0C2" />
+                  </Button>
+                  <span className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                    {buddy.name}
+                  </span>
+                </div>
               ))}
-          </ul>
-        </div>
+            </div>
+          </div>
+          <hr className="m1-4 border-gray-300 dark:border-gray-600" />
+        </>
+      )}
 
-        <div className="flex justify-end items-center p-4 gap-4">
-          <button
-            className="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100"
-            onClick={() => onClose()}
-          >
-            Cancel
-          </button>
-          <button
-            className="px-4 py-2 text-sm text-white bg-orange-500 hover:bg-orange-600 rounded-lg"
-            onClick={handleAddMembers}
-          >
-            Proceed
-          </button>
-        </div>
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 px-7 mt-5">
+        <span className="font-semibold text-base md:text-xl font-archivo text-[#1F2C37] dark:text-gray-200">
+          Add member from your Buddy list
+        </span>
+      </p>
 
-        {/* <ErrorModal
-          isErrorModalOpen={isErrorModalOpen}
-          setErrorModalState={() => {
-            setErrorModalState(false);
-          }}
-          subheading={
-            errorModalMessage || "Please check your inputs and try again."
-          }
-        ></ErrorModal> */}
-      </DialogContent>
-    </Dialog>
+      <ul className="space-y-6 px-6 pb-9 max-h-[55vh] overflow-y-auto py-4">
+        {buddies
+          .filter((buddy) => !selectedMemberIds.includes(String(buddy.id)))
+          .map((buddy, index) => (
+            <li
+              key={index}
+              className="flex items-center space-x-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg transition"
+              onClick={() => {
+                if (!selectedMemberIds.includes(String(buddy.id))) {
+                  setSelectedMemberIds((prev) => [...prev, String(buddy.id)]);
+                  setSuggestedMembers((prev) => [
+                    {
+                      avatar: buddy.avatar,
+                      id: String(buddy.id),
+                      name: buddy.name,
+                      description: "",
+                    },
+                    ...prev,
+                  ]);
+                }
+              }}
+            >
+              <img
+                src={buddy.avatar}
+                alt={buddy.name}
+                className="md:w-[4.375rem] md:h-[4.375rem] shrink-0 w-9 h-9 rounded-full object-cover"
+              />
+              <div>
+                <p className="md:text-lg text-base font-archivo font-medium text-[#101828] dark:text-gray-100">
+                  {buddy.name}
+                </p>
+                <p className="md:text-sm text-xs font-archivo truncate text-[#4F4F4F] dark:text-gray-400">
+                  {buddy.description || "No description available"}
+                </p>
+              </div>
+            </li>
+          ))}
+      </ul>
+    </div>
+
+    <div className="flex justify-end items-center p-4 gap-4">
+      <button
+        className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+        onClick={() => onClose()}
+      >
+        Cancel
+      </button>
+      <button
+        className="px-4 py-2 text-sm text-white bg-orange-500 hover:bg-orange-600 rounded-lg"
+        onClick={handleAddMembers}
+      >
+        Proceed
+      </button>
+    </div>
+  </DialogContent>
+</Dialog>
+
   );
 }

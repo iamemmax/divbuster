@@ -32,7 +32,7 @@ const AccountDetailsForm = ({
         openErrorModalWithMessage,
         errorModalMessage,
       } = useErrorModalState();
-  const { t } = useLanguage();
+  const { t,language,setLanguage } = useLanguage();
   const { authState } = useAuth();
     
 

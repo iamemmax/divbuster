@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/core';
 
 interface DateRangePickerProps {
@@ -39,6 +39,106 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   const [activeTimeRange, setActiveTimeRange] = useState<TimeRange>('custom');
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [nextMonth, setNextMonth] = useState<Date>(new Date(new Date().setMonth(new Date().getMonth() + 1)));
+  
+  // Helper function to check if two dates are the same day
+  const isSameDay = (date1: Date, date2: Date) => {
+    return date1.getFullYear() === date2.getFullYear() &&
+           date1.getMonth() === date2.getMonth() &&
+           date1.getDate() === date2.getDate();
+  };
+
+  // Helper function to normalize date to start of day
+  const normalizeDate = (date: Date) => {
+    const normalized = new Date(date);
+    normalized.setHours(0, 0, 0, 0);
+    return normalized;
+  };
+
+  // Check which preset matches the current date range
+  const getMatchingTimeRange = (startDate: Date | null, endDate: Date | null): TimeRange => {
+    if (!startDate || !endDate) return 'custom';
+    
+    const today = normalizeDate(new Date());
+    const start = normalizeDate(startDate);
+    const end = normalizeDate(endDate);
+    
+    // Today
+    if (isSameDay(start, today) && isSameDay(end, today)) {
+      return 'today';
+    }
+    
+    // Yesterday
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (isSameDay(start, yesterday) && isSameDay(end, yesterday)) {
+      return 'yesterday';
+    }
+    
+    // This week (Sunday to today)
+    const thisWeekStart = new Date(today);
+    thisWeekStart.setDate(thisWeekStart.getDate() - thisWeekStart.getDay());
+    if (isSameDay(start, thisWeekStart) && isSameDay(end, today)) {
+      return 'this-week';
+    }
+    
+    // Last week (Sunday to Saturday)
+    const lastWeekStart = new Date(today);
+    lastWeekStart.setDate(lastWeekStart.getDate() - lastWeekStart.getDay() - 7);
+    const lastWeekEnd = new Date(lastWeekStart);
+    lastWeekEnd.setDate(lastWeekEnd.getDate() + 6);
+    if (isSameDay(start, lastWeekStart) && isSameDay(end, lastWeekEnd)) {
+      return 'last-week';
+    }
+    
+    // This month (1st of month to today)
+    const thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+    if (isSameDay(start, thisMonthStart) && isSameDay(end, today)) {
+      return 'this-month';
+    }
+    
+    // Last month (1st to last day of previous month)
+    const lastMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+    const lastMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0);
+    if (isSameDay(start, lastMonthStart) && isSameDay(end, lastMonthEnd)) {
+      return 'last-month';
+    }
+    
+    // This year (Jan 1 to today)
+    const thisYearStart = new Date(today.getFullYear(), 0, 1);
+    if (isSameDay(start, thisYearStart) && isSameDay(end, today)) {
+      return 'this-year';
+    }
+    
+    // Last year (Jan 1 to Dec 31 of previous year)
+    const lastYearStart = new Date(today.getFullYear() - 1, 0, 1);
+    const lastYearEnd = new Date(today.getFullYear() - 1, 11, 31);
+    if (isSameDay(start, lastYearStart) && isSameDay(end, lastYearEnd)) {
+      return 'last-year';
+    }
+    
+    // All time (2020-01-01 to today)
+    const allTimeStart = new Date(2020, 0, 1);
+    if (isSameDay(start, allTimeStart) && isSameDay(end, today)) {
+      return 'all-time';
+    }
+    
+    return 'custom';
+  };
+
+  // Update active time range when date range changes
+  useEffect(() => {
+    if (dateRange.startDate && dateRange.endDate) {
+      const matchingRange = getMatchingTimeRange(dateRange.startDate, dateRange.endDate);
+      console.log('Date range changed:', {
+        start: dateRange.startDate.toDateString(),
+        end: dateRange.endDate.toDateString(),
+        matchingRange
+      });
+      setActiveTimeRange(matchingRange);
+    } else {
+      setActiveTimeRange('custom');
+    }
+  }, [dateRange]);
   
   // Generate calendar days for a month
   const generateCalendarDays = (date: Date) => {
@@ -93,56 +193,75 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   };
   
-  // Check if a date is selected
+  // Check if a date is selected (in range or single selection)
   const isDateSelected = (date: Date) => {
-    if (!dateRange.startDate || !dateRange.endDate) {
-      return dateRange.startDate?.getTime() === date.getTime();
+    if (!dateRange.startDate) return false;
+    
+    // If only start date is selected
+    if (!dateRange.endDate) {
+      return isSameDay(date, dateRange.startDate);
     }
     
-    const time = date.getTime();
-    return time >= dateRange.startDate.getTime() && time <= dateRange.endDate.getTime();
+    // If both dates are selected, check if date is in range
+    const dateTime = normalizeDate(date).getTime();
+    const startTime = normalizeDate(dateRange.startDate).getTime();
+    const endTime = normalizeDate(dateRange.endDate).getTime();
+    
+    return dateTime >= startTime && dateTime <= endTime;
   };
   
   // Check if a date is the start or end of the range
   const isRangeEndpoint = (date: Date) => {
-    if (!dateRange.startDate || !dateRange.endDate) return false;
+    if (!dateRange.startDate) return false;
     
-    const time = date.getTime();
-    return time === dateRange.startDate.getTime() || time === dateRange.endDate.getTime();
+    const isStart = isSameDay(date, dateRange.startDate);
+    const isEnd = dateRange.endDate ? isSameDay(date, dateRange.endDate) : false;
+    
+    return isStart || isEnd;
   };
   
   // Handle date click
   const handleDateClick = (date: Date) => {
+    const normalizedDate = normalizeDate(date);
+    
     if (!dateRange.startDate || (dateRange.startDate && dateRange.endDate)) {
       // Start a new selection
-      setDateRange({
-        startDate: date,
+      const newRange = {
+        startDate: normalizedDate,
         endDate: null,
-      });
+      };
+      setDateRange(newRange);
     } else {
       // Complete the selection
-      if (date < dateRange.startDate) {
-        setDateRange({
-          startDate: date,
+      const startTime = dateRange.startDate.getTime();
+      const clickedTime = normalizedDate.getTime();
+      
+      let newRange;
+      if (clickedTime < startTime) {
+        newRange = {
+          startDate: normalizedDate,
           endDate: dateRange.startDate,
-        });
+        };
       } else {
-        setDateRange({
+        newRange = {
           startDate: dateRange.startDate,
-          endDate: date,
-        });
+          endDate: normalizedDate,
+        };
+      }
+      
+      setDateRange(newRange);
+      
+      // Immediately check for matching preset when range is complete
+      if (newRange.startDate && newRange.endDate) {
+        const matchingRange = getMatchingTimeRange(newRange.startDate, newRange.endDate);
+        setActiveTimeRange(matchingRange);
       }
     }
-    
-    setActiveTimeRange('custom');
   };
   
   // Handle preset time range selection
   const handleTimeRangeSelect = (range: TimeRange) => {
-    setActiveTimeRange(range);
-    
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = normalizeDate(new Date());
     
     let start = new Date();
     let end = new Date();
@@ -303,9 +422,6 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                     onClick={() => handleDateClick(day.date)}
                   >
                     {day.date.getDate()}
-                    {/* {[6, 13].includes(day.date.getDate()) && day.isCurrentMonth && (
-                      <span className="absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#F7931D] rounded-full"></span>
-                    )} */}
                   </div>
                 ))}
               </div>
@@ -348,9 +464,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                     onClick={() => handleDateClick(day.date)}
                   >
                     {day.date.getDate()}
-                    {/* {[13].includes(day.date.getDate()) && day.isCurrentMonth && (
-                      <span className="absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#F7931D] rounded-full"></span>
-                    )} */}
+                   
                   </div>
                 ))}
               </div>
@@ -393,7 +507,3 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 };
 
 export default DateRangePicker;
-
-
-
-

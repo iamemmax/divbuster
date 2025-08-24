@@ -5,10 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 // Zod schema
 const participantSchema = z.object({
-  participants: z
+  other_participants: z
     .array(
       z.object({
-        name: z.string().min(1, "Name is required"),
+        first_name: z.string().min(1, "First name is required"),
+        last_name: z.string().min(1, "Last name is required"),
         email: z.string().email("Invalid email"),
         dob: z.string().min(1, "Date of Birth is required"),
       })
@@ -36,18 +37,18 @@ const SchoolParticipantForm = ({ back, next }: Props) => {
     resolver: zodResolver(participantSchema),
     mode: "onChange",
     defaultValues: {
-      participants: [
-        { name: "", email: "", dob: "" },
+      other_participants: [
+        { first_name: "", email: "", dob: "" },
       ],
     },
   });
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "participants",
+    name: "other_participants",
   });
 
-  const watchedParticipants = watch("participants");
+  const watchedParticipants = watch("other_participants");
 
   const onSubmit =async (data: ParticipantFormValues) => {
     await trigger()
@@ -60,14 +61,15 @@ const SchoolParticipantForm = ({ back, next }: Props) => {
     const isFormValid = await trigger();
     
     if (isFormValid) {
-      append({ name: "", email: "", dob: "" });
+      append({ first_name: "", last_name:"", email: "", dob: "" });
     }
   };
 
   // Check if current participants are filled
   const canAddParticipant = () => {
     return watchedParticipants.every(participant => 
-      participant.name.trim() !== "" && 
+      participant.first_name.trim() !== "" && 
+      participant.last_name.trim() !== "" && 
       participant.email.trim() !== "" && 
       participant.dob.trim() !== ""
     ) && Object.keys(errors).length === 0;
@@ -94,26 +96,44 @@ const SchoolParticipantForm = ({ back, next }: Props) => {
                   </button>
                 )}
               </div>
-              <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-4">
+              <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-2">
               <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   First and Last Name
                 </label>
                 <input
                   type="text"
-                  placeholder="Enter Participant name"
-                  {...register(`participants.${index}.name`)}
-                  className={`w-full px-4 py-3 border ${errors.participants?.[index]?.name ? "border-red-500" : "border-gray-300"} outline-none dark:border-gray-600 rounded-lg border bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
+                  placeholder="Enter First name"
+                  {...register(`other_participants.${index}.first_name`)}
+                  className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.first_name ? "border-red-500" : "border-gray-300"} outline-none dark:border-gray-600 rounded-lg border bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
                 />
-                {errors.participants?.[index]?.name && (
+                {errors.other_participants?.[index]?.first_name && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.participants[index]?.name?.message}
+                    {errors.other_participants[index]?.first_name?.message}
+                  </p>
+                )}
+              </div>
+              </div>
+              <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-2">
+              <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  last_name and Last Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter Last name"
+                  {...register(`other_participants.${index}.last_name`)}
+                  className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.last_name ? "border-red-500" : "border-gray-300"} outline-none dark:border-gray-600 rounded-lg border bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
+                />
+                {errors.other_participants?.[index]?.last_name && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.other_participants[index]?.last_name?.message}
                   </p>
                 )}
               </div>
               </div>
 
-<div className="border-b  border-[#EAECF0] dark:border-gray-700 py-4">
+<div className="border-b  border-[#EAECF0] dark:border-gray-700 py-2">
               <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Email Address
@@ -121,18 +141,18 @@ const SchoolParticipantForm = ({ back, next }: Props) => {
                 <input
                   type="email"
                   placeholder="example@example.com"
-                  {...register(`participants.${index}.email`)}
-                                   className={`w-full px-4 py-3 border ${errors.participants?.[index]?.email ? "border-red-500" : "border-gray-300"} border outline-none dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
+                  {...register(`other_participants.${index}.email`)}
+                                   className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.email ? "border-red-500" : "border-gray-300"} border outline-none dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
                 />
-                {errors.participants?.[index]?.email && (
+                {errors.other_participants?.[index]?.email && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.participants[index]?.email?.message}
+                    {errors.other_participants[index]?.email?.message}
                   </p>
                 )}
               </div>
               </div>
 
-              <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-4">
+              <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-2">
 
               <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -140,12 +160,12 @@ const SchoolParticipantForm = ({ back, next }: Props) => {
                 </label>
                 <input
                   type="date"
-                  {...register(`participants.${index}.dob`)}
-                                    className={`w-full px-4 py-3 border ${errors.participants?.[index]?.dob ? "border-red-500" : "border-gray-300"} border outline-none dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
+                  {...register(`other_participants.${index}.dob`)}
+                                    className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.dob ? "border-red-500" : "border-gray-300"} border outline-none dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
                 />
-                {errors.participants?.[index]?.dob && (
+                {errors.other_participants?.[index]?.dob && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.participants[index]?.dob?.message}
+                    {errors.other_participants[index]?.dob?.message}
                   </p>
                 )}
               </div>

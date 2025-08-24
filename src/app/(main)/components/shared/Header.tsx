@@ -3,7 +3,7 @@ import MessageIcon from "@/app/icons/(dashboard)/MessageIcon";
 import NotificationIcon from "@/app/icons/(dashboard)/NotificationIcon";
 import WarningIcon from "@/app/icons/(dashboard)/WarningIcon";
 import LogoutIcon from "@/app/icons/(dashboard)/LogoutIcon";
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/core";
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, LinkButton } from "@/components/core";
 import React, { useState, useEffect, useRef } from "react";
 import useIsMobile from "@/hooks/UseMobile";
 import { useMobileMenu } from "@/contexts/MobileMenuContext";
@@ -104,16 +104,16 @@ const Header = ({ subtitle, title }: HeaderProps) => {
               <WarningIcon className="text-[#132346] dark:text-white"  />
             </div>
           </Button>
-          <Button className="bg-transparent p-0">
+          <LinkButton href={"/messages"} className="bg-transparent p-0">
             <div className="border border-[#EEEEEE] flex justify-center items-center w-[2rem] xl:w-[2.5rem] h-[2rem] xl:h-[2.5rem] rounded-full ">
               <MessageIcon className="text-[#132346] dark:text-white" />
             </div>
-          </Button>
-          <Button className="bg-transparent p-0">
+          </LinkButton>
+          <LinkButton href={"/notifications"} className="bg-transparent p-0">
             <div className="border border-[#EEEEEE] flex justify-center items-center w-[2rem] xl:w-[2.5rem] h-[2rem] xl:h-[2.5rem] rounded-full ">
               <NotificationIcon className="text-[#132346] dark:text-white" />
             </div>
-          </Button>
+          </LinkButton>
         </div>
         <div className="flex items-center gap-3 relative" ref={dropdownRef}>
           <div 

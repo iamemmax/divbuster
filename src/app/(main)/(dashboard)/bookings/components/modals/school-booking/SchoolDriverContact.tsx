@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -10,8 +9,9 @@ import { useState } from "react";
 const durationOptions = ["1 Hour", "2 Hours", "4 Hours", "8 Hours"];
 
 const bookingSchema = z.object({
-  diverName: z.string().min(1, "Diver name is required"),
-  diverEmail: z.string().email("Enter a valid email"),
+  first_name: z.string().min(1, "Diver name is required"),
+  last_name: z.string().min(1, "Diver name is required"),
+  email: z.string().email("Enter a valid email"),
   duration: z.enum(["1 Hour", "2 Hours", "4 Hours", "8 Hours"]),
 });
 
@@ -20,7 +20,7 @@ interface Props {
   next: () => void;
   back: () => void;
 }
-const SchoolDriverContact =({back,next}:Props) =>{
+const SchoolDriverContact = ({ back, next }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const {
     register,
@@ -31,16 +31,19 @@ const SchoolDriverContact =({back,next}:Props) =>{
   } = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
-      diverName: "",
-      diverEmail: "",
-      duration: undefined,
+      first_name: "",
+      last_name: "",
+      email: "",
+      duration: "2 Hours",
     },
+    mode: "onChange",
   });
 
   const selectedDuration = watch("duration");
 
   const onSubmit = (data: BookingFormValues) => {
-    console.log(data);
+    console.log("Form submitted:", data);
+    next();
   };
 
   return (
@@ -48,94 +51,141 @@ const SchoolDriverContact =({back,next}:Props) =>{
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-6 md:px-4 bg-transparent   text-sm text-gray-900 dark:text-white"
     >
-      {/* Diver Name */}
-       <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-7">
-
-      <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
-        <label className="text-[#344054] dark:text-white font-archivo text-sm">Main Diver Name</label>
-        <div className="flex flex-col gap-y-3">
-        <input
-          {...register("diverName")}
-          placeholder="Enter Main Diver Name"
-                  className={`w-full p-3 outline-none rounded-md border ${errors.diverName?"border-red-900":"border-gray-300"}  dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-black dark:text-white`}
-
-        />
-      </div>
-      {errors.diverName && (
-        <p className="text-red-500 text-xs ">{errors.diverName.message}</p>
-      )}
-
-        </div>
-       </div>
-
-      {/* Diver Email */}
-      <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-7">
-      <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
-        <label className="text-[#344054] dark:text-white font-archivo text-sm">Main Diver Email Address</label>
-         <div className="flex flex-col gap-y-3">
-        <input
-          {...register("diverEmail")}
-          placeholder="Enter Main Diver Email Address"
-          className={`w-full p-3 rounded-md  outline-none border ${errors.diverEmail?"border-red-900":"border-gray-300"}  dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-black dark:text-white`}
-        />
-      </div>
-      {errors.diverEmail && (
-        <p className="text-red-500 text-xs ">{errors.diverEmail.message}</p>
-      )}
-
-         </div>
-
-      </div>
-
-      {/* Select Duration */}
-      <div className="grid bord-b  border-[#EAECF0] dark:border-gray-700 py-7 grid-cols-1 md:grid-cols-[200px_1fr] items-start gap-4 relative">
-        <label className="text-[#344054] dark:text-white font-archivo text-sm">Select Duration</label>
-        <div className="relative w-full">
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="w-full p-3 text-left bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-between hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none"
-          >
-            <span className={selectedDuration ? "text-gray-900 dark:text-white" : "text-gray-500"}>
-              {selectedDuration || "Select Duration"}
-            </span>
-            <ChevronDown className="h-4 w-4 text-gray-400 dark:text-gray-300" />
-          </button>
-
-          {isOpen && (
-            <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg">
-              {durationOptions.map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  onClick={() => {
-                    setValue("duration", option as BookingFormValues["duration"]);
-                    setIsOpen(false);
-                  }}
-                  className="w-full p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
-                >
-                  {option}
-                </button>
-              ))}
+      <div className="max-h-[80vh] w-full overflow-y-auto">
+        {/* Diver Name */}
+        <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-4">
+          <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
+            <label className="text-[#344054] dark:text-white font-archivo text-sm">
+              Main Diver First Name
+            </label>
+            <div className="flex flex-col gap-y-3">
+              <input
+                {...register("first_name")}
+                placeholder="Enter Main Diver Name"
+                className={`w-full p-3 outline-none rounded-md border ${errors.first_name ? "border-red-900" : "border-gray-300"}  dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-black dark:text-white`}
+              />
             </div>
-          )}
+            {errors.first_name && (
+              <p className="text-red-500 text-xs ">
+                {errors.first_name.message}
+              </p>
+            )}
+          </div>
+        </div>
+        {/* Diver Name */}
+        <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-4">
+          <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
+            <label className="text-[#344054] dark:text-white font-archivo text-sm">
+              Main Diver Last Name
+            </label>
+            <div className="flex flex-col gap-y-3">
+              <input
+                {...register("last_name")}
+                placeholder="Enter Main Diver Name"
+                className={`w-full p-3 outline-none rounded-md border ${errors.last_name ? "border-red-900" : "border-gray-300"}  dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-black dark:text-white`}
+              />
+            </div>
+            {errors.last_name && (
+              <p className="text-red-500 text-xs ">
+                {errors.last_name.message}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Diver Email */}
+        <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-4">
+          <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
+            <label className="text-[#344054] dark:text-white font-archivo text-sm">
+              Main Diver Email Address
+            </label>
+            <div className="flex flex-col gap-y-3">
+              <input
+                {...register("email")}
+                placeholder="Enter Main Diver Email Address"
+                className={`w-full p-3 rounded-md  outline-none border ${errors.email ? "border-red-900" : "border-gray-300"}  dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-black dark:text-white`}
+              />
+            </div>
+            {errors.email && (
+              <p className="text-red-500 text-xs ">{errors.email.message}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Select Duration */}
+        <div className="grid bord-b  border-[#EAECF0] dark:border-gray-700 py-7 grid-cols-1 md:grid-cols-[200px_1fr] items-start gap-4 relative">
+          <label className="text-[#344054] dark:text-white font-archivo text-sm">
+            Select Duration
+          </label>
+          <div className="relative w-full">
+            <button
+              type="button"
+              onClick={() => setIsOpen(!isOpen)}
+              className="w-full p-3 text-left bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-between hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none"
+            >
+              <span
+                className={
+                  selectedDuration
+                    ? "text-gray-900 dark:text-white"
+                    : "text-gray-500"
+                }
+              >
+                {selectedDuration || "Select Duration"}
+              </span>
+              <ChevronDown className="h-4 w-4 text-gray-400 dark:text-gray-300" />
+            </button>
+
+            {isOpen && (
+              <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg">
+                {durationOptions.map((option) => (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() => {
+                      setValue(
+                        "duration",
+                        option as BookingFormValues["duration"]
+                      );
+                      setIsOpen(false);
+                    }}
+                    className="w-full p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+        {errors.duration && (
+          <p className="text-red-500 text-xs ml-[200px]">
+            {errors.duration.message}
+          </p>
+        )}
+
+        {/* Cancellation Policy */}
+        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] max-w-3xl items-start gap-4">
+          <label className="text-[#344054] dark:text-white font-archivo text-sm">
+            Cancellation policy
+          </label>
+          <ul className="space-y-4 list-disc pl-4  text-gray-900  block mb-1 dark:text-gray-300 text-base">
+            <li>
+              We will charge a cancellation fee of 100% if booking is cancelled
+              7 days or less before the event
+            </li>
+            <li>
+              We will charge a cancellation fee of 50% if booking is cancelled
+              14 days or less before the event
+            </li>
+            <li>
+              We will charge a cancellation fee of 25% if booking is cancelled
+              30 days or less before the event
+            </li>
+          </ul>
         </div>
       </div>
-      {errors.duration && (
-        <p className="text-red-500 text-xs ml-[200px]">{errors.duration.message}</p>
-      )}
 
-      {/* Cancellation Policy */}
-      <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] max-w-3xl items-start gap-4">
-        <label className="text-[#344054] dark:text-white font-archivo text-sm">Cancellation policy</label>
-        <ul className="space-y-4 list-disc pl-4  text-gray-900  block mb-1 dark:text-gray-300 text-base">
-          <li>We will charge a cancellation fee of 100% if booking is cancelled 7 days or less before the event</li>
-          <li>We will charge a cancellation fee of 50% if booking is cancelled 14 days or less before the event</li>
-          <li>We will charge a cancellation fee of 25% if booking is cancelled 30 days or less before the event</li>
-        </ul>
-      </div>
-
-       <div className="flex justify-end gap-4   border-gray-200 dark:border-gray-700 px-6  bg-white dark:bg-gray-900">
+      <div className="flex justify-end gap-4 max-h-[10vh]   border-gray-200 dark:border-gray-700 px-6  bg-white dark:bg-gray-900">
         <button
           onClick={back}
           className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -143,7 +193,7 @@ const SchoolDriverContact =({back,next}:Props) =>{
           Cancel
         </button>
         <button
-          onClick={()=>next()}
+          onClick={handleSubmit(onSubmit)}
           className="px-6 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors"
         >
           Proceed
@@ -151,6 +201,6 @@ const SchoolDriverContact =({back,next}:Props) =>{
       </div>
     </form>
   );
-}
+};
 
-export default SchoolDriverContact
+export default SchoolDriverContact;

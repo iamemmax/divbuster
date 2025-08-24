@@ -107,51 +107,61 @@ const GroupMessages = ({groupList,selectedGroup,setGroupList,setSelectedGroup}:p
   };
 
   return (
-    <div className=" bg-gray-50 h-[79vh] overflow-y-hidden">
-      {/* Mobile Layout */}
-      <div className="md:hidden h-full">
-        {!selectedGroup ? (
-          <GroupSidebar
-            groupChats={groupList}
+    <div className="bg-gray-50 dark:bg-gray-900 h-[79vh] overflow-y-hidden">
+  {/* Mobile Layout */}
+  <div className="md:hidden h-full">
+    {!selectedGroup ? (
+      <GroupSidebar
+        groupChats={groupList}
+        selectedGroup={selectedGroup}
+        onSelectGroup={handleSelectGroup}
+        onDelete={handleDeleteGroup}
+        onArchive={handleArchiveGroup}
+      />
+    ) : (
+      <div className="h-full relative">
+        <div className="absolute top-4 left-4 z-50">
+          <button
+            onClick={handleBackToRecent}
+            className="flex items-center space-x-2 px-3 py-2 
+              bg-white dark:bg-gray-800 
+              border border-gray-200 dark:border-gray-700 
+              rounded-lg shadow-sm 
+              hover:bg-gray-50 dark:hover:bg-gray-700 
+              transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4 text-gray-700 dark:text-gray-200" />
+            <span className="text-sm font-medium text-gray-800 dark:text-gray-100">Back</span>
+          </button>
+        </div>
+        <div className="pt-16 h-full">
+          <GroupMessageBox
             selectedGroup={selectedGroup}
-            onSelectGroup={handleSelectGroup}
-            onDelete={handleDeleteGroup}
-            onArchive={handleArchiveGroup}
+            onSendMessage={handleSendMessage}
+            groupChats={groupChats}
           />
-        ) : (
-          <div className="h-full relative">
-            <div className="absolute top-4 left-4 z-50">
-              <button
-                onClick={handleBackToRecent}
-                className="flex items-center space-x-2 px-3 py-2 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                <span className="text-sm font-medium">Back</span>
-              </button>
-            </div>
-            <div className="pt-16 h-full">
-              <GroupMessageBox selectedGroup={selectedGroup} onSendMessage={handleSendMessage}  groupChats={groupChats}/>
-            </div>
-          </div>
-        )}
+        </div>
       </div>
+    )}
+  </div>
 
-      {/* Desktop Layout */}
-      <div className="hidden md:grid grid-cols-[1fr_2fr] gap-0 h-full">
-        <GroupSidebar
-          groupChats={groupList}
-          selectedGroup={selectedGroup}
-          onSelectGroup={handleSelectGroup}
-          onDelete={handleDeleteGroup}
-          onArchive={handleArchiveGroup}
-        />
-        <GroupMessageBox selectedGroup={selectedGroup} onSendMessage={handleSendMessage}
-        groupChats={groupChats}
-        />
-      </div>
+  {/* Desktop Layout */}
+  <div className="hidden md:grid grid-cols-[1fr_2fr] gap-0 h-full">
+    <GroupSidebar
+      groupChats={groupList}
+      selectedGroup={selectedGroup}
+      onSelectGroup={handleSelectGroup}
+      onDelete={handleDeleteGroup}
+      onArchive={handleArchiveGroup}
+    />
+    <GroupMessageBox
+      selectedGroup={selectedGroup}
+      onSendMessage={handleSendMessage}
+      groupChats={groupChats}
+    />
+  </div>
+</div>
 
-      
-    </div>
   );
 };
 

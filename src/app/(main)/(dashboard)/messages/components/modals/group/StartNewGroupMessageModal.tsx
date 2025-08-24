@@ -94,38 +94,59 @@ interface prop{
 }
 export default function StartNewGroupMessageModal({isOpen,onClose,onSelectMessage}:prop) {
   return (
-     <Dialog open={isOpen} >
-      <DialogContent className="sm:max-w-[50.25rem] bg-[#F9FAFB] rounded-lg">
-    <div className="w-full mx-auto  bg-[#F9FAFB] rounded-xl shadow">
-      <div className="p-7 border-b border-gray-400 border-opacity-50 flex items-center justify-between ">
-        <h2 className=" text-sm sm:text-base md:text-[1.875rem] font-archivo font-semibold text-[#101828]">Create a New Group</h2>
-        <Button className="bg-transparent p-2" onClick={()=>onClose()}><CloseIcon color="black"/></Button>
-    
+     <Dialog open={isOpen}>
+  <DialogContent className="sm:max-w-[50.25rem] bg-[#F9FAFB] dark:bg-[#1A1D21] rounded-lg">
+    <div className="w-full mx-auto bg-[#F9FAFB] dark:bg-[#1A1D21] rounded-xl shadow">
+      {/* Header */}
+      <div className="p-7 border-b border-gray-400 dark:border-gray-600 border-opacity-50 flex items-center justify-between">
+        <h2 className="text-sm sm:text-base md:text-[1.875rem] font-archivo font-semibold text-[#101828] dark:text-gray-100">
+          Create a New Group
+        </h2>
+        <Button
+          className="bg-transparent p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
+          onClick={() => onClose()}
+        >
+          <CloseIcon className="text-black dark:text-gray-300" />
+        </Button>
       </div>
-      <p className="text-sm text-gray-600 mb-4 px-7 mt-5">
-        <span className="font-semibold text-base md:text-xl font-archivo text-[#1F2C37] ">Add member from your Buddy list</span>   
+
+      {/* Subtitle */}
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 px-7 mt-5">
+        <span className="font-semibold text-base md:text-xl font-archivo text-[#1F2C37] dark:text-gray-200">
+          Add member from your Buddy list
+        </span>
       </p>
 
+      {/* Buddy list */}
       <ul className="space-y-6 px-6 pb-9 max-h-[65vh] overflow-y-auto py-4">
         {buddies.map((buddy, index) => (
-          <li key={index} className="flex items-center space-x-4 cursor-pointer" onClick={()=>{
-            onSelectMessage(buddy)
-           onClose()
-          }}>
+          <li
+            key={index}
+            className="flex items-center space-x-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2 transition"
+            onClick={() => {
+              onSelectMessage(buddy);
+              onClose();
+            }}
+          >
             <img
               src={buddy.groupAvatar}
               alt={buddy.groupName}
               className="md:w-[4.375rem] md:h-[4.375rem] shrink-0 w-9 h-9 rounded-full object-cover"
             />
             <div>
-              <p className="md:text-lg text-base font-archivo font-medium text-[#101828]">{buddy.groupName}</p>
-              <p className="md:text-sm text-xs font-archivo truncate text-[#4F4F4F] ">{buddy.description}</p>
+              <p className="md:text-lg text-base font-archivo font-medium text-[#101828] dark:text-gray-100">
+                {buddy.groupName}
+              </p>
+              <p className="md:text-sm text-xs font-archivo truncate text-[#4F4F4F] dark:text-gray-400">
+                {buddy.description}
+              </p>
             </div>
           </li>
         ))}
       </ul>
     </div>
-    </DialogContent>
-    </Dialog>
+  </DialogContent>
+</Dialog>
+
   );
 }

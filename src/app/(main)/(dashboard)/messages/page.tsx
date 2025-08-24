@@ -25,24 +25,24 @@ const Messages = () => {
   const tabs = ["Recent", "Groups"];
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <div className="">
         <Header title="Messages" subtitle="" />
       </div>
       <div className=""></div>
-      <div className="w-full bg-white">
+      <div className="w-full bg-white dark:bg-gray-900 transition-colors duration-200">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between py-4 space-y-4 md:space-y-0">
             {/* Left side - Navigation tabs */}
-            <div className="flex overflow-x-auto space-x-4 bg-[#F9FAFB] p-1 rounded-10 scrollbar-hide md:space-x-8">
+            <div className="flex overflow-x-auto space-x-4 bg-[#F9FAFB] dark:bg-gray-800 p-1 rounded-10 scrollbar-hide md:space-x-8 transition-colors duration-200">
               {tabs.map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`whitespace-nowrap text-sm md:text-base py-[0.625rem] px-6 transition-colors duration-200 ${
                     activeTab === tab
-                      ? "bg-white text-[#F7931D] font-semibold rounded-lg shadow-sm font-archivo"
-                      : "border-transparent font-medium text-[#667085] hover:border-gray-300"
+                      ? "bg-white dark:bg-gray-700 text-[#F7931D] dark:text-orange-400 font-semibold rounded-lg shadow-sm font-archivo"
+                      : "border-transparent font-medium text-[#667085] dark:text-gray-400 hover:border-gray-300 dark:hover:text-gray-200"
                   }`}
                 >
                   {tab}
@@ -50,12 +50,14 @@ const Messages = () => {
               ))}
             </div>
 
-            {/* Right side - Date picker and Create button */}
+            {/* Right side - Dark mode toggle, Date picker and Create button */}
             <div className="flex flex-wrap flex-row gap-4 md:space-x-4 md:space-y-0 items-start md:items-center">
+            
+              
               {/* Date Range Picker */}
-              <div className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 cursor-pointer transition-colors duration-200 md:min-w-[220px]">
-                <Calendar className="h-4 w-4 text-gray-500" />
-                <span className="text-xs md:text-sm text-gray-700 font-medium font-archivo whitespace-nowrap">
+              <div className="flex items-center space-x-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-200 md:min-w-[220px]">
+                <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 font-medium font-archivo whitespace-nowrap">
                   Jan 6, 2022 – Jan 13, 2022
                 </span>
               </div>
@@ -63,15 +65,16 @@ const Messages = () => {
               {/* Create New Message Button */}
               {activeTab === "Recent" && (
                 <button
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-3 md:px-6 py-2 rounded-lg font-medium text-xs md:text-sm transition-colors duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
+                  className="bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white px-3 md:px-6 py-2 rounded-lg font-medium text-xs md:text-sm transition-colors duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
                   onClick={() => setShowNewMessageModal(true)}
                 >
                   Create New Message
                 </button>
               )}
               {activeTab === "Groups" && (
-                <button className="bg-orange-500 hover:bg-orange-600 text-white px-3 md:px-6 py-2 rounded-lg font-medium text-xs md:text-sm transition-colors duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
-                onClick={()=>setShowAddNewGroupModal(true)}
+                <button 
+                  className="bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white px-3 md:px-6 py-2 rounded-lg font-medium text-xs md:text-sm transition-colors duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
+                  onClick={() => setShowAddNewGroupModal(true)}
                 >
                   Create New Group
                 </button>
@@ -106,39 +109,38 @@ const Messages = () => {
           />
         )}
 
-          { showAddNewGroupModal && <StartNewGroupMessageModal
-        isOpen={showAddNewGroupModal}
-        onClose={()=>{
-          setShowAddNewGroupModal(false)
-
-        }}
-        onSelectMessage={(data)=>{
-          setSelectedGroup(data)
-          setShowAddGroupMemberModal(true)
-        }}
+        {showAddNewGroupModal && (
+          <StartNewGroupMessageModal
+            isOpen={showAddNewGroupModal}
+            onClose={() => {
+              setShowAddNewGroupModal(false);
+            }}
+            onSelectMessage={(data) => {
+              setSelectedGroup(data);
+              setShowAddGroupMemberModal(true);
+            }}
+          />
+        )}
         
-        />
-      }
-      {
-        showAddGroupMemberModal && <AddNewGroupMembersModal
-        isOpen={showAddGroupMemberModal}
-        groupId={String(selectedGroup?.id)}
-        onClose={()=>setShowAddGroupMemberModal(false)}
-        setShowCreateGroupChat={setShowCreateGroupChat}
-        setSuggestedMembers={setSuggestedMembers}
-        suggestedMembers={suggestedMembers}
+        {showAddGroupMemberModal && (
+          <AddNewGroupMembersModal
+            isOpen={showAddGroupMemberModal}
+            groupId={String(selectedGroup?.id)}
+            onClose={() => setShowAddGroupMemberModal(false)}
+            setShowCreateGroupChat={setShowCreateGroupChat}
+            setSuggestedMembers={setSuggestedMembers}
+            suggestedMembers={suggestedMembers}
+          />
+        )}
         
-        />
-      }
-      {
-        showCreateGroupChat && <CreateGroupChatForm
-        isOpen={showCreateGroupChat}
-        groupId={String(selectedGroup?.id)}
-        onClose={()=>setShowCreateGroupChat(false)}
-         suggestedMembers={suggestedMembers}
-        
-        />
-      }
+        {showCreateGroupChat && (
+          <CreateGroupChatForm
+            isOpen={showCreateGroupChat}
+            groupId={String(selectedGroup?.id)}
+            onClose={() => setShowCreateGroupChat(false)}
+            suggestedMembers={suggestedMembers}
+          />
+        )}
       </div>
     </div>
   );

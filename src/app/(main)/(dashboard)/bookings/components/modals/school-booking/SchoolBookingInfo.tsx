@@ -58,7 +58,7 @@ const SchoolBookingInfo = ({ back, next }: Props) => {
   return (
     <div className="bg-transparent h-full   p-6 rounded-lg shadow">
       {/* Image selection row */}
-      <div className="overflow-y-auto max-h-[calc(88vh-160px)]">
+      <div className="overflow-y-auto max-h-[calc(84vh-160px)]">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-[10px] mb-6">
           {divePlans.map((plan) => (
             <div
@@ -158,7 +158,7 @@ const SchoolBookingInfo = ({ back, next }: Props) => {
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex justify-end gap-4   border-gray-200 dark:border-gray-700 px-6 pt-4 bg-white dark:bg-gray-900">
+      <div className="flex justify-end gap-4 max-h-[10vh]  border-gray-200 dark:border-gray-700 px-6 pt-4 bg-white dark:bg-gray-900">
         <button
           onClick={back}
           className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"

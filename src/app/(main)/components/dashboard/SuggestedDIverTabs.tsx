@@ -3,7 +3,7 @@ import SuggestedDivers from './suggested/SuggestedDivers';
 
 //
 
-interface TabItem {
+export interface TabItem {
   id: string;
   label: string;
   href: string;
@@ -96,48 +96,44 @@ const SuggestedDIverTabs: React.FC<DivingAppProps> = ({
   };
 
   return (
-    <div className="w-full bg-white ">
-      {/* Header Tabs */}
-     <nav
-  className="flex overflow-x-auto whitespace-nowrap border-b border-gray-200 scrollbar-hide"
-  role="tablist"
->
-  {tabs.map((tab) => (
-    <a
-      key={tab.id}
-      href={tab.href}
-      onClick={(e) => handleTabClick(e, tab.id)}
-      className={`flex-shrink-0 px-4 lg:px-6 py-3 text-xs sm:text-base font-medium transition-colors duration-200 ${
-        activeTab === tab.id
-          ? 'text-orange-500 border-b-2 border-orange-500'
-          : 'text-gray-600 hover:text-gray-800'
-      }`}
-      role="tab"
-      aria-selected={activeTab === tab.id}
-      aria-controls={`tabpanel-${tab.id}`}
-    >
-      {tab.label}
-    </a>
-  ))}
-</nav>
+  <div className="w-full bg-white dark:bg-gray-900 transition-colors duration-200">
+  {/* Header Tabs */}
+  <nav
+    className="flex overflow-x-auto whitespace-nowrap border-b border-gray-200 dark:border-gray-700 scrollbar-hide transition-colors duration-200"
+    role="tablist"
+  >
+    {tabs.map((tab) => (
+      <a
+        key={tab.id}
+        href={tab.href}
+        onClick={(e) => handleTabClick(e, tab.id)}
+        className={`flex-shrink-0 px-4 lg:px-6 py-3 text-xs sm:text-base font-medium transition-colors duration-200 ${
+          activeTab === tab.id
+            ? 'text-orange-500 dark:text-orange-400 border-b-2 border-orange-500 dark:border-orange-400'
+            : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
+        }`}
+        role="tab"
+        aria-selected={activeTab === tab.id}
+        aria-controls={`tabpanel-${tab.id}`}
+      >
+        {tab.label}
+      </a>
+    ))}
+  </nav>
 
-
-      <div className="flex">
-        {/* Main Content */}
-        <main className="flex-1  lg:px-6 py-6" role="main">
-          
-          <div
-            id={`tabpanel-${activeTab}`}
-            role="tabpanel"
-            aria-labelledby={`tab-${activeTab}`}
-          >
-            {renderTabContent()}
-          </div>
-        </main>
-
-     
+  <div className="flex">
+    {/* Main Content */}
+    <main className="flex-1 lg:px-6 py-6" role="main">
+      <div
+        id={`tabpanel-${activeTab}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${activeTab}`}
+      >
+        {renderTabContent()}
       </div>
-    </div>
+    </main>
+  </div>
+</div>
   );
 };
 

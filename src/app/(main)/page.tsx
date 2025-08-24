@@ -29,7 +29,7 @@ const Page = () => {
             <DebouncedSearchInput 
               placeholder="Search for buddies, dive sites, dive plans" 
               onSearch={(value) => value}
-              debounceTime={300}
+              debounceTime={30}
             />
           </div>
           
