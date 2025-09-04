@@ -46,7 +46,7 @@ const fetchDiveSites = async () => {
     return response.data as divSitesProp;
 }
 
-export const usefetchDiveSites = () => {
+export const useFetchDiveSites = () => {
   return useQuery({
     queryKey: ["div-sites"],
     queryFn: fetchDiveSites,

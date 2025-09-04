@@ -9,7 +9,7 @@ interface SpinnerProps {
 export function SmallSpinner({
   className,
   pathClassName,
-  color = '#fff, #ff0000',
+  color = '#F7931D',
 }: SpinnerProps) {
   return (
     <span

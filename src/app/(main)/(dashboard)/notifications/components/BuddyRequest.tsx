@@ -1,106 +1,131 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { NotificationItem } from './NotificationItem';
+import { buddyRequestResult, useFetchBuddyRequest } from '../../api/notification/buddyRequest';
+import { useAddBuddy } from '../../api/buddy/addBuddy';
+import { useQueryClient } from 'react-query';
+import { useErrorModalState } from '@/hooks';
+import { ErrorModal } from '@/components/core';
+import toast from 'react-hot-toast';
+import { formatAxiosErrorMessage } from '@/utils';
+import { AxiosError } from 'axios';
+import { SmallSpinner } from '@/icons/core';
 
-export const buddyRequests = [
-  {
-    id: "1",
-    name: "Demi Wikinson",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    time: "2 mins ago",
-    action: "Want to be your Dive buddy",
-    isOnline: true,
-    isRead: false
-  },
-  {
-    id: "2",
-    name: "Drew Cano",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    time: "3 hours ago",
-    action: "Want to be your Dive buddy",
-    isOnline: true,
-    isRead: false
-  },
-  {
-    id: "3",
-    name: "Zahir Mays",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
-    time: "4 hours ago",
-    action: "Want to be your Dive buddy",
-    isOnline: true,
-    isRead: false
-  },
-  {
-    id: "4",
-    name: "Rene Wells",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-    time: "4 hours ago",
-    action: "Wants to dive with you!",
-    isOnline: true,
-    isRead: false
-  },
-  {
-    id: "5",
-    name: "Loki Bright",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    time: "5 hours ago",
-    action: "Want to be your Dive buddy",
-    isOnline: true,
-    isRead: false
-  },
-  {
-    id: "6",
-    name: "Anita Cruz",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
-    time: "6 hours ago",
-    action: "Want to be your Dive buddy",
-    isOnline: true,
-    isRead: false
-  }
-];
+
+interface prop{
+  globalSearch: string;
+  initialStartDate: string
+  initialEndDate: string
+}
+
 // Main BuddyRequest Component
-const BuddyRequest: React.FC = () => {
-  const [loadingStates, setLoadingStates] = useState<{[key: string]: {accept: boolean, decline: boolean}}>({});
+const BuddyRequest: React.FC<prop> = ({globalSearch,initialStartDate,initialEndDate}) => {
+    const {
+      isErrorModalOpen,
+      setErrorModalState,
+      openErrorModalWithMessage,
+      errorModalMessage,
+    } = useErrorModalState();
+    const filters = {
+  date_from: initialStartDate,
+  date_to:initialEndDate,
+  search: globalSearch
+};
+  // const [loadingStates, setLoadingStates] = useState<{[key: string]: {accept: boolean, decline: boolean}}>({});
+const { mutate: handleAddNewBuddy, isLoading:isUpdating } = useAddBuddy();
+  const queryClient = useQueryClient();
 
-  // Mock JSON data based on the image
+ const [loadingDiverId, setLoadingDiverId] = useState<number | null>(null);
 
+const { data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,}= useFetchBuddyRequest("buddy-request", filters);
+      // Flatten all pages' results into one array
+      const allNotifications = useMemo(() => {
+        if (!data) return [];
+        return data.pages.flatMap((page) => page?.data?.results);
+      }, [data]);
+
+     // Infinite scroll
+     useEffect(() => {
+        const handleScroll = () => {
+          if (
+            window.innerHeight + window.scrollY >=
+              document.body.offsetHeight - 200 && // near bottom
+            hasNextPage &&
+            !isFetchingNextPage
+          ) {
+            fetchNextPage();
+          }
+        };
+    
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+      }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+    
   
   // Split notifications into two columns
-  const leftColumnNotifications = buddyRequests?.filter((_, index) => index % 2 === 0);
-  const rightColumnNotifications = buddyRequests?.filter((_, index) => index % 2 === 1);
+  const leftColumnNotifications = allNotifications?.filter((_, index) => index % 2 === 0);
+  const rightColumnNotifications = allNotifications?.filter((_, index) => index % 2 === 1);
 
-  const handleAccept = async (id: string) => {
-    setLoadingStates(prev => ({
-      ...prev,
-      [id]: { ...prev[id], accept: true }
-    }));
+  const handleAccept = async (suggested:buddyRequestResult) => {
+     setLoadingDiverId(suggested.id);
+    
+    handleAddNewBuddy({
+      invite_id: String(suggested?.request_from?.profile_details?.invite_id),
+      user_id: suggested?.request_from?.profile_details?.id,
+      request_status:"approved"
+    }, {
+      onSuccess: () => {
+        // Remove this diver from the visible list
+        
+        // Clear the loading state
+        setLoadingDiverId(null);
+        
+        // Refetch user data to update the backend state
+             queryClient.invalidateQueries({queryKey:["user-details"]});
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log(`Accepted buddy request from ${id}`);
-      setLoadingStates(prev => ({
-        ...prev,
-        [id]: { ...prev[id], accept: false }
-      }));
-      // You can add logic here to remove the request or update its status
-    }, 1500);
+        
+        toast.success("Buddy added successfully", { id: "addBuddySuccess" });
+      },
+      onError: (error) => {
+        // Clear the loading state
+        setLoadingDiverId(null);
+        
+        const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+        openErrorModalWithMessage(String(errorMessage));
+      }
+    });
   };
 
-  const handleDecline = async (id: string) => {
-    setLoadingStates(prev => ({
-      ...prev,
-      [id]: { ...prev[id], decline: true }
-    }));
+  const handleDecline = async (suggested:buddyRequestResult) => {
+    handleAddNewBuddy({
+      invite_id: String(suggested?.request_from?.profile_details?.invite_id),
+      user_id: suggested?.request_from?.profile_details?.id,
+      request_status:"declined"
+    }, {
+      onSuccess: () => {
+        // Remove this diver from the visible list
+        
+        // Clear the loading state
+        setLoadingDiverId(null);
+        
+        // Refetch user data to update the backend state
+             queryClient.invalidateQueries({queryKey:["user-details"]});
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log(`Declined buddy request from ${id}`);
-      setLoadingStates(prev => ({
-        ...prev,
-        [id]: { ...prev[id], decline: false }
-      }));
-      // You can add logic here to remove the request or update its status
-    }, 1500);
+        
+        toast.success("Buddy added successfully", { id: "addBuddySuccess" });
+      },
+      onError: (error) => {
+        // Clear the loading state
+        setLoadingDiverId(null);
+        
+        const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+        openErrorModalWithMessage(String(errorMessage));
+      }
+    });
   };
 
   const handleMarkAsRead = (id: string) => {
@@ -117,25 +142,30 @@ const BuddyRequest: React.FC = () => {
 
       {/* Buddy Requests List */}
  <div className="bg-white dark:bg-transparent rounded-lg py-3">
+  {
+    isLoading?<div className="flex justify-center items-center py-6"><SmallSpinner/></div>:
   <div className="grid grid-cols-1 xl:grid-cols-2 gap-y-8">
     {/* Left column with border-right on desktop */}
     <div className="md:border-r md:border-gray-200 dark:md:border-gray-700 md:pr-8">
       {leftColumnNotifications?.map((request, index: number) => (
         <NotificationItem
           key={request.id}
-          id={request.id}
-          avatar={request.avatar}
-          name={request.name}
-          time={request.time}
-          action={request.action}
-          isOnline={request.isOnline}
+          id={String(request?.id )}
+          avatar={
+  request?.request_from?.profile_details?.profile_picture ?? "/images/profile.png"
+}
+          name={`${request.request_from?.first_name??""} ${request.request_from?.last_name??""}`}
+          time={request?.request_date}
+          action={"Want to be your Dive buddy"}
+          isOnline={request?.request_from?.diver_profile?.online}
           isLast={index === Number(leftColumnNotifications?.length) - 1}
           showAcceptBtn={true}
           showDeclineBtn={true}
-          onAccept={() => handleAccept(request?.id)}
-          onDecline={() => handleDecline(request?.id)}
-          acceptLoading={loadingStates[request.id]?.accept || false}
-          declineLoading={loadingStates[request.id]?.decline || false}
+          onAccept={() => handleAccept(request)}
+          onDecline={() => handleDecline(request)}
+          acceptLoading={loadingDiverId === request?.id || false}
+          declineLoading={loadingDiverId === request?.id || false}
+
         />
       ))}
     </div>
@@ -145,24 +175,26 @@ const BuddyRequest: React.FC = () => {
       {rightColumnNotifications?.map((request, index) => (
         <NotificationItem
           key={request.id}
-          id={request.id}
-          avatar={request.avatar}
-          name={request.name}
-          time={request.time}
-          action={request.action}
-          isOnline={request.isOnline}
-          isLast={index === rightColumnNotifications.length - 1}
+          id={String(request?.id )}
+          avatar={request?.request_from?.profile_details?.profile_picture ? request?.request_from?.profile_details?.profile_picture:"/images/profile.png"}
+          name={`${request.request_from?.first_name??""} ${request.request_from?.last_name??""}`}
+          time={request?.request_date}
+          action={"Want to be your Dive buddy"}
+          isOnline={request?.request_from?.diver_profile?.online}
+          isLast={index === Number(leftColumnNotifications?.length) - 1}
           showAcceptBtn={true}
           showDeclineBtn={true}
-          showModifyBtn={false}
-          onAccept={() => handleAccept(request?.id)}
-          onDecline={() => handleDecline(request?.id)}
-          acceptLoading={loadingStates[request.id]?.accept || false}
-          declineLoading={loadingStates[request.id]?.decline || false}
+          onAccept={() => handleAccept(request)}
+          onDecline={() => handleDecline(request)}
+          acceptLoading={loadingDiverId === request?.id || false}
+          declineLoading={loadingDiverId === request?.id || false}
+
         />
       ))}
+      
     </div>
   </div>
+  }
 </div>
 
 
@@ -171,7 +203,7 @@ const BuddyRequest: React.FC = () => {
 
 
       {/* Empty State (when no requests) */}
-      {buddyRequests.length === 0 && (
+      {!isLoading&&allNotifications?.length === 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
           <div className="mx-auto w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
             <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -186,6 +218,19 @@ const BuddyRequest: React.FC = () => {
           </p>
         </div>
       )}
+
+
+
+        <ErrorModal
+              isErrorModalOpen={isErrorModalOpen}
+              setErrorModalState={() => {
+                setErrorModalState(false);
+              }}
+              subheading={
+                errorModalMessage ||
+                "Please check your inputs and try again."
+              }
+            />
     </div>
   );
 };

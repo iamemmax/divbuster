@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import { diveSiteResult, usefetchDiveSites } from '../../api/div-sites/fetch-dive-sites'
+import { diveSiteResult, useFetchDiveSites } from '../../api/div-sites/fetch-dive-sites'
 import Image from 'next/image'
 import { Button, ErrorModal, LoaderModal } from '@/components/core'
 import { useFetchCountry } from '../../api/fetchCountry'
@@ -30,7 +30,7 @@ const RecentDiveSites = () => {
       const { user} = authState;
        const userData = user;
       
-    const {data,isLoading} = usefetchDiveSites()
+    const {data,isLoading} = useFetchDiveSites()
     const {data:country}= useFetchCountry()
     const getCountry = (id:number) =>{
         const filterCountry = country?.results?.find((con) =>con?.id === id)
@@ -48,7 +48,7 @@ const RecentDiveSites = () => {
     },
     {
       onSuccess:()=>{
-        queryClient.invalidateQueries(["div-sites"]);
+        queryClient.invalidateQueries({queryKey:["div-sites"]});
         
       },
       onError:(error)=>{

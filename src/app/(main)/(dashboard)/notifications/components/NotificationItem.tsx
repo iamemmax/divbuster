@@ -59,6 +59,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import moment from "moment";
 
 export interface NotificationItemProps {
   id?: string;
@@ -103,6 +104,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   const handleAccept = () => {
     if (onAccept) onAccept(id);
   };
+  
 
   const handleDecline = () => {
     if (onDecline) onDecline(id);
@@ -131,7 +133,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
           alt={name}
           width={40}
           height={40}
-          className="rounded-full object-cover"
+          className="rounded-full shrink-0 object-cover"
         />
         {/* Online Status Indicator */}
         {isOnline && (
@@ -144,7 +146,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
         <div className="flex items-center gap-2 mb-1">
           <span className="font-semibold text-gray-900 dark:text-white text-sm">{name}</span>
           {time && (
-            <span className="text-xs text-gray-500 dark:text-gray-400">{time}</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">{moment(time)?.fromNow()}</span>
           )}
         </div>
         <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{action}</p>

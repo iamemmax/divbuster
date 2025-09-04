@@ -1,28 +1,43 @@
 "use client";
 import React, { useState } from "react";
 import Header from "../../components/shared/Header";
-import { Calendar } from "lucide-react";
-import RecentMessages, { messageProp } from "./components/RecentMessages";
-import GroupMessages, { GroupChat } from "./components/GroupMessages";
-import AchiveMessages from "./components/AchiveMessages";
+import RecentMessages, { resentChatProp } from "./components/RecentMessages";
+
 import StartNewMessageModal from "./components/modals/StartNewMessageModal";
-import { groupChats, messagesArray } from "./components/mocks";
-import StartNewGroupMessageModal from "./components/modals/group/StartNewGroupMessageModal";
-import AddNewGroupMembersModal, { members } from "./components/modals/group/AddGroupMembers";
+import AddNewGroupMembersModal from "./components/modals/group/AddGroupMembers";
 import CreateGroupChatForm from "./components/modals/group/CreateGroupChat";
+import {
+  chatListProp,
+  useFetchSingleChatList,
+} from "../api/chats/single-chat/fetchChatList";
+import {
+  groupChatResult,
+  Othermember,
+  useFetchGroupChatList,
+} from "../api/chats/group/fetchGroupChatList";
+import GroupMessages from "./components/GroupMessages";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/core";
 
 const Messages = () => {
-  const [activeTab, setActiveTab] = useState("Recent");
+  const [activeTab, setActiveTab] = useState<string>("Recent");
   const [showNewMessageModal, setShowNewMessageModal] = useState(false);
-  const [messages, setMessages] = useState<messageProp[]>(messagesArray);
-  const [selectedMessage, setSelectedMessage] = useState<messageProp>();
-  const [groupList, setGroupList] = useState<GroupChat[]>(groupChats);
-  const [selectedGroup, setSelectedGroup] = useState<GroupChat | null>(null);
-  const [showAddNewGroupModal, setShowAddNewGroupModal] = useState(false)
-    const [showAddGroupMemberModal, setShowAddGroupMemberModal] = useState(false)
-    const [showCreateGroupChat, setShowCreateGroupChat] = useState(false)
-     const [suggestedMembers, setSuggestedMembers] = useState<members[]>([]);
+  // const [recentChatList, setRecentChatList] = useState<resentChatProp>()
+  const [selectedMessage, setSelectedMessage] = useState<resentChatProp>();
+  // const [selectedGroupMessage, setSelectedGroupMessage] = useState<buddyResult>();
+  const [groupList, setGroupList] = useState<groupChatResult[]>();
+  const [selectedGroup, setSelectedGroup] = useState<groupChatResult | null>(
+    null
+  );
+  const [showAddGroupMemberModal, setShowAddGroupMemberModal] = useState(false);
+  const [showCreateGroupChat, setShowCreateGroupChat] = useState(false);
+  const [suggestedMembers, setSuggestedMembers] = useState<Othermember[] | undefined>();
   const tabs = ["Recent", "Groups"];
+
+  const { data: recentChatList, isLoading } = useFetchSingleChatList();
+  // const { data: groupChatList, isLoading: isLoadingGroup } =
+  //   useFetchGroupChatList();
+
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
@@ -35,15 +50,14 @@ const Messages = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between py-4 space-y-4 md:space-y-0">
             {/* Left side - Navigation tabs */}
             <div className="flex overflow-x-auto space-x-4 bg-[#F9FAFB] dark:bg-gray-800 p-1 rounded-10 scrollbar-hide md:space-x-8 transition-colors duration-200">
-              {tabs.map((tab) => (
+              {tabs?.map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`whitespace-nowrap text-sm md:text-base py-[0.625rem] px-6 transition-colors duration-200 ${
-                    activeTab === tab
-                      ? "bg-white dark:bg-gray-700 text-[#F7931D] dark:text-orange-400 font-semibold rounded-lg shadow-sm font-archivo"
-                      : "border-transparent font-medium text-[#667085] dark:text-gray-400 hover:border-gray-300 dark:hover:text-gray-200"
-                  }`}
+                  className={`whitespace-nowrap text-sm md:text-base py-[0.625rem] px-6 transition-colors duration-200 ${activeTab === tab
+                    ? "bg-white dark:bg-gray-700 text-[#F7931D] dark:text-orange-400 font-semibold rounded-lg shadow-sm font-archivo"
+                    : "border-transparent font-medium text-[#667085] dark:text-gray-400 hover:border-gray-300 dark:hover:text-gray-200"
+                    }`}
                 >
                   {tab}
                 </button>
@@ -52,32 +66,79 @@ const Messages = () => {
 
             {/* Right side - Dark mode toggle, Date picker and Create button */}
             <div className="flex flex-wrap flex-row gap-4 md:space-x-4 md:space-y-0 items-start md:items-center">
-            
-              
               {/* Date Range Picker */}
-              <div className="flex items-center space-x-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-200 md:min-w-[220px]">
+              {/* <div className="flex items-center space-x-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-200 md:min-w-[220px]">
                 <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                 <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 font-medium font-archivo whitespace-nowrap">
                   Jan 6, 2022 – Jan 13, 2022
                 </span>
-              </div>
+              </div> */}
 
               {/* Create New Message Button */}
+
               {activeTab === "Recent" && (
-                <button
-                  className="bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white px-3 md:px-6 py-2 rounded-lg font-medium text-xs md:text-sm transition-colors duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
-                  onClick={() => setShowNewMessageModal(true)}
-                >
-                  Create New Message
-                </button>
+                <div className="flex justify-between w-full items-center gap-1">
+                  {selectedMessage !== null && (
+                    <Button
+                      variant={"outlined"}
+                      onClick={() => {
+                        setSelectedMessage(undefined);
+                        // setSelectedMessage({} as resentChatProp)
+                      }}
+                      className="flex lg:hidden items-center space-x-2 px-4 py-2 
+              bg-white dark:bg-gray-800 
+              border border-gray-200 dark:border-gray-700 
+              rounded-lg shadow-sm 
+              hover:bg-gray-50 dark:hover:bg-gray-700 
+              transition-colors"
+                      aria-label="Back to recent messages"
+                    >
+                      <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-gray-300" />{" "}
+                      <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                        Back
+                      </span>
+                    </Button>
+                  )}
+                  <button
+                    className="bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white px-3 md:px-6 py-2 rounded-lg font-medium text-xs md:text-sm transition-colors duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
+                    onClick={() => setShowNewMessageModal(true)}
+                  >
+                    Create New Message
+                  </button>
+                </div>
               )}
+
+
               {activeTab === "Groups" && (
-                <button 
-                  className="bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white px-3 md:px-6 py-2 rounded-lg font-medium text-xs md:text-sm transition-colors duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
-                  onClick={() => setShowAddNewGroupModal(true)}
-                >
-                  Create New Group
-                </button>
+                <div className="flex justify-between w-full items-center gap-1">
+                  {selectedGroup !== null && (
+                    <Button
+                      variant={"outlined"}
+                      onClick={() => {
+                        setSelectedGroup(null);
+                        // setSelectedMessage({} as resentChatProp)
+                      }}
+                      className="flex lg:hidden items-center space-x-2 px-4 py-2 
+              bg-white dark:bg-gray-800 
+              border border-gray-200 dark:border-gray-700 
+              rounded-lg shadow-sm 
+              hover:bg-gray-50 dark:hover:bg-gray-700 
+              transition-colors"
+                      aria-label="Back to recent messages"
+                    >
+                      <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-gray-300" />{" "}
+                      <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                        Back
+                      </span>
+                    </Button>
+                  )}
+                  <button
+                    className="bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white px-3 md:px-6 py-2 rounded-lg font-medium text-xs md:text-sm transition-colors duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
+                    onClick={() => setShowAddGroupMemberModal(true)}
+                  >
+                    Create New Group
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -88,15 +149,17 @@ const Messages = () => {
           <RecentMessages
             selectedMessage={selectedMessage}
             setSelectedMessage={setSelectedMessage}
-            messages={messages}
+            recentChatList={recentChatList}
+            isLoading={isLoading}
           />
         )}
         {activeTab === "Groups" && (
           <GroupMessages
-            groupList={groupList}
+            // groupList={groupChatList}
             selectedGroup={selectedGroup}
             setGroupList={setGroupList}
             setSelectedGroup={setSelectedGroup}
+          // isLoadingGroup={isLoadingGroup}
           />
         )}
         {/* {activeTab === "Archive" && <AchiveMessages />} */}
@@ -109,19 +172,6 @@ const Messages = () => {
           />
         )}
 
-        {showAddNewGroupModal && (
-          <StartNewGroupMessageModal
-            isOpen={showAddNewGroupModal}
-            onClose={() => {
-              setShowAddNewGroupModal(false);
-            }}
-            onSelectMessage={(data) => {
-              setSelectedGroup(data);
-              setShowAddGroupMemberModal(true);
-            }}
-          />
-        )}
-        
         {showAddGroupMemberModal && (
           <AddNewGroupMembersModal
             isOpen={showAddGroupMemberModal}
@@ -132,14 +182,15 @@ const Messages = () => {
             suggestedMembers={suggestedMembers}
           />
         )}
-        
+
         {showCreateGroupChat && (
           <CreateGroupChatForm
             isOpen={showCreateGroupChat}
-            groupId={String(selectedGroup?.id)}
+            setSuggestedMembers={setSuggestedMembers}
             onClose={() => setShowCreateGroupChat(false)}
             suggestedMembers={suggestedMembers}
-          />
+            type="create"
+            group={{} as groupChatResult} />
         )}
       </div>
     </div>

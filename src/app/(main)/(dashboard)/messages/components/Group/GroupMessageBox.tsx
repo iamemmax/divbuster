@@ -1,7 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { messageProp } from "../RecentMessages";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import EmptyMessage from "../EmptyMessage";
 import {
   Archive,
@@ -11,204 +16,404 @@ import {
   Image,
   Video,
   FileTextIcon,
+  ImageIcon,
+  Send,
 } from "lucide-react";
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
 import { formatDateLabel } from "@/utils/formatDateLabel";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
-import { GroupChat } from "../GroupMessages";
+
+import { groupChatResult, Othermember } from "../../../api/chats/group/fetchGroupChatList";
+import { useFetchGroupChatMessages } from "../../../api/chats/group/fetchGroupChatMessages";
+import { PdfLogo, WordLogo, ExcelLogo } from "@/icons/files/FIles";
+import { FileUpload } from "../Recent/MessageBox";
+import { useSendGroupChatMessage } from "../../../api/chats/group/sendGroupChatMessages";
+import { useAuth } from "@/contexts/authentication";
+import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 import ViewGroupMembersModal from "../modals/group/members/ViewGroupMembers";
-import AddNewGroupMembersModal, {
-  members,
-} from "../modals/group/AddGroupMembers";
-import AddMembersToGroupModal from "../modals/group/members/AddMembersToGroup";
 
 interface MessageBoxProps {
   onBackToRecent?: () => void;
-  selectedGroup: GroupChat | null;
-  onSendMessage: (message: string) => void;
-  groupChats: GroupChat[];
+  selectedGroup: groupChatResult | null;
+  groupMembers: Othermember[] | undefined;
+  setGroupMembers: React.Dispatch<React.SetStateAction<Othermember[] | undefined>>
 }
-type User = {
-  id: number;
-  name: string;
-  username: string;
-  avatar: string;
-  isOnline: boolean;
-};
 
-type Message = {
-  senderId: number;
+interface OptimisticMessage {
+  id: string;
   message: string;
-  timestamp: string; // ISO string
-};
+  sender: string;
+  attachment?: string;
+  created_on: string;
+  group: number;
+  isOptimistic?: boolean;
+  isSending?: boolean;
+}
 
-const GroupMessageBox = ({
-  onSendMessage,
-  groupChats,
-  onBackToRecent,
-  selectedGroup,
-}: MessageBoxProps) => {
-  const me: User = {
-    id: 99,
-    name: "You",
-    username: "@you",
-    avatar:
-      "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=40&h=40&fit=crop&crop=face",
-    isOnline: true,
-  };
+const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: MessageBoxProps) => {
+  const { authState } = useAuth();
+  const { user } = authState;
+  const userData = user as User;
+
+  // State hooks
   const [message, setMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
+  const [showViewGroupMemberModal, setShowViewNewGroupModal] = useState(false);
+  const [optimisticMessages, setOptimisticMessages] = useState<OptimisticMessage[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<FileUpload[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+
+  // Refs
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const documentInputRef = useRef<HTMLInputElement>(null);
-  const [showGroupMember, setShowGroupMember] = useState(false);
-  const [showAddGroupMemberModal, setShowAddNewGroupModal] = useState(false);
-  const [suggestedMembers, setSuggestedMembers] = useState([
-    {
-      id: "1",
-      name: "Phoenix Baker",
-      description: "only god is enough",
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face",
-    },
-    {
-      id: " 3",
-      name: "Mollie Hall",
-      avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face",
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const attachmentMenuRef = useRef<HTMLDivElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-      description: "User description goes here... Lorem ipsum",
-    },
-  ]);
+  // Custom hooks
+  const groupId = selectedGroup?.group?.id ? String(selectedGroup.group.id) : "";
+  const {
+    data: chatMessages,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFetchGroupChatMessages(groupId);
 
-  const handleSendMessage = () => {
-    if (!message.trim()) return;
+  const { mutate: handleSendMessages, isLoading: isSending } = useSendGroupChatMessage();
 
-    onSendMessage(message.trim());
-    setMessage("");
-    setShowEmojiPicker(false);
+  // Memoized values
+  const allMessages = useMemo(() => {
+    if (!chatMessages?.pages) return optimisticMessages;
 
-    // Reset textarea height
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "44px";
-    }
-  };
+    const apiMessages = Array.isArray(chatMessages.pages)
+      ? chatMessages.pages
+          .flatMap((page) => page?.data?.results || [])
+          .filter(Boolean)
+      : [];
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
+    const combined: any[] = [...apiMessages];
+    
+    const apiMessageContents = new Set(
+      apiMessages.map(msg => `${msg.message}-${msg.sender}-${Math.floor(new Date(msg.created_on).getTime() / 1000)}`)
+    );
+    
+    optimisticMessages.forEach(optMsg => {
+      const optMsgKey = `${optMsg.message}-${optMsg.sender}-${Math.floor(new Date(optMsg.created_on).getTime() / 1000)}`;
+      
+      if (!apiMessageContents.has(optMsgKey)) {
+        const adaptedOptMsg = {
+          ...optMsg,
+          attachment: optMsg.attachment || null,
+        };
+        combined.push(adaptedOptMsg);
+      }
+    });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value);
+    return combined.sort((a, b) => {
+      try {
+        const dateA = new Date(a.created_on || 0).getTime();
+        const dateB = new Date(b.created_on || 0).getTime();
 
-    // Auto-resize textarea
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "44px";
-      textareaRef.current.style.height =
-        Math.min(textareaRef.current.scrollHeight, 120) + "px";
-    }
-  };
+        if (isNaN(dateA) && isNaN(dateB)) return 0;
+        if (isNaN(dateA)) return 1;
+        if (isNaN(dateB)) return -1;
 
-  const toggleEmojiPicker = () => {
-    setShowEmojiPicker((prev) => !prev);
-  };
+        return dateA - dateB;
+      } catch (error) {
+        console.error("Error sorting messages by date:", error);
+        return 0;
+      }
+    });
+  }, [chatMessages?.pages, optimisticMessages]);
 
-  const onEmojiClick = (emojiData: EmojiClickData) => {
-    setMessage((prevMessage) => prevMessage + emojiData.emoji);
+  const hasMessages = allMessages.length > 0;
+  const canSend = (message.trim() || selectedFiles.length > 0) && !isSending;
 
-    // Focus back on textarea after emoji selection
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  };
+  // Fixed optimistic ID generation
+  const generateOptimisticId = () => `optimistic-${Date.now()}-${Math.random()}`;
 
-  const openImageDialog = () => {
-    imageInputRef.current?.click();
-    setShowAttachmentMenu(false);
-  };
+  const handleSendMessage = useCallback(async () => {
+    if (!message.trim() && selectedFiles.length === 0) return;
+    if (!selectedGroup?.group?.id) return;
 
-  const openVideoDialog = () => {
-    videoInputRef.current?.click();
-    setShowAttachmentMenu(false);
-  };
+    const messageToSend = message.trim();
+    const filesToUpload = [...selectedFiles];
+    const optimisticId = generateOptimisticId();
 
-  const openDocumentDialog = () => {
-    documentInputRef.current?.click();
-    setShowAttachmentMenu(false);
-  };
+    try {
+      let attachmentPreview = null;
 
-  const toggleAttachmentMenu = () => {
-    setShowAttachmentMenu((prev) => !prev);
-  };
-
-  function getSenderName(senderId: number): string | undefined {
-    for (const group of groupChats) {
-      for (const participant of group.participants) {
-        if (participant.id === senderId) {
-          return participant.name;
+      if (filesToUpload.length > 0) {
+        const firstFile = filesToUpload[0];
+        if (firstFile.type === "image" && firstFile.preview) {
+          attachmentPreview = firstFile.preview;
+        } else if (firstFile.type === "video") {
+          attachmentPreview = URL.createObjectURL(firstFile.file);
+        } else {
+          attachmentPreview = `document:${firstFile.file.name}`;
         }
       }
-    }
-    return undefined; // or return 'Unknown Sender' if you prefer
-  }
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      alert(`Selected file: ${file.name} (${file.size} bytes)`);
-      // Handle file upload logic here
-      e.target.value = ""; // Reset file input
-    }
-  };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      alert(`Selected image: ${file.name} (${file.size} bytes)`);
-      // Handle image upload logic here
-      e.target.value = ""; // Reset file input
-    }
-  };
+      const optimisticMessage: OptimisticMessage = {
+        id: optimisticId,
+        message: messageToSend,
+        sender: String(userData?.id),
+        group: selectedGroup.group.id,
+        created_on: new Date().toISOString(),
+        attachment: attachmentPreview as string,
+        isOptimistic: true,
+        isSending: true,
+      };
 
-  const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      alert(`Selected video: ${file.name} (${file.size} bytes)`);
-      // Handle video upload logic here
-      e.target.value = ""; // Reset file input
-    }
-  };
+      setOptimisticMessages((prev) => [...prev, optimisticMessage]);
 
-  const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      alert(`Selected document: ${file.name} (${file.size} bytes)`);
-      // Handle document upload logic here
-      e.target.value = ""; // Reset file input
-    }
-  };
+      // Clear inputs immediately
+      setMessage("");
+      setSelectedFiles([]);
+      setShowEmojiPicker(false);
+      setShowAttachmentMenu(false);
 
-  const formatTime = (timestamp: string) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
+      // Reset textarea height
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "44px";
+        textareaRef.current.value = ""; // Ensure textarea is cleared
+      }
+
+      const uploadFiles = filesToUpload?.map((fileUpload) => fileUpload.file);
+
+      handleSendMessages(
+        {
+          message: messageToSend,
+          group_id: Number(selectedGroup.group.id),
+          upload: uploadFiles,
+        },
+        {
+          onSuccess: (response) => {
+            setOptimisticMessages((prev) => prev.filter((msg) => msg.id !== optimisticId));
+            setSelectedFiles([])
+          },
+          onError: (error) => {
+            setOptimisticMessages((prev) => prev.filter((msg) => msg.id !== optimisticId));
+            setMessage(messageToSend);
+            setSelectedFiles(filesToUpload);
+          },
+          
+        }
+      );
+
+    } catch (error) {
+      setOptimisticMessages((prev) => prev.filter((msg) => msg.id !== optimisticId));
+    }
+  }, [message, selectedFiles, selectedGroup?.group?.id, handleSendMessages, userData?.id]);
+
+  // Handle keyboard shortcuts
+  const handleKeyPress = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key === "Enter") {
+        if (e.shiftKey) {
+          return;
+        } else {
+          e.preventDefault();
+          handleSendMessage();
+        }
+      }
+
+      if (e.key === "Escape") {
+        setShowEmojiPicker(false);
+        setShowAttachmentMenu(false);
+      }
+    },
+    [handleSendMessage]
+  );
+
+  // Auto-resize textarea
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const value = e.target.value;
+      setMessage(value);
+
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "44px";
+        const newHeight = Math.min(textareaRef.current.scrollHeight, 120);
+        textareaRef.current.style.height = newHeight + "px";
+      }
+
+      setIsTyping(true);
+
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+
+      typingTimeoutRef.current = setTimeout(() => {
+        setIsTyping(false);
+      }, 1000);
+    },
+    []
+  );
+
+  // Fixed emoji picker handlers
+  const toggleEmojiPicker = useCallback(() => {
+    setShowEmojiPicker((prev) => !prev);
+    setShowAttachmentMenu(false);
+  }, []);
+
+  const onEmojiClick = useCallback((emojiData: EmojiClickData) => {
+    setMessage((prevMessage) => prevMessage + emojiData.emoji);
+    // Keep emoji picker open for multiple selections
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+      // Update textarea height after adding emoji
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.style.height = "44px";
+          const newHeight = Math.min(textareaRef.current.scrollHeight, 120);
+          textareaRef.current.style.height = newHeight + "px";
+        }
+      }, 0);
+    }
+  }, []);
+
+  // File upload handlers
+  const openImageDialog = useCallback(() => {
+    imageInputRef.current?.click();
+    setShowAttachmentMenu(false);
+  }, []);
+
+  const openVideoDialog = useCallback(() => {
+    videoInputRef.current?.click();
+    setShowAttachmentMenu(false);
+  }, []);
+
+  const openDocumentDialog = useCallback(() => {
+    documentInputRef.current?.click();
+    setShowAttachmentMenu(false);
+  }, []);
+
+  const toggleAttachmentMenu = useCallback(() => {
+    setShowAttachmentMenu((prev) => !prev);
+    setShowEmojiPicker(false);
+  }, []);
+
+  // Fixed file handling to prevent duplicates
+  const handleFileChange = useCallback(
+    (
+      e: React.ChangeEvent<HTMLInputElement>,
+      type: "image" | "video" | "document"
+    ) => {
+      const files = Array.from(e.target.files || []);
+      
+      if (files.length === 0) return;
+
+      const newFiles: FileUpload[] = files.map((file) => {
+        const fileUpload: FileUpload = { file, type };
+
+        if (type === "image" && file.type.startsWith("image/")) {
+          try {
+            fileUpload.preview = URL.createObjectURL(file);
+          } catch (error) {
+            console.error("Error creating object URL:", error);
+          }
+        }
+
+        return fileUpload;
+      });
+
+      // Replace instead of append to prevent duplicates
+      setSelectedFiles(newFiles);
+
+      // Reset input value to allow selecting the same file again
+      if (e.target) {
+        e.target.value = "";
+      }
+    },
+    []
+  );
+
+  const removeFile = useCallback((index: number) => {
+    setSelectedFiles((prev) => {
+      const fileToRemove = prev[index];
+      const updated = prev.filter((_, i) => i !== index);
+
+      if (fileToRemove?.preview) {
+        try {
+          URL.revokeObjectURL(fileToRemove.preview);
+        } catch (error) {
+          console.error("Error revoking object URL:", error);
+        }
+      }
+
+      return updated;
     });
-  };
+  }, []);
 
-  // Close emoji picker when clicking outside
+  // Format time helper
+  const formatTime = useCallback((timestamp: string) => {
+    try {
+      const date = new Date(timestamp);
+      if (isNaN(date.getTime())) return "";
+
+      return date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+    } catch (error) {
+      console.error("Error formatting time:", error);
+      return "";
+    }
+  }, []);
+
+  const scrollToBottom = useCallback(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
+
+  const shouldShowDateLabel = useCallback((currentMsg: any, prevMsg: any) => {
+    if (!prevMsg) return true;
+
+    try {
+      const currentDate = new Date(currentMsg.created_on).toDateString();
+      const prevDate = new Date(prevMsg.created_on).toDateString();
+      return currentDate !== prevDate;
+    } catch (error) {
+      console.error("Error comparing dates:", error);
+      return false;
+    }
+  }, []);
+
+  
+  //  click outside handler for emoji picker
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      if (showEmojiPicker && !target.closest(".emoji-picker-container")) {
+      
+      // Check if click is outside emoji picker and its container
+      if (
+        showEmojiPicker &&
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(target) &&
+        !target.closest('[data-emoji-picker-trigger]')
+      ) {
         setShowEmojiPicker(false);
+      }
+
+      // Check if click is outside attachment menu
+      if (
+        showAttachmentMenu &&
+        attachmentMenuRef.current &&
+        !attachmentMenuRef.current.contains(target) &&
+        !target.closest('[data-attachment-trigger]')
+      ) {
+        setShowAttachmentMenu(false);
       }
     };
 
@@ -216,154 +421,477 @@ const GroupMessageBox = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showEmojiPicker]);
+  }, [showEmojiPicker, showAttachmentMenu]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [selectedGroup?.messages]);
+  }, [selectedGroup?.group]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      scrollToBottom();
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [chatMessages?.pages, optimisticMessages, scrollToBottom]);
+
+  // Infinite scroll handler
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      if (el.scrollTop === 0 && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    };
+
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+
+      selectedFiles.forEach((file) => {
+        if (file.preview) {
+          try {
+            URL.revokeObjectURL(file.preview);
+          } catch (error) {
+            console.error("Error revoking object URL:", error);
+          }
+        }
+      });
+
+      optimisticMessages.forEach((msg) => {
+        if (msg.attachment?.startsWith("blob:")) {
+          try {
+            URL.revokeObjectURL(msg.attachment);
+          } catch (error) {
+            console.error("Error revoking optimistic attachment URL:", error);
+          }
+        }
+      });
+    };
+  }, [selectedFiles, optimisticMessages]);
 
   if (!selectedGroup) return <EmptyMessage />;
 
   return (
-  <div className="flex flex-col h-full border rounded-lg bg-[#F9FAFB] dark:bg-gray-900 dark:border-gray-700 overflow-hidden">
-  {/* Header */}
-  <div className="flex items-center justify-between p-4 border-b bg-white dark:bg-gray-800 dark:border-gray-700 flex-shrink-0">
-    <div className="flex items-center space-x-3">
-      {/* Back button for mobile */}
-      {onBackToRecent && (
-        <button
-          onClick={onBackToRecent}
-          className="md:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors mr-2"
-          aria-label="Back to recent messages"
-        >
-          <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-gray-300" />
-        </button>
-      )}
-      <div className="relative">
-        <img
-          src={selectedGroup?.groupAvatar}
-          alt={selectedGroup?.groupName}
-          className="w-10 h-10 rounded-full object-cover"
-        />
-        <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
+    <div className="flex flex-col h-full border rounded-lg bg-[#F9FAFB] dark:bg-gray-900 dark:border-gray-700 overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b bg-white dark:bg-gray-800 dark:border-gray-700 flex-shrink-0">
+        <div className="flex items-center space-x-3">
+          <div className="relative">
+            <img
+              src={selectedGroup?.group?.image}
+              alt={selectedGroup?.group?.name}
+              className="w-10 h-10 rounded-full object-cover"
+            />
+            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
+          </div>
+          <div>
+            <h2 className="font-semibold text-gray-900 dark:text-gray-100">
+              {selectedGroup?.group?.name ?? ""}
+            </h2>
+            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
+              {selectedGroup?.other_members
+                ?.slice(0, 7)
+                .map((x) => x?.first_name)
+                ?.join(", ")}
+              {selectedGroup?.other_members?.length > 7 &&
+                `, +${selectedGroup?.other_members.length - 7} more`}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <button
+            className="px-3 sm:px-4 py-2 bg-orange-500 text-white text-xs md:text-sm font-medium rounded-lg hover:bg-orange-600"
+            onClick={() => setShowViewNewGroupModal(true)}
+          >
+            <span className="hidden sm:inline">View members</span>
+            <span className="sm:hidden">Members</span>
+          </button>
+        </div>
       </div>
-      <div>
-        <h2 className="font-semibold text-gray-900 dark:text-gray-100">
-          {selectedGroup?.groupName}
-        </h2>
-        <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
-          {selectedGroup?.participants?.slice(0, 7).map((x) => x.name).join(", ")}
-          {selectedGroup?.participants?.length > 7 &&
-            `, +${selectedGroup.participants.length - 7} more`}
-        </p>
-      </div>
-    </div>
-    <div className="flex items-center space-x-2">
-      <button className="hidden sm:flex items-center space-x-1 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
-        <Archive className="h-4 w-4" />
-        <span>Archive</span>
-      </button>
-      <button
-        className="px-3 sm:px-4 py-2 bg-orange-500 text-white text-xs md:text-sm font-medium rounded-lg hover:bg-orange-600"
-        onClick={() => setShowGroupMember(true)}
+
+      {/* Messages Container */}
+      <div
+        ref={containerRef}
+        className="flex-1 overflow-y-auto p-4 space-y-4 bg-white dark:bg-gray-900"
       >
-        <span className="hidden sm:inline">View members</span>
-        <span className="sm:hidden">Members</span>
-      </button>
-    </div>
-  </div>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-32">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center text-red-500 py-8">
+            Failed to load messages. Please try again.
+          </div>
+        ) : !hasMessages ? (
+          <EmptyMessage />
+        ) : (
+          <>
+            {isFetchingNextPage && (
+              <div className="flex justify-center py-2">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500"></div>
+              </div>
+            )}
+            {allMessages.map((msg, index) => {
+              if (!msg) return null;
 
-  {/* Messages */}
-  <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white dark:bg-gray-900 min-h-0">
-    {selectedGroup?.messages?.length === 0 ? (
-      <EmptyMessage />
-    ) : (
-      <div className="max-h-[52vh] md:max-h-[58vh] overflow-y-auto">
-        {selectedGroup?.messages?.map((msg, index) => {
-          const isCurrentUser = msg.senderId === me?.id;
-          const currentMessageDate = new Date(msg.timestamp).toDateString();
-          const prevMessageDate =
-            index > 0
-              ? new Date(selectedGroup.messages[index - 1].timestamp).toDateString()
-              : null;
+              const isCurrentUser = msg.sender?.toString() === userData?.id?.toString();
+              const prevMsg = index > 0 ? allMessages[index - 1] : null;
+              const showDateLabel = shouldShowDateLabel(msg, prevMsg);
+              
+              // Check if this specific message is being sent (only for optimistic messages)
+              const isMessageSending = msg.isOptimistic && msg.isSending;
 
-          const showDateLabel = index === 0 || currentMessageDate !== prevMessageDate;
+              return (
+                <React.Fragment key={msg.id || `${index}-${msg.created_on}`}>
+                  {showDateLabel && (
+                    <div className="flex justify-center my-4">
+                      <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+                        {formatDateLabel(msg.created_on)}
+                      </span>
+                    </div>
+                  )}
+                  
+                  <div
+                    className={`flex ${isCurrentUser ? "justify-end" : "items-start space-x-3"}`}
+                  >
+                    {!isCurrentUser && (
+                      <div className="w-10 h-10 uppercase rounded-full bg-gray-300 flex items-center justify-center text-black font-semibold">
+                        {`${selectedGroup?.user?.first_name?.[0] || ""}${selectedGroup?.user?.last_name?.[0] || ""}`}
+                      </div>
+                    )}
 
-          return (
-            <div key={index} className="py-6">
-              {showDateLabel && (
-                <div className="flex justify-center my-5">
-                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
-                    {formatDateLabel(msg.timestamp)}
-                  </span>
-                </div>
-              )}
-              <div className={`flex ${isCurrentUser ? "justify-end" : "items-start space-x-3"}`}>
-                {!isCurrentUser && (
+                    <div
+                      className={`flex-1 max-w-[80%] ${isCurrentUser ? "flex flex-col items-end" : ""}`}
+                    >
+                      <div
+                        className={`flex items-center space-x-2 mb-1 ${isCurrentUser ? "flex-row-reverse space-x-reverse" : ""}`}
+                      >
+                        {!isCurrentUser && (
+                          <span className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                            {`${selectedGroup?.user?.first_name} ${selectedGroup?.user?.last_name}` ||
+                              "Unknown User"}
+                          </span>
+                        )}
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {formatTime(msg?.created_on)}
+                        </span>
+                      </div>
+
+                      <div
+                        className={`relative rounded-2xl px-4 py-2 inline-block break-words group ${
+                          isCurrentUser
+                            ? `bg-orange-500 text-white rounded-tr-md ${isMessageSending ? "opacity-70" : ""}`
+                            : "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-tl-md"
+                        }`}
+                      >
+                        {msg?.message && (
+                          <p className="text-sm whitespace-pre-wrap">
+                            {msg.message}
+                          </p>
+                        )}
+
+                        {msg?.attachment && (
+                          <div className="mt-2">
+                            {/* Handle optimistic blob URLs for images */}
+                            {msg.attachment.startsWith("blob:") ? (
+                              <img
+                                src={msg.attachment}
+                                alt="attachment"
+                                className="max-w-xs rounded-lg cursor-pointer"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = "none";
+                                }}
+                              />
+                            ) : /* Handle optimistic document placeholders */
+                            msg.attachment.startsWith("document:") ? (
+                              <div className="flex items-center space-x-2 p-2 bg-gray-100 dark:bg-gray-700 rounded">
+                                <FileTextIcon className="h-4 w-4 text-blue-500" />
+                                <span className="text-sm text-gray-700 dark:text-gray-300">
+                                  {msg.attachment.replace("document:", "")}
+                                </span>
+                              </div>
+                            ) : /* Handle regular image URLs from API */
+                            msg.attachment.match(/\.(jpeg|jpg|png|gif|webp)$/i) ||
+                              msg.attachment.includes("/image/") ||
+                              msg.attachment.startsWith("data:image/") ? (
+                              <img
+                                src={msg.attachment}
+                                alt="attachment"
+                                className="max-w-xs rounded-lg cursor-pointer"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = "none";
+                                }}
+                              />
+                            ) : /* Handle video files from API */
+                            msg.attachment.match(/\.(mp4|webm|ogg|avi|mov)$/i) ||
+                              msg.attachment.includes("/video/") ||
+                              msg.attachment.startsWith("data:video/") ? (
+                              <video
+                                src={msg.attachment}
+                                controls
+                                className="max-w-xs rounded-lg"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = "none";
+                                }}
+                              />
+                            ) : /* Handle document files from API */
+                            msg.attachment.match(/\.(pdf|docx?|xlsx?|pptx?|txt|zip|rtf)$/i) ||
+                              msg.attachment.includes("/document/") ||
+                              msg.attachment.includes("application/pdf") ||
+                              msg.attachment.includes("application/msword") ||
+                              msg.attachment.includes("application/vnd.openxmlformats") ? (
+                              <div className="flex items-center space-x-2 p-2 bg-gray-100 dark:bg-gray-700 rounded">
+                                {/* File type icons */}
+                                {(msg.attachment.match(/\.pdf$/i) || msg.attachment.includes("application/pdf")) && (
+                                  <PdfLogo className="h-4 w-4 text-red-500" />
+                                )}
+                                {(msg.attachment.match(/\.docx?$/i) || msg.attachment.includes("application/msword") || msg.attachment.includes("application/vnd.openxmlformats-officedocument.wordprocessingml")) && (
+                                  <WordLogo className="h-4 w-4 text-blue-600" />
+                                )}
+                                {(msg.attachment.match(/\.xlsx?$/i) || msg.attachment.includes("application/vnd.openxmlformats-officedocument.spreadsheetml") || msg.attachment.includes("application/vnd.ms-excel")) && (
+                                  <ExcelLogo className="h-4 w-4 text-green-600" />
+                                )}
+                                {(msg.attachment.match(/\.pptx?$/i) || msg.attachment.includes("application/vnd.openxmlformats-officedocument.presentationml") || msg.attachment.includes("application/vnd.ms-powerpoint")) && (
+                                  <ExcelLogo className="h-4 w-4 text-orange-500" />
+                                )}
+                                {!msg.attachment.match(/\.(pdf|docx?|xlsx?|pptx?)$/i) && (
+                                  <FileTextIcon className="h-4 w-4 text-blue-500" />
+                                )}
+
+                                <a
+                                  href={msg.attachment}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-sm text-gray-700 dark:text-gray-300 underline hover:text-blue-500"
+                                >
+                                  {msg.attachment.split("/").pop() || "Download File"}
+                                </a>
+                              </div>
+                            ) : /* Only show download link for actual files, not empty strings */
+                            msg.attachment.trim() && msg.attachment !== "null" && msg.attachment !== "undefined" ? (
+                              <a
+                                href={msg.attachment}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm underline text-blue-500 hover:text-blue-600 flex items-center space-x-2"
+                              >
+                                <FileTextIcon className="h-4 w-4" />
+                                <span>📎 Download File</span>
+                              </a>
+                            ) : null}
+                          </div>
+                        )}
+
+                        {/* Loading overlay only for pending optimistic messages */}
+                        {isMessageSending && (
+                          <div className="absolute inset-0 bg-black bg-opacity-10 rounded-2xl flex items-center justify-center">
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </React.Fragment>
+              );
+            })}
+            <div ref={messagesEndRef} />
+          </>
+        )}
+      </div>
+
+      {/* File Preview Section */}
+      {selectedFiles.length > 0 && (
+        <div className="border-t bg-gray-50 dark:bg-gray-800 p-3">
+          <div className="flex flex-wrap gap-2">
+            {selectedFiles.map((fileUpload, index) => (
+              <div
+                key={index}
+                className="relative bg-white dark:bg-gray-700 rounded-lg p-2 border"
+              >
+                {fileUpload.preview ? (
                   <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face"
-                    alt="Sender"
-                    className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                    src={fileUpload.preview}
+                    alt="Preview"
+                    className="w-16 h-16 object-cover rounded"
                   />
+                ) : (
+                  <div className="w-16 h-16 flex items-center justify-center bg-gray-100 dark:bg-gray-600 rounded">
+                    <FileTextIcon className="h-8 w-8 text-gray-500" />
+                  </div>
                 )}
-                <div className={`flex-1 ${isCurrentUser ? "flex flex-col items-end" : ""}`}>
-                  <div
-                    className={`flex items-center gap-x-6 mb-1 ${isCurrentUser ? "flex-row-reverse" : ""}`}
-                  >
-                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {isCurrentUser ? "You" : getSenderName(msg?.senderId)}
-                    </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      {formatTime(msg.timestamp)}
-                    </span>
+                <button
+                  onClick={() => removeFile(index)}
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                  aria-label="Remove file"
+                >
+                  ×
+                </button>
+                <p
+                  className="text-xs text-center mt-1 truncate w-16"
+                  title={fileUpload?.file.name}
+                >
+                  {fileUpload.file.name}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Message Input Section */}
+      <div className="border-t p-4 bg-white dark:bg-gray-800 dark:border-gray-700 flex-shrink-0">
+        <div className="flex items-end space-x-2">
+          <div className="flex-1 flex items-center relative">
+            <textarea
+              ref={textareaRef}
+              value={message}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyPress}
+              placeholder="Send a message"
+              className="w-full px-4 py-3 pr-20 border border-gray-200 dark:border-gray-700 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent overflow-hidden bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 disabled:opacity-50"
+              style={{ minHeight: "44px", maxHeight: "120px" }}
+              rows={1}
+              disabled={isSending}
+            />
+            <div className="absolute right-2 bottom-2 flex items-center space-x-1">
+              <button
+                type="button"
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                onClick={toggleEmojiPicker}
+                disabled={isSending}
+                aria-label="Add emoji"
+                data-emoji-picker-trigger
+              >
+                <Smile className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+              </button>
+
+              <div className="relative" ref={attachmentMenuRef}>
+                <button
+                  type="button"
+                  className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                  onClick={toggleAttachmentMenu}
+                  disabled={isSending}
+                  aria-label="Attach file"
+                  data-attachment-trigger
+                >
+                  <ThreeDot className="text-gray-600 dark:text-gray-300" />
+                </button>
+
+                {showAttachmentMenu && (
+                  <div className="absolute bottom-10 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-2 z-30 min-w-[180px]">
+                    <button
+                      type="button"
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-3 transition-colors"
+                      onClick={openImageDialog}
+                    >
+                      <ImageIcon className="h-4 w-4 text-purple-500" />
+                      <span>Image</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-3 transition-colors"
+                      onClick={openVideoDialog}
+                    >
+                      <Video className="h-4 w-4 text-purple-500" />
+                      <span>Video</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-3 transition-colors"
+                      onClick={openDocumentDialog}
+                    >
+                      <FileTextIcon className="h-4 w-4 text-blue-500" />
+                      <span>Document</span>
+                    </button>
                   </div>
-                  <div
-                    className={`relative rounded-2xl px-4 py-2 inline-block max-w-[90%] md:max-w-[70%] break-words group ${
-                      isCurrentUser
-                        ? "bg-orange-500 text-white rounded-tr-md"
-                        : "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-tl-md"
-                    }`}
-                  >
-                    <p className="text-sm font-medium font-archivo">{msg.message}</p>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
-          );
-        })}
-        <div ref={messagesEndRef} />
+
+            {/* Emoji Picker */}
+            {showEmojiPicker && (
+              <div
+                className="absolute bottom-12 right-2 z-50 emoji-picker-container"
+                ref={emojiPickerRef}
+              >
+                <EmojiPicker
+                  onEmojiClick={onEmojiClick}
+                  width={280}
+                  height={350}
+                  previewConfig={{ showPreview: false }}
+                />
+              </div>
+            )}
+          </div>
+
+          <button
+            onClick={handleSendMessage}
+            disabled={!canSend}
+            className={`px-4 py-3 text-sm font-medium rounded-lg transition-colors flex items-center space-x-2 ${
+              canSend
+                ? "bg-orange-500 text-white hover:bg-orange-600"
+                : "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+            }`}
+            type="button"
+            aria-label="Send message"
+          >
+            {isSending ? (
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
+            <span className="hidden sm:inline">Send</span>
+          </button>
+        </div>
+
+        {/* Hidden file inputs */}
+        <input
+          ref={imageInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={(e) => handleFileChange(e, "image")}
+        />
+        <input
+          ref={videoInputRef}
+          type="file"
+          accept="video/*"
+          multiple
+          className="hidden"
+          onChange={(e) => handleFileChange(e, "video")}
+        />
+        <input
+          ref={documentInputRef}
+          type="file"
+          accept=".pdf,.doc,.docx,.txt,.rtf"
+          multiple
+          className="hidden"
+          onChange={(e) => handleFileChange(e, "document")}
+        />
       </div>
-    )}
-  </div>
 
-  {/* Input */}
-  <div className="border-t p-4 bg-white dark:bg-gray-800 dark:border-gray-700 flex-shrink-0">
-    <div className="flex items-end space-x-2">
-      <textarea
-        ref={textareaRef}
-        value={message}
-        onChange={handleInputChange}
-        onKeyPress={handleKeyPress}
-        placeholder="Send a message"
-        className="w-full px-4 py-3 pr-20 border border-gray-200 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
-        rows={1}
-      />
-      <button
-        onClick={handleSendMessage}
-        disabled={!message.trim()}
-        className={`px-6 py-3 text-sm font-medium rounded-lg transition-colors ${
-          message.trim()
-            ? "bg-orange-500 text-white hover:bg-orange-600"
-            : "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-        }`}
-        type="button"
-      >
-        Send
-      </button>
+      {showViewGroupMemberModal && (
+        <ViewGroupMembersModal 
+          isOpen={showViewGroupMemberModal}
+          setShowAddNewGroupModal={setShowViewNewGroupModal}
+          onClose={() => setShowViewNewGroupModal(false)}
+          groupId={groupId}
+          suggestedMembers={groupMembers}
+          setGroupMembers={setGroupMembers}
+        />
+      )}
     </div>
-  </div>
-</div>
-
   );
 };
 

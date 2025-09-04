@@ -1,106 +1,69 @@
-import React, { useState } from 'react'
-import { ArrowLeft, Send, MoreVertical, Users, Clock, Search, Edit3, Trash2, Archive } from 'lucide-react'
-import GroupSidebar from './Group/GroupSidebar';
-import GroupMessageBox from './Group/GroupMessageBox';
-import { groupChats, me } from './mocks';
-export type User = {
-  id: number;
-  name: string;
-  username: string;
-  avatar: string;
-  isOnline: boolean;
-};
+import React, { useState } from "react";
 
-type Message = {
-  senderId: number;
-  message: string;
-  timestamp: string; // ISO string
-};
+import GroupSidebar from "./Group/GroupSidebar";
+import GroupMessageBox from "./Group/GroupMessageBox";
+import { groupChats, me } from "./mocks";
+import {
+  groupChatListProp,
+  groupChatResult,
+  Othermember,
+  useFetchGroupChatList,
+} from "../../api/chats/group/fetchGroupChatList";
 
-export type GroupChat = {
-  id: number;
-  groupName: string;
-  participants: User[];
-  messages: Message[];
-  hasUnreadMessages: boolean;
-  lastUpdated?: string; // ISO string
-  groupAvatar: string; // <-- new property: array of avatar URLs for group avatar
-};
-
-
-
-
-
-interface prop{
-  groupList: GroupChat[]
-  setSelectedGroup: React.Dispatch<React.SetStateAction<GroupChat | null>>
-   selectedGroup: GroupChat | null;
-   setGroupList: React.Dispatch<React.SetStateAction<GroupChat[]>>
+interface prop {
+  // groupList: groupChatListProp | undefined;
+  setSelectedGroup: React.Dispatch<
+    React.SetStateAction<groupChatResult | null>
+  >;
+  selectedGroup: groupChatResult | null;
+  setGroupList: React.Dispatch<
+    React.SetStateAction<groupChatResult[] | undefined>
+  >;
+  // isLoadingGroup: boolean;
 }
 
-
-
 // Main Component
-const GroupMessages = ({groupList,selectedGroup,setGroupList,setSelectedGroup}:prop) => {
-  // const [groupList, setGroupList] = useState<GroupChat[]>(groupChats);
-  // const [selectedGroup, setSelectedGroup] = useState<GroupChat | null>(null);
-
-  const handleBackToRecent = () => {
-    setSelectedGroup(null);
-  };
-
-  const handleSendMessage = (messageText: string) => {
-    if (!selectedGroup) return;
-
-    const newMessage: Message = {
-      senderId: me?.id,
-      message: messageText,
-      timestamp: new Date().toISOString(),
-    };
-
-    setGroupList(prevGroups =>
-      prevGroups.map(group =>
-        group.id === selectedGroup.id
-          ? {
-              ...group,
-              messages: [...group.messages, newMessage],
-              lastUpdated: newMessage.timestamp,
-              hasUnreadMessages: false, // Mark as read when we send a message
-            }
-          : group
-      )
-    );
-
-    // Update selected group to reflect the new message
-    setSelectedGroup(prev => prev ? {
-      ...prev,
-      messages: [...prev.messages, newMessage],
-      lastUpdated: newMessage.timestamp,
-      hasUnreadMessages: false,
-    } : null);
-  };
+const GroupMessages = ({
+  // groupList,
+  selectedGroup,
+  setGroupList,
+  setSelectedGroup,
+  // isLoadingGroup,
+}: prop) => {
+  const {
+    data: groupChatList,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isFetchingNextPage,
+    isLoading: isLoadingGroup,
+  } = useFetchGroupChatList();
+  const [groupMembers, setGroupMembers] = useState<Othermember[]>();
 
   const handleDeleteGroup = (groupId: number) => {
-    setGroupList(prevGroups => prevGroups.filter(group => group.id !== groupId));
+    setGroupList((prevGroups) =>
+      prevGroups?.filter((group) => group.id !== groupId)
+    );
     if (selectedGroup?.id === groupId) {
       setSelectedGroup(null);
     }
   };
 
   const handleArchiveGroup = (groupId: number) => {
-    // For demo purposes, we'll just remove it like delete
-    // In a real app, you might move it to an archived section
-    setGroupList(prevGroups => prevGroups.filter(group => group.id !== groupId));
+    setGroupList((prevGroups) =>
+      prevGroups?.filter((group) => group.id !== groupId)
+    );
     if (selectedGroup?.id === groupId) {
       setSelectedGroup(null);
     }
   };
 
-  const handleSelectGroup = (group: GroupChat) => {
+  const handleSelectGroup = (group: groupChatResult) => {
     setSelectedGroup(group);
     // Mark as read when selected
-    setGroupList(prevGroups =>
-      prevGroups.map(g =>
+    setGroupList((prevGroups) =>
+      prevGroups?.map((g) =>
         g.id === group.id ? { ...g, hasUnreadMessages: false } : g
       )
     );
@@ -108,60 +71,62 @@ const GroupMessages = ({groupList,selectedGroup,setGroupList,setSelectedGroup}:p
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 h-[79vh] overflow-y-hidden">
-  {/* Mobile Layout */}
-  <div className="md:hidden h-full">
-    {!selectedGroup ? (
-      <GroupSidebar
-        groupChats={groupList}
-        selectedGroup={selectedGroup}
-        onSelectGroup={handleSelectGroup}
-        onDelete={handleDeleteGroup}
-        onArchive={handleArchiveGroup}
-      />
-    ) : (
-      <div className="h-full relative">
-        <div className="absolute top-4 left-4 z-50">
-          <button
-            onClick={handleBackToRecent}
-            className="flex items-center space-x-2 px-3 py-2 
-              bg-white dark:bg-gray-800 
-              border border-gray-200 dark:border-gray-700 
-              rounded-lg shadow-sm 
-              hover:bg-gray-50 dark:hover:bg-gray-700 
-              transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4 text-gray-700 dark:text-gray-200" />
-            <span className="text-sm font-medium text-gray-800 dark:text-gray-100">Back</span>
-          </button>
-        </div>
-        <div className="pt-16 h-full">
-          <GroupMessageBox
+      {/* Mobile Layout */}
+      <div className="lg:hidden h-full">
+        {!selectedGroup ? (
+          <GroupSidebar
+            isLoadingGroup={isLoadingGroup}
+            groupList={groupChatList}
             selectedGroup={selectedGroup}
-            onSendMessage={handleSendMessage}
-            groupChats={groupChats}
+            onSelectGroup={handleSelectGroup}
+            onDelete={handleDeleteGroup}
+            onArchive={handleArchiveGroup}
+            setGroupMembers={setGroupMembers}
+            fetchNextPage={fetchNextPage}
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            fetchPreviousPage={fetchPreviousPage}
+            hasPreviousPage={hasPreviousPage}
           />
-        </div>
+        ) : (
+          <div className="h-full relative">
+            <div className="h-[75vh]">
+              <GroupMessageBox
+                selectedGroup={selectedGroup}
+                // onSendMessage={handleSendMessage}
+                groupMembers={groupMembers}
+                setGroupMembers={setGroupMembers}
+              />
+            </div>
+          </div>
+        )}
       </div>
-    )}
-  </div>
 
-  {/* Desktop Layout */}
-  <div className="hidden md:grid grid-cols-[1fr_2fr] gap-0 h-full">
-    <GroupSidebar
-      groupChats={groupList}
-      selectedGroup={selectedGroup}
-      onSelectGroup={handleSelectGroup}
-      onDelete={handleDeleteGroup}
-      onArchive={handleArchiveGroup}
-    />
-    <GroupMessageBox
-      selectedGroup={selectedGroup}
-      onSendMessage={handleSendMessage}
-      groupChats={groupChats}
-    />
-  </div>
-</div>
+      {/* Desktop Layout */}
+      <div className="hidden lg:grid grid-cols-[1fr_1.8fr] gap-0 h-full">
+        <GroupSidebar
+          groupList={groupChatList}
+          selectedGroup={selectedGroup}
+          onSelectGroup={handleSelectGroup}
+          onDelete={handleDeleteGroup}
+          onArchive={handleArchiveGroup}
+          isLoadingGroup={isLoadingGroup}
+          setGroupMembers={setGroupMembers}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchPreviousPage={fetchPreviousPage}
+          hasPreviousPage={hasPreviousPage}
+        />
+        <GroupMessageBox
+          selectedGroup={selectedGroup}
+          // onSendMessage={handleSendMessage}
 
+          groupMembers={groupMembers}
+          setGroupMembers={setGroupMembers}
+        />
+      </div>
+    </div>
   );
 };
 

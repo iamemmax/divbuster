@@ -6,6 +6,7 @@ import {
   DialogTitle,
   Button,
 } from "@/components/core";
+import { SmallSpinner } from "@/icons/core";
 import { ReactNode } from "react";
 
 interface UnsavedChangesModalProps {
@@ -19,6 +20,7 @@ interface UnsavedChangesModalProps {
   saveLabel?: string;
   icon?: ReactNode;
   hideSaveButton?: boolean;
+  loading?: boolean;
 }
 
 export const UnsavedChangesModal = ({
@@ -32,27 +34,30 @@ export const UnsavedChangesModal = ({
   saveLabel = "Save changes",
   icon = <WarningIcon2 />,
   hideSaveButton = false,
+  loading = false
 }: UnsavedChangesModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-white dark:bg-[#1A1D21]">
         <DialogHeader className="text-center flex flex-col">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#FEF0C7] border-[#FFFAEB] border-[8px]">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#FEF0C7] dark:bg-orange-900/20 border-[#FFFAEB] dark:border-orange-800/30 border-[8px]">
             {icon}
           </div>
-          <DialogTitle className="text-lg font-archivo font-medium mt-5 text-[#101828]">
+          <DialogTitle className="text-lg font-archivo font-medium mt-5 text-[#101828] dark:text-gray-100">
             {title}
           </DialogTitle>
         </DialogHeader>
 
         <div className="text-center mt-2 pb-6">
-          <p className="text-[#667085] font-archivo text-sm">{description}</p>
+          <p className="text-[#667085] dark:text-gray-400 font-archivo text-sm">
+            {description}
+          </p>
 
           <div className="flex gap-3 px-6 justify-center mb-4 mt-[3.125rem]">
             <Button
               variant="outlined"
               onClick={onDiscard}
-              className="w-full max-md:px-3 py-[10px]"
+              className="w-full max-md:px-3 py-[10px] border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
             >
               {discardLabel}
             </Button>
@@ -60,9 +65,9 @@ export const UnsavedChangesModal = ({
             {!hideSaveButton && (
               <Button
                 onClick={onSave}
-                className="w-full max-md:px-3 py-[10px] bg-orange-500 hover:bg-orange-600 text-white"
+                className="w-full flex items-center justify-center gap-x-2 max-md:px-3 py-[10px] bg-orange-500 hover:bg-orange-600 text-white dark:bg-orange-600 dark:hover:bg-orange-700"
               >
-                {saveLabel}
+                {saveLabel} {loading && <SmallSpinner color="white" />}
               </Button>
             )}
           </div>

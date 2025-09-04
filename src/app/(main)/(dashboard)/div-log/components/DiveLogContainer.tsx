@@ -5,7 +5,6 @@ import React, { useEffect, useRef, useState } from "react";
 import LikeIcon from "@/app/icons/(dashboard)/LikeIcon";
 import MessageIcon2 from "@/app/icons/(dashboard)/MessageIcon2";
 import ShareIcon2 from "@/app/icons/(dashboard)/ShareIcon2";
-import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import slugify from "react-slugify";
 import PenIcon from "@/app/icons/(dashboard)/PenIcon";
@@ -24,6 +23,7 @@ import { useFetchCountry } from "../../api/fetchCountry";
 import { LocationDisplay } from "@/utils/GetLocationFromCordinate";
 import { SmallSpinner } from "@/icons/core";
 import { useAuth } from "@/contexts/authentication";
+import SuggestedBuddies from "../../div-buddies/SuggestedBuddies";
 interface VisibilityOption {
   value: string;
   label: string;
@@ -38,56 +38,6 @@ interface ColorClasses {
   icon: string;
 }
 
-const buddies = [
-  {
-    name: "Phoenix Baker",
-    rating: 4,
-    reviews: 22,
-    avatar: "PB",
-    img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=40&h=40&fit=crop&crop=face",
-    color: "bg-purple-100 text-purple-700",
-  },
-  {
-    name: "Lana Steiner",
-    rating: 5,
-    reviews: 29,
-    avatar: "LS",
-    color: "bg-green-100 text-green-700",
-    img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face",
-  },
-  {
-    name: "Demi Wilkinson",
-    rating: 4,
-    reviews: 22,
-    avatar: "DW",
-    color: "bg-blue-100 text-blue-700",
-    img: "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=40&h=40&fit=crop&crop=face",
-  },
-  {
-    name: "Candice Wu",
-    rating: 4,
-    reviews: 22,
-    avatar: "CW",
-    color: "bg-pink-100 text-pink-700",
-    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face",
-  },
-  {
-    name: "Natali Craig",
-    rating: 4,
-    reviews: 22,
-    avatar: "NC",
-    color: "bg-yellow-100 text-yellow-700",
-    img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face",
-  },
-  {
-    name: "Orlando Diggs",
-    rating: 4,
-    reviews: 22,
-    avatar: "OD",
-    color: "bg-indigo-100 text-indigo-700",
-    img: "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=80&h=80&fit=crop",
-  },
-];
 
 interface Prop {
   data_type?: string;
@@ -201,7 +151,7 @@ const handleSelect = ({ id, option }: { id: string | number; option: VisibilityO
   };
 
   return (
-    <div className="mt-[13rem] 2xl:mt-[1.125rem]  py-6 grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-6 w-full">
+    <div className="mt-[13rem] 2xl:mt-[1.125rem]  py-6 grid grid-cols-1 xl:grid-cols-[3fr_1fr] gap-6 w-full">
       {isLoading ? (
         <div className="flex justify-center items-center py-5">
           <SmallSpinner color="#F7931D" />
@@ -215,7 +165,7 @@ const handleSelect = ({ id, option }: { id: string | number; option: VisibilityO
                 key={idx}
                
               >
-                <div className="flex items-center justify-between w-full  mb-6">
+                <div className="flex items-center justify-between w-full z-50  mb-6" onClick={() => router.push(`/div-log/${slugify(item?.id)}`)}>
                   <div className="flex items-start space-x-4 w-full">
                     <div className="relative shrink-0 md:h-[60px]  md:w-[60px] h-[40px] w-[40px] rounded-full">
                       <Image
@@ -530,68 +480,7 @@ const handleSelect = ({ id, option }: { id: string | number; option: VisibilityO
         </div>
       )}
       <div className=" border border-[#EAECF0] rounded-lg ">
-        <div className="bg-white rounded-lg shadow-sm">
-          <div className="p-4 border-b border-gray-100">
-            <h3 className="font-semibold font-archivo text-base text-[#101828]">
-              Suggested Buddies
-            </h3>
-            {/* <p className="text-xs text-[#78828A] font-medium font-archivo">46 Dive Buddies</p> */}
-          </div>
-          <div className="p-4">
-            <div className="">
-              {buddies.map((buddy, index) => (
-                <div
-                  key={index}
-                  className="relative flex items-center justify-between py-3"
-                >
-                  {/* Connecting line */}
-                  {index < buddies.length - 1 && (
-                    <div className="absolute left-5 top-12 w-[2px] h-6 bg-gray-200"></div>
-                  )}
-
-                  <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div className="relative z-10 flex-shrink-0">
-                      <img
-                        src={buddy.img}
-                        alt={buddy.name}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
-
-                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white"></div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-gray-900 text-sm truncate">
-                        {buddy.name}
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-3 h-3 ${i < buddy.rating ? "text-orange-400 fill-current" : "text-gray-300"}`}
-                          />
-                        ))}
-                        <span className="text-xs text-gray-500 ml-1">
-                          {buddy.reviews} Reviews
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <button className="flex items-center justify-center hover:border-orange-500 hover:bg-orange-50 transition-colors p-1 flex-shrink-0">
-                    <AddIcon />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="flex py-3 justify-center items-center w-full">
-            <Button
-              variant={"outlined"}
-              className=" mt-4 text-center text-sm text-gray-600 hover:text-gray-800"
-            >
-              View more
-            </Button>
-          </div>
-        </div>
+       <SuggestedBuddies/>
       </div>
     </div>
   );

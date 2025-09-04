@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/authentication";
 import { useRouter } from "next/navigation";
 import { tokenStorage } from "@/app/(auth)/utils";
 import { deleteAxiosDefaultToken } from "@/lib/axios";
+import Link from "next/link";
 
 interface HeaderProps {
   title?: string;
@@ -66,6 +67,8 @@ const Header = ({ subtitle, title }: HeaderProps) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  // console.log(user);
+  
 
   return (
     <div className="py-4 xl:py-6 px-[1.9375rem] w-full border-b border-[#E2E8F0] flex justify-between items-center">
@@ -124,7 +127,7 @@ const Header = ({ subtitle, title }: HeaderProps) => {
             <div className="relative">
               <div className="xl:w-10 xl:h-10 w-8 h-8 rounded-full overflow-hidden border-2 border-white">
                 <img
-                  src={userData?.profile_details?.profile_picture}
+                  src={userData?.profile_details?.profile_picture !==null ? userData?.profile_details?.profile_picture: "/images/profile.png"}
                   alt="Diver profile"
                   className="w-full h-full object-cover"
                 />
@@ -213,9 +216,9 @@ const Header = ({ subtitle, title }: HeaderProps) => {
                   <span className="text-sm font-medium text-gray-700 dark:text-white/70">Alerts</span>
                 </div>
                 <div className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
-                  <div className="border border-[#EEEEEE]  dark:border-gray-600 flex justify-center items-center w-8 h-8 rounded-full">
+                  <Link href={"/messages"} className="border border-[#EEEEEE] bg-transparent p-0 dark:border-gray-600 flex justify-center items-center w-8 h-8 rounded-full">
                     <MessageIcon className="text-[#132346] dark:text-white"/>
-                  </div>
+                  </Link>
                   <span className="text-sm font-medium text-gray-700 dark:text-white/70">Messages</span>
                 </div>
                 <div className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">

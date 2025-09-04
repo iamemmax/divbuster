@@ -1,7 +1,10 @@
+
 "use client"
 import { Button, LinkButton } from "@/components/core"
+import { SmallSpinner } from "@/icons/core"
 import { cn } from "@/utils/classNames"
 import Image from "next/image"
+import Link from "next/link"
 
 export interface DiverCardProps {
   id: string
@@ -18,13 +21,31 @@ export interface DiverCardProps {
     bottomTime: string
   }
   className?: string
+  addBuddyFunc: () => void
+  isLoading: boolean
+  linkUrl?: string // New prop for the link URL
 }
 
-export function SuggestedDiverCard({ name, location, date, profileImage, backgroundImage, stats, className }: DiverCardProps) {
+export function SuggestedDiverCard({ 
+  id,
+  name, 
+  location, 
+  date, 
+  profileImage, 
+  backgroundImage, 
+  stats, 
+  className,
+  addBuddyFunc,
+  isLoading,
+  linkUrl = `/div-buddies/profile/${id}` // Default link URL using the id
+}: DiverCardProps) {
   return (
     <div className={cn("relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 p-4 shadow-sm dark:shadow-gray-700/20 border border-gray-100 dark:border-gray-700 transition-colors duration-200", className)}>
+      {/* Clickable overlay that covers the entire card but allows button clicks through */}
+      <Link href={linkUrl} className="absolute inset-0 z-10 cursor-pointer" />
+      
       {/* Profile Section */}
-      <div className="flex items-start gap-[.625rem]">
+      <div className="flex items-start gap-[.625rem] relative">
         <div className="relative xl:h-[3.4375rem] xl:w-[3.4375rem] w-[2rem] h-[2rem] rounded-full overflow-hidden bg-[#F7931D] flex items-center justify-center ">
           {profileImage ? (
             <Image
@@ -64,10 +85,11 @@ export function SuggestedDiverCard({ name, location, date, profileImage, backgro
         {/* Content */}
         <div className="relative flex flex-col items-start justify-between h-full z-10">
           <div>
-            {/* Add Buddy Button */}
-            <LinkButton 
-              href={"/div-buddies/add-new-buddy"} 
-              className="absolute right-4 top-4 flex items-center gap-1 rounded-full border border-white/70 dark:border-white/60 bg-transparent px-4 py-2 text-white font-archivo text-base font-medium transition-all duration-200 hover:bg-black/50 dark:hover:bg-white/20 hover:border-white/90 dark:hover:border-white/80"
+            {/* Add Buddy Button - positioned above the link overlay */}
+            <Button 
+              onClick={addBuddyFunc}
+              disabled={isLoading!}
+              className="absolute right-4 top-4 flex items-center gap-1 rounded-full border border-white/70 dark:border-white/60 bg-transparent px-4 py-2 text-white font-archivo text-base font-medium transition-all duration-200 hover:bg-black/50 dark:hover:bg-white/20 hover:border-white/90 dark:hover:border-white/80 z-20 "
             >
               <span className="text-sm lg:text-xl">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -76,8 +98,8 @@ export function SuggestedDiverCard({ name, location, date, profileImage, backgro
                         stroke="white" strokeWidth="1.67" strokeLinecap="round"
                         strokeLinejoin="round"/>
                 </svg>
-              </span> Buddy
-            </LinkButton>
+              </span> Buddy {isLoading && <SmallSpinner color="#F7931D"/>}
+            </Button>
           </div>
 
           <div className="px-[2.125rem] w-full pb-[1.375rem]">
