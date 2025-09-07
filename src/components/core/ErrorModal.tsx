@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./Dialog";
+import ErrorIcon from "@/app/icons/ErrorIcon";
 
 interface ErrorModalProps {
   isErrorModalOpen: boolean;
@@ -30,45 +31,21 @@ export function ErrorModal({
 }: ErrorModalProps) {
   return (
     <Dialog open={isErrorModalOpen} onOpenChange={setErrorModalState}>
-      <DialogContent>
-        <DialogHeader className="bg-white flex justify-between items-start">
-          <svg
-            width="56"
-            height="56"
-            viewBox="0 0 56 56"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect x="4" y="4" width="48" height="48" rx="24" fill="#FEE4E2" />
-            <rect
-              x="4"
-              y="4"
-              width="48"
-              height="48"
-              rx="24"
-              stroke="#FEF3F2"
-              stroke-width="8"
-            />
-            <path
-              d="M28 24V28M28 32H28.01M38 28C38 33.5228 33.5228 38 28 38C22.4772 38 18 33.5228 18 28C18 22.4772 22.4772 18 28 18C33.5228 18 38 22.4772 38 28Z"
-              stroke="#D92D20"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+      <DialogContent className="bg-white dark:bg-gray-900">
+        <DialogHeader className="bg-white dark:bg-gray-900 flex justify-between items-start">
+          <ErrorIcon/>
 
-          <DialogClose className="ml-auto bg-[#F2F5FF] rounded  text-red-900  flex justify-center items-center">
-            <CloseIcon  color="black" className="text-black dark:text-white" />
+          <DialogClose className="ml-auto bg-[#F2F5FF] dark:bg-gray-700 rounded text-red-900 dark:text-red-400 flex justify-center items-center">
+            <CloseIcon color="black" className="text-black dark:text-white" />
           </DialogClose>
         </DialogHeader>
 
-        <DialogBody className="p-0 text-left">
-          <div className="px-8 pb-6 ">
-            <DialogTitle className="font-heading  text-[#F7931D] w-4/5 font-nunito text-lg font-medium">
+        <DialogBody className="p-0 text-left bg-white dark:bg-gray-900">
+          <div className="px-8 pb-6">
+            <DialogTitle className="font-heading text-[#F7931D] dark:text-orange-400 w-4/5 font-nunito text-lg font-medium">
               {heading}
             </DialogTitle>
-            <DialogDescription className="text-[#667085] text-sm font-nunito py-2">
+            <DialogDescription className="text-[#667085] dark:text-gray-300 text-sm font-nunito py-2">
               {subheading}
             </DialogDescription>
           </div>
@@ -76,7 +53,7 @@ export function ErrorModal({
           {children}
           <div className="px-8 pb-12">
             <Button
-              className="grow bg-[#F7931D] px-1.5 sm:text-sm w-full md:px-[3.1875rem]"
+              className="grow bg-[#F7931D] dark:bg-orange-500 hover:bg-orange-600 dark:hover:bg-orange-600 px-1.5 sm:text-sm w-full md:px-[3.1875rem] text-white"
               size="lg"
               type="button"
               onClick={() => {

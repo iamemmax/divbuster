@@ -7,7 +7,7 @@ import StartNewMessageModal from "./components/modals/StartNewMessageModal";
 import AddNewGroupMembersModal from "./components/modals/group/AddGroupMembers";
 import CreateGroupChatForm from "./components/modals/group/CreateGroupChat";
 import {
-  chatListProp,
+  
   useFetchSingleChatList,
 } from "../api/chats/single-chat/fetchChatList";
 import {
@@ -35,8 +35,7 @@ const Messages = () => {
   const tabs = ["Recent", "Groups"];
 
   const { data: recentChatList, isLoading } = useFetchSingleChatList();
-  // const { data: groupChatList, isLoading: isLoadingGroup } =
-  //   useFetchGroupChatList();
+
 
 
   return (
@@ -66,15 +65,7 @@ const Messages = () => {
 
             {/* Right side - Dark mode toggle, Date picker and Create button */}
             <div className="flex flex-wrap flex-row gap-4 md:space-x-4 md:space-y-0 items-start md:items-center">
-              {/* Date Range Picker */}
-              {/* <div className="flex items-center space-x-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-200 md:min-w-[220px]">
-                <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 font-medium font-archivo whitespace-nowrap">
-                  Jan 6, 2022 – Jan 13, 2022
-                </span>
-              </div> */}
-
-              {/* Create New Message Button */}
+            
 
               {activeTab === "Recent" && (
                 <div className="flex justify-between w-full items-center gap-1">

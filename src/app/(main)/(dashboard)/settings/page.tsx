@@ -88,68 +88,69 @@ const SettingsTab = () => {
   };
 
   return (
-    <div>
-      <Header title="Settings" subtitle="" />
+<div>
+  <Header title="Settings" subtitle="" />
 
-      <div className="font-archivo p-3 md:p-6 h-[80vh] overflow-y-auto">
-        <div className="mb-8">
-          <h1 className="text-base md:xl: lg:text-2xl font-medium  text-[#1D2939]">
-            System settings
-          </h1>
-          <p className="text-[#475467] font-medium text-xs sm:text-sm">
-            Set up your business account here if you haven't.
-          </p>
-        </div>
-        <nav
-          className="flex overflow-x-auto mt-5 border-gray-200 scrollbar-hide"
-          role="tablist"
-        >
-          {/* <div className=""> */}
-          {tabs?.map((tab) => (
-            <a
-              key={tab.id}
-              href={tab.href}
-              onClick={(e) => handleTabClick(e, tab.id)}
-              className={`flex-shrink-0 whitespace-nowrap px-8 py-[10px] text-xs sm:text-sm font-medium transition-colors duration-200 ${
-                activeTab === tab.id
-                  ? "text-white  bg-[#F7931D]"
-                  : "bg-[#fff] text-black border border-[#D0D5DD] border-opacity-50"
-              }`}
-              role="tab"
-              aria-selected={activeTab === tab.id}
-              aria-controls={`tabpanel-${tab.id}`}
-            >
-              {tab.label}
-            </a>
-
-))}
-{/* </div> */}
-
-<a
-              href={"/token-management"}
-              className={`flex-shrink-0 whitespace-nowrap px-8 py-[10px] text-xs sm:text-sm font-medium transition-colors duration-200 ${
-               activeTab === "token-management"
-                  ? "text-white  bg-[#F7931D]": "bg-[#fff] text-black border border-[#D0D5DD] border-opacity-50"
-              }`}
-              role="tab"
-           
-            >
-             Token Management
-            </a>
-        </nav>
-
-        {/* Main Content */}
-        <main className=" w-full" role="main">
-          <div
-            id={`tabpanel-${activeTab}`}
-            role="tabpanel"
-            aria-labelledby={`tab-${activeTab}`}
-          >
-            {renderTabContent()}
-          </div>
-        </main>
-      </div>
+  <div className="font-archivo p-3 md:p-6 h-[80vh] overflow-y-auto">
+    <div className="mb-8">
+      <h1 className="text-base lg:text-2xl font-medium text-[#1D2939] dark:text-white">
+        System settings
+      </h1>
+      <p className="text-[#475467] font-medium text-xs sm:text-sm dark:text-gray-300">
+        Set up your business account here if you haven't.
+      </p>
     </div>
+
+    <nav
+      className="flex overflow-x-auto mt-5 border-gray-200 dark:border-gray-700 scrollbar-hide"
+      role="tablist"
+    >
+      {tabs?.map((tab) => (
+        <a
+          key={tab.id}
+          href={tab.href}
+          onClick={(e) => handleTabClick(e, tab.id)}
+          className={`flex-shrink-0 whitespace-nowrap px-8 py-[10px] text-xs sm:text-sm font-medium transition-colors duration-200
+            ${
+              activeTab === tab.id
+                ? "text-white bg-[#F7931D] dark:bg-[#F7931D]"
+                : "bg-white text-black border border-[#D0D5DD] border-opacity-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600"
+            }`}
+          role="tab"
+          aria-selected={activeTab === tab.id}
+          aria-controls={`tabpanel-${tab.id}`}
+        >
+          {tab.label}
+        </a>
+      ))}
+
+      <a
+        href={"/token-management"}
+        className={`flex-shrink-0 whitespace-nowrap px-8 py-[10px] text-xs sm:text-sm font-medium transition-colors duration-200
+          ${
+            activeTab === "token-management"
+              ? "text-white bg-[#F7931D] dark:bg-[#F7931D]"
+              : "bg-white text-black border border-[#D0D5DD] border-opacity-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600"
+          }`}
+        role="tab"
+      >
+        Token Management
+      </a>
+    </nav>
+
+    {/* Main Content */}
+    <main className="w-full" role="main">
+      <div
+        id={`tabpanel-${activeTab}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${activeTab}`}
+      >
+        {renderTabContent()}
+      </div>
+    </main>
+  </div>
+</div>
+
   );
 };
 

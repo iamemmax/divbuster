@@ -588,7 +588,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                       </div>
 
                       <div
-                        className={`relative rounded-2xl px-4 py-2 inline-block break-words group ${
+                        className={`relative rounded-2xl p-2 inline-block break-words group ${
                           isCurrentUser
                             ? `bg-orange-500 text-white rounded-tr-md ${isMessageSending ? "opacity-70" : ""}`
                             : "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-tl-md"

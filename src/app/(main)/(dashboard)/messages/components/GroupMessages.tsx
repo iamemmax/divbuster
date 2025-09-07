@@ -74,6 +74,8 @@ const GroupMessages = ({
       {/* Mobile Layout */}
       <div className="lg:hidden h-full">
         {!selectedGroup ? (
+          <div className="h-full bg-white dark:bg-gray-900 rounded-lg transition-colors duration-200">
+
           <GroupSidebar
             isLoadingGroup={isLoadingGroup}
             groupList={groupChatList}
@@ -88,8 +90,9 @@ const GroupMessages = ({
             fetchPreviousPage={fetchPreviousPage}
             hasPreviousPage={hasPreviousPage}
           />
+          </div>
         ) : (
-          <div className="h-full relative">
+          <div className="h-full relative  bg-white dark:bg-gray-900 rounded-lg transition-colors duration-200">
             <div className="h-[75vh]">
               <GroupMessageBox
                 selectedGroup={selectedGroup}
@@ -103,7 +106,9 @@ const GroupMessages = ({
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden lg:grid grid-cols-[1fr_1.8fr] gap-0 h-full">
+      <div className="hidden lg:grid grid-cols-[1fr_1.8fr] gap-4 h-full">
+         <div className="h-full bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+
         <GroupSidebar
           groupList={groupChatList}
           selectedGroup={selectedGroup}
@@ -118,6 +123,8 @@ const GroupMessages = ({
           fetchPreviousPage={fetchPreviousPage}
           hasPreviousPage={hasPreviousPage}
         />
+        </div>
+        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-200">
         <GroupMessageBox
           selectedGroup={selectedGroup}
           // onSendMessage={handleSendMessage}
@@ -126,6 +133,8 @@ const GroupMessages = ({
           setGroupMembers={setGroupMembers}
         />
       </div>
+
+        </div>
     </div>
   );
 };

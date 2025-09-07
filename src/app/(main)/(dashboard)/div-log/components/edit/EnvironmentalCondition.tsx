@@ -1,271 +1,217 @@
-import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
+"use client"
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Button, Dialog, DialogBody, DialogContent, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core';
-import { Switch } from '@/components/core';
-import { Clock } from 'lucide-react';
-import { CaretDown } from '@/components/icons';
+import { Button, Dialog, DialogBody, DialogContent, ErrorModal } from '@/components/core';
+import { useErrorModalState } from '@/hooks';
+import { singleDiveProp } from '../../../api/div-logs/fetchSingleDivLog';
+import { useUpdateEnvironmentalCon } from '../../../api/div-logs/update/updateEnvironmentalCond';
+import { useQueryClient } from 'react-query';
+import { formatAxiosErrorMessage } from '@/utils';
+import { AxiosError } from 'axios';
+import { SmallSpinner } from '@/icons/core';
+import { UnsavedChangesModal } from '@/app/(main)/components/shared/modal/UnsavedChangeModal';
+import { DiveLogUpdatedModal } from './DiveLogUpdatedModal';
+
 
 // Define the validation schema with Zod
 const moreLogDetailsSchema = z.object({
-  isDecompressionDive: z.boolean().optional(),
-  diveCategories: z.array(z.string()).optional(),
-  surfaceInterval: z.string().optional(),
-  weight: z.string().optional(),
-  entryType: z.string().optional(),
-  bodyOfWater: z.string().optional(),
+  min_water_temperature: z.string(),
+  max_water_temperature: z.string(),
+  avg_water_temperature: z.string(),
+
 });
 
-export type MoreLogDetailsFormValues = z.infer<typeof moreLogDetailsSchema>;
+export type MoreEnvironmentalFormValues = z.infer<typeof moreLogDetailsSchema>;
 
 interface EnvironmentalConditionProps {
   isOpen?: boolean;
-  onClose?: () => void;
-  initialData?: Partial<MoreLogDetailsFormValues>;
-  // onSave: (data: MoreLogDetailsFormValues) => void;
+  onClose: () => void;
+  initialData?: singleDiveProp | undefined
 }
 
 const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
   isOpen,
   onClose,
-  initialData = {},
+  initialData
   // onSave,
 }) => {
-  const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
-    initialData.diveCategories || []
-  );
+  const {
+    isErrorModalOpen,
+    setErrorModalState,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
+  const [showDiscardModal, setShowDiscardModal] = useState(false)
+  const [showUpdatedModal, setShowUpdatedModal] = useState(false)
+  const { mutate: handleUpdate, isLoading } = useUpdateEnvironmentalCon()
+
 
   const {
+    register,
     handleSubmit,
-    control,
-    setValue,
-    formState:{errors}
-  } = useForm<MoreLogDetailsFormValues>({
+    formState: { errors }
+  } = useForm<MoreEnvironmentalFormValues>({
     resolver: zodResolver(moreLogDetailsSchema),
     defaultValues: {
-      isDecompressionDive: initialData.isDecompressionDive || false,
-      diveCategories: initialData.diveCategories || [],
-      surfaceInterval: initialData.surfaceInterval || '',
-      weight: initialData.weight || '',
-      entryType: initialData.entryType || '',
-      bodyOfWater: initialData.bodyOfWater || '',
+      min_water_temperature: String(initialData?.data?.min_water_temperature) || "0",
+      avg_water_temperature: String(initialData?.data?.avg_water_temperature || "0"),
+      max_water_temperature: String(initialData?.data?.max_water_temperature) || "0",
+
     },
   });
 
-  // Update form value when categories change
-  React.useEffect(() => {
-    setValue('diveCategories', selectedCategories);
-  }, [selectedCategories, setValue]);
 
-  const toggleCategory = (category: string) => {
-    setSelectedCategories(prev => 
-      prev.includes(category)
-        ? prev.filter(c => c !== category)
-        : [...prev, category]
-    );
+
+  const queryClient = useQueryClient()
+  const onSubmit = ({ avg_water_temperature, max_water_temperature, min_water_temperature }: MoreEnvironmentalFormValues) => {
+   
+    handleUpdate({
+      id: String(initialData?.data?.id),
+      avg_water_temperature, max_water_temperature, min_water_temperature
+
+    }, {
+      onSuccess: () => {
+        setShowUpdatedModal(true)
+        queryClient.invalidateQueries({ queryKey: ["single-div-log"] })
+        queryClient.invalidateQueries({ queryKey: ["div-logs"] })
+
+
+      }, onError: (error) => {
+        const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+        openErrorModalWithMessage(String(errorMessage));
+      },
+    })
   };
-
-  const onSubmit = (data: MoreLogDetailsFormValues) => {
-    // onSave(data);
-    // onClose();
-  };
-
   if (!isOpen) return null;
 
-  const frequentCategories = ['Fresh Water', 'Salt Water', 'Custom Density'];
- 
-  const entryTypes = ['None', 'Light Current', 'Morderate Current', 'Strong Current'];
-  const bodyOfWaterTypes = ['Flat Condition', 'Small Waves', 'Large Waves'];
 
   return (
-   <Dialog modal={true} open={isOpen}>
-      <DialogContent className="w-full !max-w-[57.3125rem] ">
-        <DialogBody className="p-0  px-4 md:px-8 pt-8  w-full !max-h-[95vh] md:!max-h-[90vh] !max-w-[57.3125rem] ">
-
-        <div className=" border-gray-200 flex justify-between items-center border-b  border-opacity-55 pb-4">
-          <h2 className="text-xl font-semibold font-archivo  text-[#101828]">Environmental Conditions</h2>
-          
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-       
-          <div className="w-full max-h-[60vh] md:max-h-[70vh]  overflow-auto">
-            
-            
-            <div>
-              <p className="block text-base md:text-base font-medium text-black font-archivo mt-4">Select all that Apply</p>
-              <p className="text-sm md:text-base text-black mb-2 mt-3 font-archivo font-medium">Water Type (Select one)</p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {frequentCategories.map((category) => (
-                  <Button
-                    key={category}
-                    type="button"
-                    variant="outlined"
-                    className={`rounded-lg py-[10px] text-xs font-archivo px-4 ${
-                      selectedCategories.includes(category)
-                        ? 'bg-orange-500 text-white border-orange-500'
-                        : 'bg-white text-gray-700 border-gray-300'
-                    }`}
-                    onClick={() => toggleCategory(category)}
-                  >
-                    {category}
-                  </Button>
-                ))}
-              </div>
-              
-           
-            </div>
-            
-          
-               <div className='grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-4 items-center gap-2 sm:gap-5'>
-
-              <label className="block text-sm font-medium text-gray-700 mb-1">Minimum Water Temperature</label>
-              <Controller
-                name="surfaceInterval"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger className={`border relative ${
-                    errors.surfaceInterval ? "border-red-500" : "border-[#E2E8F0]"
-                  } outline-none py-[.8125rem] w-full text-black text-sm flex-1 bg-white font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
->
-                      <SelectValue placeholder="3h 14" />
-                      {/* <Clock className="h-4 w-4 ml-2" /> */}
-                        <div className="absolute right-4"><CaretDown color='black'/></div>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1h">1h</SelectItem>
-                      <SelectItem value="2h">2h</SelectItem>
-                      <SelectItem value="3h">3h</SelectItem>
-                      <SelectItem value="3h14">3h 14</SelectItem>
-                      <SelectItem value="4h">4h</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-            
-           
-               <div className='grid grid-cols-1 sm:grid-cols-[1fr_2fr]  border-b border-[#EAECF0] border-opacity-50 py-4 items-center gap-2 sm:gap-5'>
-
-              <label className="block text-sm font-medium text-gray-700 sm:mb-1">Maximum Water Temperature</label>
-              <Controller
-                name="weight"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger className={`border relative ${
-                    errors.weight ? "border-red-500" : "border-[#E2E8F0]"
-                  } outline-none py-[.8125rem] w-full text-black text-sm flex-1 bg-white font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
->
-                      <SelectValue placeholder="Select weight" />
-                      <div className="absolute right-4"><CaretDown color='black'/></div>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="5kg">5kg</SelectItem>
-                      <SelectItem value="10kg">10kg</SelectItem>
-                      <SelectItem value="15kg">15kg</SelectItem>
-                      <SelectItem value="20kg">20kg</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-               <div className='grid grid-cols-1 sm:grid-cols-[1fr_2fr]  border-b border-[#EAECF0] border-opacity-50 py-4 items-center gap-2 sm:gap-5'>
-
-              <label className="block text-sm font-medium text-gray-700 sm:mb-1">Average Water Temperature</label>
-              <Controller
-                name="weight"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger className={`border relative ${
-                    errors.weight ? "border-red-500" : "border-[#E2E8F0]"
-                  } outline-none py-[.8125rem] w-full text-black text-sm flex-1 bg-white font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
->
-                      <SelectValue placeholder="Select weight" />
-                      <div className="absolute right-4"><CaretDown color='black'/></div>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="5kg">5kg</SelectItem>
-                      <SelectItem value="10kg">10kg</SelectItem>
-                      <SelectItem value="15kg">15kg</SelectItem>
-                      <SelectItem value="20kg">20kg</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-            
-            <div className=' border-b border-[#EAECF0] border-opacity-50 py-4 '>
-              <label className="block text-base font-semibold font-archivo text-black mb-2">Current (Select one)</label>
-              <div className="flex flex-wrap py-3 gap-2">
-                {entryTypes.map((type) => (
-                  <Controller
-                    key={type}
-                    name="entryType"
-                    control={control}
-                    render={({ field }) => (
-                      <Button
-                        type="button"
-                        variant="outlined"
-                        className={`rounded-lg font-archivo text-sm ${
-                          field.value === type
-                            ? 'bg-orange-500 text-white border-orange-500'
-                            : 'bg-white text-gray-700 border-gray-300'
-                        }`}
-                        onClick={() => field.onChange(type)}
-                      >
-                        {type}
-                      </Button>
-                    )}
-                  />
-                ))}
-              </div>
-            </div>
-            
-            <div className=' border-b border-[#EAECF0] border-opacity-50 py-4 '>
-              <label className="text-base font-semibold font-archivo text-black mb-2">Surface Conditions (Select one)</label>
-              <div className="flex flex-wrap mt-2 py-3 gap-2">
-                {bodyOfWaterTypes.map((type) => (
-                  <Controller
-                    key={type}
-                    name="bodyOfWater"
-                    control={control}
-                    render={({ field }) => (
-                      <Button
-                        type="button"
-                        variant="outlined"
-                        className={`rounded-lg font-archivo text-sm ${
-                          field.value === type
-                            ? 'bg-orange-500 text-white border-orange-500'
-                            : 'bg-white text-gray-700 border-gray-300'
-                        }`}
-                        onClick={() => field.onChange(type)}
-                      >
-                        {type}
-                      </Button>
-                    )}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          <div className="py-4 border-t border-gray-200 flex justify-end space-x-2">
-            <Button type="button" variant="outlined" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white">
-              Save Changes
-            </Button>
-          </div>
-        </form>
-     
-      </DialogBody>
-             </DialogContent>
-           </Dialog> 
+  <Dialog modal={true} open={isOpen}>
+  <DialogContent className="w-full !max-w-[57.3125rem] bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+    <DialogBody className="p-0 px-4 md:px-8 pt-8 w-full !max-h-[95vh] md:!max-h-[90vh] !max-w-[57.3125rem]">
       
+      {/* Header */}
+      <div className="border-gray-200 dark:border-gray-700 flex justify-between items-center border-b border-opacity-55 pb-4">
+        <h2 className="text-xl font-semibold font-archivo text-[#101828] dark:text-gray-100">
+          Environmental Conditions
+        </h2>
+      </div>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="w-full max-h-[60vh] md:max-h-[70vh] overflow-auto">
+          
+          {/* Minimum Temp */}
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Minimum Water Temperature
+            </label>
+            <input
+              {...register('min_water_temperature')}
+              placeholder="0"
+              className={`border ${
+                errors.min_water_temperature
+                  ? "border-red-500 dark:border-red-400"
+                  : "border-[#E2E8F0] dark:border-gray-600"
+              } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem] 
+              focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors 
+              placeholder-gray-400 dark:placeholder-gray-500`}
+            />
+            {errors.min_water_temperature && (
+              <p className="text-red-500 dark:text-red-400 text-xs mt-1">
+                {errors.min_water_temperature.message}
+              </p>
+            )}
+          </div>
+
+          {/* Maximum Temp */}
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
+              Maximum Water Temperature
+            </label>
+            <input
+              {...register('max_water_temperature')}
+              placeholder="0"
+              className={`border ${
+                errors.max_water_temperature
+                  ? "border-red-500 dark:border-red-400"
+                  : "border-[#E2E8F0] dark:border-gray-600"
+              } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem] 
+              focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors 
+              placeholder-gray-400 dark:placeholder-gray-500`}
+            />
+            {errors.max_water_temperature && (
+              <p className="text-red-500 dark:text-red-400 text-xs mt-1">
+                {errors.max_water_temperature.message}
+              </p>
+            )}
+          </div>
+
+          {/* Average Temp */}
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
+              Avg Water Temperature
+            </label>
+            <input
+              {...register('avg_water_temperature')}
+              placeholder="0"
+              className={`border ${
+                errors.avg_water_temperature
+                  ? "border-red-500 dark:border-red-400"
+                  : "border-[#E2E8F0] dark:border-gray-600"
+              } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem] 
+              focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors 
+              placeholder-gray-400 dark:placeholder-gray-500`}
+            />
+            {errors.avg_water_temperature && (
+              <p className="text-red-500 dark:text-red-400 text-xs mt-1">
+                {errors.avg_water_temperature.message}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-2">
+          <Button type="button" className='dark:border-white dark:text-white' variant="outlined"  onClick={() => setShowDiscardModal(true)}>
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            className="bg-orange-500 flex justify-center items-center gap-x-3 hover:bg-orange-600 text-white"
+          >
+            Save Changes {isLoading && <SmallSpinner color="#fff" />}
+          </Button>
+        </div>
+      </form>
+
+      {/* Modals */}
+      {showDiscardModal && (
+        <UnsavedChangesModal
+          isOpen={showDiscardModal}
+          onClose={() => setShowDiscardModal(false)}
+          onDiscard={() => onClose()}
+          loading={isLoading}
+        />
+      )}
+
+      {showUpdatedModal && (
+        <DiveLogUpdatedModal isOpen={showUpdatedModal} onClose={() => onClose()} />
+      )}
+
+      <ErrorModal
+        isErrorModalOpen={isErrorModalOpen}
+        setErrorModalState={() => {
+          setErrorModalState(false);
+        }}
+        subheading={errorModalMessage || "Please check your inputs and try again."}
+      />
+    </DialogBody>
+  </DialogContent>
+</Dialog>
+
+
   );
 };
 

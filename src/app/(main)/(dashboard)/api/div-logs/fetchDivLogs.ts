@@ -120,7 +120,11 @@ const fetchDiveLogs = async (
   const [, filters] = queryKey;
 
   const params: Record<string, any> = {};
-  if (filters.data_type) params.data_type = filters.data_type;
+  
+  // Only add data_type if it's not "all_time" or undefined
+  if (filters.data_type && filters.data_type !== "all_time") {
+    params.data_type = filters.data_type;
+  }
 
   if (filters.date_from) {
     params.date_from = new Date(filters.date_from)
@@ -138,7 +142,6 @@ const fetchDiveLogs = async (
   const response = await adminAxios.get(relativeUrl, { params });
   return response.data as divLogsProp;
 };
-
 export const useFetchDiveLogs = (filters: DiveLogsFilters) => {
   return useInfiniteQuery<divLogsProp, unknown, divLogsProp, [string, DiveLogsFilters]>({
     queryKey: ["dive-logs", filters],

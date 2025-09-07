@@ -2,7 +2,7 @@ import { adminAxios } from "@/lib/axios";
 import { useQuery } from "react-query";
 
 
-interface singleDiveProp {
+export interface singleDiveProp {
   detail: string;
   data: Data;
 }

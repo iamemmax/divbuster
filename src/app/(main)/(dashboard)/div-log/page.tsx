@@ -13,8 +13,9 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import UpArrow from "@/app/icons/(dashboard)/UpArrow";
 import DateRangePicker from "@/components/core/DateRangePicker";
-import { Calendar } from "lucide-react";
 import DiveLogContainer from "./components/DiveLogContainer";
+import ArrowDown from "@/app/icons/(dashboard)/ArrowDown";
+import CalendarIcon from "@/app/icons/(dashboard)/CalendarIcon";
 interface CustomDateRange {
   startDate: Date;
   endDate: Date;
@@ -79,8 +80,8 @@ const DiveLog = () => {
   <Header title={"Dive Logs"} subtitle="June 12, 2024" />
 
   {/* Dashboard content */}
-  <div className="mt-[2.125rem] md:px-[1.875rem] h-[83vh] overflow-y-auto">
-    <div className="flex justify-between items-center flex-wrap">
+  <div className="mt-[1.125rem] p-4 md:px-[1.875rem] h-[83vh] overflow-y-auto">
+    <div className="flex justify-between items-center gap-3 flex-wrap">
       <div className="relative w-full md:w-96">
         <DebouncedSearchInput
           placeholder="search for Date, dive sites, longitude and Latitude"
@@ -97,21 +98,7 @@ const DiveLog = () => {
         bg-white dark:bg-gray-900"
         onClick={() => setShowDatePicker(true)}
       >
-        <svg
-          width="18"
-          height="20"
-          viewBox="0 0 18 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M12.3333 1.6665V4.99984M5.66667 1.6665V4.99984M1.5 8.33317H16.5M3.16667 3.33317H14.8333C15.7538 3.33317 16.5 4.07936 16.5 4.99984V16.6665C16.5 17.587 15.7538 18.3332 14.8333 18.3332H3.16667C2.24619 18.3332 1.5 17.587 1.5 16.6665V4.99984C1.5 4.07936 2.24619 3.33317 3.16667 3.33317Z"
-            stroke="currentColor"
-            strokeWidth="1.67"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+       <CalendarIcon/>
         {customDateRange.startDate.toDateString()} -{" "}
         {customDateRange.endDate.toDateString()}
       </div>
@@ -189,21 +176,7 @@ const DiveLog = () => {
               )}
               {stat.count === "low" && (
                 <p className="text-xs md:text-sm font-medium gap-1 flex items-center max-w-[70px] bg-[#FEF3F2] dark:bg-red-900/40 rounded-2xl py-[.3063rem] px-[.7813rem] font-archivo text-[#B42318] dark:text-red-400">
-                  <svg
-                    width="10"
-                    height="10"
-                    viewBox="0 0 10 10"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 1.5V8.5M5 8.5L8.5 5M5 8.5L1.5 5"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                 <ArrowDown/>
                   {stat.percentage}
                 </p>
               )}
@@ -215,7 +188,7 @@ const DiveLog = () => {
 
     {/* Dive Log Container */}
   <DiveLogContainer
-  data_type={activeTab !== "custom" ? activeTab : undefined}
+  data_type={activeTab === "last_month" ? activeTab : undefined}
   date_from={
     activeTab === "custom" && customDateRange?.startDate
       ? customDateRange.startDate.toISOString().split("T")[0]

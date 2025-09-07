@@ -3,15 +3,19 @@ import { ChevronRight, Wifi } from 'lucide-react';
 import DiveWatch from '@/app/icons/(dashboard)/DiveWatch';
 import EditDiveStatisticsModal from './edit/EditDiveStatisticsModal';
 import EditBuuddyGear from './edit/EditBuuddyGear';
-import AddAirUsage from './edit/AddAirUsage';
+import AddAirUsage from './edit/unused/AddAirUsage';
 import EnvironmentalCondition from './edit/EnvironmentalCondition';
 import DiveComputer from './edit/DiveComputer';
-import AddDiveBuddyToLogModal from './edit/AddDivBuddyToLog';
+import AddDiveBuddyToLogModal from './edit/unused/AddDivBuddyToLog';
 import AddDiveNotes from './edit/AddDiveNotes';
 import DivePhotoUploader from './edit/DivePhotoUploader';
+import { singleDiveProp } from '../../api/div-logs/fetchSingleDivLog';
 
 
-const SingleDiveLogSidebar = () => {
+interface prop{
+   data: singleDiveProp | undefined
+}
+const SingleDiveLogSidebar:React.FC<prop> = ({data}) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [logSummaryModalOpen, setLogSummaryModalOpen] = useState(false);
 const [showBuddyGearModalOpen, setShowBuddyGearModalOpen] = useState(false)
@@ -39,21 +43,21 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
       icon: ChevronRight, 
       onClick: () => setLogSummaryModalOpen(true) 
     },
-    { 
-      title: "Add Dive Buddy", 
-      icon: ChevronRight ,
-      onClick: () => setShowAddDiveToLog(true) 
-    },
+    // { 
+    //   title: "Add Dive Buddy", 
+    //   icon: ChevronRight ,
+    //   onClick: () => setShowAddDiveToLog(true) 
+    // },
     { 
       title: "Add Photos/Videos", 
       icon: ChevronRight ,
       onClick: () => setShowDiveUploaderModal(true) 
     },
-    { 
-      title: "Add Air Usage", 
-      icon: ChevronRight ,
-      onClick:()=>setShowAirUsageModalOpen(true)
-    },
+    // { 
+    //   title: "Add Air Usage", 
+    //   icon: ChevronRight ,
+    //   onClick:()=>setShowAirUsageModalOpen(true)
+    // },
     { 
       title: "Log your Gear", 
       icon: ChevronRight,
@@ -73,9 +77,9 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
   ];
 
   return (
-    <div className="max-w-md mx-auto ">
+   <div className="max-w-md mx-auto ">
       {/* Watch Display */}
-      <div className="relative bg-white p-8 flex justify-center" onClick={()=>setShowdiveComputer(true)}>
+      <div className="relative bg-white dark:bg-gray-800 p-8 flex justify-center" onClick={()=>setShowdiveComputer(true)}>
         <div className="relative">
           {/* Watch Body */}
            <DiveWatch/>
@@ -85,22 +89,22 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
       
       {/* Connection Status */}
       <div className="px-6 py-4 flex justify-center items-center">
-        <div className="bg-[#ECFDF3] rounded-full px-4 py-2 flex items-center gap-2 w-fit">
-          <div className="w-2 h-2 bg-[#027A48] rounded-full"></div>
-          <span className="text-[#027A48] font-archivo text-sm font-semibold">Device Connected</span>
+        <div className="bg-[#ECFDF3] dark:bg-green-900/20 rounded-full px-4 py-2 flex items-center gap-2 w-fit">
+          <div className="w-2 h-2 bg-[#027A48] dark:bg-green-400 rounded-full"></div>
+          <span className="text-[#027A48] dark:text-green-400 font-archivo text-sm font-semibold">Device Connected</span>
         </div>
       </div>
       
       {/* Menu Items */}
       <div className="px-6 gap-4 pb-8">
         {menuItems.map((item, index) => (
-          <div key={index} className="bg-white rounded-lg mb-3 border">
+          <div key={index} className="bg-white dark:bg-gray-800 rounded-lg mb-3 border border-gray-200 dark:border-gray-700">
             <button 
-              className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+              className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               onClick={item.onClick}
             >
-              <span className="text-[#101828] font-archivo text-xs font-semibold">{item.title}</span>
-              <ChevronRight className="w-5 h-5 text-gray-400" />
+              <span className="text-[#101828] dark:text-white font-archivo text-xs font-semibold">{item.title}</span>
+              <ChevronRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
             </button>
           </div>
         ))}
@@ -110,21 +114,24 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
     {logSummaryModalOpen&&  <EditDiveStatisticsModal
         isOpen={logSummaryModalOpen}
         onClose={() => setLogSummaryModalOpen(false)}
+        data={data}
        
       />}
     {showBuddyGearModalOpen &&  <EditBuuddyGear
         isOpen={showBuddyGearModalOpen}
         onClose={() => setShowBuddyGearModalOpen(false)}
+        initialData={data}
        
       />}
-    {showAirUsageModalOpen &&  <AddAirUsage
+    {/* {showAirUsageModalOpen &&  <AddAirUsage
         isOpen={showAirUsageModalOpen}
         onClose={() => setShowAirUsageModalOpen(false)}
        
-      />}
+      />} */}
     {showEnvironmentalModalOpen &&  <EnvironmentalCondition
         isOpen={showEnvironmentalModalOpen}
         onClose={() => setShowEnvironmentalModalOpen(false)}
+         initialData={data}
        
       />}
     {showdiveComputer &&  <DiveComputer
@@ -132,19 +139,21 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
         onClose={() => setShowdiveComputer(false)}
        
       />}
-    {showAddDiveToLog &&  <AddDiveBuddyToLogModal
+    {/* {showAddDiveToLog &&  <AddDiveBuddyToLogModal
         isOpen={showAddDiveToLog}
         onClose={() => setShowAddDiveToLog(false)}
        
-      />}
+      />} */}
     {showNoteModal &&  <AddDiveNotes
         isOpen={showNoteModal}
         onClose={() => setShowNoteModal(false)}
+         data={data}
        
       />}
     {showDiveUploaderModal &&  <DivePhotoUploader
         isOpen={showDiveUploaderModal}
         onClose={() => setShowDiveUploaderModal(false)}
+         data={data}
        
       />}
     </div>

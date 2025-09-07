@@ -2,38 +2,44 @@
 
 import { useAuth } from "@/contexts/authentication";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import FullPageLoader from "../(main)/loading";
-
-// Define public routes that don't require authentication
-
 
 export default function ProtectedRouteGuard({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  
   const { authState } = useAuth();
   const { isAuthenticated, isLoading } = authState;
   const pathname = usePathname();
   const router = useRouter();
-  const path = pathname; // Access pathname using useRouter
 
+  // Define protected route patterns
+  const protectedRoutes = [
+    "/",
+    "/div-buddies",
+    "/div-log", // will cover /div-log and /div-log/[id]
+    "/settings",
+    "/div-sites",
+    "/messages",
+    "/bookings",
+    "/profile",
+  ];
 
-  // Handle routing based on authentication state
- const protectedRoutes = ["/","/div-buddies","/div-log","/settings","div-sites","/messages","/bookings"]; // Define your protected routes here
+  const isProtected = protectedRoutes.some((route) =>
+    pathname === route || pathname.startsWith(`${route}/`)
+  );
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && protectedRoutes.includes(path)) {
+    if (!isLoading && !isAuthenticated && isProtected) {
       router.push("/login");
     }
-  }, [isLoading, isAuthenticated, path, router]);
-  // Show loading state while checking authentication
-  if ((isLoading || !isAuthenticated) && protectedRoutes.includes(path)) {
+  }, [isLoading, isAuthenticated, isProtected, router]);
+
+  if ((isLoading || !isAuthenticated) && isProtected) {
     return <FullPageLoader />;
   }
 
-  // Render children once authentication is checked
   return <>{children}</>;
 }

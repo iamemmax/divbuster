@@ -78,7 +78,7 @@ const queryClient = useQueryClient();
   ) || [];
      
   return (
-    <div className="w-full xl:w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors duration-200">
+    <div className="w-full xl:min-w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors duration-200">
             <div className=" p-2 sm:px-6 sm:py-4 border-b border-gray-100">
             <h3 className="font-semibold font-arcivo text-base text-[#101828] dark:text-white">
               Suggested Buddies

@@ -6,43 +6,45 @@ import * as z from "zod";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-const durationOptions = ["1 Hour", "2 Hours", "4 Hours", "8 Hours"];
+// const durationOptions = ["1 Hour", "2 Hours", "4 Hours", "8 Hours"];
 
 const bookingSchema = z.object({
   first_name: z.string().min(1, "Diver name is required"),
   last_name: z.string().min(1, "Diver name is required"),
   email: z.string().email("Enter a valid email"),
-  duration: z.enum(["1 Hour", "2 Hours", "4 Hours", "8 Hours"]),
+  // duration: z.enum(["1 Hour", "2 Hours", "4 Hours", "8 Hours"]),
 });
 
-type BookingFormValues = z.infer<typeof bookingSchema>;
+export type BookingDriverFormValues = z.infer<typeof bookingSchema>;
 interface Props {
   next: () => void;
   back: () => void;
+  setDiverInfo: React.Dispatch<React.SetStateAction<BookingDriverFormValues>>
+  diverInfo:BookingDriverFormValues
 }
-const SchoolDriverContact = ({ back, next }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
+const SchoolDriverContact = ({ back, next,diverInfo,setDiverInfo }: Props) => {
   const {
     register,
     handleSubmit,
     setValue,
     watch,
     formState: { errors },
-  } = useForm<BookingFormValues>({
+  } = useForm<BookingDriverFormValues>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
-      email: "",
-      duration: "2 Hours",
+      first_name: diverInfo?.first_name || "",
+      last_name:diverInfo?.last_name || "",
+      email:diverInfo?.email|| "",
+      // duration: "2 Hours",
     },
     mode: "onChange",
   });
 
-  const selectedDuration = watch("duration");
+  // const selectedDuration = watch("duration");
 
-  const onSubmit = (data: BookingFormValues) => {
+  const onSubmit = (data: BookingDriverFormValues) => {
     console.log("Form submitted:", data);
+    setDiverInfo({email:data?.email, first_name:data?.first_name,last_name:data?.last_name})
     next();
   };
 
@@ -51,12 +53,12 @@ const SchoolDriverContact = ({ back, next }: Props) => {
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-6 md:px-4 bg-transparent   text-sm text-gray-900 dark:text-white"
     >
-      <div className="max-h-[80vh] w-full overflow-y-auto">
+      <div className="max-h-[70vh] w-full overflow-y-auto">
         {/* Diver Name */}
         <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-4">
           <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
             <label className="text-[#344054] dark:text-white font-archivo text-sm">
-              Main Diver First Name
+            First Name
             </label>
             <div className="flex flex-col gap-y-3">
               <input
@@ -76,7 +78,7 @@ const SchoolDriverContact = ({ back, next }: Props) => {
         <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-4">
           <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
             <label className="text-[#344054] dark:text-white font-archivo text-sm">
-              Main Diver Last Name
+               Last Name
             </label>
             <div className="flex flex-col gap-y-3">
               <input
@@ -97,7 +99,7 @@ const SchoolDriverContact = ({ back, next }: Props) => {
         <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-4">
           <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
             <label className="text-[#344054] dark:text-white font-archivo text-sm">
-              Main Diver Email Address
+               Email Address
             </label>
             <div className="flex flex-col gap-y-3">
               <input
@@ -113,7 +115,7 @@ const SchoolDriverContact = ({ back, next }: Props) => {
         </div>
 
         {/* Select Duration */}
-        <div className="grid bord-b  border-[#EAECF0] dark:border-gray-700 py-7 grid-cols-1 md:grid-cols-[200px_1fr] items-start gap-4 relative">
+        {/* <div className="grid bord-b  border-[#EAECF0] dark:border-gray-700 py-7 grid-cols-1 md:grid-cols-[200px_1fr] items-start gap-4 relative">
           <label className="text-[#344054] dark:text-white font-archivo text-sm">
             Select Duration
           </label>
@@ -161,14 +163,14 @@ const SchoolDriverContact = ({ back, next }: Props) => {
           <p className="text-red-500 text-xs ml-[200px]">
             {errors.duration.message}
           </p>
-        )}
+        )} */}
 
         {/* Cancellation Policy */}
         <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] max-w-3xl items-start gap-4">
           <label className="text-[#344054] dark:text-white font-archivo text-sm">
             Cancellation policy
           </label>
-          <ul className="space-y-4 list-disc pl-4  text-gray-900  block mb-1 dark:text-gray-300 text-base">
+          <ul className="space-y-4 list-disc pl-4  text-gray-900  block mb-1 dark:text-gray-300 text-sm md:text-base">
             <li>
               We will charge a cancellation fee of 100% if booking is cancelled
               7 days or less before the event

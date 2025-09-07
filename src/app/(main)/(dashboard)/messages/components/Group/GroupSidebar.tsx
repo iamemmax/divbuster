@@ -221,9 +221,9 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900 shadow-sm px-8 flex flex-col h-full overflow-y-auto">
+    <div className="bg-white dark:bg-gray-900 shadow-sm  flex flex-col h-full overflow-y-auto">
       {/* Header */}
-      <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+      <div className="border-b border-gray-200 dark:border-gray-700 px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
