@@ -167,15 +167,33 @@ export interface certificates {
   trainer_name: string;
   created_on: string;
 }
-const fetchBuddyProfile = async (id:string) => {
- const response = await adminAxios.get(`buddies/${id}`);
+const fetchBuddyProfile = async (id: string): Promise<BuddyProfile | null> => {
+  if (!id) return null;
+  try {
+    const response = await adminAxios.get(`buddies/${id}`);
     return response.data as BuddyProfile;
-}
+  } catch (error) {
+    console.error("Failed to fetch buddy profile:", error);
+    throw error;
+  }
+};
 
-export const usefetchBuddyProfile = (id:string) => {
+
+// export const usefetchBuddyProfile = (id:string) => {
+//   return useQuery({
+//     queryKey: ["buddy-profile",id],
+//     queryFn: ()=>fetchBuddyProfile(id),
+//     enabled:!!id
+//   });
+// };
+
+export const usefetchBuddyProfile = (id: string | null) => {
   return useQuery({
-    queryKey: ["buddy-profile",id],
-    queryFn: ()=>fetchBuddyProfile(id),
-    enabled:!!id
+    queryKey: ["buddy-profile", id],
+    queryFn: () => {
+      if (!id) return Promise.resolve(null);
+      return fetchBuddyProfile(id);
+    },
+    enabled: !!id,
   });
 };
