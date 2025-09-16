@@ -8,7 +8,7 @@ interface UserProp {
   first_name: string;
   last_name: string;
   gender: "Male" | "Female" | "Other";
-  body_size?: string;
+  body_size: string;
   shoe_size: string;
   shoe_value: string;
   profile_picture: File;
@@ -23,7 +23,7 @@ const updateUserProfile = async ({data:user}: UserProp) => {
   formData.append("first_name", user.first_name);
   formData.append("last_name", user.last_name);
   formData.append("gender", user.gender);
-//   formData.append("body_size", user.body_size);
+  formData.append("body_size", user.body_size);
   formData.append("shoe_size", user.shoe_size);
   formData.append("shoe_value", user.shoe_value);
 

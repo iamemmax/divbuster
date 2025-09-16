@@ -19,27 +19,58 @@ const accountPlanSchema = z.object({
 });
 
 type AccountPlanFormData = z.infer<typeof accountPlanSchema>;
-
+// gear______gear
 // Plan data
 const planOptions: PlanOption[] = [
   {
-    id: 'mile',
-    name: 'Kilogram (KG)',
+    id: 'xxs',
+    name: 'XX-Small',
     icon: <Layers className="w-5 h-5 text-orange-500" />,
-    description: 'The SI unit of mass (equivalent to approximately 2.205 lb), first introduced as a unit of mass for the metric system.',
+    description: 'Extra Extra Small size for petite builds',
+    isDefault: false,
+  },
+  {
+    id: 'xs',
+    name: 'X-Small',
+    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    description: 'Extra Small size for smaller builds',
+  },
+  {
+    id: 's',
+    name: 'Small',
+    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    description: 'Small size for compact builds',
+  },
+  {
+    id: 'm',
+    name: 'Medium',
+    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    description: 'Medium size for average builds',
     isDefault: true,
   },
   {
-    id: 'metre',
-    name: 'Pound (lb)',
+    id: 'l',
+    name: 'Large',
     icon: <Layers className="w-5 h-5 text-orange-500" />,
-    description: 'The pound or pound-mass is a unit of mass used in both the British imperial and United States customary systems of measurement.',
+    description: 'Large size for bigger builds',
   },
   {
-    id: 'kilometre',
-    name: 'Gram',
+    id: 'xl',
+    name: 'X-Large',
     icon: <Layers className="w-5 h-5 text-orange-500" />,
-    description: 'The gram is a unit of mass in the International System of Units (SI) equal to one thousandth of a kilogram.',
+    description: 'Extra Large size for extended builds',
+  },
+  {
+    id: 'xxl',
+    name: 'XX-Large',
+    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    description: 'Extra Extra Large size for maximum builds',
+  },
+  {
+    id: 'xxxl',
+    name: 'XXX-Large',
+    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    description: 'Triple Extra Large size for the largest builds',
   },
 ];
 

@@ -3,16 +3,9 @@ import { useMutation } from "react-query";
 import { useAuth } from "@/contexts/authentication";
 import { tokenStorage } from "../utils";
 import { setAxiosDefaultToken } from "@/lib/axios";
+import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
-interface GoogleAuthResponse {
-  status: string;
-  message: string;
-  tokens: {
-    refresh: string;
-    access: string;
-  };
-  data: [];
-}
+
 
 interface GoogleAuthPayload {
   provider: string;
@@ -36,7 +29,7 @@ const googleAuth = async (token: string, language: string = "english") => {
     is_auth_code: isAuthCode
   };
   
-  return adminAxios.post<GoogleAuthResponse>("auth/google", payload);
+  return adminAxios.post("/social", payload);
 };
 
 export const useGoogleAuth = () => {
@@ -46,22 +39,28 @@ export const useGoogleAuth = () => {
     ({ token, language }: { token: string; language?: string }) => 
       googleAuth(token, language),
     {
-      onSuccess: ({ data }) => {
-        const { tokens } = data;
-        const { access: token } = tokens;
-
+      onSuccess: async ({data}) => {
+       const token = data?.access_token;
         // Store the token
         tokenStorage.setToken(token);
         
         // Set the token for future requests
         setAxiosDefaultToken(token, adminAxios);
+         // Fetch user data after successful login
+          const user = await getAuthenticatedUser();
+              
 
         if (authDispatch) {
-          authDispatch({ type: "STOP_LOADING" });
+         authDispatch({ type: "LOGIN", payload: user });
+          authDispatch?.({ type: "STOP_LOADING" });
         }
         
         // Don't use router here - we'll handle navigation in the component
       },
+      onError: (error) => {
+      console.error("Login error:", error);
+      authDispatch?.({ type: "STOP_LOADING" });
+    }
     }
   );
 };

@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useMemo, useState } from 'react';
-import { Calendar, Settings, MoreHorizontal, Moon, Sun, Menu, X } from 'lucide-react';
+import { Calendar, Settings, Menu, X } from 'lucide-react';
 import Header from '../../components/shared/Header';
 import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput';
 import { TabItem } from '../../components/dashboard/SuggestedDIverTabs';

@@ -14,7 +14,7 @@ import { AxiosError } from 'axios';
 import { ErrorModal } from '@/components/core';
 import { SmallSpinner } from '@/icons/core';
 import toast from 'react-hot-toast';
-import { useAuth } from '@/contexts/authentication';
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 
 // Account type selection schema with translations
 const createAccountTypeSelectionSchema = (t: any) =>
@@ -28,7 +28,10 @@ const createAccountTypeSelectionSchema = (t: any) =>
   });
   
 
-const ProfileAccountType = () => {
+  interface prop{
+     user: User | null
+  }
+const ProfileAccountType = ({user}:prop) => {
 
    const {
       isErrorModalOpen,
@@ -40,8 +43,7 @@ const ProfileAccountType = () => {
   const [diverTypeOpen, setDiverTypeOpen] = useState(false);
   const [selectedAccountType, setSelectedAccountType] =
     useState('recreative');
- const { authState } = useAuth();
-  const { user } = authState;
+
   const userData = user;
   // Create schema with translated error messages
   const accountTypeSelectionSchema = createAccountTypeSelectionSchema(t);

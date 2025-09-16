@@ -25,6 +25,7 @@ import { useQueryClient } from "react-query";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { SmallSpinner } from "@/icons/core";
+import toast from "react-hot-toast";
 
 // Zod schema for form validation
 const profileSchema = z.object({
@@ -35,7 +36,7 @@ const profileSchema = z.object({
   // bio: z.string().optional(),
   // weight: z.string().min(1, "Weight is required"),
   height: z.string().min(1, "Height is required") || "",
-  // body_size: z.string().min(1, "Body size is required"),
+  body_size: z.string().min(1, "Body size is required"),
   shoe_size: z.string().min(1, "Shoe size is required"),
   shoe_value: z.string().min(1, "Shoe value is required"),
 });
@@ -193,7 +194,7 @@ const ProfileSettings = () => {
       email: user?.email,
       gender: "Male",
       height: String(user?.diver_profile?.height),
-      // body_size: String(user?.diver_profile?.body_size),
+      body_size: String(user?.diver_profile?.body_size),
       shoe_size: String(user?.diver_profile?.shoe_size),
       shoe_value: String(user?.diver_profile?.shoe_value),
     },
@@ -219,6 +220,7 @@ const ProfileSettings = () => {
 
     }, {
       onSuccess: () => {
+        toast.success("Profile updated successfully")
         queryClient.invalidateQueries({ queryKey: ["user-details"] })
 
 
@@ -438,7 +440,7 @@ const ProfileSettings = () => {
                   </div>
                 </div>
                 {/* body-size */}
-                {/* <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr] text-xs md:text-sm border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
+                <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr] text-xs md:text-sm border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Body Size
                   </label>
@@ -461,8 +463,8 @@ const ProfileSettings = () => {
                           </SelectTrigger>
                           <SelectContent className="dark:bg-gray-800 dark:text-gray-100">
                             {bodySizes?.map((x, idx: number) => (
-                              <SelectItem value={x?.value} key={idx}>
-                                {x?.label}
+                              <SelectItem value={x} key={idx}>
+                                {x}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -475,7 +477,7 @@ const ProfileSettings = () => {
                       </p>
                     )}
                   </div>
-                </div> */}
+                </div>
                 {/* Shoe Value */}
                 <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr] text-xs md:text-sm border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

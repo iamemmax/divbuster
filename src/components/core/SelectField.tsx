@@ -13,6 +13,7 @@ interface SelectFieldProps {
     value: string | number;
     onChange: (value: string | number) => void;
   };
+  className?: string | undefined
   placeholder?: string;
   options: Option[];
   label?: string;
@@ -29,6 +30,7 @@ const SelectField = ({
   onReachEnd,
   loading = false,
   error,
+  className
 }: SelectFieldProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -63,13 +65,13 @@ const SelectField = ({
   };
 
   return (
-    <div className="space-y-2 grid items-center grid-cols-1 md:grid-cols-[1fr_2fr]">
+    <div className={`space-y-2  w-full grid items-center ${label ? "grid-cols-1":"grid-cols-1 md:grid-cols-[1fr_2fr]"} `}>
       {label && (
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           {label}
         </label>
       )}
-      <div className="relative" ref={dropdownRef}>
+      <div className="relative !w-full" ref={dropdownRef}>
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
@@ -77,7 +79,7 @@ const SelectField = ({
             error 
               ? 'border-red-500 dark:border-red-500 hover:border-red-600 dark:hover:border-red-400' 
               : 'border-gray-300 dark:border-gray-600'
-          }`}
+          } ${className}`}
         >
           <span
             className={

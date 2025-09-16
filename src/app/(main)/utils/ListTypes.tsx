@@ -1,4 +1,4 @@
-export const bodySizes = ["xsmall", "small", "medium", "large", "xlarge"]
+export const bodySizes = [ "xxs", "xs", "s", "m", "l", "xl", "xxl", "xxxl"]
 
 
 export const shoeValues = [

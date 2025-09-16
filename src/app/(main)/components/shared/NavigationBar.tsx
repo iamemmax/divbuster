@@ -67,7 +67,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onItemClick }) => {
     {
       name: "Buddy Finder",
       icon: <BuddyIcon className={cn(isActive("/div-finder") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
-      link: "/div-finder",
+      link: "/dive-finder",
       hasBarge: true,
       bargeText: "New",
     },

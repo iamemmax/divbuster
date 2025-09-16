@@ -10,11 +10,12 @@ import {
 } from "@/components/core";
 import DateRangePicker from "@/components/core/DateRangePicker";
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
-import { useAuth, User } from "@/contexts/authentication";
+import { useAuth } from "@/contexts/authentication";
 import DashboardIcon from "@/app/icons/(dashboard)/Dashbaordicon";
 import { ToggleSwitch } from "@/components/core/Toggle";
 import { info } from "console";
 import Link from "next/link";
+import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 
 // Define types for our stats
 interface StatItem {

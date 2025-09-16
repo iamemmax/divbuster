@@ -110,7 +110,8 @@ const DivingProfile = () => {
     }
   }, [isError, error]);
 
-  const buddyProfile = params?.id ? data : user;
+  const  buddyProfile = params?.id ? data : user;
+  
 
   const diveSiteInfo = getDiveSiteInfo({
     latitude: Number(buddyProfile?.current_location?.lat),

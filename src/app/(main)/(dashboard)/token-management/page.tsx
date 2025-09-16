@@ -17,16 +17,11 @@ const SettingsTab = () => {
 
   const tabs: TabItem[] = [
     { id: "manage-token", label: "Manage Token", href: "?tab=manageToken" },
-    { id: "myCards", label: "My Cards", href: "?tab=myCards" },
+    //    { id: "myCards", label: "My Cards", href: "?tab=myCards" },
     {
       id: "invoices",
       label: "Invoices",
       href: "?tab=invoices",
-    },
-    {
-      id: "orders",
-      label: "Orders",
-      href: "?tab=orders",
     },
     
     

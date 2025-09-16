@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import Header from './components/shared/Header'
 import { cn } from '@/utils/classNames'
 import { useAuth } from '@/contexts/authentication'
@@ -8,11 +8,13 @@ import { ActionDropdown } from '@/components/core/ActionDropdown';
 import MonthlySnapShot from './components/dashboard/MonthlySnapShot'
 import DivingTab from './components/dashboard/Divertab'
 import SuggestedDIverTabs from './components/dashboard/SuggestedDIverTabs'
+import AddNewDiveLog from './(dashboard)/div-log/components/AddNewDiveLog'
 // import { ChevronRightIcon } from '@heroicons/react/24/outline'
 
 const Page = () => {
   const { authState } = useAuth();
   const { user} = authState;
+  const [showDiveLogModal, setShowDivelogModal] = useState(false)
 
   return (
     <div className='text-black dark:text-white'>
@@ -36,14 +38,16 @@ const Page = () => {
           <div className="relative w-full md:w-auto">
             <ActionDropdown 
               items={[
-                { label: "Add new Dive Log", href: "/dive-log/new", active: true },
-                { label: "Create a Dive Plan", href: "/dive-plan/new" },
-                { label: "Add a new Buddy", href: "/buddy/new" },
-                { label: "Add new Dive Spot", href: "/dive-spot/new" },
-                { label: "Add Certification", href: "/certification/new" },
-                { label: "Add Gear", href: "/gear/new" },
-                { label: "Add Feedback or Comment", href: "/feedback/new" }
+                { label: "Add new Dive Log",  active: true , onClick:() =>setShowDivelogModal(true)
+                },
+                { label: "Create a Dive Plan",  },
+                { label: "Add a new Buddy", },
+                { label: "Add new Dive Spot" },
+                { label: "Add Certification" },
+                { label: "Add Gear" },
+                { label: "Add Feedback or Comment" }
               ]}
+              
               
             
             />
@@ -63,6 +67,11 @@ const Page = () => {
         </div>
     
       </div>
+
+
+      {
+        showDiveLogModal && <AddNewDiveLog isOpen={showDiveLogModal} onClose={()=>setShowDivelogModal(false)}/>
+      }
     </div>
   )
 }

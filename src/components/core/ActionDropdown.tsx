@@ -24,6 +24,7 @@ export const ActionDropdown: React.FC<ActionDropdownProps> = ({
   dropdownClassName,
   label = "Select an Action"
 }) => {
+  const [selected, setSelected] = React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
@@ -78,43 +79,22 @@ export const ActionDropdown: React.FC<ActionDropdownProps> = ({
         >
           {items?.map((item, index) => (
             <React.Fragment key={index}>
-              {item.href ? (
-                <Link 
-                  href={item.href}
-                  className={cn(
-                    "flex items-center px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-700",
-                    item.active && "bg-[#FFF6EA] dark:bg-gray-700"
-                  )}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.icon && <span className="mr-3">{item.icon}</span>}
-                  <span className="text-[#132346] font-archivo text-sm dark:text-white">{item.label}</span>
-                  {item.active && (
-                    <svg className="ml-auto text-orange-500" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M5 12L10 17L19 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  )}
-                </Link>
-              ) : (
-                <Button
-                  className={cn(
-                    "flex items-center w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700",
-                    item.active && "bg-orange-50 dark:bg-gray-700"
+             
+                <div
+                 className={cn(
+                    "flex items-center cursor-pointer text-sm px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-700",
+                    // item.active && "bg-[#FFF6EA] dark:bg-gray-700"
                   )}
                   onClick={() => {
                     if (item.onClick) item.onClick();
+                    // setSelected(item?.)
                     setIsOpen(false);
                   }}
                 >
                   {item.icon && <span className="mr-3">{item.icon}</span>}
                   <span className="text-gray-800 dark:text-gray-200">{item.label}</span>
-                  {item.active && (
-                    <svg className="ml-auto text-orange-500" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M5 12L10 17L19 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  )}
-                </Button>
-              )}
+                 
+                </div>
             </React.Fragment>
           ))}
         </div>

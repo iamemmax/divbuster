@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ChevronDown, ChevronLeft, ChevronRight, X, Calendar as CalendarIcon } from "lucide-react";
 import { Dialog, DialogBody, DialogContent } from "@/components/core";
 import SchoolBookingInfo from "./SchoolBookingInfo";
 import SchoolDriverContact, { BookingDriverFormValues } from "./SchoolDriverContact";
@@ -171,10 +170,10 @@ const CreateSchoolPlan = ({ isOpen, setIsOpenCardModal }: Props) => {
       if (
         window.innerHeight + window.scrollY >=
         document.body.offsetHeight - 200 && // near bottom
-        hasNextPage &&
-        !isFetchingNextPage
+        hasNextPageDiveSite &&
+        !isFetchingNextPageDiveSite
       ) {
-        fetchNextPage();
+        fetchNextPageDiveSites();
       }
     };
 
@@ -306,25 +305,7 @@ const CreateSchoolPlan = ({ isOpen, setIsOpenCardModal }: Props) => {
                     </p>
                   )}
 
-                  {/* Dive Class
-                  <Controller
-                    name="div_class"
-                    control={createForm.control}
-                    render={({ field }) => (
-                      <SelectField
-                        field={field}
-                        label="Select Dive Classes"
-                        placeholder="Discover Scuba Dive Exp. (US $95.00)"
-                        options={diveClasses}
-                        error={createForm?.formState?.errors?.div_class}
-                      />
-                    )}
-                  />
-                  {createForm.formState.errors.div_class && (
-                    <p className="text-red-500 text-sm">
-                      {createForm.formState.errors.div_class.message}
-                    </p>
-                  )} */}
+                 
 
                   <Controller
                     name="dive_event_id"

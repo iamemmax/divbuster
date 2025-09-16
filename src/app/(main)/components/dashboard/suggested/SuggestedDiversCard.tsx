@@ -3,6 +3,7 @@
 import { Button, LinkButton } from "@/components/core"
 import { SmallSpinner } from "@/icons/core"
 import { cn } from "@/utils/classNames"
+import moment from "moment"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -110,21 +111,21 @@ export function SuggestedDiverCard({
               <div className="flex gap-4">
                 <div className="flex flex-col items-start gap-y-[5px]" >
                   <span className="text-xs text-[#FFFFFF] dark:text-gray-200 font-archivo font-medium transition-colors duration-200">Time in</span>
-                  <span className="font-archivo font-semibold text-base text-white dark:text-gray-100 transition-colors duration-200">{stats.timeIn}</span>
+                  <span className="font-archivo font-semibold text-sm text-white dark:text-gray-100 transition-colors duration-200">{moment(stats.timeIn).format("ll")}</span>
                 </div>
                 <div className="flex flex-col items-start gap-y-[5px]">
                   <span className="text-xs text-[#FFFFFF] dark:text-gray-200 font-archivo font-medium transition-colors duration-200">Time out</span>
-                  <span className="font-archivo font-semibold text-base text-white dark:text-gray-100 transition-colors duration-200">{stats.timeOut}</span>
+                  <span className="font-archivo font-semibold text-sm text-white dark:text-gray-100 transition-colors duration-200">{moment(stats.timeOut).format("ll")}</span>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex flex-col items-start gap-y-[5px]">
                   <span className="text-xs text-[#FFFFFF] dark:text-gray-200 font-archivo font-medium transition-colors duration-200">Max Depth</span>
-                  <span className="font-archivo font-semibold text-base text-white dark:text-gray-100 transition-colors duration-200">{stats.maxDepth}</span>
+                  <span className="font-archivo font-semibold text-sm text-white dark:text-gray-100 transition-colors duration-200">{stats.maxDepth}</span>
                 </div>
                 <div className="flex flex-col items-start gap-y-[5px]">
                   <span className="text-xs text-[#FFFFFF] dark:text-gray-200 font-archivo font-medium transition-colors duration-200">Bottom Time</span>
-                  <span className="font-archivo font-semibold text-base text-white dark:text-gray-100 transition-colors duration-200">{stats.bottomTime}</span>
+                  <span className="font-archivo font-semibold text-sm text-white dark:text-gray-100 transition-colors duration-200">{stats.bottomTime}</span>
                 </div>
               </div>
             </div>

@@ -350,159 +350,181 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   const nextMonthDays = generateCalendarDays(nextMonth);
   
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-      <div className="flex">
-        {/* Time range presets */}
-        <div className="w-64 border-r border-gray-200 dark:border-gray-700 p-4">
-          <div className="space-y-2">
-            {[
-              { id: 'today', label: 'Today' },
-              { id: 'yesterday', label: 'Yesterday' },
-              { id: 'this-week', label: 'This week' },
-              { id: 'last-week', label: 'Last week' },
-              { id: 'this-month', label: 'This month' },
-              { id: 'last-month', label: 'Last month' },
-              { id: 'this-year', label: 'This year' },
-              { id: 'last-year', label: 'Last year' },
-              { id: 'all-time', label: 'All time' },
-            ].map((item) => (
+   <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+  <div className="flex flex-col lg:flex-row">
+    {/* Time range presets */}
+    <div className="w-full hidden md:block lg:w-64 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 p-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2">
+        {[
+          { id: 'today', label: 'Today' },
+          { id: 'yesterday', label: 'Yesterday' },
+          { id: 'this-week', label: 'This week' },
+          { id: 'last-week', label: 'Last week' },
+          { id: 'this-month', label: 'This month' },
+          { id: 'last-month', label: 'Last month' },
+          { id: 'this-year', label: 'This year' },
+          { id: 'last-year', label: 'Last year' },
+          { id: 'all-time', label: 'All time' },
+        ].map((item) => (
+          <div
+            key={item.id}
+            className={`px-3 py-3 rounded-md cursor-pointer text-sm text-center lg:text-left ${
+              activeTimeRange === item.id
+                ? 'bg-[#F7931D]/10 text-[#F7931D]'
+                : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+            }`}
+            onClick={() => handleTimeRangeSelect(item.id as TimeRange)}
+          >
+            {item.label}
+          </div>
+        ))}
+      </div>
+    </div>
+    
+    {/* Calendar */}
+    <div className="flex-1 flex flex-col">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 sm:p-6 flex-grow">
+        {/* Current Month */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <Button
+              variant="outlined"
+              className="p-1 rounded-full border-none hover:bg-gray-100 dark:hover:bg-gray-700"
+              onClick={goToPrevMonth}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M15 18L9 12L15 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Button>
+            <h3 className="text-sm font-medium">
+              {currentMonth.toLocaleDateString('en-US', {
+                month: 'long',
+                year: 'numeric',
+              })}
+            </h3>
+            <div className="w-8"></div>
+          </div>
+
+          <div className="grid grid-cols-7 gap-2 sm:gap-3">
+            {daysOfWeek.map((day) => (
               <div
-                key={item.id}
-                className={`px-3 py-3 rounded-md cursor-pointer text-sm ${
-                  activeTimeRange === item.id
-                    ? 'bg-[#F7931D]/10 text-[#F7931D]'
-                    : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
-                onClick={() => handleTimeRangeSelect(item.id as TimeRange)}
+                key={day}
+                className="text-[10px] sm:text-xs text-center font-medium text-gray-500 dark:text-gray-400 py-1"
               >
-                {item.label}
+                {day}
+              </div>
+            ))}
+
+            {currentMonthDays.map((day, index) => (
+              <div
+                key={index}
+                className={`
+                  text-center h-8 w-8 sm:h-9 sm:w-9 flex justify-center items-center text-xs rounded-full cursor-pointer
+                  ${!day.isCurrentMonth ? 'text-gray-400 dark:text-gray-600' : 'text-gray-800 dark:text-gray-200'}
+                  ${isDateSelected(day.date) ? 'bg-[#F7931D]/10' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}
+                  ${isRangeEndpoint(day.date) ? '!bg-[#F7931D] text-white hover:!bg-[#F7931D]' : ''}
+                `}
+                onClick={() => handleDateClick(day.date)}
+              >
+                {day.date.getDate()}
               </div>
             ))}
           </div>
         </div>
-        
-        {/* Calendar */}
-        <div className="flex-1  flex flex-col">
-          <div className="grid grid-cols-2 gap-8 p-6 flex-grow">
-            {/* Current Month */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <Button 
-                variant={"outlined"}
-                  className="p-1 rounded-full border-none hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={goToPrevMonth}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </Button>
-                <h3 className="text-sm font-medium">
-                  {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                </h3>
-                <div className="w-8"></div> {/* Spacer for alignment */}
-              </div>
-              
-              <div className="grid grid-cols-7 gap-3">
-                {daysOfWeek.map((day) => (
-                  <div key={day} className="text-xs text-center font-medium text-gray-500 dark:text-gray-400 py-1">
-                    {day}
-                  </div>
-                ))}
-                
-                {currentMonthDays.map((day, index) => (
-                  <div
-                    key={index}
-                    className={`
-                      text-center h-9 w-9 flex justify-center items-center text-xs rounded-full cursor-pointer
-                      ${!day.isCurrentMonth ? 'text-gray-400 dark:text-gray-600' : 'text-gray-800 dark:text-gray-200'}
-                      ${isDateSelected(day.date) ? 'bg-[#F7931D]/10' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}
-                      ${isRangeEndpoint(day.date) ? '!bg-[#F7931D] text-white hover:!bg-[#F7931D]' : ''}
-                      relative
-                    `}
-                    onClick={() => handleDateClick(day.date)}
-                  >
-                    {day.date.getDate()}
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            {/* Next Month */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-8"></div> {/* Spacer for alignment */}
-                <h3 className="text-sm font-medium">
-                  {nextMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                </h3>
-                <button 
-                  className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={goToNextMonth}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-7 gap-3">
-                {daysOfWeek.map((day) => (
-                  <div key={day} className="text-xs text-center font-medium text-gray-500 dark:text-gray-400 py-1">
-                    {day}
-                  </div>
-                ))}
-                
-                {nextMonthDays.map((day, index) => (
-                  <div
-                    key={index}
-                    className={`
-                      text-center h-9 w-9 flex justify-center items-center text-xs rounded-full cursor-pointer
-                      ${!day.isCurrentMonth ? 'text-gray-400 dark:text-gray-600' : 'text-gray-800 dark:text-gray-200'}
-                      ${isDateSelected(day.date) ? 'bg-[#F7931D]/10' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}
-                      ${isRangeEndpoint(day.date) ? '!bg-[#F7931D] text-white hover:!bg-[#F7931D]' : ''}
-                      relative
-                    `}
-                    onClick={() => handleDateClick(day.date)}
-                  >
-                    {day.date.getDate()}
-                   
-                  </div>
-                ))}
-              </div>
-            </div>
+
+        {/* Next Month */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-8"></div>
+            <h3 className="text-sm font-medium">
+              {nextMonth.toLocaleDateString('en-US', {
+                month: 'long',
+                year: 'numeric',
+              })}
+            </h3>
+            <button
+              className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+              onClick={goToNextMonth}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9 6L15 12L9 18"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
           </div>
-          
-          {/* Date Range Display and Actions - Now sticky at bottom */}
-          <div className="mt-auto py-4 px-6 flex items-center justify-between border-opacity-70 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex items-center space-x-2">
-              <div className="px-5 font-archivo font-normal py-2 border border-gray-200 dark:border-gray-700 rounded-md text-sm">
-                {formatDate(dateRange.startDate)}
-              </div>
-              <span className="text-gray-500">–</span>
-              <div className="px-5 py-2 border border-gray-200 font-archivo font-normal dark:border-gray-700 rounded-md text-sm">
-                {formatDate(dateRange.endDate)}
-              </div>
-            </div>
-            
-            <div className="flex space-x-2">
-              <Button 
-                variant="outlined" 
-                className="text-sm"
-                onClick={onCancel}
+
+          <div className="grid grid-cols-7 gap-2 sm:gap-3">
+            {daysOfWeek.map((day) => (
+              <div
+                key={day}
+                className="text-[10px] sm:text-xs text-center font-medium text-gray-500 dark:text-gray-400 py-1"
               >
-                Cancel
-              </Button>
-              <Button 
-                className="bg-[#F7931D] text-white hover:bg-[#e88616] text-sm"
-                onClick={handleApply}
-                disabled={!dateRange.startDate || !dateRange.endDate}
+                {day}
+              </div>
+            ))}
+
+            {nextMonthDays.map((day, index) => (
+              <div
+                key={index}
+                className={`
+                  text-center h-8 w-8 sm:h-9 sm:w-9 flex justify-center items-center text-xs rounded-full cursor-pointer
+                  ${!day.isCurrentMonth ? 'text-gray-400 dark:text-gray-600' : 'text-gray-800 dark:text-gray-200'}
+                  ${isDateSelected(day.date) ? 'bg-[#F7931D]/10' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}
+                  ${isRangeEndpoint(day.date) ? '!bg-[#F7931D] text-white hover:!bg-[#F7931D]' : ''}
+                `}
+                onClick={() => handleDateClick(day.date)}
               >
-                Apply
-              </Button>
-            </div>
+                {day.date.getDate()}
+              </div>
+            ))}
           </div>
         </div>
       </div>
+
+      {/* Date Range Display and Actions */}
+      <div className="mt-auto py-4 px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-opacity-70 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex items-center space-x-2">
+          <div className="px-4 sm:px-5 font-archivo font-normal py-2 border border-gray-200 dark:border-gray-700 rounded-md text-xs sm:text-sm">
+            {formatDate(dateRange.startDate)}
+          </div>
+          <span className="text-gray-500">–</span>
+          <div className="px-4 sm:px-5 py-2 border border-gray-200 font-archivo font-normal dark:border-gray-700 rounded-md text-xs sm:text-sm">
+            {formatDate(dateRange.endDate)}
+          </div>
+        </div>
+
+        <div className="flex space-x-2 w-full sm:w-auto">
+          <Button
+            variant="outlined"
+            className="flex-1 sm:flex-none text-sm"
+            onClick={onCancel}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="flex-1 sm:flex-none bg-[#F7931D] text-white hover:bg-[#e88616] text-sm"
+            onClick={handleApply}
+            disabled={!dateRange.startDate || !dateRange.endDate}
+          >
+            Apply
+          </Button>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
+
   );
 };
 

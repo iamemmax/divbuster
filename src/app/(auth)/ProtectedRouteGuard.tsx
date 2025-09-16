@@ -25,6 +25,8 @@ export default function ProtectedRouteGuard({
     "/messages",
     "/bookings",
     "/profile",
+    "/token-management?tab=invoices",
+    "/token-management"
   ];
 
   const isProtected = protectedRoutes.some((route) =>

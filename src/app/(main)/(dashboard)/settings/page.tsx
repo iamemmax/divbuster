@@ -75,7 +75,7 @@ const SettingsTab = () => {
           </div>
         );
       case "UserSettings":
-        return <div><UserSetting/></div>;
+        return <div><UserSetting user={user}/></div>;
       case "MySubscription":
         return <div><SubscriptionSettings user={user}/></div>;
       case "Units & Measurement":
@@ -88,10 +88,12 @@ const SettingsTab = () => {
   };
 
   return (
-<div>
-  <Header title="Settings" subtitle="" />
+<div className="h-[100vh]">
+ <div className="h-[10vh]">
+   <Header title="Settings" subtitle="" />
+ </div>
 
-  <div className="font-archivo p-3 md:p-6 h-[80vh] overflow-y-auto">
+  <div className="font-archivo p-3 md:p-6 h-[90vh] overflow-y-auto">
     <div className="mb-8">
       <h1 className="text-base lg:text-2xl font-medium text-[#1D2939] dark:text-white">
         System settings

@@ -3,16 +3,9 @@ import { useMutation } from "react-query";
 import { useAuth } from "@/contexts/authentication";
 import { tokenStorage } from "../utils";
 import { setAxiosDefaultToken } from "@/lib/axios";
+import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
-interface LinkedInAuthResponse {
-  status: string;
-  message: string;
-  tokens: {
-    refresh: string;
-    access: string;
-  };
-  data: [];
-}
+
 
 interface LinkedInAuthPayload {
   provider: string;
@@ -27,8 +20,9 @@ const linkedinAuth = async (token: string, language: string = "english") => {
     access_token: token,
     lang: language
   };
+  console.log(payload);
   
-  return adminAxios.post<LinkedInAuthResponse>("auth/linkedin", payload);
+  return adminAxios.post("/social", payload);
 };
 
 export const useLinkedInAuth = () => {
@@ -39,8 +33,8 @@ export const useLinkedInAuth = () => {
       linkedinAuth(token, language),
     {
       onSuccess: async ({ data }) => {
-        const { tokens } = data;
-        const { access: token } = tokens;
+      const token = data?.access_token;
+      
         
         console.log("LinkedIn auth successful, token received:", token);
 
@@ -55,13 +49,12 @@ export const useLinkedInAuth = () => {
         try {
           // Fetch user data after successful login
           console.log("Fetching user data after LinkedIn login");
-          const userResponse = await adminAxios.get('/profile');
-          const userData = userResponse.data?.data;
-          console.log("User data fetched successfully:", userData);
+          const user = await getAuthenticatedUser();
+               
           
           if (authDispatch) {
             // Update auth state with user data
-            authDispatch({ type: "LOGIN", payload: userData });
+            authDispatch({ type: "LOGIN", payload: user });
             console.log("Auth state updated with user data");
           }
         } catch (error) {

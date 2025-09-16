@@ -15,12 +15,14 @@ interface Props {
   isOpen: boolean;
   setIsOpenCardModal: React.Dispatch<React.SetStateAction<boolean>>;
   setShowSchoolBookingModal: React.Dispatch<React.SetStateAction<boolean>>;
+   setShowBookWithBuddy: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const BookingActionModal: React.FC<Props> = ({
   isOpen,
   setIsOpenCardModal,
   setShowSchoolBookingModal,
+  setShowBookWithBuddy
 }) => {
   const handleCancel = () => {
     setIsOpenCardModal(false);
@@ -30,7 +32,7 @@ const BookingActionModal: React.FC<Props> = ({
     {
       id: 1,
       title: "Book with Buddy",
-      action: () => {},
+      action: () => setShowBookWithBuddy(true),
     },
     {
       id: 2,

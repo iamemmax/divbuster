@@ -13,16 +13,10 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { RouteChangeLoader } from "@/components/core/RouteChangeLoader";
 
 // Updated Google Client ID from environment variables
-const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || 
-                         process.env.NEXT_PUBLIC_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
 
 // Add this to get the current origin for redirect URIs
-const getOrigin = () => {
-  if (typeof window !== 'undefined') {
-    return window.location.origin;
-  }
-  return '';
-};
+
 
 const sans = DM_Sans({
   subsets: ["latin"],
@@ -68,6 +62,7 @@ export default function RootLayout({
         />
         <GoogleOAuthProvider 
           clientId={GOOGLE_CLIENT_ID as string}
+          
           onScriptLoadSuccess={() => console.log("Google OAuth script loaded successfully")}
         >
           <ReactQueryProvider>

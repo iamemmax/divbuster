@@ -285,62 +285,7 @@ const LoginPage = () => {
     const stepComponents = {
       "login":(
   <div className="md:px-[30px] px-6 py-[30px]  xl:px-[9.125rem] xl:py-[7rem]">
-   <div className="flex justify-end items-center">
-        <Select
-            value={language || ""}
-            onValueChange={handleLanguageChange}
-            defaultValue={language}
-            onOpenChange={setIsOpen}
-          >
-            <div className="relative">
-              <SelectTrigger
-                id="language"
-                className={`border bg-transparent max-w-[9.5rem] w-full  relative text-black outline-none h-[3rem] text-sm font-archivo rounded-xl px-[.875rem] pr-10`}
-              >
-                <SelectValue
-                  className="text-[#8D9196] text-sm font-archivo font-medium"
-                />
-              <CaretDownIcon 
-                color="#8D9196" 
-                className={`absolute right-2  top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
-                  isOpen ? 'rotate-180' : ''
-                }`}
-              />
-              </SelectTrigger>
-            </div>
-            <SelectContent>
-              <SelectItem
-                className="hidden"
-                disabled
-                value=""
-                style={{
-                  color: "#8D9196",
-                  fontWeight: 500,
-                  fontFamily: "Archivo",
-                  fontSize: "10px",
-                }}
-              >
-                {language}
-              </SelectItem>
-              {languages.map((lang) => (
-                <SelectItem
-                  key={lang.value}
-                  value={lang.value}
-                  className="px-2"
-                >
-                  <div className="flex items-start gap-3">
-                    <img
-                      src={lang.flag}
-                      alt={`${lang.label} flag`}
-                      className="w-5 h-5 rounded-sm object-cover"
-                    />{" "}
-                    <span>{lang.label}</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-   </div>
+  
       <div className="flex justify-center mt-5 mb-7 items-center lg:hidden ">
         <DiveBusterBlackLogo />
       </div>
@@ -448,7 +393,63 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full relative h-full">
+     <div className="flex absolute right-6 md:right-[9rem] top-5  justify-end items-center">
+        <Select
+            value={language || ""}
+            onValueChange={handleLanguageChange}
+            defaultValue={language}
+            onOpenChange={setIsOpen}
+          >
+            <div className="relative">
+              <SelectTrigger
+                id="language"
+                className={`border bg-transparent max-w-[9.5rem] w-full  relative text-black outline-none h-[3rem] text-sm font-archivo rounded-xl px-[.875rem] pr-10`}
+              >
+                <SelectValue
+                  className="text-[#8D9196] text-sm font-archivo font-medium"
+                />
+              <CaretDownIcon 
+                color="#8D9196" 
+                className={`absolute right-2  top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                  isOpen ? 'rotate-180' : ''
+                }`}
+              />
+              </SelectTrigger>
+            </div>
+            <SelectContent>
+              <SelectItem
+                className="hidden"
+                disabled
+                value=""
+                style={{
+                  color: "#8D9196",
+                  fontWeight: 500,
+                  fontFamily: "Archivo",
+                  fontSize: "10px",
+                }}
+              >
+                {language}
+              </SelectItem>
+              {languages.map((lang) => (
+                <SelectItem
+                  key={lang.value}
+                  value={lang.value}
+                  className="px-2"
+                >
+                  <div className="flex items-start gap-3">
+                    <img
+                      src={lang.flag}
+                      alt={`${lang.label} flag`}
+                      className="w-5 h-5 rounded-sm object-cover"
+                    />{" "}
+                    <span>{lang.label}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+   </div>
     {renderCurrentStep()}
     </div>
   );

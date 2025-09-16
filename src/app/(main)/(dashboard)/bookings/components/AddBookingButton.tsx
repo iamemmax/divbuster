@@ -3,10 +3,12 @@ import React, { useState } from 'react'
 import BookingActionModal from './modals/BookingActionModal'
 import { Button } from '@/components/core'
 import CreateSchoolPlan from './modals/school-booking/CreateSchoolPlan'
+import CreateBuddyBooking from './modals/buddy-booking/CreateBuddyBooking'
 
 const AddBookingButton = () => {
     const [showBookingModal, setShowBookingModal] = useState(false)
     const [showScholBookingModal, setShowSchoolBookingModal] = useState(false)
+    const [showBookWithBuddy, setShowBookWithBuddy] = useState(false)
   return (
     <div>
  <Button 
@@ -17,8 +19,10 @@ const AddBookingButton = () => {
               </Button>
 
 
-       {showBookingModal&& <BookingActionModal isOpen={showBookingModal} setIsOpenCardModal={setShowBookingModal} setShowSchoolBookingModal={setShowSchoolBookingModal}/>}
+       {showBookingModal&& <BookingActionModal isOpen={showBookingModal} setIsOpenCardModal={setShowBookingModal} setShowBookWithBuddy={setShowBookWithBuddy} setShowSchoolBookingModal={setShowSchoolBookingModal}/>}
        {showScholBookingModal&& <CreateSchoolPlan isOpen={showScholBookingModal} setIsOpenCardModal={setShowSchoolBookingModal}/>}
+    {showBookWithBuddy && <CreateBuddyBooking isOpen={showBookWithBuddy} setIsOpenCardModal={setShowBookWithBuddy}/>}
+    
     </div>
   )
 }

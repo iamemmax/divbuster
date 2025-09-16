@@ -8,9 +8,13 @@ import LanguageComponent from './userSettings/LangusgeSetteings';
 import ReferralSetting from './userSettings/ReferralSetting';
 import BlockedUsersAndFeedback from './userSettings/BlockedUsersAndFeedback ';
 import { AuthenticationComponent } from './userSettings/AuthenticationComp';
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 
+interface Prop{
+   user: User | null
+}
 
-const UserSetting = () => {
+const UserSetting = ({user}:Prop) => {
 
   
   const [activeSection, setActiveSection] = useState('authentication');
@@ -53,9 +57,9 @@ const UserSetting = () => {
       case 'authentication':
         return <AuthenticationComponent />;
       case 'account-type':
-        return <ProfileAccountType />;
+        return <ProfileAccountType user={user} />;
       case 'language':
-        return <LanguageComponent />;
+        return <LanguageComponent user={user}/>;
       case 'referral':
         return <ReferralSetting />;
       case 'delete-account':
