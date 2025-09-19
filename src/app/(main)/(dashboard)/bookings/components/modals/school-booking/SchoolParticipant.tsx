@@ -12,6 +12,8 @@ import { UnsavedChangesModal } from "@/app/(main)/components/shared/modal/Unsave
 import { ErrorModal } from "@/components/core";
 import { DiveLogUpdatedModal } from "@/app/(main)/(dashboard)/div-log/components/edit/DiveLogUpdatedModal";
 import { SmallSpinner } from "@/icons/core";
+import { useUser } from "@/app/(auth)/api/getAuthenticatedUser";
+import { useQueryClient } from "react-query";
 
 // Zod schema
 const participantSchema = z.object({
@@ -22,6 +24,9 @@ const participantSchema = z.object({
         last_name: z.string().min(1, "Last name is required"),
         email: z.string().email("Invalid email"),
         dob: z.string().min(1, "Date of Birth is required"),
+        contact_info:z.object({
+          phone_number:z.string().min(1,{message:"phone number is required"})
+        })
       })
     )
     .min(1, "At least one participant is required"),
@@ -69,15 +74,17 @@ const SchoolParticipantForm = ({ back, onClose ,diverInfo,schoolBookingDataInfo}
     name: "other_participants",
   });
 
+  const user = useUser()
   const watchedParticipants = watch("other_participants");
-
+const queryclient = useQueryClient()
   const onSubmit = async ({other_participants}: ParticipantFormValues) => {
     await trigger()
     const payload = {
       ...diverInfo,
       ...schoolBookingDataInfo,
       other_participants,
-      book_now:true
+      book_now:true,
+      lang:user?.data?.data?.profile_details?.language
 
     }
 
@@ -86,8 +93,7 @@ const SchoolParticipantForm = ({ back, onClose ,diverInfo,schoolBookingDataInfo}
     },{
        onSuccess: () => {
               setShowUpdatedModal(true);
-              // queryclient.invalidateQueries({ queryKey: ["single-div-log"] });
-              // queryclient.invalidateQueries({ queryKey: ["div-logs"] });
+              queryclient.invalidateQueries({ queryKey: ["booking-schools"] });
             }, 
             onError: (error) => {
               const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -102,7 +108,7 @@ const SchoolParticipantForm = ({ back, onClose ,diverInfo,schoolBookingDataInfo}
     const isFormValid = await trigger();
 
     if (isFormValid) {
-      append({ first_name: "", last_name: "", email: "", dob: "" });
+      append({ first_name: "", last_name: "", email: "", dob: "",contact_info:{phone_number:""} });
     }
   };
 
@@ -112,7 +118,7 @@ const SchoolParticipantForm = ({ back, onClose ,diverInfo,schoolBookingDataInfo}
       participant.first_name.trim() !== "" &&
       participant.last_name.trim() !== "" &&
       participant.email.trim() !== "" &&
-      participant.dob.trim() !== ""
+      participant.dob.trim() !== "" && participant.contact_info?.phone_number?.trim() !==""
     ) && Object.keys(errors).length === 0;
   };
 
@@ -140,13 +146,13 @@ const SchoolParticipantForm = ({ back, onClose ,diverInfo,schoolBookingDataInfo}
                 <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-2">
                   <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      First and Last Name
+                      First Name
                     </label>
                     <input
                       type="text"
                       placeholder="Enter First name"
                       {...register(`other_participants.${index}.first_name`)}
-                      className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.first_name ? "border-red-500" : "border-gray-300"} outline-none dark:border-gray-600 rounded-lg border bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
+                      className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.first_name ? "border-red-500" : "border-gray-300 dark:border-gray-600"} outline-none  rounded-lg border bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
                     />
                     {errors.other_participants?.[index]?.first_name && (
                       <p className="text-red-500 text-sm mt-1">
@@ -158,13 +164,13 @@ const SchoolParticipantForm = ({ back, onClose ,diverInfo,schoolBookingDataInfo}
                 <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-2">
                   <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      last_name and Last Name
+                      Last Name
                     </label>
                     <input
                       type="text"
                       placeholder="Enter Last name"
                       {...register(`other_participants.${index}.last_name`)}
-                      className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.last_name ? "border-red-500" : "border-gray-300"} outline-none dark:border-gray-600 rounded-lg border bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
+                      className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.last_name ? "border-red-500" : "border-gray-300 dark:border-gray-600"} outline-none  rounded-lg border bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
                     />
                     {errors.other_participants?.[index]?.last_name && (
                       <p className="text-red-500 text-sm mt-1">
@@ -183,11 +189,29 @@ const SchoolParticipantForm = ({ back, onClose ,diverInfo,schoolBookingDataInfo}
                       type="email"
                       placeholder="example@example.com"
                       {...register(`other_participants.${index}.email`)}
-                      className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.email ? "border-red-500" : "border-gray-300"} border outline-none dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
+                      className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.email ? "border-red-500" : "border-gray-300 dark:border-gray-600"} border outline-none  rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
                     />
                     {errors.other_participants?.[index]?.email && (
                       <p className="text-red-500 text-sm mt-1">
                         {errors.other_participants[index]?.email?.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="border-b  border-[#EAECF0] dark:border-gray-700 py-2">
+                  <div className="grid  grid-cols-1 md:grid-cols-[200px_1fr] items-center gap-4">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Phone Number
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="phone number"
+                      {...register(`other_participants.${index}.contact_info.phone_number`)}
+                      className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.contact_info?.phone_number ? "border-red-500" : "border-gray-300 dark:border-gray-600"}  outline-none  rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
+                    />
+                    {errors.other_participants?.[index]?.contact_info?.phone_number && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.other_participants[index]?.contact_info?.phone_number?.message}
                       </p>
                     )}
                   </div>
@@ -202,7 +226,7 @@ const SchoolParticipantForm = ({ back, onClose ,diverInfo,schoolBookingDataInfo}
                     <input
                       type="date"
                       {...register(`other_participants.${index}.dob`)}
-                      className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.dob ? "border-red-500" : "border-gray-300"} border outline-none dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
+                      className={`w-full px-4 py-3 border ${errors.other_participants?.[index]?.dob ? "border-red-500" : "border-gray-300 dark:border-gray-600"} border outline-none  rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none  transition-colors`}
                     />
                     {errors.other_participants?.[index]?.dob && (
                       <p className="text-red-500 text-sm mt-1">
@@ -220,7 +244,7 @@ const SchoolParticipantForm = ({ back, onClose ,diverInfo,schoolBookingDataInfo}
                 disabled={!canAddParticipant()}
                 className={` py-2 font-archivo rounded-lg font-medium transition-colors ${canAddParticipant()
                     ? "text-orange-500 dark:text-blue-400 border-orange-500 dark:border-blue-400 hover:bg-orange-50 dark:hover:bg-blue-900"
-                    : "text-[#98A2B3] dark:text-gray-500 border-gray-300 dark:border-gray-600 cursor-not-allowed"
+                    : "text-[#98A2B3] dark:text-gray-500 border-gray-300 dark:border-gray-600  cursor-not-allowed"
                   }`}
               >
                 + Add Another Participant
@@ -258,7 +282,7 @@ const SchoolParticipantForm = ({ back, onClose ,diverInfo,schoolBookingDataInfo}
             <div className="">
               <button
               onClick={back}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600  rounded text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               Cancel
             </button>
@@ -288,6 +312,8 @@ const SchoolParticipantForm = ({ back, onClose ,diverInfo,schoolBookingDataInfo}
                   <DiveLogUpdatedModal
                     isOpen={showUpdatedModal}
                     onClose={() => onClose()}
+                    title="Booking Sucessful"
+                    description="Congratulations, You have successfully book a dive. Click on close to return back to your booking page"
                     
                   />
                 )}

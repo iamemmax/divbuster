@@ -1,38 +1,38 @@
 import React, { useState } from 'react';
 import { Button, Dialog,DialogTitle, DialogBody, DialogContent } from '@/components/core';
+import { bookingResult } from '../../../api/bookings/fetchSchoolBooking';
+import moment from 'moment';
 
 interface prop{
     isOpen: boolean;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
     type:"dive"| "event"
     title:string
+    bookingDetails: bookingResult | undefined
     //  bookingDetails: DiveData | undefined
 }
-const ViewBookingDivePlan = ({isOpen,setIsOpen, type,title}: prop) => {
+const ViewBookingDivePlan = ({isOpen,setIsOpen, type,title,bookingDetails}: prop) => {
 
   // Sample participant data with diving-related images
-  const participants = [
-    { id: 1, name: 'Kinslee', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face' },
-    { id: 2, name: 'Malayah', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face' },
-    { id: 3, name: 'Averie', avatar: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=40&h=40&fit=crop&crop=face' },
-    { id: 4, name: 'Jensen', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face' },
-    { id: 5, name: 'Aniyah', avatar: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=40&h=40&fit=crop&crop=face' },
-    { id: 6, name: 'Peck', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face' },
-  ];
+  // const participants = [
+  //   { id: 1, name: 'Kinslee', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face' },
+  //   { id: 2, name: 'Malayah', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face' },
+  //   { id: 3, name: 'Averie', avatar: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=40&h=40&fit=crop&crop=face' },
+  //   { id: 4, name: 'Jensen', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face' },
+  //   { id: 5, name: 'Aniyah', avatar: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=40&h=40&fit=crop&crop=face' },
+  //   { id: 6, name: 'Peck', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face' },
+  // ];
 
-  // Duplicate participants to show 12 total (2 rows of 6)
-const allParticipants = type === "event"
-  ? [...participants, ...participants]
-  : [...participants];
+
 
   const orderDetails = [
-    { label: 'Dive Spot', value: 'USAT Liberty Shipwreck' },
-    { label: 'Date', value: 'Wed, 27 May, 2024' },
-    { label: 'Meet Up Location', value: 'Amazing Diving school Hall' },
-    { label: 'Hosted By', value: 'Amazing Diving School' },
-    { label:  type==="event"?'Price Per Person':"Price", value: '$93.00' },
-    { label: 'Service & Transaction Fee', value: '$0.00' },
-    { label: 'Total Fee', value: '$570.00', isTotal: true },
+    { label: 'Dive Spot', value: '' },
+    { label: 'Date', value: moment(bookingDetails?.date?.event_date).format("ll")},
+    { label: 'Meet Up Location', value: '' },
+    { label: 'Hosted By', value: '' },
+    { label:  'Price Per Person', value: bookingDetails?.event?.amount },
+    { label: 'Service & Transaction Fee', value: bookingDetails?.event?.service_charge },
+    { label: 'Total Fee', value: bookingDetails?.amount, isTotal: true },
   ];
 
   return (
@@ -49,31 +49,33 @@ const allParticipants = type === "event"
 <div className="max-h-[75vh] overflow-y-auto">
               {/* Participants Section */}
               <div className="my-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  Number of Participants {allParticipants?.length??0}
+                <h3 className="text-lg font-semibold dark:text-white  text-gray-900 mb-4 flex items-center gap-2">
+                  Number of Participants {bookingDetails?.participant_count??0}
                 </h3>
                 
                 {/* Participants Grid */}
                     <div className="grid grid-cols-6 gap-2  md:gap-4">
-              {allParticipants?.map((buddy) => (
+              {bookingDetails?.participants?.map((buddy) => (
                 <div key={buddy.id} className="text-center shrink-0">
-                  {buddy?.avatar ? (
+                  {/* {buddy?.avatar ? (
                     <img
                       src={buddy.avatar}
                       alt={buddy.name}
                       className="md:w-16 md:h-16 w-7 h-7 shrink-0 rounded-full object-cover mx-auto"
                     />
-                  ) : (
+                  ) : ( */}
                     <div className="md:w-16 md:h-16 rounded-full bg-gray-100 text-gray-800 font-medium flex items-center justify-center mx-auto">
-                      {buddy?.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        .substring(0, 2)
-                        .toUpperCase()}
-                    </div>
-                  )}
-                  <p className="text-xs font-archivo text-[#98A2B3] mt-2">{buddy?.name}</p>
+  {`${buddy?.first_name ?? ""} ${buddy?.last_name ?? ""}`
+    .trim()
+    .split(" ")
+    .map((n) => n[0] || "")
+    .join("")
+    .substring(0, 2)
+    .toUpperCase()}
+</div>
+
+                  {/* )} */}
+                  <p className="text-xs font-archivo text-[#98A2B3] mt-2">{buddy?.first_name} {buddy?.last_name}</p>
                 </div>
               ))}
             </div>

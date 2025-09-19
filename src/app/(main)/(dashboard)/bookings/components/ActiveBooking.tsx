@@ -1,134 +1,230 @@
-import React, { useState } from 'react';
-import { Search, Share2, ArrowRight } from 'lucide-react';
+import React, { useState, useCallback, useMemo } from 'react';
+import { Search, Share2, ArrowRight, Loader2 } from 'lucide-react';
 import { BookingCard } from './BookingCard';
 import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput';
 import { Button } from '@/components/core';
 import AddBookingButton from './AddBookingButton';
 import ViewBookingDetails from './details/ViewBooking';
 import ViewBookingDivePlan from './details/ViewBookingDivePlan';
+import { bookingResult, useFetchSchoolBooking } from '../../api/bookings/fetchSchoolBooking';
+import moment from 'moment';
 
-export interface DiveData {
-  image: string;
-  location: string;
-  date: string;
-  hostedBy: string;
-  title: string;
-  description: string;
-}
+// Types
+
 
 // Main Component
 const ActiveBookings: React.FC = () => {
-    const [globalSearch, setGlobalSearch] = useState("")
-    const [showViewBookingDetailsModal, setShowViewBookingDetailsModal] = useState(false)
-   const [bookingDetails, setBookingDetails] = useState<DiveData>()
-   const [showViewBookingDivePlanModal, setShowViewBookingDivePlanModal] = useState(false)
+  const [globalSearch, setGlobalSearch] = useState("");
+  const [showViewBookingDetailsModal, setShowViewBookingDetailsModal] = useState(false);
+  const [bookingDetails, setBookingDetails] = useState<bookingResult>();
+  const [showViewBookingDivePlanModal, setShowViewBookingDivePlanModal] = useState(false);
 
+  const {
+    data,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isFetching,
+    error
+  } = useFetchSchoolBooking();
 
+  // Memoized filtered bookings based on search
+  const filteredBookings = useMemo(() => {
+    if (!data?.pages) return [];
+    
+    const allBookings = data.pages.flatMap(response => response?.results || []);
+    
+    if (!globalSearch.trim()) return allBookings;
+    
+    const searchLower = globalSearch.toLowerCase();
+    return allBookings.filter(dive => 
+      dive?.event?.description?.toLowerCase().includes(searchLower) ||
+      dive?.event?.name?.toLowerCase().includes(searchLower) 
+    )
+      // dive?.dive_instructor?.toLowerCase().includes(searchLower)
+  }, [data?.pages, globalSearch]);
 
-  const handleShare = (title:string): void => {
-    console.log('Share dive plan clicked');
-  };
-
-  const diveData: DiveData[] = [
-    {
-      image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      location: "USAT Liberty Shipwreck",
-      date: "13 May, 2024",
-      hostedBy: "Dive Hosted by: Amazing Dive School",
-      title: "Dive with Bart",
-      description: "Always wanted to try out diving? Come and join us on a Discover Scuba diving adventure Discover Scuba diving adventure. "
-    },
-    {
-      image: "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      location: "Bonaire, Caribbean Netherlands.",
-      date: "16 May, 2024",
-      hostedBy: "Dive Hosted by: Amazing Dive School",
-      title: "Amazing Dive School Events",
-      description: "This program is designed especially for people who want to try diving for the first time.."
-    },
-    {
-      image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      location: "Casino Point Dive Park",
-      date: "05 May, 2024",
-      hostedBy: "Dive Hosted by: Amazing Dive School",
-      title: "Diving get Better",
-      description: "Always wanted to try out diving? Come and join us on a Discover Scuba diving adventure."
-    },
-    {
-      image: "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      location: "Maria la Gorda, Guanacabibes",
-      date: "01 May, 2024",
-      hostedBy: "Dive Hosted by: Amazing Dive School",
-      title: "Dive School Championship",
-      description: "This program is designed especially for people who want to try diving for the first time.."
+  // Optimized handlers using useCallback
+  const handleShare = useCallback((title: string): void => {
+    if (navigator.share) {
+      navigator.share({
+        title: `Dive Plan: ${title}`,
+        text: 'Check out this dive plan!',
+        url: window.location.href,
+      }).catch((err) => console.log('Error sharing:', err));
+    } else {
+      // Fallback for browsers without Web Share API
+      navigator.clipboard?.writeText(window.location.href);
+      // You might want to show a toast notification here
+      console.log('Link copied to clipboard');
     }
-  ];
+  }, []);
+
+  const handleReadMore = useCallback((dive: bookingResult) => {
+    setBookingDetails(dive);
+    setShowViewBookingDetailsModal(true);
+  }, []);
+
+  const handleViewPlan = useCallback((dive: bookingResult) => {
+    setBookingDetails(dive);
+    setShowViewBookingDivePlanModal(true);
+  }, []);
+
+ 
+
+  const handleLoadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+          <Loader2 className="animate-spin" size={20} />
+          <span>Loading dive bookings...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 dark:text-red-400 mb-4">
+            Failed to load dive bookings
+          </p>
+          <Button onClick={() => window.location.reload()}>
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
         <div className="py-4">
-            <div className="relative flex-1 w-full">
-             <DebouncedSearchInput
-                           placeholder="search for dive buddy, dive location, e.t.c"
-                           onSearch={(value) => setGlobalSearch(value)}
-                           debounceTime={300}
-                           value={globalSearch}
-                           className='py-3'
-                         />           
-            </div>
-          <div className="flex  gap-y-3 flex-wrap items-center justify-between py-3">
-          <p className='font-archivo text-base md:text-xl text-[#101828] dark:text-white font-medium'>Recent Dive Plan Details</p>
+          <div className="relative flex-1 w-full">
+            <DebouncedSearchInput
+              placeholder="Search for dive buddy, dive location, etc."
+              onSearch={setGlobalSearch}
+              debounceTime={300}
+              value={globalSearch}
+              className="py-3"
+              icon={<Search size={18} />}
+            />           
+          </div>
+          
+          <div className="flex gap-y-3 flex-wrap items-center justify-between py-3">
+            <h1 className="font-archivo text-base md:text-xl text-[#101828] dark:text-white font-medium">
+              Recent Dive Plan Details
+              {filteredBookings.length > 0 && (
+                <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+                  ({filteredBookings.length} {filteredBookings.length === 1 ? 'booking' : 'bookings'})
+                </span>
+              )}
+            </h1>
             
             {/* Action Buttons */}
             <div className="flex items-center gap-3">
               <Button 
-              variant={"outlined"}
+                variant="outlined"
                 className="flex items-center font-archivo gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-gray-900 dark:text-white"
-                onClick={()=>handleShare}
+                onClick={() => handleShare('Dive Plan')}
+                disabled={filteredBookings.length === 0}
               >
                 <Share2 size={18} />
                 <span>Share Dive Plan</span>
               </Button>
-                 <AddBookingButton/>
+              <AddBookingButton />
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Main Content */}
-      <div className="bg-white dark:bg-gray-900">
-        
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-6">
-          {diveData.map((dive: DiveData, index: number) => (
-            <BookingCard
-              key={index}
-              image={dive.image}
-              location={dive.location}
-              date={dive.date}
-              hostedBy={dive.hostedBy}
-              title={dive.title}
-              description={dive.description}
-              viewPlanText='View Dive Plan '
-              onReadMore={() =>{
-                setBookingDetails(dive)
-                setShowViewBookingDetailsModal(true)}}
-              onViewPlan={() => setShowViewBookingDivePlanModal(true)}
-            />
-          ))}
-        </div>
-      </div>
+      <main className="bg-white dark:bg-gray-900 p-4">
+        {filteredBookings.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="text-gray-400 mb-4">
+              <Search size={48} className="mx-auto mb-4 opacity-50" />
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              {globalSearch ? 'No matching dive bookings found' : 'No dive bookings yet'}
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              {globalSearch 
+                ? `No results found for "${globalSearch}". Try adjusting your search.`
+                : 'Get started by creating your first dive booking.'
+              }
+            </p>
+            {!globalSearch && <AddBookingButton />}
+          </div>
+        ) : (
+          <>
+            {/* Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-6">
+              {filteredBookings.map((dive, index) => (
+                <BookingCard
+                  key={dive?.id || index}
+                  image={ ""}
+                  location={dive?.contact_info?.location || "Location TBD"}
+                  date={moment(dive?.date?.event_date).format("MMM DD, YYYY")}
+                  hostedBy={dive?.event?.dive_school?.toString() || ""}
+                  title={dive?.event?.name || "Dive Event"}
+                  description={dive?.event?.description || "No description available"}
+                  viewPlanText="View Dive Plan"
+                  readMoreText="Read more"
+                  onReadMore={() => handleReadMore(dive)}
+                  onViewPlan={() => handleViewPlan(dive)}
+                />
+              ))}
+            </div>
+
+            {/* Load More Button */}
+            {hasNextPage && (
+              <div className="flex justify-center mt-8">
+                <Button
+                  onClick={handleLoadMore}
+                  disabled={isFetchingNextPage}
+                  className="flex items-center gap-2"
+                >
+                  {isFetchingNextPage ? (
+                    <>
+                      <Loader2 className="animate-spin" size={18} />
+                      Loading more...
+                    </>
+                  ) : (
+                    <>
+                      Load more
+                      <ArrowRight size={18} />
+                    </>
+                  )}
+                </Button>
+              </div>
+            )}
+          </>
+        )}
+      </main>
 
       {showViewBookingDetailsModal &&
         <ViewBookingDetails bookingDetails={bookingDetails} isOpen={showViewBookingDetailsModal} setIsOpen={setShowViewBookingDetailsModal}/>
       }
       {showViewBookingDivePlanModal &&
-        <ViewBookingDivePlan isOpen={showViewBookingDivePlanModal} title='Dive with Bart (Dive Plan Summary)' type='dive' setIsOpen={setShowViewBookingDivePlanModal}/>
+        <ViewBookingDivePlan isOpen={showViewBookingDivePlanModal} title='Dive with Bart (Dive Plan Summary)' bookingDetails={bookingDetails} type='dive' setIsOpen={setShowViewBookingDivePlanModal}/>
       }
     </div>
   );
 };
 
 export default ActiveBookings;
+
+     

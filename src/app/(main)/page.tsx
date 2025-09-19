@@ -9,12 +9,19 @@ import MonthlySnapShot from './components/dashboard/MonthlySnapShot'
 import DivingTab from './components/dashboard/Divertab'
 import SuggestedDIverTabs from './components/dashboard/SuggestedDIverTabs'
 import AddNewDiveLog from './(dashboard)/div-log/components/AddNewDiveLog'
+import AddCertification from './components/certifications/AddCertification'
+import { certificateResult } from './(dashboard)/certifications/fetchCertifications'
+import CreateSchoolPlan from './(dashboard)/bookings/components/modals/school-booking/CreateSchoolPlan'
+import CreateBuddyBooking from './(dashboard)/bookings/components/modals/buddy-booking/CreateBuddyBooking'
 // import { ChevronRightIcon } from '@heroicons/react/24/outline'
 
 const Page = () => {
   const { authState } = useAuth();
   const { user} = authState;
   const [showDiveLogModal, setShowDivelogModal] = useState(false)
+  const [showCertificationModal, setShowCertificationModal] = useState(false)
+      const [showScholBookingModal, setShowSchoolBookingModal] = useState(false)
+      const [showBookWithBuddy, setShowBookWithBuddy] = useState(false)
 
   return (
     <div className='text-black dark:text-white'>
@@ -40,12 +47,10 @@ const Page = () => {
               items={[
                 { label: "Add new Dive Log",  active: true , onClick:() =>setShowDivelogModal(true)
                 },
-                { label: "Create a Dive Plan",  },
-                { label: "Add a new Buddy", },
-                { label: "Add new Dive Spot" },
-                { label: "Add Certification" },
-                { label: "Add Gear" },
-                { label: "Add Feedback or Comment" }
+                { label: "Create a Dive Plan", onClick:()=>setShowBookWithBuddy(true) },
+                { label: "Add a new Buddy",onClick:()=>setShowSchoolBookingModal(true) },
+                // { label: "Add new Dive Spot" },
+                { label: "Add Certification", onClick:()=>setShowCertificationModal(true)},
               ]}
               
               
@@ -61,9 +66,9 @@ const Page = () => {
         <div className="">
           <SuggestedDIverTabs />
         </div>
-        <div className="">
+        {/* <div className="">
           <DivingTab/>
-        </div>
+        </div> */}
         </div>
     
       </div>
@@ -72,6 +77,12 @@ const Page = () => {
       {
         showDiveLogModal && <AddNewDiveLog isOpen={showDiveLogModal} onClose={()=>setShowDivelogModal(false)}/>
       }
+      {
+        showCertificationModal && <AddCertification  certificateData={{} as certificateResult} type="add" isOpen={showCertificationModal} setIsOpenCardModal={()=>setShowCertificationModal(false)}/>
+      }
+       {showScholBookingModal&& <CreateSchoolPlan isOpen={showScholBookingModal} setIsOpenCardModal={setShowSchoolBookingModal}/>}
+          {showBookWithBuddy && <CreateBuddyBooking isOpen={showBookWithBuddy} setIsOpenCardModal={setShowBookWithBuddy}/>}
+      
     </div>
   )
 }

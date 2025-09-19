@@ -14,7 +14,7 @@ interface Result {
   dive_instructors: Diveinstructor[];
   name: string;
   address: string;
-  contact_info: string;
+  
   qr_code: null | string;
   created_on: string;
   updated_on: string;
@@ -43,7 +43,7 @@ const fetchDiveSchools = async ({ pageParam = "dive/dive-schools" }) => {
 
 export const useFetchDiveSchools = () => {
   return useInfiniteQuery({
-    queryKey: ["dive-schools"],
+    queryKey: ["booking-schools"],
     queryFn: fetchDiveSchools,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
   });

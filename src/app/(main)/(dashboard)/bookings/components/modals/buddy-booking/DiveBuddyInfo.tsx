@@ -9,6 +9,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { PlaceData } from '../../../../../../../../google-maps';
 import GoogleAutocomplete from '@/app/(main)/components/google/Autocomplete';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core';
+import CaretDownIcon from '@/icons/core/CaretDown';
+import { capitalizeFirstLetter } from '@/utils';
 
 interface prop{
      setStep: React.Dispatch<React.SetStateAction<number>>
@@ -23,6 +26,7 @@ const advancedDetailsSchema = z.object({
     dive_site_id: z.string().min(1),
     // meet_up_address: z.string().min(1, { message: "meet up address is required" }),
     meet_up_address: z.string().optional(),
+    
 });
 
 export type diveLogTypes = z.infer<typeof advancedDetailsSchema>;
@@ -49,6 +53,7 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
             start_date: "",
             end_date: "",
             meet_up_address: "",
+          
         },
         mode: "onChange"
     });
@@ -110,6 +115,7 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
      // Handle form submission
     }
 
+
     return (
         <div>
             <form className="p-6 space-y-8" onSubmit={handleSubmit(onSubmit)}>
@@ -165,6 +171,11 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
                         </p>
                     )}
                 </div>
+               
+
+
+
+                
 
                 <div className="">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { X, Calendar, User, MapPin } from "lucide-react";
-import { DiveData } from "../ActiveBooking";
 import Image from "next/image";
 import {
   Button,
@@ -9,12 +8,13 @@ import {
   DialogBody,
   DialogContent,
 } from "@/components/core";
+import { bookingResult } from "../../../api/bookings/fetchSchoolBooking";
 // import {  } from '@radix-ui/react-dialog';
 
 interface prop {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  bookingDetails: DiveData | undefined;
+  bookingDetails: bookingResult | undefined
 }
 const ViewBookingDetails = ({ isOpen, setIsOpen, bookingDetails }: prop) => {
   return (
@@ -33,8 +33,8 @@ const ViewBookingDetails = ({ isOpen, setIsOpen, bookingDetails }: prop) => {
                 {/* Image wrapper layer */}
                 <div className="absolute inset-0 z-0">
                   <Image
-                    src={`${bookingDetails?.image}`}
-                    alt={bookingDetails?.location as string}
+                    src={`${""}`}
+                    alt={bookingDetails?.created_on as string}
                     fill
                     className="object-cover"
                     sizes="100vw"
@@ -47,14 +47,14 @@ const ViewBookingDetails = ({ isOpen, setIsOpen, bookingDetails }: prop) => {
                   <div className="relative">
                     <div className="flex items-center justify-between">
                       <h3 className="text-white font-semibold text-sm font-archivo mb-1">
-                        {bookingDetails?.location}
+                        {bookingDetails?.contact_info?.location}
                       </h3>
                       <p className="text-white font-semibold text-sm font-archivo right-0">
-                        {bookingDetails?.date}
+                        {bookingDetails?.date?.event_date}
                       </p>
                     </div>
                     <p className="text-[#F7931D] font-archivo font-medium text-xs">
-                      {bookingDetails?.hostedBy}
+                      {bookingDetails?.event?.name}
                     </p>
                   </div>
                 </div>

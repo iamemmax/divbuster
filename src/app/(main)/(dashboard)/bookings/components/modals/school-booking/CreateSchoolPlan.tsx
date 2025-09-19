@@ -384,7 +384,7 @@ const CreateSchoolPlan = ({ isOpen, setIsOpenCardModal }: Props) => {
                     onClick={createForm.handleSubmit(onCreateSubmit)}
                     className="px-6 py-2 bg-orange-500 text-white flex justify-center items-center gap-x-3 rounded-lg hover:bg-orange-600"
                   >
-                    Proceed  {isLoading && <SmallSpinner color='#fff' />}
+                    Proceed  
                   </button>
                 </div>
               </div>

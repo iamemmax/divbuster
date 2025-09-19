@@ -77,11 +77,11 @@ export function SuggestedDiverCard({
 
       {/* Background Image Card */}
       <div
-        className="relative h-[240px] mt-[.9375rem] w-full rounded-[1rem] bg-no-repeat bg-cover"
+        className="relative bg-[#F7931D] h-[240px] mt-[.9375rem] w-full rounded-[1rem] bg-no-repeat bg-cover"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
         {/* Black overlay */}
-        <div className="absolute inset-0 bg-black/70 dark:bg-black/80 rounded-[1rem] z-0 transition-colors duration-200" />
+        <div className="absolute inset-0 bg-black/40 dark:bg-black/80 rounded-[1rem] z-0 transition-colors duration-200" />
 
         {/* Content */}
         <div className="relative flex flex-col items-start justify-between h-full z-10">

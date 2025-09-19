@@ -8,8 +8,10 @@ import SupportContainer from './SupportContainer'
 import DiveBusterLogo from '@/components/icons/DiveBusterLogo'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import SimpleLogoutButton from "@/components/SimpleLogoutButton";
+import { useUser } from '@/app/(auth)/api/getAuthenticatedUser'
 
 const SideBar = () => {
+    const user = useUser()
   const isMobile = useIsMobile();
   const { isMobileMenuOpen, setMobileMenuOpen } = useMobileMenu();
   const [mounted, setMounted] = useState(false);
@@ -46,10 +48,10 @@ const SideBar = () => {
           <NavigationBar/>
         </div>
         <div className="px-8 mt-2">
-          <CardContainer/>
+          <CardContainer user={user}/>
         </div>
         <div className="border-t border-[#E9E9E9] dark:border-gray-700 px-8 py-[1.3438rem]">
-          <SupportContainer/>
+          <SupportContainer user={user}/>
         </div>
       </div>
     </div>

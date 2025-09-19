@@ -64,7 +64,7 @@ const SchoolDriverContact = ({ back, next,diverInfo,setDiverInfo }: Props) => {
               <input
                 {...register("first_name")}
                 placeholder="Enter Main Diver Name"
-                className={`w-full p-3 outline-none rounded-md border ${errors.first_name ? "border-red-900" : "border-gray-300"}  dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-black dark:text-white`}
+                className={`w-full p-3 outline-none rounded-md border ${errors.first_name ? "border-red-900" : "border-gray-300 dark:border-gray-600"}   bg-white dark:bg-gray-800 text-sm text-black dark:text-white`}
               />
             </div>
             {errors.first_name && (
@@ -84,7 +84,7 @@ const SchoolDriverContact = ({ back, next,diverInfo,setDiverInfo }: Props) => {
               <input
                 {...register("last_name")}
                 placeholder="Enter Main Diver Name"
-                className={`w-full p-3 outline-none rounded-md border ${errors.last_name ? "border-red-900" : "border-gray-300"}  dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-black dark:text-white`}
+                className={`w-full p-3 outline-none rounded-md border ${errors.last_name ? "border-red-900" : "border-gray-300 dark:border-gray-600"}   bg-white dark:bg-gray-800 text-sm text-black dark:text-white`}
               />
             </div>
             {errors.last_name && (
@@ -105,7 +105,7 @@ const SchoolDriverContact = ({ back, next,diverInfo,setDiverInfo }: Props) => {
               <input
                 {...register("email")}
                 placeholder="Enter Main Diver Email Address"
-                className={`w-full p-3 rounded-md  outline-none border ${errors.email ? "border-red-900" : "border-gray-300"}  dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-black dark:text-white`}
+                className={`w-full p-3 rounded-md  outline-none border ${errors.email ? "border-red-900" : "border-gray-300 dark:border-gray-600"}   bg-white dark:bg-gray-800 text-sm text-black dark:text-white`}
               />
             </div>
             {errors.email && (
@@ -123,7 +123,7 @@ const SchoolDriverContact = ({ back, next,diverInfo,setDiverInfo }: Props) => {
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="w-full p-3 text-left bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-between hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none"
+              className="w-full p-3 text-left bg-white dark:bg-gray-800 border border-gray- dark:border-gray-600300  rounded-lg flex items-center justify-between hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none"
             >
               <span
                 className={
@@ -138,7 +138,7 @@ const SchoolDriverContact = ({ back, next,diverInfo,setDiverInfo }: Props) => {
             </button>
 
             {isOpen && (
-              <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg">
+              <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray- dark:border-gray-600300  rounded-lg shadow-lg">
                 {durationOptions.map((option) => (
                   <button
                     key={option}
@@ -190,7 +190,7 @@ const SchoolDriverContact = ({ back, next,diverInfo,setDiverInfo }: Props) => {
       <div className="flex justify-end gap-4 max-h-[10vh]   border-gray-200 dark:border-gray-700 px-6  bg-white dark:bg-gray-900">
         <button
           onClick={back}
-          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          className="px-4 py-2 border border-gray- dark:border-gray-600300  rounded text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
         >
           Cancel
         </button>

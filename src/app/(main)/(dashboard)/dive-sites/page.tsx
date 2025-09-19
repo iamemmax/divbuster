@@ -139,50 +139,9 @@ const DiveSites = () => {
 
       <div className="max-h-[80vh] overflow-y-auto p-2 md:p-6">
         {/* Hero Section */}
-        <div className="relative h-60 overflow-hidden rounded-lg shadow-lg">
-          {/* Background Image */}
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage: "url('/images/dashboard/profile-Location.png')",
-            }}
-          />
-
-          {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-black flex justify-center items-center opacity-30 z-10" />
-
-          {/* Foreground Content */}
-          <div className="relative z-20 w-full h-full flex items-center justify-between px-3 md:px-7">
-            {/* Left Content */}
-            <div className="flex w-full flex-col gap-y-2 justify-center">
-              <p className="font-archivo text-sm md:text-base text-[#F7931D]">
-                Recent Visited Dive Site
-              </p>
-              {/* <h2 className="font-archivo font-semibold text-lg md:text-[1.875rem] text-white">
-                Maria la Gorda, Guanacabibes
-              </h2>
-              <p className="font-archivo md:text-base text-sm text-white">
-                Washington County, Tennessee, United States
-              </p> */}
-
-              <div className="flex absolute bottom-6 right-10 justify-end w-full mt-4">
-                <Button className="bg-[#F7931D] hover:bg-orange-600 h-[3.1875rem] p-0 w-[3.1875rem] rounded-full flex justify-center items-center transition-colors">
-                  <PlusIcon width={24} height={24} />
-                </Button>
-              </div>
-            </div>
-
-            {/* Right Icon */}
-            <div className="absolute right-[3rem] 2xl:right-[10rem]">
-              <Button className="bg-transparent hover:bg-white/10 transition-colors">
-                <LocationIcconbg />
-              </Button>
-            </div>
-          </div>
-        </div>
-
+    
         {/* Main Content Grid */}
-        <div className='grid grid-cols-1 lg:grid-cols-[2fr_1fr] xl:grid-cols-[3fr_1fr] gap-[1.3125rem] mt-4 relative'>
+        <div className='grid grid-cols-1 lg:grid-cols-[2fr_1fr] xl:grid-cols-[3fr_1fr] gap-[1.3125rem]  relative'>
           {/* Main Content */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
             {/* Tab Navigation */}

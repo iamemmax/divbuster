@@ -288,7 +288,11 @@ const DivingProfile = () => {
                           (card, idx: number) => (
                             <div
                               className={`${cn(`flex flex-col z-50 relative gap-4 bg-[url('/images/dashboard/swimmer.svg')] rounded-[1.1944rem] px-[1.125rem] py-4 bg-[${color[idx]?.color1}] bg-cover bg-no-repeat`)}`}
-                              key={idx}
+                              key={idx}style={{
+    backgroundImage: `url(${card?.image ?? ""})`,
+    backgroundColor:!card?.image?"#F7931D":""
+  }}
+
                             >
                               <div className="flex justify-between items-start">
                                 <p className="text-white text-base font-medium font-archivo">
@@ -344,16 +348,16 @@ const DivingProfile = () => {
                       </div>
                     )}
                   </>
-                  {/* {buddyProfile && buddyProfile?.certificates?.length > 0 && (
+                  {buddyProfile && buddyProfile?.certificates?.length > 0 && (
                     <div className="border-t border-[#EAECF0] dark:border-gray-700 flex justify-end items-center py-4 px-8 transition-colors duration-200">
-                      <Button
+                      <LinkButton href={"/manage-certifications"}
                         variant={"outlined"}
                         className="py-[.625rem] px-4 text-sm font-archivo text-[#344054] dark:text-gray-300 font-medium border border-[#D0D5DD] dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
                       >
                         Manage Certification
-                      </Button>
+                      </LinkButton>
                     </div>
-                  )} */}
+                  )}
                 </div>
 
                 {/* Dive Sites */}
