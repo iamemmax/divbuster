@@ -19,7 +19,7 @@ const MyBuddyList = () => {
     hasPreviousPage,
     fetchPreviousPage,
     isFetchingPreviousPage
-  } = useFetchBuddyList();
+  } = useFetchBuddyList(buddyProfile?.data?.data?.profile_details?.language as string);
 
   // Extract all buddies from infinite query pages
   const allBuddies = useMemo(() => {

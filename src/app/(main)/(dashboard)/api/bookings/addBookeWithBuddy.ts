@@ -28,9 +28,19 @@ interface payload {
 
 const createBookingWithBuddy = async ({ buddies, dive_site_id, email, end_date, name, start_date, meet_up_address, weight, bcd, fin, gas_mixture, mask, regulator, wetsuit }: payload) => {
   const response = await adminAxios.post(`/dive/dive-log/add`, {
-    buddies, dive_site_id,
-    weight, bcd, fin, gas_mixture, mask, regulator, wetsuit,
-    email, end_date: moment(end_date).utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'), name, start_date: moment(start_date).utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'), meet_up_address: "5th Avenue, New York, NY, USA"
+    buddies, 
+    dive_site_id,
+    weight,
+    bcd, 
+    fin, 
+    gas_mixture, 
+    mask, regulator, 
+    wetsuit,
+    email, 
+    end_date: moment(end_date).utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'), 
+    name, 
+    start_date: moment(start_date).utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'), 
+    meet_up_address
   });
   return response.data;
 }

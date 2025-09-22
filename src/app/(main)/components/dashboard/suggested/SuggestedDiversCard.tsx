@@ -27,7 +27,7 @@ export interface DiverCardProps {
   linkUrl?: string // New prop for the link URL
 }
 
-export function SuggestedDiverCard({ 
+export function   SuggestedDiverCard({ 
   id,
   name, 
   location, 
@@ -71,13 +71,13 @@ export function SuggestedDiverCard({
             {name ?? ''}
           </h2>
           <p className="font-archivo font-medium text-[#78828A] dark:text-gray-400 text-sm md:text-base transition-colors duration-200">{location}</p>
-          <p className="font-archivo font-medium text-[#78828A] dark:text-gray-400 text-xs md:text-sm transition-colors duration-200">{date}</p>
+          {/* <p className="font-archivo font-medium text-[#78828A] dark:text-gray-400 text-xs md:text-sm transition-colors duration-200">{date}</p> */}
         </div>
       </div>
-
+{/*  */}
       {/* Background Image Card */}
       <div
-        className="relative bg-[#F7931D] h-[240px] mt-[.9375rem] w-full rounded-[1rem] bg-no-repeat bg-cover"
+        className="relative bg-[#F7931D] h-[240px]  mt-2 w-full rounded-[1rem] bg-no-repeat bg-cover"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
         {/* Black overlay */}

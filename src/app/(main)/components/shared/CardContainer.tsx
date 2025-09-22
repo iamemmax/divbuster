@@ -65,7 +65,7 @@ const sortedCertificates = user?.data?.data?.certificates?.slice().sort((a, b) =
       <div className="my-3 flex justify-center items-center">
         <LinkButton href={"/manage-certifications"} 
           variant="outlined" 
-          className='bg-transparent text-[#344054] font-medium text-sm font-archivo border border-gray-300 hover:bg-gray-50 transition-colors'
+          className='bg-transparent text-[#344054] font-medium text-sm dark:text-white font-archivo border border-gray-300 hover:bg-gray-50 transition-colors'
         >
           Manage your Certifications
         </LinkButton>

@@ -49,7 +49,7 @@ export const ActionDropdown: React.FC<ActionDropdownProps> = ({
       <Button
         onClick={toggleDropdown}
         className={cn(
-          `w-full md:w-auto font-archivo font-medium text-base ${isOpen ? "bg-white text-[#101828] border border-[#F7931D]" : "bg-[#F7931D] text-white"} hover:bg-[#e88616] hover:text-white font-medium py-2.5 px-4 rounded-lg flex items-center justify-center`,
+          `w-full md:w-auto font-archivo font-medium text-xs px-2 sm:text-sm md:text-base ${isOpen ? "bg-white text-[#101828] border border-[#F7931D]" : "bg-[#F7931D] text-white"} hover:bg-[#e88616] hover:text-white font-medium py-2.5 md:px-4 rounded-lg flex items-center justify-center`,
           buttonClassName
         )}
       >

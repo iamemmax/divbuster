@@ -1,8 +1,8 @@
 // components/GoogleAutocomplete.tsx
+"use client"
 import { useEffect, useRef, useState, forwardRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { AutocompleteOptions, PlaceData } from '../../../../../google-maps';
-// import { PlaceData, AutocompleteOptions } from '../types/google-maps';
 
 interface GoogleAutocompleteProps {
   onPlaceSelected: (place: PlaceData) => void;
@@ -23,12 +23,18 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
 }, ref) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const initializeAutocomplete = async (): Promise<void> => {
+      if (isLoaded || !inputRef.current) {
+        setIsLoading(false);
+        return;
+      }
+
       if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) {
         setError('Google Maps API key is not configured');
         setIsLoading(false);
@@ -40,11 +46,11 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
         version: 'weekly',
         libraries: ['places']
       });
-
+      
       try {
         await loader.load();
         
-        if (inputRef.current) {
+        if (inputRef.current && !autocompleteRef.current) {
           const autocompleteOptions: google.maps.places.AutocompleteOptions = {
             types: options.types || ['establishment', 'geocode'],
             fields: options.fields || [
@@ -64,6 +70,32 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
             inputRef.current,
             autocompleteOptions
           );
+
+          // Fix z-index and positioning issues
+          const pacContainer = document.querySelector('.pac-container') as HTMLElement;
+          if (pacContainer) {
+            pacContainer.style.zIndex = '9999';
+            pacContainer.style.position = 'absolute';
+          }
+
+          // Remove "powered by Google" branding
+          setTimeout(() => {
+            const poweredByElements = document.querySelectorAll('[style*="background-image"]');
+            poweredByElements.forEach((element: Element) => {
+              const htmlElement = element as HTMLElement;
+              if (htmlElement.style.backgroundImage && htmlElement.style.backgroundImage.includes('powered_by_google')) {
+                htmlElement.style.display = 'none';
+              }
+            });
+            
+            // Also hide any elements with Google branding text
+            const allElements = document.querySelectorAll('*');
+            allElements.forEach((element: Element) => {
+              if (element.textContent?.toLowerCase().includes('powered by google')) {
+                (element as HTMLElement).style.display = 'none';
+              }
+            });
+          }, 500);
 
           autocompleteRef.current.addListener('place_changed', () => {
             if (!autocompleteRef.current) return;
@@ -86,12 +118,15 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
               };
               
               onPlaceSelected(placeData);
+            } else {
+              console.warn('Invalid place selected:', place);
             }
           });
+
+          setIsLoaded(true);
+          setError(null);
         }
         
-        setIsLoaded(true);
-        setError(null);
       } catch (err) {
         console.error('Error loading Google Maps:', err);
         setError('Failed to load Google Maps');
@@ -100,11 +135,45 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
       }
     };
 
-    if (!isLoaded && !isLoading) {
-      setIsLoading(true);
-      initializeAutocomplete();
+    initializeAutocomplete();
+  }, [onPlaceSelected, options]);
+
+  // Handle z-index and pointer events issues
+  useEffect(() => {
+    const fixDropdownIssues = () => {
+      setTimeout(() => {
+        const pacContainers = document.querySelectorAll('.pac-container');
+        pacContainers.forEach((container: Element) => {
+          const htmlContainer = container as HTMLElement;
+          htmlContainer.style.zIndex = '99999';
+          htmlContainer.style.position = 'absolute';
+          htmlContainer.style.pointerEvents = 'auto';
+          htmlContainer.style.display = 'block';
+          htmlContainer.style.visibility = 'visible';
+          htmlContainer.style.opacity = '1';
+          
+          // Fix individual items
+          const items = htmlContainer.querySelectorAll('.pac-item');
+          items.forEach((item: Element) => {
+            const htmlItem = item as HTMLElement;
+            htmlItem.style.pointerEvents = 'auto';
+            htmlItem.style.cursor = 'pointer';
+          });
+        });
+      }, 50);
+    };
+
+    const inputElement = inputRef.current;
+    if (inputElement) {
+      inputElement.addEventListener('focus', fixDropdownIssues);
+      inputElement.addEventListener('input', fixDropdownIssues);
+      
+      return () => {
+        inputElement.removeEventListener('focus', fixDropdownIssues);
+        inputElement.removeEventListener('input', fixDropdownIssues);
+      };
     }
-  }, [onPlaceSelected, isLoaded, isLoading, options]);
+  }, [isLoaded]);
 
   // Combine refs
   useEffect(() => {
@@ -117,6 +186,16 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
     }
   }, [ref]);
 
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      if (autocompleteRef.current) {
+        google.maps.event.clearInstanceListeners(autocompleteRef.current);
+        autocompleteRef.current = null;
+      }
+    };
+  }, []);
+
   if (error) {
     return (
       <div className="text-red-500 text-sm p-2">
@@ -126,7 +205,7 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
   }
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
       <input
         ref={inputRef}
         type="text"
@@ -136,12 +215,101 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
         } ${className}`}
         disabled={disabled || isLoading}
         defaultValue={defaultValue}
+        autoComplete="off"
       />
       {isLoading && (
         <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
         </div>
       )}
+      
+      {/* Add global styles for Google Places dropdown */}
+      <style jsx global>{`
+        .pac-container {
+          z-index: 9999999999999 !important;
+          border-radius: 8px;
+          border: 1px solid #e5e7eb;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+          background: white;
+          pointer-events: auto !important;
+          display: block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+          max-height: 500px;
+          overflow-y: auto;
+        }
+        
+        .pac-item {
+          padding: 12px 16px;
+          cursor: pointer !important;
+          border-bottom: 1px solid #f3f4f6;
+          pointer-events: auto !important;
+          user-select: none;
+          line-height: 1.4;
+          font-size: 14px;
+        }
+        
+        .pac-item:hover {
+          background-color: #f9fafb !important;
+        }
+        
+        .pac-item:last-child {
+          border-bottom: none;
+        }
+        
+        .pac-item-selected,
+        .pac-item:focus {
+          background-color: #eff6ff !important;
+          outline: none;
+        }
+        
+        .pac-matched {
+          font-weight: 600;
+          color: #1f2937;
+        }
+        
+        .pac-icon {
+          display: none;
+        }
+        
+        /* Hide Google branding */
+        .pac-logo:after {
+          display: none !important;
+        }
+        
+        .hdpi.pac-logo:after {
+          display: none !important;
+        }
+        
+        .pac-container:after {
+          display: none !important;
+        }
+        
+        [style*="powered_by_google"] {
+          display: none !important;
+        }
+        
+        /* Dark mode support */
+        .dark .pac-container {
+          background: #374151;
+          border-color: #4b5563;
+          color: white;
+        }
+        
+        .dark .pac-item {
+          color: white;
+          border-color: #4b5563;
+        }
+        
+        .dark .pac-item:hover {
+          background-color: #4b5563 !important;
+        }
+        
+        .dark .pac-item-selected,
+        .dark .pac-item:focus {
+          background-color: #3b82f6 !important;
+        }
+      `}</style>
     </div>
   );
 });

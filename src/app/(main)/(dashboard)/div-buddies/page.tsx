@@ -1,3 +1,4 @@
+
 "use client"
 import React, { useState, useMemo, useEffect } from 'react'
 import {
@@ -19,15 +20,25 @@ import { useErrorModalState } from '@/hooks';
 import { formatAxiosErrorMessage } from '@/utils';
 import { AxiosError } from 'axios';
 import { SmallSpinner } from '@/icons/core';
+import { useAuth } from '@/contexts/authentication';
+import { diverBuddiesTranslations } from '../../translation/diveBuddiesTranslation';
+import { Language } from '@/app/(auth)/sign-up/translations';
 
 const DiverBuddies = () => {
   const {
-      isErrorModalOpen,
-      setErrorModalState,
-      openErrorModalWithMessage,
-      errorModalMessage,
-    } = useErrorModalState();
+    isErrorModalOpen,
+    setErrorModalState,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
+
   const [globalFilter, setGlobalFilter] = useState("");
+
+  // ✅ Get language from user profile
+  const { authState } = useAuth();
+  const { user } = authState;
+  const language: Language = (user?.profile_details?.language as Language);
+  const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
 
   const { 
     data: buddyList, 
@@ -40,22 +51,17 @@ const DiverBuddies = () => {
     hasPreviousPage,
     fetchPreviousPage,
     isFetchingPreviousPage
-  } = useFetchBuddyList();
+  } = useFetchBuddyList(language);
 
-  // Extract all buddies from infinite query pages
   const allBuddies = useMemo(() => {
     if (!buddyList?.pages) return [];
-    
-    // Flatten all pages into a single array
     return buddyList.pages.flatMap(page => page?.results || []);
   }, [buddyList]);
 
-  // Get total count from the first page (assuming it's consistent across pages)
   const totalCount = useMemo(() => {
     return buddyList?.pages?.[0]?.count || 0;
   }, [buddyList]);
 
-  // Get current page info for display
   const currentPageInfo = useMemo(() => {
     const totalResults = allBuddies.length;
     return {
@@ -74,7 +80,6 @@ const DiverBuddies = () => {
     }
   };
 
-  // Handle pagination with infinite query
   const handleNextPage = async () => {
     if (hasNextPage && !isFetchingNextPage) {
       await fetchNextPage();
@@ -94,16 +99,14 @@ const DiverBuddies = () => {
     }
   }, [isError, error, openErrorModalWithMessage]);
 
-  // Create column helper
-  const columnHelper = createColumnHelper<Partial<buddyResult>>()
+  const columnHelper = createColumnHelper<Partial<buddyResult>>();
 
-  // Define columns
   const columns = useMemo(() => [
     columnHelper.accessor('first_name', {
       id: 'name',
       header: () => (
         <div className="text-left font-medium text-gray-700 dark:text-gray-300">
-          Name
+          {t.name}
         </div>
       ),
       cell: ({ row }) => (
@@ -134,7 +137,7 @@ const DiverBuddies = () => {
       id: 'diveBuddies',
       header: () => (
         <div className="text-left font-medium text-gray-700 dark:text-gray-300">
-          Dive Buddies
+          {t.diveBuddies}
         </div>
       ),
       cell: ({ row }) => (
@@ -152,7 +155,7 @@ const DiverBuddies = () => {
     }),
     columnHelper.accessor('certificates', {
       id: 'certificates',
-      header: 'Certificate',
+      header: t.certificate,
       cell: ({ row }) => (
         <div className="flex gap-1 flex-wrap">
           {row?.original?.certificates?.map((cert) => (
@@ -176,20 +179,19 @@ const DiverBuddies = () => {
             href={`/div-buddies/profile/${row?.original?.id}`}
             className="text-orange-500 dark:text-orange-400 font-archivo text-sm bg-transparent hover:text-orange-600 dark:hover:text-orange-300 font-medium whitespace-nowrap transition-colors duration-200"
           >
-            View Profile
+            {t.viewProfile}
           </LinkButton>
         </div>
       ),
     }),
-  ], [])
+  ], [t]);
 
-  // Table instance - using all flattened buddies
   const table = useReactTable({
     data: allBuddies,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    manualPagination: false, // Let the table handle client-side filtering since we have all data
+    manualPagination: false,
     state: {
       globalFilter,
     },
@@ -198,54 +200,44 @@ const DiverBuddies = () => {
       const searchableValue = `${row?.original.first_name} ${row.original.email} ${row?.original.certificates?.map(c => c.issuer_name).join(' ')}`
       return searchableValue.toLowerCase().includes(value.toLowerCase())
     },
-  })
+  });
 
   return (
     <div>
       <Header 
-        title='My Dive Buddies' 
+        title={t?.myBuddies}
         subtitle='' 
       />
       
       <div className="w-full bg-white dark:bg-gray-900 min-h-screen px-4 sm:px-6 lg:px-[1.875rem] transition-colors duration-200">
-        {/* Header */}
         <div className="bg-white dark:bg-gray-900 py-4 border-gray-200 dark:border-gray-700 transition-colors duration-200">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            {/* Search */}
             <div className="relative w-full sm:flex-1 sm:max-w-md">
               <DebouncedSearchInput 
-                placeholder="search for buddy name" 
+                placeholder={t.searchPlaceholder} 
                 onSearch={(value) => setGlobalFilter(value)}
                 value={globalFilter}
               />
             </div>
-
-            {/* Action Buttons */}
             <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
-              {/* <button className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-orange-500 dark:bg-orange-600 text-white rounded-lg hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-200 font-medium text-sm">
-                Favorite Buddy
-              </button> */}
               <LinkButton href="/notifications?tab=notifications" className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-orange-500 dark:bg-orange-600 text-white rounded-lg hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-200 font-medium text-sm">
-                Buddy Requests
+                {t.buddyRequests}
               </LinkButton>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col xl:flex-row gap-6 xl:gap-10">
-          {/* Main Content */}
           <div className="flex-1 p-4 sm:p-6 border border-[#EAECF0] dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 transition-colors duration-200">
-            {/* Section Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
               <div className="flex items-center gap-3">
-                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100 transition-colors duration-200">Dive Buddies</h1>
+                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100 transition-colors duration-200">{t.diveBuddies}</h1>
                 <div className="bg-[#FEF6F4] dark:bg-orange-900/30 rounded-[1rem] flex justify-center items-center px-2 py-[.1875rem] transition-colors duration-200">
-                  <span className="text-[#F7931D] dark:text-orange-400 text-xs font-archivo font-medium">{totalCount} users</span>
+                  <span className="text-[#F7931D] dark:text-orange-400 text-xs font-archivo font-medium">{totalCount} {t.users}</span>
                 </div>
               </div>
             </div>
 
-            {/* Table Container */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-x-auto transition-colors duration-200">
               {isLoading ? (
                 <div className='flex justify-center w-full items-center py-10'>
@@ -284,7 +276,6 @@ const DiverBuddies = () => {
               )}
             </div>
 
-            {/* Infinite Query Pagination Controls */}
             {!isLoading && (
               <div className="flex items-center justify-between py-6 gap-4">
                 <button
@@ -293,18 +284,18 @@ const DiverBuddies = () => {
                   disabled={!hasPreviousPage || isFetchingPreviousPage}
                 >
                   <AngleLeft />
-                  {isFetchingPreviousPage ? 'Loading...' : 'Previous'}
+                  {isFetchingPreviousPage ? t.loading : t.previous}
                 </button>
 
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Showing {currentPageInfo.start}-{currentPageInfo.end} of {currentPageInfo.total} results
+                <div className="text-sm text-gray-600 dark:text-gray-400 hidden  md:block">
+                  {t.showing} {currentPageInfo.start}-{currentPageInfo.end} {t.of} {currentPageInfo.total} {t.results}
                   {hasNextPage && (
                     <button
                       onClick={handleNextPage}
                       disabled={isFetchingNextPage}
                       className="ml-2 text-orange-500 hover:text-orange-600 disabled:opacity-50"
                     >
-                      {isFetchingNextPage ? 'Loading more...' : 'Load more'}
+                      {isFetchingNextPage ? t.loadingMore : t.loadMore}
                     </button>
                   )}
                 </div>
@@ -314,14 +305,13 @@ const DiverBuddies = () => {
                   onClick={handleNextPage}
                   disabled={!hasNextPage || isFetchingNextPage}
                 >
-                  {isFetchingNextPage ? 'Loading...' : 'Next'}
+                  {isFetchingNextPage ? t.loading : t.next}
                   <AngleRight />
                 </button>
               </div>
             )}
           </div>
 
-          {/* Sidebar - Suggested Buddies */}
           <div className="">
             <SuggestedBuddies />
           </div>

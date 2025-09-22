@@ -677,7 +677,7 @@ const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData,onClose,s
           disabled={isSubmitting}
           onClick={handleProceed}
         >
-          {isSubmitting ? <SmallSpinner /> : "Proceed"}
+         Proceed  {isSubmitting && <SmallSpinner color='#fff' /> }
         </Button>
       </div>
 

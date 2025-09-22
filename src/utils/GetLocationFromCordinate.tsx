@@ -233,7 +233,6 @@ export const LocationDisplay: React.FC<LocationDisplayProps> = ({
       // Try each service with exponential backoff
       for (let i = 0; i < services.length; i++) {
         try {
-          console.log(`Trying geocoding service ${i + 1}...`)
           const result = await services[i]()
 
           if (result && result.trim()) {
@@ -255,7 +254,6 @@ export const LocationDisplay: React.FC<LocationDisplayProps> = ({
             return
           }
         } catch (error) {
-          console.warn(`Geocoding service ${i + 1} failed:`, error)
 
           // Add delay between service attempts
           if (i < services.length - 1) {
@@ -266,7 +264,6 @@ export const LocationDisplay: React.FC<LocationDisplayProps> = ({
 
       // If all services fail, try retry with exponential backoff
       if (retryCount < 2) {
-        console.log(`All services failed, retrying in ${2 ** retryCount} seconds...`)
         setTimeout(
           () => {
             setRetryCount((prev) => prev + 1)

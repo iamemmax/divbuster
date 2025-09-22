@@ -1,6 +1,89 @@
+// import * as React from 'react';
+// import { cn } from '@/utils/classNames';
+// import { Button } from './Button';
+
+// type TabOption = 'this-month' | 'last-month' | 'custom';
+
+// interface MonthlyTabsProps {
+//   value: TabOption;
+//   onChange: (value: TabOption) => void;
+//   className?: string;
+// }
+
+// export const MonthlyTabs: React.FC<MonthlyTabsProps> = ({
+//   value,
+//   onChange,
+//   className
+// }) => {
+//   return (
+//     <div className={cn("flex border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden", className)}>
+//       <Button 
+//         className={cn(
+//           "flex items-center px-2 md:px-4 py-2 font-medium text-sm",
+//           value === 'this-month' 
+//             ? "bg-[#F0FFF4] dark:bg-green-900/20 text-green-600 rounded-none rounded-l dark:text-green-400" 
+//             : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+//         )}
+//         onClick={() => onChange('this-month')}
+//       >
+//         {value === 'this-month' && <span className="w-2 h-2 bg-green-500  mr-2"></span>}
+//         This month
+//       </Button>
+      
+//       <Button 
+//         className={cn(
+//           "px-4 py-2 font-medium text-sm border-l border-gray-200 rounded-none dark:border-gray-700",
+//           value === 'last-month' 
+//             ? "bg-[#F0FFF4] dark:bg-green-900/20 text-green-600 dark:text-green-400" 
+//             : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+//         )}
+//         onClick={() => onChange('last-month')}
+//       >
+//         {value === 'last-month' && <span className="w-2 h-2 bg-green-500  mr-2"></span>}
+//         Last month
+//       </Button>
+      
+//       <Button 
+//         className={cn(
+//           "flex items-center px-4 py-2 font-medium text-sm  border-l rounded-none rounded-r border-gray-200 dark:border-gray-700",
+//           value === 'custom' 
+//             ? "bg-[#F0FFF4] dark:bg-green-900/20 text-green-600 dark:text-green-400" 
+//             : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+//         )}
+//         onClick={() => onChange('custom')}
+//       >
+//         {value === 'custom' ? (
+//           <span className="w-2 h-2 bg-green-500  mr-2"></span>
+//         ) : (
+//           <svg 
+//             className="mr-1 w-4 h-4" 
+//             viewBox="0 0 24 24" 
+//             fill="none" 
+//             xmlns="http://www.w3.org/2000/svg"
+//           >
+//             <path 
+//               d="M12 4V20M20 12H4" 
+//               stroke="currentColor" 
+//               strokeWidth="2" 
+//               strokeLinecap="round" 
+//               strokeLinejoin="round"
+//             />
+//           </svg>
+//         )}
+//         Custom
+//       </Button>
+//     </div>
+//   );
+// };
+
+
 import * as React from 'react';
 import { cn } from '@/utils/classNames';
 import { Button } from './Button';
+import { monthlyTabsTranslations } from '@/app/(main)/translation/dashboardTranslation';
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { Language } from '@/app/(auth)/sign-up/translations';
+
 
 type TabOption = 'this-month' | 'last-month' | 'custom';
 
@@ -8,18 +91,26 @@ interface MonthlyTabsProps {
   value: TabOption;
   onChange: (value: TabOption) => void;
   className?: string;
+  user:User|null
 }
 
 export const MonthlyTabs: React.FC<MonthlyTabsProps> = ({
   value,
   onChange,
-  className
+  className,
+user
 }) => {
+  
+
+  const language: Language = (user?.profile_details?.language as Language) || "en";
+  const t = monthlyTabsTranslations[language] || monthlyTabsTranslations?.en;
+
   return (
-    <div className={cn("flex border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden", className)}>
+    <div className={cn("flex border border-gray-200 w-full dark:border-gray-700 rounded-lg overflow-hidden", className)}>
+      {/* This Month */}
       <Button 
         className={cn(
-          "flex items-center px-4 py-2 font-medium text-sm",
+          "flex items-center px-2 md:px-4 py-2 font-medium text-sm",
           value === 'this-month' 
             ? "bg-[#F0FFF4] dark:bg-green-900/20 text-green-600 rounded-none rounded-l dark:text-green-400" 
             : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
@@ -27,12 +118,13 @@ export const MonthlyTabs: React.FC<MonthlyTabsProps> = ({
         onClick={() => onChange('this-month')}
       >
         {value === 'this-month' && <span className="w-2 h-2 bg-green-500  mr-2"></span>}
-        This month
+        {t.thisMonth}
       </Button>
       
+      {/* Last Month */}
       <Button 
         className={cn(
-          "px-4 py-2 font-medium text-sm border-l border-gray-200 rounded-none dark:border-gray-700",
+          "px-2 md:px-4 py-2 font-medium text-sm border-l border-gray-200 rounded-none dark:border-gray-700",
           value === 'last-month' 
             ? "bg-[#F0FFF4] dark:bg-green-900/20 text-green-600 dark:text-green-400" 
             : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
@@ -40,12 +132,13 @@ export const MonthlyTabs: React.FC<MonthlyTabsProps> = ({
         onClick={() => onChange('last-month')}
       >
         {value === 'last-month' && <span className="w-2 h-2 bg-green-500  mr-2"></span>}
-        Last month
+        {t.lastMonth}
       </Button>
       
+      {/* Custom */}
       <Button 
         className={cn(
-          "flex items-center px-4 py-2 font-medium text-sm  border-l rounded-none rounded-r border-gray-200 dark:border-gray-700",
+          "flex items-center px-2 md:px-4 py-2 font-medium text-sm  border-l rounded-none rounded-r border-gray-200 dark:border-gray-700",
           value === 'custom' 
             ? "bg-[#F0FFF4] dark:bg-green-900/20 text-green-600 dark:text-green-400" 
             : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
@@ -70,7 +163,7 @@ export const MonthlyTabs: React.FC<MonthlyTabsProps> = ({
             />
           </svg>
         )}
-        Custom
+        {t.custom}
       </Button>
     </div>
   );

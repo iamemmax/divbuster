@@ -61,9 +61,7 @@ const fetchDiveSites = async ({ lang, favorite, search, pageParam = 1 }: filter 
     }
     
     const url = `dive/dive-sites?${params.toString()}`;
-    console.log('API URL:', url); // For debugging
-    console.log('Page param:', pageParam); // Debug page value
-    
+  
     const response = await adminAxios.get(url);
     return response.data as divSitesProp;
   } catch (error) {

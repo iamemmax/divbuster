@@ -71,12 +71,12 @@ const SuggestedDivers = () => {
   ) || [];
 
   return (
-    <div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className='w-full'>
+      <div className="mt-6 grid grid-cols-1 w-full gap-6 lg:grid-cols-2 xl:grid-cols-3">
         {visibleDivers.map((diver) => (
           <SuggestedDiverCard
             key={diver?.id}
-            id={String(diver.id)}
+            id={String(diver.id)} 
             name={diver?.full_name}
             addBuddyFunc={() => handleAddBuddy(diver)}
             // Only show loading for the specific diver being processed

@@ -185,6 +185,7 @@ const LoginPage = () => {
       const storedLanguage = localStorage.getItem("preferredLanguage") as Language | null;
       if (storedLanguage && Object.keys(translations).includes(storedLanguage)) {
         setLanguage(storedLanguage);
+        setValue("lang",language)
         updateLanguage(storedLanguage);
       }
     }
@@ -205,6 +206,7 @@ const LoginPage = () => {
     handleSubmit,
     register,
     watch,
+    setValue,
     formState: { errors, isValid },
   } = useForm<LoginDetailsValue>({
     resolver: zodResolver(loginUserSchema),
@@ -258,7 +260,7 @@ const LoginPage = () => {
   // Fixed: Improved language change handler
   const handleLanguageChange = (value: string) => {
     const newLanguage = value as Language;
-    console.log('Changing language to:', newLanguage); // Debug log
+    // console.log('Changing language to:', newLanguage); // Debug log
     
     // Update local state first
     setLanguage(newLanguage);
@@ -266,15 +268,12 @@ const LoginPage = () => {
     // Update context
     updateLanguage(newLanguage);
     
+    setValue("lang",newLanguage)
     // Set localStorage with error handling
     try {
       if (typeof window !== 'undefined') {
         localStorage.setItem("preferredLanguage", newLanguage);
-        console.log('Language saved to localStorage:', newLanguage); // Debug log
-        
-        // Verify it was saved
-        const saved = localStorage.getItem("preferredLanguage");
-        console.log('Verified saved language:', saved); // Debug log
+       
       }
     } catch (error) {
       console.error('Error saving language to localStorage:', error);

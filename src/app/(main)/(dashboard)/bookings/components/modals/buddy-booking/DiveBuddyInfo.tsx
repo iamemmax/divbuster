@@ -9,9 +9,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { PlaceData } from '../../../../../../../../google-maps';
 import GoogleAutocomplete from '@/app/(main)/components/google/Autocomplete';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core';
-import CaretDownIcon from '@/icons/core/CaretDown';
-import { capitalizeFirstLetter } from '@/utils';
+
 
 interface prop{
      setStep: React.Dispatch<React.SetStateAction<number>>
@@ -217,7 +215,7 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
                     <GoogleAutocomplete
                         onPlaceSelected={handleMeetupPlaceSelected}
                         placeholder="Search for meet-up location..."
-                        className={`${errors.meet_up_address ? "border-red-500" : ""} bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white`}
+                        className={`${errors.meet_up_address ? "border-red-500" : ""}  bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white`}
                         options={{
                             types: ['establishment', 'geocode'],
                             // You can add country restrictions if needed
@@ -230,39 +228,7 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
                         </p>
                     )}
                     
-                    {/* Display selected place details */}
-                    {selectedMeetupPlace && (
-                        <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                            <div className="flex items-start space-x-3">
-                                <div className="flex-shrink-0">
-                                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                                </div>
-                                <div className="flex-1">
-                                    <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                                        {selectedMeetupPlace.name}
-                                    </p>
-                                    <p className="text-xs text-gray-600 dark:text-gray-400">
-                                        {selectedMeetupPlace.address}
-                                    </p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-500">
-                                        Coordinates: {selectedMeetupPlace.location.lat.toFixed(6)}, {selectedMeetupPlace.location.lng.toFixed(6)}
-                                    </p>
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setSelectedMeetupPlace(null);
-                                        setValue('meet_up_address', '');
-                                    }}
-                                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    )}
+                
                 </div>
 
                 <div className="flex justify-end">

@@ -182,52 +182,74 @@ interface Profiledetails {
 }
 
 
-// const fetchBuddyList = async (url?: string) => {
-//   // Use the provided URL or default to the base endpoint
-//   const endpoint = url || 'buddies';
-//   const response = await adminAxios.get(endpoint);
-//   return response.data as buddyListProp;
-// }
 
-// export const useFetchBuddyList = (url?: string) => {
-//   return useQuery({
-//     queryKey: ["buddy-list", url],
-//     queryFn: () => fetchBuddyList(url),
-//     keepPreviousData: true, // This keeps the previous data while loading new data
-//   });
-// }
 
-const fetchBuddyList = async (pageParam?: string) => {
-  let url: string;
+// const fetchBuddyList = async (pageParam?: string) => {
+//   let url: string;
   
+//   if (pageParam) {
+//     // If pageParam is a full URL, extract just the path and query parameters
+//     try {
+//       const urlObj = new URL(pageParam);
+//       url = urlObj.pathname + urlObj.search;
+//     } catch {
+//       // If pageParam is not a full URL, use it as is
+//       url = pageParam;
+//     }
+//   } else {
+//     // Initial request
+//     url = `buddies?lang=${language}`;
+//   }
+  
+//   const response = await adminAxios.get(url);
+//   return response.data as buddyListProp;
+// };
+
+// export const useFetchBuddyList = () => {
+//   return useInfiniteQuery({
+//     queryKey: ["buddy-list"],
+//     queryFn: ({ pageParam }) => fetchBuddyList(pageParam),
+//     getNextPageParam: (lastPage) => {
+//       return lastPage.next;
+//     },
+//     getPreviousPageParam: (firstPage) => {
+//       return firstPage.previous;
+//     },
+//     keepPreviousData: true,
+//   });
+// };
+
+
+
+const fetchBuddyList = async (pageParam?: string, language?: string) => {
+  let url: string;
+
   if (pageParam) {
-    // If pageParam is a full URL, extract just the path and query parameters
     try {
       const urlObj = new URL(pageParam);
       url = urlObj.pathname + urlObj.search;
     } catch {
-      // If pageParam is not a full URL, use it as is
       url = pageParam;
     }
   } else {
-    // Initial request
-    url = 'buddies';
+    url = `buddies?lang=${language}`;
   }
-  
-  const response = await adminAxios.get(url);
-  return response.data as buddyListProp;
+
+  try {
+    const response = await adminAxios.get(url);
+    return response.data as buddyListProp;
+  } catch (error) {
+    console.error("Fetch failed:", error);
+    throw error;
+  }
 };
 
-export const useFetchBuddyList = () => {
+export const useFetchBuddyList = (language: string) => {
   return useInfiniteQuery({
-    queryKey: ["buddy-list"],
-    queryFn: ({ pageParam }) => fetchBuddyList(pageParam),
-    getNextPageParam: (lastPage) => {
-      return lastPage.next;
-    },
-    getPreviousPageParam: (firstPage) => {
-      return firstPage.previous;
-    },
+    queryKey: ["buddy-list", language],
+    queryFn: ({ pageParam }) => fetchBuddyList(pageParam, language),
+    getNextPageParam: (lastPage) => lastPage.next,
+    getPreviousPageParam: (firstPage) => firstPage.previous,
     keepPreviousData: true,
   });
 };

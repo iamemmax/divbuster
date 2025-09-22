@@ -24,7 +24,7 @@ export const loginUserSchema = z.object({
     // ),
    
 
-  
+  lang:z.string().optional()
   });
 
 export const forgetPasswordUserSchema = z.object({

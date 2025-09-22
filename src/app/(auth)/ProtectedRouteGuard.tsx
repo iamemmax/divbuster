@@ -24,6 +24,7 @@ export default function ProtectedRouteGuard({
     "/div-sites",
     "/messages",
     "/bookings",
+    "/dive-finder",
     "/profile",
     "/token-management?tab=invoices",
     "/token-management",
