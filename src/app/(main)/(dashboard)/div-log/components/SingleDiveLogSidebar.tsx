@@ -1,31 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Wifi } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import DiveWatch from '@/app/icons/(dashboard)/DiveWatch';
 import EditDiveStatisticsModal from './edit/EditDiveStatisticsModal';
 import EditBuuddyGear from './edit/EditBuuddyGear';
-import AddAirUsage from './edit/unused/AddAirUsage';
 import EnvironmentalCondition from './edit/EnvironmentalCondition';
 import DiveComputer from './edit/DiveComputer';
-import AddDiveBuddyToLogModal from './edit/unused/AddDivBuddyToLog';
 import AddDiveNotes from './edit/AddDiveNotes';
 import DivePhotoUploader from './edit/DivePhotoUploader';
 import { singleDiveProp } from '../../api/div-logs/fetchSingleDivLog';
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { diveLogSidebarTranslations } from '@/app/(main)/translation/diveLogTranslation';
+import { Language } from '@/app/(auth)/sign-up/translations';
 
 
 interface prop{
-   data: singleDiveProp | undefined
+   data: singleDiveProp | undefined;
+   user: User | null
 }
-const SingleDiveLogSidebar:React.FC<prop> = ({data}) => {
+const SingleDiveLogSidebar:React.FC<prop> = ({data,user}) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [logSummaryModalOpen, setLogSummaryModalOpen] = useState(false);
 const [showBuddyGearModalOpen, setShowBuddyGearModalOpen] = useState(false)
-const [showAirUsageModalOpen, setShowAirUsageModalOpen] = useState(false)
 const [showEnvironmentalModalOpen, setShowEnvironmentalModalOpen] = useState(false)
 const [showdiveComputer, setShowdiveComputer] = useState(false)
-const [showAddDiveToLog, setShowAddDiveToLog] = useState(false)
 const [showNoteModal, setShowNoteModal] = useState(false)
 const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
 
+    const language: Language = (user?.profile_details?.language as Language)
+    const t = diveLogSidebarTranslations[language] || diveLogSidebarTranslations?.en;
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -33,44 +35,32 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
     return () => clearInterval(timer);
   }, []);
 
-
-
- 
-
   const menuItems = [
     { 
-      title: "Edit Dive Statistics", 
+      title: t?.menu?.editStats, 
       icon: ChevronRight, 
       onClick: () => setLogSummaryModalOpen(true) 
     },
-    // { 
-    //   title: "Add Dive Buddy", 
-    //   icon: ChevronRight ,
-    //   onClick: () => setShowAddDiveToLog(true) 
-    // },
+   
     { 
-      title: "Add Photos/Videos", 
+      title: t?.menu?.addPhotos, 
       icon: ChevronRight ,
       onClick: () => setShowDiveUploaderModal(true) 
     },
-    // { 
-    //   title: "Add Air Usage", 
-    //   icon: ChevronRight ,
-    //   onClick:()=>setShowAirUsageModalOpen(true)
-    // },
+   
     { 
-      title: "Log your Gear", 
+      title: t?.menu?.logGear, 
       icon: ChevronRight,
       onClick:()=>setShowBuddyGearModalOpen(true)
     },
     { 
-      title: "Add Notes", 
+      title: t?.menu?.addNotes, 
       icon: ChevronRight ,
       onClick: () => setShowNoteModal(true) 
 
     },
     { 
-      title: "Environmental Conditions", 
+      title: t?.menu?.environment, 
       icon: ChevronRight ,
       onClick:()=>setShowEnvironmentalModalOpen(true)
     }
@@ -82,7 +72,7 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
       <div className="relative bg-white dark:bg-gray-800 p-8 flex justify-center" onClick={()=>setShowdiveComputer(true)}>
         <div className="relative">
           {/* Watch Body */}
-           <DiveWatch/>
+           <DiveWatch className='dark:bg-transparent'/>
          
         </div>
       </div>
@@ -91,7 +81,7 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
       <div className="px-6 py-4 flex justify-center items-center">
         <div className="bg-[#ECFDF3] dark:bg-green-900/20 rounded-full px-4 py-2 flex items-center gap-2 w-fit">
           <div className="w-2 h-2 bg-[#027A48] dark:bg-green-400 rounded-full"></div>
-          <span className="text-[#027A48] dark:text-green-400 font-archivo text-sm font-semibold">Device Connected</span>
+          <span className="text-[#027A48] dark:text-green-400 font-archivo text-sm font-semibold">{t?.deviceConnected}</span>
         </div>
       </div>
       
@@ -115,23 +105,22 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
         isOpen={logSummaryModalOpen}
         onClose={() => setLogSummaryModalOpen(false)}
         data={data}
+        user={user}
        
       />}
     {showBuddyGearModalOpen &&  <EditBuuddyGear
         isOpen={showBuddyGearModalOpen}
         onClose={() => setShowBuddyGearModalOpen(false)}
         initialData={data}
+            user={user}
        
       />}
-    {/* {showAirUsageModalOpen &&  <AddAirUsage
-        isOpen={showAirUsageModalOpen}
-        onClose={() => setShowAirUsageModalOpen(false)}
-       
-      />} */}
+    
     {showEnvironmentalModalOpen &&  <EnvironmentalCondition
         isOpen={showEnvironmentalModalOpen}
         onClose={() => setShowEnvironmentalModalOpen(false)}
          initialData={data}
+         user={user}
        
       />}
     {showdiveComputer &&  <DiveComputer
@@ -139,21 +128,19 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
         onClose={() => setShowdiveComputer(false)}
        
       />}
-    {/* {showAddDiveToLog &&  <AddDiveBuddyToLogModal
-        isOpen={showAddDiveToLog}
-        onClose={() => setShowAddDiveToLog(false)}
-       
-      />} */}
+    
     {showNoteModal &&  <AddDiveNotes
         isOpen={showNoteModal}
         onClose={() => setShowNoteModal(false)}
          data={data}
+          user={user}
        
       />}
     {showDiveUploaderModal &&  <DivePhotoUploader
         isOpen={showDiveUploaderModal}
         onClose={() => setShowDiveUploaderModal(false)}
          data={data}
+           user={user}
        
       />}
     </div>

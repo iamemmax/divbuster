@@ -6,7 +6,6 @@ import TrashIcon from "@/app/icons/(dashboard)/Trashcon";
 import VideoIcon from "@/app/icons/(dashboard)/VideoIcon";
 import FileIcon from "@/app/icons/(dashboard)/FileIcon";
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
-import { UnsavedChangesModal } from "./UnsavedChangeModal";
 import { DiveLogUpdatedModal } from "./DiveLogUpdatedModal";
 import { z } from "zod";
 import { useErrorModalState } from "@/hooks";
@@ -18,6 +17,11 @@ import { useQueryClient } from "react-query";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import CheckColorIcon2 from "@/app/icons/(dashboard)/CheckColorIcon2";
+import { User } from "@/app/(auth)/api/getAuthenticatedUser";
+import { Language } from "@/app/(auth)/sign-up/translations";
+import { divePhotoUploaderTranslations } from "@/app/(main)/translation/diveLogTranslation";
+import { UnsavedChangesModal } from "@/app/(main)/components/shared/modal/UnsavedChangeModal";
+import { SmallSpinner } from "@/icons/core";
 
 // Define FileItem with the file property
 interface FileItem {
@@ -31,7 +35,8 @@ interface FileItem {
 interface AdvancedDetailsModalProps {
   isOpen?: boolean;
   onClose: () => void;
-  data: singleDiveProp | undefined
+  data: singleDiveProp | undefined;
+  user: User | null
 }
 
 const diveImageSchema = z.object({
@@ -43,7 +48,8 @@ type DiveImageFormData = z.infer<typeof diveImageSchema>;
 export default function DivePhotoUploader({
   isOpen,
   onClose,
-  data
+  data,
+  user
 }: AdvancedDetailsModalProps) {
   const {
     isErrorModalOpen,
@@ -57,7 +63,9 @@ export default function DivePhotoUploader({
   const [showDiscardModal, setShowDiscardModal] = useState(false);
   const [showUpdatedModal, setShowUpdatedModal] = useState(false);
   const { mutate: handleUpdate, isLoading } = useUpdatImageOrVideo();
-
+  const language: Language = (user?.profile_details?.language as Language)
+  const t = divePhotoUploaderTranslations[language] || divePhotoUploaderTranslations?.en;
+  
   const {
     control,
     handleSubmit,
@@ -150,7 +158,7 @@ export default function DivePhotoUploader({
             {/* Header */}
             <div className="border-gray-200 dark:border-gray-600 flex justify-between items-center border-b border-opacity-55 pb-4">
               <h2 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
-                Add Photos from the Dive
+              {t?.header}
               </h2>
             </div>
 
@@ -158,7 +166,7 @@ export default function DivePhotoUploader({
             <div className="max-h-[60vh] overflow-y-auto">
               <div className="flex items-center justify-between border dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700">
                 <span className="font-medium text-sm font-archivo text-gray-800 dark:text-gray-200">
-                  Show Map First
+                 {t?.showMapFirst}
                 </span>
                 <Controller
                   name="show_map_first"
@@ -190,24 +198,24 @@ export default function DivePhotoUploader({
               <div className="flex justify-between items-start border-gray-200 dark:border-gray-600 border-b border-opacity-55 py-6">
                 <div>
                   <h4 className="text-xs font-medium mb-1 text-gray-800 dark:text-gray-200">
-                    Upload Attached files
+                   {t?.upload?.title}
                   </h4>
                   <p className="text-xs text-gray-500 dark:text-gray-400 max-w-[320px] md:max-w-full">
-                    Files and assets that have been attached to this dive.
+                   {t?.upload?.description}
                   </p>
                 </div>
-                <Button className="p-0 bg-transparent dark:bg-transparent">
+                {/* <Button className="p-0 bg-transparent dark:bg-transparent">
                   <ThreeDot />
-                </Button>
+                </Button> */}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] border-b border-[#EAECF0] dark:border-gray-600 border-opacity-50 py-4 md:py-2 items-start gap-6 md:gap-5 mt-4">
                 <div>
                   <h4 className="text-xs font-archivo font-medium mb-1 text-gray-800 dark:text-gray-200">
-                    Dive Pictures
+                    {t?.upload?.pictures?.title}
                   </h4>
                   <p className="text-xs text-gray-500 dark:text-gray-400 max-w-[320px] md:max-w-full">
-                    Share a few snippets of your dive.
+                   {t?.upload?.pictures?.description}
                   </p>
                 </div>
 
@@ -224,12 +232,12 @@ export default function DivePhotoUploader({
                     </div>
                     <p>
                       <span className="text-orange-500 font-archivo text-sm font-medium">
-                        Click to upload
+                       {t?.upload?.dropzone?.click}
                       </span>{" "}
-                      or drag and drop
+                      {t?.upload?.dropzone?.or}
                     </p>
                     <p className="text-xs font-archivo mt-1 text-gray-500 dark:text-gray-400">
-                      SVG, PNG, JPG or GIF or MP4 (max. 800×400px)
+                      {t?.upload?.dropzone?.formats}
                     </p>
                     <input
                       type="file"
@@ -296,8 +304,9 @@ export default function DivePhotoUploader({
 
                             {/* Delete or Check Icon */}
                             <div className="mt-3 md:mt-0">
-                              {file.progress < 100 ? (
+                              {file?.name ? (
                                 <button
+                                disabled={!!isLoading}
                                   type="button"
                                   onClick={() => handleDelete(index)}
                                   className="text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400"
@@ -330,9 +339,9 @@ export default function DivePhotoUploader({
               <button 
                 type="submit"
                 disabled={isLoading}
-                className="px-4 py-2 rounded-lg bg-orange-500 text-white text-sm hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 rounded-lg bg-orange-500 text-white flex items-center gap-x-3 text-xs md:text-sm hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? 'Saving...' : 'Save Changes'}
+               {t?.actions?.save} {isLoading && <SmallSpinner color="#fff"/>}
               </button>
             </div>
           </form>
@@ -358,7 +367,7 @@ export default function DivePhotoUploader({
               setErrorModalState(false);
             }}
             subheading={
-              errorModalMessage || "Please check your inputs and try again."
+              errorModalMessage || t?.messages?.error
             }
           />
         </DialogBody>

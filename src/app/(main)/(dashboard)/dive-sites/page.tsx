@@ -141,7 +141,7 @@ const DiveSites = () => {
         {/* Hero Section */}
     
         {/* Main Content Grid */}
-        <div className='grid grid-cols-1 lg:grid-cols-[2fr_1fr] xl:grid-cols-[3fr_1fr] gap-[1.3125rem]  relative'>
+        <div className='grid grid-cols-1 xl:grid-cols-[2fr_1fr] 2xl:grid-cols-[3fr_1fr] gap-[1.3125rem]  relative'>
           {/* Main Content */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
             {/* Tab Navigation */}

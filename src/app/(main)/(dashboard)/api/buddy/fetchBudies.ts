@@ -2,7 +2,7 @@ import { adminAxios } from "@/lib/axios";
 import { useInfiniteQuery, useQuery } from "react-query";
 
 
-interface buddyListProp {
+export interface buddyListProp {
   count: number;
   next: null;
   previous: null;

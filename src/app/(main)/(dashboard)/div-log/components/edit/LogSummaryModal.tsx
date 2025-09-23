@@ -12,21 +12,20 @@ import { AxiosError } from 'axios';
 import { SmallSpinner } from '@/icons/core';
 import { useQueryClient } from 'react-query';
 import { UnsavedChangesModal } from '@/app/(main)/components/shared/modal/UnsavedChangeModal';
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { Language } from '@/app/(auth)/sign-up/translations';
+import { logSummaryTranslations } from '@/app/(main)/translation/diveLogTranslation';
 
 // Define the validation schema with Zod
-const logSummarySchema = z.object({
-  bottom_time: z.string().min(1, { message: "bottom time is required" }),
-  max_depth: z.string().min(1, { message: "max depth is required" }),
 
-});
 
-export type LogSummaryFormValues = z.infer<typeof logSummarySchema>;
 
 interface LogSummaryModalProps {
   isOpen?: boolean;
   onClose: () => void;
   // initialData?: Partial<LogSummaryFormValues>;
-  data: singleDiveProp | undefined
+  data: singleDiveProp | undefined;
+    user: User | null
   // onSave: (data: LogSummaryFormValues) => void;
 }
 
@@ -34,8 +33,17 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
   isOpen,
   onClose,
   // initialData = {},
-  data
+  data,
+  user
 }) => {
+   const language: Language = (user?.profile_details?.language as Language)
+      const t = logSummaryTranslations[language] || logSummaryTranslations?.en;
+      const logSummarySchema = z.object({
+  bottom_time: z.string().min(1, { message: t.errors.bottomTime }),
+  max_depth: z.string().min(1, { message: t.errors.maxDepth }),
+  
+});
+ type LogSummaryFormValues = z.infer<typeof logSummarySchema>;
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -94,7 +102,7 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
           <div className="w-full max-h-[60vh] md:max-h-[70vh]  overflow-auto">
             <div className="grid grid-cols-1 gap-4">
               <div className='grid grid-cols-[1fr_2fr] border-b border-[#EAECF0] dark:border-gray-600 border-opacity-50 py-2 items-center gap-5'>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Bottom Time</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">{t?.labels?.bottomTime}</label>
                 <input
                   {...register('bottom_time')}
                   placeholder="0"
@@ -107,7 +115,7 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
 
 
               <div className='grid grid-cols-[1fr_2fr]  dark:border-gray-600 border-opacity-50 py-2 items-center gap-5'>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Max Depth</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">{t?.labels?.maxDepth}</label>
                 <input
                   {...register('max_depth')}
                   placeholder="0"
@@ -123,10 +131,10 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
 
           <div className="py-4 mt-3 border-t border-gray-200 dark:border-gray-600 flex justify-end space-x-2">
             <Button type="button" className='dark:text-white border-white' variant="outlined" onClick={() => setShowDiscardModal(true)}>
-              Cancel
+             {t?.buttons?.cancel}
             </Button>
             <Button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white flex justify-center items-center gap-x-3">
-              Save Changes {isLoading && <SmallSpinner color='#fff' />}
+             {t?.buttons?.save} {isLoading && <SmallSpinner color='#fff' />}
             </Button>
           </div>
         </form>
@@ -154,7 +162,7 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
                   setErrorModalState(false);
                 }}
                 subheading={
-                  errorModalMessage || "Please check your inputs and try again."
+                  errorModalMessage || t?.messages?.error
                 }
               />
     </div>

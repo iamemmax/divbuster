@@ -1,167 +1,59 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Header from "../../components/shared/Header";
 import { useUser } from "@/app/(auth)/api/getAuthenticatedUser";
-import { diveSiteResult, useFetchDiveSites } from "../api/div-sites/fetch-dive-sites";
+import { diveSiteResult, divSitesProp, useFetchDiveSites } from "../api/div-sites/fetch-dive-sites";
+import GoogleMap from "./components/GoogleMap";
+import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query";
+import { DebouncedSearchInput } from "@/components/core/DebouncedSearchInput";
+import { Search } from "lucide-react";
+import CreateBuddyPlanMap from "./components/CreateBuddyPlanMap";
+import { useAuth } from "@/contexts/authentication";
+import { diverBuddiesTranslations } from "../../translation/diveBuddiesTranslation";
+import { Language } from "../../translation/dashboardTranslation";
+import { buddyListProp, buddyResult, useFetchBuddyList } from "../api/buddy/fetchBudies";
 
-interface DiveSite {
-  id: string;
-  title: string;
-  lat: string; // Fixed from previous 'lag' typo
-  lon: string;
+interface buddyProp {
+  buddyList: buddyResult[]
+ FetchBuddyNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<buddyListProp, unknown>>
+hasNextBuddyPage: boolean | undefined
+isFetchBuddyNextPage: boolean
+
 }
 
-// Map Component - using direct script loading instead of conflicting loaders
-function MapComponent({ diveSites }: { diveSites: diveSiteResult[] }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<google.maps.Map | null>(null);
-  const markersRef = useRef<google.maps.Marker[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    // Check if Google Maps is already loaded
-    if (window.google?.maps) {
-      setIsLoaded(true);
-      return;
-    }
-
-    // Load Google Maps script if not already loaded
-    if (!document.querySelector('script[src*="maps.googleapis.com"]')) {
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=marker`;
-      script.async = true;
-      script.onload = () => setIsLoaded(true);
-      document.head.appendChild(script);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!ref.current || !isLoaded || !window.google?.maps) return;
-
-    const initializeMap = () => {
-      if (!mapRef.current) {
-        mapRef.current = new google.maps.Map(ref.current!, {
-          center: { lat: 18.427, lng: -66.063 },
-          zoom: 4,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-        });
-      }
-
-      // Clear old markers
-      markersRef.current.forEach((m) => m.setMap(null));
-      markersRef.current = [];
-
-      const bounds = new google.maps.LatLngBounds();
-
-      diveSites?.forEach((site) => {
-        // Using 'lag' from your data structure - consider fixing this in your API to 'lat'
-        if (!site?.lag || !site?.lon) return;
-
-        const lat = parseFloat(site.lag);
-        const lng = parseFloat(site.lon);
-        
-        // Validate coordinates
-        if (isNaN(lat) || isNaN(lng)) {
-          console.warn(`Invalid coordinates for site ${site.title}: lat=${site.lag}, lng=${site.lon}`);
-          return;
-        }
-
-        const position = { lat, lng };
-
-        // Use the standard google.maps.Marker (not the new advanced markers)
-        const marker = new google.maps.Marker({
-          position,
-          map: mapRef.current!,
-          title: site.title,
-          icon: {
-            url: "/images/marker.png",
-            scaledSize: new google.maps.Size(32, 32),
-            anchor: new google.maps.Point(16, 32), // Center the icon properly
-          },
-        });
-
-        const infoWindow = new google.maps.InfoWindow({
-          content: `
-            <div style="padding: 8px; min-width: 150px;">
-              <h3 style="margin: 0 0 4px 0; font-weight: 600; color: #1f2937;">${site.title}</h3>
-              <p style="margin: 0; font-size: 12px; color: #6b7280;">Dive Site</p>
-            </div>
-          `,
-        });
-
-        marker.addListener("click", () => {
-          // Close any open info windows first
-          markersRef.current.forEach((m) => {
-            if (m?.infoWindow) {
-              m?.infoWindow.close();
-            }
-          });
-          infoWindow.open(mapRef.current!, marker);
-        });
-
-        // Store info window reference for cleanup
-        (marker as any).infoWindow = infoWindow;
-        markersRef.current.push(marker);
-        bounds.extend(position);
-      });
-
-      if (diveSites.length > 0 && !bounds.isEmpty()) {
-        mapRef.current!.fitBounds(bounds, {
-          top: 50,
-          bottom: 50,
-          left: 50,
-          right: 50,
-        });
-
-        // Prevent over-zooming
-        const listener = google.maps.event.addListenerOnce(mapRef.current!, "bounds_changed", () => {
-          const zoom = mapRef.current?.getZoom();
-          if (zoom && zoom > 12) {
-            mapRef.current!.setZoom(12);
-          }
-        });
-      }
-    };
-
-    initializeMap();
-  }, [diveSites, isLoaded]);
-
-  if (!isLoaded) {
-    return <div className="flex items-center justify-center h-full">Loading map...</div>;
-  }
-
-  return <div ref={ref} className="w-full h-full" />;
+interface prop {
+    diveSites: diveSiteResult[]
+    hasNextPage: boolean | undefined;
+    isFetchingNextPage: boolean
+    fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<divSitesProp, unknown>>
 }
-
 // Nearest Dive Site Component - simplified without Wrapper
-function NearestDiveSite({ diveSites }: { diveSites: diveSiteResult[] }) {
+function NearestDiveSite({ diveSites, fetchNextPage,hasNextPage,isFetchingNextPage}: prop) {
   return (
     <div className="flex-1">
-      <MapComponent diveSites={diveSites} />
+      <GoogleMap diveSites={diveSites}  hasNextPage={hasNextPage} fetchNextPage={fetchNextPage} isFetchingNextPage={isFetchingNextPage}/>
     </div>
   );
 }
 
 // Create Dive Plan Component
-function CreateDivePlan() {
+function CreateDivePlan({FetchBuddyNextPage,buddyList,hasNextBuddyPage,isFetchBuddyNextPage}:buddyProp) {
+
+    
   return (
-    <div className="flex-1 p-6 bg-gray-50">
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Create Dive Plan</h2>
-        {/* Add your dive plan form here */}
-      </div>
+    <div className="flex-1">
+      <CreateBuddyPlanMap buddyList={buddyList}  fetchNextPage={FetchBuddyNextPage}isFetchingNextPage={isFetchBuddyNextPage} hasNextPage={hasNextBuddyPage} />
     </div>
   );
 }
 
 // Find Buddy Component
 function FindBuddy() {
-  const [searchBuddy, setSearchBuddy] = useState("");
-  const [certificationLevel, setCertificationLevel] = useState("");
 
   return (
-    <div className="flex-1 p-6 bg-gray-50">
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+    <div className="flex-1 p-6 bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-md mx-auto bg-white  dark:bg-gray-900 rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold mb-6 text-gray-800">Find Buddy</h2>
         {/* Add your find buddy form here */}
       </div>
@@ -175,6 +67,9 @@ export default function DiveMap() {
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState("nearest");
 
+    const language: Language = (user?.data?.profile_details?.language as Language);
+    const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
+  
   const apiParams = {
     lang: user?.data?.profile_details?.language || "en",
     favorite: "",
@@ -183,32 +78,52 @@ export default function DiveMap() {
 
   const {
     data,
-    refetch,
-    isLoading,
-    isError,
-    error,
+  hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
   } = useFetchDiveSites(apiParams);
 
+  const { 
+      data: buddyList, 
+  
+      fetchNextPage:FetchBuddyNextPage,
+      hasNextPage:hasNextBuddyPage,
+      isFetchingNextPage:isFetchBuddyNextPage,
+    
+    } = useFetchBuddyList(language);
+
   const diveSites = data?.pages?.flatMap((page) => page?.data?.results) || [];
+  const diveBuddirsData = buddyList?.pages?.flatMap((page) => page?.results) || [];
 
   const tabs = [
-    { id: "nearest", label: "Nearest Dive Site", component: <NearestDiveSite diveSites={diveSites} /> },
-    { id: "plan", label: "Create Dive Plan", component: <CreateDivePlan /> },
+    { id: "nearest", label: "Nearest Dive Site", component: <NearestDiveSite diveSites={diveSites} hasNextPage={hasNextPage} fetchNextPage={fetchNextPage} isFetchingNextPage={isFetchingNextPage}/> },
+    { id: "plan", label: "Create Dive Plan", component: <CreateDivePlan isFetchBuddyNextPage={isFetchBuddyNextPage}  buddyList={diveBuddirsData} FetchBuddyNextPage={FetchBuddyNextPage} hasNextBuddyPage={hasNextBuddyPage}/> },
     { id: "buddy", label: "Find Buddy", component: <FindBuddy /> },
   ];
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex relative flex-col h-screen">
       {/* Header */}
       <Header title="Dive Finder" subtitle="" />
 
       {/* Tabs */}
-      <div className="flex gap-4 p-4 bg-white shadow-md">
-        {tabs.map((tab) => (
+      <div className="flex gap-4 px-4 pb-5 md:p-4 bg-white dark:bg-gray-900 flex-wrap  absolute top-[6rem] inset-x-0 z-[9999999] shadow-md">
+         <div className="relative flex-1 w-full">
+                    <DebouncedSearchInput
+                      placeholder="Search for dive buddy, dive location, etc."
+                      onSearch={setSearch}
+                      debounceTime={300}
+                      value={search}
+                      className="py-3"
+                      icon={<Search size={18} />}
+                    />           
+                  </div>
+      <div className="flex items-center gap-4">
+          {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 rounded transition-colors ${
+            className={`md:px-4 px-2  py-2 rounded transition-colors text-xs md:text-base ${
               activeTab === tab.id
                 ? "bg-orange-500 text-white"
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -217,6 +132,7 @@ export default function DiveMap() {
             {tab.label}
           </button>
         ))}
+      </div>
       </div>
 
       {/* Active Tab Content */}

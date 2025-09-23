@@ -1,3 +1,6 @@
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { Language } from '@/app/(auth)/sign-up/translations';
+import { divLogChat } from '@/app/(main)/translation/diveLogTranslation';
 import ThreeDot from '@/app/icons/(dashboard)/ThreeDot';
 import React from 'react';
 import { 
@@ -13,7 +16,12 @@ import {
   Dot
 } from 'recharts';
 
-const DiveLogCharts = () => {
+interface prop{
+   user: User | null
+}
+const DiveLogCharts = ({user}:prop) => {
+     const language: Language = (user?.profile_details?.language as Language)
+      const t = divLogChat[language] || divLogChat?.en;
   // Heart rate data - matching the original pattern more closely
   const heartRateData = [
     { time: '0:00', hr: 45 },
@@ -102,18 +110,18 @@ const DiveLogCharts = () => {
       {/* Heart Rate Section */}
     <div className=" border border-[#EAECF0] rounded-lg mt-[1.875rem] w-full  p-6">
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-sm font-archivo font-semibold text-[#101828]">Heart Rate</h2>
-          <div className="text-gray-400 text-sm"><ThreeDot/></div>
+          <h2 className="text-sm font-archivo font-semibold text-[#101828] dark:text-white">{t?.heartRate?.title}</h2>
+          <div className="text-gray-400 dark:text-white text-sm"><ThreeDot/></div>
         </div>
         
         <div className="flex gap-8 mb-4">
           <div>
-            <div className="text-sm text-gray-500 mb-1">Average Heart Rate</div>
-            <div className="text-xl font-archivo font-bold text-[#101828]">76 bpm</div>
+            <div className="text-sm text-gray-500 dark:text-white mb-1">{t?.heartRate?.avg}</div>
+            <div className="text-xl font-archivo font-bold text-[#101828] dark:text-white">76 bpm</div>
           </div>
           <div>
-            <div className="text-sm text-gray-500 mb-1">Max. Heart Rate</div>
-            <div className="text-xl font-archivo font-bold text-[#101828]">100 bpm</div>
+            <div className="text-sm text-gray-500 dark:text-white mb-1">{t?.heartRate?.max}</div>
+            <div className="text-xl font-archivo font-bold text-[#101828] dark:text-white">100 bpm</div>
           </div>
         </div>
         
@@ -156,22 +164,22 @@ const DiveLogCharts = () => {
       {/* Water Temperature Section */}
       <div className=" border border-[#EAECF0] rounded-lg mt-[1.875rem] w-full  p-6">
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-sm font-archivo font-semibold text-[#101828]">Water temperature</h2>
-          <div className="text-gray-400 text-sm"><ThreeDot/></div>
+          <h2 className="text-sm font-archivo font-semibold text-[#101828] dark:text-white">{t?.waterTemp?.title}</h2>
+          <div className="text-gray-400 dark:text-white text-sm"><ThreeDot/></div>
         </div>
         
         <div className="flex gap-5 md:gap-28 mb-4">
           <div>
-            <div className="text-sm text-gray-500 mb-1">Average Water Temp.</div>
-            <div className="text-xl font-archivo font-bold text-[#101828]">28.0 <span className="text-lg">°C</span></div>
+            <div className="text-sm text-gray-500 dark:text-white mb-1">{t?.waterTemp?.avg}</div>
+            <div className="text-xl font-archivo font-bold text-[#101828] dark:text-white">28.0 <span className="text-lg">°C</span></div>
           </div>
           <div>
-            <div className="text-sm text-gray-500 mb-1">Min. Water Temp.</div>
-            <div className="text-xl font-archivo font-bold text-[#101828]">28.0 <span className="text-lg">°C</span></div>
+            <div className="text-sm text-gray-500 dark:text-white mb-1">{t?.waterTemp?.min}</div>
+            <div className="text-xl font-archivo font-bold text-[#101828] dark:text-white">28.0 <span className="text-lg">°C</span></div>
           </div>
           <div>
-            <div className="text-sm text-gray-500 mb-1">Max. Water Temp.</div>
-            <div className="text-xl font-archivo font-bold text-[#101828]">29.0 <span className="text-lg">°C</span></div>
+            <div className="text-sm text-gray-500 dark:text-white mb-1">{t?.waterTemp?.max}.</div>
+            <div className="text-xl font-archivo font-bold text-[#101828] dark:text-white">29.0 <span className="text-lg">°C</span></div>
           </div>
         </div>
         
@@ -219,15 +227,15 @@ const DiveLogCharts = () => {
         
         <div className="flex items-center mt-5">
           <div className="w-2 h-2 bg-yellow-400 rounded-full mr-2"></div>
-          <span className="text-xs text-gray-500">Average 0C</span>
+          <span className="text-xs text-gray-500 dark:text-white">{t?.depthProfile?.title}</span>
         </div>
       </div>
 
       {/* Depth Profile Section */}
       <div className=" border border-[#EAECF0] rounded-lg mt-[1.875rem] w-full  p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-sm font-archivo font-semibold text-[#101828]">Depth Profile</h2>
-          <div className="text-gray-400 text-sm"><ThreeDot/></div>
+          <h2 className="text-sm font-archivo font-semibold text-[#101828] dark:text-white">{t?.depthProfile?.yAxis}</h2>
+          <div className="text-gray-400 dark:text-white text-sm"><ThreeDot/></div>
         </div>
         
         <div className="h-80">
@@ -270,7 +278,7 @@ const DiveLogCharts = () => {
         </div>
         
         <div className="text-center mt-2">
-          <div className="text-sm text-gray-500">Runtime</div>
+          <div className="text-sm text-gray-500 dark:text-white">{t?.depthProfile?.xAxis}</div>
         </div>
       </div>
     </div>

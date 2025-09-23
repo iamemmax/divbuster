@@ -8,12 +8,18 @@ interface MonthlyTabsProps {
   value: TabOption;
   onChange: (value: TabOption) => void;
   className?: string;
+  labels: {
+    allTime: string;
+    lastMonth: string;
+    custom: string;
+  };
 }
 
 export const DiveLogTabs: React.FC<MonthlyTabsProps> = ({
   value,
   onChange,
-  className
+  className,
+  labels
 }) => {
   return (
     <div className={cn("flex border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden", className)}>
@@ -26,8 +32,8 @@ export const DiveLogTabs: React.FC<MonthlyTabsProps> = ({
         )}
         onClick={() => onChange('all_time')}
       >
-        {value === 'all_time' && <span className="w-2 h-2 bg-green-500  mr-2"></span>}
-        All Time
+        {value === 'all_time' && <span className="w-2 h-2 bg-green-500 mr-2"></span>}
+        {labels.allTime}
       </Button>
       
       <Button 
@@ -39,13 +45,13 @@ export const DiveLogTabs: React.FC<MonthlyTabsProps> = ({
         )}
         onClick={() => onChange('last_month')}
       >
-        {value === 'last_month' && <span className="w-2 h-2 bg-green-500  mr-2"></span>}
-        Last month
+        {value === 'last_month' && <span className="w-2 h-2 bg-green-500 mr-2"></span>}
+        {labels.lastMonth}
       </Button>
       
       <Button 
         className={cn(
-          "flex items-center px-4 py-2 font-medium text-sm  border-l rounded-none rounded-r border-gray-200 dark:border-gray-700",
+          "flex items-center px-4 py-2 font-medium text-sm border-l rounded-none rounded-r border-gray-200 dark:border-gray-700",
           value === 'custom' 
             ? "bg-[#F0FFF4] dark:bg-green-900/20 text-green-600 dark:text-green-400" 
             : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
@@ -53,7 +59,7 @@ export const DiveLogTabs: React.FC<MonthlyTabsProps> = ({
         onClick={() => onChange('custom')}
       >
         {value === 'custom' ? (
-          <span className="w-2 h-2 bg-green-500  mr-2"></span>
+          <span className="w-2 h-2 bg-green-500 mr-2"></span>
         ) : (
           <svg 
             className="mr-1 w-4 h-4" 
@@ -70,7 +76,7 @@ export const DiveLogTabs: React.FC<MonthlyTabsProps> = ({
             />
           </svg>
         )}
-        Custom
+        {labels.custom}
       </Button>
     </div>
   );

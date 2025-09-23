@@ -365,6 +365,7 @@ import { AxiosError } from 'axios';
 import { useErrorModalState } from '@/hooks';
 import toast from 'react-hot-toast';
 import { createGearLogDetailsFormValues } from './CreateDrivePlanGear';
+import { useUser } from '@/app/(auth)/api/getAuthenticatedUser';
 
 const advancedDetailsSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -416,6 +417,7 @@ const setBuddiesString = (buddiesSet: Set<number>): string => {
 };
 
 const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData,onClose,stepOneLogDetails}:prop) => {
+  const user = useUser()
       const {
           isErrorModalOpen,
           setErrorModalState,
@@ -435,7 +437,7 @@ const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData,onClose,s
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useFetchBuddyList();
+  } = useFetchBuddyList(user?.data?.data?.profile_details?.language as string);
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
 

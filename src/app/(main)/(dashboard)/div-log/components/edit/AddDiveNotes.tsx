@@ -23,30 +23,41 @@ import { SmallSpinner } from "@/icons/core";
 import { useState } from "react";
 import { DiveLogUpdatedModal } from "./DiveLogUpdatedModal";
 import { UnsavedChangesModal } from "@/app/(main)/components/shared/modal/UnsavedChangeModal";
+import { User } from "@/app/(auth)/api/getAuthenticatedUser";
+import { Language } from "@/app/(auth)/sign-up/translations";
+import { diveNotesTranslations } from "@/app/(main)/translation/diveLogTranslation";
+import CloseIcon from "@/app/icons/CloseIcon";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-const diveNotesSchema = z.object({
-  show_notes: z.boolean(),
-  public_note: z.string().max(275, "Public notes cannot exceed 275 characters"),
-  private_note: z
-    .string()
-    .max(275, "Private notes cannot exceed 275 characters"),
-});
-
-type DiveNotesFormData = z.infer<typeof diveNotesSchema>;
 
 interface AdvancedDetailsModalProps {
   isOpen?: boolean;
   onClose: () => void;
   data: singleDiveProp | undefined;
+  user: User | null
 }
 
 export default function AddDiveNotes({
   isOpen,
   onClose,
   data,
+  user,
+  
 }: AdvancedDetailsModalProps) {
+  const language: Language = (user?.profile_details?.language as Language)
+  const t = diveNotesTranslations[language] || diveNotesTranslations?.en;
+  
+  const diveNotesSchema = z.object({
+    show_notes: z.boolean(),
+    public_note: z.string().max(275, t?.publicNotes?.error),
+    private_note: z
+      .string()
+      .max(275, t?.privateNotes?.error),
+  });
+  
+  type DiveNotesFormData = z.infer<typeof diveNotesSchema>;
+
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -70,16 +81,14 @@ export default function AddDiveNotes({
 
   const [showDiscardModal, setShowDiscardModal] = useState(false);
   const [showUpdatedModal, setShowUpdatedModal] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
   const { mutate: handleUpdate, isLoading } = useUpdateLogNote();
   const public_note = watch("public_note");
   const private_note = watch("private_note");
   const queryClient = useQueryClient();
 
-  const onSubmit = ({
-    private_note,
-    public_note,
-    show_notes,
-  }: DiveNotesFormData) => {
+  const onSubmit = ({ private_note, public_note, show_notes }: DiveNotesFormData) => {
     handleUpdate(
       {
         id: String(data?.data?.id),
@@ -120,44 +129,27 @@ export default function AddDiveNotes({
     ],
   };
 
-  const formats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "list",
-    "bullet",
-    "link",
-  ];
+  const formats = ["header", "bold", "italic", "underline", "list", "bullet", "link"];
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-full !max-w-[57.3125rem] flex flex-col max-h-[90vh] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         {/* Header */}
         <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-4">
-          <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            Dive Notes
-          </DialogTitle>
+          <DialogTitle className="text-2xl font-bold">{t.title}</DialogTitle>
         </DialogHeader>
 
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-6 space-y-8">
           {/* Toggle Switch */}
           <div className="flex items-center justify-between border border-gray-200 dark:border-gray-700 border-opacity-55 px-5 py-[10px] rounded-lg">
-            <h2 className="text-sm font-semibold font-archivo text-gray-900 dark:text-gray-100">
-              Show Note on Dive Log
-            </h2>
+            <h2 className="text-sm font-semibold">{t.showNote}</h2>
             <Controller
               name="show_notes"
               control={control}
               render={({ field }) => (
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="sr-only"
-                    checked={field.value}
-                    onChange={field.onChange}
-                  />
+                  <input type="checkbox" className="sr-only" checked={field.value} onChange={field.onChange} />
                   <div
                     className={`w-16 h-8 rounded-full transition-colors duration-200 ${
                       field.value ? "bg-orange-500" : "bg-gray-300 dark:bg-gray-600"
@@ -177,138 +169,75 @@ export default function AddDiveNotes({
           {/* Public Notes */}
           <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] border-b border-gray-200 dark:border-gray-700 border-opacity-50 py-2 items-start gap-5">
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                Add Public Notes
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-xs mb-4">
-                Write a short note for your friends to see.
-              </p>
+              <h3 className="text-sm font-semibold mb-2">{t.publicNotes?.heading}</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-xs mb-4">{t.publicNotes?.description}</p>
             </div>
             <div>
               <Controller
                 name="public_note"
                 control={control}
                 render={({ field }) => (
-                  <ReactQuill
-                    value={field.value}
-                    onChange={field.onChange}
-                    modules={modules}
-                    formats={formats}
-                    theme="snow"
-                    className="custom-quill text-black dark:text-gray-100"
-                  />
+                  <ReactQuill value={field.value} onChange={field.onChange} modules={modules} formats={formats} theme="snow" />
                 )}
               />
               <div className="text-sm mt-2">
                 <span
                   className={`${
-                    publicCharactersLeft < 0
-                      ? "text-red-500"
-                      : "text-gray-500 dark:text-gray-400"
-                  } text-xs font-archivo`}
+                    publicCharactersLeft < 0 ? "text-red-500" : "text-gray-500 dark:text-gray-400"
+                  } text-xs`}
                 >
-                  {publicCharactersLeft} characters left. Only visible if your
-                  dive is set to public or share buddy
+                  {t?.publicNotes?.charactersLeft}.
                 </span>
-                {errors.public_note && (
-                  <p className="text-red-500 text-sm">
-                    {errors.public_note.message}
-                  </p>
-                )}
+                {errors.public_note && <p className="text-red-500 text-sm">{errors.public_note.message}</p>}
               </div>
             </div>
           </div>
 
           {/* Private Notes */}
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] border-b border-gray-200 dark:border-gray-700 border-opacity-50 py-2 items-start gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] py-2 items-start gap-5">
             <div>
-              <h3 className="text-sm font-semibold font-archivo text-gray-900 dark:text-gray-100 mb-2">
-                Add Private Notes (Optional)
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-xs mb-4">
-                Write a short note only for your dive buddy.
-              </p>
+              <h3 className="text-sm font-semibold mb-2">{t.privateNotes.heading}</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-xs mb-4">{t.privateNotes.description}</p>
             </div>
             <div>
               <Controller
                 name="private_note"
                 control={control}
                 render={({ field }) => (
-                  <ReactQuill
-                    value={field.value}
-                    onChange={field.onChange}
-                    modules={modules}
-                    formats={formats}
-                    theme="snow"
-                    className="custom-quill text-black dark:text-gray-100"
-                  />
+                  <ReactQuill value={field.value} onChange={field.onChange} modules={modules} formats={formats} theme="snow" />
                 )}
               />
               <div className="text-sm mt-2">
                 <span
                   className={`${
-                    privateCharactersLeft < 0
-                      ? "text-red-500"
-                      : "text-gray-500 dark:text-gray-400"
-                  } text-xs font-archivo`}
+                    privateCharactersLeft < 0 ? "text-red-500" : "text-gray-500 dark:text-gray-400"
+                  } text-xs`}
                 >
-                  {privateCharactersLeft} characters left. Only visible if your
-                  dive is set to public or share buddy
+                  {t?.privateNotes?.charactersLeft}.
                 </span>
-                {errors.private_note && (
-                  <p className="text-red-500 text-sm">
-                    {errors.private_note.message}
-                  </p>
-                )}
+                {errors.private_note && <p className="text-red-500 text-sm">{errors.private_note.message}</p>}
               </div>
             </div>
           </div>
+
+
+     
         </div>
 
         {/* Footer Actions */}
         <div className="flex justify-end gap-4 p-6 border-t border-gray-200 dark:border-gray-700">
-          <Button
-            type="button"
-            variant="outlined"
-            onClick={() => setShowDiscardModal(true)}
-            className="dark:text-gray-200"
-          >
-            Cancel
+          <Button type="button" variant="outlined" onClick={() => setShowDiscardModal(true)}>
+            {t.actions.cancel}
           </Button>
-          <Button
-            onClick={handleSubmit(onSubmit)}
-            type="submit"
-            className="bg-orange-500 flex justify-center items-center gap-x-3 hover:bg-orange-600 text-white"
-          >
-            Save Changes {isLoading && <SmallSpinner color="#fff" />}
+          <Button onClick={handleSubmit(onSubmit)} type="submit" className="bg-orange-500 hover:bg-orange-600 text-white flex items-center gap-x-3">
+            {t.actions.save} {isLoading && <SmallSpinner color="#fff" />}
           </Button>
         </div>
 
         {/* Modals */}
-        {showDiscardModal && (
-          <UnsavedChangesModal
-            isOpen={showDiscardModal}
-            onClose={() => setShowDiscardModal(false)}
-            onDiscard={() => onClose()}
-          />
-        )}
-
-        {showUpdatedModal && (
-          <DiveLogUpdatedModal
-            isOpen={showUpdatedModal}
-            onClose={() => onClose()}
-          />
-        )}
-
-        <ErrorModal
-          isErrorModalOpen={isErrorModalOpen}
-          setErrorModalState={() => {
-            setErrorModalState(false);
-          }}
-          subheading={
-            errorModalMessage || "Please check your inputs and try again."
-          }
-        />
+        {showDiscardModal && <UnsavedChangesModal isOpen={showDiscardModal} onClose={() => setShowDiscardModal(false)} onDiscard={() => onClose()} />}
+        {showUpdatedModal && <DiveLogUpdatedModal isOpen={showUpdatedModal} onClose={() => onClose()} />}
+        <ErrorModal isErrorModalOpen={isErrorModalOpen} setErrorModalState={() => setErrorModalState(false)} subheading={errorModalMessage || "Please check your inputs and try again."} />
       </DialogContent>
     </Dialog>
   );

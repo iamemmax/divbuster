@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/core";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import LikeIcon from "@/app/icons/(dashboard)/LikeIcon";
 import MessageIcon2 from "@/app/icons/(dashboard)/MessageIcon2";
 import ShareIcon2 from "@/app/icons/(dashboard)/ShareIcon2";
@@ -12,10 +12,8 @@ import ColorCheckIcon from "@/app/icons/(dashboard)/ColorCheckIcon";
 import CupIcon from "@/app/icons/(dashboard)/CupIcon";
 import InfoIcon from "@/app/icons/(dashboard)/InfoIcon";
 import BottleIcon from "@/app/icons/(dashboard)/BotleIcon";
-import AddIcon from "@/app/icons/(dashboard)/AddIcon";
 import ClockIcon from "@/app/icons/(dashboard)/ClockIcon";
 import CloudIcon2 from "@/app/icons/(dashboard)/CloudIcon2";
-import { useFetchDiveLogs } from "../../api/div-logs/fetchDivLogs";
 import moment from "moment";
 import PrivateIcon from "@/app/icons/(dashboard)/PrivateIcon";
 import EyeIcon from "@/app/icons/EyeIcon";
@@ -25,6 +23,10 @@ import { SmallSpinner } from "@/icons/core";
 import { useAuth } from "@/contexts/authentication";
 import SuggestedBuddies from "../../div-buddies/SuggestedBuddies";
 import { useUpdateDiveLogVisibility } from "../../api/div-logs/update/updateDivelogVisibility";
+import { Language } from "@/app/(auth)/sign-up/translations";
+import { diveLogContainerTranslations } from "@/app/(main)/translation/diveLogTranslation";
+import { capitalizeFirstLetter } from "@/utils";
+import { useFetchDiveLogs } from "../../api/div-logs/fetchDivLogs";
 
 interface VisibilityOption {
   value: string;
@@ -50,15 +52,25 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
   const { authState } = useAuth();
   const { user } = authState;
   const { data: fetchCountry } = useFetchCountry();
+  
+  // Separate state for each item's visibility and loading state
   const [itemVisibilities, setItemVisibilities] = useState<Record<string, string>>({});
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
-  const { mutate: updateVisibility, isLoading: isUpdatingVisibility } = useUpdateDiveLogVisibility();
+  const [updatingItems, setUpdatingItems] = useState<string[]>([]);
+  
+  const { mutate: updateVisibility } = useUpdateDiveLogVisibility();
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  
+  const language: Language = (user?.profile_details?.language as Language);
+  const t = diveLogContainerTranslations[language] || diveLogContainerTranslations?.en;
+  
+  // Debug translations
+  console.log('Translations:', { language, t: { public: t?.public, private: t?.private } });
+ 
   const visibilityOptions: VisibilityOption[] = [
     {
-      value: "public",
-      label: "Public",
+      value: t?.public,
+      label: capitalizeFirstLetter(t?.public),
       icon: (
         <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
           <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
@@ -67,8 +79,8 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
       color: "green",
     },
     {
-      value: "private",
-      label: "Private",
+      value: t?.private,
+      label: capitalizeFirstLetter(t?.private),
       icon: <PrivateIcon />,
       color: "red",
     },
@@ -92,28 +104,44 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
     return colors[color];
   };
 
-  const getCurrentVisibility = (item: any) => {
+  // Memoized function to get current visibility for each item
+  const getCurrentVisibility = useCallback((item: any) => {
     const itemId = String(item.id);
     // Check local state first, then fall back to server data
     const localVisibility = itemVisibilities[itemId];
+    
+    // Debug logging
+    console.log('getCurrentVisibility for item:', itemId, {
+      localVisibility,
+      itemPublic: item?.public,
+      translationsPublic: t?.public,
+      translationsPrivate: t?.private
+    });
+    
     if (localVisibility) return localVisibility;
     
-    // Determine from server data - adjust this based on your actual data structure
+    // Return standardized values: "public" or "private"
     return item?.public ? "public" : "private";
-  };
+  }, [itemVisibilities, t?.public, t?.private]);
 
-  const handleToggle = (id: string) => {
-    setOpenDropdownId(openDropdownId === id ? null : id);
-  };
+  const handleToggle = useCallback((id: string) => {
+    setOpenDropdownId(prevId => prevId === id ? null : id);
+  }, []);
 
-  const handleSelect = ({ id, option }: { id: string | number; option: VisibilityOption }) => {
+  const handleSelect = useCallback(({ id, option }: { id: string | number; option: VisibilityOption }) => {
     const itemId = String(id);
     
+    console.log('handleSelect called:', { itemId, optionValue: option.value, optionLabel: option.label });
+    
+    // Add item to updating array
+    setUpdatingItems(prev => [...prev, itemId]);
+    
     // Update local state immediately for optimistic UI
-    setItemVisibilities(prev => ({
-      ...prev,
-      [itemId]: option.value
-    }));
+    setItemVisibilities(prev => {
+      const updated = { ...prev, [itemId]: option.value };
+      console.log('Updated itemVisibilities:', updated);
+      return updated;
+    });
     
     // Close dropdown
     setOpenDropdownId(null);
@@ -123,18 +151,28 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
       id: itemId,
       isPublic: option.value === "public"
     }, {
+      onSuccess: () => {
+        console.log('API call successful for item:', itemId);
+        // Remove item from updating array on success
+        setUpdatingItems(prev => prev.filter(id => id !== itemId));
+      },
       onError: (error) => {
+        console.error('API call failed for item:', itemId, error);
         // Revert local state on error
         setItemVisibilities(prev => {
           const updated = { ...prev };
           delete updated[itemId];
+          console.log('Reverted itemVisibilities:', updated);
           return updated;
         });
         
-        console.error("Failed to update visibility:", error);
+        // Remove item from updating array
+        setUpdatingItems(prev => prev.filter(id => id !== itemId));
+        
+        console.error('Error updating visibility:', error);
       }
     });
-  };
+  }, [updateVisibility, t?.public]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -182,6 +220,21 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
     return filterCountry;
   };
 
+   const handleShare = useCallback((title: string): void => {
+      if (navigator.share) {
+        navigator.share({
+          title: `Dive Plan: ${title}`,
+          text: 'Check out this dive plan!',
+          url: window.location.href,
+        }).catch((err) => console.log('Error sharing:', err));
+      } else {
+        // Fallback for browsers without Web Share API
+        navigator.clipboard?.writeText(window.location.href);
+        // You might want to show a toast notification here
+        console.log('Link copied to clipboard');
+      }
+    }, []);
+
   return (
     <div className="2xl:mt-[1.125rem] py-6 grid grid-cols-1 xl:grid-cols-[3fr_1fr] gap-6 w-full">
       {isLoading ? (
@@ -192,11 +245,21 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
         <div className="space-y-6">
           {data?.pages.flatMap((items, idx: number) =>
             items?.results?.map((item, itemIndex) => {
+              const itemId = String(item.id);
               const currentVisibility = getCurrentVisibility(item);
-              const currentOption = visibilityOptions.find((option) => option.value === currentVisibility) || visibilityOptions[0];
+              const currentOption = visibilityOptions.find((option) => option.value === currentVisibility) || visibilityOptions[1]; // default to private if not found
+              const isItemUpdating = updatingItems.includes(itemId);
+              const isDropdownOpen = openDropdownId === itemId;
               
-              // Debug log (remove this in production)
-              // debugVisibility(item, currentVisibility);
+              // Debug logging
+              console.log('Rendering item:', itemId, {
+                currentVisibility,
+                currentOption: currentOption?.label,
+                currentOptionValue: currentOption?.value,
+                visibilityOptions: visibilityOptions.map(opt => ({ value: opt.value, label: opt.label })),
+                isItemUpdating,
+                isDropdownOpen
+              });
               
               return (
                 <div
@@ -246,16 +309,20 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleToggle(String(item.id));
+                              handleToggle(itemId);
                             }}
-                            disabled={isUpdatingVisibility}
+                            disabled={isItemUpdating}
                             className={`flex items-center space-x-2 px-4 py-2 border rounded-lg cursor-pointer hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed ${getColorClasses(currentOption.color).bg} ${getColorClasses(currentOption.color).border}`}
-                            aria-expanded={openDropdownId === String(item.id)}
+                            aria-expanded={isDropdownOpen}
                             aria-haspopup="true"
                           >
-                            <div className={getColorClasses(currentOption?.color).icon}>
-                              {currentOption?.icon}
-                            </div>
+                            {isItemUpdating ? (
+                              <SmallSpinner color={currentOption.color === 'green' ? '#027A48' : '#FF0000'} />
+                            ) : (
+                              <div className={getColorClasses(currentOption?.color).icon}>
+                                {currentOption?.icon}
+                              </div>
+                            )}
                             <span
                               className={`font-medium text-sm font-archivo ${getColorClasses(
                                 currentOption?.color
@@ -265,7 +332,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                             </span>
                             <div
                               className={`${getColorClasses(currentOption?.color).icon} transition-transform ${
-                                openDropdownId === String(item.id) ? "rotate-180" : ""
+                                isDropdownOpen ? "rotate-180" : ""
                               }`}
                             >
                               <svg
@@ -286,7 +353,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                             </div>
                           </button>
 
-                          {openDropdownId === String(item.id) && !isUpdatingVisibility && (
+                          {isDropdownOpen && !isItemUpdating && (
                             <div className="absolute top-full left-0 mt-1 min-w-[200px] bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg py-1 z-50">
                               {visibilityOptions.map((option: VisibilityOption) => (
                                 <button
@@ -361,7 +428,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                               <div className="flex items-center bg-[#C5EFFF] dark:bg-blue-900/50 max-w-[100px] justify-center gap-[.3531rem] py-1 px-[.4063rem] rounded-10">
                                 <CupIcon />
                                 <p className="font-archivo text-xxs text-[#132346] dark:text-blue-100 font-semibold">
-                                  Rank:{item?.dive_plan?.dive_site?.ranking}
+                                  {t?.rank}:{item?.dive_plan?.dive_site?.ranking}
                                 </p>
                               </div>
                               <InfoIcon />
@@ -371,7 +438,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                             <LocationDisplay
                               lat={item?.dive_plan?.dive_site?.lag as string}
                               lon={item?.dive_plan?.dive_site?.lon as string}
-                              fallback="Location unavailable"
+                              fallback={t?.locationUnavailable}
                               showTime={false}
                               timeFormat="relative"
                             />
@@ -391,11 +458,11 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
 
                           <div className="py-2">
                             <p className="text-xs text-[#F7F7F7] dark:text-gray-300 md:text-base font-archivo">
-                              Latitude:{" "}
+                              {t?.latitude}:{" "}
                               <span className="font-semibold">
                                 {item?.dive_plan?.latitude}{" "}
                               </span>{" "}
-                              <span className="px-2">•</span> Longitude:{" "}
+                              <span className="px-2">•</span> {t?.longitude}:{" "}
                               <span className="font-semibold">
                                 {item?.dive_plan.longitude}
                               </span>
@@ -412,7 +479,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                         </div>
                         <div className="">
                           <p className="font-archivo font-semibold text-sm md:text-xl text-[#132346] dark:text-gray-100">
-                            Max Depth{" "}
+                          {t?.maxDepth}{" "}
                           </p>
                           <p className="font-archivo font-semibold text-sm md:text-xl text-[#132346] dark:text-gray-100">
                             {item?.dive_plan?.dive_site?.max_depth}
@@ -425,7 +492,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                         </div>
                         <div className="">
                           <p className="font-archivo font-semibold text-sm md:text-xl text-[#132346] dark:text-gray-100">
-                            Bottom Time{" "}
+                            {t?.bottomTime}{" "}
                           </p>
                           <p className="font-archivo font-semibold text-sm md:text-xl text-[#132346] dark:text-gray-100">
                             {item?.bottom_time}
@@ -438,7 +505,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                         </div>
                         <div className="">
                           <p className="font-archivo font-semibold text-sm md:text-xl text-[#132346] dark:text-gray-100">
-                            Pressure Used{" "}
+                           {t?.pressureUsed}{" "}
                           </p>
                           <p className="font-archivo font-semibold text-sm md:text-xl text-[#132346] dark:text-gray-100">
                             {item?.average_pressure_of_oxygen}
@@ -472,7 +539,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                             </div>
                           </div>
                         </Button>
-                        <Button className="bg-[#F9FAFB] dark:bg-gray-700 h-[2.8125rem] w-[3.75rem] px-[1.125rem] py-[.625rem] rounded-xl flex justify-center items-center border dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+                        <Button className="bg-[#F9FAFB] dark:bg-gray-700 h-[2.8125rem] w-[3.75rem] px-[1.125rem] py-[.625rem] rounded-xl flex justify-center items-center border dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"   onClick={() => handleShare('Dive Log')}>
                           <ShareIcon2 />
                         </Button>
                       </div>

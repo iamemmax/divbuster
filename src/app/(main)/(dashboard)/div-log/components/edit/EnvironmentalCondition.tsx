@@ -13,6 +13,9 @@ import { AxiosError } from 'axios';
 import { SmallSpinner } from '@/icons/core';
 import { UnsavedChangesModal } from '@/app/(main)/components/shared/modal/UnsavedChangeModal';
 import { DiveLogUpdatedModal } from './DiveLogUpdatedModal';
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { Language } from '@/app/(auth)/sign-up/translations';
+import { environmentalConditionTranslations } from '@/app/(main)/translation/diveLogTranslation';
 
 
 // Define the validation schema with Zod
@@ -28,13 +31,15 @@ export type MoreEnvironmentalFormValues = z.infer<typeof moreLogDetailsSchema>;
 interface EnvironmentalConditionProps {
   isOpen?: boolean;
   onClose: () => void;
-  initialData?: singleDiveProp | undefined
+  initialData?: singleDiveProp | undefined;
+   user: User | null
 }
 
 const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
   isOpen,
   onClose,
-  initialData
+  initialData,
+  user
   // onSave,
 }) => {
   const {
@@ -43,6 +48,9 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
+    const language: Language = (user?.profile_details?.language as Language)
+    const t = environmentalConditionTranslations[language] || environmentalConditionTranslations?.en;
+    
   const [showDiscardModal, setShowDiscardModal] = useState(false)
   const [showUpdatedModal, setShowUpdatedModal] = useState(false)
   const { mutate: handleUpdate, isLoading } = useUpdateEnvironmentalCon()
@@ -95,7 +103,7 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
       {/* Header */}
       <div className="border-gray-200 dark:border-gray-700 flex justify-between items-center border-b border-opacity-55 pb-4">
         <h2 className="text-xl font-semibold font-archivo text-[#101828] dark:text-gray-100">
-          Environmental Conditions
+         {t?.header}
         </h2>
       </div>
 
@@ -105,7 +113,7 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
           {/* Minimum Temp */}
           <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Minimum Water Temperature
+             {t?.labels?.min}
             </label>
             <input
               {...register('min_water_temperature')}
@@ -128,7 +136,7 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
           {/* Maximum Temp */}
           <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
-              Maximum Water Temperature
+             {t?.labels?.max}
             </label>
             <input
               {...register('max_water_temperature')}
@@ -151,7 +159,7 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
           {/* Average Temp */}
           <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
-              Avg Water Temperature
+             {t?.labels?.avg}
             </label>
             <input
               {...register('avg_water_temperature')}
@@ -175,13 +183,13 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
         {/* Footer */}
         <div className="py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-2">
           <Button type="button" className='dark:border-white dark:text-white' variant="outlined"  onClick={() => setShowDiscardModal(true)}>
-            Cancel
+          {t?.actions?.cancel}
           </Button>
           <Button
             type="submit"
             className="bg-orange-500 flex justify-center items-center gap-x-3 hover:bg-orange-600 text-white"
           >
-            Save Changes {isLoading && <SmallSpinner color="#fff" />}
+            {t?.actions?.save} {isLoading && <SmallSpinner color="#fff" />}
           </Button>
         </div>
       </form>
@@ -205,7 +213,7 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
         setErrorModalState={() => {
           setErrorModalState(false);
         }}
-        subheading={errorModalMessage || "Please check your inputs and try again."}
+        subheading={errorModalMessage || t?.messages?.error}
       />
     </DialogBody>
   </DialogContent>

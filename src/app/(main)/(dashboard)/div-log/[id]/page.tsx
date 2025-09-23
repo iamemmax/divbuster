@@ -21,6 +21,8 @@ import PenIcon from '@/app/icons/(dashboard)/PenIcon'
 import ColorCheckIcon from '@/app/icons/(dashboard)/ColorCheckIcon'
 import CupIcon from '@/app/icons/(dashboard)/CupIcon'
 import InfoIcon from '@/app/icons/(dashboard)/InfoIcon'
+import { Language } from '@/app/(auth)/sign-up/translations'
+import { DiveLogDetailsTranslations } from '@/app/(main)/translation/diveLogTranslation'
 
 const DiveLogId = () => {
   const params = useParams()
@@ -28,13 +30,16 @@ const DiveLogId = () => {
   const { user } = authState;
   const { data: fetchCountry } = useFetchCountry();
   const { data, isLoading } = usefetchSingleDivLog(params?.id as string)
+
+    const language: Language = (user?.profile_details?.language as Language)
+    const t = DiveLogDetailsTranslations[language] || DiveLogDetailsTranslations?.en;
   const singleDivLog = diveLogData?.find((_item) => slugify(_item?.dive.title) === params?.id);
   const metrics = [
-    { label: "Dive Time", value: `${data?.data?.bottom_time}` },
-    { label: "Air", value: "Gas" },
-    { label: "Avg. Depth", value: `${data?.data?.dive_depth}` },
-    { label: "Max Depth", value: `${data?.data?.dive_plan?.dive_site?.max_depth}` },
-    { label: "Water", value: data?.data?.dive_plan?.dive_site?.water_type ?? "" }
+    { label: t?.metrics?.diveTime, value: `${data?.data?.bottom_time}` },
+    { label: t?.metrics?.air, value:t?.labels?.gas },
+    { label: t?.metrics?.avgDepth, value: `${data?.data?.dive_depth}` },
+    { label: t?.metrics?.maxDepth, value: `${data?.data?.dive_plan?.dive_site?.max_depth}` },
+    { label:t?.metrics?.water, value: data?.data?.dive_plan?.dive_site?.water_type ?? "" }
   ];
 
   const cylinderData = [
@@ -67,11 +72,7 @@ const DiveLogId = () => {
 
       <Header
         title={
-          params?.name
-            ? String(params.name)
-              ?.replace(/-/g, ' ')
-              ?.replace(/\b\w/g, char => char.toUpperCase())
-            : ''
+         t?.title
         }
         subtitle=""
       />
@@ -140,12 +141,12 @@ const DiveLogId = () => {
 
                     {/* Coordinates Overlay */}
                     <div className="absolute top-2 left-4 text-white py-4 px-6 md:px-[2.75rem] w-full">
-                      <div className="flex justify-end max-md:pr-2 items-center w-full">
+                      {singleDivLog?.post.status&&<div className="flex justify-end max-md:pr-2 items-center w-full">
                         <Button className="bg-white dark:bg-gray-200 px-[1.0688rem] py-[.5206rem] rounded-2xl text-[#F7931D] dark:text-orange-600 text-xs md:text-sm font-medium flex items-center gap-[.3125rem]">
                         <ColorCheckIcon/>
                           {singleDivLog?.post.status}
                         </Button>
-                      </div>
+                      </div>}
                       <div className="">
                         <div className="flex items-center flex-wrap gap-[10px]">
                           <div className="relative h-[40px] rounded w-[52px]">
@@ -168,15 +169,15 @@ const DiveLogId = () => {
                               <LocationDisplay
                                 lat={data?.data?.dive_plan?.dive_site?.lag as string}
                                 lon={data?.data?.dive_plan?.dive_site?.lon as string}
-                                fallback="Location unavailable"
+                                fallback={t?.labels?.locationUnavailable}
                                 showTime={false}
                                 timeFormat="relative"
                               />
                             </p>
-                            <div className="flex items-center bg-[#C5EFFF] dark:bg-blue-200 max-w-[100px] justify-center gap-[.3531rem] py-1 px-[.4063rem] rounded-10 ">
+                            <div className="flex items-center bg-[#C5EFFF] dark:bg-blue-200 min-w-[100px] justify-center gap-[.3531rem] py-1 px-[.4063rem] rounded-10 ">
                              <CupIcon/>
                               <p className="font-archivo text-xxs text-[#132346] dark:text-blue-900 font-semibold">
-                                Rank:{data?.data?.dive_plan?.dive_site?.ranking}
+                                {t?.labels?.rank}:{data?.data?.dive_plan?.dive_site?.ranking}
                               </p>
                             </div>
                            <InfoIcon/>
@@ -197,11 +198,11 @@ const DiveLogId = () => {
                         </div>
                         <div className="py-2">
                           <p className="text-xs text-[#F7F7F7] dark:text-gray-200 md:text-base font-archivo ">
-                            Latitude:{" "}
+                            {t?.labels?.latitude}:{" "}
                             <span className="font-semibold">
                               {data?.data?.dive_plan?.dive_site?.lag}{" "}
                             </span>{" "}
-                            <span className="px-2">•</span> Longitude:{" "}
+                            <span className="px-2">•</span> {t?.labels?.longitude}:{" "}
                             <span className="font-semibold">
                               {data?.data?.dive_plan?.dive_site?.lon}
                             </span>
@@ -234,7 +235,7 @@ const DiveLogId = () => {
                   <div className="border border-[#EAECF0] dark:border-gray-700 rounded-lg mt-[1.875rem] w-full p-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-xl font-medium text-[#101828] dark:text-white font-archivo">
-                        Air Usage
+                      {t?.buttons?.airUsage}
                       </h3>
                       <Button className="bg-transparent p-0 rounded-2xl text-[#F7931D] dark:text-orange-400 text-sm font-medium ">
                         <ThreeDot />
@@ -259,7 +260,7 @@ const DiveLogId = () => {
                             <div className="flex flex-col gap-5 justify-between">
                               <div className="">
                                 <p className="text-xs lg:text-sm font-archivo text-[#132346] dark:text-gray-300 font-medium py-1">
-                                  Start Pressure
+                                  {t?.labels?.startPressure}
                                 </p>
                                 <h3 className="font-archivo font-semibold text-base lg:text-xl text-[#132346] dark:text-white">
                                   {" "}
@@ -271,7 +272,7 @@ const DiveLogId = () => {
                               </div>
                               <div className="">
                                 <p className="text-xs lg:text-sm font-archivo text-[#132346] dark:text-gray-300 font-medium py-1">
-                                  Cylinder Type
+                                 {t?.labels?.cylinderType}
                                 </p>
                                 <h3 className="font-archivo font-semibold text-base lg:text-xl text-[#132346] dark:text-white">
                                   {" "}
@@ -282,7 +283,7 @@ const DiveLogId = () => {
                             <div className="flex flex-col gap-5 justify-between">
                               <div className="">
                                 <p className="text-xs lg:text-sm font-archivo text-[#132346] dark:text-gray-300 font-medium py-1">
-                                  End Pressure
+                                 {t?.labels?.endPressure}
                                 </p>
                                 <h3 className="font-archivo font-semibold text-base lg:text-xl text-[#132346] dark:text-white">
                                   {" "}
@@ -294,7 +295,7 @@ const DiveLogId = () => {
                               </div>
                               <div className="">
                                 <p className="text-xs lg:text-sm font-archivo text-[#132346] dark:text-gray-300 font-medium py-1">
-                                  Gas
+                                  {t?.labels?.gas}
                                 </p>
                                 <h3 className="font-archivo font-semibold text-base lg:text-xl text-[#132346] dark:text-white">
                                   {" "}
@@ -306,7 +307,7 @@ const DiveLogId = () => {
                           <div className="w-full rounded-e-[1.25rem] bg-[#E4881C] dark:bg-orange-600 flex flex-col gap-5 justify-center items-center py-[2.125rem] px-5 lg:px-[2.3125rem]">
                             <div className="">
                               <p className="text-xs lg:text-sm font-archivo text-white font-medium py-1">
-                                Pressure Used
+                                {t?.labels?.pressureUsed}
                               </p>
                               <h3 className="font-archivo font-semibold text-base lg:text-xl text-white">
                                 {" "}
@@ -323,13 +324,13 @@ const DiveLogId = () => {
 
                   </div>
 
-                  <DiveLogCharts />
+                  <DiveLogCharts user={user}/>
                 </div>
 
 
               </div>
               <div className="">
-                <SingleDIveLogSidebar data={data}/>
+                <SingleDIveLogSidebar data={data} user={user}/>
               </div>
 
             </div>
