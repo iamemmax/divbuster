@@ -90,9 +90,9 @@ const DiveSites = () => {
 
     switch (activeTab) {
       case 'recentDiveSites':
-        return <div><RecentDiveSites data={data} loading={isLoading} fetchNextPage={fetchNextPage} hasNextPage={hasNextPage} isFetchingNextPage={isFetchingNextPage} search={search} /></div>
+        return <div><RecentDiveSites data={data} loading={isLoading} fetchNextPage={fetchNextPage} hasNextPage={hasNextPage} isFetchingNextPage={isFetchingNextPage} search={search}  user={user}/></div>
       case 'favouriteDiveSite':
-        return <div><RecentDiveSites data={data} loading={isLoading} fetchNextPage={fetchNextPage} hasNextPage={hasNextPage} isFetchingNextPage={isFetchingNextPage} search={search} /></div>
+        return <div><RecentDiveSites data={data} loading={isLoading} fetchNextPage={fetchNextPage} hasNextPage={hasNextPage} isFetchingNextPage={isFetchingNextPage} search={search} user={user} /></div>
       case 'divesitesNearYou':
         return (
           <div className="text-gray-600 dark:text-gray-300 text-center py-8">

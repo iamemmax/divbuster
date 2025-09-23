@@ -16,6 +16,9 @@ import { formatAxiosErrorMessage } from '@/utils';
 import { AxiosError } from 'axios';
 import { SmallSpinner } from '@/icons/core';
 import toast from 'react-hot-toast';
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { Language } from '@/app/(auth)/sign-up/translations';
+import { diveNotesTranslations } from '@/app/(main)/translation/diveLogTranslation';
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -27,20 +30,22 @@ interface prop {
     evironmentalData: diveEnvironmentalFormValues
     buddyMembers: addBuddyMember;
     onClose: () => void
+    user: User | null
 }
 
-const diveNotesSchema = z.object({
-    show_notes: z.boolean(),
-    public_note: z.string().max(275, "Public notes cannot exceed 275 characters"),
-    private_note: z
+
+
+const AddDiveLogNotes = ({ setStep, buddyMembers, onClose,user, diveGearData, diveLogData, diveLogDetails, evironmentalData }: prop) => {
+    const language: Language = (user?.profile_details?.language as Language)
+    const t = diveNotesTranslations[language] || diveNotesTranslations?.en;
+    const diveNotesSchema = z.object({
+        show_notes: z.boolean(),
+        public_note: z.string().max(275, t.publicNotes.error),
+        private_note: z
         .string()
-        .max(275, "Private notes cannot exceed 275 characters"),
-});
-
-type DiveNotesFormData = z.infer<typeof diveNotesSchema>;
-
-const AddDiveLogNotes = ({ setStep, buddyMembers, onClose, diveGearData, diveLogData, diveLogDetails, evironmentalData }: prop) => {
-
+        .max(275, t.privateNotes.error),
+    });
+    type DiveNotesFormData = z.infer<typeof diveNotesSchema>;
     const {
         isErrorModalOpen,
         setErrorModalState,
@@ -112,7 +117,7 @@ const AddDiveLogNotes = ({ setStep, buddyMembers, onClose, diveGearData, diveLog
         }
         handleCreate(payload, {
             onSuccess: () => {
-                toast.success("Dive log created successfully")
+                toast.success(t.modals.updated)
                 onClose()
             },
             onError: (error) => {
@@ -137,7 +142,7 @@ const AddDiveLogNotes = ({ setStep, buddyMembers, onClose, diveGearData, diveLog
                         {/* Toggle Switch */}
                         <div className="flex items-center justify-between border border-gray-200 dark:border-gray-700 border-opacity-55 px-5 py-[10px] rounded-lg">
                             <h2 className="text-sm font-semibold font-archivo text-gray-900 dark:text-gray-100">
-                                Show Note on Dive Log
+                                {t.showNote}
                             </h2>
                             <Controller
                                 name="show_notes"
@@ -168,10 +173,10 @@ const AddDiveLogNotes = ({ setStep, buddyMembers, onClose, diveGearData, diveLog
                         <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] border-b border-gray-200 dark:border-gray-700 border-opacity-50 py-2 items-start gap-5">
                             <div>
                                 <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                                    Add Public Notes
+                                    {t.publicNotes.heading}
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-400 text-xs mb-4">
-                                    Write a short note for your friends to see.
+                                   {t.publicNotes.description}
                                 </p>
                             </div>
                             <div>
@@ -196,8 +201,7 @@ const AddDiveLogNotes = ({ setStep, buddyMembers, onClose, diveGearData, diveLog
                                             : "text-gray-500 dark:text-gray-400"
                                             } text-xs font-archivo`}
                                     >
-                                        {publicCharactersLeft} characters left. Only visible if your
-                                        dive is set to public or share buddy
+                                        {publicCharactersLeft} {t.publicNotes.charactersLeft}
                                     </span>
                                     {errors.public_note && (
                                         <p className="text-red-500 text-sm">
@@ -212,10 +216,10 @@ const AddDiveLogNotes = ({ setStep, buddyMembers, onClose, diveGearData, diveLog
                         <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] border-b border-gray-200 dark:border-gray-700 border-opacity-50 py-2 items-start gap-5">
                             <div>
                                 <h3 className="text-sm font-semibold font-archivo text-gray-900 dark:text-gray-100 mb-2">
-                                    Add Private Notes (Optional)
+                                   {t.privateNotes.heading}
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-400 text-xs mb-4">
-                                    Write a short note only for your dive buddy.
+                                   {t.privateNotes.description}
                                 </p>
                             </div>
                             <div>
@@ -240,8 +244,7 @@ const AddDiveLogNotes = ({ setStep, buddyMembers, onClose, diveGearData, diveLog
                                             : "text-gray-500 dark:text-gray-400"
                                             } text-xs font-archivo`}
                                     >
-                                        {privateCharactersLeft} characters left. Only visible if your
-                                        dive is set to public or share buddy
+                                        {privateCharactersLeft} {t.privateNotes.charactersLeft}
                                     </span>
                                     {errors.private_note && (
                                         <p className="text-red-500 text-sm">
@@ -261,14 +264,14 @@ const AddDiveLogNotes = ({ setStep, buddyMembers, onClose, diveGearData, diveLog
                         className="px-8 py-3 border-dark dark:border-white dark:text-white  text-black font-medium rounded-lg flex justify-center items-center gap-x-3  transition-colors focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={() => setStep(5)}
                     >
-                        Back
+                     {t.actions.cancel}
                     </Button>
                     <Button
                         type="submit"
                         disabled={isLoading}
                         className="px-8 py-3 bg-orange-500 text-white font-medium rounded-lg flex justify-center items-center gap-x-3 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 transition-colors focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Proceed {isLoading && <SmallSpinner color='#fff' />}
+                        {t.actions.save} {isLoading && <SmallSpinner color='#fff' />}
                     </Button>
                 </div>
             </form>
@@ -279,7 +282,7 @@ const AddDiveLogNotes = ({ setStep, buddyMembers, onClose, diveGearData, diveLog
                     setErrorModalState(false);
                 }}
                 subheading={
-                    errorModalMessage || "Please check your inputs and try again."
+                    errorModalMessage || t.modals.error
                 }
             />
         </div>

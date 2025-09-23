@@ -5,21 +5,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from 'zod';
 import { useFetchBuddyList } from '../../../api/buddy/fetchBudies';
 import { SmallSpinner } from '@/icons/core';
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { Language } from '@/app/(auth)/sign-up/translations';
+import { diveLogBuddiesTranslations } from '@/app/(main)/translation/diveLogTranslation';
 
-const advancedDetailsSchema = z.object({
-  email: z.string().email("Invalid email address"),
-});
 
-type AdvancedDetails = z.infer<typeof advancedDetailsSchema>;
-
-interface prop{
-    setStep: React.Dispatch<React.SetStateAction<number>>
-     buddyMembers: addBuddyMember;
-     setBuddyMembers: React.Dispatch<React.SetStateAction<addBuddyMember>>
+interface prop {
+  setStep: React.Dispatch<React.SetStateAction<number>>
+  buddyMembers: addBuddyMember;
+  setBuddyMembers: React.Dispatch<React.SetStateAction<addBuddyMember>>
+  user: User | null
 }
 export interface addBuddyMember {
-    email:string[],
-    buddies:string;
+  email: string[],
+  buddies: string;
 
 }
 
@@ -28,17 +27,17 @@ const parseBuddiesString = (buddiesString: string): Set<number> => {
   if (!buddiesString || buddiesString.trim() === '') {
     return new Set();
   }
-  
+
   try {
     // Remove 'Set(' and ')' if present, then split by comma
     const cleanString = buddiesString.replace(/^Set\(|\)$/g, '');
     if (cleanString === '') return new Set();
-    
+
     const buddyIds = cleanString
       .split(',')
       .map(id => parseInt(id.trim()))
       .filter(id => !isNaN(id));
-    
+
     return new Set(buddyIds);
   } catch (error) {
     console.error('Error parsing buddies string:', error);
@@ -52,24 +51,30 @@ const setBuddiesString = (buddiesSet: Set<number>): string => {
   return Array.from(buddiesSet).join(',');
 };
 
-const AddDiveLogBuddies = ({setStep,buddyMembers,setBuddyMembers}:prop) => {
+const AddDiveLogBuddies = ({ setStep, buddyMembers, setBuddyMembers, user }: prop) => {
   // Fix: Initialize with empty array if buddyMembers?.email is undefined
-  const [selectedBuddies, setSelectedBuddies] = useState<Set<number>>(() => 
+  const [selectedBuddies, setSelectedBuddies] = useState<Set<number>>(() =>
     parseBuddiesString(buddyMembers?.buddies || '')
   );
-  const [emailList, setEmailList] = useState<string[]>(() => 
+  const [emailList, setEmailList] = useState<string[]>(() =>
     buddyMembers?.email || []
   );
-
+  const language: Language = (user?.profile_details?.language as Language)
+  const t = diveLogBuddiesTranslations[language] || diveLogBuddiesTranslations?.en;
+  const advancedDetailsSchema = z.object({
+    email: z.string().email(t.emailError),
+  });
+  type AdvancedDetails = z.infer<typeof advancedDetailsSchema>;
   const {
     data: buddyList,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useFetchBuddyList();
+  } = useFetchBuddyList(language);
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
+
 
   // RHF setup
   const {
@@ -130,7 +135,7 @@ const AddDiveLogBuddies = ({setStep,buddyMembers,setBuddyMembers}:prop) => {
     setEmailList(emailList.filter((email) => email !== emailToRemove));
   };
 
-  const handleNext = ()=>{
+  const handleNext = () => {
     setBuddyMembers({
       buddies: setBuddiesString(selectedBuddies),
       email: emailList
@@ -142,20 +147,20 @@ const AddDiveLogBuddies = ({setStep,buddyMembers,setBuddyMembers}:prop) => {
     <div className="p-3">
       <DialogHeader className="border-b flex items-center justify-between border-gray-200 dark:border-gray-700 pb-4">
         <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          Buddies
+          {t.title}
         </DialogTitle>
       </DialogHeader>
 
       {/* Email Input */}
       <div className="p-3">
-        <h2 className="py-3 text-gray-900 dark:text-gray-100">Add new member(s)</h2>
+        <h2 className="py-3 text-gray-900 dark:text-gray-100">{t.addNewMembers}</h2>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex items-center gap-x-2"
         >
           <input
             {...register("email")}
-            placeholder="Email Address"
+            placeholder={t.emailPlaceholder}
             className={`border outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem]
               focus:border-[#F7931D] border-[#E2E8F0] dark:border-gray-600 focus:ring-2 focus:ring-[#F7931D]/20 transition-colors 
               placeholder-gray-400 dark:placeholder-gray-500`}
@@ -165,7 +170,7 @@ const AddDiveLogBuddies = ({setStep,buddyMembers,setBuddyMembers}:prop) => {
             type="submit"
             className="bg-[#F7931D] py-[1rem] hover:bg-[#E8841A] text-white"
           >
-            Add
+            {t.addButton}
           </Button>
         </form>
 
@@ -198,11 +203,11 @@ const AddDiveLogBuddies = ({setStep,buddyMembers,setBuddyMembers}:prop) => {
       {/* Buddy List */}
       <div className="px-3 mt-3">
         <p className="text-gray-900 dark:text-gray-100">
-          Add members(s) from your buddy list
+          {t.addFromList}
         </p>
         {selectedBuddies.size > 0 && (
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            {selectedBuddies.size} buddy(ies) selected
+            {selectedBuddies.size} {t.buddiesSelected}
           </p>
         )}
       </div>
@@ -219,11 +224,10 @@ const AddDiveLogBuddies = ({setStep,buddyMembers,setBuddyMembers}:prop) => {
               <li
                 key={buddy.id || index}
                 className={`flex items-center space-x-4 p-1 cursor-pointer mt-4 rounded-lg transition 
-                    ${
-                  selectedBuddies.has(buddy.id)
+                    ${selectedBuddies.has(buddy.id)
                     ? "bg-[#F7931D]/10 border border-[#F7931D]/30"
                     : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                }
+                  }
                 
                 `}
                 onClick={() => handleBuddySelection(buddy.id)}
@@ -249,7 +253,7 @@ const AddDiveLogBuddies = ({setStep,buddyMembers,setBuddyMembers}:prop) => {
                     {`${buddy.first_name} ${buddy.last_name}`}
                   </p>
                   <p className="md:text-xs  font-archivo truncate text-[#4F4F4F] dark:text-gray-400">
-                    {`Dive:${buddy?.dashboard_analysis?.dives ?? 0} . Dive Spot:${buddy?.dashboard_analysis?.dive_spots ?? 0} . Bottom:${buddy?.dashboard_analysis?.bottom_time ?? 0}`}
+                    {`${t.dives}:${buddy?.dashboard_analysis?.dives ?? 0} . ${t.diveSpots}:${buddy?.dashboard_analysis?.dive_spots ?? 0} . ${t.bottomTime}:${buddy?.dashboard_analysis?.bottom_time ?? 0}`}
                   </p>
                 </div>
               </li>
@@ -265,17 +269,17 @@ const AddDiveLogBuddies = ({setStep,buddyMembers,setBuddyMembers}:prop) => {
         </ul>
       )}
 
-        <div className="py-4 border-t border-[#EAECF0] border-opacity-50 flex justify-end space-x-2">
-                          <Button type="button"
-                              className="px-8 py-3 border-dark dark:border-white dark:text-white  text-black font-medium rounded-lg flex justify-center items-center gap-x-3  transition-colors focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-                          
-                          variant="outlined" onClick={() => setStep(4)}>
-                              Back
-                          </Button>
-                          <Button type="button" onClick={handleNext} className="bg-orange-500 flex justify-center items-center gap-x-3 hover:bg-orange-600 text-white">
-                              Proceed
-                          </Button>
-                      </div>
+      <div className="py-4 border-t border-[#EAECF0] border-opacity-50 flex justify-end space-x-2">
+        <Button type="button"
+          className="px-8 py-3 border-dark dark:border-white dark:text-white  text-black font-medium rounded-lg flex justify-center items-center gap-x-3  transition-colors focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+
+          variant="outlined" onClick={() => setStep(4)}>
+          {t.back}
+        </Button>
+        <Button type="button" onClick={handleNext} className="bg-orange-500 flex justify-center items-center gap-x-3 hover:bg-orange-600 text-white">
+          {t.proceed}
+        </Button>
+      </div>
     </div>
   );
 };

@@ -1,3 +1,6 @@
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { Language } from '@/app/(auth)/sign-up/translations';
+import { environmentalConditionTranslations } from '@/app/(main)/translation/diveLogTranslation';
 import { Button, DialogHeader, DialogTitle } from '@/components/core'
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react'
@@ -17,9 +20,10 @@ export type diveEnvironmentalFormValues = z.infer<typeof moreLogDetailsSchema>;
 interface prop {
     setStep: React.Dispatch<React.SetStateAction<number>>
     setEvironmentalData: React.Dispatch<React.SetStateAction<diveEnvironmentalFormValues>>
-    evironmentalData: diveEnvironmentalFormValues
+    evironmentalData: diveEnvironmentalFormValues;
+    user: User | null
 }
-const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, setStep }: prop) => {
+const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, setStep,user }: prop) => {
 
     const {
         register,
@@ -34,6 +38,8 @@ const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, set
 
         },
     });
+     const language: Language = (user?.profile_details?.language as Language)
+        const t = environmentalConditionTranslations[language] || environmentalConditionTranslations?.en;
 
     const onSubmit = (data: diveEnvironmentalFormValues) => {
         setEvironmentalData({ avg_water_temperature: data?.avg_water_temperature, max_water_temperature: data?.max_water_temperature, min_water_temperature: data?.min_water_temperature })
@@ -42,7 +48,7 @@ const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, set
     return (
         <div className='p-3'> <DialogHeader className="border-b flex items-center justify-between border-gray-200 dark:border-gray-700 pb-4">
             <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                Environmental Conditions
+                {t?.header}
             </DialogTitle>
 
         </DialogHeader>
@@ -53,7 +59,7 @@ const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, set
                     {/* Minimum Temp */}
                     <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Minimum Water Temperature
+                           {t.labels?.min}
                         </label>
                         <input
                             {...register('min_water_temperature')}
@@ -75,7 +81,7 @@ const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, set
                     {/* Maximum Temp */}
                     <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
-                            Maximum Water Temperature
+                           {t.labels?.max}
                         </label>
                         <input
                             {...register('max_water_temperature')}
@@ -97,7 +103,7 @@ const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, set
                     {/* Average Temp */}
                     <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] py-4 items-center gap-2 sm:gap-5">
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
-                            Avg Water Temperature
+                           {t.labels.avg}
                         </label>
                         <input
                             {...register('avg_water_temperature')}
@@ -120,13 +126,13 @@ const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, set
                 {/* Footer */}
                 <div className="py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-2">
                     <Button type="button" className='dark:border-white dark:text-white' variant="outlined" onClick={() => setStep(3)}>
-                        Cancel
+                      {t.actions.cancel}
                     </Button>
                     <Button
                         type="submit"
                         className="bg-orange-500 flex justify-center items-center gap-x-3 hover:bg-orange-600 text-white"
                     >
-                        Proceed
+                      {t.actions.save}
                     </Button>
                 </div>
             </form>

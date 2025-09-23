@@ -7,11 +7,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretDown } from '@/components/icons';
 import { convertKebabAndSnakeToTitleCase } from '@/utils/strings';
 import { capitalizeFirstLetter } from '@/utils';
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { gearLogTranslations } from '@/app/(main)/translation/diveLogTranslation';
+import { Language } from '@/app/(auth)/sign-up/translations';
 
 interface prop {
     setDiveGearData: React.Dispatch<React.SetStateAction<createGearLogDetailsFormValues>>
     diveGearData: createGearLogDetailsFormValues;
     setStep: React.Dispatch<React.SetStateAction<number>>
+    user: User | null
 }
 
 
@@ -27,7 +31,7 @@ const advancedDetailsSchema = z.object({
 export type createGearLogDetailsFormValues = z.infer<typeof advancedDetailsSchema>;
 
 
-const CreateDriveLogGear: React.FC<prop> = ({ diveGearData, setDiveGearData, setStep }) => {
+const CreateDriveLogGear: React.FC<prop> = ({ diveGearData, setDiveGearData, setStep,user }) => {
     const {
         handleSubmit,
         control,
@@ -44,6 +48,8 @@ const CreateDriveLogGear: React.FC<prop> = ({ diveGearData, setDiveGearData, set
             wetsuit: diveGearData?.wetsuit || '',
         },
     });
+ const language: Language = (user?.profile_details?.language as Language)
+    const t = gearLogTranslations[language] || gearLogTranslations?.en;
 
     const gasMixture = ["air", "eanx32", "eanx36", "eanx40", "enriched", "rebreather"]
     const weightArray = ["light", "good", "heavy"]
@@ -59,14 +65,14 @@ const CreateDriveLogGear: React.FC<prop> = ({ diveGearData, setDiveGearData, set
         <div className='py-3'>
             <DialogHeader className="border-b flex items-center justify-between border-gray-200 dark:border-gray-700 pb-4">
                 <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                   Log your Gear
+                  {t?.title}
                 </DialogTitle>
                
             </DialogHeader>
 
             <form onSubmit={handleSubmit(onSubmit)} className='w-full p-6 space-y-8'>
                 <div className="w-full max-h-[78vh] md:max-h-[70vh]  overflow-auto">
-                    <div className="grid grid-cols-1  gap-4">
+                    {/* <div className="grid grid-cols-1  gap-4">
                         <div className='grid grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-5'>
 
                             <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Gas Mixture</label>
@@ -248,7 +254,61 @@ const CreateDriveLogGear: React.FC<prop> = ({ diveGearData, setDiveGearData, set
                         </div>
 
 
-                    </div>
+                    </div> */}
+                      <div className="grid grid-cols-1 gap-4">
+                                      {/** Each field row */}
+                                      {[
+                                        { name: "gas_mixture", label: t?.fields?.gasMixture, options: gasMixture },
+                                        { name: "bcd", label: t?.fields?.bcd, options: ["true", "false"] },
+                                        { name: "weight", label: t?.fields?.weight, options: weightArray },
+                                        { name: "mask", label: t?.fields?.mask, options: maskArray },
+                                        { name: "regulator", label: t?.fields?.regulator, options: ["true", "false"] },
+                                        { name: "fin", label: t?.fields?.fin, options: ["true", "false"] },
+                                        { name: "wetsuit", label: t?.fields?.wetsuit, options: wetSuitArray },
+                                      ].map((fieldConfig, idx) => (
+                                        <div
+                                          key={idx}
+                                          className="grid grid-cols-[1fr_2fr] border-b border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-2 items-center gap-5 last:border-none"
+                                        >
+                                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            {fieldConfig.label}
+                                          </label>
+                                          <Controller
+                                            name={fieldConfig.name as keyof createGearLogDetailsFormValues}
+                                            control={control}
+                                            render={({ field }) => (
+                                              <Select onValueChange={field.onChange} value={field.value}>
+                                                <SelectTrigger
+                                                  className={`border relative ${
+                                                    errors[fieldConfig.name as keyof createGearLogDetailsFormValues]
+                                                      ? "border-red-500"
+                                                      : "border-[#E2E8F0] dark:border-gray-600"
+                                                  } outline-none py-[.8125rem] w-full text-sm flex-1 font-archivo h-[48px] rounded-lg px-[.875rem] 
+                                                  focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors
+                                                  bg-white dark:bg-gray-800 dark:text-gray-100`}
+                                                >
+                                                  <SelectValue placeholder="Select..." />
+                                                  <div className="absolute right-4">
+                                                    <CaretDown color="currentColor" className='dark:hidden' />
+                                                  </div>
+                                                </SelectTrigger>
+                                                <SelectContent className="dark:bg-gray-800 dark:text-gray-100">
+                                                  {fieldConfig.options.map((opt, i) => (
+                                                    <SelectItem
+                                                      key={i}
+                                                      value={opt}
+                                                      className="text-black dark:text-gray-100"
+                                                    >
+                                                      {convertKebabAndSnakeToTitleCase(opt)}
+                                                    </SelectItem>
+                                                  ))}
+                                                </SelectContent>
+                                              </Select>
+                                            )}
+                                          />
+                                        </div>
+                                      ))}
+                                    </div>
                 </div>
 
 

@@ -20,8 +20,10 @@ import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput'
 import CupIcon from '@/app/icons/(dashboard)/CupIcon'
 import InfoIcon from '@/app/icons/(dashboard)/InfoIcon'
 import toast from 'react-hot-toast'
+import { userDetails } from '@/app/(auth)/api/getAuthenticatedUser'
 
 interface prop{
+  user: userDetails | undefined
   data: InfiniteData<divSitesProp> | undefined
   loading:boolean;
   search: string;
@@ -68,8 +70,18 @@ const useInfiniteScroll = (
 };
 
 const RecentDiveSites = ({data, loading, search, fetchNextPage, hasNextPage, isFetchingNextPage}: prop) => {
+  const { authState } = useAuth();
+  const { user} = authState;
+  const userData = user;
+  const favoriteSites = user?.diver_profile.favourite_sites
   const [loadingItemId, setLoadingItemId] = useState<number | null>(null)
+  const [myFavourite , setMyFavourite ] = useState<number[]>(favoriteSites || [])
   
+useEffect(() => {
+  setMyFavourite(favoriteSites as number[])
+}, [])
+
+
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -77,9 +89,6 @@ const RecentDiveSites = ({data, loading, search, fetchNextPage, hasNextPage, isF
     errorModalMessage,
   } = useErrorModalState();
   
-  const { authState } = useAuth();
-  const { user} = authState;
-  const userData = user;
       
   const {data:country}= useFetchCountry()
   const getCountry = (id:number) =>{
@@ -100,7 +109,17 @@ const RecentDiveSites = ({data, loading, search, fetchNextPage, hasNextPage, isF
     },
     {
       onSuccess:() => {
-        toast.success("Dive sites added to your favoutite list")
+        if(myFavourite.includes(item?.id)){
+
+          const removeFrmFav = myFavourite.filter((x)=>x !== item?.id)
+          setMyFavourite(removeFrmFav)
+          toast.success("Dive sites removed from  your favoutite list")
+        }else{
+          setMyFavourite((prev)=>[...prev, item?.id])
+          toast.success("Dive sites added to your favoutite list")
+
+        }
+        queryClient.invalidateQueries({queryKey:["user-details"]});
         queryClient.invalidateQueries({queryKey:["div-sites"]});
         setLoadingItemId(null)
       },
@@ -181,7 +200,7 @@ const RecentDiveSites = ({data, loading, search, fetchNextPage, hasNextPage, isF
                     {/* Add to Favorite Button */}
                     <div className="flex justify-end max-md:pr-2 items-center w-full mb-4">
                       <Button  
-                        className="bg-white dark:bg-gray-100 px-[1.0688rem] py-[.5206rem] rounded-2xl text-[#4D5869] dark:text-gray-800 font-archivo text-xs font-medium flex items-center gap-[.3125rem] hover:bg-gray-50 dark:hover:bg-gray-200 transition-colors disabled:opacity-50" 
+                        className={`${myFavourite?.includes(item?.id) ? "bg-[#F7931D] dark:bg-[#F7931D] text-white" : "bg-white text-[#4D5869] dark:text-gray-800 dark:bg-gray-100 hover:bg-gray-50 dark:hover:bg-gray-200 "} px-[1.0688rem] py-[.5206rem] rounded-2xl  font-archivo text-xs font-medium flex items-center gap-[.3125rem]  transition-colors disabled:opacity-50`}
                         onClick={() => handleSave(item)}
                         disabled={loadingItemId === item.id}
                       >
@@ -190,7 +209,7 @@ const RecentDiveSites = ({data, loading, search, fetchNextPage, hasNextPage, isF
                         ) : (
                           <HeartIcon/>   
                         )}        
-                        Add to Favourite
+                       {myFavourite?.includes(item?.id)? "Remove from Favourite"  : "Add to Favourite"}
                       </Button>
                     </div>
 

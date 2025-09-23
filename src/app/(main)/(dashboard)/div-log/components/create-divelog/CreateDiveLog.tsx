@@ -10,16 +10,20 @@ import SelectField from '@/components/core/SelectField'
 import { CustomDateRange } from '@/app/(main)/components/dashboard/MonthlySnapShot'
 import moment from 'moment'
 import DateRangePicker from '@/components/core/DateRangePicker'
+import { User } from '@/app/(auth)/api/getAuthenticatedUser'
+import { Language } from '@/app/(auth)/sign-up/translations'
+import { createdivePlanTranslations } from '@/app/(main)/translation/diveLogTranslation'
 
 interface prop {
     setStep: React.Dispatch<React.SetStateAction<number>>
     onClose: () => void
     setDiveLogData: React.Dispatch<React.SetStateAction<diveLogTypes>>
-    diveLogData:diveLogTypes
+    diveLogData:diveLogTypes;
+    user: User | null
 }
 
 const advancedDetailsSchema = z.object({
-    name: z.string().min(1, { message: "name is required" }),
+    name: z.string().min(1, { message: "name is " }),
     start_date: z.string().min(1),
     end_date: z.string().min(1),
     dive_site_id: z.string().min(1),
@@ -27,7 +31,10 @@ const advancedDetailsSchema = z.object({
 
 export type diveLogTypes = z.infer<typeof advancedDetailsSchema>;
 
-const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData }: prop) => {
+const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData,user }: prop) => {
+      const language: Language = (user?.profile_details?.language as Language)
+    const t = createdivePlanTranslations[language] || createdivePlanTranslations?.en;
+
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [dateRange, setDateRange] = useState<CustomDateRange>({
         startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
@@ -67,6 +74,12 @@ const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData }: prop) =>
             }))
         ) ?? [];
 
+
+        useEffect(() => {
+            setValue('start_date', String(dateRange?.startDate));
+        setValue('end_date', String(dateRange?.endDate));
+        }, [])
+        
     useEffect(() => {
         const handleScroll = () => {
             if (
@@ -94,7 +107,7 @@ const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData }: prop) =>
         if (dateRange.startDate && dateRange.endDate) {
             return `${moment(dateRange.startDate).format("ll")} - ${moment(dateRange.endDate).format("ll")}`;
         }
-        return "Select date range";
+        return t.dateSelect
     };
 
     const onSubmit = (data: diveLogTypes) => {
@@ -113,7 +126,7 @@ const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData }: prop) =>
         <div className='py-3'>
             <DialogHeader className="border-b flex items-center justify-between border-gray-200 dark:border-gray-700 pb-4">
                 <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    Dive Log
+                 {t?.title}
                 </DialogTitle>
                 <DialogClose className="bg-transparent p-0 hover:bg-gray-100 dark:hover:bg-gray-800"
                     onClick={onClose}>
@@ -124,11 +137,11 @@ const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData }: prop) =>
             <form className="p-6 space-y-8" onSubmit={handleSubmit(onSubmit)}>
                 <div className="">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Log Name
+                     {t?.nameLabel}
                     </label>
                     <input
                         type="text"
-                        placeholder="Enter Dive Log name"
+                        placeholder={t?.namePlaceholder}
                         {...register("name")}
                         className={`w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 
               text-gray-900 dark:text-white placeholder-gray-400 
@@ -150,8 +163,8 @@ const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData }: prop) =>
                         render={({ field }) => (
                             <SelectField
                                 field={field}
-                                label="Select Dive Spot"
-                                placeholder="Select Dive Spot"
+                                label={t?.diveSpotLabel}
+                                placeholder={t?.diveSpotPlaceholder}
                                 options={diveLocation}
                                 onReachEnd={() => {
                                     if (
@@ -177,7 +190,7 @@ const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData }: prop) =>
 
                 <div className="">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Date
+                       {t?.dateLabel}
                     </label>
                     <button
                         type="button"
@@ -188,7 +201,7 @@ const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData }: prop) =>
                     </button>
                     {(errors.start_date || errors.end_date) && (
                         <p className="text-red-500 text-sm mt-1">
-                            Date  is required
+                           {t?.dateRequired}
                         </p>
                     )}
 
@@ -210,7 +223,7 @@ const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData }: prop) =>
                     <button
                         className="px-8 py-3 bg-orange-500 text-white font-medium rounded-lg flex justify-center items-center gap-x-3 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 transition-colors focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Proceed
+                        {t.proceed}
                     </button>
                 </div>
             </form>

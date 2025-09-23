@@ -24,7 +24,6 @@ export const ActionDropdown: React.FC<ActionDropdownProps> = ({
   dropdownClassName,
   label = "Select an Action"
 }) => {
-  const [selected, setSelected] = React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 

@@ -885,3 +885,180 @@ export const environmentalConditionTranslations = {
     },
   },
 };
+
+
+export const createdivePlanTranslations = {
+  en: {
+    title: "Dive Log",
+    nameLabel: "Log Name",
+    namePlaceholder: "Enter Dive Log name",
+    nameRequired: "Name is required",
+    diveSpotLabel: "Select Dive Spot",
+    diveSpotPlaceholder: "Select Dive Spot",
+    diveSpotRequired: "Dive Spot is required",
+    dateLabel: "Date",
+    dateRequired: "Date is required",
+    dateSelect: "Select date range",
+    proceed: "Proceed",
+    close: "Close",
+  },
+  es: {
+    title: "Registro de Buceo",
+    nameLabel: "Nombre del Registro",
+    namePlaceholder: "Ingrese el nombre del registro de buceo",
+    nameRequired: "El nombre es obligatorio",
+    diveSpotLabel: "Seleccionar Lugar de Buceo",
+    diveSpotPlaceholder: "Seleccionar lugar de buceo",
+    diveSpotRequired: "El lugar de buceo es obligatorio",
+    dateLabel: "Fecha",
+    dateRequired: "La fecha es obligatoria",
+    dateSelect: "Seleccionar rango de fechas",
+    proceed: "Continuar",
+    close: "Cerrar",
+  },
+  fr: {
+    title: "Journal de Plongée",
+    nameLabel: "Nom du Journal",
+    namePlaceholder: "Entrez le nom du journal de plongée",
+    nameRequired: "Le nom est requis",
+    diveSpotLabel: "Sélectionner le Site de Plongée",
+    diveSpotPlaceholder: "Sélectionner un site de plongée",
+    diveSpotRequired: "Le site de plongée est requis",
+    dateLabel: "Date",
+    dateRequired: "La date est requise",
+    dateSelect: "Sélectionner une plage de dates",
+    proceed: "Continuer",
+    close: "Fermer",
+  },
+  nl: {
+    title: "Duiklogboek",
+    nameLabel: "Lognaam",
+    namePlaceholder: "Voer de naam van het duiklogboek in",
+    nameRequired: "Naam is verplicht",
+    diveSpotLabel: "Duiklocatie Kiezen",
+    diveSpotPlaceholder: "Selecteer een duiklocatie",
+    diveSpotRequired: "Duiklocatie is verplicht",
+    dateLabel: "Datum",
+    dateRequired: "Datum is verplicht",
+    dateSelect: "Selecteer datumbereik",
+    proceed: "Doorgaan",
+    close: "Sluiten",
+  },
+};
+
+export type SupportedLanguages = keyof typeof diveLogTranslations;
+
+
+
+export const creatediveLogDetailsTranslations = {
+  en: {
+    title: "Dive Log Details",
+    bottomTimeLabel: "Bottom Time",
+    bottomTimePlaceholder: "Enter Bottom time",
+    bottomTimeError: "Bottom time is required",
+    depthLabel: "Max Depth",
+    depthPlaceholder: "Enter Max Depth",
+    depthError: "Max depth is required",
+    back: "Back",
+    proceed: "Proceed",
+  },
+  es: {
+    title: "Detalles del Registro de Buceo",
+    bottomTimeLabel: "Tiempo de Fondo",
+    bottomTimePlaceholder: "Ingrese el tiempo de fondo",
+    bottomTimeError: "El tiempo de fondo es obligatorio",
+    depthLabel: "Profundidad Máxima",
+    depthPlaceholder: "Ingrese la profundidad máxima",
+    depthError: "La profundidad máxima es obligatoria",
+    back: "Atrás",
+    proceed: "Continuar",
+  },
+  fr: {
+    title: "Détails du Journal de Plongée",
+    bottomTimeLabel: "Temps au Fond",
+    bottomTimePlaceholder: "Entrez le temps au fond",
+    bottomTimeError: "Le temps au fond est requis",
+    depthLabel: "Profondeur Maximale",
+    depthPlaceholder: "Entrez la profondeur maximale",
+    depthError: "La profondeur maximale est requise",
+    back: "Retour",
+    proceed: "Continuer",
+  },
+  nl: {
+    title: "Duiklogdetails",
+    bottomTimeLabel: "Bodem Tijd",
+    bottomTimePlaceholder: "Voer bodemtijd in",
+    bottomTimeError: "Bodemtijd is verplicht",
+    depthLabel: "Maximale Diepte",
+    depthPlaceholder: "Voer maximale diepte in",
+    depthError: "Maximale diepte is verplicht",
+    back: "Terug",
+    proceed: "Doorgaan",
+  },
+};
+
+
+
+
+export const diveLogBuddiesTranslations = {
+  en: {
+    title: "Buddies",
+    addNewMembers: "Add new member(s)",
+    emailPlaceholder: "Email Address",
+    addButton: "Add",
+    emailError: "Invalid email address",
+    addedMembers: "Added Members",
+    addFromList: "Add member(s) from your buddy list",
+    buddiesSelected: " buddy(ies) selected",
+    dives: "Dive",
+    diveSpots: "Dive Spot",
+    bottomTime: "Bottom",
+    back: "Back",
+    proceed: "Proceed"
+  },
+  es: {
+    title: "Compañeros",
+    addNewMembers: "Agregar nuevo(s) miembro(s)",
+    emailPlaceholder: "Dirección de correo electrónico",
+    addButton: "Agregar",
+    emailError: "Dirección de correo inválida",
+    addedMembers: "Miembros agregados",
+    addFromList: "Agregar miembro(s) de tu lista de compañeros",
+    buddiesSelected: " compañero(s) seleccionado(s)",
+    dives: "Buceo",
+    diveSpots: "Lugar de buceo",
+    bottomTime: "Fondo",
+    back: "Atrás",
+    proceed: "Continuar"
+  },
+  fr: {
+    title: "Binômes",
+    addNewMembers: "Ajouter un ou plusieurs membres",
+    emailPlaceholder: "Adresse e-mail",
+    addButton: "Ajouter",
+    emailError: "Adresse e-mail invalide",
+    addedMembers: "Membres ajoutés",
+    addFromList: "Ajouter des membres depuis votre liste de binômes",
+    buddiesSelected: " binôme(s) sélectionné(s)",
+    dives: "Plongée",
+    diveSpots: "Site de plongée",
+    bottomTime: "Fond",
+    back: "Retour",
+    proceed: "Continuer"
+  },
+  nl: {
+    title: "Buddies",
+    addNewMembers: "Voeg nieuw(e) lid/leden toe",
+    emailPlaceholder: "E-mailadres",
+    addButton: "Toevoegen",
+    emailError: "Ongeldig e-mailadres",
+    addedMembers: "Toegevoegde leden",
+    addFromList: "Lid(leden) toevoegen uit je buddy lijst",
+    buddiesSelected: " buddy('s) geselecteerd",
+    dives: "Duik",
+    diveSpots: "Duiklocatie",
+    bottomTime: "Bodem",
+    back: "Terug",
+    proceed: "Doorgaan"
+  }
+};
