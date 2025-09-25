@@ -27,6 +27,7 @@ import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 import { Language } from "@/app/(auth)/sign-up/translations";
 import { diveNotesTranslations } from "@/app/(main)/translation/diveLogTranslation";
 import CloseIcon from "@/app/icons/CloseIcon";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -45,7 +46,7 @@ export default function AddDiveNotes({
   user,
   
 }: AdvancedDetailsModalProps) {
-  const language: Language = (user?.profile_details?.language as Language)
+  const {language}= useLanguage()
   const t = diveNotesTranslations[language] || diveNotesTranslations?.en;
   
   const diveNotesSchema = z.object({

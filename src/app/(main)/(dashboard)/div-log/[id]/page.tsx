@@ -23,6 +23,7 @@ import CupIcon from '@/app/icons/(dashboard)/CupIcon'
 import InfoIcon from '@/app/icons/(dashboard)/InfoIcon'
 import { Language } from '@/app/(auth)/sign-up/translations'
 import { DiveLogDetailsTranslations } from '@/app/(main)/translation/diveLogTranslation'
+import { useLanguage } from '@/hooks/useLanguage'
 
 const DiveLogId = () => {
   const params = useParams()
@@ -31,7 +32,7 @@ const DiveLogId = () => {
   const { data: fetchCountry } = useFetchCountry();
   const { data, isLoading } = usefetchSingleDivLog(params?.id as string)
 
-    const language: Language = (user?.profile_details?.language as Language)
+const {language}= useLanguage()
     const t = DiveLogDetailsTranslations[language] || DiveLogDetailsTranslations?.en;
   const singleDivLog = diveLogData?.find((_item) => slugify(_item?.dive.title) === params?.id);
   const metrics = [

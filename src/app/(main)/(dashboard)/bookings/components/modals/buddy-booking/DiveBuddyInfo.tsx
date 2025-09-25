@@ -9,11 +9,14 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { PlaceData } from '../../../../../../../../google-maps';
 import GoogleAutocomplete from '@/app/(main)/components/google/Autocomplete';
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { divePlanBuddiesTranslations } from '@/app/(main)/translation/diveLogTranslation';
+import { useLanguage } from '@/hooks/useLanguage';
 
 
 interface prop{
      setStep: React.Dispatch<React.SetStateAction<number>>
-    //  onClose:()=>void
+   user: User | null
       setStepOneLogDetails: React.Dispatch<React.SetStateAction<diveLogTypes>>
 }
 
@@ -29,7 +32,9 @@ const advancedDetailsSchema = z.object({
 
 export type diveLogTypes = z.infer<typeof advancedDetailsSchema>;
 
-const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
+const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails,user}) => {
+             const {language}= useLanguage()
+                const t = divePlanBuddiesTranslations[language] || divePlanBuddiesTranslations?.en;
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [dateRange, setDateRange] = useState<CustomDateRange>({
         startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
@@ -63,6 +68,11 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
         isLoading: isLoadingDiveSites,
         isFetchingNextPage: isFetchingNextPageDiveSite,
     } = useFetchDiveSites();
+    useEffect(() => {
+      setValue("start_date",String(dateRange.startDate))
+      setValue("end_date",String(dateRange.endDate))
+    }, [])
+    
 
     const diveLocation =
         diveSitesData?.pages.flatMap((page) =>
@@ -104,7 +114,7 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
         if (dateRange.startDate && dateRange.endDate) {
             return `${moment(dateRange.startDate).format("ll")} - ${moment(dateRange.endDate).format("ll")}`;
         }
-        return "Select date range";
+        return t.fields.date.placeholder
     };
 
     const onSubmit = ({dive_site_id,end_date,name,start_date,meet_up_address}: diveLogTypes) => {
@@ -119,11 +129,11 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
             <form className="p-6 space-y-8" onSubmit={handleSubmit(onSubmit)}>
                 <div className="">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                       Dive Plan Name
+                     {t.fields.name.label}
                     </label>
                     <input
                         type="text"
-                        placeholder="Enter Dive plan name"
+                        placeholder={t.fields.name.placeholder}
                         {...register("name")}
                         className={`w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 
               text-gray-900 dark:text-white placeholder-gray-400 
@@ -145,8 +155,8 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
                         render={({ field }) => (
                             <SelectField
                                 field={field}
-                                label="Select Dive Spot"
-                                placeholder="Select Dive Spot"
+                                label={t.fields.diveSpot?.label}
+                                placeholder={t.fields.diveSpot?.placeholder}
                                 options={diveLocation}
                                 onReachEnd={() => {
                                     if (
@@ -177,7 +187,7 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
 
                 <div className="">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Date 
+                       {t.fields.date.label}
                     </label>
                     <button
                         type="button"
@@ -188,7 +198,7 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
                     </button>
                     {(errors.start_date || errors.end_date) && (
                         <p className="text-red-500 text-sm mt-1">
-                            Date is required
+                          {t.fields.date.error}
                         </p>
                     )}
 
@@ -210,11 +220,11 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
                 {/* Google Autocomplete for Meet-up Address */}
                 <div className="">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Meet-up Address
+                      {t.fields.meetUpAddress.label}
                     </label>
                     <GoogleAutocomplete
                         onPlaceSelected={handleMeetupPlaceSelected}
-                        placeholder="Search for meet-up location..."
+                        placeholder={t.fields.meetUpAddress.placeholder}
                         className={`${errors.meet_up_address ? "border-red-500" : ""}  bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white`}
                         options={{
                             types: ['establishment', 'geocode'],
@@ -236,7 +246,7 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails}) => {
                         type="submit"
                         className="px-8 py-3 bg-orange-500 text-white font-medium rounded-lg flex justify-center items-center gap-x-3 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 transition-colors focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Proceed
+                        {t.buttons.proceed}
                     </button>
                 </div>
             </form>

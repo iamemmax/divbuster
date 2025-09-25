@@ -8,6 +8,7 @@ import { ToggleSwitch } from "@/components/core/Toggle";
 import Link from "next/link";
 import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 import { MonthlySnapShotTranslations } from "../../translation/dashboardTranslation";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export interface CustomDateRange {
   startDate: Date;
@@ -30,7 +31,7 @@ const MonthlySnapShot = ({user}:prop) => {
 
  
 
-  const language: Language = (user?.profile_details?.language as Language) || "en";
+const {language}= useLanguage()
   const t = MonthlySnapShotTranslations[language] || MonthlySnapShotTranslations.en;
 
   const stats = [

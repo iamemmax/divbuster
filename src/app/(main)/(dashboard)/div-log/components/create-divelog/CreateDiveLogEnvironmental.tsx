@@ -2,6 +2,7 @@ import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { Language } from '@/app/(auth)/sign-up/translations';
 import { environmentalConditionTranslations } from '@/app/(main)/translation/diveLogTranslation';
 import { Button, DialogHeader, DialogTitle } from '@/components/core'
+import { useLanguage } from '@/hooks/useLanguage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react'
 import { useForm } from 'react-hook-form';
@@ -38,7 +39,7 @@ const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, set
 
         },
     });
-     const language: Language = (user?.profile_details?.language as Language)
+     const {language}= useLanguage()
         const t = environmentalConditionTranslations[language] || environmentalConditionTranslations?.en;
 
     const onSubmit = (data: diveEnvironmentalFormValues) => {

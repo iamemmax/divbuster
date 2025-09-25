@@ -9,9 +9,12 @@ import DiveBusterLogo from '@/components/icons/DiveBusterLogo'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import SimpleLogoutButton from "@/components/SimpleLogoutButton";
 import { useUser } from '@/app/(auth)/api/getAuthenticatedUser'
+import { useLanguage } from '@/hooks/useLanguage'
+import { useAuth } from '@/contexts/authentication'
 
 const SideBar = () => {
-    const user = useUser()
+  const {authState}= useAuth()
+  const {user}=authState
   const isMobile = useIsMobile();
   const { isMobileMenuOpen, setMobileMenuOpen } = useMobileMenu();
   const [mounted, setMounted] = useState(false);

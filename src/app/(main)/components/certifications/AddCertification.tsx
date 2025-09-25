@@ -18,14 +18,15 @@ import { certificateResult } from '../../(dashboard)/certifications/fetchCertifi
 import { useUpdateCertification } from '../../(dashboard)/certifications/editCertification';
 import { convertKebabAndSnakeToTitleCase } from '@/utils/strings';
 interface Props {
-    isOpen: boolean;
     setIsOpenCardModal: React.Dispatch<React.SetStateAction<boolean>>;
     certificateData: certificateResult | undefined
-    type:string
+    type:string;
+    setStep: React.Dispatch<React.SetStateAction<number>>
+    selectedCard: string | null
 }
 
 
-const AddCertification = ({ isOpen, setIsOpenCardModal,certificateData,type }: Props) => {
+const AddCertification = ({ setIsOpenCardModal,certificateData,type,selectedCard,setStep }: Props) => {
     const user = useUser()
      const {
             isErrorModalOpen,
@@ -46,7 +47,7 @@ const AddCertification = ({ isOpen, setIsOpenCardModal,certificateData,type }: P
   resolver: zodResolver(certificateSchema),
   defaultValues: {
     certificate_no: certificateData?.certification_no || "",
-    certificate_type: String(certificateData?.certificate_type) as any || "free",
+    certificate_type: selectedCard as any,
     full_name: certificateData?.full_name || "",
     image: "" as any, // start empty, set later if editing
     issuer: certificateData?.issuer as any || "padi",
@@ -71,6 +72,12 @@ const AddCertification = ({ isOpen, setIsOpenCardModal,certificateData,type }: P
     // setValue("image", certificateData.image as any); 
   }
 }, [certificateData, setValue]);
+useEffect(() => {
+
+    setValue("certificate_type", String(selectedCard) as any)
+
+}, [selectedCard, setValue])
+
 
     const handleImageUpload = useCallback(
         (file: File) => {
@@ -172,18 +179,8 @@ const AddCertification = ({ isOpen, setIsOpenCardModal,certificateData,type }: P
 
     return (
         <>
-        <Dialog open={isOpen}>
-            <DialogContent className="!max-w-[917px] !max-h-[95vh] bg-white dark:bg-gray-900">
-                <DialogBody className="w-full max-md:px-2 p-0 outline-none text-gray-900 dark:text-white">
-                    <DialogHeader className="border-b flex items-center justify-between border-gray-200 dark:border-gray-700 pb-4">
-                        <DialogTitle className="md:text-2xl text-base font-bold text-gray-900 dark:text-gray-100">
-                            {type==="add"?"Add":"Update"} Dive Certification
-                        </DialogTitle>
-                        <DialogClose className="bg-transparent p-0 hover:bg-gray-100 dark:hover:bg-gray-800"
-                            onClick={() => setIsOpenCardModal(false)}>
-                            <CloseIcon className="dark:text-white text-black" />
-                        </DialogClose>
-                    </DialogHeader>
+        
+        
                     <form action="" className='p-6 md:px-8 ' onSubmit={handleSubmit(onSubmit)}>
                         <div className="max-h-[70vh] space-y-6 overflow-y-auto">
                             <div className="max-h-[70vh] space-y-6 overflow-y-auto">
@@ -423,6 +420,15 @@ const AddCertification = ({ isOpen, setIsOpenCardModal,certificateData,type }: P
                         <div className="py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-2">
 
                             <Button
+                            variant={"outlined"}
+                                size={"lg"}
+                                type="submit"
+                                className="flex dark:border-white border-black  justify-center items-center gap-x-3 text-black hover:bg-orange-100 dark:text-white"
+                            onClick={()=>setStep(1)}
+                            >
+                                Back
+                            </Button>
+                            <Button
                                 size={"lg"}
                                 type="submit"
                                 className="bg-orange-500 flex justify-center items-center gap-x-3 hover:bg-orange-600 text-white"
@@ -431,9 +437,7 @@ const AddCertification = ({ isOpen, setIsOpenCardModal,certificateData,type }: P
                             </Button>
                         </div>
                     </form>
-                </DialogBody>
-            </DialogContent>
-        </Dialog>
+                
                <ErrorModal
                         isErrorModalOpen={isErrorModalOpen}
                         setErrorModalState={() => {

@@ -1,13 +1,19 @@
-import { userDetails } from '@/app/(auth)/api/getAuthenticatedUser'
+import { User, userDetails } from '@/app/(auth)/api/getAuthenticatedUser'
 import { Button, LinkButton } from '@/components/core'
 import React from 'react'
 import { UseQueryResult } from 'react-query'
+import { CERTIFICATE_TYPE_CHOICES_WITH_BG } from '../certifications'
 interface prop{
-  user: UseQueryResult<userDetails, unknown>
+ user: User | null
+}
+
+export const selectedCardBg = (selectedCard:string)=>{
+  const myCard = CERTIFICATE_TYPE_CHOICES_WITH_BG.find((card)=>String(card?.value) === String(selectedCard))
+return myCard
 }
 const CardContainer = ({user}:prop) => {
      // Sort certificates by issue_date to get the latest first
-const sortedCertificates = user?.data?.data?.certificates?.slice().sort((a, b) => 
+const sortedCertificates = user?.certificates?.slice().sort((a, b) => 
   new Date(b.issue_date).getTime() - new Date(a.issue_date).getTime()
 ) || [];
   return (
@@ -23,17 +29,19 @@ const sortedCertificates = user?.data?.data?.certificates?.slice().sort((a, b) =
           return (
             <div 
               key={card?.id}
-              className="absolute top-0 left-0 right-0 transition-all duration-300 hover:scale-105"
+              className="absolute rounded-[10px] top-0 left-0 right-0 transition-all duration-300 hover:scale-105"
               style={{
                 transform: `translateY(${offsetY}px) translateX(${offsetX}px) scale(${scale})`,
-                zIndex: zIndex
+                zIndex: zIndex,
+                  
               }}
             >
               <div 
-                className="flex flex-col gap-4 bg-cover bg-center bg-no-repeat rounded-[10px] px-[1.125rem] py-4 shadow-lg"
+                className="flex flex-col gap-4   bg-[url('/images/card-parttern3.svg')]  bg-cover bg-center bg-no-repeat rounded-[10px] px-[1.125rem] py-4 shadow-lg"
+                
                 style={{
-                  backgroundImage: card?.image ? `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${card.image})` : 'none',
-                  backgroundColor: !card?.image ? "#F7931D" : "transparent"
+                  backgroundColor: selectedCardBg(card?.certificate_type)?.bg,
+                color:selectedCardBg(card?.certificate_type)?.text ,
                 }}
               >
                 <div className="">

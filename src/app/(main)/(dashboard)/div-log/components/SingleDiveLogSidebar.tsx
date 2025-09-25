@@ -10,7 +10,7 @@ import DivePhotoUploader from './edit/DivePhotoUploader';
 import { singleDiveProp } from '../../api/div-logs/fetchSingleDivLog';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { diveLogSidebarTranslations } from '@/app/(main)/translation/diveLogTranslation';
-import { Language } from '@/app/(auth)/sign-up/translations';
+import { useLanguage } from '@/hooks/useLanguage';
 
 
 interface prop{
@@ -26,7 +26,7 @@ const [showdiveComputer, setShowdiveComputer] = useState(false)
 const [showNoteModal, setShowNoteModal] = useState(false)
 const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
 
-    const language: Language = (user?.profile_details?.language as Language)
+    const {language}= useLanguage()
     const t = diveLogSidebarTranslations[language] || diveLogSidebarTranslations?.en;
   useEffect(() => {
     const timer = setInterval(() => {

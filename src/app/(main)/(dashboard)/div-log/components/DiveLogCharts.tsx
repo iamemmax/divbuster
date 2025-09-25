@@ -2,6 +2,7 @@ import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { Language } from '@/app/(auth)/sign-up/translations';
 import { divLogChat } from '@/app/(main)/translation/diveLogTranslation';
 import ThreeDot from '@/app/icons/(dashboard)/ThreeDot';
+import { useLanguage } from '@/hooks/useLanguage';
 import React from 'react';
 import { 
   AreaChart, 
@@ -20,7 +21,7 @@ interface prop{
    user: User | null
 }
 const DiveLogCharts = ({user}:prop) => {
-     const language: Language = (user?.profile_details?.language as Language)
+const {language}= useLanguage()
       const t = divLogChat[language] || divLogChat?.en;
   // Heart rate data - matching the original pattern more closely
   const heartRateData = [

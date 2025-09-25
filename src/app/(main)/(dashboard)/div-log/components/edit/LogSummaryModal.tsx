@@ -13,8 +13,9 @@ import { SmallSpinner } from '@/icons/core';
 import { useQueryClient } from 'react-query';
 import { UnsavedChangesModal } from '@/app/(main)/components/shared/modal/UnsavedChangeModal';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
-import { Language } from '@/app/(auth)/sign-up/translations';
+// import { Language } from '@/app/(auth)/sign-up/translations';
 import { logSummaryTranslations } from '@/app/(main)/translation/diveLogTranslation';
+import { useLanguage } from '@/hooks/useLanguage';
 
 // Define the validation schema with Zod
 
@@ -36,7 +37,7 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
   data,
   user
 }) => {
-   const language: Language = (user?.profile_details?.language as Language)
+ const {language}= useLanguage()
       const t = logSummaryTranslations[language] || logSummaryTranslations?.en;
       const logSummarySchema = z.object({
   bottom_time: z.string().min(1, { message: t.errors.bottomTime }),

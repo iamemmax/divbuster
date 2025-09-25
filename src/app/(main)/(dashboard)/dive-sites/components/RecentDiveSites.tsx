@@ -21,6 +21,9 @@ import CupIcon from '@/app/icons/(dashboard)/CupIcon'
 import InfoIcon from '@/app/icons/(dashboard)/InfoIcon'
 import toast from 'react-hot-toast'
 import { userDetails } from '@/app/(auth)/api/getAuthenticatedUser'
+import { Language } from '@/app/(auth)/sign-up/translations'
+import { recentDivetranslations } from '@/app/(main)/translation/diveSitesTranslation'
+import { useLanguage } from '@/hooks/useLanguage'
 
 interface prop{
   user: userDetails | undefined
@@ -73,6 +76,8 @@ const RecentDiveSites = ({data, loading, search, fetchNextPage, hasNextPage, isF
   const { authState } = useAuth();
   const { user} = authState;
   const userData = user;
+ const {language}= useLanguage()
+  const t = recentDivetranslations[language] || recentDivetranslations.en
   const favoriteSites = user?.diver_profile.favourite_sites
   const [loadingItemId, setLoadingItemId] = useState<number | null>(null)
   const [myFavourite , setMyFavourite ] = useState<number[]>(favoriteSites || [])
@@ -113,10 +118,10 @@ useEffect(() => {
 
           const removeFrmFav = myFavourite.filter((x)=>x !== item?.id)
           setMyFavourite(removeFrmFav)
-          toast.success("Dive sites removed from  your favoutite list")
+          toast.success(t.removed)
         }else{
           setMyFavourite((prev)=>[...prev, item?.id])
-          toast.success("Dive sites added to your favoutite list")
+          toast.success(t.added)
 
         }
         queryClient.invalidateQueries({queryKey:["user-details"]});
@@ -158,7 +163,7 @@ useEffect(() => {
           {search && (
             <div className="mb-4">
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {allDiveSites.length} of {totalCount} dive site{totalCount !== 1 ? 's' : ''} found
+                {allDiveSites.length} of {totalCount} {t.diveSite} {totalCount !== 1 ? 's' : ''} found
               </p>
             </div>
           )}
@@ -167,7 +172,7 @@ useEffect(() => {
           {allDiveSites.length === 0 && search && (
             <div className="text-center py-12">
               <p className="text-gray-500 dark:text-gray-400 text-lg">
-                No dive sites found matching "{search}"
+                {t.noResults}{search}
               </p>
             </div>
           )}
@@ -205,11 +210,11 @@ useEffect(() => {
                         disabled={loadingItemId === item.id}
                       >
                         {loadingItemId === item.id ? (
-                          <SmallSpinner color='#F7931D'/>
+                          <SmallSpinner color={myFavourite.includes(item.id)?"#fff":'#F7931D'}/>
                         ) : (
-                          <HeartIcon/>   
+                          <HeartIcon fill={myFavourite?.includes(item?.id)?"#Fff":"#fff"}/>   
                         )}        
-                       {myFavourite?.includes(item?.id)? "Remove from Favourite"  : "Add to Favourite"}
+                       {myFavourite?.includes(item?.id)? t.removeFav  : t.addFav}
                       </Button>
                     </div>
 
@@ -238,7 +243,7 @@ useEffect(() => {
                           <div className="flex items-center bg-[#C5EFFF] dark:bg-blue-100 max-w-[100px] justify-center gap-[.3531rem] py-1 px-[.4063rem] rounded-lg">
                             <CupIcon/>
                             <p className="font-archivo text-xxs text-[#132346] dark:text-blue-800 font-semibold">
-                              Rank:{item?.ranking}
+                              {t.rank}:{item?.ranking}
                             </p>
                           </div>
                           <InfoIcon/>
@@ -246,7 +251,7 @@ useEffect(() => {
                       </div>
 
                       {/* Address */}
-                      <h2 className="font-semibold py-1 md:py-3 text-sm sm:text-base md:text-lg lg:text-[1.875rem] font-archivo text-white break-words">
+                      <h2 className="font-semibold py-1 md:py-3 text-sm sm:text-base md:text-lg lg:text-2xl font-archivo text-white break-words">
                         {item?.address}
                       </h2>
 
@@ -265,11 +270,11 @@ useEffect(() => {
                       {/* Coordinates */}
                       <div className="py-2">
                         <p className="text-xs text-[#F7F7F7] md:text-sm font-archivo break-all">
-                          Latitude:{" "}
+                          {t.latitude}:{" "}
                           <span className="font-semibold">
                             {item?.lag}
                           </span>{" "}
-                          <span className="px-2">•</span> Longitude:{" "}
+                          <span className="px-2">•</span> {t.longitude}:{" "}
                           <span className="font-semibold">
                             {item?.lon}
                           </span>
@@ -294,7 +299,7 @@ useEffect(() => {
                           +1
                         </div>
                         <p className="text-sm font-archivo font-medium text-[#475467] dark:text-gray-300 hidden sm:block">
-                          Like this dive
+                       {t.like}
                         </p>
                       </div>
                     </div>
@@ -315,7 +320,7 @@ useEffect(() => {
                       </div>
                     </Button>
                     
-                    <Button className="bg-[#F9FAFB] dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 h-[2.8125rem] w-[3.75rem] px-[1.125rem] py-[.625rem] rounded-xl flex justify-center items-center transition-colors">
+                    <Button title={t.share} className="bg-[#F9FAFB] dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 h-[2.8125rem] w-[3.75rem] px-[1.125rem] py-[.625rem] rounded-xl flex justify-center items-center transition-colors">
                       <ShareIcon2/>
                     </Button>
                   </div>
@@ -329,7 +334,7 @@ useEffect(() => {
             <div className="flex justify-center items-center py-8">
               <div className="flex items-center gap-2">
                 <SmallSpinner/>
-                <span className="text-gray-600 dark:text-gray-400">Loading more dive sites...</span>
+                <span className="text-gray-600 dark:text-gray-400">{t.loadingMore}</span>
               </div>
             </div>
           )}
@@ -338,28 +343,18 @@ useEffect(() => {
           {!hasNextPage && allDiveSites.length > 0 && (
             <div className="flex justify-center items-center py-8">
               <span className="text-gray-500 dark:text-gray-400 text-sm">
-                You've reached the end of all dive sites
+              {t.end}
               </span>
             </div>
           )}
 
           {/* Manual Load More Button (fallback) */}
-          {hasNextPage && !isFetchingNextPage && allDiveSites.length > 0 && (
-            <div className="flex justify-center items-center py-8">
-              <Button
-                onClick={handleLoadMore}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
-              >
-                Load More Dive Sites
-              </Button>
-            </div>
-          )}
-
+         
           {/* Empty State */}
           {!search && allDiveSites.length === 0 && (
             <div className="text-center py-12">
               <p className="text-gray-500 dark:text-gray-400 text-lg">
-                No dive sites available at the moment
+                {t.noSites}
               </p>
             </div>
           )}

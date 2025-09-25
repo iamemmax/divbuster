@@ -19,6 +19,7 @@ import toast from 'react-hot-toast';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { Language } from '@/app/(auth)/sign-up/translations';
 import { diveNotesTranslations } from '@/app/(main)/translation/diveLogTranslation';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -36,7 +37,7 @@ interface prop {
 
 
 const AddDiveLogNotes = ({ setStep, buddyMembers, onClose,user, diveGearData, diveLogData, diveLogDetails, evironmentalData }: prop) => {
-    const language: Language = (user?.profile_details?.language as Language)
+   const {language}= useLanguage()
     const t = diveNotesTranslations[language] || diveNotesTranslations?.en;
     const diveNotesSchema = z.object({
         show_notes: z.boolean(),

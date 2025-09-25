@@ -6,6 +6,9 @@ import ManageToken from "./components/ManageToken";
 import MyInvoicesNamagement from "./components/invoices/InvoiceMagement";
 import CardManagement from "./components/MyCards";
 import MyOrderMangement from "./components/orders/ordersMagement";
+import { tokenTranslations } from "../../translation/tokenTranslation";
+import { Language } from "../../translation/dashboardTranslation";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface TabItem {
   id: string;
@@ -15,12 +18,17 @@ interface TabItem {
 const SettingsTab = () => {
   const [activeTab, setActiveTab] = useState<string>("manage-token");
 
+  const { authState } = useAuth();
+    const { user} = authState;
+  const {language}= useLanguage()
+ 
+  const t = tokenTranslations[language] || tokenTranslations.en;
   const tabs: TabItem[] = [
-    { id: "manage-token", label: "Manage Token", href: "?tab=manageToken" },
+    { id: "manage-token", label: t.header, href: "?tab=manageToken" },
     //    { id: "myCards", label: "My Cards", href: "?tab=myCards" },
     {
       id: "invoices",
-      label: "Invoices",
+      label: t.invoices,
       href: "?tab=invoices",
     },
     
@@ -54,8 +62,6 @@ const SettingsTab = () => {
     setActiveTab(tabId);
   };
   
-   const { authState } = useAuth();
-     const { user} = authState;
   const renderTabContent = (): JSX.Element => {
     switch (activeTab) {
       case "manage-token":
@@ -72,21 +78,21 @@ const SettingsTab = () => {
         return <div><MyOrderMangement/></div>;
     
       default:
-        return <div>Content not found</div>;
+        return  <ManageToken user={user}/>
     }
   };
 
   return (
     <div className="w-full">
-      <Header title="Token Management" subtitle="" />
+      <Header title={t.manageToken} subtitle="" />
 
       <div className="font-archivo w-full p-3 md:p-6 h-[80vh] overflow-y-auto">
         <div className="mb-8">
           <h1 className="text-base md:xl: lg:text-2xl font-medium  text-[#1D2939]">
-           Token Management
+          {t.header}
           </h1>
           <p className="text-[#475467] font-medium text-xs sm:text-sm">
-           Manage your account token here. 
+         {t.description}
           </p>
         </div>
         <nav

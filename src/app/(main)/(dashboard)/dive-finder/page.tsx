@@ -74,6 +74,7 @@ export default function DiveMap() {
     lang: user?.data?.profile_details?.language || "en",
     favorite: "",
     search,
+    paginate:"yes"
   };
 
   const {

@@ -1,16 +1,20 @@
 import React from 'react'
-import { Button, Dialog, DialogBody, DialogContent, DialogHeader, ErrorModal, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core';
-import { DialogTitle } from '@radix-ui/react-dialog';
+import { Button,  Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core';
+// import { DialogTitle } from '@radix-ui/react-dialog';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretDown } from '@/components/icons';
 import { convertKebabAndSnakeToTitleCase } from '@/utils/strings';
 import { capitalizeFirstLetter } from '@/utils';
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { Language } from '@/app/(auth)/sign-up/translations';
+import { gearLogTranslations } from '@/app/(main)/translation/diveLogTranslation';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface prop {
     setPlanGearData: React.Dispatch<React.SetStateAction<createGearLogDetailsFormValues>>
-
+    user: User | null
     setStep: React.Dispatch<React.SetStateAction<number>>
 }
 
@@ -27,7 +31,9 @@ const advancedDetailsSchema = z.object({
 export type createGearLogDetailsFormValues = z.infer<typeof advancedDetailsSchema>;
 
 
-const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
+const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep, user }) => {
+   const {language}= useLanguage()
+    const t = gearLogTranslations[language] || gearLogTranslations?.en;
     const {
         handleSubmit,
         control,
@@ -36,12 +42,12 @@ const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
         resolver: zodResolver(advancedDetailsSchema),
         defaultValues: {
             gas_mixture: '',
-            bcd:  "",
-            weight:  '',
-            mask:  '',
-            regulator:  "",
+            bcd: "",
+            weight: '',
+            mask: '',
+            regulator: "",
             fin: "",
-            wetsuit:  '',
+            wetsuit: '',
         },
     });
 
@@ -52,7 +58,7 @@ const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
 
 
     const onSubmit = (data: createGearLogDetailsFormValues) => {
-        setPlanGearData({bcd:data?.bcd,fin:data?.fin,gas_mixture:data?.gas_mixture,mask:data?.mask,regulator:data?.regulator,weight:data?.weight,wetsuit:data?.wetsuit})
+        setPlanGearData({ bcd: data?.bcd, fin: data?.fin, gas_mixture: data?.gas_mixture, mask: data?.mask, regulator: data?.regulator, weight: data?.weight, wetsuit: data?.wetsuit })
         setStep(3)
     }
     return (
@@ -69,7 +75,7 @@ const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
                     <div className="grid grid-cols-1  gap-4">
                         <div className='grid grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-5'>
 
-                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Gas Mixture</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">{t.fields.gasMixture}</label>
                             <Controller
                                 name="gas_mixture"
                                 control={control}
@@ -77,8 +83,8 @@ const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
                                     <Select onValueChange={field.onChange} value={field.value}>
                                         <SelectTrigger className={`border relative ${errors.gas_mixture ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
                                             } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}>
-                                            <SelectValue placeholder="Nitrox" />
-                                            <div className="absolute right-4"><CaretDown color='black' className='dark:hidden'/></div>
+                                            <SelectValue placeholder={t.placeholders.gasMixture} />
+                                            <div className="absolute right-4"><CaretDown color='black' className='dark:hidden' /></div>
 
                                         </SelectTrigger>
                                         <SelectContent>
@@ -96,16 +102,16 @@ const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
                         </div>
                         <div className='grid grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-5'>
 
-                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">BCD Type</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">{t.fields.bcd}</label>
                             <Controller
                                 name="bcd"
                                 control={control}
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} value={field.value}>
                                         <SelectTrigger className={`border relative ${errors.bcd ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
-} outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}                                       >
-                                            <SelectValue placeholder="Nitrox" />
-                                            <div className="absolute right-4"><CaretDown color='black' className='dark:hidden'/></div>
+                                            } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}                                       >
+                                            <SelectValue placeholder={t.placeholders.bcd} />
+                                            <div className="absolute right-4"><CaretDown color='black' className='dark:hidden' /></div>
 
                                         </SelectTrigger>
                                         <SelectContent className='text-black'>
@@ -119,15 +125,15 @@ const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
                         </div>
                         <div className='grid grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-5'>
 
-                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Weight Type</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">{t.fields.weight}</label>
                             <Controller
                                 name="weight"
                                 control={control}
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} value={field.value}>
                                         <SelectTrigger className={`border relative ${errors.weight ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
-} outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}                                        >
-                                            <SelectValue placeholder="select weight type" />
+                                            } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}                                        >
+                                            <SelectValue placeholder={t.placeholders.weight} />
                                             <div className="absolute right-4"><CaretDown color='black' className='dark:hidden' /></div>
 
                                         </SelectTrigger>
@@ -150,15 +156,15 @@ const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
 
                         <div className='grid grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-5'>
 
-                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Mask</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">{t.fields.mask}</label>
                             <Controller
                                 name="mask"
                                 control={control}
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} value={field.value}>
                                         <SelectTrigger className={`border relative ${errors.mask ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
-} outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}                    >
-                                            <SelectValue placeholder="Nitrox" />
+                                            } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}                    >
+                                            <SelectValue placeholder={t.placeholders.mask} />
                                             <div className="absolute right-4"><CaretDown color='black' className='dark:hidden' /></div>
 
                                         </SelectTrigger>
@@ -177,16 +183,16 @@ const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
 
                         <div className='grid grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-5'>
 
-                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Regulator</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">{t.fields.regulator}</label>
                             <Controller
                                 name="regulator"
                                 control={control}
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} value={field.value}>
                                         <SelectTrigger className={`border relative ${errors.regulator ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
-} outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}                             >
-                                            <SelectValue placeholder="Nitrox" />
-                                            <div className="absolute right-4"><CaretDown color='black' className='dark:hidden'/></div>
+                                            } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}                             >
+                                            <SelectValue placeholder={t.placeholders.regulator} />
+                                            <div className="absolute right-4"><CaretDown color='black' className='dark:hidden' /></div>
 
                                         </SelectTrigger>
                                         <SelectContent className='text-black'>
@@ -199,16 +205,16 @@ const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
                         </div>
                         <div className='grid grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-5'>
 
-                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Fin</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">{t.fields.fin}</label>
                             <Controller
                                 name="fin"
                                 control={control}
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} value={field.value}>
                                         <SelectTrigger className={`border relative ${errors.fin ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
-} outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}                                        >
-                                            <SelectValue placeholder="Nitrox" />
-                                            <div className="absolute right-4"><CaretDown color='black' className='dark:hidden'/></div>
+                                            } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}                                        >
+                                            <SelectValue placeholder={t.placeholders.fin} />
+                                            <div className="absolute right-4"><CaretDown color='black' className='dark:hidden' /></div>
 
                                         </SelectTrigger>
                                         <SelectContent className='text-black'>
@@ -221,16 +227,16 @@ const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
                         </div>
                         <div className='grid grid-cols-[1fr_2fr]  border-opacity-50 py-2 items-center gap-5'>
 
-                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Wet Suit</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">{t.placeholders.wetsuit}</label>
                             <Controller
                                 name="wetsuit"
                                 control={control}
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} value={field.value}>
                                         <SelectTrigger className={`border relative ${errors.weight ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
-} outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}                                        >
-                                            <SelectValue placeholder="Nitrox" />
-                                            <div className="absolute right-4"><CaretDown color='black' className='dark:hidden'/></div>
+                                            } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}                                        >
+                                            <SelectValue placeholder={t.placeholders.wetsuit} />
+                                            <div className="absolute right-4"><CaretDown color='black' className='dark:hidden' /></div>
 
                                         </SelectTrigger>
                                         <SelectContent>
@@ -255,12 +261,12 @@ const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
                 <div className="py-4 border-t border-[#EAECF0] border-opacity-50 flex justify-end space-x-2">
                     <Button type="button"
                         className="px-8 py-3 border-dark dark:border-white dark:text-white  text-black font-medium rounded-lg flex justify-center items-center gap-x-3  transition-colors focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-                    
-                    variant="outlined" onClick={() => setStep(2)}>
-                        Back
+
+                        variant="outlined" onClick={() => setStep(1)}>
+                        {t.actions.cancel}
                     </Button>
                     <Button type="submit" className="bg-orange-500 flex justify-center items-center gap-x-3 hover:bg-orange-600 text-white">
-                        Proceed
+                        {t.actions.saveChanges}
                     </Button>
                 </div>
             </form>

@@ -11,7 +11,7 @@ interface prop {
     fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<divSitesProp, unknown>>
 }
 
-const GoogleMap = ({ diveSites, fetchNextPage, hasNextPage, isFetchingNextPage }: prop) => {
+const GoogleMap = ({ diveSites}: prop) => {
     const mapRef = useRef<HTMLDivElement>(null)
     const mapInstance = useRef<google.maps.Map | null>(null)
     const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([])
@@ -26,56 +26,38 @@ const GoogleMap = ({ diveSites, fetchNextPage, hasNextPage, isFetchingNextPage }
     }, [])
 
     // Function to add markers for dive sites
-    const addMarkers = useCallback(async (sites: diveSiteResult[], map: google.maps.Map) => {
-        if (!sites || sites.length === 0) return
+const addMarkers = useCallback(async (sites: diveSiteResult[], map: google.maps.Map) => {
+  if (!sites || sites.length === 0) return;
 
-        try {
-            const loader = new Loader({
-                apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-                version: "quarterly",
-                libraries: ["places"]
-            })
-            
-            const { AdvancedMarkerElement } = await loader.importLibrary("marker") as google.maps.MarkerLibrary
+  try {
+    const loader = new Loader({
+      apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+      version: "quarterly",
+      libraries: ["places"]
+    });
 
-            sites.forEach((site, index) => {
-                const lat = Number(site?.lag)
-                const lng = Number(site?.lon)
-                
-                // Only create marker if coordinates are valid
-                if (!isNaN(lat) && !isNaN(lng)) {
-                    const marker = new AdvancedMarkerElement({
-                        position: {
-                            lat: lat,
-                            lng: lng
-                        },
-                        map: map,
-                        title: site?.title || `Dive Site ${index + 1}`
-                    })
-                    
-                    markersRef.current.push(marker)
-                }
-            })
-        } catch (error) {
-            console.error('Error adding markers:', error)
-        }
-    }, [])
+    const { AdvancedMarkerElement } = await loader.importLibrary("marker") as google.maps.MarkerLibrary;
 
-    // Function to handle map bounds change (trigger load more data)
-    const handleBoundsChanged = useCallback(() => {
-        if (!mapInstance.current || !hasNextPage || isFetchingNextPage) return
+    sites.forEach((site, index) => {
+      const lat = Number(site?.lag);
+      const lng = Number(site?.lon);
 
-        const bounds = mapInstance.current.getBounds()
-        if (!bounds) return
+      if (!isNaN(lat) && !isNaN(lng)) {
+        const marker = new AdvancedMarkerElement({
+          position: { lat, lng },
+          title: site?.title || `Dive Site ${index + 1}`
+        });
 
-        // Check if user has panned/zoomed significantly
-        // You can adjust this logic based on your needs
-        const center = mapInstance.current.getCenter()
-        if (center) {
-            // Fetch more data when bounds change
-            fetchNextPage()
-        }
-    }, [hasNextPage, isFetchingNextPage, fetchNextPage])
+        marker.map = map; // ✅ attach marker to map
+        markersRef.current.push(marker);
+      }
+    });
+  } catch (error) {
+    console.error("Error adding markers:", error);
+  }
+}, []);
+
+
 
     // Initialize map
     useEffect(() => {
@@ -118,18 +100,7 @@ const GoogleMap = ({ diveSites, fetchNextPage, hasNextPage, isFetchingNextPage }
                 mapInstance.current = map
                 
                 // Add event listeners
-                map.addListener('bounds_changed', () => {
-                    // Debounce the bounds change to avoid too many API calls
-                    setTimeout(handleBoundsChanged, 1000)
-                })
-
-                // Add idle listener (when map stops moving/zooming)
-                map.addListener('idle', () => {
-                    if (hasNextPage && !isFetchingNextPage) {
-                        // Optional: Auto-fetch when map becomes idle
-                        // fetchNextPage()
-                    }
-                })
+              
                 
                 setIsMapLoaded(true)
                 
@@ -141,7 +112,7 @@ const GoogleMap = ({ diveSites, fetchNextPage, hasNextPage, isFetchingNextPage }
         if (!isMapLoaded) {
             initMap()
         }
-    }, [isMapLoaded, handleBoundsChanged])
+    }, [])
 
     // Update markers when diveSites change
     useEffect(() => {
@@ -151,38 +122,13 @@ const GoogleMap = ({ diveSites, fetchNextPage, hasNextPage, isFetchingNextPage }
         }
     }, [diveSites, isMapLoaded, addMarkers, clearMarkers])
 
-    // Manual load more function (you can call this from a button)
-    const handleLoadMore = useCallback(() => {
-        if (hasNextPage && !isFetchingNextPage) {
-            fetchNextPage()
-        }
-    }, [hasNextPage, isFetchingNextPage, fetchNextPage])
+  
 
     return (
         <div className="relative w-full h-[83vh] mt-[4rem] dark:bg-gray-900">
             <div ref={mapRef} className="w-full h-full" />
             
-            {/* Load More Button */}
-            {hasNextPage && (
-                <div className="absolute bottom-4 right-4">
-                    <button
-                        onClick={handleLoadMore}
-                        disabled={isFetchingNextPage}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                    >
-                        {isFetchingNextPage ? (
-                            <>
-                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                Loading...
-                            </>
-                        ) : (
-                            'Load More Sites'
-                        )}
-                    </button>
-                </div>
-            )}
-
-            {/* Loading indicator */}
+          
             
         </div>
     )

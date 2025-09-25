@@ -27,6 +27,7 @@ import { Language } from "@/app/(auth)/sign-up/translations";
 import { diveLogContainerTranslations } from "@/app/(main)/translation/diveLogTranslation";
 import { capitalizeFirstLetter } from "@/utils";
 import { useFetchDiveLogs } from "../../api/div-logs/fetchDivLogs";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface VisibilityOption {
   value: string;
@@ -61,7 +62,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
   const { mutate: updateVisibility } = useUpdateDiveLogVisibility();
   const dropdownRef = useRef<HTMLDivElement>(null);
   
-  const language: Language = (user?.profile_details?.language as Language);
+  const {language}= useLanguage()
   const t = diveLogContainerTranslations[language] || diveLogContainerTranslations?.en;
   
   // Debug translations
@@ -354,7 +355,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                           </button>
 
                           {isDropdownOpen && !isItemUpdating && (
-                            <div className="absolute top-full left-0 mt-1 min-w-[200px] bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg py-1 z-50">
+                            <div className="absolute top-full -left-3 mt-1  bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg py-1 z-50">
                               {visibilityOptions.map((option: VisibilityOption) => (
                                 <button
                                   key={option.value}
@@ -398,8 +399,8 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                       {/* Coordinates Overlay */}
                       <div className="absolute top-2 left-4 text-white py-4 px-6 md:px-[2.75rem] w-full">
                         <div className="flex justify-end max-md:pr-2 items-center w-full">
-                          <Button className="bg-white dark:bg-gray-800 px-[1.0688rem] py-[.5206rem] rounded-2xl text-[#F7931D] dark:text-[#F7931D] text-xs md:text-sm font-medium flex items-center gap-[.3125rem] border dark:border-gray-600">
-                            <ColorCheckIcon />
+                          <Button className="bg-transparent border-none py-[.5206rem] rounded-2xl text-[#F7931D] dark:text-[#F7931D] text-xs md:text-sm font-medium flex items-center gap-[.3125rem] border dark:border-gray-600">
+                            {/* <ColorCheckIcon /> */}
                           </Button>
                         </div>
                         <div className="">

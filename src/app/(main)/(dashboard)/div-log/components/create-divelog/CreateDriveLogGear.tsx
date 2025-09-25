@@ -10,6 +10,7 @@ import { capitalizeFirstLetter } from '@/utils';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { gearLogTranslations } from '@/app/(main)/translation/diveLogTranslation';
 import { Language } from '@/app/(auth)/sign-up/translations';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface prop {
     setDiveGearData: React.Dispatch<React.SetStateAction<createGearLogDetailsFormValues>>
@@ -48,7 +49,7 @@ const CreateDriveLogGear: React.FC<prop> = ({ diveGearData, setDiveGearData, set
             wetsuit: diveGearData?.wetsuit || '',
         },
     });
- const language: Language = (user?.profile_details?.language as Language)
+const {language}= useLanguage()
     const t = gearLogTranslations[language] || gearLogTranslations?.en;
 
     const gasMixture = ["air", "eanx32", "eanx36", "eanx40", "enriched", "rebreather"]

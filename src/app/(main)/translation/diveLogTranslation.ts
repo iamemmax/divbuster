@@ -1062,3 +1062,130 @@ export const diveLogBuddiesTranslations = {
     proceed: "Doorgaan"
   }
 };
+
+
+
+export const divePlanBuddiesTranslations = {
+  en: {
+     DivePlan: "Dive Plan",
+     title: "Dive Plan - Buddies",
+     fields: {
+      name: {
+        label: "Dive Plan Name",
+        placeholder: "Enter Dive plan name",
+        error: "Name is required",
+      },
+      diveSpot: {
+        label: "Select Dive Spot",
+        placeholder: "Select Dive Spot",
+        error: "Dive spot is required",
+      },
+      date: {
+        label: "Date",
+        placeholder: "Select date range",
+        error: "Date is required",
+      },
+      meetUpAddress: {
+        label: "Meet-up Address",
+        placeholder: "Search for meet-up location...",
+        error: "Meet-up address is required",
+      },
+    },
+    buttons: {
+      back: "Back",
+      proceed: "Proceed",
+    },
+  },
+  es: {
+    DivePlan: "Plan de Buceo",
+    title: "Plan de Buceo - Compañeros",
+    fields: {
+      name: {
+        label: "Nombre del Plan de Buceo",
+        placeholder: "Ingrese el nombre del plan de buceo",
+        error: "El nombre es obligatorio",
+      },
+      diveSpot: {
+        label: "Seleccionar Lugar de Buceo",
+        placeholder: "Seleccionar lugar de buceo",
+        error: "El lugar de buceo es obligatorio",
+      },
+      date: {
+        label: "Fecha",
+        placeholder: "Seleccionar rango de fechas",
+        error: "La fecha es obligatoria",
+      },
+      meetUpAddress: {
+        label: "Dirección de Encuentro",
+        placeholder: "Buscar lugar de encuentro...",
+        error: "La dirección de encuentro es obligatoria",
+      },
+    },
+    buttons: {
+      back: "Atrás",
+      proceed: "Continuar",
+    },
+  },
+  fr: {
+    DivePlan: "Plan de Plongée",
+
+    title: "Plan de Plongée - Binômes",
+    fields: {
+      name: {
+        label: "Nom du Plan de Plongée",
+        placeholder: "Entrez le nom du plan de plongée",
+        error: "Le nom est requis",
+      },
+      diveSpot: {
+        label: "Sélectionner un Site de Plongée",
+        placeholder: "Sélectionner un site de plongée",
+        error: "Le site de plongée est requis",
+      },
+      date: {
+        label: "Date",
+        placeholder: "Sélectionner une plage de dates",
+        error: "La date est requise",
+      },
+      meetUpAddress: {
+        label: "Lieu de Rendez-vous",
+        placeholder: "Rechercher un lieu de rendez-vous...",
+        error: "Le lieu de rendez-vous est requis",
+      },
+    },
+    buttons: {
+      back: "Retour",
+      proceed: "Continuer",
+    },
+  },
+  nl: {
+    DivePlan: "Duikplan",
+
+    title: "Duikplan - Buddies",
+    fields: {
+      name: {
+        label: "Naam van Duikplan",
+        placeholder: "Voer duikplannaam in",
+        error: "Naam is verplicht",
+      },
+      diveSpot: {
+        label: "Selecteer Duiklocatie",
+        placeholder: "Selecteer duiklocatie",
+        error: "Duiklocatie is verplicht",
+      },
+      date: {
+        label: "Datum",
+        placeholder: "Selecteer datumbereik",
+        error: "Datum is verplicht",
+      },
+      meetUpAddress: {
+        label: "Afspreekadres",
+        placeholder: "Zoek afspreeklocatie...",
+        error: "Afspreekadres is verplicht",
+      },
+    },
+    buttons: {
+      back: "Terug",
+      proceed: "Doorgaan",
+    },
+  },
+};

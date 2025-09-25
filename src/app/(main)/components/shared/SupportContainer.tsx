@@ -1,4 +1,4 @@
-import { userDetails, useUser } from '@/app/(auth)/api/getAuthenticatedUser'
+import { User, userDetails, useUser } from '@/app/(auth)/api/getAuthenticatedUser'
 import Moonicon from '@/app/icons/(dashboard)/Moonicon'
 import SettingsIcon from '@/app/icons/(dashboard)/SettingsIcon'
 import { Switch } from '@/components/core'
@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react'
 import { UseQueryResult } from 'react-query'
 
 interface prop{
-  user: UseQueryResult<userDetails, unknown>
+   user: User | null
 }
 const SupportContainer = ({user}:prop) => {
   const [darkMode, setDarkMode] = useState(false)
@@ -53,7 +53,7 @@ const SupportContainer = ({user}:prop) => {
         </div>
       </div>
       <div className="mt-10 dark:text-white">
-        <p className='font-archivo font-medium text-[#4F4F4F] text-sm dark:text-white'>Logged in as {user?.data?.data?.first_name} {user?.data?.data?.last_login && "on"} {user?.data?.data?.last_login}</p>
+        <p className='font-archivo font-medium text-[#4F4F4F] text-sm dark:text-white'>Logged in as {user?.first_name} {user?.last_login && "on"} {user?.last_login}</p>
         <p className='font-archivo font-medium text-[#4F4F4F] text-sm dark:text-white'>Version 1.0.0.0</p>
       </div>
     </div>

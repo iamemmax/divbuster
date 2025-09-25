@@ -44,9 +44,10 @@ interface filter {
   favorite?: string;
   lang: string;
   search: string;
+  paginate:string
 }
 
-const fetchDiveSites = async ({ lang, favorite, search, pageParam = 1 }: filter & { pageParam?: number }) => {
+const fetchDiveSites = async ({ lang, favorite, search,paginate, pageParam = 1 }: filter & { pageParam?: number }) => {
   try {
     // Build query parameters properly
     const params = new URLSearchParams();
@@ -59,6 +60,9 @@ const fetchDiveSites = async ({ lang, favorite, search, pageParam = 1 }: filter 
     if (search) {
       params.append("title", search);
     }
+    if (paginate==="yes") {
+      params.append("no-paginate", paginate);
+    }
     
     const url = `dive/dive-sites?${params.toString()}`;
   
@@ -70,18 +74,19 @@ const fetchDiveSites = async ({ lang, favorite, search, pageParam = 1 }: filter 
   }
 };
 
-export const useFetchDiveSites = ({ lang, favorite, search }: filter) => {
+export const useFetchDiveSites = ({ lang, favorite, search ,paginate}: filter) => {
   // Normalize favorite to either "yes" or null for consistent caching
   const normalizedFavorite = favorite === "yes" ? "yes" : null;
   
   return useInfiniteQuery({
-    queryKey: ["div-sites", normalizedFavorite, lang, search],
+    queryKey: ["div-sites", normalizedFavorite, lang, search,paginate],
     queryFn: ({ pageParam = 1 }) => 
       fetchDiveSites({ 
         favorite: normalizedFavorite || undefined, 
         lang, 
         search, 
-        pageParam 
+        pageParam,
+        paginate 
       }),
     enabled: !!lang, // Only run query when lang is available
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -120,8 +125,8 @@ export const useFetchDiveSites = ({ lang, favorite, search }: filter) => {
 };
 
 // Helper hook to get flattened results from infinite query
-export const useFlattenedDiveSites = ({ lang, favorite, search }: filter) => {
-  const query = useFetchDiveSites({ lang, favorite, search });
+export const useFlattenedDiveSites = ({ lang, favorite, search,paginate }: filter) => {
+  const query = useFetchDiveSites({ lang, favorite, search, paginate });
   
   const flattenedData = query.data?.pages.reduce((acc, page) => {
     return [...acc, ...page.data.results];

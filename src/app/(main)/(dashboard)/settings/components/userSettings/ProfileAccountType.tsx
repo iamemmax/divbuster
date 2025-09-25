@@ -15,6 +15,8 @@ import { ErrorModal } from '@/components/core';
 import { SmallSpinner } from '@/icons/core';
 import toast from 'react-hot-toast';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { Language } from '@/app/(auth)/sign-up/translations';
+import { accountTypeTranslations } from '@/app/(main)/translation/profileTranslation';
 
 // Account type selection schema with translations
 const createAccountTypeSelectionSchema = (t: any) =>
@@ -30,8 +32,10 @@ const createAccountTypeSelectionSchema = (t: any) =>
 
   interface prop{
      user: User | null
+       language:Language
+
   }
-const ProfileAccountType = ({user}:prop) => {
+const ProfileAccountType = ({user,language}:prop) => {
 
    const {
       isErrorModalOpen,
@@ -39,7 +43,8 @@ const ProfileAccountType = ({user}:prop) => {
       openErrorModalWithMessage,
       errorModalMessage,
     } = useErrorModalState();
-  const { t } = useLanguage();
+      const t = accountTypeTranslations[language] || accountTypeTranslations?.en;
+  
   const [diverTypeOpen, setDiverTypeOpen] = useState(false);
   const [selectedAccountType, setSelectedAccountType] =
     useState('recreative');
@@ -106,7 +111,7 @@ setValue("diver_type", userData?.diver_profile?.diver_type)
     <div className="max-w-2xl">
       <div className="flex flex-col">
         <h2 className="text-2xl font-semibold font-archivo text-[#09090B] dark:text-white mb-2">
-          Account Type
+       {t.accountTypeSelection.accountTypeHeader}
         </h2>
       </div>
 
@@ -233,7 +238,7 @@ setValue("diver_type", userData?.diver_profile?.diver_type)
             type="submit"
             className="px-8 py-3 bg-orange-500 text-white flex justify-center items-center gap-x-3 font-medium rounded-lg hover:bg-orange-600 transition-colors focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 outline-none dark:focus:ring-offset-gray-900"
           >
-      Save changes {isSubmitting && <SmallSpinner color="#fff" />}
+      {t.accountTypeSelection.saveChanges} {isSubmitting && <SmallSpinner color="#fff" />}
           </button>
         </div>
       </form>

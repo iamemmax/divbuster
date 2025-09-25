@@ -112,11 +112,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import moment from "moment";
 import { AxiosError } from "axios";
-import { Star, MoreHorizontal } from "lucide-react";
 
 import Header from "@/app/(main)/components/shared/Header";
 import ShareIcon from "@/app/icons/(dashboard)/ShareIcon";
-import { Button, ErrorModal, LinkButton } from "@/components/core";
+import { Button,  LinkButton } from "@/components/core";
 import { getDiveSiteInfo } from "@/utils/getLocationCharacteristic";
 import { Rating } from "react-simple-star-rating";
 import CardHeadIcon from "@/app/icons/(dashboard)/CardHeadIcon";
@@ -129,7 +128,8 @@ import { useAuth } from "@/contexts/authentication";
 
 import MyBuddyList from "../MyBuddyList";
 import { profileTranslations } from "@/app/(main)/translation/diveBuddiesTranslation";
-import { Language } from "@/app/(auth)/sign-up/translations";
+import CreateBuddyBooking from "../../../bookings/components/modals/buddy-booking/CreateBuddyBooking";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const DivingProfile = () => {
   const color = [
@@ -141,6 +141,8 @@ const DivingProfile = () => {
   const params = useParams();
   const { authState } = useAuth();
   const { user } = authState;
+    const [showBookWithBuddy, setShowBookWithBuddy] = useState(false)
+  
 
   const {
     isErrorModalOpen,
@@ -150,7 +152,8 @@ const DivingProfile = () => {
   } = useErrorModalState();
 
   // language state — replace with context or prop if you have
-    const language: Language = (user?.profile_details?.language as Language);
+    const {language}=useLanguage()
+ 
   
   const t = profileTranslations[language] || profileTranslations?.en;
 
@@ -254,6 +257,7 @@ const DivingProfile = () => {
                     <Button
                       variant={"outlined"}
                       className="bg-white dark:bg-gray-800 text-[#344054] dark:text-gray-300 px-4 py-[.625rem] font-archivo font-medium rounded-lg border border-[#D0D5DD] dark:border-gray-600 transition-colors duration-200 text-sm shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                    onClick={()=>setShowBookWithBuddy(true)}
                     >
                       {t.bookDive}
                     </Button>
@@ -476,14 +480,16 @@ const DivingProfile = () => {
           </>
         )}
       </div>
+            {showBookWithBuddy && <CreateBuddyBooking isOpen={showBookWithBuddy} setIsOpenCardModal={setShowBookWithBuddy} user={user}/>}
+      
 
-      {isErrorModalOpen && (
+      {/* {isErrorModalOpen && (
         <ErrorModal
           isErrorModalOpen={isErrorModalOpen}
           setErrorModalState={() => setErrorModalState(false)}
           subheading={errorModalMessage || "Error"}
         />
-      )}
+      )} */}
     </div>
   );
 };

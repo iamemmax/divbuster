@@ -11,8 +11,8 @@ import { CustomDateRange } from '@/app/(main)/components/dashboard/MonthlySnapSh
 import moment from 'moment'
 import DateRangePicker from '@/components/core/DateRangePicker'
 import { User } from '@/app/(auth)/api/getAuthenticatedUser'
-import { Language } from '@/app/(auth)/sign-up/translations'
 import { createdivePlanTranslations } from '@/app/(main)/translation/diveLogTranslation'
+import { useLanguage } from '@/hooks/useLanguage'
 
 interface prop {
     setStep: React.Dispatch<React.SetStateAction<number>>
@@ -32,7 +32,7 @@ const advancedDetailsSchema = z.object({
 export type diveLogTypes = z.infer<typeof advancedDetailsSchema>;
 
 const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData,user }: prop) => {
-      const language: Language = (user?.profile_details?.language as Language)
+    const {language}= useLanguage()
     const t = createdivePlanTranslations[language] || createdivePlanTranslations?.en;
 
     const [showDatePicker, setShowDatePicker] = useState(false);

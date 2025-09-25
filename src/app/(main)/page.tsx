@@ -15,9 +15,8 @@ import { certificateResult } from './(dashboard)/certifications/fetchCertificati
 import CreateSchoolPlan from './(dashboard)/bookings/components/modals/school-booking/CreateSchoolPlan'
 import CreateBuddyBooking from './(dashboard)/bookings/components/modals/buddy-booking/CreateBuddyBooking'
 import { Dashbaordtranslations } from './translation/dashboardTranslation';
-
-
-type Language = "en" | "es" | "fr" | "nl";
+import { useLanguage } from '@/hooks/useLanguage';
+import AddCertificateTypeComp from './components/certifications/AddCertificateTypeComp';
 
 const Page = () => {
   const { authState } = useAuth();
@@ -27,7 +26,7 @@ const Page = () => {
   const [showScholBookingModal, setShowSchoolBookingModal] = useState(false)
   const [showBookWithBuddy, setShowBookWithBuddy] = useState(false)
 
-  const language: Language = (user?.profile_details?.language as Language) 
+  const {language}= useLanguage()
   const t = Dashbaordtranslations[language] || Dashbaordtranslations.en;
 
   return (
@@ -73,9 +72,9 @@ const Page = () => {
       </div>
 
       {showDiveLogModal && <AddNewDiveLog isOpen={showDiveLogModal} onClose={()=>setShowDivelogModal(false)}/>}
-      {showCertificationModal && <AddCertification certificateData={{} as certificateResult} type="add" isOpen={showCertificationModal} setIsOpenCardModal={()=>setShowCertificationModal(false)}/>}
+      {showCertificationModal && <AddCertificateTypeComp certificateData={{} as certificateResult} type="add" isOpen={showCertificationModal} setIsOpenCardModal={()=>setShowCertificationModal(false)}/>}
       {showScholBookingModal && <CreateSchoolPlan isOpen={showScholBookingModal} setIsOpenCardModal={setShowSchoolBookingModal}/>}
-      {showBookWithBuddy && <CreateBuddyBooking isOpen={showBookWithBuddy} setIsOpenCardModal={setShowBookWithBuddy}/>}
+      {showBookWithBuddy && <CreateBuddyBooking isOpen={showBookWithBuddy} setIsOpenCardModal={setShowBookWithBuddy} user={user}/>}
     </div>
   )
 }

@@ -7,6 +7,7 @@ import { Dialog, DialogContent } from "@/components/core";
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { Language } from '@/app/(auth)/sign-up/translations';
 import { diveLogSidebarTranslations } from '@/app/(main)/translation/diveLogTranslation';
+import { useLanguage } from '@/hooks/useLanguage';
 
 
 interface EditDiveStatisticsModalProps {
@@ -29,7 +30,7 @@ const EditDiveStatisticsModal: React.FC<EditDiveStatisticsModalProps> = ({
   // const handleTabChange = (value: string) => {
   //   setActiveTab(value);
   // };
- const language: Language = (user?.profile_details?.language as Language)
+ const {language}= useLanguage()
     const t = diveLogSidebarTranslations[language] || diveLogSidebarTranslations?.en;
  
   return (

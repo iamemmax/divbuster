@@ -150,6 +150,7 @@ import SuggestedDivers from "./suggested/SuggestedDivers";
 import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 import { sugestedDriverTranslations } from "../../translation/dashboardTranslation";
 import { Language } from "@/app/(auth)/sign-up/translations";
+import { useLanguage } from "@/hooks/useLanguage";
 
 
 export interface TabItem {
@@ -173,7 +174,7 @@ const SuggestedDIverTabs: React.FC<DivingAppProps> = ({
 
 
 
- const language: Language = (user?.profile_details?.language as Language) || "en";
+const {language}= useLanguage()
   const t = sugestedDriverTranslations[language] ||sugestedDriverTranslations?.en ;
 
   const tabs: TabItem[] = [

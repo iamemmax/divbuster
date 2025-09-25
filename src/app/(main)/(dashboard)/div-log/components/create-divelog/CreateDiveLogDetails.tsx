@@ -4,6 +4,7 @@ import { Language } from '@/app/(auth)/sign-up/translations'
 import { creatediveLogDetailsTranslations } from '@/app/(main)/translation/diveLogTranslation'
 // import CloseIcon from '@/app/icons/CloseIcon'
 import { Button, DialogClose, DialogHeader, DialogTitle } from '@/components/core'
+import { useLanguage } from '@/hooks/useLanguage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -25,7 +26,7 @@ const advancedDetailsSchema = z.object({
 export type diveLogDetailsTypes = z.infer<typeof advancedDetailsSchema>;
 
 const CreateDiveLogDetails = ({ setStep, diveLogDetails, setDiveLogDetails, user }: prop) => {
-    const language: Language = (user?.profile_details?.language as Language)
+   const {language}= useLanguage()
     const t = creatediveLogDetailsTranslations[language] || creatediveLogDetailsTranslations?.en;
     const {
         register,

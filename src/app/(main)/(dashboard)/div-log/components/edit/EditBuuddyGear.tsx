@@ -29,6 +29,7 @@ import { UnsavedChangesModal } from '@/app/(main)/components/shared/modal/Unsave
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { Language } from '@/app/(auth)/sign-up/translations';
 import { gearLogTranslations } from '@/app/(main)/translation/diveLogTranslation';
+import { useLanguage } from '@/hooks/useLanguage';
 
 // Validation schema
 const advancedDetailsSchema = z.object({
@@ -67,7 +68,7 @@ const EditBuuddyGear: React.FC<AdvancedDetailsModalProps> = ({
   const [showUpdatedModal, setShowUpdatedModal] = useState(false);
   const { mutate: handleUpdate, isLoading } = useUpdateLogGearDetails();
 
-  const language: Language = (user?.profile_details?.language as Language);
+  const {language}= useLanguage()
   const t = gearLogTranslations[language] || gearLogTranslations?.en;
 
   const {

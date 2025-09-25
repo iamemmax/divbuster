@@ -22,6 +22,7 @@ import { Language } from "@/app/(auth)/sign-up/translations";
 import { divePhotoUploaderTranslations } from "@/app/(main)/translation/diveLogTranslation";
 import { UnsavedChangesModal } from "@/app/(main)/components/shared/modal/UnsavedChangeModal";
 import { SmallSpinner } from "@/icons/core";
+import { useLanguage } from "@/hooks/useLanguage";
 
 // Define FileItem with the file property
 interface FileItem {
@@ -63,7 +64,7 @@ export default function DivePhotoUploader({
   const [showDiscardModal, setShowDiscardModal] = useState(false);
   const [showUpdatedModal, setShowUpdatedModal] = useState(false);
   const { mutate: handleUpdate, isLoading } = useUpdatImageOrVideo();
-  const language: Language = (user?.profile_details?.language as Language)
+const {language}= useLanguage()
   const t = divePhotoUploaderTranslations[language] || divePhotoUploaderTranslations?.en;
   
   const {

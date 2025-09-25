@@ -12,14 +12,64 @@ import LocationIcon from "@/app/icons/(dashboard)/LocationIcon";
 import LogIcon from "@/app/icons/(dashboard)/LogIcon";
 import ProfileIcon from "@/app/icons/(dashboard)/ProfileIcon";
 import DashboardIcon from "@/app/icons/(dashboard)/Dashbaordicon";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface NavigationBarProps {
   onItemClick?: () => void;
 }
 
+export const navTranslations = {
+  en: {
+    dashboard: "Dashboard",
+    diveBuddies: "Dive Buddies",
+    diveLog: "Dive Log",
+    diveSites: "Dive Sites",
+    buddyFinder: "Buddy Finder",
+    bookings: "Bookings",
+    myProfile: "My Profile",
+    insurance: "Insurance",
+    new: "New",
+  },
+  es: {
+    dashboard: "Tablero",
+    diveBuddies: "Compañeros de buceo",
+    diveLog: "Registro de buceo",
+    diveSites: "Sitios de buceo",
+    buddyFinder: "Buscador de compañeros",
+    bookings: "Reservas",
+    myProfile: "Mi perfil",
+    insurance: "Seguro",
+    new: "Nuevo",
+  },
+  fr: {
+    dashboard: "Tableau de bord",
+    diveBuddies: "Compagnons de plongée",
+    diveLog: "Journal de plongée",
+    diveSites: "Sites de plongée",
+    buddyFinder: "Recherche de binômes",
+    bookings: "Réservations",
+    myProfile: "Mon profil",
+    insurance: "Assurance",
+    new: "Nouveau",
+  },
+  nl: {
+    dashboard: "Dashboard",
+    diveBuddies: "Duikvrienden",
+    diveLog: "Duiklogboek",
+    diveSites: "Duiklocaties",
+    buddyFinder: "Buddyzoeker",
+    bookings: "Boekingen",
+    myProfile: "Mijn profiel",
+    insurance: "Verzekering",
+    new: "Nieuw",
+  },
+};
+
+
 const NavigationBar: React.FC<NavigationBarProps> = ({ onItemClick }) => {
   const isActive = useActivePath();
   const isMobile = useIsMobile();
+    const {language}=useLanguage()
   const [mounted, setMounted] = useState(false);
   
   // Handle initial mounting
@@ -33,61 +83,61 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onItemClick }) => {
     }
   };
   
+const t = navTranslations[language] || navTranslations.en;
+
   const navigationArray = [
     {
-      name: "Dashboard",
-      icon: <DashboardIcon className={cn(isActive("/") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
+      name: t.dashboard,
+      icon: <DashboardIcon className={cn(isActive("/") ? "text-[#F7931D] dark:text-[#F7931D]" : "text-[#4F4F4F] dark:text-white")} />,
       link: "/",
       hasBarge: false,
       bargeText: "",
     },
     {
-      name: "Dive Buddies",
-      icon: <BuddiesIcon className={cn(isActive("/div-buddies") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")}
-  
-      />,
+      name: t.diveBuddies,
+      icon: <BuddiesIcon className={cn(isActive("/div-buddies") ? "text-[#F7931D] dark:text-[#F7931D]" : "text-[#4F4F4F] dark:text-white")} />,
       link: "/div-buddies",
       hasBarge: false,
       bargeText: "",
     },
     {
-      name: "Dive Log",
-      icon: <LogIcon className={cn(isActive("/div-log") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")}    />,
+      name: t.diveLog,
+      icon: <LogIcon className={cn(isActive("/div-log") ? "text-[#F7931D] dark:text-[#F7931D]" : "text-[#4F4F4F] dark:text-white")} />,
       link: "/div-log",
       hasBarge: false,
       bargeText: "",
     },
     {
-      name: "Dive Sites",
-      icon: <LocationIcon className={cn(isActive("/dive-sites") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
+      name: t.diveSites,
+      icon: <LocationIcon className={cn(isActive("/dive-sites") ? "text-[#F7931D] dark:text-[#F7931D]" : "text-[#4F4F4F] dark:text-white")} />,
       link: "/dive-sites",
       hasBarge: false,
       bargeText: "",
     },
     {
-      name: "Buddy Finder",
-      icon: <BuddyIcon className={cn(isActive("/div-finder") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
+      name: t.buddyFinder,
+      icon: <BuddyIcon className={cn(isActive("/div-finder") ? "text-[#F7931D] dark:text-[#F7931D]" : "text-[#4F4F4F] dark:text-white")} />,
       link: "/dive-finder",
       hasBarge: true,
-      bargeText: "New",
+      bargeText: t.new,
     },
     {
-      name: "Bookings",
-      icon: <BookingIcon className={cn(isActive("/bookings") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
+      name: t.bookings,
+      icon: <BookingIcon className={cn(isActive("/bookings") ? "text-[#F7931D] dark:text-[#F7931D]" : "text-[#4F4F4F] dark:text-white")} />,
       link: "/bookings",
       hasBarge: false,
       bargeText: "",
     },
     {
-      name: "My Profile",
-      icon: <ProfileIcon className={cn(isActive("/profile") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
+      name: t.myProfile,
+      icon: <ProfileIcon className={cn(isActive("/profile") ? "text-[#F7931D] dark:text-[#F7931D]" : "text-[#4F4F4F] dark:text-white")} />,
       link: "/profile",
       hasBarge: false,
       bargeText: "",
     },
     {
-      name: "Insurance",
-      icon: <InsuranceIcon className={cn(isActive("/insurance") ? "text-[#F7931D] dark:text-[#F7931D] " : "text-[#4F4F4F] dark:text-white")} />,
+      name: t.insurance,
+      icon: <InsuranceIcon className={cn(isActive("/insurance") ? "text-[#F7931D] dark:text-[#F7931D]" : "text-[#4F4F4F] dark:text-white")} />,
       link: "/insurance",
       hasBarge: false,
       bargeText: "",

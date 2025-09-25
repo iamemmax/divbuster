@@ -162,8 +162,7 @@ import CalendarIcon from "@/app/icons/(dashboard)/CalendarIcon";
 import DateRangePicker from "@/components/core/DateRangePicker";
 import DiveLogContainer from "./components/DiveLogContainer";
 import { diveLogTabsTranslations, diveLogTranslations } from "../../translation/diveLogTranslation";
-import { useAuth } from "@/contexts/authentication";
-import { Language } from "../../translation/dashboardTranslation";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface CustomDateRange {
   startDate: Date;
@@ -171,9 +170,9 @@ interface CustomDateRange {
 }
 
 const DiveLog = () => {
-  const { authState } = useAuth();
-  const { user } = authState;
-  const language: Language = (user?.profile_details?.language as Language)
+
+  const {language}= useLanguage()
+ 
   const t = diveLogTranslations[language] || diveLogTranslations?.en;
   const mt = diveLogTabsTranslations[language] || diveLogTabsTranslations?.en;
 

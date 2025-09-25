@@ -82,7 +82,7 @@ import { cn } from '@/utils/classNames';
 import { Button } from './Button';
 import { monthlyTabsTranslations } from '@/app/(main)/translation/dashboardTranslation';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
-import { Language } from '@/app/(auth)/sign-up/translations';
+import { useLanguage } from '@/hooks/useLanguage';
 
 
 type TabOption = 'this-month' | 'last-month' | 'custom';
@@ -102,7 +102,7 @@ user
 }) => {
   
 
-  const language: Language = (user?.profile_details?.language as Language) || "en";
+  const {language}= useLanguage()
   const t = monthlyTabsTranslations[language] || monthlyTabsTranslations?.en;
 
   return (

@@ -8,6 +8,7 @@ import { toggleBodyScroll } from '@/utils/inputs';
 import CardContainer from './CardContainer';
 import SupportContainer from './SupportContainer';
 import DiveBusterLogo from '@/components/icons/DiveBusterLogo';
+import { useAuth } from '@/contexts/authentication';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -16,6 +17,8 @@ interface MobileMenuProps {
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, setIsOpen }) => {
   // Disable body scroll when menu is open
+  const {authState}= useAuth()
+  const {user} = authState
   useEffect(() => {
     toggleBodyScroll(isOpen);
     return () => toggleBodyScroll(false);
@@ -47,10 +50,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, setIsOpen }) => {
           <div className="flex-1 overflow-y-auto p-4">
             <NavigationBar onItemClick={() => setIsOpen(false)} />
             <div className="mt-3">
-              <CardContainer/>
+              <CardContainer  user={user}/>
             </div>
             <div className="mt-6 pt-4 border-t border-[#E9E9E9] dark:border-gray-700">
-              <SupportContainer/>
+              <SupportContainer user={user}/>
             </div>
           </div>
         </div>

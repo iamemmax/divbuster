@@ -26,6 +26,8 @@ import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { SmallSpinner } from "@/icons/core";
 import toast from "react-hot-toast";
+import { Language } from "@/app/(auth)/sign-up/translations";
+import { profileDetailsTranslations } from "@/app/(main)/translation/profileTranslation";
 
 // Zod schema for form validation
 const profileSchema = z.object({
@@ -33,8 +35,6 @@ const profileSchema = z.object({
   last_name: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email address"),
   gender: z.enum(["Male", "Female", "Other"]),
-  // bio: z.string().optional(),
-  // weight: z.string().min(1, "Weight is required"),
   height: z.string().min(1, "Height is required") || "",
   body_size: z.string().min(1, "Body size is required"),
   shoe_size: z.string().min(1, "Shoe size is required"),
@@ -48,17 +48,20 @@ interface ProfilePictureSectionProps {
   profileImage: string;
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onDeleteAccount: () => void;
+  language:Language
 }
 
 
 const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
   profileImage,
   onImageChange,
+  language
 
 }) => {
   const { authState } = useAuth();
   const { user } = authState;
   const userData = user;
+        const t = profileDetailsTranslations[language] || profileDetailsTranslations?.en;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -78,7 +81,7 @@ const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
   return (
     <div>
       <h3 className="md:text-lg  text-sm font-semibold text-gray-900 my-4">
-        Profile picture
+       {t.profilePicture}
       </h3>
       <div className="flex flex-wrap  items-start  md:items-center gap-4">
         <div className="flex items-center gap-3">
@@ -91,7 +94,7 @@ const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
           </div>
           <div className="">
             <label className="bg-orange-500 hover:bg-orange-600 max-xxscren:text-xxs text-white px-4  py-2 rounded-md  text-xs text-nowrap lg:text-sm font-medium cursor-pointer transition-colors">
-              Change picture
+              {t.changePicture}
               <input
                 type="file"
                 accept="image/*"
@@ -108,14 +111,14 @@ const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
             onClick={() => setIsModalOpen(true)}
             className="bg-gray-200 hover:bg-gray-300 text-[#09090B] max-xxscren:text-xxs px-4 py-2 text-nowrap rounded-md text-xs lg:text-sm font-medium transition-colors"
           >
-            View Personal QR Code
+           {t.viewQRCode}
           </button>
           <button
             type="button"
             onClick={() => setIsDeleteModalOpen(true)}
             className="bg-[#FEE4E2] hover:bg-red-200 text-[#FF0000] max-xxscren:text-xxs px-4 py-2 text-nowrap rounded-md text-xs lg:text-sm font-medium transition-colors"
           >
-            Delete Account
+           {t.deleteAccount}
           </button>
         </div>
       </div>
@@ -139,8 +142,8 @@ const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
             setShowConfirmSaveModal(false);
             handleClose();
           }}
-          title="Account Deleted"
-          description="You have successfully deleted your account. You will be redirected to our official page in a minute."
+          title={t.accountDeleted}
+          description={t.accountDeletedDesc}
         />
       )}
     </div>
@@ -149,22 +152,13 @@ const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
 }
 
 
-// Footer Links Component
-// const FooterLinks = () => (
-//   <div className="mt-12 space-y-4 max-w-5xl">
-//     <button className="flex items-center py-4 px-5 rounded-10 justify-between  text-xs w-full text-left text-[#333333] border border-[#EBEBEB] hover:text-gray-900 transition-colors">
-//       <span>Terms of Use & Privacy Policy</span>
-//       <AngleRight/>
-//     </button>
-//     <button className="flex items-center py-4 px-5 rounded-10 justify-between text-xs  w-full text-left text-[#333333] border border-[#EBEBEB] hover:text-gray-900 transition-colors">
-//       <span>FAQs (Frequently Asked Questions)</span>
-//        <AngleRight/>
-//     </button>
-//   </div>
-// );
 
 // Profile Component
-const ProfileSettings = () => {
+
+interface prop{
+  language:Language
+}
+const ProfileSettings = ({language}:prop) => {
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -175,6 +169,7 @@ const ProfileSettings = () => {
 
   const { authState } = useAuth();
   const { user } = authState;
+     const t = profileDetailsTranslations[language] || profileDetailsTranslations?.en;
   const [profileImage, setProfileImage] = useState(user?.profile_details?.profile_picture);
   const gender = ["Male", "Female", "Other"];
   const heights = ["0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2.0", "2.1", "2.2", "2.3", "2.4"]
@@ -249,7 +244,7 @@ const ProfileSettings = () => {
   const handleDeleteAccount = () => {
     if (
       window.confirm(
-        "Are you sure you want to delete your account? This action cannot be undone."
+       t.deleteConfirm
       )
     ) {
       alert("Account deletion requested");
@@ -267,18 +262,19 @@ const ProfileSettings = () => {
               profileImage={profileImage as string}
               onImageChange={handleImageChange}
               onDeleteAccount={handleDeleteAccount}
+              language={language}
             />
 
             {/* Profile Name Section */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">
-                Profile name
+               {t.profileName}
               </h3>
               <div className="bg-[#FDFDFC] dark:bg-gray-800 border border-[#EBEBEB] dark:border-gray-700 max-w-5xl 2xl:pr-12 rounded-10 p-2 md:p-5 lg:p-10">
                 {/* Full Name */}
                 <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr] py-4 items-center gap-2 ">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Full Name
+                   {t.fullName}
                   </label>
                   <div className="grid max-xxscren:grid-cols-1 grid-cols-2 gap-5 w-full ">
                     <div className="w-full">
@@ -331,7 +327,7 @@ const ProfileSettings = () => {
                 {/* Email */}
                 <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr] border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Email Address
+                  {t.emailAddress}
                   </label>
                   <div>
                     <Controller
@@ -345,7 +341,7 @@ const ProfileSettings = () => {
                               ? "border-red-500"
                               : "border-[#E2E8F0] dark:border-gray-600"
                             } outline-none py-[.8125rem] w-full text-black dark:text-gray-100 flex-1 text-xs md:text-sm bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
-                          placeholder="Enter email address"
+                          placeholder={t.emailPlaceholder}
                         />
                       )}
                     />
@@ -360,7 +356,7 @@ const ProfileSettings = () => {
                 {/* Gender */}
                 <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr] text-xs md:text-sm border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Gender
+                   {t.gender}
                   </label>
                   <div className="">
                     <Controller
@@ -374,9 +370,9 @@ const ProfileSettings = () => {
                                 : "border-[#E2E8F0] dark:border-gray-600"
                               } outline-none py-[.8125rem] w-full text-black dark:text-gray-100 flex-1 text-xs md:text-sm bg-white dark:bg-gray-700 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                           >
-                            <SelectValue placeholder="Select gender" />
+                            <SelectValue placeholder={t.selectGender} />
                             <div className="absolute right-4">
-                              <CaretDown color="currentColor" />
+                              <CaretDown className="dark:hidden" color="currentColor" />
                             </div>
                           </SelectTrigger>
                           <SelectContent className="dark:bg-gray-800 dark:text-gray-100">
@@ -403,7 +399,7 @@ const ProfileSettings = () => {
                 {/* Height */}
                 <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr] text-xs md:text-sm border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Height (M)
+                   {t.height}
                   </label>
                   <div className="">
                     <Controller
@@ -417,9 +413,9 @@ const ProfileSettings = () => {
                                 : "border-[#E2E8F0] dark:border-gray-600"
                               } outline-none py-[.8125rem] w-full text-black dark:text-gray-100 flex-1 text-xs md:text-sm bg-white dark:bg-gray-700 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                           >
-                            <SelectValue placeholder="Select height" />
+                            <SelectValue placeholder={t.selectHeight} />
                             <div className="absolute right-4">
-                              <CaretDown color="currentColor" />
+                              <CaretDown className="dark:hidden" color="currentColor" />
                             </div>
                           </SelectTrigger>
                           <SelectContent className="dark:bg-gray-800 dark:text-gray-100">
@@ -442,7 +438,7 @@ const ProfileSettings = () => {
                 {/* body-size */}
                 <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr] text-xs md:text-sm border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Body Size
+                    {t.bodySize}
                   </label>
                   <div className="">
                     <Controller
@@ -456,9 +452,9 @@ const ProfileSettings = () => {
                                 : "border-[#E2E8F0] dark:border-gray-600"
                               } outline-none py-[.8125rem] w-full text-black dark:text-gray-100 flex-1 text-xs md:text-sm bg-white dark:bg-gray-700 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                           >
-                            <SelectValue placeholder="Select height" />
+                            <SelectValue placeholder={t.selectBodySize} />
                             <div className="absolute right-4">
-                              <CaretDown color="currentColor" />
+                              <CaretDown className="dark:hidden" color="currentColor" />
                             </div>
                           </SelectTrigger>
                           <SelectContent className="dark:bg-gray-800 dark:text-gray-100">
@@ -481,7 +477,7 @@ const ProfileSettings = () => {
                 {/* Shoe Value */}
                 <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr] text-xs md:text-sm border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Shoe Value
+                   {t.shoeValue}
                   </label>
                   <div className="">
                     <Controller
@@ -495,9 +491,9 @@ const ProfileSettings = () => {
                                 : "border-[#E2E8F0] dark:border-gray-600"
                               } outline-none py-[.8125rem] w-full text-black dark:text-gray-100 flex-1 text-xs md:text-sm bg-white dark:bg-gray-700 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                           >
-                            <SelectValue placeholder="Select shoe Value" />
+                            <SelectValue placeholder={t.selectShoeValue} />
                             <div className="absolute right-4">
-                              <CaretDown color="currentColor" />
+                              <CaretDown className="dark:hidden" color="currentColor" />
                             </div>
                           </SelectTrigger>
                           <SelectContent className="dark:bg-gray-800 dark:text-gray-100">
@@ -519,7 +515,7 @@ const ProfileSettings = () => {
                 </div>
                 <div className="grid max-xxscren:grid-cols-2 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_6fr] text-xs md:text-sm border-[#EAECF0] dark:border-gray-700 border-opacity-50 py-4 items-center gap-2 sm:gap-5">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Shoe Size
+                   {t.shoeSize}
                   </label>
                   <div className="">
                     <Controller
@@ -533,9 +529,9 @@ const ProfileSettings = () => {
                                 : "border-[#E2E8F0] dark:border-gray-600"
                               } outline-none py-[.8125rem] w-full text-black dark:text-gray-100 flex-1 text-xs md:text-sm bg-white dark:bg-gray-700 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                           >
-                            <SelectValue placeholder="Select shoe Value" />
+                            <SelectValue placeholder={t.selectShoeSize} />
                             <div className="absolute right-4">
-                              <CaretDown color="currentColor" />
+                              <CaretDown className="dark:hidden" color="currentColor" />
                             </div>
                           </SelectTrigger>
                           <SelectContent className="dark:bg-gray-800 dark:text-gray-100">
@@ -567,7 +563,7 @@ const ProfileSettings = () => {
                 disabled={isSubmitting}
                 className="bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 flex justify-center items-center gap-x-3 text-white px-8 py-3 rounded-md font-medium transition-colors dark:bg-orange-600 dark:hover:bg-orange-700 dark:disabled:bg-orange-400"
               >
-                Save changes {isSubmitting && <SmallSpinner color="#fff" />}
+                {t.saveChanges} {isSubmitting && <SmallSpinner color="#fff" />}
               </button>
             </div>
           </form>

@@ -4,13 +4,14 @@ import SideBar from './components/shared/SideBar'
 import useIsMobile from '@/hooks/UseMobile'
 import useRouteChangeEvent from '@/hooks/useRouteChangeEvent'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
+import { LanguageProvider } from '@/hooks/useLanguage'
 
 const OnboardingLayout = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const isMobile = useIsMobile();
+
   const [isChangingRoute, setIsChangingRoute] = useState(false);
   const [mounted, setMounted] = useState(false);
   
@@ -30,6 +31,8 @@ const OnboardingLayout = ({
   });
 
   return (
+     <LanguageProvider>
+
     <MobileMenuProvider>
       <div className="flex flex-col h-screen">
         {/* Progress bar for route changes */}
@@ -51,6 +54,7 @@ const OnboardingLayout = ({
         </div>
       </div>
     </MobileMenuProvider>
+     </LanguageProvider>
   );
 };
 

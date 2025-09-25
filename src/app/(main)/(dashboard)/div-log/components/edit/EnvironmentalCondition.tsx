@@ -16,6 +16,7 @@ import { DiveLogUpdatedModal } from './DiveLogUpdatedModal';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { Language } from '@/app/(auth)/sign-up/translations';
 import { environmentalConditionTranslations } from '@/app/(main)/translation/diveLogTranslation';
+import { useLanguage } from '@/hooks/useLanguage';
 
 
 // Define the validation schema with Zod
@@ -48,7 +49,7 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
-    const language: Language = (user?.profile_details?.language as Language)
+    const {language}= useLanguage()
     const t = environmentalConditionTranslations[language] || environmentalConditionTranslations?.en;
     
   const [showDiscardModal, setShowDiscardModal] = useState(false)

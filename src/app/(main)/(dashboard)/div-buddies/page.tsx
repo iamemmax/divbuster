@@ -20,9 +20,8 @@ import { useErrorModalState } from '@/hooks';
 import { formatAxiosErrorMessage } from '@/utils';
 import { AxiosError } from 'axios';
 import { SmallSpinner } from '@/icons/core';
-import { useAuth } from '@/contexts/authentication';
 import { diverBuddiesTranslations } from '../../translation/diveBuddiesTranslation';
-import { Language } from '@/app/(auth)/sign-up/translations';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const DiverBuddies = () => {
   const {
@@ -35,9 +34,7 @@ const DiverBuddies = () => {
   const [globalFilter, setGlobalFilter] = useState("");
 
   // ✅ Get language from user profile
-  const { authState } = useAuth();
-  const { user } = authState;
-  const language: Language = (user?.profile_details?.language as Language);
+   const {language}=useLanguage()
   const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
 
   const { 

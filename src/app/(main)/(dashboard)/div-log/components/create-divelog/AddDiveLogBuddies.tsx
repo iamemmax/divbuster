@@ -6,8 +6,8 @@ import { z } from 'zod';
 import { useFetchBuddyList } from '../../../api/buddy/fetchBudies';
 import { SmallSpinner } from '@/icons/core';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
-import { Language } from '@/app/(auth)/sign-up/translations';
 import { diveLogBuddiesTranslations } from '@/app/(main)/translation/diveLogTranslation';
+import { useLanguage } from '@/hooks/useLanguage';
 
 
 interface prop {
@@ -59,7 +59,7 @@ const AddDiveLogBuddies = ({ setStep, buddyMembers, setBuddyMembers, user }: pro
   const [emailList, setEmailList] = useState<string[]>(() =>
     buddyMembers?.email || []
   );
-  const language: Language = (user?.profile_details?.language as Language)
+  const {language}= useLanguage()
   const t = diveLogBuddiesTranslations[language] || diveLogBuddiesTranslations?.en;
   const advancedDetailsSchema = z.object({
     email: z.string().email(t.emailError),

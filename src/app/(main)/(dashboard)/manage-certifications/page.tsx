@@ -9,6 +9,7 @@ import { cn } from '@/utils/classNames'
 import CardHeadIcon from '@/app/icons/(dashboard)/CardHeadIcon'
 import EditIcon from '@/app/icons/(dashboard)/EditIcon'
 import AddCertification from '../../components/certifications/AddCertification'
+import AddCertificateTypeComp from '../../components/certifications/AddCertificateTypeComp'
 // import cn and color + CardHeadIcon if they exist in your project
 
 const ManageCertifications = () => {
@@ -133,7 +134,7 @@ const ManageCertifications = () => {
       </div>
 
        {
-        showEditModal && <AddCertification type="edit" isOpen={showEditModal} setIsOpenCardModal={()=>setShowEditModal(false)} certificateData={certificateData}/>
+        showEditModal && <AddCertificateTypeComp type="edit" isOpen={showEditModal} setIsOpenCardModal={()=>setShowEditModal(false)} certificateData={certificateData}/>
       }
     </div>
   )
