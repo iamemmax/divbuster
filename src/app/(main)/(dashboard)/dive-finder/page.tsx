@@ -12,6 +12,9 @@ import { useAuth } from "@/contexts/authentication";
 import { diverBuddiesTranslations } from "../../translation/diveBuddiesTranslation";
 import { Language } from "../../translation/dashboardTranslation";
 import { buddyListProp, buddyResult, useFetchBuddyList } from "../api/buddy/fetchBudies";
+import BuddiesIcon from "@/app/icons/(dashboard)/BuddiesIcon";
+import BuddyIcon from "@/app/icons/(dashboard)/BuddyIcon";
+import MapMarker from "@/app/icons/(dashboard)/MapMarker";
 
 interface buddyProp {
   buddyList: buddyResult[]
@@ -56,6 +59,7 @@ function FindBuddy() {
       <div className="max-w-md mx-auto bg-white  dark:bg-gray-900 rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold mb-6 text-gray-800">Find Buddy</h2>
         {/* Add your find buddy form here */}
+         <MapMarker className="w-6 h-6 text-blue-500" />
       </div>
     </div>
   );

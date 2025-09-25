@@ -8,6 +8,10 @@ import toast from 'react-hot-toast'
 import { useErrorModalState } from '@/hooks'
 import { formatAxiosErrorMessage } from '@/utils'
 import { AxiosError } from 'axios'
+import BuddiesIcon from '@/app/icons/(dashboard)/BuddiesIcon'
+import { createRoot } from "react-dom/client";
+import MapMarker from '@/app/icons/(dashboard)/MapMarker'
+
 
 interface prop {
     buddyList: buddyResult[]
@@ -151,38 +155,20 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
     }, [handleCreatePlan])
 
     // Function to create custom marker element
-    const createCustomMarkerElement = useCallback((buddy: buddyResult) => {
-        const markerElement = document.createElement('div')
-        markerElement.style.cssText = `
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background-image: url('${buddy.profile_details?.profile_picture || '/default-avatar.png'}');
-            background-size: cover;
-            background-position: center;
-        `
-        
-        // Add hover effect
-        markerElement.addEventListener('mouseenter', () => {
-            markerElement.style.transform = 'scale(1.1)'
-            markerElement.style.boxShadow = '0 4px 16px rgba(0,0,0,0.4)'
-        })
-        
-        markerElement.addEventListener('mouseleave', () => {
-            markerElement.style.transform = 'scale(1)'
-            markerElement.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)'
-        })
-        
-        return markerElement
-    }, [])
+    const createCustomMarkerElement = useCallback(() => {
+  // Create an empty DOM container
+  const container = document.createElement("div")
+
+  // Render your React component into that container
+  const root = createRoot(container)
+  root.render(
+    <div className="w-10 h-10 flex items-center justify-center rounded-full shadow-lg ">
+      <MapMarker className="w-10 h-10 text-blue-500" />
+    </div>
+  )
+
+  return container
+}, [])
 
     // Function to add markers for buddies
     const addMarkers = useCallback(async (buddies: buddyResult[], map: google.maps.Map) => {
@@ -205,17 +191,15 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
                 // Only create marker if coordinates are valid
                 if (!isNaN(lat) && !isNaN(lng)) {
                     // Create custom marker element
-                    const customElement = createCustomMarkerElement(buddy)
+                    // const customElement = createCustomMarkerElement(buddy)
                     
-                    const marker = new AdvancedMarkerElement({
-                        position: {
-                            lat: lat,
-                            lng: lng
-                        },
-                        map: map,
-                        content: customElement,
-                        title: `${buddy.first_name} ${buddy.last_name}`.trim() || buddy.username
-                    })
+                   const marker = new AdvancedMarkerElement({
+  position: { lat, lng },
+  map,
+  content: createCustomMarkerElement(), // your React marker
+  title: buddy.username,
+})
+
                     
                     // Create info window
                     const infoWindow = new InfoWindow({
