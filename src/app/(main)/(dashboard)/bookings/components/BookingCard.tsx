@@ -73,9 +73,12 @@ export const BookingCard: React.FC<DiveCardProps> = ({
       <div className="space-y-3">
         <h2 className="text-2xl font-semibold font-archivo text-[#101828] dark:text-white">{title}</h2>
       <p
-  className="text-gray-600 dark:text-gray-300 font-archivo text-base leading-relaxed line-clamp-2"
+  className="text-gray-600 dark:text-gray-300 font-archivo text-base leading-relaxed "
 >
+  <span className='line-clamp-2'>
+
   {description}{' '}
+  </span>
   <span
     className="text-orange-500 dark:text-orange-400 text-sm font-medium cursor-pointer hover:underline"
     onClick={onReadMore}

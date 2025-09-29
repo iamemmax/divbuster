@@ -1,57 +1,58 @@
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Check, HelpCircle, ChevronDown } from "lucide-react";
-import MastercardIcon from "@/app/icons/(dashboard)/card/MatercardIcon";
-import { Button, Dialog, DialogBody, DialogContent } from "@/components/core";
-import CloseIcon from "@/app/icons/CloseIcon";
-import FileIcon from "@/app/icons/(dashboard)/FileIcon";
-import AngleRight from "@/app/icons/(dashboard)/AngleRight";
-
-// Zod validation schema
+import React from "react"
+import { Button, Dialog, DialogBody, DialogContent } from "@/components/core"
+import CloseIcon from "@/app/icons/CloseIcon"
+import AngleRight from "@/app/icons/(dashboard)/AngleRight"
+import { bookingActionTranslations } from "@/app/(main)/translation/bookingTranslation"
+import { useLanguage } from "@/hooks/useLanguage"
 
 interface Props {
-  isOpen: boolean;
-  setIsOpenCardModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowSchoolBookingModal: React.Dispatch<React.SetStateAction<boolean>>;
-   setShowBookWithBuddy: React.Dispatch<React.SetStateAction<boolean>>
+  isOpen: boolean
+  setIsOpenCardModal: React.Dispatch<React.SetStateAction<boolean>>
+  setShowSchoolBookingModal: React.Dispatch<React.SetStateAction<boolean>>
+  setShowBookWithBuddy: React.Dispatch<React.SetStateAction<boolean>>
 }
+
+// Translations
 
 const BookingActionModal: React.FC<Props> = ({
   isOpen,
   setIsOpenCardModal,
   setShowSchoolBookingModal,
-  setShowBookWithBuddy
+  setShowBookWithBuddy,
+
 }) => {
+  const {language}= useLanguage()
+  const t = bookingActionTranslations[language]||bookingActionTranslations.en
+
   const handleCancel = () => {
-    setIsOpenCardModal(false);
-  };
+    setIsOpenCardModal(false)
+  }
 
   const actionsType = [
     {
       id: 1,
-      title: "Book with Buddy",
+      title: t.buddy,
       action: () => setShowBookWithBuddy(true),
     },
     {
       id: 2,
-      title: "Book with School/Community",
+      title: t.school,
       action: () => setShowSchoolBookingModal(true),
     },
     {
       id: 3,
-      title: "Book with Dive Spot",
+      title: t.diveSpot,
       action: () => {},
     },
-  ];
+  ]
+
   return (
     <Dialog modal={true} open={isOpen}>
       <DialogContent className="!max-w-[517px] max-h-[80vh] bg-[#F9FAFB] dark:bg-gray-900">
         <DialogBody className="w-full outline-none">
           <div className="flex justify-between items-center w-full outline-none">
             <h3 className="font-archivo text-lg font-medium text-gray-900 dark:text-white">
-              Choose a booking Action
+              {t.chooseAction}
             </h3>
             <Button
               className="bg-transparent p-0 hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -68,22 +69,18 @@ const BookingActionModal: React.FC<Props> = ({
                 onClick={action?.action}
               >
                 <div className="flex items-center gap-3">
-                  <div>
-                    <p className="font-archivo text-sm text-gray-900 dark:text-white">
-                      {action?.title}
-                    </p>
-                  </div>
+                  <p className="font-archivo text-sm text-gray-900 dark:text-white">
+                    {action?.title}
+                  </p>
                 </div>
-                <div className="">
-                  <AngleRight className="text-gray-600 dark:text-gray-400" />
-                </div>
+                <AngleRight className="text-gray-600 dark:text-gray-400" />
               </div>
             ))}
           </div>
         </DialogBody>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
-export default BookingActionModal;
+export default BookingActionModal

@@ -21,19 +21,19 @@ interface prop {
 }
 
 const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingNextPage }: prop) => {
-     const {
-            isErrorModalOpen,
-            setErrorModalState,
-            openErrorModalWithMessage,
-            errorModalMessage,
-        } = useErrorModalState();
+    const {
+        isErrorModalOpen,
+        setErrorModalState,
+        openErrorModalWithMessage,
+        errorModalMessage,
+    } = useErrorModalState();
     const mapRef = useRef<HTMLDivElement>(null)
     const mapInstance = useRef<google.maps.Map | null>(null)
     const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([])
     const infoWindowsRef = useRef<google.maps.InfoWindow[]>([])
     const [isMapLoaded, setIsMapLoaded] = useState(false)
-        const { mutate: handleCreate, isLoading } = useCreateDiveLog();
-    
+    const { mutate: handleCreate, isLoading } = useCreateDiveLog();
+
     // Function to clear existing markers and info windows
     const clearMarkers = useCallback(() => {
         markersRef.current.forEach(marker => {
@@ -50,7 +50,7 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
     const createInfoWindowContent = useCallback((buddy: buddyResult) => {
         const profilePicture = buddy.profile_details?.profile_picture || '/default-avatar.png'
         const fullName = `${buddy.first_name} ${buddy.last_name}`.trim() || buddy.username
-        
+
         return `
             <div style="padding: 12px; min-width: 200px; font-family: Arial, sans-serif;">
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
@@ -99,48 +99,48 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
     }, [])
 
     // Function to handle create plan button click
-    const handleCreatePlan = (data:buddyResult) => {
+    const handleCreatePlan = (data: buddyResult) => {
         // Close all info windows first
         const payload = {
-            data:{
-                 private_note: '',
-    public_note: "",
-    show_notes: false,
-    min_water_temperature:"0",
-    max_water_temperature:"0",
-    avg_water_temperature:"0",
-    bottom_time:"0",
-    dive_depth:"0",
-    name: "string",
-    start_date: "string",
-    end_date: "string",
-    dive_site_id: "1",
-    gas_mixture: "2",
-    bcd: "sll",
-    weight: "",
-    mask: "",
-    regulator: "",
-    fin: "",
-    wetsuit: "",
-    email: [],
-    buddies: "",
+            data: {
+                private_note: '',
+                public_note: "",
+                show_notes: false,
+                min_water_temperature: "0",
+                max_water_temperature: "0",
+                avg_water_temperature: "0",
+                bottom_time: "0",
+                dive_depth: "0",
+                name: "string",
+                start_date: "string",
+                end_date: "string",
+                dive_site_id: "1",
+                gas_mixture: "2",
+                bcd: "sll",
+                weight: "",
+                mask: "",
+                regulator: "",
+                fin: "",
+                wetsuit: "",
+                email: [],
+                buddies: "",
             }
         }
-        
+
         handleCreate(payload, {
             onSuccess: () => {
                 toast.success("Dive log created successfully")
                 infoWindowsRef.current.forEach(infoWindow => {
-        infoWindow.close()
-        
+                    infoWindow.close()
+
+                })
+            },
+            onError: (error) => {
+                const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+                openErrorModalWithMessage(String(errorMessage));
+            },
         })
-                   },
-                   onError: (error) => {
-                       const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-                       openErrorModalWithMessage(String(errorMessage));
-                   },
-               })
-      
+
     }
 
     // Make handleCreatePlan available globally for the info window
@@ -148,7 +148,7 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
         (window as any).handleCreatePlan = (buddyId: buddyResult) => {
             handleCreatePlan(buddyId)
         }
-        
+
         return () => {
             delete (window as any).handleCreatePlan
         }
@@ -156,19 +156,19 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
 
     // Function to create custom marker element
     const createCustomMarkerElement = useCallback(() => {
-  // Create an empty DOM container
-  const container = document.createElement("div")
+        // Create an empty DOM container
+        const container = document.createElement("div")
 
-  // Render your React component into that container
-  const root = createRoot(container)
-  root.render(
-    <div className="w-10 h-10 flex items-center justify-center rounded-full shadow-lg ">
-      <MapMarker className="w-10 h-10 text-blue-500" />
-    </div>
-  )
+        // Render your React component into that container
+        const root = createRoot(container)
+        root.render(
+            <div className="w-10 h-10 flex items-center justify-center rounded-full shadow-lg ">
+                <MapMarker className="w-10 h-10 text-blue-500" />
+            </div>
+        )
 
-  return container
-}, [])
+        return container
+    }, [])
 
     // Function to add markers for buddies
     const addMarkers = useCallback(async (buddies: buddyResult[], map: google.maps.Map) => {
@@ -180,45 +180,45 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
                 version: "quarterly",
                 libraries: ["places"]
             })
-            
+
             const { AdvancedMarkerElement } = await loader.importLibrary("marker") as google.maps.MarkerLibrary
             const { InfoWindow } = await loader.importLibrary("maps") as google.maps.MapsLibrary
 
             buddies.forEach((buddy, index) => {
                 const lat = Number(buddy?.current_location?.lat)
                 const lng = Number(buddy?.current_location?.lon)
-                
+
                 // Only create marker if coordinates are valid
                 if (!isNaN(lat) && !isNaN(lng)) {
                     // Create custom marker element
                     // const customElement = createCustomMarkerElement(buddy)
-                    
-                   const marker = new AdvancedMarkerElement({
-  position: { lat, lng },
-  map,
-  content: createCustomMarkerElement(), // your React marker
-  title: buddy.username,
-})
 
-                    
+                    const marker = new AdvancedMarkerElement({
+                        position: { lat, lng },
+                        map,
+                        content: createCustomMarkerElement(), // your React marker
+                        title: buddy.username,
+                    })
+
+
                     // Create info window
                     const infoWindow = new InfoWindow({
                         content: createInfoWindowContent(buddy),
                         ariaLabel: `${buddy.first_name} ${buddy.last_name}`.trim() || buddy.username
                     })
-                    
+
                     // Add click listener to marker
                     marker.addListener('click', () => {
                         // Close all other info windows
                         infoWindowsRef.current.forEach(iw => iw.close())
-                        
+
                         // Open this info window
                         infoWindow.open({
                             anchor: marker,
                             map: map
                         })
                     })
-                    
+
                     markersRef.current.push(marker)
                     infoWindowsRef.current.push(infoWindow)
                 }
@@ -250,25 +250,25 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
                     version: "quarterly",
                     libraries: ["places"]
                 })
-                
+
                 const { Map } = await loader.importLibrary("maps")
-                
+
                 // Calculate center from buddy locations if available
                 let centerLocation = { lat: 40.73061, lng: -73.935242 } // Default location
-                
+
                 if (buddyList && buddyList.length > 0) {
-                    const validBuddies = buddyList.filter(buddy => 
-                        buddy?.current_location?.lat && buddy?.current_location?.lon && 
+                    const validBuddies = buddyList.filter(buddy =>
+                        buddy?.current_location?.lat && buddy?.current_location?.lon &&
                         !isNaN(Number(buddy.current_location?.lat)) && !isNaN(Number(buddy.current_location?.lon))
                     )
-                    
+
                     if (validBuddies.length > 0) {
                         const avgLat = validBuddies.reduce((sum, buddy) => sum + Number(buddy?.current_location?.lat), 0) / validBuddies.length
                         const avgLng = validBuddies.reduce((sum, buddy) => sum + Number(buddy?.current_location?.lon), 0) / validBuddies.length
                         centerLocation = { lat: avgLat, lng: avgLng }
                     }
                 }
-                
+
                 const options: google.maps.MapOptions = {
                     center: centerLocation,
                     zoom: buddyList && buddyList.length > 1 ? 10 : 15,
@@ -277,10 +277,10 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
                     fullscreenControl: false,
                     streetViewControl: false
                 }
-                
+
                 const map = new Map(mapRef.current as HTMLElement, options)
                 mapInstance.current = map
-                
+
                 // Add event listeners
                 map.addListener('bounds_changed', () => {
                     setTimeout(handleBoundsChanged, 1000)
@@ -292,9 +292,9 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
                         // fetchNextPage()
                     }
                 })
-                
+
                 setIsMapLoaded(true)
-                
+
             } catch (error) {
                 console.error('Error initializing Google Maps:', error)
             }
@@ -323,7 +323,7 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
     return (
         <div className="relative w-full h-[83vh] mt-[4rem] dark:bg-gray-900">
             <div ref={mapRef} className="w-full h-full" />
-            
+
             {/* Load More Button */}
             {hasNextPage && (
                 <div className="absolute bottom-4 right-4">

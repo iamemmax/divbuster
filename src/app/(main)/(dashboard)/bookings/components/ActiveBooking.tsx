@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useCallback, useMemo } from 'react';
 import { Search, Share2, ArrowRight, Loader2 } from 'lucide-react';
 import { BookingCard } from './BookingCard';
@@ -8,16 +9,19 @@ import ViewBookingDetails from './details/ViewBooking';
 import ViewBookingDivePlan from './details/ViewBookingDivePlan';
 import { bookingResult, useFetchSchoolBooking } from '../../api/bookings/fetchSchoolBooking';
 import moment from 'moment';
+import { bookingTranslation } from '@/app/(main)/translation/bookingTranslation';
+import { useLanguage } from '@/hooks/useLanguage';
 
-// Types
+// Translations
 
 
-// Main Component
 const ActiveBookings: React.FC = () => {
   const [globalSearch, setGlobalSearch] = useState("");
   const [showViewBookingDetailsModal, setShowViewBookingDetailsModal] = useState(false);
   const [bookingDetails, setBookingDetails] = useState<bookingResult>();
   const [showViewBookingDivePlanModal, setShowViewBookingDivePlanModal] = useState(false);
+const {language} = useLanguage()
+  const t = bookingTranslation[language] || bookingTranslation.en;
 
   const {
     data,
@@ -25,27 +29,20 @@ const ActiveBookings: React.FC = () => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    isFetching,
     error
-  } = useFetchSchoolBooking();
+  } = useFetchSchoolBooking(language);
 
-  // Memoized filtered bookings based on search
   const filteredBookings = useMemo(() => {
     if (!data?.pages) return [];
-    
     const allBookings = data.pages.flatMap(response => response?.results || []);
-    
     if (!globalSearch.trim()) return allBookings;
-    
     const searchLower = globalSearch.toLowerCase();
-    return allBookings.filter(dive => 
+    return allBookings.filter(dive =>
       dive?.event?.description?.toLowerCase().includes(searchLower) ||
-      dive?.event?.name?.toLowerCase().includes(searchLower) 
-    )
-      // dive?.dive_instructor?.toLowerCase().includes(searchLower)
+      dive?.event?.name?.toLowerCase().includes(searchLower)
+    );
   }, [data?.pages, globalSearch]);
 
-  // Optimized handlers using useCallback
   const handleShare = useCallback((title: string): void => {
     if (navigator.share) {
       navigator.share({
@@ -54,10 +51,7 @@ const ActiveBookings: React.FC = () => {
         url: window.location.href,
       }).catch((err) => console.log('Error sharing:', err));
     } else {
-      // Fallback for browsers without Web Share API
       navigator.clipboard?.writeText(window.location.href);
-      // You might want to show a toast notification here
-      console.log('Link copied to clipboard');
     }
   }, []);
 
@@ -71,37 +65,29 @@ const ActiveBookings: React.FC = () => {
     setShowViewBookingDivePlanModal(true);
   }, []);
 
- 
-
   const handleLoadMore = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  // Loading state
   if (isLoading) {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
           <Loader2 className="animate-spin" size={20} />
-          <span>Loading dive bookings...</span>
+          <span>{t.loading}</span>
         </div>
       </div>
     );
   }
 
-  // Error state
   if (error) {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 dark:text-red-400 mb-4">
-            Failed to load dive bookings
-          </p>
-          <Button onClick={() => window.location.reload()}>
-            Try Again
-          </Button>
+          <p className="text-red-600 dark:text-red-400 mb-4">{t.error}</p>
+          <Button onClick={() => window.location.reload()}>{t.tryAgain}</Button>
         </div>
       </div>
     );
@@ -114,7 +100,7 @@ const ActiveBookings: React.FC = () => {
         <div className="py-4">
           <div className="relative flex-1 w-full">
             <DebouncedSearchInput
-              placeholder="Search for dive buddy, dive location, etc."
+              placeholder={t.searchPlaceholder}
               onSearch={setGlobalSearch}
               debounceTime={300}
               value={globalSearch}
@@ -125,12 +111,7 @@ const ActiveBookings: React.FC = () => {
           
           <div className="flex gap-y-3 flex-wrap items-center justify-between py-3">
             <h1 className="font-archivo text-base md:text-xl text-[#101828] dark:text-white font-medium">
-              Recent Dive Plan Details
-              {filteredBookings.length > 0 && (
-                <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
-                  ({filteredBookings.length} {filteredBookings.length === 1 ? 'booking' : 'bookings'})
-                </span>
-              )}
+              {t.recentPlans}
             </h1>
             
             {/* Action Buttons */}
@@ -142,9 +123,10 @@ const ActiveBookings: React.FC = () => {
                 disabled={filteredBookings.length === 0}
               >
                 <Share2 size={18} />
-                <span>Share Dive Plan</span>
+                <span>{t.sharePlan}</span>
               </Button>
               <AddBookingButton />
+             
             </div>
           </div>
         </div>
@@ -158,38 +140,33 @@ const ActiveBookings: React.FC = () => {
               <Search size={48} className="mx-auto mb-4 opacity-50" />
             </div>
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              {globalSearch ? 'No matching dive bookings found' : 'No dive bookings yet'}
+              {globalSearch ? t.noResults : t.noBookings}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              {globalSearch 
-                ? `No results found for "${globalSearch}". Try adjusting your search.`
-                : 'Get started by creating your first dive booking.'
-              }
+              {globalSearch ? t.noResultsMessage(globalSearch) : t.getStarted}
             </p>
             {!globalSearch && <AddBookingButton />}
           </div>
         ) : (
           <>
-            {/* Cards Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-6">
               {filteredBookings.map((dive, index) => (
                 <BookingCard
                   key={dive?.id || index}
-                  image={ ""}
+                  image={"/images/dashboard/map3.png"}
                   location={dive?.contact_info?.location || "Location TBD"}
                   date={moment(dive?.date?.event_date).format("MMM DD, YYYY")}
                   hostedBy={dive?.event?.dive_school?.toString() || ""}
                   title={dive?.event?.name || "Dive Event"}
                   description={dive?.event?.description || "No description available"}
-                  viewPlanText="View Dive Plan"
-                  readMoreText="Read more"
+                  viewPlanText={t.viewPlan}
+                  readMoreText={t.readMore}
                   onReadMore={() => handleReadMore(dive)}
                   onViewPlan={() => handleViewPlan(dive)}
                 />
               ))}
             </div>
 
-            {/* Load More Button */}
             {hasNextPage && (
               <div className="flex justify-center mt-8">
                 <Button
@@ -200,11 +177,11 @@ const ActiveBookings: React.FC = () => {
                   {isFetchingNextPage ? (
                     <>
                       <Loader2 className="animate-spin" size={18} />
-                      Loading more...
+                      {t.loadingMore}
                     </>
                   ) : (
                     <>
-                      Load more
+                      {t.loadMore}
                       <ArrowRight size={18} />
                     </>
                   )}
@@ -219,7 +196,7 @@ const ActiveBookings: React.FC = () => {
         <ViewBookingDetails bookingDetails={bookingDetails} isOpen={showViewBookingDetailsModal} setIsOpen={setShowViewBookingDetailsModal}/>
       }
       {showViewBookingDivePlanModal &&
-        <ViewBookingDivePlan isOpen={showViewBookingDivePlanModal} title='Dive with Bart (Dive Plan Summary)' bookingDetails={bookingDetails} type='dive' setIsOpen={setShowViewBookingDivePlanModal}/>
+        <ViewBookingDivePlan isOpen={showViewBookingDivePlanModal} title={t.planSummary} bookingDetails={bookingDetails} type='dive' setIsOpen={setShowViewBookingDivePlanModal}/>
       }
     </div>
   );

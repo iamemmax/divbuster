@@ -34,14 +34,7 @@ const BookingPage = () => {
     return () => window.removeEventListener('popstate', updateFromURL)
   }, [])
 
-  const handleTabClick = (e: React.MouseEvent<HTMLAnchorElement>, tabId: string) => {
-    e.preventDefault()
-
-    const url = new URL(window.location.href)
-    url.searchParams.set('tab', tabId)
-    window.history.pushState({}, '', url.toString())
-    setActiveTab(tabId)
-  }
+  
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)

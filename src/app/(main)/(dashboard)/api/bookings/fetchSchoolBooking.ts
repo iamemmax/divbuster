@@ -69,8 +69,8 @@ interface Contactinfo {
 
 
 const fetchSchoolBooking = async (
-  id: string,
-  { pageParam = `dive/dive-booking` }
+  lang: string,
+  { pageParam = `dive/dive-booking?lang=${lang}` }
 ) => {
   // Strip domain if next is a full URL
   const relativeUrl = pageParam.replace(/^https?:\/\/[^/]+/, "");
@@ -78,10 +78,10 @@ const fetchSchoolBooking = async (
   return response.data as SchoolBookingProp;
 };
 
-export const useFetchSchoolBooking = (id?: string) => {
+export const useFetchSchoolBooking = (lang?: string) => {
   return useInfiniteQuery({
-    queryKey: ["dive-school-booking", id], // cache per dive school
-    queryFn: ({ pageParam }) => fetchSchoolBooking(String(id), { pageParam }),
+    queryKey: ["dive-school-booking", lang], // cache per dive school
+    queryFn: ({ pageParam }) => fetchSchoolBooking(String(lang), { pageParam }),
     getNextPageParam: (lastPage) => lastPage?.next ?? undefined,
   });
 };
