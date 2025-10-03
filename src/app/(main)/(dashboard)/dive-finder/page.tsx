@@ -112,7 +112,7 @@ export default function DiveMap() {
       <Header title="Dive Finder" subtitle="" />
 
       {/* Tabs */}
-      <div className="flex gap-4 px-4 pb-5 md:p-4 bg-white dark:bg-gray-900 flex-wrap  absolute top-[6rem] inset-x-0 z-[9999999] shadow-md">
+      <div className="flex gap-4 px-4 pb-5 md:p-4 bg-white dark:bg-gray-900 flex-wrap  absolute top-[6rem] inset-x-0 z-30 shadow-md">
          <div className="relative flex-1 w-full">
                     <DebouncedSearchInput
                       placeholder="Search for dive buddy, dive location, etc."

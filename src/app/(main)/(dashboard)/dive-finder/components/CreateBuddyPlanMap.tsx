@@ -11,6 +11,9 @@ import { AxiosError } from 'axios'
 import BuddiesIcon from '@/app/icons/(dashboard)/BuddiesIcon'
 import { createRoot } from "react-dom/client";
 import MapMarker from '@/app/icons/(dashboard)/MapMarker'
+import BookingActionModal from '../../bookings/components/modals/BookingActionModal'
+import CreateBuddyBooking from '../../bookings/components/modals/buddy-booking/CreateBuddyBooking'
+import { useAuth } from '@/contexts/authentication'
 
 
 interface prop {
@@ -21,19 +24,16 @@ interface prop {
 }
 
 const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingNextPage }: prop) => {
-    const {
-        isErrorModalOpen,
-        setErrorModalState,
-        openErrorModalWithMessage,
-        errorModalMessage,
-    } = useErrorModalState();
+ 
     const mapRef = useRef<HTMLDivElement>(null)
     const mapInstance = useRef<google.maps.Map | null>(null)
     const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([])
     const infoWindowsRef = useRef<google.maps.InfoWindow[]>([])
     const [isMapLoaded, setIsMapLoaded] = useState(false)
-    const { mutate: handleCreate, isLoading } = useCreateDiveLog();
-
+   const [selectedBuddy, setSelectedBuddy] = useState("")
+    const [showDivePlanModal, setShowDivePlanModal] = useState(false)
+const {authState}= useAuth()
+const {user}=authState
     // Function to clear existing markers and info windows
     const clearMarkers = useCallback(() => {
         markersRef.current.forEach(marker => {
@@ -76,7 +76,7 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
                 ` : ''}
                 
                 <button 
-                    onclick="handleCreatePlan('${buddy.id}')" 
+                    onclick="handleCreatePlan('${buddy}')" 
                     style="
                         width: 100%; 
                         background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
@@ -101,45 +101,8 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
     // Function to handle create plan button click
     const handleCreatePlan = (data: buddyResult) => {
         // Close all info windows first
-        const payload = {
-            data: {
-                private_note: '',
-                public_note: "",
-                show_notes: false,
-                min_water_temperature: "0",
-                max_water_temperature: "0",
-                avg_water_temperature: "0",
-                bottom_time: "0",
-                dive_depth: "0",
-                name: "string",
-                start_date: "string",
-                end_date: "string",
-                dive_site_id: "1",
-                gas_mixture: "2",
-                bcd: "sll",
-                weight: "",
-                mask: "",
-                regulator: "",
-                fin: "",
-                wetsuit: "",
-                email: [],
-                buddies: "",
-            }
-        }
-
-        handleCreate(payload, {
-            onSuccess: () => {
-                toast.success("Dive log created successfully")
-                infoWindowsRef.current.forEach(infoWindow => {
-                    infoWindow.close()
-
-                })
-            },
-            onError: (error) => {
-                const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-                openErrorModalWithMessage(String(errorMessage));
-            },
-        })
+        setSelectedBuddy(data?.username)
+      setShowDivePlanModal(true)
 
     }
 
@@ -353,6 +316,19 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
                     </div>
                 </div>
             )}
+
+
+           {showDivePlanModal && (
+        <div className="!z-[999999999]">
+            <CreateBuddyBooking
+          isOpen={showDivePlanModal}
+          user={user}
+          setIsOpenCardModal={setShowDivePlanModal}
+          selectedBuddies={selectedBuddy}
+          />
+          
+        </div>
+      )}
         </div>
     )
 }

@@ -468,19 +468,19 @@ const DivingProfile = () => {
                 <MyBuddyList />
               </div>
 
-              <div className="space-y-3 flex justify-center items-center flex-col">
+              {/* <div className="space-y-3 flex justify-center items-center flex-col">
                 <Button className="w-full py-3 bg-[#A9B0C2] dark:bg-gray-600 max-w-[33.75rem] font-semibold text-lg border border-[#A9B0C2] dark:border-gray-600 text-white rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors duration-200">
                   {t.unfriend}
                 </Button>
                 <Button className="w-full py-3 bg-transparent text-[#FF0000] dark:text-red-400 font-semibold text-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200">
                   {t.blockUser}
                 </Button>
-              </div>
+              </div> */}
             </div>
           </>
         )}
       </div>
-            {showBookWithBuddy && <CreateBuddyBooking isOpen={showBookWithBuddy} setIsOpenCardModal={setShowBookWithBuddy} user={user}/>}
+            {showBookWithBuddy && <CreateBuddyBooking isOpen={showBookWithBuddy} setIsOpenCardModal={setShowBookWithBuddy} user={user} selectedBuddies=""/>}
       
 
       {/* {isErrorModalOpen && (

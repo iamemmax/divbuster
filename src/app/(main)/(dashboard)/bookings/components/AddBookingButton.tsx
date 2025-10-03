@@ -54,6 +54,7 @@ const {language}=useLanguage()
           isOpen={showBookWithBuddy}
           user={user}
           setIsOpenCardModal={setShowBookWithBuddy}
+          selectedBuddies=""
         />
       )}
     </div>

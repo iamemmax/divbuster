@@ -5,6 +5,7 @@ import Image from "next/image";
 import moment from "moment";
 import { viewBookingranslations } from "@/app/(main)/translation/bookingTranslation";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useAuth } from "@/contexts/authentication";
 
 interface prop {
   isOpen: boolean;
@@ -17,7 +18,8 @@ interface prop {
 const ViewBookingDetails = ({ isOpen, setIsOpen, bookingDetails }: prop) => {
   const {language}= useLanguage()
   const t = viewBookingranslations[language] || viewBookingranslations.en;
-
+const {authState}= useAuth()
+const {user}= authState
   return (
     <div className="">
       <Dialog modal={true} open={isOpen}>
@@ -63,7 +65,7 @@ const ViewBookingDetails = ({ isOpen, setIsOpen, bookingDetails }: prop) => {
                 {/* Dive with Bart Section */}
                 <div className="grid md:grid-cols-[1fr_1.5fr] gap-8 mb-8">
                   <h3 className="text-base font-semibold text-[#344054] font-archivo mb-3 dark:text-white">
-                    {t.diveWithBart}
+                    {t.diveWithBart} {user?.profile_details?.nickname}
                   </h3>
                   <div className="text-[#667085] dark:text-white space-y-2">
                     <p className="text-base font-archivo">

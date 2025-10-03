@@ -5,7 +5,7 @@
 
 
 
-
+"use client"
 
 import { Button, ErrorModal } from '@/components/core'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -39,6 +39,7 @@ interface prop{
         onClose: () => void
         planGearData:createGearLogDetailsFormValues
          user: User | null
+         selectedBuddies:string
 }
 export interface addBuddyMember {
     email:string[],
@@ -75,7 +76,7 @@ const setBuddiesString = (buddiesSet: Set<number>): string => {
   return Array.from(buddiesSet).join(',');
 };
 
-const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData,onClose,stepOneLogDetails,user}:prop) => {
+const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData, selectedBuddies:selectedBuddyEmail,onClose,stepOneLogDetails,user}:prop) => {
    const {language}= useLanguage()
     const t = diveLogBuddiesTranslations[language] || diveLogBuddiesTranslations?.en;
       const {
@@ -183,6 +184,17 @@ const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData,onClose,s
       toast.error("Email already added");
     }
   };
+  useEffect(() => {
+    if(selectedBuddyEmail !== ""){
+     if (!emailList.includes(selectedBuddyEmail)) {
+      setEmailList([...emailList, selectedBuddyEmail]);
+      // Clear the input after adding
+    } else {
+      toast.error("Email already added");
+    }
+    }
+  }, [selectedBuddyEmail])
+  
 
   // Handle proceed action (create booking)
   const handleProceed = () => {

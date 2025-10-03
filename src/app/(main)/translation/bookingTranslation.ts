@@ -137,7 +137,7 @@ export const bookingDetailstranslations = {
 export const viewBookingranslations = {
   en: {
     viewDivePlan: "View Dive Plan",
-    diveWithBart: "Dive with Bart",
+    diveWithBart: "Dive with ",
     included: "What's included?",
     bring: "What do I need to bring?",
     gear: "All the dive gear + tank",
@@ -151,7 +151,7 @@ export const viewBookingranslations = {
   },
   es: {
     viewDivePlan: "Ver plan de buceo",
-    diveWithBart: "Bucea con Bart",
+    diveWithBart: "Bucea con ",
     included: "¿Qué está incluido?",
     bring: "¿Qué necesito traer?",
     gear: "Todo el equipo de buceo + tanque",
@@ -165,7 +165,7 @@ export const viewBookingranslations = {
   },
   fr: {
     viewDivePlan: "Voir le plan de plongée",
-    diveWithBart: "Plonger avec Bart",
+    diveWithBart: "Plonger avec ",
     included: "Qu'est-ce qui est inclus ?",
     bring: "Que dois-je apporter ?",
     gear: "Tout le matériel de plongée + bouteille",
@@ -179,7 +179,7 @@ export const viewBookingranslations = {
   },
   nl: {
     viewDivePlan: "Bekijk duikplan",
-    diveWithBart: "Duiken met Bart",
+    diveWithBart: "Duiken met ",
     included: "Wat is inbegrepen?",
     bring: "Wat moet ik meenemen?",
     gear: "Alle duikuitrusting + tank",
