@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 "use client"
 
 import { Button, ErrorModal } from '@/components/core'

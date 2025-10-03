@@ -17,6 +17,8 @@ import { useQueries, useQueryClient } from 'react-query';
 import { certificateResult } from '../../(dashboard)/certifications/fetchCertifications';
 import { useUpdateCertification } from '../../(dashboard)/certifications/editCertification';
 import { convertKebabAndSnakeToTitleCase } from '@/utils/strings';
+import { useLanguage } from '@/hooks/useLanguage';
+import { addCertificationFormtranslations } from '../../translation/certificationTranslation';
 interface Props {
     setIsOpenCardModal: React.Dispatch<React.SetStateAction<boolean>>;
     certificateData: certificateResult | undefined
@@ -28,6 +30,8 @@ interface Props {
 
 const AddCertification = ({ setIsOpenCardModal,certificateData,type,selectedCard,setStep }: Props) => {
     const user = useUser()
+    const {language} =useLanguage()
+    const t = addCertificationFormtranslations[language] || addCertificationFormtranslations.en
      const {
             isErrorModalOpen,
             setErrorModalState,
@@ -216,10 +220,10 @@ useEffect(() => {
                                                 htmlFor="fileInput"
                                                 className="mt-2 inline-block cursor-pointer px-3 py-1 text-orange-500  text-sm rounded-lg"
                                             >
-                                              CLick to upload
+                                             {t.upload}
                                             </label>
                                             <p className="text-sm text-gray-600 dark:text-gray-300">
-                                                Drag & Drop (PNG, JPG or JPEG)
+                                               {t.dragDrop}
                                             </p>
                                             <input
                                                 type="file"
@@ -236,7 +240,7 @@ useEffect(() => {
 
                             <div className='grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-5'>
 
-                                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Issuer</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">{t.issuer}</label>
                                 <Controller
                                     name="issuer"
                                     control={control}
@@ -263,7 +267,7 @@ useEffect(() => {
                             </div>
                             <div className='grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-5'>
 
-                                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Certificate Type</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">{t.certType}</label>
                                 <Controller
                                     name="certificate_type"
                                     control={control}
@@ -292,11 +296,11 @@ useEffect(() => {
 
                             <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-2 sm:gap-5">
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
-                                    Certificate No
+                                   {t.certNo}
                                 </label>
                                 <input
                                     {...register('certificate_no')}
-                                    placeholder="Enter certificate no"
+                                    placeholder=""
                                     className={`border relative ${errors.certificate_no ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
                                         } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}
                                 />
@@ -308,12 +312,12 @@ useEffect(() => {
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-2 sm:gap-5">
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
-                                    Certification Date
+                                    {t.certDate}
                                 </label>
                                 <input
                                     type='date'
                                     {...register('issue_date')}
-                                    placeholder="Enter certificate date"
+                                    placeholder=""
                                     className={`border relative ${errors.issue_date ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
                                         } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}
                                 />
@@ -327,11 +331,11 @@ useEffect(() => {
 
                             <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-2 sm:gap-5">
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
-                                    Diver Name
+                                  {t.diverName}
                                 </label>
                                 <input
                                     {...register('full_name')}
-                                    placeholder="Enter Diver name"
+                                    placeholder=""
                                     className={`border relative ${errors.full_name ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
                                         } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}
                                 />
@@ -346,12 +350,12 @@ useEffect(() => {
 
                             <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-2 sm:gap-5">
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
-                                    Date of birth
+                                   {t.dob}
                                 </label>
                                 <input
                                     type='date'
                                     {...register('dob')}
-                                    placeholder="Enter certificate date"
+                                    placeholder=""
                                     className={`border relative ${errors.dob ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
                                         } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}
                                 />
@@ -364,12 +368,12 @@ useEffect(() => {
 
                             <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-2 sm:gap-5">
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
-                                    Dive School
+                                   {t.school}
                                 </label>
                                 <input
                                     type='text'
                                     {...register('school_name')}
-                                    placeholder="Enter Dive school"
+                                    placeholder=""
                                     className={`border relative ${errors.school_name ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
                                         } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}
                                 />
@@ -382,12 +386,12 @@ useEffect(() => {
 
                             <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-2 sm:gap-5">
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
-                                    Trainer Name
+                                   {t.trainer}
                                 </label>
                                 <input
                                     type='text'
                                     {...register('trainer_name')}
-                                    placeholder="Enter Trainer name"
+                                    placeholder={``}
                                     className={`border relative ${errors.trainer_name ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
                                         } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}
                                 />
@@ -399,12 +403,12 @@ useEffect(() => {
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-2 sm:gap-5">
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
-                                    Instructor number
+                                   {t.instructor}
                                 </label>
                                 <input
                                     type='text'
                                     {...register('trainer_phone')}
-                                    placeholder="Enter Instructor number"
+                                    placeholder=""
                                     className={`border relative ${errors.trainer_phone ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
                                         } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}
                                 />
@@ -426,14 +430,14 @@ useEffect(() => {
                                 className="flex dark:border-white border-black  justify-center items-center gap-x-3 text-black hover:bg-orange-100 dark:text-white"
                             onClick={()=>setStep(1)}
                             >
-                                Back
+                                {t.back}
                             </Button>
                             <Button
                                 size={"lg"}
                                 type="submit"
                                 className="bg-orange-500 flex justify-center items-center gap-x-3 hover:bg-orange-600 text-white"
                             >
-                                Proceed {isLoading || isUpdating && <SmallSpinner color='#fff'/>}
+                                {t.proceed} {isLoading || isUpdating && <SmallSpinner color='#fff'/>}
                             </Button>
                         </div>
                     </form>

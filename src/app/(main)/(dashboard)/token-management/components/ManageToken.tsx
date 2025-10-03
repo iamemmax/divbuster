@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import RecentTokenTransaction from './manageToken/RecentTokenTransaction';
@@ -7,63 +8,49 @@ import TokenSpent from './manageToken/TokenSpent';
 import AddTokenModal from './modals/AddTokenModal';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import MyInvoicesManagement from './invoices/InvoiceMagement';
+import { tokenHistoryTranslations } from '@/app/(main)/translation/tokenTranslation';
+import { useLanguage } from '@/hooks/useLanguage';
 
-interface prop{
-    user: User | null
+interface prop {
+  user: User | null;
 }
 
-const ManageToken = ({user}:prop) => {
+
+
+const ManageToken = ({ user }: prop) => {
   const [activeSection, setActiveSection] = useState('History');
   const [showTokenModal, setShowTokenModal] = useState(false);
-
-  const sidebarItems = [
-    // {
-    //   id: 'resetnt-token',
-    //   title: 'Token Transactions',
-    //   subtitle: 'View all your token transaction here.',
-    // },
-    // {
-    //   id: 'funt-transaction',
-    //   title: 'Fund Transactions',
-    //   subtitle: 'View all your fund transactions here.',
-    // },
-    {
-      id: 'History',
-      title: 'Recent Transaction History',
-      subtitle: 'View all token spent with detais',
-    },
-  ];
+const {language}=useLanguage()
+  const t = tokenHistoryTranslations[language] || tokenHistoryTranslations.en;
 
   const renderComponent = () => {
     switch (activeSection) {
-      // case 'resetnt-token':
-      //   return <RecentTokenTransaction/>;
-      // case 'funt-transaction':
-      //   return <RecentFundTransactions/>;
       case 'History':
-        // return <TokenSpent/>;
-        return <MyInvoicesManagement/>;
+        return <MyInvoicesManagement />;
       default:
         return 1;
     }
   };
 
   return (
-    <div className="flex 2xl:max-h-[60vh] flex-col md:flex-row md:px-4  py-6 gap-6 md:gap-[50px] bg-white dark:bg-gray-900 transition-colors">
+    <div className="flex 2xl:max-h-[60vh] flex-col md:flex-row md:px-4 py-6 gap-6 md:gap-[50px] bg-white dark:bg-gray-900 transition-colors">
       {/* Sidebar */}
       <div className="w-full max-w-md mt-10 rounded-lg">
         <div className="pb-3 max-w-xs">
           <h2 className='font-archivo text-black dark:text-white font-medium text-xl'>
-            <span className='text-[#71717A] dark:text-gray-400'>Hello, {user?.first_name}</span>, 
-            Let's help you manage your token.
+            <span className='text-[#71717A] dark:text-gray-400'>
+              {t.greeting}, {user?.first_name}
+            </span>, {t.manageTokens}
           </h2>
-          {/* <p className='py-1 font-archivo text-sm text-[#71717A] dark:text-gray-400'>You are currently on a One (1) Year Solid Plan.</p> */}
         </div>
         <div className="">
-          <ManageTokenHeader onAddTokens={()=>setShowTokenModal(true)} balance={user?.wallet?.balance}/>
+          <ManageTokenHeader 
+            onAddTokens={() => setShowTokenModal(true)} 
+            balance={user?.wallet?.balance} 
+          />
         </div>
         <div className="space-y-4">
-          {sidebarItems.map((item, index) => (
+          {t.sidebar.map((item, index) => (
             <div
               key={index}
               onClick={() => setActiveSection(item.id)}
@@ -100,12 +87,12 @@ const ManageToken = ({user}:prop) => {
         {renderComponent()}
       </div>
 
-      {
-        showTokenModal && <AddTokenModal
+      {showTokenModal && (
+        <AddTokenModal
           isOpen={showTokenModal}
           setIsOpen={setShowTokenModal}
         />
-      }
+      )}
     </div>
   );
 };

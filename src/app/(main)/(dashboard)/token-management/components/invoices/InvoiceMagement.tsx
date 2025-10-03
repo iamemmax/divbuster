@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useMemo } from "react";
 import {
   useReactTable,
@@ -8,7 +9,7 @@ import {
   createColumnHelper,
   flexRender,
 } from "@tanstack/react-table";
-import { ChevronLeft, ChevronRight, ArrowUpDown } from "lucide-react";
+import {  ArrowUpDown } from "lucide-react";
 import AppleCardIcon from "@/app/icons/(dashboard)/card/AppleCardIcon";
 import MastercardIcon from "@/app/icons/(dashboard)/card/MatercardIcon";
 import PaypalIcon from "@/app/icons/(dashboard)/card/PaypalIcon";
@@ -16,6 +17,8 @@ import StripeCardIcon from "@/app/icons/(dashboard)/card/StripeCardIcon";
 import VisaCardIcon from "@/app/icons/(dashboard)/card/VisaCardIcon";
 import { DebouncedSearchInput } from "@/components/core/DebouncedSearchInput";
 import { useFetchPaymentHistory } from "../../../api/payment/fetchPaymentHistory";
+import { invoiceeTranslations } from "@/app/(main)/translation/tokenTranslation";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface TransHistoryResult {
   id: number;
@@ -33,7 +36,13 @@ interface TransHistoryResult {
   plan: number;
 }
 
+// 🔹 Translation object
+
+
+
 const MyInvoicesManagement = () => {
+  const {language}= useLanguage()
+  const t = invoiceeTranslations[language] || invoiceeTranslations.en;
   const [globalFilter, setGlobalFilter] = useState("");
   const { data } = useFetchPaymentHistory();
 
@@ -65,8 +74,8 @@ const MyInvoicesManagement = () => {
   const columns = useMemo(
     () => [
       columnHelper.accessor("id", {
-        header: "S/N",
-        cell: (info) => info?.row?.index+1,
+        header: t.sn,
+        cell: (info) => info?.row?.index + 1,
         enableSorting: true,
       }),
       columnHelper.accessor("reference", {
@@ -77,7 +86,7 @@ const MyInvoicesManagement = () => {
               column.toggleSorting(column.getIsSorted() === "asc")
             }
           >
-            <span>TRANSACTION ID</span>
+            <span>{t.transactionId}</span>
             <ArrowUpDown className="w-4 h-4" />
           </button>
         ),
@@ -85,15 +94,15 @@ const MyInvoicesManagement = () => {
         enableSorting: true,
       }),
       columnHelper.accessor("narration", {
-        header: "RECIPIENT DETAILS",
+        header: t.recipient,
         cell: (info) => info.getValue(),
       }),
       columnHelper.accessor("amount", {
-        header: "AMOUNT",
+        header: t.amount,
         cell: (info) => `₦${info.getValue().toLocaleString()}`,
       }),
       columnHelper.accessor("created_on", {
-        header: "DATE",
+        header: t.date,
         cell: (info) =>
           new Date(info.getValue()).toLocaleDateString("en-GB", {
             day: "2-digit",
@@ -102,11 +111,11 @@ const MyInvoicesManagement = () => {
           }),
       }),
       columnHelper.accessor("payment_gateway", {
-        header: "GATEWAY",
+        header: t.gateway,
         cell: (info) => getGatewayDisplay(info.getValue()),
       }),
       columnHelper.accessor("transaction_status", {
-        header: "STATUS",
+        header: t.status,
         cell: (info) => (
           <span
             className={`px-2 py-1 text-xs rounded-full ${
@@ -120,7 +129,7 @@ const MyInvoicesManagement = () => {
         ),
       }),
     ],
-    [columnHelper]
+    [columnHelper, t]
   );
 
   const table = useReactTable({
@@ -141,13 +150,13 @@ const MyInvoicesManagement = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:justify-between mb-8">
         <h1 className="text-xl md:text-2xl font-medium text-[#101828] dark:text-gray-100">
-          My Invoices
+          {t.title}
         </h1>
 
         {/* Search Bar */}
         <div className="w-full sm:w-auto">
           <DebouncedSearchInput
-            placeholder="Search for transaction ID, narration, amount etc.."
+            placeholder={t.searchPlaceholder}
             onSearch={(value) => setGlobalFilter(value)}
             debounceTime={300}
             value={globalFilter}
@@ -187,7 +196,7 @@ const MyInvoicesManagement = () => {
                     colSpan={columns.length}
                     className="px-3 sm:px-6 py-8 text-center text-gray-500 dark:text-gray-400"
                   >
-                    No transactions found.
+                    {t.noTransactions}
                   </td>
                 </tr>
               ) : (
