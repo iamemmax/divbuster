@@ -6,6 +6,7 @@ import { Button } from '@/components/core';
 import { useLanguage } from '../contexts/LanguageContext';
 // Try a different approach for QR code rendering
 import { QRCodeCanvas } from 'qrcode.react';
+import { translations } from '../translations';
 
 // Validation schema
 const mfaSchema = z.object({
@@ -19,7 +20,8 @@ interface MFAVerificationFormProps {
 }
 
 const MFAVerificationForm = ({ activeTab }: MFAVerificationFormProps) => {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
+  const t = translations[language] || translations.en
   const [isRegenerating, setIsRegenerating] = useState(false);
   
   // This would typically come from your API

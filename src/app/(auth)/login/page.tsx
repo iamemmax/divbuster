@@ -21,12 +21,13 @@ import { Language } from "../sign-up/translations";
 import SocialAuth from "../components/SocialAuth";
 import VerifyEmail from "./VerifyEmail";
 import CaretDownIcon from "@/icons/core/CaretDown";
-import { useLanguage } from "../sign-up/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
+// import { useLanguage } from "../sign-up/contexts/LanguageContext";
 
-type LoginStep = 
+type LoginStep =
   | 'login'
   | 'verify'
-  
+
 // Create translations object for login page
 const translations = {
   en: {
@@ -141,33 +142,33 @@ const translations = {
   }
 };
 
- const languages = [
-    {
-      value: "en",
-      label: "English",
-      flag: "https://flagcdn.com/gb.svg", // UK
-    },
-    {
-      value: "es",
-      label: "Spanish",
-      flag: "https://flagcdn.com/es.svg",
-    },
-    {
-      value: "fr",
-      label: "French",
-      flag: "https://flagcdn.com/fr.svg",
-    },
-    {
-      value: "nl",
-      label: "Dutch",
-      flag: "https://flagcdn.com/nl.svg",
-    },
-    // {
-    //   value: "de",
-    //   label: "German",
-    //   flag: "https://flagcdn.com/de.svg",
-    // },
-  ];
+const languages = [
+  {
+    value: "en",
+    label: "English",
+    flag: "https://flagcdn.com/gb.svg", // UK
+  },
+  {
+    value: "es",
+    label: "Spanish",
+    flag: "https://flagcdn.com/es.svg",
+  },
+  {
+    value: "fr",
+    label: "French",
+    flag: "https://flagcdn.com/fr.svg",
+  },
+  {
+    value: "nl",
+    label: "Dutch",
+    flag: "https://flagcdn.com/nl.svg",
+  },
+  // {
+  //   value: "de",
+  //   label: "German",
+  //   flag: "https://flagcdn.com/de.svg",
+  // },
+];
 export type LoginDetailsValue = z.infer<typeof loginUserSchema>;
 
 const LoginPage = () => {
@@ -177,7 +178,7 @@ const LoginPage = () => {
   const { language: updatedLang, setLanguage: updateLanguage } = useLanguage();
   const [language, setLanguage] = useState<Language>(updatedLang);
   const [isOpen, setIsOpen] = useState(false);
-  
+
   // Fixed: Initialize language from localStorage only on mount
   useEffect(() => {
     // Only run on client side
@@ -185,15 +186,15 @@ const LoginPage = () => {
       const storedLanguage = localStorage.getItem("preferredLanguage") as Language | null;
       if (storedLanguage && Object.keys(translations).includes(storedLanguage)) {
         setLanguage(storedLanguage);
-        setValue("lang",language)
+        setValue("lang", language)
         updateLanguage(storedLanguage);
       }
     }
   }, []); // Empty dependency array - only run on mount
-  
+
   // Get translations for current language
   const t = translations[language] || translations.en;
-  
+
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -201,7 +202,7 @@ const LoginPage = () => {
     errorModalMessage,
   } = useErrorModalState();
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const {
     handleSubmit,
     register,
@@ -228,20 +229,20 @@ const LoginPage = () => {
 
   const watchEmail = watch("email")
   const stepOrder: LoginStep[] = [
-   "login","verify"
+    "login", "verify"
   ];
   const getStepIndex = (step: LoginStep) => stepOrder.indexOf(step);
 
-  const handleNext = ()=>{
+  const handleNext = () => {
     const currentIndex = getStepIndex(currentStep);
     const nextIndex = currentIndex + 1;
-     setCurrentStep(stepOrder[nextIndex]);  
+    setCurrentStep(stepOrder[nextIndex]);
   }
 
   const goToPreviousStep = () => {
     const currentIndex = getStepIndex(currentStep);
     const prevIndex = currentIndex - 1;
-     setCurrentStep(stepOrder[prevIndex]);
+    setCurrentStep(stepOrder[prevIndex]);
   };
 
   const onSubmit = (data: LoginDetailsValue) => {
@@ -250,7 +251,7 @@ const LoginPage = () => {
         const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         openErrorModalWithMessage(String(errorMessage));
 
-        if(errorMessage === "Kindly verify account to continue"){
+        if (errorMessage === "Kindly verify account to continue") {
           handleNext()
         }
       },
@@ -261,195 +262,194 @@ const LoginPage = () => {
   const handleLanguageChange = (value: string) => {
     const newLanguage = value as Language;
     // console.log('Changing language to:', newLanguage); // Debug log
-    
+
     // Update local state first
     setLanguage(newLanguage);
-    
+
     // Update context
     updateLanguage(newLanguage);
-    
-    setValue("lang",newLanguage)
+
+    setValue("lang", newLanguage)
     // Set localStorage with error handling
     try {
       if (typeof window !== 'undefined') {
         localStorage.setItem("preferredLanguage", newLanguage);
-       
+
       }
     } catch (error) {
       console.error('Error saving language to localStorage:', error);
     }
   };
 
-  const renderCurrentStep = ()=>{
+  const renderCurrentStep = () => {
     const stepComponents = {
-      "login":(
-  <div className="md:px-[30px] px-6 py-[30px]  xl:px-[9.125rem] xl:py-[7rem]">
-  
-      <div className="flex justify-center mt-5 mb-7 items-center lg:hidden ">
-        <DiveBusterBlackLogo />
-      </div>
-      <div className="flex justify-center items-center flex-col">
-        <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39]">
-          {t.title}
-        </h2>
-        <p className="font-archivo text-[#8D9196] font-medium text-xs 2xl:text-base">
-          {t.subtitle}
-        </p>
-      </div>
-      <div className="mt-[1.3125rem]">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col ">
-            <label
-              htmlFor="email"
-              className="font-archivo text-[#1E293B] text-base font-medium"
-            >
-              {t.emailLabel}
-            </label>
-            <input
-              type="text"
-              placeholder={t.emailPlaceholder}
-              id="email"
-              className={`border ${errors.email ? "border-red-500" : "border-[#E2E8F0]"} outline-none py-[.8125rem] text-black text-sm bg-transparent font-archivo rounded-lg px-[.875rem]`}
-              {...register("email")}
-            />
-            {errors?.email && (
-              <p className="text-red-900 text-xs font-archivo">
-                {errors?.email?.message}
-              </p>
-            )}
-          </div>
-          <div className="flex flex-col mt-4 2xl:mt-6">
-            <label
-              htmlFor="password"
-              className="font-archivo text-[#1E293B] text-base font-medium"
-            >
-              {t.passwordLabel}
-            </label>
-            <div
-              className={`border ${errors.password ? "border-red-500" : "border-[#E2E8F0]"} flex items-center justify-between gap-5 outline-none py-[.8125rem] text-sm font-archivo rounded-lg px-[.875rem]`}
-            >
-              <input
-                className="border-none  outline-none bg-transparent text-black w-full"
-                type={showPassword?"text":"password"}
-                placeholder={t.passwordPlaceholder}
-                id="password"
-                {...register("password")}
-              />
+      "login": (
+        <div className="md:px-[30px] px-6 py-[30px]  xl:px-[9.125rem] xl:py-[7rem]">
 
-              <Button type="button" className="p-0 bg-transparent" onClick={()=>setShowPassword(!showPassword)}>
-                <EyeIcon />
+          <div className="flex justify-center mt-5 mb-7 items-center lg:hidden ">
+            <DiveBusterBlackLogo />
+          </div>
+          <div className="flex justify-center items-center flex-col">
+            <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39]">
+              {t.title}
+            </h2>
+            <p className="font-archivo text-[#8D9196] font-medium text-xs 2xl:text-base">
+              {t.subtitle}
+            </p>
+          </div>
+          <div className="mt-[1.3125rem]">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex flex-col ">
+                <label
+                  htmlFor="email"
+                  className="font-archivo text-[#1E293B] text-base font-medium"
+                >
+                  {t.emailLabel}
+                </label>
+                <input
+                  type="text"
+                  placeholder={t.emailPlaceholder}
+                  id="email"
+                  className={`border ${errors.email ? "border-red-500" : "border-[#E2E8F0]"} outline-none py-[.8125rem] text-black text-sm bg-transparent font-archivo rounded-lg px-[.875rem]`}
+                  {...register("email")}
+                />
+                {errors?.email && (
+                  <p className="text-red-900 text-xs font-archivo">
+                    {errors?.email?.message}
+                  </p>
+                )}
+              </div>
+              <div className="flex flex-col mt-4 2xl:mt-6">
+                <label
+                  htmlFor="password"
+                  className="font-archivo text-[#1E293B] text-base font-medium"
+                >
+                  {t.passwordLabel}
+                </label>
+                <div
+                  className={`border ${errors.password ? "border-red-500" : "border-[#E2E8F0]"} flex items-center justify-between gap-5 outline-none py-[.8125rem] text-sm font-archivo rounded-lg px-[.875rem]`}
+                >
+                  <input
+                    className="border-none  outline-none bg-transparent text-black w-full"
+                    type={showPassword ? "text" : "password"}
+                    placeholder={t.passwordPlaceholder}
+                    id="password"
+                    {...register("password")}
+                  />
+
+                  <Button type="button" className="p-0 bg-transparent" onClick={() => setShowPassword(!showPassword)}>
+                    <EyeIcon />
+                  </Button>
+                </div>
+                {errors?.password && (
+                  <p className="text-red-900 text-xs font-archivo">
+                    {errors?.password?.message}
+                  </p>
+                )}
+              </div>
+              <div className="flex justify-end items-center mt-[10px]">
+                <Link href={"/forgot-password"} className="text-[#F7931D] text-sm font-archivo font-medium">
+                  {t.forgotPassword}
+                </Link>
+              </div>
+              <Button type="submit" className="bg-[#F7931D] border flex items-center justify-center gap-x-3 border-[#F7931D] font-archivo font-semibold text-base mt-5 w-full h-[50px]">
+                {t.loginButton} {isLoading && <SmallSpinner color="#fff" />}
               </Button>
+            </form>
+
+            <SocialAuth />
+
+            <div className="mt-7">
+              <Link
+                href={"/sign-up"}
+                className="text-[#1E293B] text-sm font-archivo font-semibold flex justify-center items-center"
+              >
+                <p>
+                  {t.noAccount} <span className="text-[#F7931D]">{t.register}</span>{" "}
+                </p>
+              </Link>
             </div>
-            {errors?.password && (
-              <p className="text-red-900 text-xs font-archivo">
-                {errors?.password?.message}
-              </p>
-            )}
+
           </div>
-          <div className="flex justify-end items-center mt-[10px]">
-            <Link href={"/forgot-password"} className="text-[#F7931D] text-sm font-archivo font-medium">
-              {t.forgotPassword}
-            </Link>
-          </div>
-          <Button type="submit" className="bg-[#F7931D] border flex items-center justify-center gap-x-3 border-[#F7931D] font-archivo font-semibold text-base mt-5 w-full h-[50px]">
-            {t.loginButton} {isLoading && <SmallSpinner color="#fff"/>}
-          </Button>
-        </form>
 
-         <SocialAuth/>
-
-         <div className="mt-7">
-                 <Link  
-                   href={"/sign-up"}
-                   className="text-[#1E293B] text-sm font-archivo font-semibold flex justify-center items-center"
-                 >
-                   <p>
-                     {t.noAccount} <span className="text-[#F7931D]">{t.register}</span>{" "}
-                   </p>
-                 </Link>
-               </div>
-         
-      </div>
-
-      <ErrorModal
-        isErrorModalOpen={isErrorModalOpen}
-        setErrorModalState={() => {
-          setErrorModalState(false);
-        }}
-        subheading={
-          errorModalMessage ||
-          "Please check your inputs and try again."
-        }
-      ></ErrorModal>
-    </div>
+          <ErrorModal
+            isErrorModalOpen={isErrorModalOpen}
+            setErrorModalState={() => {
+              setErrorModalState(false);
+            }}
+            subheading={
+              errorModalMessage ||
+              "Please check your inputs and try again."
+            }
+          ></ErrorModal>
+        </div>
       ),
 
-      "verify":(
+      "verify": (
         <VerifyEmail email={watchEmail} goToPreviousStep={goToPreviousStep} />
       )
     }
-      return stepComponents[currentStep]
+    return stepComponents[currentStep]
   }
 
   return (
     <div className="w-full relative h-full">
-     <div className="flex absolute right-6 md:right-[9rem] top-5  justify-end items-center">
+      <div className="flex absolute right-6 md:right-[9rem] top-5  justify-end items-center">
         <Select
-            value={language || ""}
-            onValueChange={handleLanguageChange}
-            defaultValue={language}
-            onOpenChange={setIsOpen}
-          >
-            <div className="relative">
-              <SelectTrigger
-                id="language"
-                className={`border bg-transparent max-w-[9.5rem] w-full  relative text-black outline-none h-[3rem] text-sm font-archivo rounded-xl px-[.875rem] pr-10`}
-              >
-                <SelectValue
-                  className="text-[#8D9196] text-sm font-archivo font-medium"
-                />
-              <CaretDownIcon 
-                color="#8D9196" 
-                className={`absolute right-2  top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
-                  isOpen ? 'rotate-180' : ''
-                }`}
+          value={language || ""}
+          onValueChange={handleLanguageChange}
+          defaultValue={language}
+          onOpenChange={setIsOpen}
+        >
+          <div className="relative">
+            <SelectTrigger
+              id="language"
+              className={`border bg-transparent max-w-[9.5rem] w-full  relative text-black outline-none h-[3rem] text-sm font-archivo rounded-xl px-[.875rem] pr-10`}
+            >
+              <SelectValue
+                className="text-[#8D9196] text-sm font-archivo font-medium"
               />
-              </SelectTrigger>
-            </div>
-            <SelectContent>
+              <CaretDownIcon
+                color="#8D9196"
+                className={`absolute right-2  top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${isOpen ? 'rotate-180' : ''
+                  }`}
+              />
+            </SelectTrigger>
+          </div>
+          <SelectContent>
+            <SelectItem
+              className="hidden"
+              disabled
+              value=""
+              style={{
+                color: "#8D9196",
+                fontWeight: 500,
+                fontFamily: "Archivo",
+                fontSize: "10px",
+              }}
+            >
+              {language}
+            </SelectItem>
+            {languages.map((lang) => (
               <SelectItem
-                className="hidden"
-                disabled
-                value=""
-                style={{
-                  color: "#8D9196",
-                  fontWeight: 500,
-                  fontFamily: "Archivo",
-                  fontSize: "10px",
-                }}
+                key={lang.value}
+                value={lang.value}
+                className="px-2"
               >
-                {language}
+                <div className="flex items-start gap-3">
+                  <img
+                    src={lang.flag}
+                    alt={`${lang.label} flag`}
+                    className="w-5 h-5 rounded-sm object-cover"
+                  />{" "}
+                  <span>{lang.label}</span>
+                </div>
               </SelectItem>
-              {languages.map((lang) => (
-                <SelectItem
-                  key={lang.value}
-                  value={lang.value}
-                  className="px-2"
-                >
-                  <div className="flex items-start gap-3">
-                    <img
-                      src={lang.flag}
-                      alt={`${lang.label} flag`}
-                      className="w-5 h-5 rounded-sm object-cover"
-                    />{" "}
-                    <span>{lang.label}</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-   </div>
-    {renderCurrentStep()}
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      {renderCurrentStep()}
     </div>
   );
 };

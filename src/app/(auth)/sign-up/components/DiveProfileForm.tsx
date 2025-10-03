@@ -4,11 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/core";
 import { thirdStepProps } from ".";
-import { useLanguage } from "../contexts/LanguageContext";
+// import { useLanguage } from "../contexts/LanguageContext";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import EyeIcon from "@/app/icons/EyeIcon";
 import DiveBusterBlackLogo from "@/components/icons/DiveBusterBlackLogo";
+import { useLanguage } from "@/hooks/useLanguage";
+import { translations } from "../translations";
 
 type DiveProfileFormProps = {
   stepThreeData: thirdStepProps;
@@ -23,7 +25,8 @@ const DiveProfileForm = ({
   onNext,
   onBack,
 }: DiveProfileFormProps) => {
-  const { t } = useLanguage();
+  const { language} = useLanguage();
+  const t = translations[language] || translations.en
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   

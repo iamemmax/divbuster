@@ -28,14 +28,14 @@ const CreateBuddyBooking = ({isOpen,setIsOpenCardModal,user,selectedBuddies}:Pro
          const renderSteps = (step: number) => {
         switch (step) {
             case 1:
-                return <DiveBuddyInfo setStep={setStep}   setStepOneLogDetails={setStepOneLogDetails} user={user}/>
+                return <DiveBuddyInfo setStep={setStep} stepOneLogDetails={stepOneLogDetails}  setStepOneLogDetails={setStepOneLogDetails} user={user}/>
             case 2:
                 return <CreateDrivePlanGear setStep={setStep}  setPlanGearData={setPlanGearData} user={user} />
          case 3: 
 
                 return <CreateDivePlanBuddyBooking onClose={()=>setIsOpenCardModal(false)} setStep={setStep}  user={user} setBuddyMembers={setBuddyMembers} selectedBuddies={selectedBuddies} stepOneLogDetails={stepOneLogDetails} buddyMembers={buddyMembers} planGearData={planGearData}/>
                        default:
-                return <DiveBuddyInfo setStep={setStep}   setStepOneLogDetails={setStepOneLogDetails}  user={user}  />
+                return <DiveBuddyInfo setStep={setStep} stepOneLogDetails={stepOneLogDetails}  setStepOneLogDetails={setStepOneLogDetails}  user={user}  />
         }
     }
   return (

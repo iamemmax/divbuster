@@ -122,6 +122,17 @@ const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData, selected
     [fetchNextPage, hasNextPage, isFetchingNextPage]
   );
 
+    useEffect(() => {
+    if(selectedBuddyEmail !== ""){
+     if (!emailList.includes(selectedBuddyEmail)) {
+      setEmailList([...emailList, selectedBuddyEmail]);
+      // Clear the input after adding
+    } else {
+      toast.error("Email already added");
+    }
+    }
+  }, [selectedBuddyEmail])
+
   useEffect(() => {
     const option = { root: null, rootMargin: "20px", threshold: 0.5 };
     const observer = new IntersectionObserver(handleObserver, option);
@@ -156,7 +167,7 @@ const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData, selected
     
     handleCreate(payload, {
       onSuccess: () => {
-        toast.success("Booking created successfully");
+        toast.success("Plan created successfully");
         setSelectedBuddies({}as any)
         onClose();
       },
@@ -177,16 +188,7 @@ const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData, selected
       toast.error("Email already added");
     }
   };
-  useEffect(() => {
-    if(selectedBuddyEmail !== ""){
-     if (!emailList.includes(selectedBuddyEmail)) {
-      setEmailList([...emailList, selectedBuddyEmail]);
-      // Clear the input after adding
-    } else {
-      toast.error("Email already added");
-    }
-    }
-  }, [selectedBuddyEmail])
+
   
 
   // Handle proceed action (create booking)
@@ -235,7 +237,6 @@ const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData, selected
         {errors.email && (
           <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
         )}
-
         {/* Display added emails */}
         {emailList.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">

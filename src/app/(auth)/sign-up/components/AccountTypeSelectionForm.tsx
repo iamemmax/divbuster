@@ -4,8 +4,9 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretDown } from '@/components/icons';
-import { useLanguage } from '../contexts/LanguageContext';
 import DiveBusterBlackLogo from '@/components/icons/DiveBusterBlackLogo';
+import { useLanguage } from '@/hooks/useLanguage';
+import { translations } from '../translations';
 
 // Account type selection schema with translations
 const createAccountTypeSelectionSchema = (t: any) => z.object({
@@ -21,7 +22,9 @@ type AccountTypeSelectionFormProps = {
 };
 
 const AccountTypeSelectionForm = ({ formData, updateFormData, onNext, onBack }: AccountTypeSelectionFormProps) => {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
+    const t = translations[language] || translations.en;
+  
   const [diverTypeOpen, setDiverTypeOpen] = useState(false);
   const [selectedAccountType, setSelectedAccountType] = useState(formData.account_type || 'recreative');
   

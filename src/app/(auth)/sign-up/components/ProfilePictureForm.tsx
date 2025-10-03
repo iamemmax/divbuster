@@ -3,10 +3,11 @@ import { Button, ErrorModal } from "@/components/core";
 import { firstStepProps, fourthStepProps, secondStepProps, thirdStepProps } from ".";
 import { useSignup, SignupPayload } from "@/app/(auth)/api/signup";
 import { useRouter } from "next/navigation";
-import { useLanguage } from "../contexts/LanguageContext";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
+import { useLanguage } from "@/hooks/useLanguage";
+import { translations } from "../translations";
 
 type ProfilePictureFormProps = {
   formData: any;
@@ -35,7 +36,9 @@ const ProfilePictureForm = ({
           openErrorModalWithMessage,
           errorModalMessage,
         } = useErrorModalState();
-  const { t } = useLanguage();
+  const { language } = useLanguage();
+    const t = translations[language] || translations.en;
+  
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
     

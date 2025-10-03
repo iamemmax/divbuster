@@ -4,13 +4,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button, ErrorModal } from "@/components/core";
 import { secondStepProps } from ".";
-import { useLanguage } from "../contexts/LanguageContext";
+// import { useLanguage } from "../contexts/LanguageContext";
 import DiveBusterBlackLogo from "@/components/icons/DiveBusterBlackLogo";
 
 import { useAuth } from "@/contexts/authentication";
 import router from "next/router";
 import { useErrorModalState } from "@/hooks";
 import SocialAuth from "../../components/SocialAuth";
+import { useLanguage } from "@/hooks/useLanguage";
+import { translations } from "../translations";
 
 type AccountDetailsFormProps = {
   stepTwoData: secondStepProps;
@@ -26,24 +28,24 @@ const AccountDetailsForm = ({
   onBack,
 }: AccountDetailsFormProps) => {
 
-      const {
-        isErrorModalOpen,
-        setErrorModalState,
-        openErrorModalWithMessage,
-        errorModalMessage,
-      } = useErrorModalState();
-  const { t,language,setLanguage } = useLanguage();
+  const {
+    isErrorModalOpen,
+    setErrorModalState,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
+  const { language, setLanguage } = useLanguage();
   const { authState } = useAuth();
-    
 
-  
+
+const t = translations[language] || translations.en
   // Create the validation schema with translated error messages
   const accountDetailsSchema = z.object({
     first_name: z.string().min(1, { message: t.accountDetails.errors.firstNameRequired }),
     last_name: z.string().min(1, { message: t.accountDetails.errors.lastNameRequired }),
     email: z.string().email({ message: t.accountDetails.errors.invalidEmail }),
   });
-  
+
   const {
     register,
     handleSubmit,
@@ -59,7 +61,7 @@ const AccountDetailsForm = ({
   });
 
 
-// Watch for authentication state changes
+  // Watch for authentication state changes
   const onSubmit = (data: any) => {
     setStepTwoData({
       first_name: data.first_name,
@@ -70,17 +72,17 @@ const AccountDetailsForm = ({
   };
 
 
- 
+
   useEffect(() => {
     if (authState.isAuthenticated && !authState.isLoading) {
       router.push("/");
     }
   }, [authState.isAuthenticated, authState.isLoading, router]);
 
-  
+
   return (
     <div className=" xl:px-[9.125rem] w-full md:px-[30px]  px-6 py-[30px] xl:py-[7rem]">
-         <div className="flex justify-center mb-7 items-center md:hidden">
+      <div className="flex justify-center mb-7 items-center md:hidden">
         <DiveBusterBlackLogo />
       </div>
 
@@ -106,9 +108,8 @@ const AccountDetailsForm = ({
             id="first_name"
             placeholder={t.accountDetails.firstNamePlaceholder}
             {...register("first_name")}
-            className={`border ${
-              errors.first_name ? "border-red-500" : "border-[#E2E8F0]"
-            } w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem]`}
+            className={`border ${errors.first_name ? "border-red-500" : "border-[#E2E8F0]"
+              } w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem]`}
           />
           {errors.first_name && (
             <p className="text-red-500 text-xs mt-1">
@@ -129,9 +130,8 @@ const AccountDetailsForm = ({
             id="last_name"
             placeholder={t.accountDetails.lastNamePlaceholder}
             {...register("last_name")}
-            className={`border ${
-              errors.last_name ? "border-red-500" : "border-[#E2E8F0]"
-            } w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem]`}
+            className={`border ${errors.last_name ? "border-red-500" : "border-[#E2E8F0]"
+              } w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem]`}
           />
           {errors.last_name && (
             <p className="text-red-500 text-xs mt-1">
@@ -152,9 +152,8 @@ const AccountDetailsForm = ({
             id="email"
             placeholder={t.accountDetails.emailPlaceholder}
             {...register("email")}
-            className={`border ${
-              errors.email ? "border-red-500" : "border-[#E2E8F0]"
-            } w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem]`}
+            className={`border ${errors.email ? "border-red-500" : "border-[#E2E8F0]"
+              } w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem]`}
           />
           {errors.email && (
             <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
@@ -180,19 +179,19 @@ const AccountDetailsForm = ({
 
 
 
-    <SocialAuth/>
+      <SocialAuth />
 
 
-                    <ErrorModal
-                      isErrorModalOpen={isErrorModalOpen}
-                      setErrorModalState={() => {
-                        setErrorModalState(false);
-                      }}
-                      subheading={
-                        errorModalMessage ||
-                        "Please check your inputs and try again."
-                      }
-                    ></ErrorModal>
+      <ErrorModal
+        isErrorModalOpen={isErrorModalOpen}
+        setErrorModalState={() => {
+          setErrorModalState(false);
+        }}
+        subheading={
+          errorModalMessage ||
+          "Please check your inputs and try again."
+        }
+      ></ErrorModal>
     </div>
   );
 };

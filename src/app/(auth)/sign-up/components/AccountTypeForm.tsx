@@ -12,9 +12,11 @@ import {
 } from "@/components/core";
 import { fourthStepProps } from ".";
 import { CaretDown } from "@/components/icons";
-import { useLanguage } from "../contexts/LanguageContext";
+// import { useLanguage } from "../contexts/LanguageContext";
 import { useFetchCountry } from "@/app/(main)/(dashboard)/api/fetchCountry";
 import DiveBusterBlackLogo from "@/components/icons/DiveBusterBlackLogo";
+import { useLanguage } from "@/hooks/useLanguage";
+import { translations } from "../translations";
 
 // Helper function to convert Unicode code points to emoji
 export const unicodeToEmoji = (unicodeString: string) => {
@@ -53,11 +55,11 @@ const AccountTypeForm = ({
   onNext,
   onBack,
 }: AccountTypeFormProps) => {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
   
   // Create schema with translated error messages
+  const t = translations[language]||translations.en
   const accountTypeSchema = createAccountTypeSchema(t);
-  
   const {
     handleSubmit,
     formState: { errors },

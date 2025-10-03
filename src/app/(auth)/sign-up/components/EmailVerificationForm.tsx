@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button, ErrorModal, } from '@/components/core';
-import { useLanguage } from '../contexts/LanguageContext';
+// import { useLanguage } from '../contexts/LanguageContext';
 import MFAVerificationForm from './MFAVerificationForm';
 import DiveBusterBlackLogo from '@/components/icons/DiveBusterBlackLogo';
 import { useVerifyEmail } from '../../api/verification/verifyEmail';
@@ -14,6 +14,8 @@ import { formatAxiosErrorMessage } from '@/utils';
 import { AxiosError } from 'axios';
 import { ErrorAlert } from '@/components/core/ErrorAlert';
 import { useErrorModalState } from '@/hooks';
+import { useLanguage } from '@/hooks/useLanguage';
+import { translations } from '../translations';
 
 // Validation schema
 const verificationSchema = z.object({
@@ -36,7 +38,8 @@ const EmailVerificationForm = ({ email, lang }: EmailVerificationFormProps) => {
           openErrorModalWithMessage,
           errorModalMessage,
         } = useErrorModalState();
-  const { t } = useLanguage();
+        const { language } = useLanguage();
+        const t= translations[language] || translations.en
   const [activeTab, setActiveTab] = useState<'email' | 'qr'>('email');
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);

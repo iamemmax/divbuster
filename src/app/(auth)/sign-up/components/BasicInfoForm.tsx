@@ -13,8 +13,9 @@ import {
 import DiveBusterBlackLogo from "@/components/icons/DiveBusterBlackLogo";
 import { firstStepProps } from ".";
 import { CaretDown } from "@/components/icons";
-import { useLanguage } from "../contexts/LanguageContext";
+// import { useLanguage } from "../contexts/LanguageContext";
 import { Language, translations } from "../translations";
+import { useLanguage } from "@/hooks/useLanguage";
 
 // Basic info validation schema
 const basicInfoSchema = z.object({
@@ -32,10 +33,10 @@ const BasicInfoForm = ({
   stepOneData,
   onNext,
 }: BasicInfoFormProps) => {
-  const { language, setLanguage, t } = useLanguage();
+  const { language, setLanguage} = useLanguage();
   
   // Add a safety check for t
-  const safeT = t || translations.en;
+  const t = translations[language] || translations.en;
   
   const {
     
@@ -116,10 +117,10 @@ const BasicInfoForm = ({
 
       <div className="flex justify-center items-center flex-col">
         <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39]">
-          {safeT.basicInfo?.title || "Create an Account"}
+          {t.basicInfo?.title || "Create an Account"}
         </h2>
         <p className="font-archivo text-[#8D9196] font-medium text-xs 2xl:text-base">
-          {safeT.basicInfo?.subtitle || "Proceed with your Registration"}
+          {t.basicInfo?.subtitle || "Proceed with your Registration"}
         </p>
       </div>
 
@@ -160,7 +161,7 @@ const BasicInfoForm = ({
                 disabled
                 value=""
                 style={{
-                  color: "#8D9196",
+                  color: "#000",
                   fontWeight: 500,
                   fontFamily: "Archivo",
                   fontSize: "12px",
@@ -178,7 +179,7 @@ const BasicInfoForm = ({
                     <img
                       src={lang.flag}
                       alt={`${lang.label} flag`}
-                      className="w-5 h-5 rounded-sm object-cover"
+                      className="w-5 h-5  rounded-sm object-cover"
                     />{" "}
                     <span>{lang.label}</span>
                   </div>

@@ -18,6 +18,7 @@ interface prop{
      setStep: React.Dispatch<React.SetStateAction<number>>
    user: User | null
       setStepOneLogDetails: React.Dispatch<React.SetStateAction<diveLogTypes>>
+      stepOneLogDetails:diveLogTypes
 }
 
 const advancedDetailsSchema = z.object({
@@ -32,7 +33,7 @@ const advancedDetailsSchema = z.object({
 
 export type diveLogTypes = z.infer<typeof advancedDetailsSchema>;
 
-const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails,user}) => {
+const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails,stepOneLogDetails}) => {
              const {language}= useLanguage()
                 const t = divePlanBuddiesTranslations[language] || divePlanBuddiesTranslations?.en;
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -51,11 +52,11 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails,user}) => 
     } = useForm<diveLogTypes>({
         resolver: zodResolver(advancedDetailsSchema),
         defaultValues: {
-            dive_site_id: "",
-            name: "",
-            start_date: "",
-            end_date: "",
-            meet_up_address: "",
+            dive_site_id: stepOneLogDetails?.dive_site_id||"",
+            name: stepOneLogDetails?.name||"",
+            start_date:stepOneLogDetails?.start_date|| "",
+            end_date:stepOneLogDetails?.end_date|| "",
+            meet_up_address:stepOneLogDetails?.meet_up_address|| "",
           
         },
         mode: "onChange"
@@ -72,6 +73,13 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails,user}) => 
       setValue("start_date",String(dateRange.startDate))
       setValue("end_date",String(dateRange.endDate))
     }, [])
+    
+    useEffect(() => {
+      if(stepOneLogDetails){
+      setValue("meet_up_address",stepOneLogDetails?.meet_up_address)
+
+      }
+    }, [stepOneLogDetails])
     
 
     const diveLocation =
