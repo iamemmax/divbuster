@@ -3,6 +3,7 @@ import { Dialog, DialogContent } from "@/components/core";
 import { messageProp, resentChatProp } from "../RecentMessages";
 import { buddyResult, useFetchBuddyList } from "../../../api/buddy/fetchBudies";
 import { SmallSpinner } from "@/icons/core";
+import { useAuth } from "@/contexts/authentication";
 
 interface prop {
   isOpen: boolean;
@@ -11,13 +12,15 @@ interface prop {
 }
 
 export default function StartNewMessageModal({ isOpen, onClose, onSelectMessage }: prop) {
+ const {authState}=useAuth()
+  const {user}=authState
   const { 
     data: buddyList, 
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage
-  } = useFetchBuddyList();
+  } = useFetchBuddyList(String(user?.profile_details?.language));
   
   const loaderRef = useRef<HTMLDivElement | null>(null);
 

@@ -10,6 +10,7 @@ import { UnsavedChangesModal } from "@/app/(main)/components/shared/modal/Unsave
 import { ConfirmSaveModal } from "@/app/(main)/components/shared/modal/ConfirmSave";
 import { Othermember } from "@/app/(main)/(dashboard)/api/chats/group/fetchGroupChatList";
 import { useFetchBuddyList } from "@/app/(main)/(dashboard)/api/buddy/fetchBudies";
+import { useAuth } from "@/contexts/authentication";
 
 interface Prop {
   isOpen: boolean;
@@ -36,15 +37,15 @@ export default function AddMembersToGroupModal({
   } = useErrorModalState();
 
   const { mutate: handleAddMembersFunc,isLoading:isAdding } = useAddGroupMembers();
- const { 
-    data: buddList, 
-    isLoading, 
-    error, 
-    isError,
+ const {authState}=useAuth()
+  const {user}=authState
+  const { 
+    data: buddyList, 
+    isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage
-  } = useFetchBuddyList();
+  } = useFetchBuddyList(String(user?.profile_details?.language));
 
   const [selectedMemberIds, setSelectedMemberIds] = useState<string[]>([]);
   const [showUnsavedModal, setShowUnsavedModal] = useState(false);
@@ -169,7 +170,7 @@ return (
             </div>
           ) : (
             <ul className="space-y-6 px-6 pb-9 max-h-[55vh] overflow-y-auto py-4">
-              {buddList?.pages
+              {buddyList?.pages
                 ?.flatMap(page => page.results)
                 ?.filter(
                   (buddy) => !selectedMemberIds.includes(String(buddy?.id))

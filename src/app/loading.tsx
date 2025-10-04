@@ -1,9 +1,11 @@
+"use client"
 import React from 'react'
+import FullPageLoader from './(main)/loading'
 
-const loading = () => {
+const Loading = () => {
   return (
-    <div className="">Loading</div>
+    <div className=""><FullPageLoader/></div>
   )
 }
 
-export default loading  
+export default Loading  

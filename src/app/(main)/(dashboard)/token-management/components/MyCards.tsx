@@ -7,7 +7,6 @@ import {
   Plus,
   Wifi,
 } from "lucide-react";
-import { User } from "@/contexts/authentication";
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
 import { Button } from "@/components/core";
 import VisaCardIcon from "@/app/icons/(dashboard)/card/VisaCardIcon";
@@ -18,6 +17,7 @@ import StripeCardIcon from "@/app/icons/(dashboard)/card/StripeCardIcon";
 import AddNewCardForm from "./modals/AddCard";
 import ViewCardDetails from "./modals/ViewCardDetails";
 import AddTokenModal from "./modals/AddTokenModal";
+import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 
 interface prop {
   user: User | null;

@@ -8,6 +8,7 @@ import { SmallSpinner } from "@/icons/core";
 import { Othermember } from "@/app/(main)/(dashboard)/api/chats/group/fetchGroupChatList";
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
+import { useAuth } from "@/contexts/authentication";
 
 
 interface Prop {
@@ -31,14 +32,15 @@ export default function AddNewGroupMembersModal({
 }: Prop) {
   const [selectedMemberIds, setSelectedMemberIds] = useState<string[]>([]);
   const loaderRef = useRef<HTMLDivElement | null>(null);
-  
+  const {authState}=useAuth()
+  const {user}=authState
   const { 
     data: buddyList, 
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage
-  } = useFetchBuddyList();
+  } = useFetchBuddyList(String(user?.profile_details?.language));
 
   // Intersection Observer for infinite scroll
   const handleObserver = useCallback(

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import GroupSidebar from "./Group/GroupSidebar";
 import GroupMessageBox from "./Group/GroupMessageBox";
-import { groupChats, me } from "./mocks";
 import {
   groupChatListProp,
   groupChatResult,

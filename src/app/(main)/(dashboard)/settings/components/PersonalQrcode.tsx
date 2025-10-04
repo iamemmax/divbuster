@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { X, QrCode } from 'lucide-react';
 import QRCode from 'qrcode';
 import LocationIcconbg from '@/app/icons/(dashboard)/LocationIconbg';
-import { User } from '@/contexts/authentication';
 import Image from 'next/image';
+import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 
 interface prop{
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
      isModalOpen: boolean;
-     userData: User
+     userData: User | null
 }
 const PersonalQRCode = ({isModalOpen,setIsModalOpen, userData}:prop) => {
   const [qrCodeDataURL, setQrCodeDataURL] = useState<string>('');
@@ -89,7 +89,7 @@ const PersonalQRCode = ({isModalOpen,setIsModalOpen, userData}:prop) => {
                 <div className="md:w-12 md:h-12 w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-teal-500 flex items-center justify-center">
   <Image
     alt='profile'
-    src={userData?.profile_details?.profile_picture}
+    src={String(userData?.profile_details?.profile_picture)}
     width={48}
     height={48}
     className='object-cover rounded-full w-full h-full'

@@ -1,6 +1,7 @@
-"use client"
+"use client";
+
 import { useAuth } from "@/contexts/authentication";
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 type Language = "en" | "es" | "fr" | "nl";
 
@@ -12,11 +13,28 @@ interface LanguageContextProps {
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-    const {authState} = useAuth()
-    const {isAuthenticated, user}=authState
-    const selectedLanguage:Language =user?.profile_details?.language as Language 
-    const getLanguage = localStorage.getItem("preferredLanguage") as Language
-  const [language, setLanguage] = useState<Language>(isAuthenticated?selectedLanguage:getLanguage);
+  const { authState } = useAuth();
+  const { isAuthenticated, user } = authState;
+
+  const selectedLanguage = user?.profile_details?.language as Language | undefined;
+  const storedLanguage = (typeof window !== "undefined" && localStorage.getItem("preferredLanguage")) as Language | null;
+
+  const [language, setLanguage] = useState<Language>("en");
+
+  // ✅ Handle initial language load logic safely
+  useEffect(() => {
+    if (isAuthenticated && selectedLanguage) {
+      setLanguage(selectedLanguage);
+      localStorage.setItem("preferredLanguage", selectedLanguage);
+    } else if (storedLanguage) {
+      setLanguage(storedLanguage);
+    }
+  }, [isAuthenticated, selectedLanguage, storedLanguage]);
+
+  // ✅ Update localStorage whenever language changes
+  useEffect(() => {
+    localStorage.setItem("preferredLanguage", language);
+  }, [language]);
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage }}>
@@ -25,7 +43,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// ✅ Custom hook for easy usage
+// ✅ Custom hook for easy access
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (!context) {
@@ -34,8 +52,8 @@ export const useLanguage = () => {
   return context;
 };
 
-
-interface prop{
-    me:string;
-    setMe:(a:string)=> void
+// (Unrelated, but if you need this type, keep it defined separately)
+interface Prop {
+  me: string;
+  setMe: (a: string) => void;
 }
