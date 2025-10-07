@@ -16,6 +16,8 @@ import { useAuth } from "@/contexts/authentication";
 import { FetchPreviousPageOptions, InfiniteData, InfiniteQueryObserverResult, useQueryClient } from "react-query";
 import moment from "moment";
 import CreateGroupChatForm from "../modals/group/CreateGroupChat";
+import { useLanguage } from "@/hooks/useLanguage";
+import { groupSidebarTranslations } from "@/app/(main)/translation/chatMessagesTranslation";
 
 // Enhanced Sidebar Component
 const GroupSidebar = ({
@@ -38,20 +40,21 @@ const GroupSidebar = ({
   setGroupMembers: React.Dispatch<
     React.SetStateAction<Othermember[] | undefined>
   >;
-   fetchNextPage: () => void;
+  fetchNextPage: () => void;
   hasNextPage?: boolean;
   isFetchingNextPage?: boolean;
   fetchPreviousPage: (options?: FetchPreviousPageOptions | undefined) => Promise<InfiniteQueryObserverResult<groupChatListProp, unknown>>
-   hasPreviousPage: boolean | undefined
-  
-  }) => {
+  hasPreviousPage: boolean | undefined
+
+}) => {
   const {
     isErrorModalOpen,
     setErrorModalState,
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
-  const { authState } = useAuth();
+ const { language } = useLanguage();
+const t = groupSidebarTranslations[language] ||groupSidebarTranslations.en;
   const [searchQuery, setSearchQuery] = useState("");
   const [userIdToExist, setUserIdToExist] = useState("");
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
@@ -60,8 +63,8 @@ const GroupSidebar = ({
   const [showCreateGroupChat, setShowCreateGroupChat] = useState(false);
   const [suggestedMembers, setSuggestedMembers] = useState<Othermember[] | undefined>();
 
-const [group, setGroup] = useState<groupChatResult>()
-const loaderRef = useRef<HTMLDivElement | null>(null);
+  const [group, setGroup] = useState<groupChatResult>()
+  const loaderRef = useRef<HTMLDivElement | null>(null);
   // Close dropdown menu if clicking outside
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -81,7 +84,7 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
 
 
   const handleObserver = useCallback(
-  // IntersectionObserver for infinite scroll
+    // IntersectionObserver for infinite scroll
     (entries: IntersectionObserverEntry[]) => {
       const target = entries[0];
       if (target.isIntersecting && hasNextPage && !isFetchingNextPage) {
@@ -104,38 +107,38 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
     };
   }, [handleObserver]);
   // Filter by group name, description, or member names
- const filteredGroupChats = React.useMemo(() => {
-  if (!groupList?.pages) return [];
+  const filteredGroupChats = React.useMemo(() => {
+    if (!groupList?.pages) return [];
 
-  const searchLower = searchQuery.toLowerCase();
+    const searchLower = searchQuery.toLowerCase();
 
-  // Flatten all pages
-  const allGroups = groupList.pages.flatMap((page) => page.results);
+    // Flatten all pages
+    const allGroups = groupList.pages.flatMap((page) => page.results);
 
-  return allGroups.filter((group) => {
-    // Search in group name and description
-    if (group.group?.name?.toLowerCase().includes(searchLower)) return true;
-    if (group.group?.description?.toLowerCase().includes(searchLower)) return true;
+    return allGroups.filter((group) => {
+      // Search in group name and description
+      if (group.group?.name?.toLowerCase().includes(searchLower)) return true;
+      if (group.group?.description?.toLowerCase().includes(searchLower)) return true;
 
-    // Search in other members' names
-    if (
-      group.other_members?.some(
-        (member) =>
-          member.first_name?.toLowerCase().includes(searchLower) ||
-          member.last_name?.toLowerCase().includes(searchLower) ||
-          member.email?.toLowerCase().includes(searchLower)
+      // Search in other members' names
+      if (
+        group.other_members?.some(
+          (member) =>
+            member.first_name?.toLowerCase().includes(searchLower) ||
+            member.last_name?.toLowerCase().includes(searchLower) ||
+            member.email?.toLowerCase().includes(searchLower)
+        )
       )
-    )
-      return true;
+        return true;
 
-    // Search in current user's details
-    if (group.user?.first_name?.toLowerCase().includes(searchLower)) return true;
-    if (group.user?.last_name?.toLowerCase().includes(searchLower)) return true;
-    if (group.user?.username?.toLowerCase().includes(searchLower)) return true;
+      // Search in current user's details
+      if (group.user?.first_name?.toLowerCase().includes(searchLower)) return true;
+      if (group.user?.last_name?.toLowerCase().includes(searchLower)) return true;
+      if (group.user?.username?.toLowerCase().includes(searchLower)) return true;
 
-    return false;
-  });
-}, [groupList, searchQuery]);
+      return false;
+    });
+  }, [groupList, searchQuery]);
 
   const handleMenuToggle = (groupId: number) => {
     setOpenMenuId(openMenuId === groupId ? null : groupId);
@@ -160,7 +163,7 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
   // Get formatted member list for preview
   const getMemberPreview = (group: groupChatResult): string => {
     if (!group.other_members || group.other_members.length === 0) {
-      return "Only you";
+      return t.onlyYou;
     }
 
     const memberNames = group.other_members
@@ -227,10 +230,10 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              Group Chats
+             {t.groupChats}
             </h2>
             <span className="bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300 text-xs font-medium px-2 py-1 rounded-full">
-         {groupList?.pages?.reduce((acc, page) => acc + page.results.length, 0) ?? 0}
+              {groupList?.pages?.reduce((acc, page) => acc + page.results.length, 0) ?? 0}
 
             </span>
           </div>
@@ -239,14 +242,14 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
         {/* Search */}
         <div className="mt-2">
           <label htmlFor="group-search" className="sr-only">
-            Search groups or members
+            {t.searchPlaceholder}
           </label>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
             <input
               id="group-search"
               type="text"
-              placeholder="Search groups or members"
+              placeholder={t.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
@@ -256,7 +259,7 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
       </div>
 
       {/* Group Chats List */}
-    {/* Group Chats List */}
+      {/* Group Chats List */}
       <div className="flex-1 max-h-[66vh] md:max-h-[65vh] overflow-y-auto mt-4">
         {isLoadingGroup ? (
           <div className="flex justify-center items-center h-32">
@@ -265,8 +268,8 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
         ) : !filteredGroupChats.length ? (
           <p className="text-center text-gray-400 dark:text-gray-500 mt-8">
             {searchQuery
-              ? "No groups found matching your search."
-              : "No group chats found."}
+              ? t.noGroupsFoundSearch
+              : t.noGroupChatsFound}
           </p>
         ) : (
           <>
@@ -276,11 +279,10 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
               return (
                 <div
                   key={group.id}
-                  className={`flex items-start py-4 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors ${
-                    isSelected
+                  className={`flex items-start py-4 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors ${isSelected
                       ? "bg-orange-50 dark:bg-orange-900/30 border-orange-500 border-l-2"
                       : "border-b border-gray-200 dark:border-gray-700"
-                  }`}
+                    }`}
                   onClick={() => {
                     onSelectGroup(group);
                     setGroupMembers(group?.other_members);
@@ -298,7 +300,7 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
                     {group.is_admin && (
                       <div
                         className="w-2 h-2 bg-green-500 rounded-full"
-                        title="You are admin of this group"
+                        title={t.youAreAdmin}
                       ></div>
                     )}
                   </div>
@@ -324,7 +326,7 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
                       <div className="flex-1 min-w-0">
                         {/* Group name */}
                         <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                          {group.group?.name || "Unnamed Group"}
+                          {group.group?.name || t.unnamedGroup}
                         </p>
 
                         {/* Group description or member preview */}
@@ -334,7 +336,7 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
                               {group.group.description}
                             </span>
                           ) : (
-                            <span title={`Members: ${getMemberPreview(group)}`}>
+                            <span title={`${t.members}: ${getMemberPreview(group)}`}>
                               {getMemberPreview(group)}
                             </span>
                           )}
@@ -384,11 +386,11 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
                                       setGroup(group)
                                       setOpenMenuId(null);
                                     }}
-                                    className="flex items-center w-full px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                    className="flex items-center w-full px-2 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                     role="menuitem"
                                   >
-                                    <PenIcon className="h-4 w-4 mr-2 text-yellow-600" />
-                                    Edit Group
+                                    <PenIcon className="h-4 w-4 mr-1 text-yellow-600" />
+                                    {t.editGroup}
                                   </button>
                                 )}
                                 <button
@@ -398,11 +400,11 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
                                     setShowConfirmSaveModal(true);
                                     setOpenMenuId(null);
                                   }}
-                                  className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/40 transition-colors"
+                                  className="flex items-center w-full px-2 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/40 transition-colors"
                                   role="menuitem"
                                 >
-                                  <Trash2 className="h-4 w-4 mr-2" />
-                                  Exit Group
+                                  <Trash2 className="h-4 w-4 mr-1" />
+                                 {t.exitGroup}
                                 </button>
                               </div>
                             </div>
@@ -433,7 +435,7 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
           setErrorModalState(false);
         }}
         subheading={
-          errorModalMessage || "Please check your inputs and try again."
+          errorModalMessage ||t.pleaseCheckInputs
         }
       />
       {showConfirmSaveModal && (
@@ -443,22 +445,21 @@ const loaderRef = useRef<HTMLDivElement | null>(null);
           onDiscard={() => setShowConfirmSaveModal(false)}
           onSave={handleExist}
           hideSaveButton={false}
-          title="Exist Group"
-          description="Are you sure you want to exist this group"
+          title={t.exitGroupTitle}
+          description={t.exitGroupDescription}
           loading={isLoading}
         />
       )}
-       {showCreateGroupChat && (
-                <CreateGroupChatForm
-                  isOpen={showCreateGroupChat}
-                  // groupId={String(selectedGroup?.id)}
-                  onClose={() => setShowCreateGroupChat(false)}
-                  suggestedMembers={suggestedMembers}
-                  setSuggestedMembers={setSuggestedMembers}
-                  group={group}
-                  type="update"
-                />
-              )}
+      {showCreateGroupChat && (
+        <CreateGroupChatForm
+          isOpen={showCreateGroupChat}
+          onClose={() => setShowCreateGroupChat(false)}
+          suggestedMembers={suggestedMembers}
+          setSuggestedMembers={setSuggestedMembers}
+          group={group}
+          type="update"
+        />
+      )}
     </div>
   );
 };

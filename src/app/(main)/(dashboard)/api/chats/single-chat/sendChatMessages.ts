@@ -5,7 +5,7 @@ interface MessageData {
   receiver_id: number;
   message: string;
   upload?: File[]; // Changed from any to File[] for better type safety
-  lang?: string;
+  lang: string;
 }
 
 interface ChatMessageResponse {
@@ -21,14 +21,17 @@ const sendSingleChatMessage = async ({
   message,
   receiver_id,
   upload,
+  lang
 }: {
   message: string;
   receiver_id: number;
   upload?: File[];
+  lang:string
 }) => {
 
   const formData = new FormData();
   formData.append("message", message);
+  formData.append("lang", lang);
   formData.append("receiver_id", String(receiver_id));
 
   

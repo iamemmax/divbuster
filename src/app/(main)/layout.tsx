@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import SideBar from './components/shared/SideBar'
-import useIsMobile from '@/hooks/UseMobile'
 import useRouteChangeEvent from '@/hooks/useRouteChangeEvent'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 import { LanguageProvider } from '@/hooks/useLanguage'

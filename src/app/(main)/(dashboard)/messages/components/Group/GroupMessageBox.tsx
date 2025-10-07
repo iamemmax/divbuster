@@ -31,6 +31,8 @@ import { useSendGroupChatMessage } from "../../../api/chats/group/sendGroupChatM
 import { useAuth } from "@/contexts/authentication";
 import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 import ViewGroupMembersModal from "../modals/group/members/ViewGroupMembers";
+import { useLanguage } from "@/hooks/useLanguage";
+import { messageBoxTranslations } from "@/app/(main)/translation/chatMessagesTranslation";
 
 interface MessageBoxProps {
   onBackToRecent?: () => void;
@@ -54,6 +56,8 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
   const { authState } = useAuth();
   const { user } = authState;
   const userData = user as User;
+  const {language}=useLanguage()
+  const t = messageBoxTranslations[language] || messageBoxTranslations.en
 
   // State hooks
   const [message, setMessage] = useState("");
@@ -530,7 +534,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
           </div>
         ) : error ? (
           <div className="text-center text-red-500 py-8">
-            Failed to load messages. Please try again.
+           {t.failedToLoadMessages}
           </div>
         ) : !hasMessages ? (
           <EmptyMessage />
@@ -579,7 +583,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                         {!isCurrentUser && (
                           <span className="text-sm font-medium text-gray-900 dark:text-gray-200">
                             {`${selectedGroup?.user?.first_name} ${selectedGroup?.user?.last_name}` ||
-                              "Unknown User"}
+                             t.unknownUser}
                           </span>
                         )}
                         <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -686,7 +690,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                                 className="text-sm underline text-blue-500 hover:text-blue-600 flex items-center space-x-2"
                               >
                                 <FileTextIcon className="h-4 w-4" />
-                                <span>📎 Download File</span>
+                                <span>📎 {t.downloadFile}</span>
                               </a>
                             ) : null}
                           </div>
@@ -795,7 +799,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                       onClick={openImageDialog}
                     >
                       <ImageIcon className="h-4 w-4 text-purple-500" />
-                      <span>Image</span>
+                      <span>{t.image}</span>
                     </button>
                     <button
                       type="button"
@@ -803,7 +807,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                       onClick={openVideoDialog}
                     >
                       <Video className="h-4 w-4 text-purple-500" />
-                      <span>Video</span>
+                      <span>{t.video}</span>
                     </button>
                     <button
                       type="button"
@@ -811,7 +815,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                       onClick={openDocumentDialog}
                     >
                       <FileTextIcon className="h-4 w-4 text-blue-500" />
-                      <span>Document</span>
+                      <span>{t.document}</span>
                     </button>
                   </div>
                 )}
@@ -850,7 +854,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
             ) : (
               <Send className="h-4 w-4" />
             )}
-            <span className="hidden sm:inline">Send</span>
+            <span className="hidden sm:inline">{t.send}</span>
           </button>
         </div>
 

@@ -4,6 +4,8 @@ import { messageProp, resentChatProp } from "./RecentMessages";
 import StartNewMessageModal from "./modals/StartNewMessageModal";
 import { chatListProp } from "../../api/chats/single-chat/fetchChatList";
 import moment from "moment";
+import { useLanguage } from "@/hooks/useLanguage";
+import { chatMessagestranslations } from "@/app/(main)/translation/chatMessagesTranslation";
 
 interface ChatMessagesSidebarProps {
   // messages: resentChatProp[];
@@ -29,19 +31,21 @@ export default function ChatMessagesSidebar({
   const [searchQuery, setSearchQuery] = useState("");
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [showNewMessageModal, setShowNewMessageModal] = useState(false);
+  const {language}=useLanguage()
+  const t = chatMessagestranslations[language] || chatMessagestranslations.en
 
-  const handleMenuToggle = (messageId: string) => {
-    setOpenMenuId(openMenuId === messageId ? null : messageId);
-  };
+  // const handleMenuToggle = (messageId: string) => {
+  //   setOpenMenuId(openMenuId === messageId ? null : messageId);
+  // };
 
   return (
-    <div className="bg-white dark:bg-gray-900 shadow-sm p-2 flex flex-col transition-colors duration-200">
+    <div className="bg-white dark:bg-gray-900 shadow-sm px-4 sm:px-6 lg:px-8 py-3 flex flex-col transition-colors duration-200">
       {/* Header */}
       <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {title}
+              {t?.messages}
             </h2>
             <span className="bg-orange-100 dark:bg-orange-900/30 font-archivo text-orange-600 dark:text-orange-400 text-xs font-medium px-2 py-1 rounded-full">
               {recentChatList?.data?.length ?? 0}
@@ -90,10 +94,7 @@ export default function ChatMessagesSidebar({
               >
                 {/* Status indicator dots */}
                 <div className="flex flex-col items-center justify-center mt-6 mr-3 flex-shrink-0 space-y-1">
-                  {/* Unread message indicator - orange dot */}
-                  {/* {message.hasUnreadMessages && (
-        <div className="w-2 h-2 bg-orange-500 dark:bg-orange-400 rounded-full"></div>
-      )} */}
+                 
                 </div>
 
                 {/* Avatar */}
@@ -103,11 +104,7 @@ export default function ChatMessagesSidebar({
                     alt={message?.name}
                     className="w-10 h-10 rounded-full object-cover"
                   />
-                  {/* <div
-        className={`absolute bottom-0 -right-1 w-3 h-3 ${
-          message?.isOnline ? 'bg-green-500 dark:bg-green-400' : 'bg-gray-500 dark:bg-gray-600'
-        } border-2 border-white dark:border-gray-900 rounded-full`}
-      ></div> */}
+                 
                 </div>
 
                 {/* Message content */}
@@ -126,7 +123,7 @@ export default function ChatMessagesSidebar({
                         {moment(message.date!)?.fromNow()}
                       </span>
                       {/* Three-dot menu */}
-                      <div className="relative">
+                      {/* <div className="relative">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -137,7 +134,7 @@ export default function ChatMessagesSidebar({
                           <MoreVertical className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                         </button>
 
-                        {/* Dropdown menu */}
+                       
                         {openMenuId === String(message?.user_id) && (
                           <div className="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-600 z-10">
                             <div className="py-1">
@@ -164,7 +161,7 @@ export default function ChatMessagesSidebar({
                             </div>
                           </div>
                         )}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 truncate">

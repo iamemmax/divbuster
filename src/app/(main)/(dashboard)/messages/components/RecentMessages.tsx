@@ -49,7 +49,7 @@ const RecentMessages = ({ selectedMessage, setSelectedMessage, recentChatList,is
   };
 
   return (
-   <div className="bg-gray-50 dark:bg-gray-900 h-[79vh] overflow-y-hidden">
+   <div className="bg-gray-50  dark:bg-gray-900 h-[79vh] overflow-y-hidden">
       {/* Mobile Layout */}
       <div className="lg:hidden h-full">
         {!selectedMessage ? (
@@ -76,7 +76,7 @@ const RecentMessages = ({ selectedMessage, setSelectedMessage, recentChatList,is
       </div>
 
       {/* Desktop Layout - Full height grid */}
-      <div className="hidden lg:grid grid-cols-[1.5fr_3fr] gap-4 h-full">
+      <div className="hidden lg:grid grid-cols-[1.5fr_3fr]  gap-4 h-full">
         {/* Recent list */}
         <div className="h-full bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-200">
           <RecentList
