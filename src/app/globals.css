@@ -21,7 +21,47 @@ html {
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Archivo';
+  src: url('/fonts/Archivo-Regular.woff2') format('woff2'),
+       url('/fonts/Archivo-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Archivo';
+  src: url('/fonts/Archivo-Medium.woff2') format('woff2'),
+       url('/fonts/Archivo-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Archivo';
+  src: url('/fonts/Archivo-SemiBold.woff2') format('woff2'),
+       url('/fonts/Archivo-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Archivo';
+  src: url('/fonts/Archivo-Bold.woff2') format('woff2'),
+       url('/fonts/Archivo-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
+  * {
+    font-family: 'Archivo', 'Arial', sans-serif;
+  }
+  
   :root {
     --light-bg: rgb(246, 248, 253);
     --dash-dark-bg: #07112d;
@@ -227,6 +267,7 @@ input.login-autofill-text:-webkit-autofill::first-line {
 
 
 body {
+  font-family: 'Archivo', 'Arial', sans-serif;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(to bottom,
       transparent,
@@ -343,7 +384,7 @@ body {
 .phone-input-container {
   width: 100%;
 
-  font-family: var(--font-archivo);
+  font-family: 'Archivo', 'Arial', sans-serif;
 }
 
 .phone-input-container .selected-flag {
@@ -373,7 +414,7 @@ body {
 
 .phone-input-container .country-list .country {
   padding: 8px 10px;
-  font-family: var(--font-archivo);
+  font-family: 'Archivo', 'Arial', sans-serif;
 }
 
 .phone-input-container .country-list .country.highlight {

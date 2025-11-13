@@ -8,7 +8,7 @@ import { secondStepProps } from ".";
 import DiveBusterBlackLogo from "@/components/icons/DiveBusterBlackLogo";
 
 import { useAuth } from "@/contexts/authentication";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import { useErrorModalState } from "@/hooks";
 import SocialAuth from "../../components/SocialAuth";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -36,6 +36,7 @@ const AccountDetailsForm = ({
   } = useErrorModalState();
   const { language, setLanguage } = useLanguage();
   const { authState } = useAuth();
+  const router = useRouter();
 
 
 const t = translations[language] || translations.en
@@ -75,7 +76,7 @@ const t = translations[language] || translations.en
 
   useEffect(() => {
     if (authState.isAuthenticated && !authState.isLoading) {
-      router.push("/");
+      router.replace("/");
     }
   }, [authState.isAuthenticated, authState.isLoading, router]);
 
@@ -99,7 +100,7 @@ const t = translations[language] || translations.en
         <div className="mb-4">
           <label
             htmlFor="first_name"
-            className="block text-gray-700 font-medium mb-2"
+            className="block text-gray-700 font-archivo font-medium mb-2"
           >
             {t.accountDetails.firstName}
           </label>
@@ -121,7 +122,7 @@ const t = translations[language] || translations.en
         <div className="mb-4">
           <label
             htmlFor="last_name"
-            className="block text-gray-700 font-medium mb-2"
+            className="block text-gray-700 font-archivo font-medium mb-2"
           >
             {t.accountDetails.lastName}
           </label>
@@ -143,7 +144,7 @@ const t = translations[language] || translations.en
         <div className="mb-6">
           <label
             htmlFor="email"
-            className="block text-gray-700 font-medium mb-2"
+            className="block text-gray-700 font-archivo font-medium mb-2"
           >
             {t.accountDetails.email}
           </label>
@@ -164,13 +165,13 @@ const t = translations[language] || translations.en
           <Button
             type="button"
             onClick={onBack}
-            className="bg-white flex-1 border border-[#F7931D] text-[#F7931D] py-3 rounded-lg font-medium"
+            className="bg-white flex-1 border border-[#F7931D] text-[#F7931D] py-3 rounded-lg font-archivo font-medium"
           >
             {t.accountDetails.backButton}
           </Button>
           <Button
             type="submit"
-            className="flex-1 bg-[#F7931D] text-white py-3 rounded-lg font-medium"
+            className="flex-1 bg-[#F7931D] text-white py-3 rounded-lg font-archivo font-medium"
           >
             {t.accountDetails.nextButton}
           </Button>

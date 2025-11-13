@@ -121,7 +121,7 @@ import { Rating } from "react-simple-star-rating";
 import CardHeadIcon from "@/app/icons/(dashboard)/CardHeadIcon";
 import { cn } from "@/utils/classNames";
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
-import { usefetchBuddyProfile } from "../../../api/buddy/fetchBuddyProfile";
+import { certificates, usefetchBuddyProfile } from "../../../api/buddy/fetchBuddyProfile";
 import { useErrorModalState } from "@/hooks";
 import { formatAxiosErrorMessage } from "@/utils";
 import { useAuth } from "@/contexts/authentication";
@@ -130,6 +130,8 @@ import MyBuddyList from "../MyBuddyList";
 import { profileTranslations } from "@/app/(main)/translation/diveBuddiesTranslation";
 import CreateBuddyBooking from "../../../bookings/components/modals/buddy-booking/CreateBuddyBooking";
 import { useLanguage } from "@/hooks/useLanguage";
+import CertificateModal from "@/app/(main)/components/certifications/CertificateModal";
+import { selectedCardBg } from "@/app/(main)/components/shared/CardContainer";
 
 const DivingProfile = () => {
   const color = [
@@ -142,6 +144,8 @@ const DivingProfile = () => {
   const { authState } = useAuth();
   const { user } = authState;
     const [showBookWithBuddy, setShowBookWithBuddy] = useState(false)
+  const [selectedCertificate, setSelectedCertificate] = useState<certificates |null>(null)
+  const [showCertificateModal, setShowCertificateModal] = useState(false)
   
 
   const {
@@ -282,7 +286,7 @@ const DivingProfile = () => {
                           <span>{t.shareProfile}</span>
                         </Button>
                         <LinkButton
-                          href={"/messages"}
+                          href={`/messages?userId=${buddyProfile?.id}`}
                           className="flex items-center space-x-2 px-4 py-[.625rem] rounded-lg bg-[#F7931D] dark:bg-orange-600 text-white text-sm hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-200"
                         >
                           <span>{t.sendMessage}</span>
@@ -399,11 +403,15 @@ const DivingProfile = () => {
                         <div
                           key={idx}
                           className={cn(
-                            `flex flex-col z-50 relative gap-4 rounded-[1.1944rem] px-[1.125rem] py-4`
+                            `flex flex-col z-50 relative gap-4 rounded-[1.1944rem] px-[1.125rem] py-4 cursor-pointer hover:opacity-90 transition-opacity`
                           )}
                           style={{
-                            backgroundImage: `url(${card.image ?? ""})`,
-                            backgroundColor: !card.image ? color[idx]?.color1 : ""
+                             backgroundColor: selectedCardBg(card?.certificate_type)?.bg,
+                            color: selectedCardBg(card?.certificate_type)?.text,
+                          }}
+                          onClick={() => {
+                            setSelectedCertificate(card)
+                            setShowCertificateModal(true)
                           }}
                         >
                           <div className="flex justify-between items-start">
@@ -481,6 +489,12 @@ const DivingProfile = () => {
         )}
       </div>
             {showBookWithBuddy && <CreateBuddyBooking isOpen={showBookWithBuddy} setIsOpenCardModal={setShowBookWithBuddy} user={user} selectedBuddies=""/>}
+      
+      <CertificateModal 
+        isOpen={showCertificateModal}
+        onClose={() => setShowCertificateModal(false)}
+        certificate={selectedCertificate}
+      />
       
 
       {/* {isErrorModalOpen && (

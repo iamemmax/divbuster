@@ -255,7 +255,7 @@ useEffect(() => {
                                             <SelectContent>
                                                 {
                                                     CERTIFICATE_ISSUER_CHOICES?.map((mix, idx: number) => (
-                                                        <SelectItem className='text-black' value={mix} key={idx}>{convertKebabAndSnakeToTitleCase(mix)}</SelectItem>
+                                                        <SelectItem className='text-black uppercase' value={mix} key={idx}>{convertKebabAndSnakeToTitleCase(mix)}</SelectItem>
 
                                                     ))
                                                 }

@@ -22,6 +22,9 @@ import SocialAuth from "../components/SocialAuth";
 import VerifyEmail from "./VerifyEmail";
 import CaretDownIcon from "@/icons/core/CaretDown";
 import { useLanguage } from "@/hooks/useLanguage";
+import { Check } from 'lucide-react'; // or use @phosphor-icons/react
+import { LoginLanguages, LoginTranslations } from ".";
+
 // import { useLanguage } from "../sign-up/contexts/LanguageContext";
 
 type LoginStep =
@@ -29,8 +32,41 @@ type LoginStep =
   | 'verify'
 
 // Create translations object for login page
-const translations = {
-  en: {
+
+export type LoginDetailsValue = z.infer<typeof loginUserSchema>;
+
+const LoginPage = () => {
+  const router = useRouter();
+  const { authState } = useAuth();
+  const [currentStep, setCurrentStep] = useState<LoginStep>('login');
+  const { language: contextLanguage, setLanguage: updateLanguage } = useLanguage();
+  const [language, setLanguage] = useState<Language>(contextLanguage);
+  const [isOpen, setIsOpen] = useState(false);
+  const [initialized, setInitialized] = useState(false);
+
+  // Initialize language only once on mount
+  useEffect(() => {
+    if (!initialized && typeof window !== 'undefined') {
+      const storedLanguage = localStorage.getItem("preferredLanguage") as Language | null;
+      if (storedLanguage && LoginTranslations && LoginTranslations[storedLanguage]) {
+        setLanguage(storedLanguage);
+        updateLanguage(storedLanguage);
+      } else {
+        setLanguage(contextLanguage || 'en');
+      }
+      setInitialized(true);
+    }
+  }, [initialized, contextLanguage, updateLanguage]);
+
+  // Sync with context language changes (but avoid loops)
+  useEffect(() => {
+    if (initialized && contextLanguage !== language) {
+      setLanguage(contextLanguage);
+    }
+  }, [contextLanguage, initialized]);
+
+  // Get LoginTranslations for current language
+  const t = LoginTranslations?.[language] || LoginTranslations?.en || {
     title: "Log in to your account",
     subtitle: "Welcome back! Please enter your details",
     emailLabel: "Email Address",
@@ -39,161 +75,9 @@ const translations = {
     passwordPlaceholder: "Enter your password",
     forgotPassword: "Forgot Password?",
     loginButton: "Login",
-    orText: "Or",
-    googleLogin: "Login with Google",
-    googleConnecting: "Connecting...",
     noAccount: "Don't have an account?",
-    register: "Register",
-    socialLogins: {
-      reddit: "Login with Reddit",
-      microsoft: "Login with Microsoft 365",
-      linkedin: "Login with LinkedIn",
-      apple: "Login with Apple ID",
-      connecting: "Connecting..."
-    }
-  },
-  es: {
-    title: "Inicia sesión en tu cuenta",
-    subtitle: "¡Bienvenido de nuevo! Por favor, introduce tus datos",
-    emailLabel: "Correo Electrónico",
-    emailPlaceholder: "Introduce tu correo electrónico",
-    passwordLabel: "Contraseña",
-    passwordPlaceholder: "Introduce tu contraseña",
-    forgotPassword: "¿Olvidaste tu contraseña?",
-    loginButton: "Iniciar sesión",
-    orText: "O",
-    googleLogin: "Iniciar sesión con Google",
-    googleConnecting: "Conectando...",
-    noAccount: "¿No tienes una cuenta?",
-    register: "Regístrate",
-    socialLogins: {
-      reddit: "Iniciar sesión con Reddit",
-      microsoft: "Iniciar sesión con Microsoft 365",
-      linkedin: "Iniciar sesión con LinkedIn",
-      apple: "Iniciar sesión con Apple ID",
-      connecting: "Conectando..."
-    }
-  },
-  fr: {
-    title: "Connectez-vous à votre compte",
-    subtitle: "Bienvenue ! Veuillez entrer vos informations",
-    emailLabel: "Adresse Email",
-    emailPlaceholder: "Entrez votre email",
-    passwordLabel: "Mot de passe",
-    passwordPlaceholder: "Entrez votre mot de passe",
-    forgotPassword: "Mot de passe oublié ?",
-    loginButton: "Connexion",
-    orText: "Ou",
-    googleLogin: "Se connecter avec Google",
-    googleConnecting: "Connexion en cours...",
-    noAccount: "Vous n'avez pas de compte ?",
-    register: "S'inscrire",
-    socialLogins: {
-      reddit: "Se connecter avec Reddit",
-      microsoft: "Se connecter avec Microsoft 365",
-      linkedin: "Se connecter avec LinkedIn",
-      apple: "Se connecter avec Apple ID",
-      connecting: "Connexion en cours..."
-    }
-  },
-  nl: {
-    title: "Log in op je account",
-    subtitle: "Welkom terug! Voer je gegevens in",
-    emailLabel: "E-mailadres",
-    emailPlaceholder: "Voer je e-mailadres in",
-    passwordLabel: "Wachtwoord",
-    passwordPlaceholder: "Voer je wachtwoord in",
-    forgotPassword: "Wachtwoord vergeten?",
-    loginButton: "Inloggen",
-    orText: "Of",
-    googleLogin: "Inloggen met Google",
-    googleConnecting: "Verbinden...",
-    noAccount: "Heb je geen account?",
-    register: "Registreren",
-    socialLogins: {
-      reddit: "Inloggen met Reddit",
-      microsoft: "Inloggen met Microsoft 365",
-      linkedin: "Inloggen met LinkedIn",
-      apple: "Inloggen met Apple ID",
-      connecting: "Verbinden..."
-    }
-  },
-  de: {
-    title: "Melden Sie sich bei Ihrem Konto an",
-    subtitle: "Willkommen zurück! Bitte geben Sie Ihre Daten ein",
-    emailLabel: "E-Mail-Adresse",
-    emailPlaceholder: "Geben Sie Ihre E-Mail-Adresse ein",
-    passwordLabel: "Passwort",
-    passwordPlaceholder: "Geben Sie Ihr Passwort ein",
-    forgotPassword: "Passwort vergessen?",
-    loginButton: "Anmelden",
-    orText: "Oder",
-    googleLogin: "Mit Google anmelden",
-    googleConnecting: "Verbindung wird hergestellt...",
-    noAccount: "Sie haben noch kein Konto?",
-    register: "Registrieren",
-    socialLogins: {
-      reddit: "Mit Reddit anmelden",
-      microsoft: "Mit Microsoft 365 anmelden",
-      linkedin: "Mit LinkedIn anmelden",
-      apple: "Mit Apple ID anmelden",
-      connecting: "Verbindung wird hergestellt..."
-    }
-  }
-};
-
-const languages = [
-  {
-    value: "en",
-    label: "English",
-    flag: "https://flagcdn.com/gb.svg", // UK
-  },
-  {
-    value: "es",
-    label: "Spanish",
-    flag: "https://flagcdn.com/es.svg",
-  },
-  {
-    value: "fr",
-    label: "French",
-    flag: "https://flagcdn.com/fr.svg",
-  },
-  {
-    value: "nl",
-    label: "Dutch",
-    flag: "https://flagcdn.com/nl.svg",
-  },
-  // {
-  //   value: "de",
-  //   label: "German",
-  //   flag: "https://flagcdn.com/de.svg",
-  // },
-];
-export type LoginDetailsValue = z.infer<typeof loginUserSchema>;
-
-const LoginPage = () => {
-  const router = useRouter();
-  const { authState } = useAuth();
-  const [currentStep, setCurrentStep] = useState<LoginStep>('login');
-  const { language: updatedLang, setLanguage: updateLanguage } = useLanguage();
-  const [language, setLanguage] = useState<Language>(updatedLang);
-  const [isOpen, setIsOpen] = useState(false);
-
-  // Fixed: Initialize language from localStorage only on mount
-  useEffect(() => {
-    // Only run on client side
-    if (typeof window !== 'undefined') {
-      const storedLanguage = localStorage.getItem("preferredLanguage") as Language | null;
-      if (storedLanguage && Object.keys(translations).includes(storedLanguage)) {
-        setLanguage(storedLanguage);
-        setValue("lang", language)
-        updateLanguage(storedLanguage);
-      }
-    }
-  }, []); // Empty dependency array - only run on mount
-
-  // Get translations for current language
-  const t = translations[language] || translations.en;
+    register: "Register"
+  };
 
   const {
     isErrorModalOpen,
@@ -223,7 +107,7 @@ const LoginPage = () => {
   // Watch for authentication state changes
   useEffect(() => {
     if (authState.isAuthenticated && !authState.isLoading) {
-      router.push("/");
+      router.replace("/");
     }
   }, [authState.isAuthenticated, authState.isLoading, router]);
 
@@ -261,24 +145,12 @@ const LoginPage = () => {
   // Fixed: Improved language change handler
   const handleLanguageChange = (value: string) => {
     const newLanguage = value as Language;
-    // console.log('Changing language to:', newLanguage); // Debug log
-
+    
     // Update local state first
     setLanguage(newLanguage);
-
-    // Update context
+    
+    // Update context (this will handle localStorage)
     updateLanguage(newLanguage);
-
-    setValue("lang", newLanguage)
-    // Set localStorage with error handling
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem("preferredLanguage", newLanguage);
-
-      }
-    } catch (error) {
-      console.error('Error saving language to localStorage:', error);
-    }
   };
 
   const renderCurrentStep = () => {
@@ -290,10 +162,10 @@ const LoginPage = () => {
             <DiveBusterBlackLogo />
           </div>
           <div className="flex justify-center items-center flex-col">
-            <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39]">
+            <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39] dark:text-white">
               {t.title}
             </h2>
-            <p className="font-archivo text-[#8D9196] font-medium text-xs 2xl:text-base">
+            <p className="font-archivo text-[#8D9196] dark:text-gray-300 font-medium text-xs 2xl:text-base">
               {t.subtitle}
             </p>
           </div>
@@ -302,7 +174,7 @@ const LoginPage = () => {
               <div className="flex flex-col ">
                 <label
                   htmlFor="email"
-                  className="font-archivo text-[#1E293B] text-base font-medium"
+                  className="font-archivo text-[#1E293B] dark:text-white text-base font-medium"
                 >
                   {t.emailLabel}
                 </label>
@@ -310,7 +182,7 @@ const LoginPage = () => {
                   type="text"
                   placeholder={t.emailPlaceholder}
                   id="email"
-                  className={`border ${errors.email ? "border-red-500" : "border-[#E2E8F0]"} outline-none py-[.8125rem] text-black text-sm bg-transparent font-archivo rounded-lg px-[.875rem]`}
+                  className={`border ${errors.email ? "border-red-500" : "border-[#E2E8F0] dark:border-gray-600"} outline-none py-[.8125rem] text-black dark:text-white text-sm bg-transparent font-archivo rounded-lg px-[.875rem]`}
                   {...register("email")}
                 />
                 {errors?.email && (
@@ -322,15 +194,15 @@ const LoginPage = () => {
               <div className="flex flex-col mt-4 2xl:mt-6">
                 <label
                   htmlFor="password"
-                  className="font-archivo text-[#1E293B] text-base font-medium"
+                  className="font-archivo text-[#1E293B] dark:text-white text-base font-medium"
                 >
                   {t.passwordLabel}
                 </label>
                 <div
-                  className={`border ${errors.password ? "border-red-500" : "border-[#E2E8F0]"} flex items-center justify-between gap-5 outline-none py-[.8125rem] text-sm font-archivo rounded-lg px-[.875rem]`}
+                  className={`border ${errors.password ? "border-red-500" : "border-[#E2E8F0] dark:border-gray-600"} flex items-center justify-between gap-5 outline-none py-[.8125rem] text-sm font-archivo rounded-lg px-[.875rem]`}
                 >
                   <input
-                    className="border-none  outline-none bg-transparent text-black w-full"
+                    className="border-none outline-none bg-transparent text-black dark:text-white w-full"
                     type={showPassword ? "text" : "password"}
                     placeholder={t.passwordPlaceholder}
                     id="password"
@@ -362,7 +234,7 @@ const LoginPage = () => {
             <div className="mt-7">
               <Link
                 href={"/sign-up"}
-                className="text-[#1E293B] text-sm font-archivo font-semibold flex justify-center items-center"
+                className="text-[#1E293B] dark:text-white text-sm font-archivo font-semibold flex justify-center items-center"
               >
                 <p>
                   {t.noAccount} <span className="text-[#F7931D]">{t.register}</span>{" "}
@@ -394,61 +266,71 @@ const LoginPage = () => {
 
   return (
     <div className="w-full relative h-full">
-      <div className="flex absolute right-6 md:right-[9rem] top-5  justify-end items-center">
-        <Select
-          value={language || ""}
-          onValueChange={handleLanguageChange}
-          defaultValue={language}
-          onOpenChange={setIsOpen}
+
+<div className="flex absolute right-6 md:right-[9rem] top-5 justify-end items-center">
+  <Select
+    value={language || ""}
+    onValueChange={handleLanguageChange}
+    defaultValue={language}
+    onOpenChange={setIsOpen}
+  >
+    <div className="relative">
+      <SelectTrigger
+      iconClassName="hidden"
+        id="language"
+        className={`border bg-transparent max-w-[9.5rem] w-full relative text-black dark:text-white outline-none h-[3rem] text-sm font-archivo rounded-xl px-[.875rem] pr-10`}
+      >
+        <div className="flex items-center gap-3">
+          {LoginLanguages.find(lang => lang.value === language) && (
+            <>
+              <img
+                src={LoginLanguages.find(lang => lang.value === language)?.flag}
+                alt="Selected language flag"
+                className="w-5 h-5 rounded-sm object-cover"
+              />
+              <span>{LoginLanguages.find(lang => lang.value === language)?.label}</span>
+            </>
+          )}
+        </div>
+        <CaretDownIcon
+          color="#8D9196"
+          className={`absolute right-2  top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+        />
+      </SelectTrigger>
+    </div>
+    <SelectContent>
+      {LoginLanguages.map((lang) => (
+        <SelectItem
+
+          key={lang.value}
+          value={lang.value}
+          className="px-2 [&>span[data-radix-select-item-indicator]]:hidden dark:"
         >
-          <div className="relative">
-            <SelectTrigger
-              id="language"
-              className={`border bg-transparent max-w-[9.5rem] w-full  relative text-black outline-none h-[3rem] text-sm font-archivo rounded-xl px-[.875rem] pr-10`}
-            >
-              <SelectValue
-                className="text-[#8D9196] text-sm font-archivo font-medium"
+          <div className="flex items-center justify-between w-full gap-3">
+            <div className="flex items-center gap-3">
+              <img
+                src={lang.flag}
+                alt={`${lang.label} flag`}
+                className="w-5 h-5 rounded-sm object-cover"
               />
-              <CaretDownIcon
-                color="#8D9196"
-                className={`absolute right-2  top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${isOpen ? 'rotate-180' : ''
-                  }`}
-              />
-            </SelectTrigger>
+              <span className="dark:text-black">{lang.label}</span>
+            </div>
+            {language === lang.value && (
+              <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center ml-auto">
+                <Check 
+                  className="w-3 h-3 text-white" 
+                  strokeWidth={3}
+                />
+              </div>
+            )}
           </div>
-          <SelectContent>
-            <SelectItem
-              className="hidden"
-              disabled
-              value=""
-              style={{
-                color: "#8D9196",
-                fontWeight: 500,
-                fontFamily: "Archivo",
-                fontSize: "10px",
-              }}
-            >
-              {language}
-            </SelectItem>
-            {languages.map((lang) => (
-              <SelectItem
-                key={lang.value}
-                value={lang.value}
-                className="px-2"
-              >
-                <div className="flex items-start gap-3">
-                  <img
-                    src={lang.flag}
-                    alt={`${lang.label} flag`}
-                    className="w-5 h-5 rounded-sm object-cover"
-                  />{" "}
-                  <span>{lang.label}</span>
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</div>
       {renderCurrentStep()}
     </div>
   );

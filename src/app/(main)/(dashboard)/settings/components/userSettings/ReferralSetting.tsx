@@ -46,15 +46,15 @@ const ReferralSetting = () => {
   };
 
   return (
-    <div className="max-w-2xl  sm:px-6 bg-white">
+    <div className="max-w-2xl  sm:px-6 bg-white dark:bg-gray-900 transition-colors duration-200">
       {/* Header */}
       <div className="">
        
 
-          <h1 className="text-2xl font-semibold font-archivo text-[#09090B] mb-2">
+          <h1 className="text-2xl font-semibold font-archivo text-[#09090B] dark:text-gray-100 mb-2 transition-colors duration-200">
         Dive Busters Referrals
       </h1>
-      <p className="text-[#71717A] max-w-md text-xs font-archivo mb-8">
+      <p className="text-[#71717A] dark:text-gray-400 max-w-md text-xs font-archivo mb-8 transition-colors duration-200">
          You have been selected to join this amazing family. Refer your Friends and Family 
           and have the best moments together.
       </p>
@@ -62,12 +62,12 @@ const ReferralSetting = () => {
 
       {/* Referral Link Section */}
       <div className="mb-12">
-        <h2 className="block text-xs font-archivo font-medium text-[#36394A] mb-2">
+        <h2 className="block text-xs font-archivo font-medium text-[#36394A] dark:text-gray-300 mb-2 transition-colors duration-200">
           Referral Link & Code
         </h2>
         
-        <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg p-4">
-          <div className="flex-1 text-gray-700 font-mono text-xxs sm:text-sm mr-4">
+        <div className="flex items-center bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-4 transition-colors duration-200">
+          <div className="flex-1 text-gray-700 dark:text-gray-300 font-mono text-xxs sm:text-sm mr-4 transition-colors duration-200">
             {referralLink}
           </div>
           <button
@@ -92,9 +92,9 @@ const ReferralSetting = () => {
       {/* Social Sharing Section */}
       <div className="mb-12">
         <div className="flex items-center justify-center mb-8">
-          <div className="flex-1 h-px bg-gray-300"></div>
-          <span className="px-6 text-gray-500 font-medium">or share link via</span>
-          <div className="flex-1 h-px bg-gray-300"></div>
+          <div className="flex-1 h-px bg-gray-300 dark:bg-gray-600"></div>
+          <span className="px-6 text-gray-500 dark:text-gray-400 font-medium transition-colors duration-200">or share link via</span>
+          <div className="flex-1 h-px bg-gray-300 dark:bg-gray-600"></div>
         </div>
         
         <div className="flex justify-center gap-6">
@@ -138,7 +138,7 @@ const ReferralSetting = () => {
 
       {/* Invites List */}
       <div className="mb-8">
-        <h2 className="text-lg font-archivo font-semibold text-[#36394A] mb-6">
+        <h2 className="text-lg font-archivo font-semibold text-[#36394A] dark:text-gray-200 mb-6 transition-colors duration-200">
           All your Invites
         </h2>
         
@@ -146,12 +146,12 @@ const ReferralSetting = () => {
           {invites.map((invite, index) => (
             <div
               key={index}
-              className="flex justify-between items-center py-3  border-b border-gray-200  transition-colors duration-150"
+              className="flex justify-between items-center py-3  border-b border-gray-200 dark:border-gray-700  transition-colors duration-150"
             >
-              <div className="font-medium text-[#191D31] text-xs sm:text-sm font-archivo">
+              <div className="font-medium text-[#191D31] dark:text-gray-200 text-xs sm:text-sm font-archivo transition-colors duration-200">
                 {invite.name}
               </div>
-              <div className="text-[#191D31] font-medium text-xs sm:text-sm font-archivo">
+              <div className="text-[#191D31] dark:text-gray-200 font-medium text-xs sm:text-sm font-archivo transition-colors duration-200">
                 {invite.date}
               </div>
             </div>
@@ -159,7 +159,7 @@ const ReferralSetting = () => {
         </div>
         
         {invites.length === 0 && (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-gray-500 dark:text-gray-400 transition-colors duration-200">
             <p className="text-lg">No invites yet</p>
             <p className="text-sm mt-2">Share your referral link to start inviting friends!</p>
           </div>

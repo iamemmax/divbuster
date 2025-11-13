@@ -13,6 +13,7 @@ import { LinkButton } from "@/components/core"
 import { PdfLogo, WordLogo, ExcelLogo } from "@/icons/files/FIles"
 import { useLanguage } from "@/hooks/useLanguage"
 import { messageBoxTranslations } from "@/app/(main)/translation/chatMessagesTranslation"
+import InfiniteScroll from 'react-infinite-scroll-component'
 // import { FileTextIcon, FileSpreadsheet, FileWord, FilePdf, FileArchive } from "lucide-react";
 
 interface MessageBoxProps {
@@ -430,20 +431,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
     return () => clearTimeout(timer)
   }, [chatMessages?.pages, optimisticMessages, scrollToBottom])
 
-  // Infinite scroll handler
-  useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
 
-    const handleScroll = () => {
-      if (el.scrollTop === 0 && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage()
-      }
-    }
-
-    el.addEventListener("scroll", handleScroll)
-    return () => el.removeEventListener("scroll", handleScroll)
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage])
 
   // Cleanup file previews and timeouts on unmount
   useEffect(() => {
@@ -523,10 +511,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
       </div>
 
       {/* Messages */}
-      <div
-        ref={containerRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4 bg-white dark:bg-gray-900"
-      >
+      <div className="flex-1 overflow-hidden bg-white dark:bg-gray-900">
         {isLoading ? (
           <div className="flex justify-center items-center h-32">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
@@ -538,13 +523,24 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
         ) : !hasMessages ? (
           <EmptyMessage />
         ) : (
-          <>
-            {isFetchingNextPage && (
-              <div className="flex justify-center py-2">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500"></div>
-              </div>
-            )}
-            {allMessages.map((msg, index) => {
+          <div
+            id="messages-container"
+            className="h-full overflow-y-auto p-4"
+          >
+            <InfiniteScroll
+              dataLength={allMessages.length}
+              next={fetchNextPage}
+              hasMore={hasNextPage || false}
+              loader={
+                <div className="flex justify-center py-2">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500"></div>
+                </div>
+              }
+              scrollableTarget="messages-container"
+              inverse={true}
+            >
+              <div className="space-y-4">
+                {allMessages.map((msg, index) => {
               if (!msg) return null
 
               const isCurrentUser = msg.sender?.toString() !== selectedMessage?.user_id?.toString()
@@ -597,7 +593,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                         }`}>
                         {/* Message Text */}
                         {msg?.message && (
-                          <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                          <p className="text-sm whitespace-pre-wrap font-archivo">{msg.message}</p>
                         )}
 
                         {/* Attachment Display - Works for both optimistic and real messages */}
@@ -706,9 +702,11 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                   </div>
                 </React.Fragment>
               )
-            })}
+                })}
+              </div>
+            </InfiniteScroll>
             <div ref={messagesEndRef} />
-          </>
+          </div>
         )}
       </div>
 

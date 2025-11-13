@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Header from "../../components/shared/Header";
 import RecentMessages, { resentChatProp } from "./components/RecentMessages";
 import StartNewMessageModal from "./components/modals/StartNewMessageModal";
@@ -12,6 +13,7 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/core";
 import { chatMessagestranslations } from "../../translation/chatMessagesTranslation";
 import { useLanguage } from "@/hooks/useLanguage";
+import { usefetchBuddyProfile } from "../api/buddy/fetchBuddyProfile";
 
 
 
@@ -19,6 +21,8 @@ const Messages = () => {
   const {language}=useLanguage()
   const t = chatMessagestranslations[language] || chatMessagestranslations.en;
   const [activeTab, setActiveTab] = useState<string>(t.recent);
+  const searchParams = useSearchParams();
+  const userId = searchParams.get('userId');
 
 
 useEffect(() => {
@@ -37,6 +41,22 @@ useEffect(() => {
   const tabs = [t.recent, t.groups];
 
   const { data: recentChatList, isLoading } = useFetchSingleChatList();
+  const { data: userProfile } = usefetchBuddyProfile(userId);
+
+  // Handle userId parameter to start conversation
+  useEffect(() => {
+    if (userId && userProfile) {
+      const chatData: resentChatProp = {
+        user_id: userId,
+        name: `${userProfile.first_name} ${userProfile.last_name}`,
+        image: userProfile.profile_details?.profile_picture || null,
+        last_message: "",
+        date: null
+      };
+      setSelectedMessage(chatData);
+      setActiveTab(t.recent);
+    }
+  }, [userId, userProfile, t.recent]);
 
   return (
     <div className="h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">

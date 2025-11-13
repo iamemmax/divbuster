@@ -92,7 +92,7 @@ const DiveTimeChart:React.FC<prop> = ({data}) => {
 
         {/* Create the trapezoid shape manually using CSS */}
         <div className="absolute top-16 left-4 md:left-20 right-4 md:right-20 bottom-16">
-         <TrapeziumShape/>
+         {/* <TrapeziumShape/> */}
         </div>
       </div>
     </div>

@@ -72,7 +72,16 @@ export interface Translations {
     selectUnit: string;
     temperature: string;
     selectTemperature: string;
-    bodySize: string;
+     bodySize: string
+    bodySizes: {
+      xs: { value: string; label: string };
+      s: { value: string; label: string };
+      m: { value: string; label: string };
+      l: { value: string; label: string };
+      xl: { value: string; label: string };
+      xxl: { value: string; label: string };
+      xxxl: { value: string; label: string };
+    };
     selectBodySize: string;
     shoeSize: string;
     selectShoeSize: string;
@@ -260,7 +269,16 @@ title:"Kindly verify account to continue"
       selectUnit: "Select your preferred unit of measure",
       temperature: "Temperature",
       selectTemperature: "Select your preferred temperature unit",
-      bodySize: "Body Size",
+      bodySize: "Body Size", 
+      bodySizes: {
+        xs: { value: "XS", label: "Extra Small" },
+        s: { value: "S", label: "Small" },
+        m: { value: "M", label: "Medium" },
+        l: { value: "L", label: "Large" },
+        xl: { value: "XL", label: "Extra Large" },
+        xxl: { value: "XXL", label: "2X Large" },
+        xxxl: { value: "XXXL", label: "3X Large" },
+      },
       selectBodySize: "Select your body size",
       shoeSize: "Shoe Size",
       selectShoeSize: "Select your shoe size",
@@ -441,7 +459,16 @@ title:"Por favor verifica tu cuenta para continuar"
       selectUnit: "Selecciona tu unidad de medida preferida",
       temperature: "Temperatura",
       selectTemperature: "Selecciona tu unidad de temperatura preferida",
-      bodySize: "Talla Corporal",
+        bodySize: "Talla Corporal",
+   bodySizes: {
+        xs: { value: "XS", label: "Extra Pequeño" },
+        s: { value: "S", label: "Pequeño" },
+        m: { value: "M", label: "Mediano" },
+        l: { value: "L", label: "Grande" },
+        xl: { value: "XL", label: "Extra Grande" },
+        xxl: { value: "XXL", label: "2X Grande" },
+        xxxl: { value: "XXXL", label: "3X Grande" },
+      },
       selectBodySize: "Selecciona tu talla corporal",
       shoeSize: "Talla de Calzado",
       selectShoeSize: "Selecciona tu talla de calzado",
@@ -622,7 +649,16 @@ title:"Por favor verifica tu cuenta para continuar"
       selectUnit: "Sélectionnez votre unité de mesure préférée",
       temperature: "Température",
       selectTemperature: "Sélectionnez votre unité de température préférée",
-      bodySize: "Taille Corporelle",
+       bodySize: "Taille Corporelle",
+    bodySizes: {
+        xs: { value: "XS", label: "Extra Petit" },
+        s: { value: "S", label: "Petit" },
+        m: { value: "M", label: "Moyen" },
+        l: { value: "L", label: "Grand" },
+        xl: { value: "XL", label: "Extra Grand" },
+        xxl: { value: "XXL", label: "2X Grand" },
+        xxxl: { value: "XXXL", label: "3X Grand" },
+      },
       selectBodySize: "Sélectionnez votre taille corporelle",
       shoeSize: "Pointure",
       selectShoeSize: "Sélectionnez votre pointure",
@@ -804,7 +840,16 @@ title:"Por favor verifica tu cuenta para continuar"
       selectUnit: "Selecteer je voorkeurseenheid",
       temperature: "Temperatuur",
       selectTemperature: "Selecteer je temperatuureenheid",
-      bodySize: "Lichaamsgrootte",
+       bodySize: "Lichaamsgrootte",  
+     bodySizes: {
+        xs: { value: "XS", label: "Extra Klein" },
+        s: { value: "S", label: "Klein" },
+        m: { value: "M", label: "Gemiddeld" },
+        l: { value: "L", label: "Groot" },
+        xl: { value: "XL", label: "Extra Groot" },
+        xxl: { value: "XXL", label: "2X Groot" },
+        xxxl: { value: "XXXL", label: "3X Groot" },
+      },
       selectBodySize: "Selecteer je lichaamsgrootte",
       shoeSize: "Schoenmaat",
       selectShoeSize: "Selecteer je schoenmaat",
@@ -913,172 +958,7 @@ title:"Por favor verifica tu cuenta para continuar"
 
     
   },
-  // de: {
-  //   basicInfo: {
-  //     title: "Konto Erstellen",
-  //     subtitle: "Fahren Sie mit Ihrer Registrierung fort",
-  //     preferredLanguage: "Bevorzugte Sprache",
-  //     selectLanguage: "Wählen Sie Ihre bevorzugte Sprache",
-  //     nextButton: "Weiter",
-  //   },
-  //   accountDetails: {
-  //     title: "Kontodetails",
-  //     subtitle: "Geben Sie Ihre persönlichen Daten ein",
-  //     firstName: "Vorname",
-  //     lastName: "Nachname",
-  //     email: "E-Mail-Adresse",
-  //     phoneNumber: "Telefonnummer",
-  //     backButton: "Zurück",
-  //     nextButton: "Weiter",
-  //     firstNamePlaceholder: "Geben Sie Ihren Vornamen ein",
-  //     lastNamePlaceholder: "Geben Sie Ihren Nachnamen ein",
-  //     emailPlaceholder: "Geben Sie Ihre E-Mail-Adresse ein",
-  //     errors: {
-  //       firstNameRequired: "Vorname ist erforderlich",
-  //       lastNameRequired: "Nachname ist erforderlich",
-  //       invalidEmail: "Ungültige E-Mail-Adresse"
-  //     }
-  //   },
-  //   socialLogins: {
-  //     reddit: "Mit Reddit anmelden",
-  //     microsoft: "Mit Microsoft 365 anmelden",
-  //     linkedin: "Mit LinkedIn anmelden",
-  //     apple: "Mit Apple ID anmelden",
-  //     connecting: "Verbindung wird hergestellt...",
-  //     google: "Mit Google anmelden"
-  //   },
-  //   googleLogin: "Mit Google anmelden",
-  //   googleConnecting: "Verbindung wird hergestellt...",
-  //   noAccount: "Sie haben noch kein Konto?",
-  //   register: "Registrieren",
-  //   orText: "Oder",
-  //   diveProfile: {
-  //     title: "Tauchprofil",
-  //     subtitle: "Erzählen Sie uns von sich",
-  //     nickname: "Spitzname",
-  //     dateOfBirth: "Geburtsdatum",
-  //     phoneNumber: "Telefonnummer",
-  //     password: "Passwort",
-  //     confirmPassword: "Passwort bestätigen",
-  //     backButton: "Zurück",
-  //     nextButton: "Weiter",
-  //     nicknamePlaceholder: "Geben Sie Ihren Spitznamen ein",
-  //     dateOfBirthPlaceholder: "Wählen Sie Ihr Geburtsdatum",
-  //     phoneNumberPlaceholder: "Geben Sie Ihre Telefonnummer ein",
-  //     passwordPlaceholder: "Geben Sie Ihr Passwort ein",
-  //     confirmPasswordPlaceholder: "Geben Sie Ihr Passwort erneut ein",
-  //     errors: {
-  //       nicknameRequired: "Spitzname ist erforderlich",
-  //       dateOfBirthRequired: "Geburtsdatum ist erforderlich",
-  //       phoneNumberRequired: "Telefonnummer ist erforderlich",
-  //       passwordMinLength: "Passwort muss mindestens 8 Zeichen lang sein",
-  //       confirmPasswordRequired: "Bitte bestätigen Sie Ihr Passwort",
-  //       passwordsDoNotMatch: "Passwörter stimmen nicht überein"
-  //     }
-  //   },
-  //   accountType: {
-  //     title: "Messeinstellungen",
-  //     subtitle: "Legen Sie Ihre bevorzugten Maßeinheiten fest",
-  //     unitOfMeasure: "Maßeinheit",
-  //     selectUnit: "Wählen Sie Ihre bevorzugte Maßeinheit",
-  //     temperature: "Temperatur",
-  //     selectTemperature: "Wählen Sie Ihre bevorzugte Temperatureinheit",
-  //     bodySize: "Körpergröße",
-  //     selectBodySize: "Wählen Sie Ihre Körpergröße",
-  //     shoeSize: "Schuhgröße",
-  //     selectShoeSize: "Wählen Sie Ihre Schuhgröße",
-  //     country: "Land",
-  //     selectCountry: "Wählen Sie Ihr Land",
-  //     backButton: "Zurück",
-  //     nextButton: "Weiter",
-  //     // New dropdown options
-  //     metricOption: "Metrisch",
-  //     imperialOption: "Imperial",
-  //     celsiusOption: "Celsius",
-  //     fahrenheitOption: "Fahrenheit",
-  //     kelvinOption: "Kelvin",
-  //     xsmallOption: "Extra Klein",
-  //     smallOption: "Klein",
-  //     mediumOption: "Mittel",
-  //     largeOption: "Groß",
-  //     xlargeOption: "Extra Groß",
-  //     euOption: "EU",
-  //     usOption: "USA",
-  //     ukOption: "UK",
-  //     // Error messages
-  //     errors: {
-  //       unitRequired: "Maßeinheit ist erforderlich",
-  //       temperatureRequired: "Temperatur ist erforderlich",
-  //       bodySizeRequired: "Körpergröße ist erforderlich",
-  //       shoeSizeRequired: "Schuhgröße ist erforderlich",
-  //       countryRequired: "Land ist erforderlich",
-  //     },
-  //   },
-  //   profilePicture: {
-  //     title: "Profilbild Hinzufügen",
-  //     subtitle: "Fügen Sie Ihrem Konto ein Profilbild hinzu",
-  //     uploadText: "Klicken zum Hochladen",
-  //     dragDropText: "oder ziehen und ablegen",
-  //     fileTypeText: "PNG oder JPG (max. 800×400px)",
-  //     backButton: "Zurück",
-  //     submitButton: "Absenden",
-  //     skipButton: "Diesen Schritt Überspringen",
-  //   },
-  //   accountTypeSelection: {
-  //     title: "Wählen Sie Ihren Kontotyp",
-  //     subtitle: "Wählen Sie den Kontotyp aus, den Sie erstellen möchten.",
-  //     diverTypeLabel: "Typ des Tauchers",
-  //     scubaDiver: "Taucher mit Tauchmaske",
-  //     freeDiver: "Freitaucher",
-  //     recreativeTitle: "Rekreativ & Schüler",
-  //     recreativeDescription: "Für begeisterte, zertifizierte und nicht zertifizierte Taucher, die für Spaß tauchen und alle ihre Abenteuer mit Freunden und Familie verfolgen möchten.",
-  //     recreativeExample: "Beispielsweise: Open, Advanced, Night, Rescue usw.",
-  //     professionalTitle: "Professionell & Experten",
-  //     professionalDescription: "Für Profis, die mit einer Tauchschule, Tauchladen oder Organisation verbunden sind und sich selbst bewerben möchten.",
-  //     professionalExample: "Beispielsweise: Tauchleiter, Instrukteure.",
-  //     combinedTitle: "Kombiniert",
-  //     combinedDescription: "Für professionelle Taucher, die mit einer Tauchschule verbunden sind, aber auch in ihrer Freizeit mit Freunden unterwasser tauchen.",
-  //     combinedBenefit: "Vorteil: Alle Tauchgänge werden unter einem einzigen Profil protokolliert.",
-  //     peoplesChoice: "Menschenwahl",
-  //     backButton: "Zurück",
-  //     continueButton: "Weiter",
-  //     errors: {
-  //       diverTypeRequired: "Tauchertyp ist erforderlich",
-  //       accountTypeRequired: "Kontotyp ist erforderlich"
-  //     }
-  //   },
-  //   emailVerification: {
-  //     title: "E-Mail-Verifizierung",
-  //     subtitle: "Wir müssen Ihre E-Mail-Adresse validieren - daher erhalten Sie einen Verifizierungscode.",
-  //     mfaTitle: "Multi-Faktor-Authentifizierung",
-  //     mfaSubtitle: "Bitte scannen Sie den QR-Code in Ihre Divebuster-Anwendung oder Browser und geben Sie den unten angegebenen Code ein.",
-  //     emailTabLabel: "Über E-Mail verifizieren",
-  //     qrTabLabel: "Über QR-Code verifizieren",
-  //     verificationCodeLabel: "Verifizierungscode",
-  //     verificationCodePlaceholder: "Geben Sie Ihren Verifizierungscode ein",
-  //     submitButton: "Absenden",
-  //     noCodeText: "Keinen Code erhalten?",
-  //     resendButton: "Erneut senden",
-  //     resendingText: "Wird erneut gesendet...",
-  //     closeButton: "Schließen",
-  //     errors: {
-  //       tokenRequired: "Verifizierungscode ist erforderlich"
-  //     }
-  //   },
-  //   mfaVerification: {
-  //     generatedCodeLabel: "Generierter Code",
-  //     generatedCodePlaceholder: "Geben Sie den generierten Code ein",
-  //     submitButton: "Absenden",
-  //     submittingText: "Wird gesendet...",
-  //     noCodeText: "Keinen Code erhalten?",
-  //     regenerateButton: "QR-Code neu generieren",
-  //     regeneratingText: "Wird neu generiert...",
-  //     qrRegeneratedMessage: "QR-Code erfolgreich neu generiert!",
-  //     errors: {
-  //       mfaCodeRequired: "MFA-Code ist erforderlich"
-  //     }
-  //   }
-  // },
+  
 }
 
 

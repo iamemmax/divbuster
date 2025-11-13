@@ -35,7 +35,7 @@ const UserSetting = ({ user ,language, setLanguage}: Prop) => {
     { id: "account-type", title: t.accountType.title, subtitle: t.accountType.subtitle },
     { id: "language", title: t.language.title, subtitle: t.language.subtitle },
     { id: "referral", title: t.referral.title, subtitle: t.referral.subtitle },
-    { id: "delete-account", title: t.deleteAccount.title, subtitle: t.deleteAccount.subtitle },
+    // { id: "delete-account", title: t.deleteAccount.title, subtitle: t.deleteAccount.subtitle },
   ];
 
   const renderComponent = () => {
@@ -48,8 +48,8 @@ const UserSetting = ({ user ,language, setLanguage}: Prop) => {
         return <LanguageComponent user={user} language={language} setLanguage={setLanguage} />;
       case "referral":
         return <ReferralSetting />;
-      case "delete-account":
-        return <BlockedUsersAndFeedback />;
+      // case "delete-account":
+        // return <BlockedUsersAndFeedback />;
       default:
         return <AuthenticationComponent  language={language} />;
     }

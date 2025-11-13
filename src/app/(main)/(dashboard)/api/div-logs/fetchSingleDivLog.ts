@@ -1,5 +1,13 @@
 import { adminAxios } from "@/lib/axios";
 import { useQuery } from "react-query";
+import { Diveequipment } from "./fetchDivLogs";
+
+
+
+
+
+
+
 
 
 export interface singleDiveProp {
@@ -10,7 +18,7 @@ export interface singleDiveProp {
 interface Data {
   id: number;
   user: number;
-  dive_equipment: Diveequipment;
+  dive_equipment:Diveequipment| null;
   dive_plan: Diveplan;
   dive_photos: null;
   number: number;
@@ -18,7 +26,7 @@ interface Data {
   air_start: number;
   air_stop: number;
   start_date: string;
-  end_date: null;
+  end_date: string;
   bottom_time: string;
   dive_depth: string;
   average_elevation: number;
@@ -33,8 +41,8 @@ interface Data {
   likes: number;
   dislikes: number;
   public: boolean;
-  private_note: string;
-  public_note: string;
+  private_note: null;
+  public_note: null;
   show_notes: boolean;
   show_map_first: boolean;
   sync_status: boolean;
@@ -46,9 +54,9 @@ interface Diveplan {
   dive_logs: number[];
   name: string;
   description: string;
-  meet_up_address: null;
-  longitude: null;
-  latitude: null;
+  meet_up_address: string;
+  longitude: string;
+  latitude: string;
   buddies: string;
   dive_log_completed: boolean;
   created_on: string;
@@ -83,27 +91,6 @@ interface Divesite {
   country: number;
 }
 
-interface Diveequipment {
-  id: number;
-  gas_mixture: string;
-  oxygen_value: number;
-  nitrogen_value: number;
-  helium_value: number;
-  cylinder_type: string;
-  cylinder_size: number;
-  weight: string;
-  weight_value: number;
-  mask: string;
-  wetsuit: string;
-  fin: boolean;
-  regulator: boolean;
-  bcd: boolean;
-  hoody: boolean;
-  gloves: boolean;
-  boots: boolean;
-  others: boolean;
-  dive_log: number;
-}
 
 const fetchSingleDivLog = async (id:string) => {
  const response = await adminAxios.get(`divelog/${id}`);

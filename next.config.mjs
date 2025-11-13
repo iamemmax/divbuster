@@ -37,6 +37,11 @@ const nextConfig = {
           hostname: 'be-test.divebusters.app',
           pathname: '/**',
         },
+        {
+          protocol: 'https',
+          hostname: 'flagcdn.com',
+          pathname: '/**',
+        },
       ],
     },
     async headers() {

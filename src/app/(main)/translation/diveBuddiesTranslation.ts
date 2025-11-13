@@ -21,6 +21,7 @@ export const diverBuddiesTranslations = {
     loadingMore: "Loading more...",
   },
   es: {
+    myDiveBuddies: "Mis compañeros de buceo",
     myBuddies: "Mis compañeros",
     pageTitle: "Mis compañeros de buceo",
     searchPlaceholder: "Buscar por nombre de compañero",
@@ -41,6 +42,7 @@ export const diverBuddiesTranslations = {
     loadingMore: "Cargando más...",
   },
   fr: {
+    myDiveBuddies: "Mes partenaires de plongée",
     myBuddies: "Mes partenaires",
     pageTitle: "Mes partenaires de plongée",
     searchPlaceholder: "Rechercher par nom de partenaire",
@@ -61,6 +63,7 @@ export const diverBuddiesTranslations = {
     loadingMore: "Chargement en cours...",
   },
   nl: {
+    myDiveBuddies: "Mijn duikmaatjes",
     myBuddies: "Mijn maatjes",
     pageTitle: "Mijn duikmaatjes",
     searchPlaceholder: "Zoek op maatje naam",

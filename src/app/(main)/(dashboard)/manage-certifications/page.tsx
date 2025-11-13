@@ -10,16 +10,20 @@ import EditIcon from '@/app/icons/(dashboard)/EditIcon'
 import AddCertificateTypeComp from '../../components/certifications/AddCertificateTypeComp'
 import { certificationTranslations } from '../../translation/certificationTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
+import CertificateModal from '../../components/certifications/CertificateModal';
+import { selectedCardBg } from '../../components/shared/CardContainer';
 
 // 🔹 Translations
 
 
-
+// selectedCardBg
 const ManageCertifications= () => {
   const {language}=useLanguage()
   const t = certificationTranslations[language] ||certificationTranslations.en;
   const [showEditModal, setShowEditModal] = useState(false)
   const [certificateData, setCertificateData] = useState<certificateResult>()
+  const [selectedCertificate, setSelectedCertificate] = useState<certificateResult | null>(null)
+  const [showCertificateModal, setShowCertificateModal] = useState(false)
   const {
     data,
     hasNextPage,
@@ -35,7 +39,7 @@ const ManageCertifications= () => {
     <div>
       <Header title={t.pageTitle} subtitle="" />
       <div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg mt-[4rem] border border-[#EAECF0] dark:border-gray-700 transition-colors duration-200">
+        <div className="bg-white dark:bg-gray-800 rounded-lg mt-[4rem] !z-10 border border-[#EAECF0] dark:border-gray-700 transition-colors duration-200">
 
           {isLoading ? (
             <div className="w-full">
@@ -57,11 +61,15 @@ const ManageCertifications= () => {
                     <div
                       key={card.id}
                       className={cn(
-                        "flex flex-col z-50 relative  gap-4 rounded-[1.1944rem] px-[1.125rem] py-4 bg-cover bg-no-repeat"
+                        "flex flex-col z-50 relative gap-4 rounded-[1.1944rem] px-[1.125rem] py-4 bg-cover bg-no-repeat cursor-pointer hover:opacity-90 transition-opacity"
                       )}
                       style={{
-                        backgroundImage: `url(${card?.image ?? ""})`,
-                        backgroundColor: !card?.image ? "#F7931D" : "",
+                        backgroundColor: selectedCardBg(card?.certificate_type)?.bg,
+                        color: selectedCardBg(card?.certificate_type)?.text,
+                      }}
+                      onClick={() => {
+                        setSelectedCertificate(card)
+                        setShowCertificateModal(true)
                       }}
                     >
                       <div className="flex justify-between items-start">
@@ -95,7 +103,8 @@ const ManageCertifications= () => {
                             </div>
                             <div
                               className="flex justify-end"
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.stopPropagation();
                                 setCertificateData(card);
                                 setShowEditModal(true);
                               }}
@@ -147,6 +156,12 @@ const ManageCertifications= () => {
           certificateData={certificateData}
         />
       )}
+      
+      <CertificateModal 
+        isOpen={showCertificateModal}
+        onClose={() => setShowCertificateModal(false)}
+        certificate={selectedCertificate}
+      />
     </div>
   );
 };

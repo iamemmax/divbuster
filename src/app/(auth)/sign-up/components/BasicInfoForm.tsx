@@ -116,10 +116,10 @@ const BasicInfoForm = ({
       </div>
 
       <div className="flex justify-center items-center flex-col">
-        <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39]">
+        <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39] dark:text-white">
           {t.basicInfo?.title || "Create an Account"}
         </h2>
-        <p className="font-archivo text-[#8D9196] font-medium text-xs 2xl:text-base">
+        <p className="font-archivo text-[#8D9196] dark:text-gray-300 font-medium text-xs 2xl:text-base">
           {t.basicInfo?.subtitle || "Proceed with your Registration"}
         </p>
       </div>
@@ -128,7 +128,7 @@ const BasicInfoForm = ({
         <div className="mb-4">
           <label
             htmlFor="language"
-            className="block text-gray-700 font-medium mb-2"
+            className="block text-gray-700 dark:text-white font-medium mb-2"
           >
             {t.basicInfo.preferredLanguage}
           </label>
@@ -141,7 +141,7 @@ const BasicInfoForm = ({
             <div className="relative">
               <SelectTrigger
                 id="language"
-                className={`border bg-transparent text-black ${errors.lang ? "border-red-500" : "border-[#E2E8F0]"} w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
+                className={`border bg-transparent text-black dark:text-white ${errors.lang ? "border-red-500" : "border-[#E2E8F0] dark:border-gray-600"} w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
               >
                 <SelectValue
                   placeholder={t.basicInfo.selectLanguage}

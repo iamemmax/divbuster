@@ -7,20 +7,7 @@ import { UserDataProp } from "./types";
 import { certificates } from "@/app/(main)/(dashboard)/api/buddy/fetchBuddyProfile";
 import { getAuthenticatedUser, User, userDetails } from "@/app/(auth)/api/getAuthenticatedUser";
 
-// // Define types
-// export interface User {
-//   id: string;
-//   email: string;
-//   first_name: string;
-//   last_name: string;
-//   [key: string]: any;
-// }
 
-
-// interface RootObject {
-//   detail: string;
-//   data: Data;
-// }
 
 
 export interface AuthState {
@@ -68,8 +55,6 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
       case "LOGOUT":
         
         try {
-          // Log tokens before clearing
-          const divbusterToken = localStorage.getItem("DIVBUSTERTOKEN");
           
           // Clear token from localStorage
           tokenStorage.clearToken();
@@ -128,29 +113,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Check for token on mount
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = tokenStorage.getToken();
+useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const token = tokenStorage.getToken();
 
-        if (token === null || token === undefined) {
-          return;
-        }
-
-        setAxiosDefaultToken(token, adminAxios);
-
-        const user =  await getAuthenticatedUser() 
-        authDispatch({ type: "LOGIN", payload: user });
-      } catch (err) {
-        tokenStorage.clearToken();
-        deleteAxiosDefaultToken();
-      } finally {
+      if (!token) {
         authDispatch({ type: "STOP_LOADING" });
+        return;
       }
-    };
 
-    fetchUser();
-  }, []);
+      setAxiosDefaultToken(token, adminAxios);
+
+      const user = await getAuthenticatedUser();
+      authDispatch({ type: "LOGIN", payload: user });
+    } catch (err) {
+      // If token invalid, clear and logout
+      tokenStorage.clearToken();
+      deleteAxiosDefaultToken();
+      authDispatch({ type: "LOGOUT" });
+    }
+  };
+
+  fetchUser();
+}, []);
+
 
  
   // console.log("Auth state updated:", authState);

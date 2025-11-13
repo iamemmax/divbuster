@@ -94,16 +94,27 @@ const queryClient = useQueryClient();
                   )}
                   
                   <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div className="relative z-10 flex-shrink-0">
-                      <img   
-                        src={buddy?.profile_picture!==null ? buddy.profile_picture:"/images/profile.png"}
-                        alt={buddy.full_name}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-700 text-sm font-medium overflow-hidden">
+  {buddy?.profile_picture ? (
+    <img
+      src={buddy.profile_picture}
+      alt={buddy.full_name}
+      className="w-full h-full object-cover"
+    />
+  ) : (
+    <span>
+      {buddy?.full_name
+        ?.split(" ")
+        .slice(0, 2)
+        .map((n) => n[0]?.toUpperCase())
+        .join("") || ""}
+    </span>
+  )}
+</div>
+
                       {/* {buddy.isOnline && (
                         <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white dark:border-gray-800"></div>
                       )} */}
-                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="font-medium text-gray-900 dark:text-gray-100 text-sm truncate transition-colors duration-200">{buddy.full_name}</div>
                      

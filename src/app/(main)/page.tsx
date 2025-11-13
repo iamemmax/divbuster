@@ -14,7 +14,7 @@ import AddCertification from './components/certifications/AddCertification'
 import { certificateResult } from './(dashboard)/certifications/fetchCertifications'
 import CreateSchoolPlan from './(dashboard)/bookings/components/modals/school-booking/CreateSchoolPlan'
 import CreateBuddyBooking from './(dashboard)/bookings/components/modals/buddy-booking/CreateBuddyBooking'
-import { Dashbaordtranslations } from './translation/dashboardTranslation';
+import { DashboardTranslations } from './translation/dashboardTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 import AddCertificateTypeComp from './components/certifications/AddCertificateTypeComp';
 
@@ -27,7 +27,7 @@ const Page = () => {
   const [showBookWithBuddy, setShowBookWithBuddy] = useState(false)
 
   const {language}= useLanguage()
-  const t = Dashbaordtranslations[language] || Dashbaordtranslations.en;
+  const t = DashboardTranslations[language] || DashboardTranslations.en;
 
   return (
     <div className='text-black dark:text-white'>

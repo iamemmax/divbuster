@@ -4,44 +4,54 @@ import { useAuth } from "@/contexts/authentication";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import FullPageLoader from "../(main)/loading";
+import { tokenStorage } from "./utils";
+import { deleteAxiosDefaultToken } from "@/lib/axios";
 
 export default function ProtectedRouteGuard({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { authState } = useAuth();
+  const { authState, authDispatch } = useAuth();
   const { isAuthenticated, isLoading } = authState;
   const pathname = usePathname();
   const router = useRouter();
 
-  // Define protected route patterns
+  // Define protected routes
   const protectedRoutes = [
     "/",
     "/div-buddies",
-    "/div-log", // will cover /div-log and /div-log/[id]
+    "/div-log",
     "/settings",
-    "/div-sites",
+    "/dive-sites",
     "/messages",
     "/bookings",
     "/dive-finder",
     "/profile",
-    "/token-management?tab=invoices",
     "/token-management",
-    "/manage-certifications"
+    "/manage-certifications",
   ];
 
-  const isProtected = protectedRoutes.some((route) =>
-    pathname === route || pathname.startsWith(`${route}/`)
+  // Check if current path is protected
+  const isProtected = protectedRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
   );
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && isProtected) {
-      router.push("/login");
-    }
-  }, [isLoading, isAuthenticated, isProtected, router]);
+    if (!isLoading && isProtected && !isAuthenticated) {
+      // Ensure cleanup runs only once
+      tokenStorage.clearToken();
+      tokenStorage.clearAll();
+      deleteAxiosDefaultToken();
+      authDispatch({ type: "LOGOUT" });
 
-  if ((isLoading || !isAuthenticated) && isProtected) {
+      // Redirect to login page
+      router.replace("/login");
+    }
+  }, [isLoading, isProtected, isAuthenticated, authDispatch, router]);
+
+  // Show loader while verifying auth or redirecting
+  if (isProtected && (isLoading || (!isAuthenticated && typeof window !== "undefined"))) {
     return <FullPageLoader />;
   }
 

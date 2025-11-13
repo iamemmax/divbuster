@@ -122,6 +122,10 @@ export const diveLogContainerTranslations = {
 export const DiveLogDetailsTranslations = {
   en: {
     title: "DiveLog Details",
+        public: "Public",
+    private: "Private",
+    
+
     header: {
       subtitle: ""
     },
@@ -150,6 +154,9 @@ export const DiveLogDetailsTranslations = {
   },
   es: {
     title: "Detalles del DiveLog",
+    public: "Público",
+    private: "Privado",
+  
     header: {
       subtitle: ""
     },
@@ -178,6 +185,9 @@ export const DiveLogDetailsTranslations = {
   },
   fr: {
     title: "Détails du DiveLog",
+      public: "Public",
+    private: "Privé",
+
     header: {
       subtitle: ""
     },
@@ -206,6 +216,8 @@ export const DiveLogDetailsTranslations = {
   },
   nl: {
     title: "DiveLog Details",
+        public: "Openbaar",
+    private: "Privé",
     header: {
       subtitle: ""
     },

@@ -1,5 +1,5 @@
 "use client";
-import { DM_Sans, Wix_Madefor_Display, Outfit, Archivo } from "next/font/google";
+import { DM_Sans, Wix_Madefor_Display, Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/utils/classNames";
 import { Suspense } from "react";
@@ -11,6 +11,7 @@ import ProtectedRouteGuard from "./(auth)/ProtectedRouteGuard";
 import { Wrapper } from "./(auth)/Wrapper";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { RouteChangeLoader } from "@/components/core/RouteChangeLoader";
+import { LanguageProvider } from "@/hooks/useLanguage";
 
 // Updated Google Client ID from environment variables
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
@@ -33,11 +34,7 @@ const outfit = Outfit({
   variable: "--font-outfit",
   display: "swap",
 });
-const archivo = Archivo({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"], // Choose desired weights
-  variable: "--font-archivo",          // optional: for Tailwind integration
-})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -45,10 +42,10 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      className={cn(sans.variable, display.variable, outfit.variable, archivo.variable)}
+      className={cn(sans.variable, display.variable, outfit.variable)}
       lang="en"
     >
-      <body className="">
+      <body className="font-sans">
         <Toaster
           containerStyle={{
             zIndex: 99999,
@@ -67,12 +64,14 @@ export default function RootLayout({
         >
           <ReactQueryProvider>
             <AuthProvider>
-              <ProtectedRouteGuard>
-                <RouteChangeLoader />
-                <Suspense fallback={<FullPageLoader />}>
-                  <Wrapper>{children}</Wrapper>
-                </Suspense>
-              </ProtectedRouteGuard>
+              <LanguageProvider>
+                <ProtectedRouteGuard>
+                  <RouteChangeLoader />
+                  <Suspense fallback={<FullPageLoader />}>
+                    <Wrapper>{children}</Wrapper>
+                  </Suspense>
+                </ProtectedRouteGuard>
+              </LanguageProvider>
             </AuthProvider>
           </ReactQueryProvider>
         </GoogleOAuthProvider>

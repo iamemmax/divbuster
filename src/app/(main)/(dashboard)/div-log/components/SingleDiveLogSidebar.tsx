@@ -67,9 +67,9 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
   ];
 
   return (
-   <div className="max-w-md mx-auto ">
+   <div className="xl:max-w-md w-full mx-auto overflow-x-hidden ">
       {/* Watch Display */}
-      <div className="relative bg-white dark:bg-gray-800 p-8 flex justify-center" onClick={()=>setShowdiveComputer(true)}>
+      <div className="relative bg-white dark:bg-gray-800 p-4 2xl:p-8 flex justify-center" onClick={()=>setShowdiveComputer(true)}>
         <div className="relative">
           {/* Watch Body */}
            <DiveWatch className='dark:bg-transparent'/>
@@ -86,7 +86,7 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
       </div>
       
       {/* Menu Items */}
-      <div className="px-6 gap-4 pb-8">
+      <div className="2xl:px-6 px-3 gap-4 pb-8">
         {menuItems.map((item, index) => (
           <div key={index} className="bg-white dark:bg-gray-800 rounded-lg mb-3 border border-gray-200 dark:border-gray-700">
             <button 

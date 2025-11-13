@@ -67,11 +67,13 @@ const MyBuddyList = () => {
 
               <div className="flex items-center gap-3 flex-1 min-w-0">
                 <div className="relative z-10 flex-shrink-0">
-                  <img
-                    src={ buddy?.profile_details?.profile_picture || '/default-avatar.png'}
+                  {buddy?.profile_details?.profile_picture ?<img
+                    src={ buddy?.profile_details?.profile_picture}
                     alt={buddy.first_name || buddy.last_name || 'Buddy'}
                     className="w-10 h-10 rounded-full object-cover"
-                  />
+                  /> : <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs text-gray-600 dark:text-gray-300 transition-colors duration-200">
+                    {buddy?.first_name?.[0]?.toUpperCase() || buddy?.last_name?.[0]?.toUpperCase() || ""}
+                  </div>}
                   <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white dark:border-gray-800"></div>
                 </div>
                 <div className="flex-1 min-w-0">

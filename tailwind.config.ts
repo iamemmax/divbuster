@@ -17,11 +17,11 @@ const config: Config = {
       },
       fontFamily: {
         verdana: ['verdana', 'sans-serif'],
-        sans: ['var(--font-sans)'],
+        sans: ['Archivo', 'var(--font-sans)', 'sans-serif'],
         heading: ['var(--font-heading)'],
         display: ['var(--font-display)'],
         outfit: ['var(--font-outfit)'],
-        archivo: ['var(--font-archivo)'],
+        archivo: ['Archivo', 'sans-serif'],
       },
       fontSize: {
         xxs: '.625rem',

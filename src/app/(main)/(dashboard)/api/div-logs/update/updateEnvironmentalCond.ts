@@ -13,7 +13,7 @@ interface addBuddyprop {
 
 const updateEnvironmentalCon = async ({avg_water_temperature,max_water_temperature,min_water_temperature,id}:addBuddyprop) => {
  const response = await adminAxios.put(`/dive/dive-log/${id}/edit`,{
-avg_water_temperature,max_water_temperature,min_water_temperature });
+avg_water_temperature:Number(avg_water_temperature),max_water_temperature:Number(max_water_temperature),min_water_temperature:Number(min_water_temperature) });
     return response.data ;
 }
 

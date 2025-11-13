@@ -19,13 +19,37 @@ import { environmentalConditionTranslations } from '@/app/(main)/translation/div
 import { useLanguage } from '@/hooks/useLanguage';
 
 
-// Define the validation schema with Zod
+// ✅ Update schema - transforms values over 100 to 100
 const moreLogDetailsSchema = z.object({
-  min_water_temperature: z.string(),
-  max_water_temperature: z.string(),
-  avg_water_temperature: z.string(),
-
+  min_water_temperature: z
+    .string()
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+      message: "Value must be 0 or greater",
+    })
+    .transform((val) => {
+      const num = Number(val);
+      return num > 100 ? "100" : val;
+    }),
+  max_water_temperature: z
+    .string()
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+      message: "Value must be 0 or greater",
+    })
+    .transform((val) => {
+      const num = Number(val);
+      return num > 100 ? "100" : val;
+    }),
+  avg_water_temperature: z
+    .string()
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+      message: "Value must be 0 or greater",
+    })
+    .transform((val) => {
+      const num = Number(val);
+      return num > 100 ? "100" : val;
+    }),
 });
+
 
 export type MoreEnvironmentalFormValues = z.infer<typeof moreLogDetailsSchema>;
 
@@ -41,7 +65,6 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
   onClose,
   initialData,
   user
-  // onSave,
 }) => {
   const {
     isErrorModalOpen,
@@ -60,6 +83,7 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm<MoreEnvironmentalFormValues>({
     resolver: zodResolver(moreLogDetailsSchema),
@@ -67,11 +91,16 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
       min_water_temperature: String(initialData?.data?.min_water_temperature) || "0",
       avg_water_temperature: String(initialData?.data?.avg_water_temperature || "0"),
       max_water_temperature: String(initialData?.data?.max_water_temperature) || "0",
-
     },
   });
 
-
+  // Handler to cap value at 100
+  const handleInputChange = (field: keyof MoreEnvironmentalFormValues, value: string) => {
+    const numValue = Number(value);
+    if (!isNaN(numValue) && numValue > 100) {
+      setValue(field, "100");
+    }
+  };
 
   const queryClient = useQueryClient()
   const onSubmit = ({ avg_water_temperature, max_water_temperature, min_water_temperature }: MoreEnvironmentalFormValues) => {
@@ -85,8 +114,6 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
         setShowUpdatedModal(true)
         queryClient.invalidateQueries({ queryKey: ["single-div-log"] })
         queryClient.invalidateQueries({ queryKey: ["div-logs"] })
-
-
       }, onError: (error) => {
         const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         openErrorModalWithMessage(String(errorMessage));
@@ -116,17 +143,23 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
              {t?.labels?.min}
             </label>
-            <input
-              {...register('min_water_temperature')}
-              placeholder="0"
-              className={`border ${
-                errors.min_water_temperature
-                  ? "border-red-500 dark:border-red-400"
-                  : "border-[#E2E8F0] dark:border-gray-600"
-              } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem] 
-              focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors 
-              placeholder-gray-400 dark:placeholder-gray-500`}
-            />
+          <input
+  type="number"
+  min="0"
+  max="100"
+  {...register('min_water_temperature', {
+    onChange: (e) => handleInputChange('min_water_temperature', e.target.value)
+  })}
+  placeholder="0"
+  className={`border ${
+    errors.min_water_temperature
+      ? "border-red-500 dark:border-red-400"
+      : "border-[#E2E8F0] dark:border-gray-600"
+  } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem]
+  focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors
+  placeholder-gray-400 dark:placeholder-gray-500`}
+/>
+
             {errors.min_water_temperature && (
               <p className="text-red-500 dark:text-red-400 text-xs mt-1">
                 {errors.min_water_temperature.message}
@@ -140,7 +173,12 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
              {t?.labels?.max}
             </label>
             <input
-              {...register('max_water_temperature')}
+             type="number"
+  min="0"
+  max="100"
+              {...register('max_water_temperature', {
+                onChange: (e) => handleInputChange('max_water_temperature', e.target.value)
+              })}
               placeholder="0"
               className={`border ${
                 errors.max_water_temperature
@@ -163,7 +201,12 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
              {t?.labels?.avg}
             </label>
             <input
-              {...register('avg_water_temperature')}
+             type="number"
+  min="0"
+  max="100"
+              {...register('avg_water_temperature', {
+                onChange: (e) => handleInputChange('avg_water_temperature', e.target.value)
+              })}
               placeholder="0"
               className={`border ${
                 errors.avg_water_temperature
@@ -225,4 +268,3 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
 };
 
 export default EnvironmentalCondition;
-

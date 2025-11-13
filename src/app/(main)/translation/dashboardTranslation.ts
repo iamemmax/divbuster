@@ -1,4 +1,4 @@
-export const Dashbaordtranslations: Record<string, Record<string, string>> = {
+export const DashboardTranslations: Record<string, Record<string, string>> = {
   en: {
     search: "Search...",
     createDiveLog: "Create Dive Log",

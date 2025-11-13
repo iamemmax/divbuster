@@ -154,15 +154,15 @@ const BlockedUsersAndFeedback: React.FC = () => {
   };
 
   return (
-    <div className="max-w-2xl sm:px-6 min-h-screen">
+    <div className="max-w-2xl sm:px-6 min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
       {/* Header */}
       <div className="">
         
 
-          <h1 className="text-2xl font-semibold font-archivo text-[#09090B] mb-2">
+          <h1 className="text-2xl font-semibold font-archivo text-[#09090B] dark:text-gray-100 mb-2 transition-colors duration-200">
       Blocked Users / Delete Account
       </h1>
-      <p className="text-[#71717A] max-w-xl text-xs sm:text-sm font-archivo mb-8">
+      <p className="text-[#71717A] dark:text-gray-400 max-w-xl text-xs sm:text-sm font-archivo mb-8 transition-colors duration-200">
         People you remove from your friend list will appear here and also note that account 
           deleted can never be recovered again.
       </p>
@@ -171,21 +171,21 @@ const BlockedUsersAndFeedback: React.FC = () => {
 
       {/* Blocked List Section */}
       <div className="mb-12">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">Blocked List</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6 transition-colors duration-200">Blocked List</h2>
         
         <div className="">
           {blockedUsers.map((user, index) => (
             <div 
               key={index}
-              className="flex items-center justify-between p-4 py-5 bg-white  border-b border-gray-200 hover:shadow-sm transition-shadow"
+              className="flex items-center justify-between p-4 py-5 bg-white dark:bg-gray-800  border-b border-gray-200 dark:border-gray-700 hover:shadow-sm transition-all duration-200"
             >
               <div className="flex items-center space-x-4">
                 
-                <span className="font-medium text-sm text-gray-900">{user.name}</span>
+                <span className="font-medium text-sm text-gray-900 dark:text-gray-100 transition-colors duration-200">{user.name}</span>
               </div>
               
               <div className="flex items-center space-x-4">
-                <span className="text-gray-500 text-sm">{user.date}</span>
+                <span className="text-gray-500 dark:text-gray-400 text-sm transition-colors duration-200">{user.date}</span>
                 
               </div>
             </div>
@@ -195,9 +195,9 @@ const BlockedUsersAndFeedback: React.FC = () => {
 
       {/* Feedback Section */}
       <div>
-        <h2 className="text-2xl font-semibold font-archivo text-[#09090B] mb-2">Feedback</h2>
+        <h2 className="text-2xl font-semibold font-archivo text-[#09090B] dark:text-gray-100 mb-2 transition-colors duration-200">Feedback</h2>
         
-        <p className="text-[#71717A] text-xs sm:text-sm font-archivo mb-8">
+        <p className="text-[#71717A] dark:text-gray-400 text-xs sm:text-sm font-archivo mb-8 transition-colors duration-200">
           We're a new dive application and we want to improve and make divebusters the best experience for all divers - so 
           we will appreciate any constructive feedback you have such as feature suggestions or errors you're encountering. 
           we take compliments too.
@@ -206,7 +206,7 @@ const BlockedUsersAndFeedback: React.FC = () => {
         <div className="space-y-6">
           {/* Feedback Type Dropdown */}
           <div>
-            <label htmlFor="feedbackType" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="feedbackType" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">
               FeedBack Type
             </label>
             
@@ -214,18 +214,18 @@ const BlockedUsersAndFeedback: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-full px-4 py-3 text-left border border-[#ECEFF3] bg-[#F6F8FA] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex items-center justify-between transition-colors"
+                className="w-full px-4 py-3 text-left border border-[#ECEFF3] dark:border-gray-600 bg-[#F6F8FA] dark:bg-gray-800 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex items-center justify-between transition-colors duration-200"
                 aria-haspopup="listbox"
                 aria-expanded={isDropdownOpen}
               >
-                <span className={selectedFeedbackType ? 'text-gray-900' : 'text-gray-500'}>
+                <span className={selectedFeedbackType ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400'}>
                   {selectedFeedbackType || 'Suggestions'}
                 </span>
                 <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
               
               {isDropdownOpen && (
-                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg transition-colors duration-200">
                   {feedbackTypes.map((option) => (
                     <button
                       key={option}
@@ -234,7 +234,7 @@ const BlockedUsersAndFeedback: React.FC = () => {
                         setValue('feedbackType', option);
                         setIsDropdownOpen(false);
                       }}
-                      className="w-full px-4 py-2 text-left hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg transition-colors"
+                      className="w-full px-4 py-2 text-left text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg transition-colors duration-200"
                       role="option"
                     >
                       {option}
@@ -261,7 +261,7 @@ const BlockedUsersAndFeedback: React.FC = () => {
               {...register('feedback')}
               id="feedback"
               rows={2}
-              className="w-full px-4 py-3 border border-[#ECEFF3] bg-[#F6F8FA] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors"
+              className="w-full px-4 py-3 border border-[#ECEFF3] dark:border-gray-600 bg-[#F6F8FA] dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors duration-200"
               placeholder=" Your Feedback"
             />
             
@@ -274,7 +274,7 @@ const BlockedUsersAndFeedback: React.FC = () => {
 
           {/* File Upload with Drag and Drop */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">
               Attachment (Optional)
             </label>
             
@@ -284,14 +284,14 @@ const BlockedUsersAndFeedback: React.FC = () => {
               onDrop={handleDrop}
               className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${
                 isDragOver 
-                  ? 'border-blue-400 bg-blue-50' 
-                  : 'border-gray-300 hover:border-gray-400'
+                  ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20' 
+                  : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
               }`}
               onClick={openFileDialog}
             >
               <div className="flex flex-col items-center space-y-2">
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
-                  isDragOver ? 'bg-blue-100' : 'bg-gray-100'
+                  isDragOver ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-gray-100 dark:bg-gray-700'
                 }`}>
                  <CloudIcon className={`w-6 h-6 ${isDragOver ? 'text-blue-500' : 'text-gray-400'}`} />
                 </div>
@@ -299,10 +299,10 @@ const BlockedUsersAndFeedback: React.FC = () => {
                 {selectedFile ? (
                   <div className="flex items-center space-x-3">
                     <div className="text-center">
-                      <span className="text-sm font-medium text-gray-700 block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300 block transition-colors duration-200">
                         {selectedFile.name}
                       </span>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-200">
                         {formatFileSize(selectedFile.size)}
                       </span>
                     </div>
@@ -318,7 +318,7 @@ const BlockedUsersAndFeedback: React.FC = () => {
                       >
                         Add Attachment
                       </button>
-                      <p className="text-xs text-[#667085] font-archivo">
+                      <p className="text-xs text-[#667085] dark:text-gray-400 font-archivo transition-colors duration-200">
                       PNG, JPG or GIF (max. 1200x750px)
                       </p>
                     </div>

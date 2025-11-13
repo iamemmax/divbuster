@@ -86,8 +86,8 @@ const SuggestedDivers = () => {
                 lat={diver?.coordinate?.lat} 
                 lon={diver?.coordinate?.lon}
                 fallback="Location unavailable"
-                showTime={true}
-                timeFormat="relative"
+                // showTime={true}
+                // timeFormat="relative"
               />
             }
             date={diver?.recent_dive_info?.other_divers ?? ""}

@@ -93,13 +93,13 @@ const DialogContent = React.forwardRef<
     <DialogPortal>
       <DialogOverlay
         className={cn(
-          'fixed inset-0 grid place-items-center sm:overflow-y-auto',
+          'fixed inset-0 grid place-items-center   sm:overflow-y-auto',
           overlayClassName
         )}
       >
         <DialogPrimitive.Content
           className={cn(
-            'fixed bottom-0 z-50 h-max max-h-modal-content w-full gap-4  rounded-t-[1.125rem] bg-white animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:static sm:bottom-auto sm:my-[5vh] sm:max-h-none sm:max-w-[28rem] sm:overflow-visible sm:rounded-[1.125rem] sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0',
+            'fixed bottom-0 h-max max-h-modal-content w-full gap-4 !z-[99999999999999999999999999999] rounded-t-[1.125rem] bg-white animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:static sm:bottom-auto sm:my-[5vh] sm:max-h-none sm:max-w-[28rem] sm:overflow-visible sm:rounded-[1.125rem] sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0',
             className
           )}
           ref={ref}

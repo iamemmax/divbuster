@@ -149,7 +149,8 @@ const DiveSites = () => {
       </div>
 
       <div className="max-h-[80vh] overflow-y-auto p-2 md:p-6">
-        <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] 2xl:grid-cols-[3fr_1fr] gap-[1.3125rem] relative">
+        {/* <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] 2xl:grid-cols-[3fr_1fr] gap-[1.3125rem] relative"> */}
+        <div className="grid grid-cols-1 gap-[1.3125rem] relative">
           {/* Main Content */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
             {/* Tabs */}
@@ -208,9 +209,9 @@ const DiveSites = () => {
               </div>
             )}
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 lg:p-0">
+            {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 lg:p-0">
               <DiveSitesSidebar />
-            </div>
+            </div> */}
 
             {sidebarOpen && (
               <div className="lg:hidden fixed inset-0 bg-black/50 -z-10" onClick={toggleSidebar} />

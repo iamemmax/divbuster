@@ -1,479 +1,97 @@
-// "use client"
-// import React, { useState, useEffect, useCallback } from 'react'
-// import { diveSiteResult, divSitesProp, useFetchDiveSites } from '../../api/div-sites/fetch-dive-sites'
-// import Image from 'next/image'
-// import { Button, ErrorModal } from '@/components/core'
-// import { useFetchCountry } from '../../api/fetchCountry'
-// import HeartIcon from '@/app/icons/(dashboard)/HeartIcon'
-// import ShareIcon2 from '@/app/icons/(dashboard)/ShareIcon2'
-// import MessageIcon2 from '@/app/icons/(dashboard)/MessageIcon2'
-// import LikeIcon from '@/app/icons/(dashboard)/LikeIcon'
-// import { useAddFouriteDivSIte } from '../../api/div-sites/add-favorite-dive-site'
-// import { useAuth } from '@/contexts/authentication'
-// import { UserDataProp } from '@/contexts/types'
-// import { SmallSpinner } from '@/icons/core'
-// import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult, useQueryClient } from 'react-query'
-// import { useErrorModalState } from '@/hooks'
-// import { formatAxiosErrorMessage } from '@/utils'
-// import { AxiosError } from 'axios'
-// import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput'
-// import CupIcon from '@/app/icons/(dashboard)/CupIcon'
-// import InfoIcon from '@/app/icons/(dashboard)/InfoIcon'
-// import toast from 'react-hot-toast'
-// import { userDetails } from '@/app/(auth)/api/getAuthenticatedUser'
-// import { Language } from '@/app/(auth)/sign-up/translations'
-// import { recentDivetranslations } from '@/app/(main)/translation/diveSitesTranslation'
-// import { useLanguage } from '@/hooks/useLanguage'
+"use client";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import {
+  diveSiteResult,
+  divSitesProp,
+  useFetchDiveSites,
+} from "../../api/div-sites/fetch-dive-sites";
+import Image from "next/image";
+import { Button, ErrorModal } from "@/components/core";
+import { useFetchCountry } from "../../api/fetchCountry";
+import HeartIcon from "@/app/icons/(dashboard)/HeartIcon";
+import ShareIcon2 from "@/app/icons/(dashboard)/ShareIcon2";
+import MessageIcon2 from "@/app/icons/(dashboard)/MessageIcon2";
+import LikeIcon from "@/app/icons/(dashboard)/LikeIcon";
+import { useAddFouriteDivSIte } from "../../api/div-sites/add-favorite-dive-site";
+import { useAuth } from "@/contexts/authentication";
+import { SmallSpinner } from "@/icons/core";
+import {
+  FetchNextPageOptions,
+  InfiniteData,
+  InfiniteQueryObserverResult,
+  useQueryClient,
+} from "react-query";
+import { useErrorModalState } from "@/hooks";
+import { formatAxiosErrorMessage } from "@/utils";
+import { AxiosError } from "axios";
+import CupIcon from "@/app/icons/(dashboard)/CupIcon";
+import InfoIcon from "@/app/icons/(dashboard)/InfoIcon";
+import toast from "react-hot-toast";
+import { userDetails } from "@/app/(auth)/api/getAuthenticatedUser";
+import { recentDivetranslations } from "@/app/(main)/translation/diveSitesTranslation";
+import { useLanguage } from "@/hooks/useLanguage";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
-// interface prop{
-//   user: userDetails | undefined
-//   data: InfiniteData<divSitesProp> | undefined
-//   loading:boolean;
-//   search: string;
-//   isFetchingNextPage: boolean
-//   hasNextPage: boolean | undefined
-//   fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<divSitesProp, unknown>>
-// }
-
-// // Custom hook for infinite scroll
-// const useInfiniteScroll = (
-//   callback: () => void,
-//   hasNextPage: boolean | undefined,
-//   isFetchingNextPage: boolean
-// ) => {
-//   useEffect(() => {
-//     const handleScroll = () => {
-//       // Check if we're near the bottom of the page
-//       const scrollHeight = document.documentElement.scrollHeight;
-//       const scrollTop = document.documentElement.scrollTop;
-//       const clientHeight = document.documentElement.clientHeight;
-      
-//       // Trigger when user is 200px from bottom
-//       const threshold = 200;
-//       const isNearBottom = scrollTop + clientHeight >= scrollHeight - threshold;
-      
-//       if (isNearBottom && hasNextPage && !isFetchingNextPage) {
-//         callback();
-//       }
-//     };
-
-//     // Throttle scroll events for better performance
-//     let timeoutId: NodeJS.Timeout;
-//     const throttledHandleScroll = () => {
-//       if (timeoutId) clearTimeout(timeoutId);
-//       timeoutId = setTimeout(handleScroll, 100);
-//     };
-
-//     window.addEventListener('scroll', throttledHandleScroll);
-//     return () => {
-//       window.removeEventListener('scroll', throttledHandleScroll);
-//       if (timeoutId) clearTimeout(timeoutId);
-//     };
-//   }, [callback, hasNextPage, isFetchingNextPage]);
-// };
-
-// const RecentDiveSites = ({data, loading, search, fetchNextPage, hasNextPage, isFetchingNextPage}: prop) => {
-//   const { authState } = useAuth();
-//   const { user} = authState;
-//   const userData = user;
-//  const {language}= useLanguage()
-//   const t = recentDivetranslations[language] || recentDivetranslations.en
-//   const favoriteSites = user?.diver_profile.favourite_sites
-//   const [loadingItemId, setLoadingItemId] = useState<number | null>(null)
-//   const [myFavourite , setMyFavourite ] = useState<number[]>(favoriteSites || [])
-  
-// useEffect(() => {
-//   setMyFavourite(favoriteSites as number[])
-// }, [])
-
-
-//   const {
-//     isErrorModalOpen,
-//     setErrorModalState,
-//     openErrorModalWithMessage,
-//     errorModalMessage,
-//   } = useErrorModalState();
-  
-      
-//   const {data:country}= useFetchCountry()
-//   const getCountry = (id:number) =>{
-//     const filterCountry = country?.results?.find((con) =>con?.id === id)
-//     return filterCountry
-//   }
-  
-//   const queryClient = useQueryClient();
-  
-//   const {mutate:handleAddTofavorite, isLoading:isAddingFav} = useAddFouriteDivSIte()
-  
-//   const handleSave = (item:diveSiteResult) => {
-//     setLoadingItemId(item.id)
-//     handleAddTofavorite({
-//       action:"add",
-//       dive_site_id:item?.id,
-//       lang:String(userData?.profile_details?.language)
-//     },
-//     {
-//       onSuccess:() => {
-//         if(myFavourite.includes(item?.id)){
-
-//           const removeFrmFav = myFavourite.filter((x)=>x !== item?.id)
-//           setMyFavourite(removeFrmFav)
-//           toast.success(t.removed)
-//         }else{
-//           setMyFavourite((prev)=>[...prev, item?.id])
-//           toast.success(t.added)
-
-//         }
-//         queryClient.invalidateQueries({queryKey:["user-details"]});
-//         queryClient.invalidateQueries({queryKey:["div-sites"]});
-//         setLoadingItemId(null)
-//       },
-//       onError:(error) => {
-//         const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-//         openErrorModalWithMessage(String(errorMessage));
-//         setLoadingItemId(null)
-//       }
-//     })
-//   }
-
-//   // Memoized callback for fetchNextPage to prevent unnecessary re-renders
-//   const handleLoadMore = useCallback(() => {
-//     if (hasNextPage && !isFetchingNextPage) {
-//       fetchNextPage();
-//     }
-//   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
-
-//   // Use our custom infinite scroll hook
-//   useInfiniteScroll(handleLoadMore, hasNextPage, isFetchingNextPage);
-
-//   // Flatten all pages data into a single array
-//   const allDiveSites = data?.pages?.flatMap(page => page.data.results) || [];
-//   const totalCount = data?.pages?.[0]?.data.count || 0;
-
-//   return (
-//     <div className=" transition-colors">
-         
-//       {loading ? (
-//         <div className="flex justify-center items-center py-8"><SmallSpinner/></div>
-//       ) : (
-//         <>
-//           {/* Search Section */}
-
-//           {/* Results Count */}
-//           {search && (
-//             <div className="mb-4">
-//               <p className="text-sm text-gray-600 dark:text-gray-400">
-//                 {allDiveSites.length} of {totalCount} {t.diveSite} {totalCount !== 1 ? 's' : ''} found
-//               </p>
-//             </div>
-//           )}
-
-//           {/* No Results */}
-//           {allDiveSites.length === 0 && search && (
-//             <div className="text-center py-12">
-//               <p className="text-gray-500 dark:text-gray-400 text-lg">
-//                 {t.noResults}{search}
-//               </p>
-//             </div>
-//           )}
-
-//           {/* Dive Sites Grid */}
-//           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6">
-//             {allDiveSites.map((item, idx: number) => (
-//               <div
-//                 className="bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-2 md:py-[1.3rem] px-2 md:px-4 border border-gray-200 dark:border-gray-700"
-//                 key={`${item.id}-${idx}`} // Better key using item id
-//               >
-//                 {/* Main Image Section */}
-//                 <div
-//                   className="relative rounded-lg overflow-hidden mt-2"
-//                   style={{ height: "15.6875rem" }}
-//                 >
-//                   {/* Satellite/Map Background */}
-//                   <div
-//                     className="absolute inset-0 bg-cover bg-center"
-//                     style={{
-//                       backgroundImage: `url(/images/dashboard/profile-Location.png)`,
-//                     }}
-//                   ></div>
-
-//                   {/* Dark overlay */}
-//                   <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-
-//                   {/* Content Overlay */}
-//                   <div className="absolute top-1 md:top-2  text-white py-4 px-3 md:px-6 lg:px-[2.75rem] w-full">
-//                     {/* Add to Favorite Button */}
-//                     <div className="flex justify-end max-md:pr-2 items-center w-full mb-4">
-//                       <Button  
-//                         className={`${myFavourite?.includes(item?.id) ? "bg-[#F7931D] dark:bg-[#F7931D] text-white" : "bg-white text-[#4D5869] dark:text-gray-800 dark:bg-gray-100 hover:bg-gray-50 dark:hover:bg-gray-200 "} px-[1.0688rem] py-[.5206rem] rounded-2xl  font-archivo text-xs font-medium flex items-center gap-[.3125rem]  transition-colors disabled:opacity-50`}
-//                         onClick={() => handleSave(item)}
-//                         disabled={loadingItemId === item.id}
-//                       >
-//                         {loadingItemId === item.id ? (
-//                           <SmallSpinner color={myFavourite.includes(item.id)?"#fff":'#F7931D'}/>
-//                         ) : (
-//                           <HeartIcon fill={myFavourite?.includes(item?.id)?"#Fff":"#fff"}/>   
-//                         )}        
-//                        {myFavourite?.includes(item?.id)? t.removeFav  : t.addFav}
-//                       </Button>
-//                     </div>
-
-//                     {/* Site Info */}
-//                     <div className="">
-//                       <div className="flex items-center flex-wrap gap-[10px] md:gap-[20px]">
-//                         {/* Country Flag */}
-//                         <div className="relative h-[30px] md:h-[40px] rounded w-[40px] md:w-[52px] overflow-hidden">
-//                           <Image
-//                             src={`https://flagcdn.com/${getCountry(item?.country)?.alpha2code?.toLowerCase()}.svg`}
-//                             alt={`${getCountry(item?.country)?.name} flag`}
-//                             fill
-//                             className="object-cover rounded"
-//                             onError={(e) => {
-//                               const target = e.target as HTMLImageElement;
-//                               target.style.display = 'none';
-//                             }}
-//                           />
-//                         </div>
-
-//                         {/* Title and Ranking */}
-//                         <div className="flex items-center flex-wrap gap-[10px]">
-//                           <p className="text-white font-archivo font-semibold text-xs sm:text-sm md:text-lg break-words">
-//                             {item?.title}
-//                           </p>
-//                           <div className="flex items-center bg-[#C5EFFF] dark:bg-blue-100 min-w-[80px] justify-center gap-[.3531rem] py-1 px-[.4063rem] rounded-lg">
-//                             <CupIcon/>
-//                             <p className="font-archivo text-xxs text-[#132346] dark:text-blue-800 font-semibold">
-//                               {t.rank}:{item?.ranking}
-//                             </p>
-//                           </div>
-//                           <InfoIcon/>
-//                         </div>
-//                       </div>
-
-//                       {/* Address */}
-//                       <h2 className="font-semibold py-1 md:py-3 text-sm sm:text-base md:text-lg lg:text-2xl font-archivo text-white break-words">
-//                         {item?.address}
-//                       </h2>
-
-//                       {/* Site Type Tags */}
-//                       <div className="flex gap-x-2 py-2 md:py-3 items-center flex-wrap">
-//                         {item?.site_type?.split(",")?.map((tag, idx) => (
-//                           <div
-//                             key={idx}
-//                             className="px-[.8125rem] py-1 rounded-2xl text-xs bg-[#EFF8FF] dark:bg-blue-50 text-[#175CD3] dark:text-blue-700 cursor-pointer whitespace-nowrap"
-//                           >
-//                             {tag.trim()}
-//                           </div>
-//                         ))}
-//                       </div>
-
-//                       {/* Coordinates */}
-//                       <div className="py-2">
-//                         <p className="text-xs text-[#F7F7F7] md:text-sm font-archivo break-all">
-//                           {t.latitude}:{" "}
-//                           <span className="font-semibold">
-//                             {item?.lag}
-//                           </span>{" "}
-//                           <span className="px-2">•</span> {t.longitude}:{" "}
-//                           <span className="font-semibold">
-//                             {item?.lon}
-//                           </span>
-//                         </p>
-//                       </div>
-//                     </div>
-//                   </div>
-//                 </div>
-
-//                 {/* Bottom Section */}
-//                 <div className="mt-3 flex justify-between flex-wrap gap-3 items-center">
-//                   {/* User Avatars */}
-//                   <div className="flex items-center gap-2">
-//                     <div className="flex -space-x-1">
-//                       <img
-//                         src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face"
-//                         alt="User avatar"
-//                         className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-white object-cover"
-//                       />
-//                       <div className="flex items-center gap-2">
-//                         <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 dark:bg-gray-600 border border-white flex items-center justify-center text-xs text-gray-600 dark:text-gray-300">
-//                           +1
-//                         </div>
-//                         <p className="text-sm font-archivo font-medium text-[#475467] dark:text-gray-300 hidden sm:block">
-//                        {t.like}
-//                         </p>
-//                       </div>
-//                     </div>
-//                   </div>
-
-//                   {/* Action Buttons */}
-//                   <div className="flex items-center gap-2 sm:gap-3">
-//                     <Button className="bg-[#F9FAFB] dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 h-[2.8125rem] md:w-[3.75rem]  px-[1.125rem] py-[.625rem] rounded-xl flex justify-center items-center transition-colors">
-//                       <LikeIcon/>
-//                     </Button>
-                    
-//                     <Button className="bg-[#F9FAFB] dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 relative h-[2.8125rem] w-[3.75rem] px-[1.125rem] py-[.625rem] rounded-xl flex justify-center items-center transition-colors">
-//                       <div className="relative">
-//                         <MessageIcon2/>
-//                         <div className="absolute -top-4 -right-3 w-[.875rem] p-3 flex justify-center items-center h-[.875rem] bg-[#F7931D] rounded-full">
-//                           <p className="font-archivo text-xs font-bold text-white">12</p>
-//                         </div>
-//                       </div>
-//                     </Button>
-                    
-//                     <Button title={t.share} className="bg-[#F9FAFB] dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 h-[2.8125rem] w-[3.75rem] px-[1.125rem] py-[.625rem] rounded-xl flex justify-center items-center transition-colors">
-//                       <ShareIcon2/>
-//                     </Button>
-//                   </div>
-//                 </div> 
-//               </div>
-//             ))}
-//           </div>
-
-//           {/* Loading indicator for next page */}
-//           {isFetchingNextPage && (
-//             <div className="flex justify-center items-center py-8">
-//               <div className="flex items-center gap-2">
-//                 <SmallSpinner/>
-//                 <span className="text-gray-600 dark:text-gray-400">{t.loadingMore}</span>
-//               </div>
-//             </div>
-//           )}
-
-//           {/* End of results indicator */}
-//           {!hasNextPage && allDiveSites.length > 0 && (
-//             <div className="flex justify-center items-center py-8">
-//               <span className="text-gray-500 dark:text-gray-400 text-sm">
-//               {t.end}
-//               </span>
-//             </div>
-//           )}
-
-//           {/* Manual Load More Button (fallback) */}
-         
-//           {/* Empty State */}
-//           {!search && allDiveSites.length === 0 && (
-//             <div className="text-center py-12">
-//               <p className="text-gray-500 dark:text-gray-400 text-lg">
-//                 {t.noSites}
-//               </p>
-//             </div>
-//           )}
-//         </>
-//       )}
-
-//       <ErrorModal
-//         isErrorModalOpen={isErrorModalOpen}
-//         setErrorModalState={() => {
-//           setErrorModalState(false);
-//         }}
-//         subheading={
-//           errorModalMessage ||
-//           "Please check your inputs and try again."
-//         }
-//       />
-//     </div>
-//   )
-// }
-
-// export default RecentDiveSites
-
-
-
-
-
-
-
-
-"use client"
-import React, { useState, useEffect, useCallback } from 'react'
-import { diveSiteResult, divSitesProp, useFetchDiveSites } from '../../api/div-sites/fetch-dive-sites'
-import Image from 'next/image'
-import { Button, ErrorModal } from '@/components/core'
-import { useFetchCountry } from '../../api/fetchCountry'
-import HeartIcon from '@/app/icons/(dashboard)/HeartIcon'
-import ShareIcon2 from '@/app/icons/(dashboard)/ShareIcon2'
-import MessageIcon2 from '@/app/icons/(dashboard)/MessageIcon2'
-import LikeIcon from '@/app/icons/(dashboard)/LikeIcon'
-import { useAddFouriteDivSIte } from '../../api/div-sites/add-favorite-dive-site'
-import { useAuth } from '@/contexts/authentication'
-import { UserDataProp } from '@/contexts/types'
-import { SmallSpinner } from '@/icons/core'
-import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult, useQueryClient } from 'react-query'
-import { useErrorModalState } from '@/hooks'
-import { formatAxiosErrorMessage } from '@/utils'
-import { AxiosError } from 'axios'
-import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput'
-import CupIcon from '@/app/icons/(dashboard)/CupIcon'
-import InfoIcon from '@/app/icons/(dashboard)/InfoIcon'
-import toast from 'react-hot-toast'
-import { userDetails } from '@/app/(auth)/api/getAuthenticatedUser'
-import { Language } from '@/app/(auth)/sign-up/translations'
-import { recentDivetranslations } from '@/app/(main)/translation/diveSitesTranslation'
-import { useLanguage } from '@/hooks/useLanguage'
-
-interface prop{
-  user: userDetails | undefined
-  data: InfiniteData<divSitesProp> | undefined
-  loading:boolean;
+interface prop {
+  user: userDetails | undefined;
+  data: InfiniteData<divSitesProp> | undefined;
+  loading: boolean;
   search: string;
-  isFetchingNextPage: boolean
-  hasNextPage: boolean | undefined
-  fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<divSitesProp, unknown>>
+  isFetchingNextPage: boolean;
+  hasNextPage: boolean | undefined;
+  fetchNextPage: (
+    options?: FetchNextPageOptions | undefined
+  ) => Promise<InfiniteQueryObserverResult<divSitesProp, unknown>>;
 }
 
-// Improved infinite scroll hook
-const useInfiniteScroll = (
-  callback: () => void,
+// ✅ IntersectionObserver hook
+const useInfiniteObserver = (
+  ref: React.RefObject<Element>,
+  onIntersect: () => void,
   hasNextPage: boolean | undefined,
   isFetchingNextPage: boolean
 ) => {
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const clientHeight = window.innerHeight;
-      
-      // Calculate scroll percentage
-      const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
-      
-      // Trigger when 80% scrolled
-      if (scrollPercentage > 0.8 && hasNextPage && !isFetchingNextPage) {
-        callback();
-      }
-    };
+    if (!ref.current || !hasNextPage || isFetchingNextPage) return;
 
-    // Debounce scroll events
-    let timeoutId: NodeJS.Timeout;
-    const debouncedHandleScroll = () => {
-      if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = setTimeout(handleScroll, 150);
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          onIntersect();
+        }
+      },
+      { threshold: 0.5 } // Trigger when half of the element is visible
+    );
 
-    window.addEventListener('scroll', debouncedHandleScroll, { passive: true });
-    
-    // Check immediately on mount
-    handleScroll();
-    
+    const current = ref.current;
+    observer.observe(current);
+
     return () => {
-      window.removeEventListener('scroll', debouncedHandleScroll);
-      if (timeoutId) clearTimeout(timeoutId);
+      if (current) observer.unobserve(current);
     };
-  }, [callback, hasNextPage, isFetchingNextPage]);
+  }, [ref, hasNextPage, isFetchingNextPage, onIntersect]);
 };
 
-const RecentDiveSites = ({data, loading, search, fetchNextPage, hasNextPage, isFetchingNextPage}: prop) => {
+const RecentDiveSites = ({
+  data,
+  loading,
+  search,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+}: prop) => {
   const { authState } = useAuth();
-  const { user} = authState;
+  const { user } = authState;
   const userData = user;
-  const {language}= useLanguage()
-  const t = recentDivetranslations[language] || recentDivetranslations.en
-  const favoriteSites = user?.diver_profile.favourite_sites
-  const [loadingItemId, setLoadingItemId] = useState<number | null>(null)
-  const [myFavourite , setMyFavourite ] = useState<number[]>(favoriteSites || [])
-  
+  const { language } = useLanguage();
+  const t = recentDivetranslations[language] || recentDivetranslations.en;
+  const favoriteSites = user?.diver_profile.favourite_sites || [];
+  const [loadingItemId, setLoadingItemId] = useState<number | null>(null);
+  const [myFavourite, setMyFavourite] = useState<number[]>(favoriteSites);
+
   useEffect(() => {
-    setMyFavourite(favoriteSites as number[])
-  }, [favoriteSites])
+    setMyFavourite(favoriteSites);
+  }, [favoriteSites]);
 
   const {
     isErrorModalOpen,
@@ -481,261 +99,210 @@ const RecentDiveSites = ({data, loading, search, fetchNextPage, hasNextPage, isF
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
-      
-  const {data:country}= useFetchCountry()
-  const getCountry = (id:number) =>{
-    const filterCountry = country?.results?.find((con) =>con?.id === id)
-    return filterCountry
-  }
-  
-  const queryClient = useQueryClient();
-  
-  const {mutate:handleAddTofavorite, isLoading:isAddingFav} = useAddFouriteDivSIte()
-  
-  const handleSave = (item:diveSiteResult) => {
-    setLoadingItemId(item.id)
-    handleAddTofavorite({
-      action:"add",
-      dive_site_id:item?.id,
-      lang:String(userData?.profile_details?.language)
-    },
-    {
-      onSuccess:() => {
-        if(myFavourite.includes(item?.id)){
-          const removeFrmFav = myFavourite.filter((x)=>x !== item?.id)
-          setMyFavourite(removeFrmFav)
-          toast.success(t.removed)
-        }else{
-          setMyFavourite((prev)=>[...prev, item?.id])
-          toast.success(t.added)
-        }
-        queryClient.invalidateQueries({queryKey:["user-details"]});
-        queryClient.invalidateQueries({queryKey:["div-sites"]});
-        setLoadingItemId(null)
-      },
-      onError:(error) => {
-        const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-        openErrorModalWithMessage(String(errorMessage));
-        setLoadingItemId(null)
-      }
-    })
-  }
 
-  // Properly memoized callback
-  const handleLoadMore = useCallback(() => {
+  const { data: country } = useFetchCountry();
+  const getCountry = (id: number) => {
+    const filterCountry = country?.results?.find((con) => con?.id === id);
+    return filterCountry;
+  };
+
+  const queryClient = useQueryClient();
+  const { mutate: handleAddTofavorite } = useAddFouriteDivSIte();
+
+  const handleSave = (item: diveSiteResult) => {
+    setLoadingItemId(item.id);
+    handleAddTofavorite(
+      {
+        action: "add",
+        dive_site_id: item?.id,
+        lang: String(userData?.profile_details?.language),
+      },
+      {
+        onSuccess: () => {
+          if (myFavourite.includes(item?.id)) {
+            const removeFrmFav = myFavourite.filter((x) => x !== item?.id);
+            setMyFavourite(removeFrmFav);
+            toast.success(t.removed);
+          } else {
+            setMyFavourite((prev) => [...prev, item?.id]);
+            toast.success(t.added);
+          }
+          queryClient.invalidateQueries({ queryKey: ["user-details"] });
+          queryClient.invalidateQueries({ queryKey: ["div-sites"] });
+          setLoadingItemId(null);
+        },
+        onError: (error) => {
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+          openErrorModalWithMessage(String(errorMessage));
+          setLoadingItemId(null);
+        },
+      }
+    );
+  };
+
+  const allDiveSites = data?.pages?.flatMap((page) => page.data.results) || [];
+  const totalCount = data?.pages?.[0]?.data.count || 0;
+
+  const fetchMore = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
-
-  // Use infinite scroll hook
-  useInfiniteScroll(handleLoadMore, hasNextPage, isFetchingNextPage);
-
-  // Flatten all pages data
-  const allDiveSites = data?.pages?.flatMap(page => page.data.results) || [];
-  const totalCount = data?.pages?.[0]?.data.count || 0;
+  };
 
   return (
-    <div className=" transition-colors">
+    <div className="transition-colors">
       {loading ? (
-        <div className="flex justify-center items-center py-8"><SmallSpinner/></div>
+        <div className="flex justify-center items-center py-8">
+          <SmallSpinner />
+        </div>
       ) : (
         <>
-          {/* Results Count */}
           {search && (
             <div className="mb-4">
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {allDiveSites.length} of {totalCount} {t.diveSite} {totalCount !== 1 ? 's' : ''} found
+                {allDiveSites.length} of {totalCount} {t.diveSite}
+                {totalCount !== 1 ? "s" : ""} found
               </p>
             </div>
           )}
 
-          {/* No Results */}
           {allDiveSites.length === 0 && search && (
             <div className="text-center py-12">
               <p className="text-gray-500 dark:text-gray-400 text-lg">
-                {t.noResults}{search}
+                {t.noResults} {search}
               </p>
             </div>
           )}
 
-          {/* Dive Sites Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6">
-            {allDiveSites.map((item, idx: number) => (
-              <div
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-2 md:py-[1.3rem] px-2 md:px-4 border border-gray-200 dark:border-gray-700"
-                key={`${item.id}-${idx}`}
-              >
-                {/* Main Image Section */}
+          <InfiniteScroll
+            dataLength={allDiveSites.length}
+            next={fetchMore}
+            hasMore={hasNextPage || false}
+            loader={
+              <div className="flex justify-center items-center py-4">
+                <SmallSpinner />
+                <span className="ml-2 text-gray-600">{t.loadingMore}</span>
+              </div>
+            }
+            endMessage={
+              allDiveSites.length > 0 ? (
+                <div className="flex justify-center items-center py-8">
+                  <span className="text-gray-500 text-sm">{t.end}</span>
+                </div>
+              ) : null
+            }
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6">
+              {allDiveSites.map((item, idx) => (
                 <div
-                  className="relative rounded-lg overflow-hidden mt-2"
-                  style={{ height: "15.6875rem" }}
+                  key={`${item.id}-${idx}`}
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-2 px-2 md:px-4 border border-gray-200 dark:border-gray-700"
                 >
-                  {/* Satellite/Map Background */}
-                  <div
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{
-                      backgroundImage: `url(/images/dashboard/profile-Location.png)`,
-                    }}
-                  ></div>
+                  <div 
+                    className="relative rounded-lg overflow-hidden min-h-[250px] bg-cover bg-center "
+                    style={{ backgroundImage: "url('/images/dashboard/profile-Location.png')" }}
+                  >
+                    <div className="absolute inset-0 bg-black bg-opacity-40" />
+                    <div className="absolute top-0 text-white py-4 px-3 md:px-2 2xl:px-[0.75rem] w-full  flex justify-center flex-col  h-full">
+                      <div>
+                        <div className="flex items-center flex-wrap gap-[10px] md:gap-[20px]">
+                          <div className="relative h-[30px] xl:h-[40px] w-[40px] xl:w-[52px] overflow-hidden rounded">
+                            {getCountry(item?.country)?.alpha2code ? (
+                              <Image
+                                src={`https://flagcdn.com/w40/${getCountry(item?.country)?.alpha2code?.toLowerCase()}.png`}
+                                alt={`${getCountry(item?.country)?.name} flag`}
+                                fill
+                                className="object-cover rounded"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.src = '/images/placeholder-flag.png';
+                                }}
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gray-300 rounded flex items-center justify-center">
+                                <span className="text-xs text-gray-600">?</span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex items-center flex-wrap gap-[10px]">
+                            <p className="text-white font-archivo font-semibold text-xs sm:text-sm md:text-lg">
+                              {item?.title}
+                            </p>
+                            <div className="flex items-center bg-[#C5EFFF] min-w-[80px] justify-center gap-[.3531rem] py-1 px-[.4063rem] rounded-lg">
+                              <CupIcon />
+                              <p className="font-archivo text-xxs text-[#132346] font-semibold">
+                                {t.rank}:{item?.ranking}
+                              </p>
+                            </div>
+                            <InfoIcon />
+                          </div>
+                        </div>
 
-                  {/* Dark overlay */}
-                  <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+                        <h2 className="font-semibold py-1 md:py-3 text-xs sm:text-sm md:text-lg lg:text-xl 2xl:text-2xl text-white">
+                          {item?.address}
+                        </h2>
 
-                  {/* Content Overlay */}
-                  <div className="absolute top-1 md:top-2  text-white py-4 px-3 md:px-6 lg:px-[2.75rem] w-full">
-                    {/* Add to Favorite Button */}
-                    <div className="flex justify-end max-md:pr-2 items-center w-full mb-4">
-                      <Button  
-                        className={`${myFavourite?.includes(item?.id) ? "bg-[#F7931D] dark:bg-[#F7931D] text-white" : "bg-white text-[#4D5869] dark:text-gray-800 dark:bg-gray-100 hover:bg-gray-50 dark:hover:bg-gray-200 "} px-[1.0688rem] py-[.5206rem] rounded-2xl  font-archivo text-xs font-medium flex items-center gap-[.3125rem]  transition-colors disabled:opacity-50`}
+                        <div className="flex gap-x-2 py-2 md:py-3 flex-wrap">
+                          {item?.site_type?.split(",")?.map((tag, idx) => (
+                            <div
+                              key={idx}
+                              className="px-[.8125rem] py-1 rounded-2xl text-xs bg-[#EFF8FF] text-[#175CD3]"
+                            >
+                              {tag.trim()}
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="py-2">
+                          <p className="text-xs text-[#F7F7F7] md:text-sm font-archivo">
+                            {t.latitude}: <span className="font-semibold pr-2">{item?.lag}</span> • {t.longitude}:{" "}
+                            <span className="font-semibold">{item?.lon}</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 flex justify-between flex-wrap gap-3 items-center">
+                    <div className="flex items-center gap-2 sm:gap-5">
+                      <Button
+                        className={`${myFavourite?.includes(item?.id)
+                            ? "bg-[#F7931D] text-white"
+                            : "bg-white text-[#4D5869]"
+                          } h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-2xl shrink-0 p-0 font-archivo text-xs font-medium flex items-center gap-[.3125rem]`}
                         onClick={() => handleSave(item)}
                         disabled={loadingItemId === item.id}
                       >
                         {loadingItemId === item.id ? (
-                          <SmallSpinner color={myFavourite.includes(item.id)?"#fff":'#F7931D'}/>
+                          <SmallSpinner color={myFavourite.includes(item.id) ? "#fff" : "#F7931D"} />
                         ) : (
-                          <HeartIcon fill={myFavourite?.includes(item?.id)?"#Fff":"#fff"}/>   
-                        )}        
-                       {myFavourite?.includes(item?.id)? t.removeFav  : t.addFav}
+                          <HeartIcon fill={myFavourite.includes(item.id) ? "#fff" : "#fff"} />
+                        )}
                       </Button>
-                    </div>
-
-                    {/* Site Info */}
-                    <div className="">
-                      <div className="flex items-center flex-wrap gap-[10px] md:gap-[20px]">
-                        {/* Country Flag */}
-                        <div className="relative h-[30px] md:h-[40px] rounded w-[40px] md:w-[52px] overflow-hidden">
-                          <Image
-                            src={`https://flagcdn.com/${getCountry(item?.country)?.alpha2code?.toLowerCase()}.svg`}
-                            alt={`${getCountry(item?.country)?.name} flag`}
-                            fill
-                            className="object-cover rounded"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                            }}
-                          />
-                        </div>
-
-                        {/* Title and Ranking */}
-                        <div className="flex items-center flex-wrap gap-[10px]">
-                          <p className="text-white font-archivo font-semibold text-xs sm:text-sm md:text-lg break-words">
-                            {item?.title}
-                          </p>
-                          <div className="flex items-center bg-[#C5EFFF] dark:bg-blue-100 min-w-[80px] justify-center gap-[.3531rem] py-1 px-[.4063rem] rounded-lg">
-                            <CupIcon/>
-                            <p className="font-archivo text-xxs text-[#132346] dark:text-blue-800 font-semibold">
-                              {t.rank}:{item?.ranking}
-                            </p>
+                      {/* <Button title={t.share} className="bg-[#F9FAFB] hover:bg-gray-100 p-0 h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center">
+                        <LikeIcon />
+                      </Button> */}
+                      <Button className="bg-[#F9FAFB] hover:bg-gray-100 relative h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center">
+                        <div className="relative">
+                          <MessageIcon2 />
+                          <div className="absolute -top-4 -right-3 w-[1.3rem] h-[1.3rem] bg-[#F7931D] rounded-full flex items-center justify-center">
+                            <p className="text-xs font-bold text-white">12</p>
                           </div>
-                          <InfoIcon/>
                         </div>
-                      </div>
-
-                      {/* Address */}
-                      <h2 className="font-semibold py-1 md:py-3 text-sm sm:text-base md:text-lg lg:text-2xl font-archivo text-white break-words">
-                        {item?.address}
-                      </h2>
-
-                      {/* Site Type Tags */}
-                      <div className="flex gap-x-2 py-2 md:py-3 items-center flex-wrap">
-                        {item?.site_type?.split(",")?.map((tag, idx) => (
-                          <div
-                            key={idx}
-                            className="px-[.8125rem] py-1 rounded-2xl text-xs bg-[#EFF8FF] dark:bg-blue-50 text-[#175CD3] dark:text-blue-700 cursor-pointer whitespace-nowrap"
-                          >
-                            {tag.trim()}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Coordinates */}
-                      <div className="py-2">
-                        <p className="text-xs text-[#F7F7F7] md:text-sm font-archivo break-all">
-                          {t.latitude}:{" "}
-                          <span className="font-semibold">
-                            {item?.lag}
-                          </span>{" "}
-                          <span className="px-2">•</span> {t.longitude}:{" "}
-                          <span className="font-semibold">
-                            {item?.lon}
-                          </span>
-                        </p>
-                      </div>
+                      </Button>
+                      <Button title={t.share} className="bg-[#F9FAFB] hover:bg-gray-100 p-0 h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center">
+                        <ShareIcon2 />
+                      </Button>
                     </div>
                   </div>
                 </div>
-
-                {/* Bottom Section */}
-                <div className="mt-3 flex justify-between flex-wrap gap-3 items-center">
-                  {/* User Avatars */}
-                  <div className="flex items-center gap-2">
-                    <div className="flex -space-x-1">
-                      <img
-                        src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face"
-                        alt="User avatar"
-                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-white object-cover"
-                      />
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 dark:bg-gray-600 border border-white flex items-center justify-center text-xs text-gray-600 dark:text-gray-300">
-                          +1
-                        </div>
-                        <p className="text-sm font-archivo font-medium text-[#475467] dark:text-gray-300 hidden sm:block">
-                       {t.like}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex items-center gap-2 sm:gap-3">
-                    <Button className="bg-[#F9FAFB] dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 h-[2.8125rem] md:w-[3.75rem]  px-[1.125rem] py-[.625rem] rounded-xl flex justify-center items-center transition-colors">
-                      <LikeIcon/>
-                    </Button>
-                    
-                    <Button className="bg-[#F9FAFB] dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 relative h-[2.8125rem] w-[3.75rem] px-[1.125rem] py-[.625rem] rounded-xl flex justify-center items-center transition-colors">
-                      <div className="relative">
-                        <MessageIcon2/>
-                        <div className="absolute -top-4 -right-3 w-[.875rem] p-3 flex justify-center items-center h-[.875rem] bg-[#F7931D] rounded-full">
-                          <p className="font-archivo text-xs font-bold text-white">12</p>
-                        </div>
-                      </div>
-                    </Button>
-                    
-                    <Button title={t.share} className="bg-[#F9FAFB] dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 h-[2.8125rem] w-[3.75rem] px-[1.125rem] py-[.625rem] rounded-xl flex justify-center items-center transition-colors">
-                      <ShareIcon2/>
-                    </Button>
-                  </div>
-                </div> 
-              </div>
-            ))}
-          </div>
-
-          {/* Loading indicator for next page */}
-          {isFetchingNextPage && (
-            <div className="flex justify-center items-center py-8">
-              <div className="flex items-center gap-2">
-                <SmallSpinner/>
-                <span className="text-gray-600 dark:text-gray-400">{t.loadingMore}</span>
-              </div>
+              ))}
             </div>
-          )}
+          </InfiniteScroll>
 
-          {/* End of results indicator */}
-          {!hasNextPage && allDiveSites.length > 0 && (
-            <div className="flex justify-center items-center py-8">
-              <span className="text-gray-500 dark:text-gray-400 text-sm">
-              {t.end}
-              </span>
-            </div>
-          )}
-
-          {/* Empty State */}
           {!search && allDiveSites.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-500 dark:text-gray-400 text-lg">
-                {t.noSites}
-              </p>
+              <p className="text-gray-500 text-lg">{t.noSites}</p>
             </div>
           )}
         </>
@@ -743,16 +310,11 @@ const RecentDiveSites = ({data, loading, search, fetchNextPage, hasNextPage, isF
 
       <ErrorModal
         isErrorModalOpen={isErrorModalOpen}
-        setErrorModalState={() => {
-          setErrorModalState(false);
-        }}
-        subheading={
-          errorModalMessage ||
-          "Please check your inputs and try again."
-        }
+        setErrorModalState={() => setErrorModalState(false)}
+        subheading={errorModalMessage || "Please check your inputs and try again."}
       />
     </div>
-  )
-}
+  );
+};
 
-export default RecentDiveSites
+export default RecentDiveSites;

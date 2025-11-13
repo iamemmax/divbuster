@@ -126,12 +126,14 @@ const AccountTypeForm = ({
   ];
 
   const bodySizeOptions = [
-    t.accountType.xsmallOption,
-    t.accountType.smallOption,
-    t.accountType.mediumOption,
-    t.accountType.largeOption,
-    t.accountType.xlargeOption,
-  ];
+  { value: "xs", label: t.accountType.bodySizes.xs.label },
+  { value: "s", label: t.accountType.bodySizes.s.label },
+  { value: "m", label: t.accountType.bodySizes.m.label },
+  { value: "l", label: t.accountType.bodySizes.l.label },
+  { value: "xl", label: t.accountType.bodySizes.xl.label },
+  // { value: "XXL", label: t.accountType.bodySizes.xxl.label },
+  // { value: "XXXL", label: t.accountType.bodySizes.xxxl.label },
+];
 
   const shoeSizeOptions = [
     t.accountType.euOption,
@@ -269,61 +271,61 @@ const AccountTypeForm = ({
           )}
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="body_size" className="block text-gray-700 font-medium mb-2">
-            {t.accountType.bodySize}
-          </label>
-          <Select
-            value={bodySize}
-            onValueChange={(value) => handleValueChange('body_size', value)}
-            onOpenChange={(open) => handleOpenChange('bodySize', open)}
-          >
-            <div className="relative">
-              <SelectTrigger
-                id="body_size"
-                className={`border ${errors.body_size ? 'border-red-500' : 'border-[#E2E8F0]'} w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
-              >
-                <SelectValue 
-                  placeholder={t.accountType.selectBodySize}
-                  className="text-[#8D9196] text-sm font-archivo font-medium"
-                />
-              </SelectTrigger>
-              <CaretDown 
-                color="#8D9196"
-                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
-                  openDropdowns.bodySize ? 'rotate-180' : ''
-                }`}
-              />
-            </div>
-            <SelectContent>
-              <SelectItem
-                className="hidden"
-                disabled
-                value=""
-                style={{
-                  color: "#8D9196",
-                  fontWeight: 500,
-                  fontFamily: "Archivo",
-                  fontSize: "12px",
-                }}
-              >
-                {t.accountType.selectBodySize}
-              </SelectItem>
-              {bodySizeOptions.map((option) => (
-                <SelectItem
-                  key={option}
-                  value={option}
-                  className="px-2"
-                >
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.body_size && (
-            <p className="text-red-500 text-xs mt-1">{errors.body_size.message as string}</p>
-          )}
-        </div>
+      <div className="mb-4">
+  <label htmlFor="body_size" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+    {t.accountType.bodySize}
+  </label>
+  <Select
+    value={bodySize}
+    onValueChange={(value) => handleValueChange('body_size', value)}
+    onOpenChange={(open) => handleOpenChange('bodySize', open)}
+  >
+    <div className="relative">
+      <SelectTrigger
+        id="body_size"
+        className={`border ${errors.body_size ? 'border-red-500' : 'border-[#E2E8F0] dark:border-gray-600'} w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] pr-10 dark:bg-gray-800 dark:text-gray-100`}
+      >
+        <SelectValue 
+          placeholder={t.accountType.selectBodySize}
+          className="text-[#8D9196] dark:text-gray-400 text-sm font-archivo font-medium"
+        />
+      </SelectTrigger>
+      <CaretDown 
+        color="#8D9196"
+        className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+          openDropdowns.bodySize ? 'rotate-180' : ''
+        }`}
+      />
+    </div>
+    <SelectContent>
+      <SelectItem
+        className="hidden"
+        disabled
+        value=""
+        style={{
+          color: "#8D9196",
+          fontWeight: 500,
+          fontFamily: "Archivo",
+          fontSize: "12px",
+        }}
+      >
+        {t.accountType.selectBodySize}
+      </SelectItem>
+      {bodySizeOptions.map((option) => (
+        <SelectItem
+          key={option.value}
+          value={option.value}
+          className="px-2"
+        >
+          {option.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+  {errors.body_size && (
+    <p className="text-red-500 text-xs mt-1">{errors.body_size.message as string}</p>
+  )}
+</div>
 
         <div className="mb-4">
           <label htmlFor="shoe_size" className="block text-gray-700 font-medium mb-2">

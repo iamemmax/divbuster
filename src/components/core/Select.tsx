@@ -107,7 +107,7 @@ const SelectItem = React.forwardRef<
     ref={ref}
     {...props}
   >
-    <span className="absolute left-2 flex size-3.5 items-center justify-center">
+    {/* <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
         <svg
           fill="none"
@@ -122,7 +122,7 @@ const SelectItem = React.forwardRef<
           />
         </svg>
       </SelectPrimitive.ItemIndicator>
-    </span>
+    </span> */}
 
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
   </SelectPrimitive.Item>

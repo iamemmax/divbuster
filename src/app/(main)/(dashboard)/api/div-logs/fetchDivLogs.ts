@@ -84,7 +84,7 @@ interface Divesite {
   country: number;
 }
 
-interface Diveequipment {
+export interface Diveequipment {
   id: number;
   gas_mixture: string;
   oxygen_value: number;

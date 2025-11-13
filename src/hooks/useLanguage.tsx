@@ -17,23 +17,24 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, user } = authState;
 
   const selectedLanguage = user?.profile_details?.language as Language | undefined;
-  const storedLanguage = (typeof window !== "undefined" && localStorage.getItem("preferredLanguage")) as Language | null;
-
   const [language, setLanguage] = useState<Language>("en");
 
-  // ✅ Handle initial language load logic safely
+  // Initialize language on mount
   useEffect(() => {
+    const storedLanguage = (typeof window !== "undefined" && localStorage.getItem("preferredLanguage")) as Language | null;
+    
     if (isAuthenticated && selectedLanguage) {
       setLanguage(selectedLanguage);
-      localStorage.setItem("preferredLanguage", selectedLanguage);
     } else if (storedLanguage) {
       setLanguage(storedLanguage);
     }
-  }, [isAuthenticated, selectedLanguage, storedLanguage]);
+  }, [isAuthenticated, selectedLanguage]);
 
-  // ✅ Update localStorage whenever language changes
+  // Update localStorage when language changes
   useEffect(() => {
-    localStorage.setItem("preferredLanguage", language);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("preferredLanguage", language);
+    }
   }, [language]);
 
   return (
@@ -47,13 +48,13 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (!context) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
+    // Return default values during build time or when provider is not available
+    return {
+      language: "en" as Language,
+      setLanguage: () => {}
+    };
   }
   return context;
 };
 
 // (Unrelated, but if you need this type, keep it defined separately)
-interface Prop {
-  me: string;
-  setMe: (a: string) => void;
-}

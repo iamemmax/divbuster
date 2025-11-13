@@ -14,7 +14,7 @@ import FullPageLoader from "@/app/(main)/loading";
 import { firstStepProps, fourthStepProps, secondStepProps, thirdStepProps } from './components';
 import AccountTypeSelectionForm from './components/AccountTypeSelectionForm';
 import EmailVerificationForm from './components/EmailVerificationForm';
-import MFAVerificationForm from './components/MFAVerificationForm';
+// import MFAVerificationForm from './components/MFAVerificationForm';
 
 // Define the steps of the signup process
 type SignupStep = 

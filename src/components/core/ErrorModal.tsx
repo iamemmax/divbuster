@@ -31,7 +31,7 @@ export function ErrorModal({
 }: ErrorModalProps) {
   return (
     <Dialog open={isErrorModalOpen} onOpenChange={setErrorModalState}>
-      <DialogContent className="bg-white dark:bg-gray-900">
+      <DialogContent className="bg-white dark:bg-gray-900 ">
         <DialogHeader className="bg-white dark:bg-gray-900 flex justify-between items-start">
           <ErrorIcon/>
 
@@ -40,12 +40,12 @@ export function ErrorModal({
           </DialogClose>
         </DialogHeader>
 
-        <DialogBody className="p-0 text-left bg-white dark:bg-gray-900">
+        <DialogBody className="p-0 text-left bg-white !rounded-b-[20px] dark:bg-gray-900">
           <div className="px-8 pb-6">
             <DialogTitle className="font-heading text-[#F7931D] dark:text-orange-400 w-4/5 font-nunito text-lg font-medium">
               {heading}
             </DialogTitle>
-            <DialogDescription className="text-[#667085] dark:text-gray-300 text-sm font-nunito py-2">
+            <DialogDescription className="text-[#667085] dark:text-gray-300  text-sm font-nunito py-2">
               {subheading}
             </DialogDescription>
           </div>

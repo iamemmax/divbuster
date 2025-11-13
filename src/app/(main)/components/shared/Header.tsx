@@ -124,16 +124,26 @@ const Header = ({ subtitle, title }: HeaderProps) => {
             className="relative flex items-center"
             aria-label="User profile"
           >
-            <div className="relative">
-              <div className="xl:w-10 xl:h-10 w-8 h-8 rounded-full overflow-hidden border-2 border-white">
-                <img
-                  src={userData?.profile_details?.profile_picture !==null ? userData?.profile_details?.profile_picture: "/images/profile.png"}
-                  alt="Diver profile"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-            </div>
+          <div className="relative">
+  <div className="xl:w-10 xl:h-10 w-8 h-8 rounded-full overflow-hidden border-2 border-white dark:border-gray-700">
+    {userData?.profile_details?.profile_picture ? (
+      <img
+        src={userData.profile_details.profile_picture}
+        alt="Diver profile"
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <div className="w-full h-full bg-gray-400 dark:bg-gray-600 flex items-center justify-center">
+        <span className="text-white dark:text-gray-100 text-base font-semibold font-archivo uppercase">
+          {userData?.first_name?.charAt(0) || ""}
+          {userData?.last_name?.charAt(0) || ""}
+          {!userData?.first_name && !userData?.last_name && "??"}
+        </span>
+      </div>
+    )}
+  </div>
+  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 dark:bg-green-400 rounded-full border-2 border-white dark:border-gray-700"></div>
+</div>
             {/* Dropdown icon for mobile */}
             {isMobile && (
               <svg 

@@ -108,16 +108,24 @@ const DiverBuddies = () => {
       ),
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
-          <div className="relative shrink-0">
-            <img
-              src={row.original.profile_details?.profile_picture !== null ? String(row.original.profile_details?.profile_picture) : "/images/profile.png"}
-              alt={row.original.first_name}
-              className="w-12 h-12 shrink-0 rounded-full object-cover"
-            />
-            {row.original?.diver_profile?.online && (
-              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
-            )}
-          </div>
+         <div className="relative shrink-0">
+  {row.original.profile_details?.profile_picture ? (
+    <img
+      src={String(row.original.profile_details.profile_picture)}
+      alt={row.original.first_name}
+      className="w-12 h-12 shrink-0 rounded-full object-cover"
+    />
+  ) : (
+    <div className="w-12 h-12 shrink-0 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-semibold text-sm uppercase">
+      {`${row.original.first_name?.[0] || ''}${row.original.last_name?.[0] || ''}`}
+    </div>
+  )}
+
+  {row.original?.diver_profile?.online && (
+    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+  )}
+</div>
+
           <div className="min-w-0">
             <div className="font-medium text-[#101828] dark:text-gray-100 text-sm font-archivo truncate transition-colors duration-200">
               {row.original.first_name}

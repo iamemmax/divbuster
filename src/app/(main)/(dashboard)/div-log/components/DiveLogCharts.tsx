@@ -16,11 +16,13 @@ import {
   ReferenceLine,
   Dot
 } from 'recharts';
+import { singleDiveProp } from '../../api/div-logs/fetchSingleDivLog';
 
 interface prop{
    user: User | null
+   data: singleDiveProp | undefined
 }
-const DiveLogCharts = ({user}:prop) => {
+const DiveLogCharts = ({data}:prop) => {
 const {language}= useLanguage()
       const t = divLogChat[language] || divLogChat?.en;
   // Heart rate data - matching the original pattern more closely
@@ -172,15 +174,15 @@ const {language}= useLanguage()
         <div className="flex gap-5 md:gap-28 mb-4">
           <div>
             <div className="text-sm text-gray-500 dark:text-white mb-1">{t?.waterTemp?.avg}</div>
-            <div className="text-xl font-archivo font-bold text-[#101828] dark:text-white">28.0 <span className="text-lg">°C</span></div>
+            <div className="text-xl font-archivo font-bold text-[#101828] dark:text-white">{data?.data?.avg_water_temperature??0} <span className="text-lg">°C</span></div>
           </div>
           <div>
             <div className="text-sm text-gray-500 dark:text-white mb-1">{t?.waterTemp?.min}</div>
-            <div className="text-xl font-archivo font-bold text-[#101828] dark:text-white">28.0 <span className="text-lg">°C</span></div>
+            <div className="text-xl font-archivo font-bold text-[#101828] dark:text-white">{data?.data?.min_water_temperature??0} <span className="text-lg">°C</span></div>
           </div>
           <div>
             <div className="text-sm text-gray-500 dark:text-white mb-1">{t?.waterTemp?.max}.</div>
-            <div className="text-xl font-archivo font-bold text-[#101828] dark:text-white">29.0 <span className="text-lg">°C</span></div>
+            <div className="text-xl font-archivo font-bold text-[#101828] dark:text-white">{data?.data?.max_water_temperature??0} <span className="text-lg">°C</span></div>
           </div>
         </div>
         

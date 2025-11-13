@@ -42,7 +42,7 @@ const SideBar = () => {
 
   // For desktop, render the full sidebar
   return (
-    <div className='border-r border-[#E2E8F0] dark:border-gray-700 h-[100vh] py-6 xl:py-[1.9375rem] flex flex-col gap-6 dark:bg-gray-900'>
+    <div className='border-r border-[#E2E8F0] dark:border-gray-700 !z-[99999999999999999] h-[100vh] py-6 xl:py-[1.9375rem] flex flex-col gap-6 dark:bg-gray-900'>
       <div className="flex justify-center items-center px-8">
         <DiveBusterLogo />
       </div>
