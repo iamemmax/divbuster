@@ -12,7 +12,7 @@ import { translations } from "../translations";
 type ProfilePictureFormProps = {
   formData: any;
   stepOneData: firstStepProps;
-  stepTwoData: secondStepProps;
+  stepTwoData: secondStepProps & { referral_code?: string };
   stepThreeData: thirdStepProps;
   stepFourData: fourthStepProps;
   updateFormData: (data: any) => void;
@@ -114,7 +114,7 @@ const ProfilePictureForm = ({
       dob: stepThreeData.dob,
       profile_picture: profilePicture,
       account_type: formData.account_type || "scuba",
-      referral_code: formData.referral_code || "",
+      referral_code: stepTwoData.referral_code || "",
       body_size: stepFourData.body_size,
       // height: formData.height || "",
       measurement_unit: stepFourData.unit_of_measure,
@@ -159,7 +159,7 @@ const ProfilePictureForm = ({
       dob: stepThreeData.dob,
       profile_picture: profilePicture,
       account_type: formData.account_type || "scuba",
-      referral_code: formData.referral_code || "",
+      referral_code: stepTwoData.referral_code || "",
       body_size: stepFourData.body_size,
       // height: formData.height || "",
       measurement_unit: stepFourData.unit_of_measure,

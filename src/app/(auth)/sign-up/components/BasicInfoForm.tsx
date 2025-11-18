@@ -160,12 +160,6 @@ const BasicInfoForm = ({
                 className="hidden"
                 disabled
                 value=""
-                style={{
-                  color: "#000",
-                  fontWeight: 500,
-                  fontFamily: "Archivo",
-                  fontSize: "12px",
-                }}
               >
                 {t.basicInfo.selectLanguage}
               </SelectItem>
@@ -173,15 +167,15 @@ const BasicInfoForm = ({
                 <SelectItem
                   key={lang.value}
                   value={lang.value}
-                  className="px-2"
+                  className="px-2 text-black dark:text-white"
                 >
                   <div className="flex items-start gap-4">
                     <img
                       src={lang.flag}
                       alt={`${lang.label} flag`}
-                      className="w-5 h-5  rounded-sm object-cover"
-                    />{" "}
-                    <span>{lang.label}</span>
+                      className="w-5 h-5 rounded-sm object-cover"
+                    />
+                    <span className="text-black dark:text-white">{lang.label}</span>
                   </div>
                 </SelectItem>
               ))}

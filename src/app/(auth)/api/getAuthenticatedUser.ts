@@ -115,9 +115,16 @@ interface Diverprofile {
   updated_on: string;
   favourite_sites: number[];
 }
-
+interface Downline {
+  id: number;
+  name: string;
+  image: null;
+  username: string;
+  date_joined: string;
+}
 interface Profiledetails {
   id: string;
+  downlines: Downline[];
   language: string;
   phone_number: string;
   nickname: string;
@@ -136,6 +143,31 @@ interface Profiledetails {
   country: number;
   referred_by: null;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const getAuthenticatedUser = async () => {
   const response = await adminAxios.get(`/profile`);
   return response?.data as userDetails;

@@ -100,7 +100,7 @@ const SignupPage = () => {
   const [direction, setDirection] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false); // Prevent multiple transitions
   const [stepOneData, setStepOneData] = useState<firstStepProps>({lang: '' })
-  const [stepTwoData, setStepTwoData] = useState<secondStepProps>({  first_name: '',last_name: '',email: '' })
+  const [stepTwoData, setStepTwoData] = useState<secondStepProps & { referral_code?: string }>({  first_name: '',last_name: '',email: '', referral_code: '' })
   const [stepThreeData, setStepThreeData] = useState<thirdStepProps>({
     phone_number: '',
     confirm_password: '',

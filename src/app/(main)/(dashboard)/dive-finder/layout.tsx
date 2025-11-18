@@ -32,7 +32,7 @@ export default function DiveFinderLayout({
 
   return (
     <div className="flex relative flex-col h-screen">
-      <Header title="Buddy Finder" subtitle="" />
+      <Header title="Find Buddy" subtitle="" />
       
       <div className="flex gap-4 px-4 pb-5 md:p-4 bg-white dark:bg-gray-900 flex-wrap absolute top-[6rem] inset-x-0 z-30 shadow-md">
         <div className="relative flex-1 w-full">

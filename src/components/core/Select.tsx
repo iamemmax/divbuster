@@ -59,7 +59,7 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         className={cn(
-          'relative z-[9999999999999999999] max-h-52 min-w-[8rem] overflow-hidden rounded-md border bg-white animate-in slide-in-from-top-2',
+          'relative z-[9999999999999999999] max-h-52 min-w-[8rem] overflow-hidden rounded-md border bg-white dark:bg-[#111827] animate-in slide-in-from-top-2',
           position === 'popper' && 'translate-y-0',
           className
         )}
@@ -101,7 +101,7 @@ const SelectItem = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
     className={cn(
-      'relative flex w-full cursor-default select-none items-center rounded py-1.5 pl-8 pr-2 text-xs outline-none transition duration-300 ease-in-out focus:bg-blue-100/70 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex w-full cursor-default  select-none items-center rounded py-1.5 pl-8 pr-2 text-xs outline-none transition duration-300 ease-in-out focus:bg-blue-100/70 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className
     )}
     ref={ref}

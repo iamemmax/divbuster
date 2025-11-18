@@ -5,7 +5,6 @@ import { useFetchNearestUser } from '../../api/buddy/nearestUserAround';
 import { useAddBuddy } from '../../api/buddy/addBuddy';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-
 const BookingSideBar = () => {
   const { data: nearestUsers, isLoading } = useFetchNearestUser();
   const { mutate: addBuddy, isLoading: isAddingBuddy } = useAddBuddy();

@@ -134,10 +134,7 @@ import CertificateModal from "@/app/(main)/components/certifications/Certificate
 import { selectedCardBg } from "@/app/(main)/components/shared/CardContainer";
 
 const DivingProfile = () => {
-  const color = [
-    { color1: "#F7931D", color2: "#F7931D" },
-    { color1: "#132346", color2: "#012F94" }
-  ];
+  
 
   const router = useRouter();
   const params = useParams();
