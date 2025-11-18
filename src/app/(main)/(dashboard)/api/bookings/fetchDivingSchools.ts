@@ -33,19 +33,27 @@ interface Photo {
   created_on: string;
 }
 
-const fetchDiveSchools = async ({ pageParam = "dive/dive-schools" }) => {
+const fetchDiveSchools = async ({ pageParam = "dive/dive-schools", address }: { pageParam?: string; address?: string }) => {
   // If next is a full URL, strip the domain part
-  const relativeUrl = pageParam.replace(/^https?:\/\/[^/]+/, "");
+  let relativeUrl = pageParam.replace(/^https?:\/\/[^/]+/, "");
+  
+  // Add address filter if provided and it's the first page
+  if (address && pageParam === "dive/dive-schools") {
+    relativeUrl += `?address=${encodeURIComponent(address)}`;
+  }
+  
   const response = await adminAxios.get(relativeUrl);
   return response.data as divingSchoolsProp;
 };
 
 
-export const useFetchDiveSchools = () => {
+export const useFetchDiveSchools = (address?: string) => {
   return useInfiniteQuery({
-    queryKey: ["booking-schools"],
-    queryFn: fetchDiveSchools,
+    queryKey: ["booking-schools", address],
+    queryFn: ({ pageParam }) => fetchDiveSchools({ pageParam, address }),
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
   });
 };
 

@@ -12,7 +12,7 @@ interface prop {
     fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<buddyListProp, unknown>>
 }
 
-const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingNextPage }: prop) => {
+const BuddyLeafletMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingNextPage }: prop) => {
     const mapRef = useRef<HTMLDivElement>(null)
     const mapInstance = useRef<any>(null)
     const markersRef = useRef<any[]>([])
@@ -29,126 +29,51 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
     }, [])
 
     const createInfoWindowContent = useCallback((buddy: buddyResult) => {
-        const profilePicture = buddy.profile_details?.profile_picture
+        const profilePicture = buddy.profile_details?.profile_picture || '/default-avatar.png'
         const fullName = `${buddy.first_name} ${buddy.last_name}`.trim() || buddy.username
-        const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-        const lat = Number(buddy?.current_location?.lat)
-        const lng = Number(buddy?.current_location?.lon)
-        // const bio = buddy.profile_details?.bio || 'No bio available'
 
-        const avatarContent = profilePicture 
-            ? `<img 
-                src="${profilePicture}" 
-                alt="${fullName}"
-                style="
-                    width: 50px; 
-                    height: 50px; 
-                    border-radius: 50%; 
-                    object-fit: cover; 
-                    border: 2px solid #e5e7eb;
-                    flex-shrink: 0;
-                "
-            />`
-            : `<div style="
-                width: 50px; 
-                height: 50px; 
-                border-radius: 50%; 
-                background: #3b82f6; 
-                color: white; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                font-weight: bold; 
-                font-size: 18px; 
-                border: 2px solid #e5e7eb;
-                flex-shrink: 0;
-            ">${initials}</div>`
-
-      return `
-    <div style="
-        padding: 12px; 
-        max-width: 300px; 
-        width: calc(100vw - 40px);
-        font-family: Arial, sans-serif;
-    ">
-        <div style="
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        ">
-            ${avatarContent}
-            <div style="flex: 1; min-width: 0;">
-                <h3 style="
-                    margin: 0; 
-                    font-size: clamp(14px, 4vw, 16px); 
-                    font-weight: 600; 
-                    color: #1f2937;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                ">${fullName}</h3>
-                <p style="
-                    margin: 4px 0 0 0; 
-                    font-size: clamp(11px, 3vw, 12px); 
-                    color: #6b7280;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                ">@${buddy.username}</p>
-            </div>
-        </div>
-        
-        <div style="
-            margin-bottom: 12px; 
-            font-size: clamp(11px, 3vw, 13px); 
-            color: #4b5563;
-        ">
-            <div style="
-                margin-bottom: 8px;
-            ">
-                <div style="color: #6b7280; margin-bottom: 2px;">Location:</div>
-                <strong style="
-                    color: #1f2937;
-                    font-size: clamp(11px, 3vw, 12px);
-                    display: block;
-                ">Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}</strong>
-            </div>
-            
-            ${buddy.diver_profile ? `
-                <div style="margin-bottom: 8px;">
-                    <div style="color: #6b7280; margin-bottom: 2px;">Certification Level:</div>
-                    <strong style="
-                        color: #1f2937;
-                        display: block;
-                    ">${buddy.diver_profile.certification_level || 'Not specified'}</strong>
+        return `
+            <div style="padding: 12px; min-width: 200px; font-family: Arial, sans-serif;">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                    <img 
+                        src="${profilePicture}" 
+                        alt="${fullName}"
+                        style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #e5e7eb;"
+                    />
+                    <div>
+                        <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #1f2937;">${fullName}</h3>
+                        <p style="margin: 4px 0 0 0; font-size: 12px; color: #6b7280;">@${buddy.username}</p>
+                    </div>
                 </div>
-            ` : ''}
-        </div>
-        
-        <button 
-            onclick="handleCreatePlan('${buddy?.username}')" 
-            style="
-                width: 100%; 
-                max-width: 280px;
-                background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
-                color: white; 
-                border: none; 
-                padding: 10px 16px; 
-                border-radius: 8px; 
-                font-size: clamp(12px, 3.5vw, 14px); 
-                font-weight: 600; 
-                cursor: pointer;
-                transition: opacity 0.2s;
-            "
-            onmouseover="this.style.opacity='0.9'"
-            onmouseout="this.style.opacity='1'"
-        >
-            Create Dive Plan
-        </button>
-    </div>
-`
+                
+                ${buddy.diver_profile ? `
+                    <div style="margin-bottom: 12px; font-size: 12px; color: #4b5563;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span>Certification Level:</span>
+                            <strong>${buddy.diver_profile.certification_level || 'Not specified'}</strong>
+                        </div>
+                    </div>
+                ` : ''}
+                
+                <button 
+                    onclick="handleCreatePlan('${buddy?.username}')" 
+                    style="
+                        width: 100%; 
+                        background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+                        color: white; 
+                        border: none; 
+                        padding: 10px 16px; 
+                        border-radius: 8px; 
+                        font-size: 14px; 
+                        font-weight: 600; 
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                    "
+                >
+                    Create Dive Plan
+                </button>
+            </div>
+        `
     }, [])
 
     const handleCreatePlan = (data: string) => {
@@ -185,19 +110,16 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
     }, [])
 
     const addMarkers = useCallback(async (buddies: buddyResult[]) => {
-        console.log('CreateBuddyPlanMap - Adding markers for buddies:', buddies?.length || 0)
-        if (!buddies || buddies.length === 0 || !mapInstance.current) {
-            console.log('CreateBuddyPlanMap - No buddies or map not ready')
-            return
-        }
+        if (!buddies || buddies.length === 0 || !mapInstance.current) return
 
+        console.log('Adding markers for buddies:', buddies.length)
         const L = require('leaflet')
 
         buddies.forEach((buddy, index) => {
             const lat = Number(buddy?.current_location?.lat)
             const lng = Number(buddy?.current_location?.lon)
             
-            console.log(`CreateBuddyPlanMap - Buddy ${index}:`, { lat, lng, buddy: buddy.username })
+            console.log(`Buddy ${index}:`, { lat, lng, buddy: buddy.username })
 
             if (!isNaN(lat) && !isNaN(lng)) {
                 const marker = L.marker([lat, lng], { icon: createCustomMarkerIcon(buddy) })
@@ -205,22 +127,16 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
                     .bindPopup(createInfoWindowContent(buddy))
 
                 markersRef.current.push(marker)
-                console.log(`CreateBuddyPlanMap - Marker added for ${buddy.username} at [${lat}, ${lng}]`)
+                console.log(`Marker added for ${buddy.username} at [${lat}, ${lng}]`)
             } else {
-                console.log(`CreateBuddyPlanMap - Invalid coordinates for ${buddy.username}:`, { lat, lng })
+                console.log(`Invalid coordinates for ${buddy.username}:`, { lat, lng })
             }
         })
     }, [createCustomMarkerIcon, createInfoWindowContent])
 
     useEffect(() => {
         const initMap = async () => {
-            if (!mapRef.current) return
-            
-            // Clean up existing map
-            if (mapInstance.current) {
-                mapInstance.current.remove()
-                mapInstance.current = null
-            }
+            if (!mapRef.current || mapInstance.current) return
 
             const L = (await import('leaflet')).default
 
@@ -259,7 +175,7 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
     }, [])
 
     useEffect(() => {
-        console.log('CreateBuddyPlanMap - Buddy list updated:', buddyList?.length || 0)
+        console.log('Buddy list updated:', buddyList?.length || 0)
         if (mapInstance.current && buddyList) {
             clearMarkers()
             addMarkers(buddyList)
@@ -277,6 +193,10 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
             <style jsx global>{`
                 .custom-buddy-icon {
+                    background: transparent !important;
+                    border: none !important;
+                }
+                .leaflet-div-icon {
                     background: transparent !important;
                     border: none !important;
                 }
@@ -312,7 +232,7 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
             )}
 
             {showDivePlanModal && (
-                <div className="fixed inset-0 z-[999999999999999999] flex items-center justify-center p-4">
+                <div className="!z-[999999999]">
                     <CreateBuddyBooking
                         isOpen={showDivePlanModal}
                         user={user}
@@ -325,4 +245,4 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
     )
 }
 
-export default CreateBuddyPlanMap
+export default BuddyLeafletMap

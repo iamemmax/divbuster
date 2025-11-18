@@ -22,6 +22,7 @@ import { AxiosError } from 'axios';
 import { SmallSpinner } from '@/icons/core';
 import { diverBuddiesTranslations } from '../../translation/diveBuddiesTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
+import { DiveBuddySkeleton } from '@/components/core';
 
 const DiverBuddies = () => {
   const {
@@ -245,9 +246,21 @@ const DiverBuddies = () => {
 
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-x-auto transition-colors duration-200">
               {isLoading ? (
-                <div className='flex justify-center w-full items-center py-10'>
-                  <SmallSpinner color='#F7931D'/>
-                </div>
+                <table className="w-full">
+                  <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-300">{t.name}</th>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-300">{t.diveBuddies}</th>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-300">{t.certificate}</th>
+                      <th className="px-6 py-4"></th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <DiveBuddySkeleton key={idx} />
+                    ))}
+                  </tbody>
+                </table>
               ) : (
                 <table className="w-full">
                   <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">

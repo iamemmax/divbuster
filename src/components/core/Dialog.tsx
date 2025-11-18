@@ -55,7 +55,7 @@ const DialogPortal = ({
 }: DialogPrimitive.DialogPortalProps) => {
   return (
     <DialogPrimitive.Portal /*className={className}*/ {...props}>
-      <div className="fixed inset-0 z-50 flex items-start justify-center sm:items-center">
+      <div className="fixed inset-0 z-[999999999999999999] flex items-start justify-center sm:items-center">
         {children}
       </div>
     </DialogPrimitive.Portal>
@@ -70,7 +70,7 @@ const DialogOverlay = React.forwardRef<
   return (
     <DialogPrimitive.Overlay
       className={cn(
-        'fixed inset-0 z-50 bg-black/50 backdrop-blur-md transition-all duration-100 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
+        'fixed inset-0 z-[999999999999999999] bg-black/50 backdrop-blur-md transition-all duration-100 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
         className
       )}
       {...props}
@@ -99,7 +99,7 @@ const DialogContent = React.forwardRef<
       >
         <DialogPrimitive.Content
           className={cn(
-            'fixed bottom-0 h-max max-h-modal-content w-full gap-4 !z-[99999999999999999999999999999] rounded-t-[1.125rem] bg-white animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:static sm:bottom-auto sm:my-[5vh] sm:max-h-none sm:max-w-[28rem] sm:overflow-visible sm:rounded-[1.125rem] sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0',
+            'fixed bottom-0 h-max max-h-modal-content w-full gap-4 !z-[999999999999999999] rounded-t-[1.125rem] bg-white animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:static sm:bottom-auto sm:my-[5vh] sm:max-h-none sm:max-w-[28rem] sm:overflow-visible sm:rounded-[1.125rem] sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0',
             className
           )}
           ref={ref}

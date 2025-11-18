@@ -11,6 +11,7 @@ import { AxiosError } from 'axios';
 import { SmallSpinner } from '@/icons/core';
 import { useQueryClient } from 'react-query';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
+import { SuggestedBuddySkeleton } from '@/components/core';
 
 interface DiveBuddy {
   id: number;
@@ -86,11 +87,16 @@ const queryClient = useQueryClient();
             {/* <p className="text-xs text-[#78828A] font-medium font-archivo">46 Dive Buddies</p> */}
           </div>            
             <div className="relative  p-4 sm:p-6 sm:py-4">
-              {visibleDivers?.map((buddy, index) => (
+              {!userData ? (
+                Array.from({ length: 3 }).map((_, idx) => (
+                  <SuggestedBuddySkeleton key={idx} />
+                ))
+              ) : (
+                visibleDivers?.map((buddy, index) => (
                 <div key={buddy.id} className="relative flex items-center justify-between py-3">
                   {/* Connecting line */}
                   {index < visibleDivers?.length - 1 && (
-                    <div className="absolute left-5 top-12 w-px h-6 bg-gray-200 dark:bg-gray-600 transition-colors duration-200"></div>
+                    <div className="absolute left-5 top-[53px] w-px h-6 bg-gray-200 dark:bg-gray-600 transition-colors duration-200"></div>
                   )}
                   
                   <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -128,7 +134,8 @@ const queryClient = useQueryClient();
                     </svg>
                   </button>}
                 </div>
-              ))}
+              ))
+              )}
             </div>
             
             {/* <div className="mt-6">

@@ -31,6 +31,9 @@ import { userDetails } from "@/app/(auth)/api/getAuthenticatedUser";
 import { recentDivetranslations } from "@/app/(main)/translation/diveSitesTranslation";
 import { useLanguage } from "@/hooks/useLanguage";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import RatingModal from './RatingModal';
+import { DiveSiteSkeleton } from '@/components/core';
+import { useRouter } from "next/navigation";
 
 interface prop {
   user: userDetails | undefined;
@@ -44,33 +47,6 @@ interface prop {
   ) => Promise<InfiniteQueryObserverResult<divSitesProp, unknown>>;
 }
 
-// ✅ IntersectionObserver hook
-const useInfiniteObserver = (
-  ref: React.RefObject<Element>,
-  onIntersect: () => void,
-  hasNextPage: boolean | undefined,
-  isFetchingNextPage: boolean
-) => {
-  useEffect(() => {
-    if (!ref.current || !hasNextPage || isFetchingNextPage) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          onIntersect();
-        }
-      },
-      { threshold: 0.5 } // Trigger when half of the element is visible
-    );
-
-    const current = ref.current;
-    observer.observe(current);
-
-    return () => {
-      if (current) observer.unobserve(current);
-    };
-  }, [ref, hasNextPage, isFetchingNextPage, onIntersect]);
-};
 
 const RecentDiveSites = ({
   data,
@@ -88,6 +64,8 @@ const RecentDiveSites = ({
   const favoriteSites = user?.diver_profile.favourite_sites || [];
   const [loadingItemId, setLoadingItemId] = useState<number | null>(null);
   const [myFavourite, setMyFavourite] = useState<number[]>(favoriteSites);
+  const [ratingModalOpen, setRatingModalOpen] = useState(false);
+  const [selectedDiveSite, setSelectedDiveSite] = useState<diveSiteResult | null>(null);
 
   useEffect(() => {
     setMyFavourite(favoriteSites);
@@ -149,11 +127,40 @@ const RecentDiveSites = ({
     }
   };
 
+  const handleRatingClick = (diveSite: diveSiteResult) => {
+    setSelectedDiveSite(diveSite);
+    setRatingModalOpen(true);
+  };
+
+  const handleShare = async (item: diveSiteResult, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const shareUrl = `${window.location.origin}/dive-sites/${item.slug}`;
+    const shareData = {
+      title: item.title,
+      text: `Check out this dive site: ${item.title} at ${item.address}`,
+      url: shareUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        console.log('Error sharing:', error);
+      }
+    } else {
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success('Link copied to clipboard!');
+    }
+  };
+
+const router = useRouter()
   return (
     <div className="transition-colors">
       {loading ? (
-        <div className="flex justify-center items-center py-8">
-          <SmallSpinner />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6">
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <DiveSiteSkeleton key={idx} />
+          ))}
         </div>
       ) : (
         <>
@@ -179,9 +186,10 @@ const RecentDiveSites = ({
             next={fetchMore}
             hasMore={hasNextPage || false}
             loader={
-              <div className="flex justify-center items-center py-4">
-                <SmallSpinner />
-                <span className="ml-2 text-gray-600">{t.loadingMore}</span>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 mt-6">
+                {Array.from({ length: 2 }).map((_, idx) => (
+                  <DiveSiteSkeleton key={idx} />
+                ))}
               </div>
             }
             endMessage={
@@ -196,6 +204,7 @@ const RecentDiveSites = ({
               {allDiveSites.map((item, idx) => (
                 <div
                   key={`${item.id}-${idx}`}
+                  onClick={()=>router.push(`/dive-sites/${item?.slug}`)}
                   className="bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-2 px-2 md:px-4 border border-gray-200 dark:border-gray-700"
                 >
                   <div 
@@ -225,7 +234,7 @@ const RecentDiveSites = ({
                             )}
                           </div>
                           <div className="flex items-center flex-wrap gap-[10px]">
-                            <p className="text-white font-archivo font-semibold text-xs sm:text-sm md:text-lg">
+                            <p className="text-white font-archivo font-semibold text-xs lg:text-sm 2xl:text-lg">
                               {item?.title}
                             </p>
                             <div className="flex items-center bg-[#C5EFFF] min-w-[80px] justify-center gap-[.3531rem] py-1 px-[.4063rem] rounded-lg">
@@ -238,7 +247,7 @@ const RecentDiveSites = ({
                           </div>
                         </div>
 
-                        <h2 className="font-semibold py-1 md:py-3 text-xs sm:text-sm md:text-lg lg:text-xl 2xl:text-2xl text-white">
+                        <h2 className="font-semibold py-1 md:py-3 text-xs  xl:text-lg lg:text-xl 2xl:text-2xl text-white">
                           {item?.address}
                         </h2>
 
@@ -270,7 +279,10 @@ const RecentDiveSites = ({
                             ? "bg-[#F7931D] text-white"
                             : "bg-white text-[#4D5869]"
                           } h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-2xl shrink-0 p-0 font-archivo text-xs font-medium flex items-center gap-[.3125rem]`}
-                        onClick={() => handleSave(item)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSave(item);
+                        }}
                         disabled={loadingItemId === item.id}
                       >
                         {loadingItemId === item.id ? (
@@ -282,7 +294,13 @@ const RecentDiveSites = ({
                       {/* <Button title={t.share} className="bg-[#F9FAFB] hover:bg-gray-100 p-0 h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center">
                         <LikeIcon />
                       </Button> */}
-                      <Button className="bg-[#F9FAFB] hover:bg-gray-100 relative h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center">
+                      <Button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRatingClick(item);
+                        }}
+                        className="bg-[#F9FAFB] hover:bg-gray-100 relative h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center"
+                      >
                         <div className="relative">
                           <MessageIcon2 />
                           <div className="absolute -top-4 -right-3 w-[1.3rem] h-[1.3rem] bg-[#F7931D] rounded-full flex items-center justify-center">
@@ -290,7 +308,11 @@ const RecentDiveSites = ({
                           </div>
                         </div>
                       </Button>
-                      <Button title={t.share} className="bg-[#F9FAFB] hover:bg-gray-100 p-0 h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center">
+                      <Button 
+                        title={t.share} 
+                        onClick={(e) => handleShare(item, e)}
+                        className="bg-[#F9FAFB] hover:bg-gray-100 p-0 h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center"
+                      >
                         <ShareIcon2 />
                       </Button>
                     </div>
@@ -313,6 +335,21 @@ const RecentDiveSites = ({
         setErrorModalState={() => setErrorModalState(false)}
         subheading={errorModalMessage || "Please check your inputs and try again."}
       />
+      
+      {selectedDiveSite && (
+        <RatingModal
+          isOpen={ratingModalOpen}
+          onClose={() => {
+            setRatingModalOpen(false);
+            setSelectedDiveSite(null);
+          }}
+          // onSubmit={handleRatingSubmit}
+           removeModal={setRatingModalOpen}
+          
+          diveSiteId={selectedDiveSite.id}
+          diveSiteName={selectedDiveSite.title}
+        />
+      )}
     </div>
   );
 };

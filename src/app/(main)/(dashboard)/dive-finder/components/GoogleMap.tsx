@@ -14,94 +14,69 @@ interface prop {
 const GoogleMap = ({ diveSites}: prop) => {
     const mapRef = useRef<HTMLDivElement>(null)
     const mapInstance = useRef<google.maps.Map | null>(null)
-    const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([])
+    const markersRef = useRef<google.maps.Marker[]>([])
     const [isMapLoaded, setIsMapLoaded] = useState(false)
     
     // Function to clear existing markers
     const clearMarkers = useCallback(() => {
         markersRef.current.forEach(marker => {
-            marker.map = null // Remove marker from map
+            marker.setMap(null)
         })
         markersRef.current = []
     }, [])
 
     // Function to add markers for dive sites
-const addMarkers = useCallback(async (sites: diveSiteResult[], map: google.maps.Map) => {
-  if (!sites || sites.length === 0) return;
+    const addMarkers = useCallback((sites: diveSiteResult[], map: google.maps.Map) => {
+        if (!sites || sites.length === 0) return
 
-  try {
-    const loader = new Loader({
-      apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-      version: "quarterly",
-      libraries: ["places"]
-    });
+        sites.forEach((site, index) => {
+            const lat = Number(site?.lag)
+            const lng = Number(site?.lon)
 
-    const { AdvancedMarkerElement } = await loader.importLibrary("marker") as google.maps.MarkerLibrary;
+            if (!isNaN(lat) && !isNaN(lng)) {
+                const marker = new google.maps.Marker({
+                    position: { lat, lng },
+                    map: map,
+                    title: site?.title || `Dive Site ${index + 1}`
+                })
 
-    sites.forEach((site, index) => {
-      const lat = Number(site?.lag);
-      const lng = Number(site?.lon);
-
-      if (!isNaN(lat) && !isNaN(lng)) {
-        const marker = new AdvancedMarkerElement({
-          position: { lat, lng },
-          title: site?.title || `Dive Site ${index + 1}`
-        });
-
-        marker.map = map; // ✅ attach marker to map
-        markersRef.current.push(marker);
-      }
-    });
-  } catch (error) {
-    console.error("Error adding markers:", error);
-  }
-}, []);
+                markersRef.current.push(marker)
+            }
+        })
+    }, [])
 
 
 
-    // Initialize map
+    // Initialize map once
     useEffect(() => {
         const initMap = async () => {
+            if (!mapRef.current || mapInstance.current) return
+            
             try {
+                const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+                if (!apiKey) {
+                    console.error('Google Maps API key is missing')
+                    return
+                }
+                
                 const loader = new Loader({
-                    apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+                    apiKey,
                     version: "quarterly",
                     libraries: ["places"]
                 })
                 
                 const { Map } = await loader.importLibrary("maps")
                 
-                // Calculate center from dive sites if available
-                let centerLocation = { lat: 40.73061, lng: -73.935242 } // Default location
-                
-                if (diveSites && diveSites.length > 0) {
-                    const validSites = diveSites.filter(site => 
-                        site?.lag && site?.lon && 
-                        !isNaN(Number(site.lag)) && !isNaN(Number(site.lon))
-                    )
-                    
-                    if (validSites.length > 0) {
-                        const avgLat = validSites.reduce((sum, site) => sum + Number(site.lag), 0) / validSites.length
-                        const avgLng = validSites.reduce((sum, site) => sum + Number(site.lon), 0) / validSites.length
-                        centerLocation = { lat: avgLat, lng: avgLng }
-                    }
-                }
-                
                 const options: google.maps.MapOptions = {
-                    center: centerLocation,
-                    zoom: diveSites && diveSites.length > 1 ? 10 : 15,
-                    mapId: "map",
+                    center: { lat: 40.73061, lng: -73.935242 },
+                    zoom: 10,
                     mapTypeControl: false,
                     fullscreenControl: false,
                     streetViewControl: false
                 }
                 
-                const map = new Map(mapRef.current as HTMLElement, options)
+                const map = new Map(mapRef.current, options)
                 mapInstance.current = map
-                
-                // Add event listeners
-              
-                
                 setIsMapLoaded(true)
                 
             } catch (error) {
@@ -109,16 +84,27 @@ const addMarkers = useCallback(async (sites: diveSiteResult[], map: google.maps.
             }
         }
 
-        if (!isMapLoaded) {
-            initMap()
-        }
+        initMap()
     }, [])
 
     // Update markers when diveSites change
     useEffect(() => {
-        if (isMapLoaded && mapInstance.current && diveSites) {
+        if (isMapLoaded && mapInstance.current && diveSites?.length > 0) {
             clearMarkers()
             addMarkers(diveSites, mapInstance.current)
+            
+            // Center map on dive sites
+            const validSites = diveSites.filter(site => 
+                site?.lag && site?.lon && 
+                !isNaN(Number(site.lag)) && !isNaN(Number(site.lon))
+            )
+            
+            if (validSites.length > 0) {
+                const avgLat = validSites.reduce((sum, site) => sum + Number(site.lag), 0) / validSites.length
+                const avgLng = validSites.reduce((sum, site) => sum + Number(site.lon), 0) / validSites.length
+                mapInstance.current.setCenter({ lat: avgLat, lng: avgLng })
+                mapInstance.current.setZoom(validSites.length > 1 ? 10 : 15)
+            }
         }
     }, [diveSites, isMapLoaded, addMarkers, clearMarkers])
 
@@ -126,10 +112,15 @@ const addMarkers = useCallback(async (sites: diveSiteResult[], map: google.maps.
 
     return (
         <div className="relative w-full h-[83vh] mt-[4rem] dark:bg-gray-900">
+            {!isMapLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+                        <p className="text-gray-600 dark:text-gray-400">Loading map...</p>
+                    </div>
+                </div>
+            )}
             <div ref={mapRef} className="w-full h-full" />
-            
-          
-            
         </div>
     )
 }

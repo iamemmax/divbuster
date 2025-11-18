@@ -137,7 +137,7 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
         const timeoutId = setTimeout(() => {
           const pacContainer = document.querySelector('.pac-container') as HTMLElement;
           if (pacContainer) {
-            pacContainer.style.zIndex = '10000';
+            pacContainer.style.zIndex = '99999999999999999999';
             pacContainer.style.position = 'absolute';
           }
         }, 100);
@@ -179,7 +179,7 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
         const pacContainers = document.querySelectorAll('.pac-container');
         pacContainers.forEach((container: Element) => {
           const htmlContainer = container as HTMLElement;
-          htmlContainer.style.zIndex = '10000';
+          htmlContainer.style.zIndex = '99999999999999999999';
           htmlContainer.style.position = 'absolute';
           htmlContainer.style.pointerEvents = 'auto';
           htmlContainer.style.display = 'block';
@@ -287,7 +287,7 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
       {/* Global styles for Google Places dropdown - injected once */}
       <style jsx global>{`
         .pac-container {
-          z-index: 10000 !important;
+          z-index: 99999999999999999999 !important;
           border-radius: 8px;
           border: 1px solid #e5e7eb;
           box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);

@@ -383,11 +383,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
 
                       {/* Coordinates Overlay */}
                       <div className="absolute top-2 left-4 max-md:left-2 text-white  md:py-4 px-3 md:px-[2.75rem] w-full">
-                        {/* <div className="flex justify-end max-md:pr-2 items-center w-full">
-                          <Button className="bg-transparent border-none py-[.5206rem] rounded-2xl text-[#F7931D] dark:text-[#F7931D] text-xs md:text-sm font-medium flex items-center gap-[.3125rem] border dark:border-gray-600">
-                            <ColorCheckIcon />
-                          </Button>
-                        </div> */}
+                        
                         <div className="">
                           <div className="flex items-center flex-wrap gap-[5px] xl:gap-[20px]">
 

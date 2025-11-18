@@ -11,11 +11,17 @@ export const isActiveLink = (pathname: string, href: string) => {
     return pathname === '/dashboard' || pathname === '/dashboard/';
   }
   
-  // For other routes, match exact path or direct child routes
+  // Normalize paths
   const normalizedHref = href.endsWith('/') ? href.slice(0, -1) : href;
   const normalizedPathname = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
   
-  return normalizedPathname === normalizedHref;
+  // Exact match
+  if (normalizedPathname === normalizedHref) {
+    return true;
+  }
+  
+  // Check if pathname starts with href (for nested routes like /div-log/123)
+  return normalizedPathname.startsWith(normalizedHref + '/');
 };
 
 export const useActivePath = () => {

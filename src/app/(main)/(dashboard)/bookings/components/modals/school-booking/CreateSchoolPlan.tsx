@@ -500,7 +500,8 @@ const {language} = useLanguage()
   // Fetch hooks
   const watchSchool = createForm?.watch("div_school")
   const watchEventDateId = createForm.watch("dive_event_id")
-  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } = useFetchDiveSchools()
+  const watchLocation = createForm.watch("location")
+  
   const {
     data: diveSitesData,
     fetchNextPage: fetchNextPageDiveSites,
@@ -508,6 +509,13 @@ const {language} = useLanguage()
     isLoading: isLoadingDiveSites,
     isFetchingNextPage: isFetchingNextPageDiveSite,
   } = useFetchDiveSites()
+  
+  // Get selected location address for filtering diving schools
+  const selectedLocationAddress = diveSitesData?.pages
+    .flatMap(page => page.data?.results || [])
+    .find(site => String(site?.id) === watchLocation)?.address
+  
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } = useFetchDiveSchools(selectedLocationAddress)
   const {
     data: diveEventData,
     fetchNextPage: fetchNextPageDiveEvent,

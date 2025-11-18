@@ -108,6 +108,16 @@ const {language}= useLanguage()
     return <Dot cx={cx} cy={cy} r={2} fill="#FFD700" />;
   };
 
+  if (isLoading) {
+    return (
+      <div className="p-4 space-y-5">
+        {Array.from({ length: 3 }).map((_, idx) => (
+          <DiveLogSkeleton key={idx} />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 space-y-5">
       {/* Heart Rate Section */}

@@ -59,7 +59,7 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         className={cn(
-          'relative z-50 max-h-52 min-w-[8rem] overflow-hidden rounded-md border bg-white animate-in slide-in-from-top-2',
+          'relative z-[9999999999999999999] max-h-52 min-w-[8rem] overflow-hidden rounded-md border bg-white animate-in slide-in-from-top-2',
           position === 'popper' && 'translate-y-0',
           className
         )}

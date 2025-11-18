@@ -1,147 +1,129 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import Header from "../../components/shared/Header";
 import { useUser } from "@/app/(auth)/api/getAuthenticatedUser";
 import { diveSiteResult, divSitesProp, useFetchDiveSites } from "../api/div-sites/fetch-dive-sites";
-import GoogleMap from "./components/GoogleMap";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query";
 import { DebouncedSearchInput } from "@/components/core/DebouncedSearchInput";
 import { Search } from "lucide-react";
-import CreateBuddyPlanMap from "./components/CreateBuddyPlanMap";
 import { useAuth } from "@/contexts/authentication";
 import { diverBuddiesTranslations } from "../../translation/diveBuddiesTranslation";
 import { Language } from "../../translation/dashboardTranslation";
 import { buddyListProp, buddyResult, useFetchBuddyList } from "../api/buddy/fetchBudies";
-import BuddiesIcon from "@/app/icons/(dashboard)/BuddiesIcon";
-import BuddyIcon from "@/app/icons/(dashboard)/BuddyIcon";
-import MapMarker from "@/app/icons/(dashboard)/MapMarker";
 
-interface buddyProp {
-  buddyList: buddyResult[]
- FetchBuddyNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<buddyListProp, unknown>>
-hasNextBuddyPage: boolean | undefined
-isFetchBuddyNextPage: boolean
+// Lazy load heavy components
+const DiveSiteLeafletMap = lazy(() => import("./components/DiveSiteLeafletMap"));
+const CreateBuddyPlanMap = lazy(() => import("./components/CreateBuddyPlanMap"));
+const BuddiesAroundMe = lazy(() => import("./components/BuddiesAroundMe"));
 
-}
+// Loading component
+const MapLoader = () => (
+  <div className="flex items-center justify-center h-96 bg-gray-100 dark:bg-gray-800 rounded-lg">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-2"></div>
+      <p className="text-gray-600 dark:text-gray-400">Loading map...</p>
+    </div>
+  </div>
+);
 
 
 interface prop {
-    diveSites: diveSiteResult[]
-    hasNextPage: boolean | undefined;
-    isFetchingNextPage: boolean
-    fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<divSitesProp, unknown>>
-}
-// Nearest Dive Site Component - simplified without Wrapper
-function NearestDiveSite({ diveSites, fetchNextPage,hasNextPage,isFetchingNextPage}: prop) {
-  return (
-    <div className="flex-1">
-      <GoogleMap diveSites={diveSites}  hasNextPage={hasNextPage} fetchNextPage={fetchNextPage} isFetchingNextPage={isFetchingNextPage}/>
-    </div>
-  );
-}
-
-// Create Dive Plan Component
-function CreateDivePlan({FetchBuddyNextPage,buddyList,hasNextBuddyPage,isFetchBuddyNextPage}:buddyProp) {
-
-    
-  return (
-    <div className="flex-1">
-      <CreateBuddyPlanMap buddyList={buddyList}  fetchNextPage={FetchBuddyNextPage}isFetchingNextPage={isFetchBuddyNextPage} hasNextPage={hasNextBuddyPage} />
-    </div>
-  );
-}
-
-// Find Buddy Component
-function FindBuddy() {
-
-  return (
-    <div className="flex-1 p-6 bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-md mx-auto bg-white  dark:bg-gray-900 rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Find Buddy</h2>
-        {/* Add your find buddy form here */}
-         <MapMarker className="w-6 h-6 text-blue-500" />
-      </div>
-    </div>
-  );
+  diveSites: diveSiteResult[]
+  hasNextPage: boolean | undefined;
+  isFetchingNextPage: boolean
+  fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<divSitesProp, unknown>>
 }
 
 // Main DiveMap Component
 export default function DiveMap() {
   const { data: user } = useUser();
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState("nearest");
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'nearest';
 
-    const language: Language = (user?.data?.profile_details?.language as Language);
-    const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
+  const language: Language = (user?.data?.profile_details?.language as Language);
+  const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
   
   const apiParams = {
     lang: user?.data?.profile_details?.language || "en",
     favorite: "",
     search,
-    paginate:"yes"
+    paginate: "no"
   };
 
   const {
     data,
-  hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
+   
   } = useFetchDiveSites(apiParams);
 
   const { 
-      data: buddyList, 
-  
-      fetchNextPage:FetchBuddyNextPage,
-      hasNextPage:hasNextBuddyPage,
-      isFetchingNextPage:isFetchBuddyNextPage,
-    
-    } = useFetchBuddyList(language);
+    data: buddyList, 
+    fetchNextPage: FetchBuddyNextPage,
+    hasNextPage: hasNextBuddyPage,
+    isFetchingNextPage: isFetchBuddyNextPage,
+  } = useFetchBuddyList(language);
 
-  const diveSites = data?.pages?.flatMap((page) => page?.data?.results) || [];
-  const diveBuddirsData = buddyList?.pages?.flatMap((page) => page?.results) || [];
+ 
 
-  const tabs = [
-    { id: "nearest", label: "Nearest Dive Site", component: <NearestDiveSite diveSites={diveSites} hasNextPage={hasNextPage} fetchNextPage={fetchNextPage} isFetchingNextPage={isFetchingNextPage}/> },
-    { id: "plan", label: "Create Dive Plan", component: <CreateDivePlan isFetchBuddyNextPage={isFetchBuddyNextPage}  buddyList={diveBuddirsData} FetchBuddyNextPage={FetchBuddyNextPage} hasNextBuddyPage={hasNextBuddyPage}/> },
-    { id: "buddy", label: "Find Buddy", component: <FindBuddy /> },
-  ];
+  // Redirect to appropriate page based on tab
+  React.useEffect(() => {
+    if (activeTab === 'nearest') {
+      window.location.href = '/dive-finder/nearest';
+    } else if (activeTab === 'plan') {
+      window.location.href = '/dive-finder/plan';
+    } else if (activeTab === 'buddy') {
+      window.location.href = '/dive-finder/buddy';
+    }
+  }, [activeTab]);
 
   return (
     <div className="flex relative flex-col h-screen">
       {/* Header */}
-      <Header title="Dive Finder" subtitle="" />
+      <Header title="Buddy Finder" subtitle="" />
 
       {/* Tabs */}
-      <div className="flex gap-4 px-4 pb-5 md:p-4 bg-white dark:bg-gray-900 flex-wrap  absolute top-[6rem] inset-x-0 z-30 shadow-md">
-         <div className="relative flex-1 w-full">
-                    <DebouncedSearchInput
-                      placeholder="Search for dive buddy, dive location, etc."
-                      onSearch={setSearch}
-                      debounceTime={300}
-                      value={search}
-                      className="py-3"
-                      icon={<Search size={18} />}
-                    />           
-                  </div>
-      <div className="flex items-center gap-4">
-          {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`md:px-4 px-2  py-2 rounded transition-colors text-xs md:text-base ${
-              activeTab === tab.id
-                ? "bg-orange-500 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
+      <div className="flex gap-4  px-4 pb-5 md:p-4 bg-white dark:bg-gray-900 flex-wrap absolute top-[6rem] inset-x-0 z-30 shadow-md">
+        <div className="relative flex-1 w-full">
+          <DebouncedSearchInput
+            placeholder="Search for buddy, dive location, etc."
+            onSearch={setSearch}
+            debounceTime={300}
+            value={search}
+            className="py-3"
+            icon={<Search size={18} />}
+          />           
+        </div>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/dive-finder/nearest"
+            className="md:px-4 px-2 py-2 rounded transition-colors text-xs md:text-base bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
           >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+            {t.nearestDiveSite}
+          </Link>
+          <Link
+            href="/dive-finder/plan"
+            className="md:px-4 px-2 py-2 rounded transition-colors text-xs md:text-base bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+          >
+            {t.createDivePlan}
+          </Link>
+          <Link
+            href="/dive-finder/buddy"
+            className="md:px-4 px-2 py-2 rounded transition-colors text-xs md:text-base bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+          >
+            {t.findBuddy}
+          </Link>
+        </div>
       </div>
 
-      {/* Active Tab Content */}
-      {tabs.find(tab => tab.id === activeTab)?.component}
+      {/* Default Content */}
+      <div className="mt-4 flex items-center justify-center h-96">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Choose an Option</h2>
+          <p className="text-gray-600 dark:text-gray-400">Select from the options above to view maps</p>
+        </div>
+      </div>
     </div>
   );
 }

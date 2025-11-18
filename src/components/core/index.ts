@@ -146,3 +146,4 @@ export { Switch } from './Switch';
 export { SuccessModal } from './SuccessModal';
 export { LogOutModal } from './LogoutModal';
 export { InActivityModal } from './InactivityModal';
+export { Skeleton, DiveSiteSkeleton, DiveLogSkeleton, DiveBuddySkeleton, SuggestedBuddySkeleton } from './Skeleton';

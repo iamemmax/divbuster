@@ -10,6 +10,7 @@ import { DebouncedSearchInput } from "@/components/core/DebouncedSearchInput"
 import { diveSiteTranslations } from "../../translation/diveSitesTranslation"
 import { Language } from "../../translation/dashboardTranslation"
 import { useLanguage } from "@/hooks/useLanguage"
+import { DiveSiteSkeleton } from "@/components/core"
 
 interface TabItem {
   id: string
@@ -82,9 +83,10 @@ const DiveSites = () => {
   const renderTabContent = (): JSX.Element => {
     if (isLoading) {
       return (
-        <div className="flex justify-center items-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
-          <span className="ml-2">{t.loading}</span>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6">
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <DiveSiteSkeleton key={idx} />
+          ))}
         </div>
       )
     }
@@ -136,7 +138,7 @@ const DiveSites = () => {
       <Header title={t.header} subtitle="" />
 
       {/* Mobile Sidebar Toggle */}
-      <div className="lg:hidden p-4">
+      {/* <div className="lg:hidden p-4">
         <Button
           onClick={toggleSidebar}
           className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
@@ -146,15 +148,16 @@ const DiveSites = () => {
           </svg>
           {t.button}
         </Button>
-      </div>
+      </div> */}
 
-      <div className="max-h-[80vh] overflow-y-auto p-2 md:p-6">
+      <div className="max-h-[88vh] overflow-y-auto p-2 md:p-6">
         {/* <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] 2xl:grid-cols-[3fr_1fr] gap-[1.3125rem] relative"> */}
         <div className="grid grid-cols-1 gap-[1.3125rem] relative">
           {/* Main Content */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
             {/* Tabs */}
-            <nav className="flex overflow-x-auto border-b mt-5 border-gray-200 dark:border-gray-700 scrollbar-hide bg-white dark:bg-gray-800" role="tablist">
+            <div className="flex justify-between xl:items-center gap-6 max-xl:flex-col px-4 xl:px-6">
+            <nav className="flex overflow-x-auto border-b mt-5 border-gray-200 dark:border-gray-700 scrollbar-hide bg-white dark:bg-gray-800 w-full xl:w-auto" role="tablist">
               {tabs?.map((tab) => (
                 <a
                   key={tab.id}
@@ -173,10 +176,7 @@ const DiveSites = () => {
                 </a>
               ))}
             </nav>
-
-            {/* Content */}
-            <main className="w-full p-3 md:p-6 bg-white dark:bg-gray-800" role="main">
-              <div className="mb-4">
+              <div className="w-full xl:max-w-md pt-3 xl:flex-shrink-0">
                 <DebouncedSearchInput
                   placeholder={t.searchPlaceholder}
                   onSearch={(value) => setSearch(value)}
@@ -185,12 +185,18 @@ const DiveSites = () => {
                   inputClassName="h-[3.5rem] rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
+
+            </div>
+
+            {/* Content */}
+            <main className="w-full p-3 md:p-6 bg-white dark:bg-gray-800" role="main">
+              
               {renderTabContent()}
             </main>
           </div>
 
           {/* Sidebar */}
-          <div
+          {/* <div
             className={`w-full h-full lg:sticky lg:top-6 lg:self-start ${
               sidebarOpen ? "block" : "hidden lg:block"
             } ${sidebarOpen ? "fixed inset-0 z-50 bg-white dark:bg-gray-900 p-4" : ""}`}
@@ -209,14 +215,14 @@ const DiveSites = () => {
               </div>
             )}
 
-            {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 lg:p-0">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 lg:p-0">
               <DiveSitesSidebar />
-            </div> */}
+            </div>
 
             {sidebarOpen && (
               <div className="lg:hidden fixed inset-0 bg-black/50 -z-10" onClick={toggleSidebar} />
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

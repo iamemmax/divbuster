@@ -95,7 +95,7 @@ const SelectField = ({
 
         {isOpen && (
           <div
-            className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border max-h-[300px] overflow-y-auto border-gray-300 dark:border-gray-600 rounded-lg shadow-lg"
+            className="absolute z-[9999999999999999999] w-full mt-1 bg-white dark:bg-gray-800 border max-h-[300px] overflow-y-auto border-gray-300 dark:border-gray-600 rounded-lg shadow-lg"
             onScroll={handleScroll}
           >
             {options.map((option) => (

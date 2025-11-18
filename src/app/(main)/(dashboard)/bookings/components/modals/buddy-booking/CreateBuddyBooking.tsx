@@ -40,7 +40,7 @@ const CreateBuddyBooking = ({isOpen,setIsOpenCardModal,user,selectedBuddies}:Pro
     }
   return (
     <Dialog open={isOpen}>
-      <DialogContent className="!max-w-[917px] !z-[9999999999999999999999999] !max-h-[95vh] bg-white dark:bg-gray-900">
+      <DialogContent className="!max-w-[917px] !z-[999999999999999999] !max-h-[95vh] bg-white dark:bg-gray-900">
         <DialogBody className="w-full max-md:px-2 p-0 outline-none text-gray-900 dark:text-white">
                <DialogHeader className="border-b flex items-center justify-between border-gray-200 dark:border-gray-700 pb-4">
                 <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">

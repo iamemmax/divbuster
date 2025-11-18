@@ -19,6 +19,9 @@ export const diverBuddiesTranslations = {
     loadMore: "Load more",
     loading: "Loading...",
     loadingMore: "Loading more...",
+    nearestDiveSite: "Nearest Dive Site",
+    createDivePlan: "Create Dive Plan",
+    findBuddy: "Find Buddy",
   },
   es: {
     myDiveBuddies: "Mis compañeros de buceo",
@@ -40,6 +43,9 @@ export const diverBuddiesTranslations = {
     loadMore: "Cargar más",
     loading: "Cargando...",
     loadingMore: "Cargando más...",
+    nearestDiveSite: "Sitio de buceo más cercano",
+    createDivePlan: "Crear plan de buceo",
+    findBuddy: "Encontrar compañero",
   },
   fr: {
     myDiveBuddies: "Mes partenaires de plongée",
@@ -61,6 +67,9 @@ export const diverBuddiesTranslations = {
     loadMore: "Charger plus",
     loading: "Chargement...",
     loadingMore: "Chargement en cours...",
+    nearestDiveSite: "Site de plongée le plus proche",
+    createDivePlan: "Créer un plan de plongée",
+    findBuddy: "Trouver un partenaire",
   },
   nl: {
     myDiveBuddies: "Mijn duikmaatjes",
@@ -82,6 +91,9 @@ export const diverBuddiesTranslations = {
     loadMore: "Meer laden",
     loading: "Bezig met laden...",
     loadingMore: "Meer laden...",
+    nearestDiveSite: "Dichtstbijzijnde duiklocatie",
+    createDivePlan: "Duikplan maken",
+    findBuddy: "Maatje zoeken",
   },
 };
 
