@@ -150,7 +150,7 @@ const BasicInfoForm = ({
               </SelectTrigger>
               <CaretDown 
                 color="#8D9196" 
-                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                className={`absolute right-3 top-1/2 transform dark:hidden -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
                   isOpen ? 'rotate-180' : ''
                 }`}
               />

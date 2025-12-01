@@ -6,9 +6,10 @@ import RatingModal from '../../dive-sites/components/RatingModal'
 
 interface DiveSiteLeafletMapProps {
     diveSites: diveSiteResult[]
+    isLoading?: boolean
 }
 
-const DiveSiteLeafletMap = ({ diveSites }: DiveSiteLeafletMapProps) => {
+const DiveSiteLeafletMap = ({ diveSites, isLoading }: DiveSiteLeafletMapProps) => {
     const mapRef = useRef<HTMLDivElement>(null)
     const mapInstance = useRef<any>(null)
     const router = useRouter()
@@ -55,7 +56,10 @@ const DiveSiteLeafletMap = ({ diveSites }: DiveSiteLeafletMapProps) => {
 
         console.log('Dive sites data:', diveSites?.length || 0, diveSites)
         
-        if (!mapInstance.current || !diveSites?.length) return
+        if (!mapInstance.current || !diveSites?.length) {
+            console.log('Map not ready or no dive sites')
+            return
+        }
 
         const L = require('leaflet')
         
@@ -65,10 +69,15 @@ const DiveSiteLeafletMap = ({ diveSites }: DiveSiteLeafletMapProps) => {
             }
         })
 
-        const validSites = diveSites.filter(site => 
-            site?.lag && site?.lon && 
-            !isNaN(Number(site.lag)) && !isNaN(Number(site.lon))
-        )
+        const validSites = diveSites.filter(site => {
+            const lat = Number(site?.lag)
+            const lng = Number(site?.lon)
+            const isValid = site?.lag && site?.lon && !isNaN(lat) && !isNaN(lng)
+            if (!isValid) {
+                console.log('Invalid site coordinates:', site.title, { lat: site.lag, lng: site.lon })
+            }
+            return isValid
+        })
         
         console.log('Valid dive sites:', validSites.length, validSites)
 
@@ -129,34 +138,39 @@ const DiveSiteLeafletMap = ({ diveSites }: DiveSiteLeafletMapProps) => {
                 
                 console.log(`Creating marker ${index} for ${site.title} at [${lat}, ${lng}]`)
                 
-                const marker = L.marker([lat, lng], { icon: createCustomIcon() })
-                    .addTo(mapInstance.current)
-                
-                const rating = site.average_rating || 0
-                const fullStars = Math.floor(rating)
-                const hasHalfStar = rating % 1 >= 0.5
-                const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0)
-                
-                const starDisplay = '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars)
-                
-                const tooltipContent = `
-                    <div style="padding: 12px; min-width: 200px; font-family: Arial, sans-serif;">
-                        <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #1f2937;">${site.title}</h3>
-                        <div style="margin: 0 0 8px 0; display: flex; align-items: center; gap: 4px;">
-                            <span style="color: #fbbf24; font-size: 14px;">${starDisplay}</span>
-                            <span style="font-size: 12px; color: #6b7280;">(${rating.toFixed(1)})</span>
+                try {
+                    const rating = site.average_rating || 0
+                    const fullStars = Math.floor(rating)
+                    const hasHalfStar = rating % 1 >= 0.5
+                    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0)
+                    
+                    const starDisplay = '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars)
+                    
+                    const tooltipContent = `
+                        <div style="padding: 12px; min-width: 200px; font-family: Arial, sans-serif;">
+                            <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #1f2937;">${site.title}</h3>
+                            <div style="margin: 0 0 8px 0; display: flex; align-items: center; gap: 4px;">
+                                <span style="color: #fbbf24; font-size: 14px;">${starDisplay}</span>
+                                <span style="font-size: 12px; color: #6b7280;">(${rating.toFixed(1)})</span>
+                            </div>
+                            <p style="margin: 0 0 8px 0; font-size: 12px; color: #6b7280;">${site.address}</p>
+                            <p style="margin: 0 0 8px 0; font-size: 12px; color: #6b7280;">${site.description || 'No description available'}</p>
+                            <p style="margin: 0 0 12px 0; font-size: 12px; color: #6b7280;"><strong>Coordinates:</strong> Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}</p>
+                            <div style="display: flex; gap: 8px;">
+                                <button onclick="viewSite('${site.slug}')" style="flex: 1; background: #3b82f6; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;">View</button>
+                                <button onclick="rateSite('${site.id}')" style="flex: 1; background: #f59e0b; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;">Rate</button>
+                            </div>
                         </div>
-                        <p style="margin: 0 0 8px 0; font-size: 12px; color: #6b7280;">${site.address}</p>
-                        <p style="margin: 0 0 8px 0; font-size: 12px; color: #6b7280;">${site.description || 'No description available'}</p>
-                        <p style="margin: 0 0 12px 0; font-size: 12px; color: #6b7280;"><strong>Coordinates:</strong> Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}</p>
-                        <div style="display: flex; gap: 8px;">
-                            <button onclick="viewSite('${site.slug}')" style="flex: 1; background: #3b82f6; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;">View</button>
-                            <button onclick="rateSite('${site.id}')" style="flex: 1; background: #f59e0b; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;">Rate</button>
-                        </div>
-                    </div>
-                `
-                
-                marker.bindPopup(tooltipContent)
+                    `
+                    
+                    const marker = L.marker([lat, lng], { icon: createCustomIcon() })
+                        .addTo(mapInstance.current)
+                        .bindPopup(tooltipContent)
+                    
+                    console.log(`Marker ${index} added successfully for ${site.title}`)
+                } catch (error) {
+                    console.error(`Error creating marker ${index} for ${site.title}:`, error)
+                }
             })
 
             const group = new L.featureGroup(
@@ -176,6 +190,15 @@ const DiveSiteLeafletMap = ({ diveSites }: DiveSiteLeafletMapProps) => {
                 }
             `}</style>
             <div ref={mapRef} className="w-full h-full" id={`dive-map-${Math.random().toString(36).substr(2, 9)}`} />
+            
+            {isLoading && (
+                <div className="absolute inset-0 bg-white bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 flex items-center justify-center z-[1000]">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+                        <p className="text-gray-600 dark:text-gray-300">Loading nearest dive sites...</p>
+                    </div>
+                </div>
+            )}
             
            {ratingModalOpen && selectedDiveSite && <RatingModal
                 isOpen={ratingModalOpen}

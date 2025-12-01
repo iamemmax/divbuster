@@ -33,7 +33,7 @@ const DiveSites = () => {
     lang: language,
     favorite: activeTab === "favouriteDiveSite" ? "yes" : "",
     search,
-    paginate: "no",
+    paginate: "yes",
   }
 
   const {
@@ -49,7 +49,7 @@ const DiveSites = () => {
   const tabs: TabItem[] = [
     { id: "recentDiveSites", label: t.recent, href: "?tab=recentDiveSites" },
     { id: "favouriteDiveSite", label: t.favourite, href: "?tab=favouriteDiveSite" },
-    { id: "divesitesNearYou", label: t.discover, href: "?tab=divesitesNearYou" },
+    // { id: "divesitesNearYou", label: t.discover, href: "?tab=divesitesNearYou" },
   ]
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const DiveSites = () => {
     }
   }
 
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
+  // const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
   const renderTabContent = (): JSX.Element => {
     if (isLoading) {

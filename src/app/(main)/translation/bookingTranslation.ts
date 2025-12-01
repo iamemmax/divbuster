@@ -198,8 +198,8 @@ export const bookingActionTranslations = {
   en: {
     chooseAction: "Choose a booking action",
     buddy: "Book with Buddy",
-    school: "Book with School/Community",
-    diveSpot: "Book with Dive Spot",
+    school: "Book with School",
+    diveSpot: "Book with Community",
   },
   es: {
     chooseAction: "Elige una acción de reserva",

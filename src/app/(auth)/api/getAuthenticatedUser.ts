@@ -1,6 +1,13 @@
-import { certificates } from "@/app/(main)/(dashboard)/api/buddy/fetchBuddyProfile";
+import { certificates, Lastdivedetail } from "@/app/(main)/(dashboard)/api/buddy/fetchBuddyProfile";
 import { adminAxios } from "@/lib/axios";
 import { useQuery } from "react-query";
+
+
+
+
+
+
+
 
 
 export interface userDetails {
@@ -14,9 +21,9 @@ export interface User {
   diver_profile: Diverprofile;
   current_location: Currentlocation;
   wallet: Wallet;
-  archievements: null;
-  certificates: certificates[];
-  active_subscription: null;
+  user_archievements: Userarchievement[];
+  certificates: Certificate[];
+  active_subscription: Activesubscription;
   latest_transactions: Latesttransaction[];
   dashboard_analysis: Dashboardanalysis;
   suggested_divers: Suggesteddiver[];
@@ -34,7 +41,7 @@ export interface User {
 interface Suggesteddiver {
   id: number;
   full_name: string;
-  profile_picture: null | string;
+  profile_picture: null;
   coordinate: Coordinate;
   invite_id: string;
   recent_dive_info: Recentdiveinfo;
@@ -72,13 +79,58 @@ interface Latesttransaction {
   transaction_type: string;
   payment_method: string;
   transaction_status: string;
-  payment_gateway: null;
-  return_url: null;
+  payment_gateway: null | string;
+  return_url: null | string;
   narration: string;
   reference: string;
   created_on: string;
   updated_on: string;
-  plan: number;
+  plan: null | number;
+}
+
+interface Activesubscription {
+  id: number;
+  start_date: string;
+  end_date: string;
+  status: string;
+  user: number;
+  subscription: number;
+}
+
+interface Certificate {
+  id: number;
+  image: string;
+  certification_no: string;
+  trainer_no: string;
+  full_name: string;
+  issuer: string;
+  issuer_name: string;
+  certificate_type: string;
+  issue_date: string;
+  date_of_birth: string;
+  school_name: string;
+  trainer_name: string;
+  created_on: string;
+}
+
+interface Userarchievement {
+  id: number;
+  archievements: Archievement[];
+  created_on: string;
+  updated_on: string;
+}
+
+interface Archievement {
+  id: number;
+  image: string;
+  title: string;
+  achievement_type: string;
+  dive_count: number;
+  description: string;
+  reward: null;
+  reward_amount: number;
+  created_on: string;
+  updated_on: string;
 }
 
 interface Wallet {
@@ -95,9 +147,11 @@ interface Currentlocation {
 }
 
 interface Diverprofile {
-  id: string;
+  id: number;
   dive_spots: number;
   dive_image: null;
+  last_dive: null;
+  last_dive_detail: Lastdivedetail;
   certification_level: null;
   dive_count: number;
   public: boolean;
@@ -109,21 +163,13 @@ interface Diverprofile {
   shoe_size: string;
   shoe_value: number;
   diver_type: string;
-  facebook: string;
+  facebook: null;
   online: boolean;
-  created_on: string;
-  updated_on: string;
   favourite_sites: number[];
 }
-interface Downline {
-  id: number;
-  name: string;
-  image: null;
-  username: string;
-  date_joined: string;
-}
+
 interface Profiledetails {
-  id: string;
+  id: number;
   downlines: Downline[];
   language: string;
   phone_number: string;
@@ -134,25 +180,17 @@ interface Profiledetails {
   profile_picture: string;
   referral_code: string;
   verified: boolean;
-  verification_token: string;
-  auth_provider: string;
-  token_expiry: string;
-  stripe_customer_id: null;
-  created_on: string;
-  updated_on: string;
   country: number;
   referred_by: null;
 }
 
-
-
-
-
-
-
-
-
-
+interface Downline {
+  id: number;
+  name: string;
+  image: null;
+  username: string;
+  date_joined: string;
+}
 
 
 

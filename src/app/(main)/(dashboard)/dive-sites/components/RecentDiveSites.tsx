@@ -185,6 +185,8 @@ const router = useRouter()
             dataLength={allDiveSites.length}
             next={fetchMore}
             hasMore={hasNextPage || false}
+            height={600}
+            scrollThreshold={0.8}
             loader={
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 mt-6">
                 {Array.from({ length: 2 }).map((_, idx) => (
@@ -283,12 +285,12 @@ const router = useRouter()
                           e.stopPropagation();
                           handleSave(item);
                         }}
-                        disabled={loadingItemId === item.id}
+                        disabled={loadingItemId === item?.id}
                       >
                         {loadingItemId === item.id ? (
-                          <SmallSpinner color={myFavourite.includes(item.id) ? "#fff" : "#F7931D"} />
+                          <SmallSpinner color={myFavourite.includes(item?.id) ? "#fff" : "#F7931D"} />
                         ) : (
-                          <HeartIcon fill={myFavourite.includes(item.id) ? "#fff" : "#fff"} />
+                          <HeartIcon fill={myFavourite.includes(item?.id) ? "#fff" : "#fff"} />
                         )}
                       </Button>
                       {/* <Button title={t.share} className="bg-[#F9FAFB] hover:bg-gray-100 p-0 h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center">

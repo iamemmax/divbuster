@@ -33,7 +33,7 @@ const {language}=useLanguage()
   };
 
   return (
-    <div className="flex 2xl:max-h-[60vh] flex-col md:flex-row md:px-4 py-6 gap-6 md:gap-[50px] bg-white dark:bg-gray-900 transition-colors">
+    <div className="flex  flex-col xl:flex-row md:px-4 py-6 gap-6 md:gap-[50px] bg-white dark:bg-gray-900 transition-colors">
       {/* Sidebar */}
       <div className="w-full max-w-md mt-10 rounded-lg">
         <div className="pb-3 max-w-xs">
@@ -83,7 +83,7 @@ const {language}=useLanguage()
       </div>
 
       {/* Main Content - Scrollable */}
-      <div className="flex-1 w-full mt-6 overflow-y-auto max-h-[calc(70vh-0rem)] p-4 bg-white dark:bg-gray-800 rounded-lg transition-colors">
+      <div className="flex-1 w-full mt-6 overflow-y-auto max-h-[90vh] p-4 bg-white dark:bg-gray-800 rounded-lg transition-colors">
         {renderComponent()}
       </div>
 

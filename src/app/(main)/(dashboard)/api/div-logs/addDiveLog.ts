@@ -33,8 +33,8 @@ interface payload {
 
 
 const createDiveLog = async ({data}:payload) => {
- const response = await adminAxios.post(`/dive/dive-plan/add`,{
-   data
+ const response = await adminAxios.post(`/dive/dive-log/add`,{
+   data:{...data,dive_site_id:Number(data?.dive_site_id)}
  });
     return response.data ;
 }

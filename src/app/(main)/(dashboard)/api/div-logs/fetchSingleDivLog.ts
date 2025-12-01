@@ -20,7 +20,7 @@ interface Data {
   user: number;
   dive_equipment:Diveequipment| null;
   dive_plan: Diveplan;
-  dive_photos: null;
+  dive_photos: Divephoto[];
   number: number;
   name: string;
   air_start: number;
@@ -90,9 +90,15 @@ interface Divesite {
   updated_on: string;
   country: number;
 }
+interface Divephoto {
+  id: number;
+  image: string;
+  created_on: string;
+  dive_log: number;
+}
 
 
-const fetchSingleDivLog = async (id:string) => {
+const fetchSingleDivLog = async (id:string):Promise<singleDiveProp> => {
  const response = await adminAxios.get(`divelog/${id}`);
     return response.data as singleDiveProp;
 }
@@ -101,5 +107,7 @@ export const usefetchSingleDivLog = (id:string) => {
   return useQuery({
     queryKey: ["single-div-log",id],
     queryFn: ()=>fetchSingleDivLog(id),
+    enabled:!!id
+    
   });
 };

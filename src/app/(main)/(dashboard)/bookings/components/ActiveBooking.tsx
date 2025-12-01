@@ -73,11 +73,45 @@ const {language} = useLanguage()
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
-        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-          <Loader2 className="animate-spin" size={20} />
-          <span>{t.loading}</span>
-        </div>
+      <div className="min-h-screen bg-white dark:bg-gray-900">
+        {/* Header Skeleton */}
+        <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+          <div className="py-4">
+            <div className="animate-pulse">
+              <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4"></div>
+              <div className="flex justify-between items-center">
+                <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
+                <div className="flex gap-3">
+                  <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+                  <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        
+        {/* Content Skeleton */}
+        <main className="bg-white dark:bg-gray-900 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-6">
+            {Array.from({ length: 4 }).map((_, idx) => (
+              <div key={idx} className="animate-pulse">
+                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+                  <div className="h-48 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4"></div>
+                  <div className="space-y-3">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
+                    <div className="flex gap-2 mt-4">
+                      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
+                      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </main>
       </div>
     );
   }

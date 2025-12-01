@@ -67,7 +67,7 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
   ];
 
   return (
-   <div className="xl:max-w-md w-full mx-auto overflow-x-hidden ">
+   <div className="xl:max-w-md w-full mx-auto h-full  overflow-x-hidden ">
       {/* Watch Display */}
       <div className="relative bg-white dark:bg-gray-800 p-4 2xl:p-8 flex justify-center" onClick={()=>setShowdiveComputer(true)}>
         <div className="relative">

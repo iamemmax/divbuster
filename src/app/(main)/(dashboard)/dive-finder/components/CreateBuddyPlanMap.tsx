@@ -1,18 +1,15 @@
 "use client"
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { FetchNextPageOptions, InfiniteQueryObserverResult } from 'react-query'
-import { buddyListProp, buddyResult } from '../../api/buddy/fetchBudies'
+import { buddyResult } from '../../api/buddy/fetchBudies'
 import CreateBuddyBooking from '../../bookings/components/modals/buddy-booking/CreateBuddyBooking'
 import { useAuth } from '@/contexts/authentication'
 
 interface prop {
     buddyList: buddyResult[]
-    hasNextPage: boolean | undefined;
-    isFetchingNextPage: boolean
-    fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<buddyListProp, unknown>>
+    isLoading?: boolean
 }
 
-const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingNextPage }: prop) => {
+const CreateBuddyPlanMap = ({ buddyList, isLoading }: prop) => {
     const mapRef = useRef<HTMLDivElement>(null)
     const mapInstance = useRef<any>(null)
     const markersRef = useRef<any[]>([])
@@ -266,11 +263,7 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
         }
     }, [buddyList, addMarkers, clearMarkers])
 
-    const handleLoadMore = useCallback(() => {
-        if (hasNextPage && !isFetchingNextPage) {
-            fetchNextPage()
-        }
-    }, [hasNextPage, isFetchingNextPage, fetchNextPage])
+
 
     return (
         <div className="relative w-full h-[83vh] mt-[4rem] dark:bg-gray-900">
@@ -282,34 +275,17 @@ const CreateBuddyPlanMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingN
                 }
             `}</style>
             <div ref={mapRef} className="w-full h-full" id={`buddy-map-${Math.random().toString(36).substr(2, 9)}`} />
-
-            {hasNextPage && (
-                <div className="absolute bottom-4 right-4">
-                    <button
-                        onClick={handleLoadMore}
-                        disabled={isFetchingNextPage}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                    >
-                        {isFetchingNextPage ? (
-                            <>
-                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                Loading...
-                            </>
-                        ) : (
-                            'Load More Buddies'
-                        )}
-                    </button>
-                </div>
-            )}
-
-            {isFetchingNextPage && (
-                <div className="absolute top-4 right-4 px-3 py-2 bg-black bg-opacity-75 text-white rounded-lg">
-                    <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Loading more buddies...
+            
+            {isLoading && (
+                <div className="absolute inset-0 bg-white bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 flex items-center justify-center z-[1000]">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+                        <p className="text-gray-600 dark:text-gray-300">Loading dive buddies...</p>
                     </div>
                 </div>
             )}
+
+
 
             {showDivePlanModal && (
                 <div className="fixed inset-0 z-[999999999999999999] flex items-center justify-center p-4">

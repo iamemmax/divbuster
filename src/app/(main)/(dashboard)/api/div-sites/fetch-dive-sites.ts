@@ -1,4 +1,8 @@
-  import { useDebounce } from "@/hooks";
+export interface noPaginateData {
+  detail: string;
+  data: diveSiteResult[];
+}
+    import { useDebounce } from "@/hooks";
 import { adminAxios } from "@/lib/axios";
   import { useInfiniteQuery } from "react-query";
 
@@ -66,9 +70,9 @@ const fetchDiveSites = async ({
     if (search) {
       params.append("title", search);
     }
-    if (paginate === "yes") {
-      params.append("no-paginate", paginate);
-    }
+    // if (paginate === "yes") {
+    //   params.append("no-paginate", paginate);
+    // }
 
     const url = `dive/dive-sites?${params.toString()}`;
     const response = await adminAxios.get(url);

@@ -86,7 +86,7 @@ const queryClient = useQueryClient();
             </h3>
             {/* <p className="text-xs text-[#78828A] font-medium font-archivo">46 Dive Buddies</p> */}
           </div>            
-            <div className="relative  p-4 sm:p-6 sm:py-4">
+            <div className="relative p-4 sm:p-6 sm:py-4 max-h-[calc(100vh-300px)] overflow-y-auto">
               {!userData ? (
                 Array.from({ length: 3 }).map((_, idx) => (
                   <SuggestedBuddySkeleton key={idx} />

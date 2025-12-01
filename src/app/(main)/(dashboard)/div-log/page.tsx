@@ -57,7 +57,7 @@ const DiveLog = () => {
 
 
       {/* Dashboard content */}
-      <div className="mt-[1.125rem] p-4 md:px-[1.875rem] h-[83vh] overflow-y-auto">
+      <div className="mt-[1.125rem] p-4 md:px-[1.875rem] h-[83vh]  overflow-y-auto">
         <div className="flex justify-between items-center gap-3 flex-wrap">
           <div className="relative w-full md:w-96">
             <DebouncedSearchInput

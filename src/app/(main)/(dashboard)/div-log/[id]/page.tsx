@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { Button } from '@/components/core'
 import DiveTimeChart from '../components/TimeChart'
 import ThreeDot from '@/app/icons/(dashboard)/ThreeDot'
+import { Users } from 'lucide-react'
 import { CylinderIcon } from '@/app/icons/(dashboard)/CylinderIcon'
 import DiveLogCharts from '../components/DiveLogCharts'
 import SingleDIveLogSidebar from '../components/SingleDiveLogSidebar'
@@ -34,7 +35,8 @@ const DiveLogId = () => {
   const { authState } = useAuth();
   const { user } = authState;
   const { data: fetchCountry } = useFetchCountry();
-  const { data, isLoading } = usefetchSingleDivLog(params?.id as string)
+  const queryResult = usefetchSingleDivLog(params?.id as string)
+  const { data, isLoading: loading } = queryResult
   const { mutate: updateVisibility } = useUpdateDiveLogVisibility();
   const { language } = useLanguage()
   const t = DiveLogDetailsTranslations[language] || DiveLogDetailsTranslations?.en;
@@ -118,6 +120,25 @@ const DiveLogId = () => {
     return filterCountry;
   };
 
+  const isImageFile = (url: string) => {
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.tiff', '.svg'];
+    return imageExtensions.some(ext => url.toLowerCase().includes(ext));
+  };
+
+  const isVideoFile = (url: string) => {
+    const videoExtensions = ['.mp4', '.mov', '.avi', '.wmv', '.flv', '.webm', '.mkv'];
+    return videoExtensions.some(ext => url.toLowerCase().includes(ext));
+  };
+
+  const getFileIcon = (url: string) => {
+    if (url.includes('.pdf')) return '📄';
+    if (url.includes('.mp4') || url.includes('.mov') || url.includes('.avi')) return '🎥';
+    if (url.includes('.mp3') || url.includes('.wav')) return '🎵';
+    return '📎';
+  };
+
+
+
   const getCurrentVisibility = useCallback((item: any) => {
     if (!item) return "private";
     const itemId = String(item.id);
@@ -189,30 +210,67 @@ console.log(itemId);
         subtitle=""
       />
 
-      {isLoading ? (
+      {loading ? (
         <DiveLogDetailsSkeleton />
       ) : (
-        <div className="md:px-[1.875rem] h-[83vh]">
-          {/* Mobile sidebar toggle button */}
-          <div className="xl:hidden mb-4">
+        <div className="md:px-[1.875rem] h-[83vh] relative">
+          {/* Mobile floating button */}
+          <div className="xl:hidden fixed bottom-6 right-6 z-40">
             <Button
-              onClick={() => {
-                setShowSidebar(!showSidebar);
-                if (!showSidebar && sidebarRef.current && mainContainerRef.current) {
-                  const mainScrollTop = mainContainerRef.current.scrollTop;
-                  setTimeout(() => sidebarRef.current?.scrollTo(0, mainScrollTop), 0);
-                }
-              }}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 mt-3 rounded-lg font-medium text-sm"
+              onClick={() => setShowSidebar(true)}
+              className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg transition-all duration-200 hover:scale-105"
             >
-              {showSidebar ? 'Hide Sidebar' : 'Show Sidebar'}
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.01 3.01 0 0 0 16.96 6c-.8 0-1.54.37-2.01.97L12 10.5 9.05 6.97A3.01 3.01 0 0 0 6.04 6c-1.28 0-2.4.8-2.84 2.01L.66 16H3.5v6h2v-6h2.12l2.88-8.64L12 9.5l1.5-2.14L16.38 16H18.5v6h2zM8 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2z"/>
+              </svg>
             </Button>
           </div>
 
-          <div className={`2xl:mt-[1.125rem] py-6 grid gap-6 w-full h-full ${showSidebar ? 'grid-cols-1' : 'grid-cols-1 xl:grid-cols-[3fr_1fr]'}`}>
+          {/* Mobile sidebar modal */}
+          {showSidebar && (
+            <>
+              <style jsx>{`
+                @keyframes slideUp {
+                  from { transform: translateY(100%); }
+                  to { transform: translateY(0); }
+                }
+                @keyframes fadeIn {
+                  from { opacity: 0; }
+                  to { opacity: 1; }
+                }
+                .animate-slide-up {
+                  animation: slideUp 0.3s ease-out;
+                }
+                .animate-fade-in {
+                  animation: fadeIn 0.3s ease-out;
+                }
+              `}</style>
+              <div className="xl:hidden fixed inset-0 z-50 animate-fade-in">
+                <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setShowSidebar(false)} />
+                <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl max-h-[80vh] overflow-hidden animate-slide-up">
+                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Dive Details</h3>
+                      <Button
+                        onClick={() => setShowSidebar(false)}
+                        className="bg-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2"
+                      >
+                        ✕
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="overflow-y-auto max-h-[calc(80vh-80px)]">
+                    <SingleDIveLogSidebar data={data} user={user} />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          <div className="2xl:mt-[1.125rem] py-6 grid gap-6 w-full h-full grid-cols-1 xl:grid-cols-[3fr_1fr]">
             {/* Main content with independent scroll */}
-            <div ref={mainContainerRef} className={`overflow-y-auto h-full ${showSidebar ? 'hidden xl:block' : ''}`}>
-              <div className="bg-white dark:bg-gray-800 rounded-lg border border-[#EAECF0] dark:border-gray-700 cursor-pointer p-[1.875rem] px-4 md:px-[2.2813rem]">
+            <div ref={mainContainerRef} className="overflow-y-auto h-full">
+              <div className="bg-white dark:bg-gray-800 rounded-lg cursor-pointer p-[1.875rem] px-4 md:px-[2.2813rem]">
                 <div className="flex items-center justify-between w-full mb-6">
                   <div className="flex items-start space-x-4 w-full">
                     <div className="relative shrink-0 md:h-[60px] md:w-[60px] h-[40px] w-[40px] rounded-full">
@@ -405,6 +463,62 @@ console.log(itemId);
                 </div>
 
                 <DiveTimeChart data={data} />
+                   {/* Dive Photos Section */}
+                {data?.data?.dive_photos && data.data.dive_photos.length > 0 && (
+                  <div className="border border-[#EAECF0] dark:border-gray-700 rounded-lg mt-[1.875rem] w-full p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-medium text-[#101828] dark:text-white font-archivo">
+                        Dive Media
+                      </h3>
+                      <Button className="bg-transparent p-0 rounded-2xl text-[#F7931D] dark:text-orange-400 text-sm font-medium">
+                        <ThreeDot />
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {data.data.dive_photos.map((photo: any, index: number) => {
+                        const fileUrl = photo.image || photo.url || photo;
+                        const isImage = isImageFile(fileUrl);
+                        const isVideo = isVideoFile(fileUrl);
+                        
+                        return (
+                          <div key={index} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => window.open(fileUrl, '_blank')}>
+                            {isImage ? (
+                              <Image
+                                src={fileUrl}
+                                alt={`Dive media ${index + 1}`}
+                                fill
+                                className="object-cover hover:scale-105 transition-transform duration-200"
+                              />
+                            ) : isVideo ? (
+                              <div className="relative w-full h-full">
+                                <video
+                                  className="w-full h-full object-cover"
+                                  preload="metadata"
+                                >
+                                  <source src={fileUrl} />
+                                </video>
+                                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                                  <div className="w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                    <svg className="w-6 h-6 text-gray-800 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                      <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="flex flex-col items-center justify-center h-full p-4 text-center">
+                                <span className="text-4xl mb-2">{getFileIcon(fileUrl)}</span>
+                                <span className="text-xs text-gray-600 dark:text-gray-400 font-medium truncate w-full">
+                                  {fileUrl.split('/').pop()?.split('.').pop()?.toUpperCase()}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 <div className="border border-[#EAECF0] dark:border-gray-700 rounded-lg mt-[1.875rem] w-full p-6">
                   <div className="flex items-center justify-between">
@@ -495,11 +609,13 @@ console.log(itemId);
                 </div>
 
                 <DiveLogCharts user={user} data={data} />
+
+             
               </div>
             </div>
 
-            {/* Sidebar with independent scroll */}
-            <div ref={sidebarRef} className={`${showSidebar ? 'block' : 'hidden'} xl:block overflow-y-auto h-full`}>
+            {/* Desktop sidebar with independent scroll */}
+            <div ref={sidebarRef} className="hidden xl:block overflow-y-auto h-full">
               <SingleDIveLogSidebar data={data} user={user} />
             </div>
           </div>

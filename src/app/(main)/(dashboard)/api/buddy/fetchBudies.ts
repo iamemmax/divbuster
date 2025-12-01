@@ -244,12 +244,31 @@ const fetchBuddyList = async (pageParam?: string, language?: string) => {
   }
 };
 
+const fetchAllBuddies = async (language?: string) => {
+  const url = `buddies?lang=${language}&no_paginate=yes`;
+  try {
+    const response = await adminAxios.get(url);
+    return response.data as buddyListProp;
+  } catch (error) {
+    console.error("Fetch failed:", error);
+    throw error;
+  }
+};
+
 export const useFetchBuddyList = (language: string) => {
   return useInfiniteQuery({
     queryKey: ["buddy-list", language],
     queryFn: ({ pageParam }) => fetchBuddyList(pageParam, language),
     getNextPageParam: (lastPage) => lastPage.next,
     getPreviousPageParam: (firstPage) => firstPage.previous,
+    keepPreviousData: true,
+  });
+};
+
+export const useFetchAllBuddies = (language: string) => {
+  return useQuery({
+    queryKey: ["all-buddies", language],
+    queryFn: () => fetchAllBuddies(language),
     keepPreviousData: true,
   });
 };

@@ -3,13 +3,20 @@ import { useQuery } from "react-query";
 
 
 export interface BuddyProfile {
+
+  detail: string;
+  data: Data;
+}
+
+
+interface Data {
   id: number;
   profile_details: Profiledetails;
   diver_profile: Diverprofile;
   current_location: Currentlocation;
   wallet: Wallet;
-  archievements: Archievement[];
-  certificates: certificates[];
+  user_archievements: Userarchievement[];
+  certificates: Certificate[];
   active_subscription: Activesubscription;
   latest_transactions: Latesttransaction[];
   dashboard_analysis: Dashboardanalysis;
@@ -28,7 +35,7 @@ export interface BuddyProfile {
 interface Suggesteddiver {
   id: number;
   full_name: string;
-  profile_picture: null | string;
+  profile_picture: null;
   coordinate: Coordinate;
   invite_id: string;
   recent_dive_info: Recentdiveinfo;
@@ -84,11 +91,40 @@ interface Activesubscription {
   subscription: number;
 }
 
-interface Archievement {
+interface Certificate {
   id: number;
+  image: string;
+  certification_no: string;
+  trainer_no: string;
+  full_name: string;
+  issuer: string;
+  issuer_name: string;
+  certificate_type: string;
+  issue_date: string;
+  date_of_birth: string;
+  school_name: string;
+  trainer_name: string;
+  created_on: string;
+}
+
+interface Userarchievement {
+  id: number;
+  archievements: Archievement[];
   created_on: string;
   updated_on: string;
-  archievements: any[];
+}
+
+interface Archievement {
+  id: number;
+  image: string;
+  title: string;
+  achievement_type: string;
+  dive_count: number;
+  description: string;
+  reward: null;
+  reward_amount: number;
+  created_on: string;
+  updated_on: string;
 }
 
 interface Wallet {
@@ -107,8 +143,10 @@ interface Currentlocation {
 interface Diverprofile {
   id: number;
   dive_spots: number;
-  dive_image: string;
-  certification_level: string;
+  dive_image: null;
+  last_dive: number;
+  last_dive_detail: Lastdivedetail;
+  certification_level: null;
   dive_count: number;
   public: boolean;
   buddies: string;
@@ -121,13 +159,24 @@ interface Diverprofile {
   diver_type: string;
   facebook: string;
   online: boolean;
-  created_on: string;
-  updated_on: string;
-  favourite_sites: any[];
+  favourite_sites: number[];
+}
+
+export interface Lastdivedetail {
+  id: number;
+  name: string;
+  longitude: string;
+  latitude: string;
+  water_type: string;
+  water_body: string;
+  entry_type: string;
+  max_depth: number;
+  dive_count: number;
 }
 
 interface Profiledetails {
   id: number;
+  downlines: Downline[];
   language: string;
   phone_number: string;
   nickname: string;
@@ -137,19 +186,17 @@ interface Profiledetails {
   profile_picture: string;
   referral_code: string;
   verified: boolean;
-  verification_token: string;
-  auth_provider: string;
-  token_expiry: string;
-  stripe_customer_id: string;
-  created_on: string;
-  updated_on: string;
   country: number;
-  referred_by: string;
+  referred_by: null;
 }
 
-
-
-
+interface Downline {
+  id: number;
+  name: string;
+  image: null;
+  username: string;
+  date_joined: string;
+}
 
 
 export interface certificates {

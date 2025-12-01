@@ -139,26 +139,26 @@ const DiverBuddies = () => {
       ),
       enableSorting: false,
     }),
-    columnHelper.accessor('diver_profile.dive_count', {
-      id: 'diveBuddies',
-      header: () => (
-        <div className="text-left font-medium text-gray-700 dark:text-gray-300">
-          {t.diveBuddies}
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center gap-2">
-          <div className="flex -space-x-1">
-            {Number(row?.original?.diver_profile?.dive_count) > 4 && (
-              <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 border border-white dark:border-gray-700 flex items-center justify-center text-xs text-gray-600 dark:text-gray-300 transition-colors duration-200">
-                +{Number(row?.original?.diver_profile?.dive_count) - 4}
-              </div>
-            )}
-          </div>
-        </div>
-      ),
-      enableSorting: false,
-    }),
+    // columnHelper.accessor('diver_profile.dive_count', {
+    //   id: 'diveBuddies',
+    //   header: () => (
+    //     <div className="text-left font-medium text-gray-700 dark:text-gray-300">
+    //       {t.diveBuddies}
+    //     </div>
+    //   ),
+    //   cell: ({ row }) => (
+    //     <div className="flex items-center gap-2">
+    //       <div className="flex -space-x-1">
+    //         {Number(row?.original?.diver_profile?.dive_count) > 4 && (
+    //           <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 border border-white dark:border-gray-700 flex items-center justify-center text-xs text-gray-600 dark:text-gray-300 transition-colors duration-200">
+    //             +{Number(row?.original?.diver_profile?.dive_count) - 4}
+    //           </div>
+    //         )}
+    //       </div>
+    //     </div>
+    //   ),
+    //   enableSorting: false,
+    // }),
     columnHelper.accessor('certificates', {
       id: 'certificates',
       header: t.certificate,

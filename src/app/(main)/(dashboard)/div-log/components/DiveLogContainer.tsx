@@ -58,6 +58,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
   const [itemVisibilities, setItemVisibilities] = useState<Record<string, string>>({});
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const [updatingItems, setUpdatingItems] = useState<string[]>([]);
+  const [showBuddies, setShowBuddies] = useState(false);
 
   const { mutate: updateVisibility } = useUpdateDiveLogVisibility();
 
@@ -163,7 +164,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
 
 
   const router = useRouter();
-  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isLoading: loading, isFetchingNextPage } =
     useFetchDiveLogs({
       data_type,
       date_from,
@@ -205,28 +206,40 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
 
 
   return (
-    <div className="2xl:mt-[1.125rem] py-6 grid grid-cols-1 xl:grid-cols-[3fr_1fr] gap-6 w-full">
-      {isLoading ? (
-        <DiveLogSkeleton />
-      ) : (
-        <InfiniteScroll
-          dataLength={allDiveLogs.length}
-          next={fetchMore}
-          hasMore={hasNextPage || false}
-          loader={
-            <div className="flex justify-center items-center py-4">
-              <SmallSpinner color="#F7931D" />
-              <span className="ml-2 text-gray-600">Loading more...</span>
-            </div>
-          }
-          endMessage={
-            allDiveLogs.length > 0 ? (
-              <div className="flex justify-center items-center py-8">
-                <span className="text-gray-500 text-sm">No more items</span>
+    <div className="2xl:mt-[1.125rem] py-6 grid grid-cols-1 xl:grid-cols-[3fr_1fr] gap-6 w-full ">
+      {/* Mobile Buddies Button */}
+      <button
+        onClick={() => setShowBuddies(!showBuddies)}
+        className="xl:hidden fixed bottom-4 right-4 z-50 bg-[#F7931D] text-white p-3 rounded-full shadow-lg hover:bg-[#E8841A] transition-colors"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.01 3.01 0 0 0 16.96 6c-.8 0-1.54.37-2.01.97L12 10.5 9.05 6.97A3.01 3.01 0 0 0 6.04 6c-1.28 0-2.4.8-2.84 2.01L.66 16H3.5v6h2v-6h2.12l2.88-8.64L12 9.5l1.5-2.14L16.38 16H18.5v6h2zM8 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2z"/>
+        </svg>
+      </button>
+      
+      <div className="overflow-y-auto h-full">
+        {loading ? (
+          <DiveLogSkeleton />
+        ) : (
+          <InfiniteScroll
+            dataLength={allDiveLogs.length}
+            next={fetchMore}
+            hasMore={hasNextPage || false}
+            height={"calc(100vh - 200px)"}
+            loader={
+              <div className="flex justify-center items-center py-4">
+                <SmallSpinner color="#F7931D" />
+                <span className="ml-2 text-gray-600">Loading more...</span>
               </div>
-            ) : null
-          }
-        >
+            }
+            endMessage={
+              allDiveLogs.length > 0 ? (
+                <div className="flex justify-center items-center py-8">
+                  <span className="text-gray-500 text-sm">No more items</span>
+                </div>
+              ) : null
+            }
+          >
           <div className="space-y-6">
             {allDiveLogs.map((item, itemIndex) => {
               const itemId = String(item.id);
@@ -531,12 +544,34 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
               );
             })}
           </div>
-        </InfiniteScroll>
-        // </div>
-      )}
-      <div className="w-full rounded-lg">
+          </InfiniteScroll>
+        )}
+      </div>
+      <div className={`w-full rounded-lg overflow-y-auto h-full ${showBuddies ? 'xl:block' : 'hidden xl:block'}`}>
         <SuggestedBuddies />
       </div>
+      
+      {/* Mobile Buddies Modal */}
+      {showBuddies && (
+        <div className="xl:hidden fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setShowBuddies(false)}>
+          <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-lg max-h-[70vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-archivo">Suggested Buddies</h3>
+              <button 
+                onClick={() => setShowBuddies(false)} 
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M12.854 4.854a.5.5 0 0 0-.708-.708L8 8.293 3.854 4.146a.5.5 0 1 0-.708.708L7.293 9l-4.147 4.146a.5.5 0 0 0 .708.708L8 9.707l4.146 4.147a.5.5 0 0 0 .708-.708L8.707 9l4.147-4.146z"/>
+                </svg>
+              </button>
+            </div>
+            <div className="overflow-y-auto max-h-[calc(70vh-80px)]">
+              <SuggestedBuddies />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

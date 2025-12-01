@@ -9,10 +9,33 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 // Define the validation schema with Zod
 const moreLogDetailsSchema = z.object({
-    min_water_temperature: z.string().min(1),
-    max_water_temperature: z.string().min(1),
-    avg_water_temperature: z.string().min(1),
-
+  min_water_temperature: z
+    .string()
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+      message: "Value must be 0 or greater",
+    })
+    .transform((val) => {
+      const num = Number(val);
+      return num > 100 ? "100" : val;
+    }),
+  max_water_temperature: z
+    .string()
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+      message: "Value must be 0 or greater",
+    })
+    .transform((val) => {
+      const num = Number(val);
+      return num > 100 ? "100" : val;
+    }),
+  avg_water_temperature: z
+    .string()
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+      message: "Value must be 0 or greater",
+    })
+    .transform((val) => {
+      const num = Number(val);
+      return num > 100 ? "100" : val;
+    }),
 });
 
 export type diveEnvironmentalFormValues = z.infer<typeof moreLogDetailsSchema>;
@@ -42,6 +65,15 @@ const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, set
      const {language}= useLanguage()
         const t = environmentalConditionTranslations[language] || environmentalConditionTranslations?.en;
 
+    const handleTemperatureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseFloat(e.target.value);
+        if (value > 100) {
+            e.target.value = '100';
+        } else if (value < 0) {
+            e.target.value = '0';
+        }
+    };
+
     const onSubmit = (data: diveEnvironmentalFormValues) => {
         setEvironmentalData({ avg_water_temperature: data?.avg_water_temperature, max_water_temperature: data?.max_water_temperature, min_water_temperature: data?.min_water_temperature })
         setStep(5)
@@ -64,6 +96,10 @@ const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, set
                         </label>
                         <input
                             {...register('min_water_temperature')}
+                            type="number"
+                            min="0"
+                            max="100"
+                            onChange={handleTemperatureChange}
                             placeholder="0"
                             className={`border ${errors.min_water_temperature
                                 ? "border-red-500 dark:border-red-400"
@@ -86,6 +122,10 @@ const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, set
                         </label>
                         <input
                             {...register('max_water_temperature')}
+                            type="number"
+                            min="0"
+                            max="100"
+                            onChange={handleTemperatureChange}
                             placeholder="0"
                             className={`border ${errors.max_water_temperature
                                 ? "border-red-500 dark:border-red-400"
@@ -108,6 +148,10 @@ const CreateDiveLogEnvironmental = ({ evironmentalData, setEvironmentalData, set
                         </label>
                         <input
                             {...register('avg_water_temperature')}
+                            type="number"
+                            min="0"
+                            max="100"
+                            onChange={handleTemperatureChange}
                             placeholder="0"
                             className={`border ${errors.avg_water_temperature
                                 ? "border-red-500 dark:border-red-400"
