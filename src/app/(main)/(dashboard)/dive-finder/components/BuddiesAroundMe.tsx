@@ -44,6 +44,7 @@ const BuddiesAroundMe = () => {
     if (!mapRef.current) return
     
     import('leaflet').then(({ default: L }) => {
+      if (!mapRef.current) return
       const map = L.map(mapRef.current).setView([40.73061, -73.935242], 10)
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
       

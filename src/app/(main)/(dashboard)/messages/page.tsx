@@ -48,8 +48,8 @@ useEffect(() => {
     if (userId && userProfile) {
       const chatData: resentChatProp = {
         user_id: userId,
-        name: `${userProfile.first_name} ${userProfile.last_name}`,
-        image: userProfile.profile_details?.profile_picture || null,
+        name: `${userProfile?.data?.first_name} ${userProfile?.data?.last_name}`,
+        image: userProfile?.data?.profile_details?.profile_picture || null,
         last_message: "",
         date: null
       };

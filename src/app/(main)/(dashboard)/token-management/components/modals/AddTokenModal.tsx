@@ -60,10 +60,10 @@ const {language}=useLanguage()
   const onSubmit = (data: TokenFormData) => {
     handleSubmitData(
       {
-        cancel_url: `${process.env.NEXT_PUBLIC_URL}token-management`,
+        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}token-management`,
         lang: String(user?.data?.data?.profile_details?.language),
         plan_id: Number(data?.plan_id),
-        return_url: `${process.env.NEXT_PUBLIC_URL}token-management`,
+        return_url: `${process.env.NEXT_PUBLIC_APP_URL}token-management`,
       },
       {
         onSuccess: (data) => {

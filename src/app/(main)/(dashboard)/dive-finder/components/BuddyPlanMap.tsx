@@ -18,7 +18,7 @@ export default function BuddyPlanMap({ diveSites, buddyList }: BuddyPlanMapProps
         <div className="max-h-32 overflow-y-auto space-y-1">
           {buddyList.slice(0, 5).map((buddy, index) => (
             <div key={index} className="text-sm p-1 bg-gray-50 dark:bg-gray-700 rounded">
-              {buddy.name || `Buddy ${index + 1}`}
+              {`${buddy?.first_name} ${buddy?.last_name}` || `Buddy ${index + 1}`}
             </div>
           ))}
         </div>
