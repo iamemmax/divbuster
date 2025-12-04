@@ -30,6 +30,7 @@ export default function ProtectedRouteGuard({
     "/profile",
     "/token-management",
     "/manage-certifications",
+    "/insurance"
   ];
 
   // Check if current path is protected
