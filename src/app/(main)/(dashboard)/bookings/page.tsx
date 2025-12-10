@@ -85,7 +85,7 @@ const BookingPage = () => {
             <div className="2xl:hidden absolute inset-x-0 bottom-0 z-40 bg-black bg-opacity-50" onClick={toggleSidebar}>
               <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-lg max-h-[70vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-archivo">Dive Buddy around you</h3>
+                  {/* <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-archivo">Dive Buddy around you</h3> */}
                   <button 
                     onClick={toggleSidebar} 
                     className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"

@@ -5,11 +5,15 @@ import { useFetchNearestUser } from '../../api/buddy/nearestUserAround';
 import { useAddBuddy } from '../../api/buddy/addBuddy';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
+import { useLanguage } from '@/hooks/useLanguage';
+import { diverBuddiesTranslations } from '@/app/(main)/translation/diveBuddiesTranslation';
 const BookingSideBar = () => {
   const { data: nearestUsers, isLoading } = useFetchNearestUser();
   const { mutate: addBuddy, isLoading: isAddingBuddy } = useAddBuddy();
   const [displayCount, setDisplayCount] = useState(6);
   const [addingBuddyId, setAddingBuddyId] = useState<number | null>(null);
+  const { language } = useLanguage();
+  const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
   
   const suggestedBuddies = nearestUsers?.slice(0, displayCount) || [];
   const hasMoreUsers = (nearestUsers?.length || 0) > displayCount;

@@ -9,6 +9,7 @@ import AddDiveLogBuddies, { addBuddyMember } from './create-divelog/AddDiveLogBu
 import AddDiveLogNotes from './create-divelog/AddDiveLogNotes';
 import { useAuth } from '@/contexts/authentication';
 import { Language } from '@/app/(auth)/sign-up/translations';
+import InsuranceModal from '@/components/modals/InsuranceModal';
 
 
 // Replace these with actual content components, NOT modals
@@ -24,6 +25,7 @@ const AddNewDiveLog: React.FC<EditDiveStatisticsModalProps> = ({
     onClose,
 }) => {
     const [step, setStep] = useState(1)
+    const [showInsuranceModal, setShowInsuranceModal] = useState(false)
     const [diveLogData, setDiveLogData] = useState<diveLogTypes>({ dive_site_id: "", end_date: "", name: "", start_date: "" })
     const [diveLogDetails, setDiveLogDetails] = useState<diveLogDetailsTypes>({ bottom_time: "", dive_depth: "" })
     const [diveGearData, setDiveGearData] = useState<createGearLogDetailsFormValues>({ bcd: "", fin: "", gas_mixture: "", mask: "", regulator: "", weight: "", wetsuit: "" })
@@ -31,6 +33,18 @@ const AddNewDiveLog: React.FC<EditDiveStatisticsModalProps> = ({
     const [buddyMembers, setBuddyMembers] = useState<addBuddyMember>({ buddies: "", email: [] })
 const {authState}= useAuth()
  const { user } = authState;
+
+ // Check insurance status when modal opens
+ React.useEffect(() => {
+   if (isOpen && user) {
+     const hasMedical = user.has_filled_medical
+     const hasLiability = user.has_filled_liability
+     
+     if (!hasMedical || !hasLiability) {
+       setShowInsuranceModal(true)
+     }
+   }
+ }, [isOpen, user])
   
 
     if (!isOpen) return null;
@@ -61,16 +75,24 @@ const {authState}= useAuth()
     }
 
     return (
-        <Dialog open={isOpen}>
+        <>
+        <Dialog open={isOpen && !showInsuranceModal}>
             <DialogContent className="sm:max-w-[50.25rem] bg-[#F9FAFB] dark:bg-[#1A1D21] rounded-lg">
-
                 <div className="">
                     {renderSteps(step)}
                 </div>
-
-
             </DialogContent>
         </Dialog>
+        
+        <InsuranceModal
+            isOpen={showInsuranceModal}
+            onClose={() => {
+                setShowInsuranceModal(false)
+                onClose()
+            }}
+            description="You must complete your insurance forms before creating a dive log."
+        />
+        </>
     );
 };
 
