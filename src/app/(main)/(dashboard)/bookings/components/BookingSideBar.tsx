@@ -44,7 +44,7 @@ const BookingSideBar = () => {
        
   return (
     <div>
-  <div className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 sm:p-6">
+  <div className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 max-2xl:pb-16 sm:p-6">
     <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Dive Buddy around you.</h2>
     
     <div className="relative">
@@ -67,7 +67,7 @@ const BookingSideBar = () => {
           const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
           
           return (
-            <div key={buddy.user_id} className="relative flex items-center justify-between py-3">
+            <div key={buddy.user_id} className="relative  max-md:pl-0  max-2xl:pl-80  flex items-center justify-between py-3">
               {/* Connecting line */}
               {index < suggestedBuddies.length - 1 && (
                 <div className="absolute left-5 top-12 w-px h-6 bg-gray-200 dark:bg-gray-600"></div>

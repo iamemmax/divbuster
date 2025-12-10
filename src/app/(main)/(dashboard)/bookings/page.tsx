@@ -46,9 +46,9 @@ const BookingPage = () => {
     <div>
       <Header title="Bookings" subtitle="" />
 
-      <div className="font-archivo h-[80vh]">
+      <div className="font-archivo h-[85vh]">
         <div className="p-3 md:px-6 h-full">
-          <div className='grid grid-cols-1 lg:grid-cols-[2fr_1fr] xl:grid-cols-[3fr_1fr] gap-[1.3125rem] h-full'>
+          <div className='grid grid-cols-1 2xl:grid-cols-[3fr_1fr] gap-[1.3125rem] h-full'>
             <div className="overflow-y-auto h-full">
               {/* Mobile Buddies Button */}
               <button
@@ -75,14 +75,14 @@ const BookingPage = () => {
             </div>
 
             {/* Sidebar - Hidden on mobile by default, toggleable */}
-            <div className="hidden lg:block w-full py-8 h-full overflow-y-auto">
+            <div className="hidden 2xl:block w-full py-8 h-full overflow-y-auto">
               <BookingSideBar/>
             </div>
           </div>
 
           {/* Mobile Buddies Modal */}
           {isSidebarOpen && (
-            <div className="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50" onClick={toggleSidebar}>
+            <div className="2xl:hidden absolute inset-x-0 bottom-0 z-40 bg-black bg-opacity-50" onClick={toggleSidebar}>
               <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-lg max-h-[70vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-archivo">Dive Buddy around you</h3>

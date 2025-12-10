@@ -204,7 +204,7 @@ const DivingProfile = () => {
               </div>
             </div>
 
-            <div className="mt-[6.125rem] px-3 md:px-6 py-6 grid grid-cols-1 xl:grid-cols-[3fr_1fr] gap-6 h-full">
+            <div className="mt-[6.125rem] px-3 md:px-6 py-6 grid grid-cols-1 2xl:grid-cols-[3fr_1fr] gap-6 h-full">
               {/* Mobile Buddy List Button */}
               <button
                 onClick={() => setShowBuddyList(!showBuddyList)}
@@ -496,13 +496,13 @@ const DivingProfile = () => {
               </div>
 
               {/* Right Sidebar */}
-              <div className="hidden xl:block border border-[#EAECF0] dark:border-none rounded-lg transition-colors duration-200 overflow-y-auto h-full">
+              <div className="hidden 2xl:block border border-[#EAECF0] dark:border-none rounded-lg transition-colors duration-200 overflow-y-auto h-full">
                 <MyBuddyList />
               </div>
 
               {/* Mobile Buddy List Modal */}
               {showBuddyList && (
-                <div className="xl:hidden fixed inset-0 z-[70] bg-black bg-opacity-50 animate-fade-in" onClick={() => setShowBuddyList(false)}>
+                <div className="2xl:hidden absolute inset-x-0 bottom-0 z-[70] bg-black bg-opacity-50 animate-fade-in" onClick={() => setShowBuddyList(false)}>
                   <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-lg max-h-[70vh] overflow-hidden animate-slide-up" onClick={(e) => e.stopPropagation()}>
                     <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-archivo">Buddy List</h3>

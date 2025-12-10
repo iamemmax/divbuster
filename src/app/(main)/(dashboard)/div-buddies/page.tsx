@@ -15,7 +15,7 @@ import Header from '../../components/shared/Header';
 import { buddyResult, useFetchBuddyList } from '../api/buddy/fetchBudies';
 import AngleLeft from '@/app/icons/(dashboard)/AngleLeft';
 import AngleRight from '@/app/icons/(dashboard)/AngleRight';
-import SuggestedBuddies from './SuggestedBuddies';
+// import SuggestedBuddies from './SuggestedBuddies';
 import { useErrorModalState } from '@/hooks';
 import { formatAxiosErrorMessage } from '@/utils';
 import { AxiosError } from 'axios';
@@ -23,6 +23,7 @@ import { SmallSpinner } from '@/icons/core';
 import { diverBuddiesTranslations } from '../../translation/diveBuddiesTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { DiveBuddySkeleton } from '@/components/core';
+import SuggestedBuddies from './SuggestedBuddies';
 
 const DiverBuddies = () => {
   const {
@@ -332,16 +333,16 @@ const DiverBuddies = () => {
           </div>
 
           {/* Desktop Sidebar */}
-          <div className="hidden xl:block">
+          <div className="hidden 2xl:block">
             <SuggestedBuddies />
           </div>
 
           {/* Mobile Sidebar */}
           {sidebarOpen && (
-            <div className="xl:hidden fixed inset-0 z-50 bg-black/50" onClick={() => setSidebarOpen(false)}>
-              <div className="absolute right-0 top-0 h-full w-80 bg-white dark:bg-gray-800 shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="2xl:hidden absolute inset-0 z-50 bg-black/50" onClick={() => setSidebarOpen(!sidebarOpen)}>
+              <div className="absolute right-0 top-0 h-full !w-96 bg-white dark:bg-gray-800 shadow-xl" onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Suggested Buddies</h3>
+                  {/* <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Suggested Buddies</h3> */}
                   <button onClick={() => setSidebarOpen(false)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
                     <svg className="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -356,7 +357,7 @@ const DiverBuddies = () => {
           {/* Floating Button */}
           <button
             onClick={() => setSidebarOpen(true)}
-            className="xl:hidden fixed bottom-6 right-6 z-40 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg transition-colors duration-200"
+            className="2xl:hidden fixed bottom-6 right-6 z-40 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg transition-colors duration-200"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />

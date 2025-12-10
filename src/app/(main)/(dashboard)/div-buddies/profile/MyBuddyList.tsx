@@ -58,7 +58,7 @@ const MyBuddyList = () => {
           {allBuddies.map((buddy, index) => (
             <Link href={`/div-buddies/profile/${buddy?.id}`}
               key={buddy.id || index}
-              className="relative flex items-center justify-between py-3"
+              className="relative  max-md:pl-0  max-2xl:pl-80  flex items-center justify-between py-3"
             >
               {/* Connecting line */}
               {index < allBuddies.length - 1 && (

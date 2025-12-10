@@ -217,7 +217,7 @@ console.log(itemId);
           {/* Mobile floating button */}
           <div className="xl:hidden fixed bottom-6 right-6 z-40">
             <Button
-              onClick={() => setShowSidebar(true)}
+              onClick={() => setShowSidebar(!showSidebar)}
               className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg transition-all duration-200 hover:scale-105"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -245,7 +245,7 @@ console.log(itemId);
                   animation: fadeIn 0.3s ease-out;
                 }
               `}</style>
-              <div className="xl:hidden fixed inset-0 z-50 animate-fade-in">
+              <div className="xl:hidden absolute inset-0 z-50 animate-fade-in">
                 <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setShowSidebar(false)} />
                 <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl max-h-[80vh] overflow-hidden animate-slide-up">
                   <div className="p-4 border-b border-gray-200 dark:border-gray-700">

@@ -206,11 +206,11 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
 
 
   return (
-    <div className="2xl:mt-[1.125rem] py-6 grid grid-cols-1 xl:grid-cols-[3fr_1fr] gap-6 w-full ">
+    <div className="2xl:mt-[1.125rem] py-6 grid grid-cols-1 2xl:grid-cols-[3fr_1fr] gap-6 w-full ">
       {/* Mobile Buddies Button */}
       <button
         onClick={() => setShowBuddies(!showBuddies)}
-        className="xl:hidden fixed bottom-4 right-4 z-50 bg-[#F7931D] text-white p-3 rounded-full shadow-lg hover:bg-[#E8841A] transition-colors"
+        className="2xl:hidden fixed bottom-4 right-4 z-50 bg-[#F7931D] text-white p-3 rounded-full shadow-lg hover:bg-[#E8841A] transition-colors"
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
           <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.01 3.01 0 0 0 16.96 6c-.8 0-1.54.37-2.01.97L12 10.5 9.05 6.97A3.01 3.01 0 0 0 6.04 6c-1.28 0-2.4.8-2.84 2.01L.66 16H3.5v6h2v-6h2.12l2.88-8.64L12 9.5l1.5-2.14L16.38 16H18.5v6h2zM8 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2z"/>
@@ -553,7 +553,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
       
       {/* Mobile Buddies Modal */}
       {showBuddies && (
-        <div className="xl:hidden fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setShowBuddies(false)}>
+        <div className="2xl:hidden absolute inset-0 z-40 bg-black bg-opacity-50" onClick={() => setShowBuddies(false)}>
           <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-lg max-h-[70vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
            
             <div className="overflow-y-auto max-h-[calc(70vh-80px)]">

@@ -12,6 +12,8 @@ import { SmallSpinner } from '@/icons/core';
 import { useQueryClient } from 'react-query';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { SuggestedBuddySkeleton } from '@/components/core';
+import { useLanguage } from '@/hooks/useLanguage';
+import { diverBuddiesTranslations } from '../../translation/diveBuddiesTranslation';
 
 const SuggestedBuddies = () => {
   const {
@@ -25,6 +27,8 @@ const SuggestedBuddies = () => {
   const { user } = authState;
   const userData = user as User;
   const { mutate: handleAddNewBuddy } = useAddBuddy();
+  const { language } = useLanguage();
+  const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
   
   const [loadingDiverId, setLoadingDiverId] = useState<number | null>(null);
   const [removedDivers, setRemovedDivers] = useState<Set<number>>(new Set());
@@ -71,7 +75,7 @@ const SuggestedBuddies = () => {
   };
      
   return (
-    <div className="w-full md:pl-[20rem] xl:pl-0 xl:w-80   bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors duration-200">
+    <div className="w-full xl:w-85 2xl:w-96 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors duration-200">
       <div className="p-2 sm:px-6 sm:py-4 border-b border-gray-200 dark:border-gray-700">
         <h3 className="font-semibold font-arcivo text-base text-[#101828] dark:text-white">
           Suggested Buddies
@@ -92,7 +96,7 @@ const SuggestedBuddies = () => {
         ) : (
           // Buddy list
           visibleDivers.map((buddy, index) => (
-            <div key={buddy.id} className="relative  min flex items-center justify-between py-3">
+            <div key={buddy.id} className="relative max-md:pl-0    flex items-center justify-between py-3">
               {/* Connecting line */}
               {index < visibleDivers.length - 1 && (
                 <div className="absolute left-5 top-[53px] w-px h-6 bg-gray-200 dark:bg-gray-600 transition-colors duration-200"></div>
