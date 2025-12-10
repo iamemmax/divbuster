@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import RecentList from './Recent/RecentList'
 import MessageBox from './Recent/MessageBox'
 import { ArrowLeft } from 'lucide-react'
-import { chatListProp, useFetchSingleChatList } from '../../api/chats/single-chat/fetchChatList';
+import { chatListProp } from '../../api/chats/single-chat/fetchChatList';
 
 export interface messageProp{
     id: number;

@@ -15,14 +15,15 @@ interface Datum {
   date: null | string;
 }
 
-const fetchSingleChatList = async () => {
- const response = await adminAxios.get(`chat-list`);
+const fetchSingleChatList = async (lang:string) => {
+ const response = await adminAxios.get(`chat-list?lang=${lang}`);
     return response.data as chatListProp;
 }
 
-export const useFetchSingleChatList = () => {
+export const useFetchSingleChatList = (lang:string) => {
   return useQuery({
-    queryKey: ["single-chat-list"],
-    queryFn: fetchSingleChatList,
+    queryKey: ["single-chat-list",lang],
+    queryFn: ()=>fetchSingleChatList(lang),
+    enabled:!!lang,
   });
 };

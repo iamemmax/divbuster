@@ -130,7 +130,7 @@ const LoginPage = () => {
   };
 
   const onSubmit = (data: LoginDetailsValue) => {
-    handleLogin(data, {
+    handleLogin({...data,lang:contextLanguage}, {
       onError: (error) => {
         const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         openErrorModalWithMessage(String(errorMessage));

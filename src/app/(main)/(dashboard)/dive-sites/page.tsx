@@ -22,7 +22,7 @@ interface TabItem {
 
 const DiveSites = () => {
   const [activeTab, setActiveTab] = useState<string>("recentDiveSites")
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
+  // const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
   const { data: user, isLoading: userLoading } = useUser()
   const [search, setSearch] = useState("")
  const {language}= useLanguage()

@@ -40,7 +40,7 @@ useEffect(() => {
 
   const tabs = [t.recent, t.groups];
 
-  const { data: recentChatList, isLoading } = useFetchSingleChatList();
+  const { data: recentChatList, isLoading } = useFetchSingleChatList(String(language));
   const { data: userProfile } = usefetchBuddyProfile(userId);
 
   // Handle userId parameter to start conversation

@@ -42,7 +42,7 @@ const MedicalForm = () => {
   const {authState}=useAuth()
   const {language}= useLanguage()
   const {user}=authState
-  const {data:questionData, isLoading}=useFetchInsuranceQuestions("medical")
+  const {data:questionData, isLoading}=useFetchInsuranceQuestions("medical",String(language))
   const sigRef = useRef<SignatureCanvas>(null)
   const physicianSigRef = useRef<SignatureCanvas>(null)
   const [canSign, setCanSign] = useState(false)

@@ -36,7 +36,7 @@ const LiabilityForm = () => {
   const {language}= useLanguage()
   const {authState}=useAuth()
   const {user}=authState
-  const {data:questionData, isLoading}=useFetchInsuranceQuestions("liability")
+  const {data:questionData, isLoading}=useFetchInsuranceQuestions("liability", String(language))
   const {mutate:handleSubmitLiability, isLoading:isSubmitting}=useSubmitLiabilityReport()
     const {mutate:handleUpdateMedical, isLoading:isUpdating}=useUpdateLiabilityReport()
   
