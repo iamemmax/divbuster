@@ -32,6 +32,8 @@ export interface User {
   is_dive_instructor: null;
   last_login: null;
   username: string;
+  has_filled_medical: string;
+has_filled_liability: string;
   first_name: string;
   last_name: string;
   email: string;

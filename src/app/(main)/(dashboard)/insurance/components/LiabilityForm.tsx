@@ -5,334 +5,349 @@ import { Button } from '@/components/core'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useFetchInsuranceQuestions } from '../../api/insurance/questions/getIsuranceQuestion'
+import { useSubmitLiabilityReport } from '../../api/insurance/liability/submitLiabiltyForm'
+import { useLanguage } from '@/hooks/useLanguage'
+import { useAuth } from '@/contexts/authentication'
+import { SmallSpinner } from '@/icons/core'
+import { useFetchLiabilityReport } from '../../api/insurance/liability/retrieveUserLiailityReport'
+import { useUpdateLiabilityReport } from '../../api/insurance/liability/updateLiabilityForm'
+import { useErrorModalState } from '@/hooks'
+import { formatAxiosErrorMessage } from '@/utils'
+import { AxiosError } from 'axios'
+import toast from 'react-hot-toast'
+import { useQueryClient } from 'react-query'
 
 const liabilitySchema = z.object({
-  fullName: z.string().min(1, 'Full name is required'),
-  dateOfBirth: z.string().min(1, 'Date of birth is required'),
-  email: z.string().email('Valid email is required'),
-  phone: z.string().min(1, 'Phone number is required'),
-  address: z.string().min(1, 'Address is required'),
-  city: z.string().min(1, 'City is required'),
-  state: z.string().min(1, 'State is required'),
-  zipCode: z.string().min(1, 'Zip code is required'),
-  emergencyContact: z.string().min(1, 'Emergency contact is required'),
-  emergencyPhone: z.string().min(1, 'Emergency phone is required'),
-  certificationLevel: z.string().min(1, 'Certification level is required'),
-  certificationAgency: z.string().min(1, 'Certification agency is required'),
-  agreementAccepted: z.boolean().refine(val => val === true, 'You must accept the agreement'),
-  riskAcknowledged: z.boolean().refine(val => val === true, 'You must acknowledge the risks'),
-  medicalFitness: z.boolean().refine(val => val === true, 'You must certify medical fitness')
+  parent_or_guardian_signature: z.string().optional(),
+  dive_instructor_id: z.string().optional(),
+  acceptTerms: z.boolean().refine(val => val === true, 'You must accept all terms')
 })
 
 type LiabilityFormData = z.infer<typeof liabilitySchema>
 
 const LiabilityForm = () => {
+  const {
+        isErrorModalOpen,
+        setErrorModalState,
+        openErrorModalWithMessage,
+        errorModalMessage,
+      } = useErrorModalState();
+  const {language}= useLanguage()
+  const {authState}=useAuth()
+  const {user}=authState
+  const {data:questionData, isLoading}=useFetchInsuranceQuestions("liability")
+  const {mutate:handleSubmitLiability, isLoading:isSubmitting}=useSubmitLiabilityReport()
+    const {mutate:handleUpdateMedical, isLoading:isUpdating}=useUpdateLiabilityReport()
+  
+  const {data:liabilityReport}=useFetchLiabilityReport()
   const sigRef = useRef<SignatureCanvas>(null)
   const [canSign, setCanSign] = useState(false)
+  const [selectedQuestions, setSelectedQuestions] = useState<number[]>([])
+  const [answers, setAnswers] = useState<Record<string, boolean>>({})
+  const [isSigned, setIsSigned] = useState(false)
+  const [canvasWidth, setCanvasWidth] = useState(800)
+  const [signatureData, setSignatureData] = useState<string>('')
   
-  const { register, handleSubmit, formState: { errors }, watch } = useForm<LiabilityFormData>({
+  const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<LiabilityFormData>({
     resolver: zodResolver(liabilitySchema),
     defaultValues: {
-      agreementAccepted: false,
-      riskAcknowledged: false,
-      medicalFitness: false
+      parent_or_guardian_signature: liabilityReport?.data?.parent_or_guardian_signature || '',
+      dive_instructor_id: undefined,
+      acceptTerms: false
     }
   })
   
-  const watchedValues = watch()
-  const allCheckboxesChecked = watchedValues.agreementAccepted && watchedValues.riskAcknowledged && watchedValues.medicalFitness
+  const acceptTerms = watch('acceptTerms')
 
   const clearSignature = () => {
     sigRef.current?.clear()
-    setCanSign(false)
+    setIsSigned(false)
+    setSignatureData('')
   }
-  
+  const queryClient = useQueryClient()
   const onSubmit = (data: LiabilityFormData) => {
-    if (!sigRef.current?.isEmpty()) {
-      console.log('Form submitted:', data)
-      // Handle form submission
+    if (sigRef.current && !sigRef.current.isEmpty()) {
+      const signature = sigRef.current.toDataURL()
+      
+      // Include all questions with their answers (true/false)
+      const allAnswers: Record<string, string> = {}
+      questionData?.data?.forEach(question => {
+        allAnswers[question.question_slug] = (answers[question.question_slug] || false).toString()
+      })
+      
+      const payload = {
+        question_ids: questionData?.data?.map(q => q.id) || [],
+        answers: allAnswers,
+        signature: signature,
+        parent_or_guardian_signature: data.parent_or_guardian_signature || "",
+        dive_instructor_id: data.dive_instructor_id ? parseInt(data.dive_instructor_id) : 0,
+        lang: language
+      }
+
+      handleSubmitLiability({payload},{
+        onSuccess:(responseData)=> {
+         
+          toast.success('Liability form submitted successfully')
+          queryClient.invalidateQueries({queryKey:['user-details']})
+        },
+        onError:(error)=>{
+        const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+                  openErrorModalWithMessage(String(errorMessage));
+        }
+      })
     } else {
-      alert('Please provide your signature')
+     
+                   openErrorModalWithMessage(String("Please provide your signature"));
     }
   }
+
+   const onUpdate = (data: LiabilityFormData) => {
+   
+      if (sigRef.current && !sigRef.current.isEmpty()) {
+        const signature = sigRef.current.toDataURL()
+       
+        
+        // Include all questions with their answers (true/false)
+        const allAnswers: Record<string, string> = {}
+        questionData?.data?.forEach(question => {
+          allAnswers[question.question_slug] = (answers[question.question_slug] || false).toString()
+        })
+        
+        const payload = {
+          id:String(liabilityReport?.data?.id),
+          question_ids: questionData?.data?.map(q => q.id) || [],
+          answers: allAnswers,
+          signature: signature,
+         parent_or_guardian_signature: data.parent_or_guardian_signature || "",
+        dive_instructor_id: data.dive_instructor_id ? parseInt(data.dive_instructor_id) : 0,
+          lang: language
+        }
+  
+        handleUpdateMedical({payload}, {
+          onSuccess:(responseData)=> {
+            toast.success('Liability form Updated successfully')
+          queryClient.invalidateQueries({queryKey:['user-details']})
+            
+          },
+          onError:(error: any)=>{
+            const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+            openErrorModalWithMessage(String(errorMessage));
+          }
+        })
+        // Handle form submission
+      } else {
+     
+        openErrorModalWithMessage(String("Please provide your signature"));
+      }
+    }
   
   React.useEffect(() => {
-    setCanSign(allCheckboxesChecked)
-  }, [allCheckboxesChecked])
+    setCanSign(acceptTerms)
+  }, [acceptTerms])
 
-  const waiverText = `
-    RELEASE AND WAIVER OF LIABILITY, ASSUMPTION OF RISK AND INDEMNITY AGREEMENT
+  // Populate form with liability report data when it loads
+  React.useEffect(() => {
+    if (liabilityReport?.data) {
+      setValue('parent_or_guardian_signature', liabilityReport.data.parent_or_guardian_signature || '')
+      
+      // Load signature if available
+      if (liabilityReport.data.signature && sigRef.current) {
+        sigRef.current.fromDataURL(liabilityReport.data.signature)
+        setSignatureData(liabilityReport.data.signature)
+        setIsSigned(true)
+        setValue('acceptTerms', true)
+      }
+      
+      // Load answers if available
+      if (liabilityReport.data.answers && questionData?.data) {
+        const answersObj: Record<string, boolean> = {}
+        const selectedIds: number[] = []
+        
+        Object.entries(liabilityReport.data.answers).forEach(([key, value]) => {
+          const isTrue = value === 'true'
+          answersObj[key] = isTrue
+          
+          if (isTrue) {
+            const question = questionData.data.find(q => q.question_slug === key)
+            if (question) {
+              selectedIds.push(question.id)
+            }
+          }
+        })
+        
+        setAnswers(answersObj)
+        setSelectedQuestions(selectedIds)
+      }
+    }
+  }, [liabilityReport, questionData, setValue])
 
-    PLEASE READ CAREFULLY. THIS IS A RELEASE OF LEGAL RIGHTS.
+  React.useEffect(() => {
+    let resizeTimeout: NodeJS.Timeout
+    
+    const updateCanvasWidth = () => {
+      clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(() => {
+        if (sigRef.current && !sigRef.current.isEmpty()) {
+          setSignatureData(sigRef.current.toDataURL())
+        }
+        
+        const width = Math.min(window.innerWidth - 100, 800)
+        setCanvasWidth(width)
+      }, 300)
+    }
+    
+    updateCanvasWidth()
+    window.addEventListener('resize', updateCanvasWidth)
+    
+    return () => {
+      clearTimeout(resizeTimeout)
+      window.removeEventListener('resize', updateCanvasWidth)
+    }
+  }, [])
 
-    In consideration of being allowed to participate in scuba diving activities and to use the facilities, equipment and services of DivBuster, I agree to the following:
+  // Restore signature data after canvas width changes
+  React.useEffect(() => {
+    if (signatureData && sigRef.current) {
+      sigRef.current.fromDataURL(signatureData)
+    }
+  }, [canvasWidth])
 
-    1. ACKNOWLEDGMENT OF RISKS: I acknowledge that scuba diving activities involve inherent risks including but not limited to: decompression sickness, arterial gas embolism, nitrogen narcosis, oxygen toxicity, hypothermia, marine life injuries, equipment failure, entanglement, entrapment, and drowning which can result in serious injury or death.
-
-    2. ASSUMPTION OF RISK: I voluntarily assume full responsibility for any risks of loss, property damage or personal injury that may be sustained by me as a result of participating in scuba diving activities.
-
-    3. RELEASE OF LIABILITY: I hereby release, discharge and covenant not to sue DivBuster, its owners, managers, employees, agents, and representatives from any and all liability, claims, demands, actions and causes of action whatsoever arising out of or related to any loss, damage, or injury that may be sustained by me while participating in scuba diving activities.
-
-    4. INDEMNIFICATION: I agree to indemnify and hold harmless DivBuster from any loss or liability incurred in defending any claim made by me or anyone making a claim on my behalf.
-
-    5. MEDICAL FITNESS: I certify that I am physically and mentally fit to participate in scuba diving activities and that I have not been advised otherwise by a qualified medical person.
-
-    6. CERTIFICATION AND EXPERIENCE: I certify that I am a certified diver or am participating under proper supervision, and that I will not dive beyond the limits of my training and experience.
-
-    This agreement shall be binding upon my heirs, next of kin, executors, administrators and assigns. I have read this agreement and understand that by signing it I am giving up substantial legal rights.
-  `
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Full Name *
           </label>
           <input
-            {...register('fullName')}
+          disabled
+           value={`${user?.first_name} ${user?.last_name}`}
             type="text"
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-              errors.fullName ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-            }`}
+            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white 
+             
+              
+            `}
           />
-          {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>}
         </div>
-        <div>
+          <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Date of Birth *
+             Phone Number
           </label>
           <input
-            {...register('dateOfBirth')}
-            type="date"
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-              errors.dateOfBirth ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-            }`}
-          />
-          {errors.dateOfBirth && <p className="text-red-500 text-sm mt-1">{errors.dateOfBirth.message}</p>}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Email *
-          </label>
-          <input
-            {...register('email')}
-            type="email"
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-              errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-            }`}
-          />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Phone *
-          </label>
-          <input
-            {...register('phone')}
+          disabled
+          value={`${user?.profile_details?.phone_number}`}
             type="tel"
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-              errors.phone ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-            }`}
+            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white $border-gray-300 dark:border-gray-600
+            `}
           />
-          {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
         </div>
       </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Address *
-        </label>
-        <input
-          {...register('address')}
-          type="text"
-          className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-            errors.address ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-          }`}
-        />
-        {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            City *
-          </label>
-          <input
-            {...register('city')}
-            type="text"
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-              errors.city ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-            }`}
-          />
-          {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city.message}</p>}
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            State *
-          </label>
-          <input
-            {...register('state')}
-            type="text"
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-              errors.state ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-            }`}
-          />
-          {errors.state && <p className="text-red-500 text-sm mt-1">{errors.state.message}</p>}
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Zip Code *
-          </label>
-          <input
-            {...register('zipCode')}
-            type="text"
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-              errors.zipCode ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-            }`}
-          />
-          {errors.zipCode && <p className="text-red-500 text-sm mt-1">{errors.zipCode.message}</p>}
-        </div>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Emergency Contact *
+            Parent/Guardian Signature (Optional)
           </label>
           <input
-            {...register('emergencyContact')}
+            {...register('parent_or_guardian_signature')}
             type="text"
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-              errors.emergencyContact ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-            }`}
+            placeholder="Enter parent/guardian name if applicable"
+            className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
           />
-          {errors.emergencyContact && <p className="text-red-500 text-sm mt-1">{errors.emergencyContact.message}</p>}
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Emergency Phone *
+            Dive Instructor ID (Optional)
           </label>
           <input
-            {...register('emergencyPhone')}
-            type="tel"
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-              errors.emergencyPhone ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-            }`}
+            {...register('dive_instructor_id')}
+            type="number"
+            placeholder="Enter instructor ID if applicable"
+            className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
           />
-          {errors.emergencyPhone && <p className="text-red-500 text-sm mt-1">{errors.emergencyPhone.message}</p>}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Certification Level *
-          </label>
-          <select
-            {...register('certificationLevel')}
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-              errors.certificationLevel ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-            }`}
-          >
-            <option value="">Select certification level</option>
-            <option value="Open Water">Open Water</option>
-            <option value="Advanced Open Water">Advanced Open Water</option>
-            <option value="Rescue Diver">Rescue Diver</option>
-            <option value="Divemaster">Divemaster</option>
-            <option value="Instructor">Instructor</option>
-          </select>
-          {errors.certificationLevel && <p className="text-red-500 text-sm mt-1">{errors.certificationLevel.message}</p>}
+     
+
+      {/* Insurance Questions */}
+      {isLoading ? (
+        <div className="text-center py-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto"></div>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Certification Agency *
-          </label>
-          <input
-            {...register('certificationAgency')}
-            type="text"
-            placeholder="e.g., PADI, NAUI, SSI"
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-              errors.certificationAgency ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-            }`}
-          />
-          {errors.certificationAgency && <p className="text-red-500 text-sm mt-1">{errors.certificationAgency.message}</p>}
-        </div>
-      </div>
-
-      <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-md">
-        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
-          Liability Waiver Agreement
-        </h3>
-        <div className=" overflow-y-auto text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">
-          {waiverText}
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        <label className="flex items-start space-x-3">
-          <input
-            {...register('agreementAccepted')}
-            type="checkbox"
-            className="mt-1 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
-          />
-          <span className="text-sm text-gray-700 dark:text-gray-300">
-            I have read, understood, and agree to be bound by the terms of this Release and Waiver of Liability Agreement *
-          </span>
-        </label>
-        {errors.agreementAccepted && <p className="text-red-500 text-sm">{errors.agreementAccepted.message}</p>}
-
-        <label className="flex items-start space-x-3">
-          <input
-            {...register('riskAcknowledged')}
-            type="checkbox"
-            className="mt-1 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
-          />
-          <span className="text-sm text-gray-700 dark:text-gray-300">
-            I acknowledge and assume all risks associated with scuba diving activities *
-          </span>
-        </label>
-        {errors.riskAcknowledged && <p className="text-red-500 text-sm">{errors.riskAcknowledged.message}</p>}
-
-        <label className="flex items-start space-x-3">
-          <input
-            {...register('medicalFitness')}
-            type="checkbox"
-            className="mt-1 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
-          />
-          <span className="text-sm text-gray-700 dark:text-gray-300">
-            I certify that I am physically and mentally fit to participate in scuba diving activities and have not been advised otherwise by a medical professional *
-          </span>
-        </label>
-        {errors.medicalFitness && <p className="text-red-500 text-sm">{errors.medicalFitness.message}</p>}
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Digital Signature *
-        </label>
-        {!canSign && (
-          <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-md mb-2">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Please accept all terms above before signing
-            </p>
+      ) : (
+        questionData?.data?.map((question) => (
+          <div key={question.id} className="space-y-3">
+            <label className="flex items-start space-x-2">
+              <input
+              
+                type="checkbox"
+                checked={selectedQuestions.includes(question.id)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setSelectedQuestions(prev => [...prev, question.id])
+                    setAnswers(prev => ({ ...prev, [question?.question_slug]: true }))
+                  } else {
+                    setSelectedQuestions(prev => prev.filter(id => id !== question.id))
+                    setAnswers(prev => {
+                      const newAnswers = { ...prev }
+                      delete newAnswers[question?.question_slug]
+                      return newAnswers
+                    })
+                  }
+                }}
+                className="rounded mt-1 border-gray-300 text-orange-600 focus:ring-orange-500"
+              />
+              <span className="text-sm text-gray-700 dark:text-gray-300">
+                {question.text}
+              </span>
+            </label>
           </div>
-        )}
+        ))
+      )}
+
+      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-md p-4">
+        <label className="flex items-start space-x-3 cursor-pointer">
+          <input
+            {...register('acceptTerms')}
+            type="checkbox"
+            className="mt-1 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+          />
+          <span className="text-sm text-gray-700 dark:text-gray-300">
+            I accept all terms and conditions, acknowledge all risks, and certify that I am physically and mentally fit to participate in scuba diving activities *
+          </span>
+        </label>
+        {errors.acceptTerms && <p className="text-red-500 text-sm mt-2">{errors.acceptTerms.message}</p>}
+      </div>
+
+      <div>
+      
+        
         <div className={`border rounded-md p-2 bg-white w-full ${
           canSign ? 'border-gray-300 dark:border-gray-600' : 'border-gray-200 dark:border-gray-700 opacity-50'
         }`}>
-          <SignatureCanvas
-            ref={sigRef}
-            canvasProps={{
-              width: window?.innerWidth ? Math.min(window.innerWidth - 100, 800) : 800,
-              height: 200,
-              className: 'signature-canvas'
-            }}
-            penColor={canSign ? '#000000' : '#000000'}
-          />
+           <SignatureCanvas
+    ref={sigRef}
+    onEnd={() => {
+      const isEmpty = sigRef.current?.isEmpty()
+      setIsSigned(!isEmpty)
+      if (!isEmpty && sigRef.current) {
+        setSignatureData(sigRef.current.toDataURL())
+      }
+    }}
+    canvasProps={{
+      width: canvasWidth,
+      height: 100,
+      className: 'signature-canvas',
+      style: { 
+        pointerEvents: canSign ? 'auto' : 'none',
+        border: '1px solid #ccc',
+        touchAction: 'none' // Important for mobile
+      }
+    }}
+    penColor={canSign ? '#000000' : '#cccccc'}
+  />
         </div>
         <Button
           type="button"
@@ -349,13 +364,33 @@ const LiabilityForm = () => {
           <strong>Important:</strong> By signing this document, you are waiving certain legal rights. Please read carefully before proceeding.
         </p>
       </div>
-
-      <Button 
+<div className="grid grid-cols-2 gap-3">
+     {!user?.has_filled_liability&& <Button 
         type="submit"
-        className="w-full bg-orange-500 text-white py-3 rounded-md hover:bg-orange-600"
+        disabled={!isSigned || !acceptTerms}
+        className={`w-full flex items-center justify-center gap-x-3 py-3 rounded-md ${
+          isSigned && acceptTerms 
+            ? 'bg-orange-500 text-white hover:bg-orange-600' 
+            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+        }`}
       >
-        Submit Liability Waiver
-      </Button>
+        Submit Liability  {isSubmitting && <SmallSpinner color='#fff'/>}
+      </Button>}
+
+      {user?.has_filled_liability&&<Button 
+              type="button"
+              onClick={() => handleSubmit(onUpdate)()}
+              disabled={!isSigned || !acceptTerms}
+              className={`w-full flex items-center gap-x-3 py-3 rounded-md ${
+                isSigned && acceptTerms 
+                  ? 'bg-orange-500 text-white hover:bg-orange-600' 
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              Update Liability   { isUpdating && <SmallSpinner color='#fff'/>}
+            </Button>}
+
+</div>
     </form>
   )
 }

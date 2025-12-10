@@ -11,6 +11,10 @@ import { useErrorModalState } from '@/hooks'
 import { formatAxiosErrorMessage } from '@/utils'
 import { AxiosError } from 'axios'
 import { SmallSpinner } from '@/icons/core'
+import { useFetchMedicalReport } from '../../api/insurance/medical/retrieveUserMedicalReport'
+import { useUpdateMedalReport } from '../../api/insurance/medical/updateMedicalForm'
+import toast from 'react-hot-toast'
+import { useQueryClient } from 'react-query'
 
 type MedicalFormData = {
 
@@ -46,13 +50,66 @@ const MedicalForm = () => {
   const [isPhysicianSigned, setIsPhysicianSigned] = useState(false)
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>([])
   const [answers, setAnswers] = useState<Record<string, boolean>>({})
+  const [canvasWidth, setCanvasWidth] = useState(typeof window !== 'undefined' ? Math.min(window.innerWidth - 100, 800) : 800)
+  const [signatureData, setSignatureData] = useState<string | null>(null)
+  const [physicianSignatureData, setPhysicianSignatureData] = useState<string | null>(null)
   
+  const {data:medicalReport}=useFetchMedicalReport()
   const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<MedicalFormData>({
     defaultValues: {
+      physicianName: medicalReport?.data?.physician_name || '',
+      hospitalName: medicalReport?.data?.hospital_name || '',
+      physicianEmail: medicalReport?.data?.physician_email || '',
+      diveInstructorId:  undefined,
       medicalConditions: false,
       medicalCertification: false
     }
   })
+
+  // Populate form with medical report data when it loads
+  React.useEffect(() => {
+    if (medicalReport?.data) {
+      setValue('physicianName', medicalReport.data.physician_name || '')
+      setValue('hospitalName', medicalReport.data.hospital_name || '')
+      setValue('physicianEmail', medicalReport.data.physician_email || '')
+      // setValue('diveInstructorId', medicalReport.data.dive_instructor_id || undefined)
+      
+      // Load signatures if available
+      if (medicalReport.data.signature && sigRef.current) {
+        sigRef.current.fromDataURL(medicalReport.data.signature)
+        setSignatureData(medicalReport.data.signature)
+        setIsSigned(true)
+        setValue('medicalCertification', true)
+      }
+      if (medicalReport.data.physician_signature && physicianSigRef.current) {
+        physicianSigRef.current.fromDataURL(medicalReport.data.physician_signature)
+        setPhysicianSignatureData(medicalReport.data.physician_signature)
+        setIsPhysicianSigned(true)
+      }
+      
+      // Load answers if available
+      if (medicalReport.data.answers && questionData?.data) {
+        const answersObj: Record<string, boolean> = {}
+        const selectedIds: number[] = []
+        
+        Object.entries(medicalReport.data.answers).forEach(([key, value]) => {
+          const isTrue = value === 'true'
+          answersObj[key] = isTrue
+          
+          // Find question ID by slug and add to selectedQuestions if answer is true
+          if (isTrue) {
+            const question = questionData.data.find(q => q.question_slug === key)
+            if (question) {
+              selectedIds.push(question.id)
+            }
+          }
+        })
+        
+        setAnswers(answersObj)
+        setSelectedQuestions(selectedIds)
+      }
+    }
+  }, [medicalReport, questionData, setValue])
 
 
   
@@ -66,14 +123,17 @@ const MedicalForm = () => {
   const clearSignature = () => {
     sigRef.current?.clear()
     setIsSigned(false)
+    setSignatureData(null)
   }
 
   const clearPhysicianSignature = () => {
     physicianSigRef.current?.clear()
     setIsPhysicianSigned(false)
+    setPhysicianSignatureData(null)
   }
-  
+  const queryClient = useQueryClient()
   const {mutate:handleSubmitMedical, isLoading:isSubmitting}=useSubmitMedalReport()
+  const {mutate:handleUpdateMedical, isLoading:isUpdating}=useUpdateMedalReport()
   const onSubmit = (data: MedicalFormData) => {
     if (!data.medicalCertification) {
       openErrorModalWithMessage(String("You must certify your medical fitness"));
@@ -107,11 +167,60 @@ const MedicalForm = () => {
 
       handleSubmitMedical({payload},{
         onSuccess:(data)=> {
-          console.log(data);
-          
+          toast.success('Medical form submitted successfully')
+          queryClient.invalidateQueries({queryKey:['user-details']})  
         },
         onError:(error)=>{
 const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+          openErrorModalWithMessage(String(errorMessage));
+        }
+      })
+      // Handle form submission
+    } else {
+   
+      openErrorModalWithMessage(String("Please provide your signature"));
+    }
+  }
+  const onUpdate = (data: MedicalFormData) => {
+    if (!data.medicalCertification) {
+      openErrorModalWithMessage(String("You must certify your medical fitness"));
+
+      return
+    }
+    if (sigRef.current && !sigRef.current.isEmpty()) {
+      const signature = sigRef.current.toDataURL()
+      const physicianSignature = physicianSigRef.current && !physicianSigRef.current.isEmpty() 
+        ? physicianSigRef.current.toDataURL() 
+        : ""
+      
+      // Include all questions with their answers (true/false)
+      const allAnswers: Record<string, string> = {}
+      questionData?.data?.forEach(question => {
+        allAnswers[question.question_slug] = (answers[question.question_slug] || false).toString()
+      })
+      
+      const payload = {
+        id:String(medicalReport?.data?.id),
+        question_ids: questionData?.data?.map(q => q.id) || [],
+        answers: allAnswers,
+        signature: signature,
+        parent_or_guardian_signature: "",
+        physician_name: data.physicianName || "",
+        hospital_name: data.hospitalName || "",
+        physician_email: data.physicianEmail || "",
+        physician_signature: physicianSignature,
+        dive_instructor_id: data.diveInstructorId || 0,
+        lang: language
+      }
+
+      handleUpdateMedical({payload}, {
+        onSuccess:()=> {
+         toast.success('Medical form Updated successfully')
+          queryClient.invalidateQueries({queryKey:['user-details']})  
+          
+        },
+        onError:(error: any)=>{
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
           openErrorModalWithMessage(String(errorMessage));
         }
       })
@@ -125,6 +234,46 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
   React.useEffect(() => {
     setCanSign(isCertified)
   }, [isCertified])
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return
+    
+    let resizeTimeout: NodeJS.Timeout
+    
+    const updateCanvasWidth = () => {
+      clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(() => {
+        // Save current signature data before resize
+        if (sigRef.current && !sigRef.current.isEmpty()) {
+          setSignatureData(sigRef.current.toDataURL())
+        }
+        if (physicianSigRef.current && !physicianSigRef.current.isEmpty()) {
+          setPhysicianSignatureData(physicianSigRef.current.toDataURL())
+        }
+        
+        const width = Math.min(window.innerWidth - 100, 800)
+        setCanvasWidth(width)
+      }, 300)
+    }
+    
+    updateCanvasWidth()
+    window.addEventListener('resize', updateCanvasWidth)
+    
+    return () => {
+      clearTimeout(resizeTimeout)
+      window.removeEventListener('resize', updateCanvasWidth)
+    }
+  }, [])
+
+  // Restore signature data after canvas width changes
+  React.useEffect(() => {
+    if (signatureData && sigRef.current) {
+      sigRef.current.fromDataURL(signatureData)
+    }
+    if (physicianSignatureData && physicianSigRef.current) {
+      physicianSigRef.current.fromDataURL(physicianSignatureData)
+    }
+  }, [canvasWidth])
 
   return (
 
@@ -207,6 +356,41 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
           />
         </div>
       </div>
+            <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Physician Signature (Optional)
+        </label>
+        <div className="border rounded-md p-2 bg-white max-w-full overflow-hidden border-gray-300 dark:border-gray-600">
+           <SignatureCanvas
+    ref={physicianSigRef}
+    onEnd={() => {
+      const isEmpty = physicianSigRef.current?.isEmpty()
+      setIsSigned(!isEmpty)
+      if (!isEmpty && physicianSigRef.current) {
+        setSignatureData(physicianSigRef.current.toDataURL())
+      }
+    }}
+    canvasProps={{
+      width: canvasWidth,
+      height: 100,
+      className: 'signature-canvas',
+      style: { 
+        pointerEvents: canSign ? 'auto' : 'none',
+        border: '1px solid #ccc',
+        touchAction: 'none' // Important for mobile
+      }
+    }}
+    // penColor={canSign ? '#000000' : '#cccccc'}
+  />
+        </div>
+        <Button
+          type="button"
+          onClick={clearPhysicianSignature}
+          className="mt-2 px-4 py-2 text-sm bg-gray-500 text-white rounded-md hover:bg-gray-600"
+        >
+          Clear Physician Signature
+        </Button>
+      </div>
 
       {/* Insurance Questions */}
       {isLoading ? (
@@ -269,20 +453,30 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
            
           </div>
         
-        <div className={`border rounded-md p-2 bg-white w-full ${
+        <div className={`border rounded-md p-2 bg-white max-w-full overflow-hidden ${
           canSign ? 'border-gray-300 dark:border-gray-600' : 'border-gray-200 dark:border-gray-700 opacity-50'
         }`}>
           <SignatureCanvas
-            ref={sigRef}
-            onEnd={() => setIsSigned(!sigRef.current?.isEmpty())}
-            canvasProps={{
-              width: typeof window !== 'undefined' ? Math.min(window.innerWidth - 100, 800) : 800,
-              height: 200,
-              className: 'signature-canvas',
-              style: { pointerEvents: canSign ? 'auto' : 'none' }
-            }}
-            penColor={canSign ? '#000000' : '#cccccc'}
-          />
+    ref={sigRef}
+    onEnd={() => {
+      const isEmpty = sigRef.current?.isEmpty()
+      setIsSigned(!isEmpty)
+      if (!isEmpty && sigRef.current) {
+        setSignatureData(sigRef.current.toDataURL())
+      }
+    }}
+    canvasProps={{
+      width: canvasWidth,
+      height: 100,
+      className: 'signature-canvas',
+      style: { 
+        pointerEvents: canSign ? 'auto' : 'none',
+        border: '1px solid #ccc',
+        touchAction: 'none' // Important for mobile
+      }
+    }}
+    penColor={canSign ? '#000000' : '#cccccc'}
+  />
         </div>
         <Button
           type="button"
@@ -294,32 +488,9 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         </Button>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Physician Signature (Optional)
-        </label>
-        <div className="border rounded-md p-2 bg-white w-full border-gray-300 dark:border-gray-600">
-          <SignatureCanvas
-            ref={physicianSigRef}
-            onEnd={() => setIsPhysicianSigned(!physicianSigRef.current?.isEmpty())}
-            canvasProps={{
-              width: typeof window !== 'undefined' ? Math.min(window.innerWidth - 100, 800) : 800,
-              height: 200,
-              className: 'signature-canvas'
-            }}
-            penColor={'#000000'}
-          />
-        </div>
-        <Button
-          type="button"
-          onClick={clearPhysicianSignature}
-          className="mt-2 px-4 py-2 text-sm bg-gray-500 text-white rounded-md hover:bg-gray-600"
-        >
-          Clear Physician Signature
-        </Button>
-      </div>
 
-      <Button 
+<div className="grid grid-cols-2 gap-3">
+     {!user?.has_filled_medical&& <Button 
         type="submit"
         disabled={!isSigned || !isCertified}
         className={`w-full flex items-center gap-x-3 py-3 rounded-md ${
@@ -329,7 +500,22 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         }`}
       >
         Submit Medical Form  { isSubmitting && <SmallSpinner color='#fff'/>}
-      </Button>
+      </Button>}
+      {user?.has_filled_medical&&<Button 
+        type="button"
+        onClick={() => handleSubmit(onUpdate)()}
+        disabled={!isSigned || !isCertified}
+        className={`w-full flex items-center gap-x-3 py-3 rounded-md ${
+          isSigned && isCertified 
+            ? 'bg-orange-500 text-white hover:bg-orange-600' 
+            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+        }`}
+      >
+        Update Medical Form  { isUpdating && <SmallSpinner color='#fff'/>}
+      </Button>}
+
+</div>
+
     </form>
     
      <ErrorModal

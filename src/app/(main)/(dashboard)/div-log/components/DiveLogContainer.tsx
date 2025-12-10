@@ -555,17 +555,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
       {showBuddies && (
         <div className="xl:hidden fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setShowBuddies(false)}>
           <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-lg max-h-[70vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-archivo">Suggested Buddies</h3>
-              <button 
-                onClick={() => setShowBuddies(false)} 
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                  <path d="M12.854 4.854a.5.5 0 0 0-.708-.708L8 8.293 3.854 4.146a.5.5 0 1 0-.708.708L7.293 9l-4.147 4.146a.5.5 0 0 0 .708.708L8 9.707l4.146 4.147a.5.5 0 0 0 .708-.708L8.707 9l4.147-4.146z"/>
-                </svg>
-              </button>
-            </div>
+           
             <div className="overflow-y-auto max-h-[calc(70vh-80px)]">
               <SuggestedBuddies />
             </div>
