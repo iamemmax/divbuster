@@ -223,21 +223,23 @@ const MyInvoicesManagement = () => {
   return (
     <div className="py-6 w-full px-4 md:px-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:justify-between mb-8">
+      <div className="flex flex-wrap gap-4 sm:justify-between mb-8">
         <h1 className="text-xl md:text-2xl font-medium text-[#101828] dark:text-gray-100">
           {t.title}
         </h1>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           {/* Search Bar */}
-          <DebouncedSearchInput
+          <div className="flex-1 w-full">
+            <DebouncedSearchInput
             placeholder={t.searchPlaceholder}
             onSearch={(value) => setGlobalFilter(value)}
             debounceTime={300}
             value={globalFilter}
             inputClassName="h-12 w-full rounded-lg dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
-            className="w-full sm:w-[400px]"
+            className="w-full "
           />
+          </div>
           
           {/* Download Dropdown */}
           <div className="relative" ref={dropdownRef}>

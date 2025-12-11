@@ -138,9 +138,9 @@ const SubscriptionSettings = ({ user, language }: Props) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row px-4 md:px-10 py-6 gap-6 md:gap-[50px]">
+    <div className="flex flex-col xl:flex-row px-4 md:px-10 py-6 gap-6 md:gap-[50px]">
       {/* Desktop Sidebar */}
-      <div className="hidden md:block w-full max-w-md mt-10 shadow-sm dark:shadow-gray-900/20 rounded-lg">
+      <div className="hidden xl:block w-full max-w-md mt-10 shadow-sm dark:shadow-gray-900/20 rounded-lg">
         <div className="pb-3 max-w-xs">
           <h2 className="font-archivo text-black dark:text-white font-medium text-xl">
             {t.greeting(user?.first_name || "User")}
@@ -182,26 +182,32 @@ const SubscriptionSettings = ({ user, language }: Props) => {
         </div>
       </div>
 
-      {/* Mobile Sidebar (Modal) */}
-      <div className="md:hidden">
-        <button
-          onClick={() => setIsMobileMenuOpen(true)}
-          className="mb-4 px-4 py-2 bg-orange-500 text-white rounded-lg shadow"
-        >
-          Open Menu
-        </button>
+      {/* Mobile Menu Toggle - Floating Button */}
+      <button
+        onClick={() => setIsMobileMenuOpen(true)}
+        className="xl:hidden fixed bottom-4 right-4 z-50 bg-[#F7931D] text-white p-3 rounded-full shadow-lg hover:bg-[#E8841A] transition-colors"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+        </svg>
+      </button>
 
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex">
-            <div className="bg-white dark:bg-gray-900 w-full p-6 space-y-4 overflow-y-auto">
-              <div className="flex justify-end items-center">
-                <button
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-red-500 font-bold mb-4"
-                >
-                  <CloseIcon />
-                </button>
-              </div>
+      {/* Mobile Modal Sidebar */}
+      {isMobileMenuOpen && (
+        <div className="xl:hidden fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)}>
+          <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-900 rounded-t-lg max-h-[70vh] overflow-hidden animate-in slide-in-from-bottom duration-300" onClick={(e) => e.stopPropagation()}>
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-archivo">Subscription Menu</h3>
+              <button 
+                onClick={() => setIsMobileMenuOpen(false)} 
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M12.854 4.854a.5.5 0 0 0-.708-.708L8 8.293 3.854 4.146a.5.5 0 1 0-.708.708L7.293 9l-4.147 4.146a.5.5 0 0 0 .708.708L8 9.707l4.146 4.147a.5.5 0 0 0 .708-.708L8.707 9l4.147-4.146z"/>
+                </svg>
+              </button>
+            </div>
+            <div className="overflow-y-auto max-h-[calc(70vh-80px)]  p-4 md:pl-[18.5rem] space-y-3">
               {sidebarItems.map((item, index) => (
                 <div
                   key={index}
@@ -211,18 +217,23 @@ const SubscriptionSettings = ({ user, language }: Props) => {
                   }}
                   className={`p-4 rounded-lg border cursor-pointer transition-all ${
                     activeSection === item.id
-                      ? "border-orange-300 bg-orange-50 dark:text-black"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-orange-300 bg-orange-50 dark:bg-orange-900/20 dark:text-white"
+                      : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                   }`}
                 >
-                  <h3 className="font-medium">{item.title}</h3>
-                  <p className="text-xs text-gray-500">{item.subtitle}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h3 className="font-medium text-gray-900 dark:text-white">{item.title}</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{item.subtitle}</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-gray-400" />
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="flex-1 w-full mt-6 overflow-y-auto max-h-[calc(80vh-0rem)] p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm dark:shadow-gray-900/20">

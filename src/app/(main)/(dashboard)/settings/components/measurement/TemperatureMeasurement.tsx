@@ -101,7 +101,7 @@ const TemperatureMeasurement: React.FC<prop> = ({ user,language }) => {
   
 
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-8 -mt-5">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           {t.temperature.title}
         </h1>

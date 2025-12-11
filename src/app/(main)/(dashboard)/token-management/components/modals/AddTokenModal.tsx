@@ -2,7 +2,6 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import * as Select from '@radix-ui/react-select';
 import { ChevronDown, Check } from 'lucide-react';
 import { Dialog, DialogBody, DialogContent, DialogTitle, ErrorModal } from '@/components/core';
 import { useFetchPaymentOptions } from '../../../api/payment/fetchPaymentPlans';
@@ -60,10 +59,10 @@ const {language}=useLanguage()
   const onSubmit = (data: TokenFormData) => {
     handleSubmitData(
       {
-        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}token-management`,
+        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/token-management`,
         lang: String(user?.data?.data?.profile_details?.language),
         plan_id: Number(data?.plan_id),
-        return_url: `${process.env.NEXT_PUBLIC_APP_URL}token-management`,
+        return_url: `${process.env.NEXT_PUBLIC_APP_URL}/token-management`,
       },
       {
         onSuccess: (data) => {
@@ -103,32 +102,54 @@ const {language}=useLanguage()
                   <Controller
                     name="plan_id"
                     control={control}
-                    render={({ field }) => (
-                      <Select.Root value={field.value} onValueChange={field.onChange}>
-                        <Select.Trigger className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 flex items-center justify-between hover:border-gray-400 dark:hover:border-gray-500 focus:border-orange-500 dark:focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20 dark:focus:ring-orange-400/20 transition-all text-gray-900 dark:text-white">
-                          <Select.Value />
-                          <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                        </Select.Trigger>
-                        <Select.Portal>
-                          <Select.Content className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-2xl overflow-hidden z-50">
-                            <Select.Viewport className="p-1">
-                              {data?.map((pkg) => (
-                                <Select.Item
-                                  key={pkg.id}
-                                  value={String(pkg?.id)}
-                                  className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 rounded flex items-center justify-between data-[highlighted]:bg-gray-50 dark:data-[highlighted]:bg-gray-700 data-[state=checked]:bg-orange-50 dark:data-[state=checked]:bg-orange-900/20 text-gray-900 dark:text-white"
-                                >
-                                  <Select.ItemText>{`EUR ${pkg?.amount}-${pkg?.coin_value} tokens`}</Select.ItemText>
-                                  <Select.ItemIndicator>
-                                    <Check className="w-4 h-4 text-orange-500 dark:text-orange-400" />
-                                  </Select.ItemIndicator>
-                                </Select.Item>
-                              ))}
-                            </Select.Viewport>
-                          </Select.Content>
-                        </Select.Portal>
-                      </Select.Root>
-                    )}
+                    render={({ field }) => {
+                      const [isOpen, setIsOpen] = React.useState(false)
+                      const selectedPkg = data?.find(pkg => String(pkg.id) === field.value)
+                      
+                      return (
+                        <div className="relative">
+                          <button
+                            type="button"
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 flex items-center justify-between hover:border-gray-400 dark:hover:border-gray-500 focus:border-orange-500 dark:focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20 dark:focus:ring-orange-400/20 transition-all text-gray-900 dark:text-white text-left"
+                          >
+                            <span className={selectedPkg ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}>
+                              {selectedPkg ? `EUR ${selectedPkg.amount} - ${selectedPkg.coin_value} tokens` : 'Select a package'}
+                            </span>
+                            <ChevronDown className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                          </button>
+                          
+                          {isOpen && (
+                            <>
+                              <div 
+                                className="fixed inset-0 z-10" 
+                                onClick={() => setIsOpen(false)}
+                              />
+                              <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-2xl overflow-hidden z-20 animate-in slide-in-from-top-2 duration-200">
+                                <div className="max-h-60 overflow-y-auto">
+                                  {data?.map((pkg) => (
+                                    <button
+                                      key={pkg.id}
+                                      type="button"
+                                      onClick={() => {
+                                        field.onChange(String(pkg.id))
+                                        setIsOpen(false)
+                                      }}
+                                      className="w-full px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center justify-between text-left transition-colors text-gray-900 dark:text-white"
+                                    >
+                                      <span>{`EUR ${pkg.amount} - ${pkg.coin_value} tokens`}</span>
+                                      {String(pkg.id) === field.value && (
+                                        <Check className="w-4 h-4 text-orange-500 dark:text-orange-400" />
+                                      )}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      )
+                    }}
                   />
                   {errors.plan_id && (
                     <p className="text-sm text-red-600 dark:text-red-400">

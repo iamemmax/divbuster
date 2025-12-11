@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { useFetchInsuranceQuestions } from '../../api/insurance/questions/getIsuranceQuestion'
 import { useAuth } from '@/contexts/authentication'
 import { useLanguage } from '@/hooks/useLanguage'
+import { insuranceTranslations } from '@/app/(main)/translation/insuranceTranslation'
 import { useSubmitMedalReport } from '../../api/insurance/medical/submitMedicalFOrm'
 import { useErrorModalState } from '@/hooks'
 import { formatAxiosErrorMessage } from '@/utils'
@@ -41,6 +42,7 @@ const MedicalForm = () => {
     } = useErrorModalState();
   const {authState}=useAuth()
   const {language}= useLanguage()
+  const t = insuranceTranslations[language] || insuranceTranslations.en
   const {user}=authState
   const {data:questionData, isLoading}=useFetchInsuranceQuestions("medical",String(language))
   const sigRef = useRef<SignatureCanvas>(null)
@@ -282,7 +284,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Full Name *
+            {t.firstName} & {t.lastName} *
           </label>
           <input
           disabled
@@ -296,7 +298,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         </div>
           <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-             Phone Number
+             {t.phoneNumber}
           </label>
           <input
           disabled
@@ -314,7 +316,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Physician Name
+            {t.physicianName}
           </label>
           <input
             {...register('physicianName')}
@@ -324,7 +326,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Hospital Name
+            {t.hospitalName}
           </label>
           <input
             {...register('hospitalName')}
@@ -337,7 +339,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Physician Email
+            {t.physicianEmail}
           </label>
           <input
             {...register('physicianEmail')}
@@ -358,7 +360,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
       </div>
             <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Physician Signature (Optional)
+          {t.physicianSignature}
         </label>
         <div className="border rounded-md p-2 bg-white max-w-full overflow-hidden border-gray-300 dark:border-gray-600">
            <SignatureCanvas
@@ -388,7 +390,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
           onClick={clearPhysicianSignature}
           className="mt-2 px-4 py-2 text-sm bg-gray-500 text-white rounded-md hover:bg-gray-600"
         >
-          Clear Physician Signature
+          {t.clearSignature}
         </Button>
       </div>
 
@@ -433,7 +435,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
 
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Digital Signature *
+          {t.participantSignature} *
         </label>
         
           <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-md mb-2">
@@ -445,7 +447,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
             className="mt-1 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
           />
           <span className="text-sm text-gray-700 dark:text-gray-300">
-            I certify that the information provided is accurate and I am medically fit to participate in scuba diving activities *
+            {t.certifyMedicalFitness} *
           </span>
         </label>
         {errors.medicalCertification && <p className="text-red-500 text-sm mt-1">{errors.medicalCertification.message}</p>}
@@ -484,7 +486,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
           disabled={!canSign}
           className="mt-2 px-4 py-2 text-sm bg-gray-500 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
         >
-          Clear Signature
+          {t.clearSignature}
         </Button>
       </div>
 
@@ -499,7 +501,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
         }`}
       >
-        Submit Medical Form  { isSubmitting && <SmallSpinner color='#fff'/>}
+        {t.submit}  { isSubmitting && <SmallSpinner color='#fff'/>}
       </Button>}
       {user?.has_filled_medical&&<Button 
         type="button"
@@ -511,7 +513,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
         }`}
       >
-        Update Medical Form  { isUpdating && <SmallSpinner color='#fff'/>}
+        {t.update}  { isUpdating && <SmallSpinner color='#fff'/>}
       </Button>}
 
 </div>

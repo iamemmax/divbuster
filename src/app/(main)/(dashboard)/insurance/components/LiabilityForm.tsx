@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useFetchInsuranceQuestions } from '../../api/insurance/questions/getIsuranceQuestion'
 import { useSubmitLiabilityReport } from '../../api/insurance/liability/submitLiabiltyForm'
 import { useLanguage } from '@/hooks/useLanguage'
+import { insuranceTranslations } from '@/app/(main)/translation/insuranceTranslation'
 import { useAuth } from '@/contexts/authentication'
 import { SmallSpinner } from '@/icons/core'
 import { useFetchLiabilityReport } from '../../api/insurance/liability/retrieveUserLiailityReport'
@@ -34,6 +35,7 @@ const LiabilityForm = () => {
         errorModalMessage,
       } = useErrorModalState();
   const {language}= useLanguage()
+  const t = insuranceTranslations[language] || insuranceTranslations.en
   const {authState}=useAuth()
   const {user}=authState
   const {data:questionData, isLoading}=useFetchInsuranceQuestions("liability", String(language))
@@ -219,7 +221,7 @@ const LiabilityForm = () => {
        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Full Name *
+            {t.firstName} & {t.lastName} *
           </label>
           <input
           disabled
@@ -233,7 +235,7 @@ const LiabilityForm = () => {
         </div>
           <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-             Phone Number
+             {t.phoneNumber}
           </label>
           <input
           disabled
@@ -247,7 +249,7 @@ const LiabilityForm = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Parent/Guardian Signature (Optional)
+            {t.parentGuardianSignature}
           </label>
           <input
             {...register('parent_or_guardian_signature')}
@@ -258,7 +260,7 @@ const LiabilityForm = () => {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Dive Instructor ID (Optional)
+            Dive Instructor ID
           </label>
           <input
             {...register('dive_instructor_id')}
@@ -315,7 +317,7 @@ const LiabilityForm = () => {
             className="mt-1 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
           />
           <span className="text-sm text-gray-700 dark:text-gray-300">
-            I accept all terms and conditions, acknowledge all risks, and certify that I am physically and mentally fit to participate in scuba diving activities *
+            {t.readAndAccept} *
           </span>
         </label>
         {errors.acceptTerms && <p className="text-red-500 text-sm mt-2">{errors.acceptTerms.message}</p>}
@@ -327,7 +329,11 @@ const LiabilityForm = () => {
         <div className={`border rounded-md p-2 bg-white w-full ${
           canSign ? 'border-gray-300 dark:border-gray-600' : 'border-gray-200 dark:border-gray-700 opacity-50'
         }`}>
-           <SignatureCanvas
+           
+
+
+
+ <SignatureCanvas
     ref={sigRef}
     onEnd={() => {
       const isEmpty = sigRef.current?.isEmpty()
@@ -355,7 +361,7 @@ const LiabilityForm = () => {
           disabled={!canSign}
           className="mt-2 px-4 py-2 text-sm bg-gray-500 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
         >
-          Clear Signature
+          {t.clearSignature}
         </Button>
       </div>
 
@@ -374,7 +380,7 @@ const LiabilityForm = () => {
             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
         }`}
       >
-        Submit Liability  {isSubmitting && <SmallSpinner color='#fff'/>}
+        {t.submit}  {isSubmitting && <SmallSpinner color='#fff'/>}
       </Button>}
 
       {user?.has_filled_liability&&<Button 
@@ -387,7 +393,7 @@ const LiabilityForm = () => {
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
-              Update Liability   { isUpdating && <SmallSpinner color='#fff'/>}
+              {t.update}   { isUpdating && <SmallSpinner color='#fff'/>}
             </Button>}
 
 </div>
