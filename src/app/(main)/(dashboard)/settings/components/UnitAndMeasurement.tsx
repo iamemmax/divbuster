@@ -85,7 +85,7 @@ const UnitAndMeasurement = ({ user ,language}: Prop) => {
       {/* Mobile Modal Sidebar */}
       {isMobileMenuOpen && (
         <div className="xl:hidden fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)}>
-          <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-900 rounded-t-lg max-h-[75vh] overflow-hidden animate-in slide-in-from-bottom duration-300" onClick={(e) => e.stopPropagation()}>
+          <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-900 rounded-t-lg max-h-[70vh] overflow-hidden animate-in slide-in-from-bottom duration-300" onClick={(e) => e.stopPropagation()}>
             <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-archivo">Measurement Menu</h3>
               <button 

@@ -218,5 +218,78 @@ export const insuranceTranslations: Record<Language, any> = {
     completed: "Terminé",
     pending: "En Attente",
     notStarted: "Non Commencé"
+  },
+  
+  nl: {
+    // Page titles
+    insuranceForms: "Verzekeringformulieren",
+    medicalForm: "Medisch Formulier",
+    liabilityForm: "Aansprakelijkheidsformulier",
+    
+    // Modal
+    insuranceFormsRequired: "Verzekeringformulieren Vereist",
+    completeFormsDescription: "U moet uw verzekeringformulieren invullen voordat u verder kunt gaan. Dit zorgt voor uw veiligheid en naleving van duikreglementen.",
+    completeForms: "Formulieren Invullen",
+    cancel: "Annuleren",
+    
+    // Form sections
+    personalInformation: "Persoonlijke Informatie",
+    medicalHistory: "Medische Geschiedenis",
+    physicianInformation: "Artsinformatie",
+    signatures: "Handtekeningen",
+    
+    // Form fields
+    firstName: "Voornaam",
+    lastName: "Achternaam",
+    dateOfBirth: "Geboortedatum",
+    phoneNumber: "Telefoonnummer",
+    emergencyContact: "Noodcontact",
+    emergencyPhone: "Noodtelefoon",
+    physicianName: "Naam Arts",
+    hospitalName: "Ziekenhuis Naam",
+    physicianEmail: "Arts Email",
+    
+    // Medical questions
+    medicalQuestions: "Medische Vragen",
+    answerAllQuestions: "Beantwoord alle medische vragen eerlijk",
+    
+    // Liability waiver
+    liabilityWaiver: "Aansprakelijkheidsverklaring",
+    liabilityQuestions: "Aansprakelijkheidsvragen",
+    readAndAccept: "Ik heb alle voorwaarden gelezen en geaccepteerd",
+    
+    // Signatures
+    participantSignature: "Deelnemer Handtekening",
+    physicianSignature: "Arts Handtekening (indien vereist)",
+    parentGuardianSignature: "Ouder/Voogd Handtekening",
+    signHere: "Teken hier",
+    clearSignature: "Wissen",
+    
+    // Medical certification
+    medicalCertification: "Medische Certificering",
+    certifyMedicalFitness: "Ik certificeer dat ik medisch geschikt ben om deel te nemen aan duikactiviteiten",
+    
+    // Buttons
+    submit: "Verzenden",
+    update: "Bijwerken",
+    next: "Volgende",
+    previous: "Vorige",
+    save: "Opslaan",
+    
+    // Status messages
+    formSubmitted: "Formulier succesvol verzonden",
+    formUpdated: "Formulier succesvol bijgewerkt",
+    pleaseCompleteAllFields: "Vul alle verplichte velden in",
+    signatureRequired: "Handtekening vereist",
+    
+    // Validation
+    required: "Dit veld is verplicht",
+    invalidEmail: "Voer een geldig emailadres in",
+    invalidPhone: "Voer een geldig telefoonnummer in",
+    
+    // Form status
+    completed: "Voltooid",
+    pending: "In Behandeling",
+    notStarted: "Niet Gestart"
   }
 };
