@@ -280,31 +280,68 @@ const LiabilityForm = () => {
         </div>
       ) : (
         questionData?.data?.map((question) => (
-          <div key={question.id} className="space-y-3">
-            <label className="flex items-start space-x-2">
-              <input
-              
-                type="checkbox"
-                checked={selectedQuestions.includes(question.id)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setSelectedQuestions(prev => [...prev, question.id])
-                    setAnswers(prev => ({ ...prev, [question?.question_slug]: true }))
-                  } else {
-                    setSelectedQuestions(prev => prev.filter(id => id !== question.id))
-                    setAnswers(prev => {
-                      const newAnswers = { ...prev }
-                      delete newAnswers[question?.question_slug]
-                      return newAnswers
-                    })
-                  }
-                }}
-                className="rounded mt-1 border-gray-300 text-orange-600 focus:ring-orange-500"
-              />
-              <span className="text-sm text-gray-700 dark:text-gray-300">
-                {question.text}
-              </span>
-            </label>
+          <div key={question.id} className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
+            <span className="text-sm text-gray-700 dark:text-gray-300 flex-1">
+              {question.text}
+            </span>
+            <div className="flex gap-6 ml-4">
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <div className="relative">
+                  <input
+                    type="radio"
+                    name={`question-${question.id}`}
+                    value="true"
+                    checked={answers[question?.question_slug] === true}
+                    onChange={() => {
+                      setAnswers(prev => ({ ...prev, [question?.question_slug]: true }))
+                      if (!selectedQuestions.includes(question.id)) {
+                        setSelectedQuestions(prev => [...prev, question.id])
+                      }
+                    }}
+                    className="sr-only"
+                  />
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                    answers[question?.question_slug] === true 
+                      ? 'border-green-500 bg-green-500' 
+                      : 'border-gray-300 bg-white'
+                  }`}>
+                    {answers[question?.question_slug] === true && (
+                      <div className="w-2 h-2 rounded-full bg-white"></div>
+                    )}
+                  </div>
+                </div>
+                <span className="text-sm font-medium text-green-600 dark:text-green-400">
+                  {t.yes}
+                </span>
+              </label>
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <div className="relative">
+                  <input
+                    type="radio"
+                    name={`question-${question.id}`}
+                    value="false"
+                    checked={answers[question?.question_slug] === false}
+                    onChange={() => {
+                      setAnswers(prev => ({ ...prev, [question?.question_slug]: false }))
+                      setSelectedQuestions(prev => prev.filter(id => id !== question.id))
+                    }}
+                    className="sr-only"
+                  />
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                    answers[question?.question_slug] === false 
+                      ? 'border-red-500 bg-red-500' 
+                      : 'border-gray-300 bg-white'
+                  }`}>
+                    {answers[question?.question_slug] === false && (
+                      <div className="w-2 h-2 rounded-full bg-white"></div>
+                    )}
+                  </div>
+                </div>
+                <span className="text-sm font-medium text-red-600 dark:text-red-400">
+                  {t.no}
+                </span>
+              </label>
+            </div>
           </div>
         ))
       )}

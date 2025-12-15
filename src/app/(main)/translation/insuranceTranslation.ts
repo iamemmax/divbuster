@@ -71,7 +71,19 @@ export const insuranceTranslations: Record<Language, any> = {
     // Form status
     completed: "Completed",
     pending: "Pending",
-    notStarted: "Not Started"
+    notStarted: "Not Started",
+    
+    // Yes/No options
+    yes: "Yes",
+    no: "No",
+    
+    // Upload
+    uploadPhysicianReport: "Upload Physician Report",
+    uploadFile: "Upload File",
+    dragDropFile: "Drag and drop your file here, or click to browse",
+    supportedFormats: "Supported formats: PDF, JPG, PNG (Max 10MB)",
+    fileUploaded: "File uploaded successfully",
+    removeFile: "Remove File"
   },
   
   es: {
@@ -144,7 +156,19 @@ export const insuranceTranslations: Record<Language, any> = {
     // Form status
     completed: "Completado",
     pending: "Pendiente",
-    notStarted: "No Iniciado"
+    notStarted: "No Iniciado",
+    
+    // Yes/No options
+    yes: "Sí",
+    no: "No",
+    
+    // Upload
+    uploadPhysicianReport: "Subir Informe Médico",
+    uploadFile: "Subir Archivo",
+    dragDropFile: "Arrastra y suelta tu archivo aquí, o haz clic para explorar",
+    supportedFormats: "Formatos soportados: PDF, JPG, PNG (Máx 10MB)",
+    fileUploaded: "Archivo subido exitosamente",
+    removeFile: "Eliminar Archivo"
   },
   
   fr: {
@@ -217,7 +241,19 @@ export const insuranceTranslations: Record<Language, any> = {
     // Form status
     completed: "Terminé",
     pending: "En Attente",
-    notStarted: "Non Commencé"
+    notStarted: "Non Commencé",
+    
+    // Yes/No options
+    yes: "Oui",
+    no: "Non",
+    
+    // Upload
+    uploadPhysicianReport: "Télécharger Rapport Médical",
+    uploadFile: "Télécharger Fichier",
+    dragDropFile: "Glissez et déposez votre fichier ici, ou cliquez pour parcourir",
+    supportedFormats: "Formats supportés: PDF, JPG, PNG (Max 10MB)",
+    fileUploaded: "Fichier téléchargé avec succès",
+    removeFile: "Supprimer Fichier"
   },
   
   nl: {
@@ -290,6 +326,10 @@ export const insuranceTranslations: Record<Language, any> = {
     // Form status
     completed: "Voltooid",
     pending: "In Behandeling",
-    notStarted: "Niet Gestart"
+    notStarted: "Niet Gestart",
+    
+    // Yes/No options
+    yes: "Ja",
+    no: "Nee"
   }
 };

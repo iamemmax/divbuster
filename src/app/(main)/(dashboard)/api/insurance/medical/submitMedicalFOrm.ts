@@ -14,6 +14,7 @@ interface prop{
     physician_email: string;
     physician_signature: string;
     dive_instructor_id: number;
+    doctor_report: string;
     lang: string;
 }
 }
