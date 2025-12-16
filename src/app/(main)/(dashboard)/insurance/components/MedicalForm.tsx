@@ -91,6 +91,11 @@ const MedicalForm = () => {
         setIsPhysicianSigned(true)
       }
       
+      // Load physician report if available
+      if (medicalReport.data.physician_report) {
+        setDoctorReportBase64(medicalReport.data.physician_report)
+      }
+      
       // Load answers if available
       if (medicalReport.data.answers && questionData?.data) {
         const answersObj: Record<string, boolean> = {}
@@ -166,7 +171,7 @@ const MedicalForm = () => {
         physician_email: data.physicianEmail || "",
         physician_signature: physicianSignature,
         dive_instructor_id: data.diveInstructorId || 0,
-        doctor_report: doctorReportBase64,
+        physician_report: doctorReportBase64,
         lang: language
       }
 
@@ -215,7 +220,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         physician_email: data.physicianEmail || "",
         physician_signature: physicianSignature,
         dive_instructor_id: data.diveInstructorId || 0,
-        doctor_report: doctorReportBase64,
+        physician_report: doctorReportBase64,
         lang: language
       }
 
@@ -369,7 +374,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
           {t.uploadPhysicianReport}
         </label>
         <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
-          {uploadedFile ? (
+          {uploadedFile || doctorReportBase64 ? (
             <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
@@ -378,20 +383,38 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
                   </svg>
                 </div>
                 <div className="text-left">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{uploadedFile.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{(uploadedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {uploadedFile ? uploadedFile.name : 'Physician Report'}
+                  </p>
+                  {uploadedFile && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{(uploadedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                  )}
+                  {!uploadedFile && doctorReportBase64 && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Previously uploaded</p>
+                  )}
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setUploadedFile(null)
-                  setDoctorReportBase64("")
-                }}
-                className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-              >
-                {t.removeFile}
-              </button>
+              <div className="flex gap-2">
+                {doctorReportBase64 && (
+                  <a
+                    href={doctorReportBase64}
+                    download="physician-report"
+                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm"
+                  >
+                    {t.download || 'Download'}
+                  </a>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setUploadedFile(null)
+                    setDoctorReportBase64("")
+                  }}
+                  className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                >
+                  {t.removeFile}
+                </button>
+              </div>
             </div>
           ) : (
             <div>

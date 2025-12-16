@@ -16,6 +16,7 @@ interface Data {
   hospital_name: string;
   physician_email: string;
   physician_signature: string;
+  physician_report: string;
   last_signed_on: string;
   created_on: string;
   updated_on: string;
