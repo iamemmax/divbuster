@@ -89,9 +89,10 @@ const RecentDiveSites = ({
 
   const handleSave = (item: diveSiteResult) => {
     setLoadingItemId(item.id);
+    const action = myFavourite.includes(item?.id) ? "remove" : "add";
     handleAddTofavorite(
       {
-        action: "add",
+        action: action,
         dive_site_id: item?.id,
         lang: String(userData?.profile_details?.language),
       },
@@ -305,9 +306,9 @@ const router = useRouter()
                       >
                         <div className="relative">
                           <MessageIcon2 />
-                          <div className="absolute -top-4 -right-3 w-[1.3rem] h-[1.3rem] bg-[#F7931D] rounded-full flex items-center justify-center">
+                          {/* <div className="absolute -top-4 -right-3 w-[1.3rem] h-[1.3rem] bg-[#F7931D] rounded-full flex items-center justify-center">
                             <p className="text-xs font-bold text-white">12</p>
-                          </div>
+                          </div> */}
                         </div>
                       </Button>
                       <Button 

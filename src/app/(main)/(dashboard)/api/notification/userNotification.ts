@@ -23,18 +23,33 @@ interface user {
     profile_picture:string
 name:string
 }
+interface NotificationFilter {
+  lang?: string;
+}
+
 const fetchUserNotification = async ({
   pageParam = "user-notification",
+  queryKey,
 }: QueryFunctionContext): Promise<UserNotificationProp> => {
-  const relativeUrl = (pageParam as string).replace(/^https?:\/\/[^/]+/, "");
+  const [_key, url, filters] = queryKey as [string, string?, NotificationFilter?];
+  
+  let relativeUrl = (pageParam as string).replace(/^https?:\/\/[^/]+/, "");
+  
+  if (url) {
+    relativeUrl = url;
+  }
 
-  const response = await adminAxios.get(relativeUrl);
+  const response = await adminAxios.get(relativeUrl, {
+    params: {
+      lang: filters?.lang || 'en',
+    },
+  });
   return response.data as UserNotificationProp;
 };
 
-export const useFetchUserNotification = (url?: string) => {
+export const useFetchUserNotification = (url?: string, filters?: NotificationFilter) => {
   return useInfiniteQuery<UserNotificationProp>(
-    ["fetch-User-Notification", url],
+    ["fetch-User-Notification", url, filters],
     fetchUserNotification,
     {
       getNextPageParam: (lastPage) => lastPage.next ?? undefined,

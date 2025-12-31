@@ -22,21 +22,29 @@ type LoginStep = "forget-password" | "update-password";
 
 export type forgetDetailsValue = z.infer<typeof forgetPasswordUserSchema>;
 
+import { useLanguage } from '@/hooks/useLanguage';
+import { translations } from '../sign-up/translations';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/core';
+import CaretDownIcon from '@/icons/core/CaretDown';
+import { Check } from 'lucide-react';
+import { LoginLanguages } from "../login";
+
 const ForgetPasswordPage = () => {
   const router = useRouter();
   const { authState } = useAuth();
+  const { language, setLanguage } = useLanguage();
+  const t = translations[language] || translations.en;
   const [currentStep, setCurrentStep] = useState<LoginStep>("forget-password");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const { language: contextLanguage, setLanguage: updateLanguage } = useLanguage();
 
-  // Safe localStorage access with fallback
-  const [language, setLanguage] = useState<string>("en");
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const lang = localStorage.getItem("preferredLanguage");
-      setLanguage(lang || "en");
-    }
-  }, []);
+  const languages = [
+    { value: 'en', label: 'English', flag: '/flags/us.svg' },
+    { value: 'es', label: 'Español', flag: '/flags/es.svg' },
+    { value: 'fr', label: 'Français', flag: '/flags/fr.svg' },
+    { value: 'nl', label: 'Nederlands', flag: '/flags/nl.svg' }
+  ];
 
   const {
     isErrorModalOpen,
@@ -104,7 +112,7 @@ const ForgetPasswordPage = () => {
       },
       {
         onSuccess: () => {
-          setSuccessMessage("Verification Code sent to your email");
+          setSuccessMessage(t.forgotPassword.successMessage);
           handleNext();
         },
         onError: (error) => {
@@ -114,20 +122,29 @@ const ForgetPasswordPage = () => {
       }
     );
   };
+  const handleLanguageChange = (value: string) => {
+      const newLanguage = value as Language;
+      
+      // Update local state first
+      setLanguage(newLanguage);
+      
+      // Update context (this will handle localStorage)
+      updateLanguage(newLanguage);
+    };
 
   const renderCurrentStep = () => {
     const stepComponents = {
       "forget-password": (
         <div className="md:px-[30px] px-6 py-[30px] h-full xl:px-[9.125rem] xl:py-[7rem]">
-          <div className="flex justify-center mb-7 items-center lg:hidden">
+          <div className="flex justify-center mb-7 mt-[4rem] items-center md:hidden">
             <DiveBusterBlackLogo />
           </div>
           <div className="flex justify-center items-center flex-col">
-            <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39]">
-              Forget Password
+            <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39] dark:text-white">
+              {t.forgotPassword.title}
             </h2>
             <p className="font-archivo text-[#8D9196] font-medium text-xs 2xl:text-base text-center mt-2">
-              Please enter your email address to reset your password
+              {t.forgotPassword.subtitle}
             </p>
           </div>
           <div className="mt-[1.3125rem]">
@@ -135,17 +152,17 @@ const ForgetPasswordPage = () => {
               <div className="flex flex-col">
                 <label
                   htmlFor="email"
-                  className="font-archivo text-[#1E293B] text-base font-medium mb-2"
+                  className="font-archivo text-[#1E293B] dark:text-white text-base font-medium mb-2"
                 >
-                  Email
+                  {t.forgotPassword.emailLabel}
                 </label>
                 <input
                   type="email"
-                  placeholder="Enter email"
+                  placeholder={t.forgotPassword.emailPlaceholder}
                   id="email"
                   className={`border ${
                     errors.email ? "border-red-500" : "border-[#E2E8F0]"
-                  } outline-none py-[.8125rem] text-black text-sm bg-transparent font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
+                  } outline-none py-[.8125rem] text-black dark:text-white text-sm bg-transparent font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors`}
                   {...register("email")}
                 />
                 {errors?.email && (
@@ -162,10 +179,10 @@ const ForgetPasswordPage = () => {
               >
                 {isLoading ? (
                   <>
-                    Sending... <SmallSpinner color="#fff" />
+                    {t.forgotPassword.sendingText} <SmallSpinner color="#fff" />
                   </>
                 ) : (
-                  "Submit"
+                  t.forgotPassword.submitButton
                 )}
               </Button>
             </form>
@@ -176,7 +193,7 @@ const ForgetPasswordPage = () => {
                 href="/login"
                 className="text-[#F7931D] border border-[#F7931D] w-full hover:text-[#E8821A] font-archivo text-sm font-medium transition-colors"
               >
-                Back to Login
+                {t.forgotPassword.backToLogin}
               </LinkButton>
             </div>
           </div>
@@ -187,7 +204,7 @@ const ForgetPasswordPage = () => {
               setErrorModalState(false);
             }}
             subheading={
-              errorModalMessage || "Please check your inputs and try again."
+              errorModalMessage || t.forgotPassword.errorMessage
             }
           />
         </div>
@@ -215,7 +232,75 @@ const ForgetPasswordPage = () => {
     return stepComponents[currentStep];
   };
 
-  return <div className="w-full h-full">{renderCurrentStep()}</div>;
+  return (
+    <div className="w-full relative h-full">
+   <div className="flex  absolute right-6 xl:right-[9rem] top-5 justify-end items-center">
+  <Select
+    value={language || ""}
+    onValueChange={handleLanguageChange}
+    defaultValue={language}
+    onOpenChange={setIsOpen}
+  >
+    <div className="relative">
+      <SelectTrigger
+      iconClassName="hidden"
+        id="language"
+        className={`border bg-transparent max-w-[9.5rem] w-full relative text-black dark:text-white outline-none h-[3rem] text-sm font-archivo rounded-xl px-[.875rem] pr-10`}
+      >
+        <div className="flex items-center gap-3">
+          {LoginLanguages.find(lang => lang.value === language) && (
+            <>
+              <img
+                src={LoginLanguages.find(lang => lang.value === language)?.flag}
+                alt="Selected language flag"
+                className="w-5 h-5 rounded-sm object-cover"
+              />
+              <span className="dark:text-white">{LoginLanguages.find(lang => lang.value === language)?.label}</span>
+            </>
+          )}
+        </div>
+        <CaretDownIcon
+          color="#8D9196"
+          className={`absolute right-2  top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+        />
+      </SelectTrigger>
+    </div>
+    <SelectContent>
+      {LoginLanguages.map((lang) => (
+        <SelectItem
+
+          key={lang.value}
+          value={lang.value}
+          className="px-2 [&>span[data-radix-select-item-indicator]]:hidden dark:"
+        >
+          <div className="flex items-center justify-between w-full gap-3">
+            <div className="flex items-center gap-3">
+              <img
+                src={lang.flag}
+                alt={`${lang.label} flag`}
+                className="w-5 h-5 rounded-sm object-cover"
+              />
+              <span className="dark:text-white text-black">{lang.label}</span>
+            </div>
+            {language === lang.value && (
+              <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center ml-auto">
+                <Check 
+                  className="w-3 h-3 text-white" 
+                  strokeWidth={3}
+                />
+              </div>
+            )}
+          </div>
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</div>
+      {renderCurrentStep()}
+    </div>
+  );
 };
 
 export default ForgetPasswordPage;

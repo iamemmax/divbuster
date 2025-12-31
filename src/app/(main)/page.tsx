@@ -54,8 +54,8 @@ const Page = () => {
             <ActionDropdown 
               items={[
                 { label: t.createDiveLog,  onClick:() => setShowDivelogModal(true) },
-                { label: t.createDivePlan, onClick:()=>setShowBookWithBuddy(true) },
-                { label: t.addBuddy, onClick:()=>setShowSchoolBookingModal(true) },
+                { label: t.createDivePlan, onClick:()=>setShowSchoolBookingModal(true) },
+                { label: t.addBuddy, onClick:()=>setShowBookWithBuddy(true) },
                 { label: t.addCertification, onClick:()=>setShowCertificationModal(true)},
               ]}
             />
@@ -73,7 +73,7 @@ const Page = () => {
 
       {showDiveLogModal && <AddNewDiveLog isOpen={showDiveLogModal} onClose={()=>setShowDivelogModal(false)}/>}
       {showScholBookingModal && <CreateSchoolPlan isOpen={showScholBookingModal} setIsOpenCardModal={setShowSchoolBookingModal}/>}
-      {showBookWithBuddy && <CreateBuddyBooking isOpen={showBookWithBuddy} setIsOpenCardModal={setShowBookWithBuddy} user={user} selectedBuddies=''/>}
+      {showBookWithBuddy && <CreateBuddyBooking isOpen={showBookWithBuddy} setIsOpenCardModal={setShowBookWithBuddy} user={user} selectedBuddies='' title={t.addBuddy}/>}
       {showCertificationModal && <AddCertificateTypeComp certificateData={{} as certificateResult} type="add" isOpen={showCertificationModal} setIsOpenCardModal={()=>setShowCertificationModal(false)}/>}
     </div>
   )

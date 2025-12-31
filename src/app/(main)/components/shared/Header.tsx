@@ -219,24 +219,18 @@ const Header = ({ subtitle, title }: HeaderProps) => {
                 </p>
               </div>
               <div className="p-2">
-                <div className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+                <Link href={"/messages"} className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
                   <div className="border border-[#EEEEEE] dark:border-gray-600 flex justify-center items-center w-8 h-8 rounded-full">
-                    <WarningIcon className="text-[#132346] dark:text-white" />
-                  </div>
-                  <span className="text-sm font-medium text-gray-700 dark:text-white/70">Alerts</span>
-                </div>
-                <div className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
-                  <Link href={"/messages"} className="border border-[#EEEEEE] bg-transparent p-0 dark:border-gray-600 flex justify-center items-center w-8 h-8 rounded-full">
                     <MessageIcon className="text-[#132346] dark:text-white"/>
-                  </Link>
+                  </div>
                   <span className="text-sm font-medium text-gray-700 dark:text-white/70">Messages</span>
-                </div>
-                <div className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+                </Link>
+                <Link href={"/notifications"} className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
                   <div className="border border-[#EEEEEE] dark:border-gray-600 flex justify-center items-center w-8 h-8 rounded-full">
                     <NotificationIcon className="text-[#132346] dark:text-white"/>
                   </div>
                   <span className="text-sm font-medium text-gray-700 dark:text-white/70">Notifications</span>
-                </div>
+                </Link>
               </div>
               <div className="p-2 border-t border-gray-200 dark:border-gray-700">
                

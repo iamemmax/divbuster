@@ -150,7 +150,7 @@ const AccountTypeForm = ({
       </div>
     
       <div className="flex justify-center items-center flex-col">
-        <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39]">
+        <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39] dark:text-white">
           {t.accountType.title}
         </h2>
         <p className="font-archivo text-[#8D9196] font-medium text-xs 2xl:text-base">
@@ -160,7 +160,7 @@ const AccountTypeForm = ({
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
-          <label htmlFor="unit_of_measure" className="block text-gray-700 font-medium mb-2">
+          <label htmlFor="unit_of_measure" className="block text-gray-700 font-medium dark:text-white mb-2">
             {t.accountType.unitOfMeasure}
           </label>
           <Select
@@ -180,7 +180,7 @@ const AccountTypeForm = ({
               </SelectTrigger>
               <CaretDown 
                 color="#8D9196"
-                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                className={`absolute dark:hidden right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
                   openDropdowns.unitOfMeasure ? 'rotate-180' : ''
                 }`}
               />
@@ -216,7 +216,7 @@ const AccountTypeForm = ({
         </div>
 
         <div className="mb-4">
-          <label htmlFor="temperature" className="block text-gray-700 font-medium mb-2">
+          <label htmlFor="temperature" className="block text-gray-700 font-medium dark:text-white mb-2">
             {t.accountType.temperature}
           </label>
           <Select
@@ -236,7 +236,7 @@ const AccountTypeForm = ({
               </SelectTrigger>
               <CaretDown 
                 color="#8D9196"
-                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                className={`absolute dark:hidden right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
                   openDropdowns.temperature ? 'rotate-180' : ''
                 }`}
               />
@@ -283,7 +283,7 @@ const AccountTypeForm = ({
     <div className="relative">
       <SelectTrigger
         id="body_size"
-        className={`border ${errors.body_size ? 'border-red-500' : 'border-[#E2E8F0] dark:border-gray-600'} w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] pr-10 dark:bg-gray-800 dark:text-gray-100`}
+        className={`border ${errors.body_size ? 'border-red-500' : 'border-[#E2E8F0] dark:border-gray-600'} w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] pr-10 dark:text-gray-100`}
       >
         <SelectValue 
           placeholder={t.accountType.selectBodySize}
@@ -292,7 +292,7 @@ const AccountTypeForm = ({
       </SelectTrigger>
       <CaretDown 
         color="#8D9196"
-        className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+        className={`absolute dark:hidden right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
           openDropdowns.bodySize ? 'rotate-180' : ''
         }`}
       />
@@ -328,7 +328,7 @@ const AccountTypeForm = ({
 </div>
 
         <div className="mb-4">
-          <label htmlFor="shoe_size" className="block text-gray-700 font-medium mb-2">
+          <label htmlFor="shoe_size" className="block text-gray-700 font-medium dark:text-white mb-2">
             {t.accountType.shoeSize}
           </label>
           <Select
@@ -348,7 +348,7 @@ const AccountTypeForm = ({
               </SelectTrigger>
               <CaretDown 
                 color="#8D9196"
-                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                className={`absolute dark:hidden right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
                   openDropdowns.shoeSize ? 'rotate-180' : ''
                 }`}
               />
@@ -384,7 +384,7 @@ const AccountTypeForm = ({
         </div>
 
         <div className="mb-6">
-          <label htmlFor="country" className="block text-gray-700 font-medium mb-2">
+          <label htmlFor="country" className="block text-gray-700 font-medium dark:text-white mb-2">
             {t.accountType.country}
           </label>
           <Select
@@ -404,7 +404,7 @@ const AccountTypeForm = ({
               </SelectTrigger>
               <CaretDown 
                 color="#8D9196"
-                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                className={`absolute dark:hidden right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
                   openDropdowns.country ? 'rotate-180' : ''
                 }`}
               />

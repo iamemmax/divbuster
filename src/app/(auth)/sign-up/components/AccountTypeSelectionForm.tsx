@@ -93,17 +93,17 @@ const AccountTypeSelectionForm = ({ formData, updateFormData, onNext, onBack }: 
       </div>
 
       <div className="flex justify-center items-center flex-col">
-        <h2 className="font-archivo text-base md:-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39]">
+        <h2 className="font-archivo text-base md:-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39] dark:text-white">
           {t.accountTypeSelection.title}
         </h2>
-        <p className="font-archivo text-[#8D9196] max-sm:text-center font-medium text-xs 2xl:text-base">
+        <p className="font-archivo text-[#8D9196] mt-1 max-sm:text-center font-medium text-xs 2xl:text-base">
           {t.accountTypeSelection.subtitle}
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className='mt-[30px]'>
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">
+          <label className="block text-gray-700 dark:text-white font-medium mb-2">
             {t.accountTypeSelection.diverTypeLabel}
           </label>
           <div className="relative">
@@ -153,7 +153,7 @@ const AccountTypeSelectionForm = ({ formData, updateFormData, onNext, onBack }: 
           <div 
             className={`border rounded-lg p-4 cursor-pointer ${
               selectedAccountType === 'recreative' 
-                ? 'border-orange-500 bg-orange-50' 
+                ? 'border-orange-500 text-black bg-orange-50' 
                 : 'border-gray-300'
             }`}
             onClick={() => handleAccountTypeChange('recreative')}
@@ -174,10 +174,18 @@ const AccountTypeSelectionForm = ({ formData, updateFormData, onNext, onBack }: 
                 )}
               </div>
             </div>
-            <p className="text-gray-600 text-sm">
+            <p className={`text-sm ${
+              selectedAccountType === 'recreative' 
+                ? 'text-gray-600' 
+                : 'text-gray-600 dark:text-white/80'
+            }`}>
               {t.accountTypeSelection.recreativeDescription}
             </p>
-            <p className="text-gray-500 text-sm mt-2">
+            <p className={`text-sm mt-2 ${
+              selectedAccountType === 'recreative' 
+                ? 'text-gray-500' 
+                : 'text-gray-500 dark:text-white/80'
+            }`}>
               {t.accountTypeSelection.recreativeExample}
             </p>
           </div>
@@ -185,7 +193,7 @@ const AccountTypeSelectionForm = ({ formData, updateFormData, onNext, onBack }: 
           <div 
             className={`border rounded-lg p-4 cursor-pointer ${
               selectedAccountType === 'professional' 
-                ? 'border-orange-500 bg-orange-50' 
+                ? 'border-orange-500 text-black bg-orange-50' 
                 : 'border-gray-300'
             }`}
             onClick={() => handleAccountTypeChange('professional')}
@@ -203,10 +211,18 @@ const AccountTypeSelectionForm = ({ formData, updateFormData, onNext, onBack }: 
                 </div>
               )}
             </div>
-            <p className="text-gray-600 text-sm">
+            <p className={`text-sm ${
+              selectedAccountType === 'professional' 
+                ? 'text-gray-600' 
+                : 'text-gray-600 dark:text-white/80'
+            }`}>
               {t.accountTypeSelection.professionalDescription}
             </p>
-            <p className="text-gray-500 text-sm mt-2">
+            <p className={`text-sm mt-2 ${
+              selectedAccountType === 'professional' 
+                ? 'text-gray-500' 
+                : 'text-gray-500 dark:text-white/80'
+            }`}>
               {t.accountTypeSelection.professionalExample}
             </p>
           </div>
@@ -214,7 +230,7 @@ const AccountTypeSelectionForm = ({ formData, updateFormData, onNext, onBack }: 
           <div 
             className={`border rounded-lg p-4 cursor-pointer ${
               selectedAccountType === 'combined' 
-                ? 'border-orange-500 bg-orange-50' 
+                ? 'border-orange-500 text-black bg-orange-50' 
                 : 'border-gray-300'
             }`}
             onClick={() => handleAccountTypeChange('combined')}
@@ -227,17 +243,25 @@ const AccountTypeSelectionForm = ({ formData, updateFormData, onNext, onBack }: 
                 <h3 className="font-medium">{t.accountTypeSelection.combinedTitle}</h3>
               </div>
               {selectedAccountType === 'combined' && (
-                <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                <div className="w-6 h-6 bg-orange-500  rounded-full flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="white" width="16" height="16">
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
                   </svg>
                 </div>
               )}
             </div>
-            <p className="text-gray-600 text-sm">
+            <p className={`text-sm ${
+              selectedAccountType === 'combined' 
+                ? 'text-gray-600' 
+                : 'text-gray-600 dark:text-white/80'
+            }`}>
               {t.accountTypeSelection.combinedDescription}
             </p>
-            <p className="text-gray-500 text-sm mt-2">
+            <p className={`text-sm mt-2 ${
+              selectedAccountType === 'combined' 
+                ? 'text-gray-500' 
+                : 'text-gray-500 dark:text-white/80'
+            }`}>
               {t.accountTypeSelection.combinedBenefit}
             </p>
           </div>

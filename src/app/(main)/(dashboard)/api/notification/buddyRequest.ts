@@ -296,7 +296,8 @@ interface Profiledetails {
 interface Filter {
   date_to?:string;
   date_from?:string;
-  search?:string
+  search?:string;
+  lang?:string;
 }
 
 const fetchBuddyRequest = async ({
@@ -326,6 +327,7 @@ const fetchBuddyRequest = async ({
       date_to: dateTo,
       date_from: dateFrom,
       search: filters?.search || undefined,
+      lang: filters?.lang || 'en',
     },
   });
 

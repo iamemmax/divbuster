@@ -60,6 +60,8 @@
 import * as React from "react";
 import Image from "next/image";
 import moment from "moment";
+import { useLanguage } from "@/hooks/useLanguage";
+import { notificationTranslations } from "@/app/(main)/translation/notificationTranslation";
 
 export interface NotificationItemProps {
   id?: string;
@@ -101,6 +103,8 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   declineLoading = false,
   modifyLoading = false,
 }) => {
+  const { language } = useLanguage();
+  const t = notificationTranslations[language] || notificationTranslations.en;
   const handleAccept = () => {
     if (onAccept) onAccept(id);
   };
@@ -166,7 +170,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
                 )}
-                Add Buddy
+                {t.addBuddy}
               </button>
             )}
 
@@ -182,7 +186,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
                 )}
-                Decline
+                {t.decline}
               </button>
             )}
 
@@ -198,7 +202,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
                 )}
-                Modify
+                {t.modify}
               </button>
             )}
           </div>

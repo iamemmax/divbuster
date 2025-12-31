@@ -8,6 +8,10 @@ export interface Translations {
     selectLanguage: string;
     nextButton: string;
   };
+  diveBuddies: {
+    title: string;
+    subtitle: string;
+  };
   accountDetails: {
     title: string;
     subtitle: string;
@@ -192,29 +196,6 @@ export interface Translations {
   verifyEmail:{
     title:string
   }
-  diveBuddies: {
-    title: string;
-    subtitle: string;
-  };
-  diveSpots: {
-    title: string;
-    subtitle: string;
-  };
-  trackJourney: {
-    title: string;
-    subtitle: string;
-  };
-  forgotPassword: {
-    title: string;
-    subtitle: string;
-    emailLabel: string;
-    emailPlaceholder: string;
-    submitButton: string;
-    sendingText: string;
-    backToLogin: string;
-    successMessage: string;
-    errorMessage: string;
-  };
 }
 
 export const translations: Record<Language, Translations> = {
@@ -225,25 +206,6 @@ title:"Kindly verify account to continue"
     diveBuddies: {
       title: "Find and Connect with Dive Buddies",
       subtitle: "Easily find and connect with dive buddies around the world. Share your adventures and dive together."
-    },
-    diveSpots: {
-      title: "Discover Amazing Dive Spots",
-      subtitle: "Explore the best diving locations recommended by experienced divers from our community."
-    },
-    trackJourney: {
-      title: "Track Your Diving Journey",
-      subtitle: "Keep a record of all your dives, certifications, and equipment in one convenient place."
-    },
-    forgotPassword: {
-      title: "Forget Password",
-      subtitle: "Please enter your email address to reset your password",
-      emailLabel: "Email",
-      emailPlaceholder: "Enter email",
-      submitButton: "Submit",
-      sendingText: "Sending...",
-      backToLogin: "Back to Login",
-      successMessage: "Verification Code sent to your email",
-      errorMessage: "Please check your inputs and try again."
     },
     basicInfo: {
       title: "Create an Account",
@@ -439,25 +401,6 @@ title:"Por favor verifica tu cuenta para continuar"
       title: "Encuentra y Conecta con Compañeros de Buceo",
       subtitle: "Encuentra y conecta fácilmente con compañeros de buceo de todo el mundo. Comparte tus aventuras y bucea juntos."
     },
-    diveSpots: {
-      title: "Descubre Sitios de Buceo Increíbles",
-      subtitle: "Explora las mejores ubicaciones de buceo recomendadas por buceadores experimentados de nuestra comunidad."
-    },
-    trackJourney: {
-      title: "Rastrea tu Viaje de Buceo",
-      subtitle: "Mantén un registro de todas tus inmersiones, certificaciones y equipo en un lugar conveniente."
-    },
-    forgotPassword: {
-      title: "Olvidé mi Contraseña",
-      subtitle: "Por favor ingresa tu dirección de correo electrónico para restablecer tu contraseña",
-      emailLabel: "Correo Electrónico",
-      emailPlaceholder: "Ingresa tu correo",
-      submitButton: "Enviar",
-      sendingText: "Enviando...",
-      backToLogin: "Volver al Inicio de Sesión",
-      successMessage: "Código de verificación enviado a tu correo",
-      errorMessage: "Por favor verifica tus datos e intenta nuevamente."
-    },
     basicInfo: {
       title: "Crear una Cuenta",
       subtitle: "Continúa con tu Registro",
@@ -652,25 +595,6 @@ title:"Por favor verifica tu cuenta para continuar"
       title: "Trouvez et Connectez-vous avec des Compagnons de Plongée",
       subtitle: "Trouvez et connectez-vous facilement avec des compagnons de plongée du monde entier. Partagez vos aventures et plongez ensemble."
     },
-    diveSpots: {
-      title: "Découvrez des Sites de Plongée Incroyables",
-      subtitle: "Explorez les meilleurs emplacements de plongée recommandés par des plongeurs expérimentés de notre communauté."
-    },
-    trackJourney: {
-      title: "Suivez Votre Parcours de Plongée",
-      subtitle: "Gardez un enregistrement de toutes vos plongées, certifications et équipements en un seul endroit pratique."
-    },
-    forgotPassword: {
-      title: "Mot de Passe Oublié",
-      subtitle: "Veuillez entrer votre adresse e-mail pour réinitialiser votre mot de passe",
-      emailLabel: "E-mail",
-      emailPlaceholder: "Entrez votre e-mail",
-      submitButton: "Soumettre",
-      sendingText: "Envoi en cours...",
-      backToLogin: "Retour à la Connexion",
-      successMessage: "Code de vérification envoyé à votre e-mail",
-      errorMessage: "Veuillez vérifier vos informations et réessayer."
-    },
     basicInfo: {
       title: "Créer un Compte",
       subtitle: "Poursuivez votre Inscription",
@@ -860,7 +784,11 @@ title:"Por favor verifica tu cuenta para continuar"
   },
   nl: {
     verifyEmail:{
-      title:"Verifieer je account om door te gaan"
+      title:"Verifieer je account om door te gaan"
+    },
+    diveBuddies: {
+      title: "Vind en Verbind met Duikmaatjes",
+      subtitle: "Vind en verbind eenvoudig met duikmaatjes over de hele wereld. Deel je avonturen en duik samen."
     },
     basicInfo: {
       title: "Account Aanmaken",
@@ -1047,35 +975,11 @@ title:"Por favor verifica tu cuenta para continuar"
         mfaCodeRequired: "MFA-code is verplicht"
       }
     },
-    diveBuddies: {
-      title: "Vind en Verbind met Duikmaatjes",
-      subtitle: "Vind en verbind eenvoudig met duikmaatjes over de hele wereld. Deel je avonturen en duik samen."
-    },
-    diveSpots: {
-      title: "Ontdek Geweldige Duikplekken",
-      subtitle: "Verken de beste duiklocaties aanbevolen door ervaren duikers uit onze gemeenschap."
-    },
-    trackJourney: {
-      title: "Volg je Duikreis",
-      subtitle: "Houd een record bij van al je duiken, certificeringen en uitrusting op één handige plek."
-    },
-    forgotPassword: {
-      title: "Wachtwoord Vergeten",
-      subtitle: "Voer je e-mailadres in om je wachtwoord te resetten",
-      emailLabel: "E-mail",
-      emailPlaceholder: "Voer e-mail in",
-      submitButton: "Indienen",
-      sendingText: "Verzenden...",
-      backToLogin: "Terug naar Inloggen",
-      successMessage: "Verificatiecode verzonden naar je e-mail",
-      errorMessage: "Controleer je gegevens en probeer opnieuw."
-    }
 
     
   },
   
 }
-
 
 
 

@@ -1,26 +1,28 @@
 "use client";
 import DivebusterLogo from "@/components/icons/Logo";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { useLanguage } from '@/hooks/useLanguage';
+import { translations } from '../sign-up/translations';
+
 const AuthLayoutLeftSection = () => {
+  const { language } = useLanguage();
+  const t = translations[language] || translations.en;
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const sliderContent = [
     {
-      title: "Find and Connect with Dive Buddies",
-      description:
-        "Easily find and connect with dive buddies around the world. Share your adventures and dive together.",
+      title: t.diveBuddies.title,
+      description: t.diveBuddies.subtitle,
     },
     {
-      title: "Discover Amazing Dive Spots",
-      description:
-        "Explore the best diving locations recommended by experienced divers from our community.",
+      title: t.diveSpots.title,
+      description: t.diveSpots.subtitle,
     },
     {
-      title: "Track Your Diving Journey",
-      description:
-        "Keep a record of all your dives, certifications, and equipment in one convenient place.",
+      title: t.trackJourney.title,
+      description: t.trackJourney.subtitle,
     },
   ];
 
@@ -28,9 +30,7 @@ const AuthLayoutLeftSection = () => {
   const isLastSlide = currentSlide === sliderContent.length - 1;
 
   const nextSlide = () => {
-    if (!isLastSlide) {
-      setCurrentSlide((prev) => prev + 1);
-    }
+    setCurrentSlide((prev) => (prev + 1) % sliderContent.length);
   };
 
   const prevSlide = () => {
@@ -38,6 +38,11 @@ const AuthLayoutLeftSection = () => {
       setCurrentSlide((prev) => prev - 1);
     }
   };
+
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex flex-col justify-between px-[2.8125rem] py-[3.375rem] h-full">
@@ -58,7 +63,7 @@ const AuthLayoutLeftSection = () => {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h1 className="text-[1.5625rem] xl:text-[1.875rem] font-archivo max-w-[19.3125rem] font-semibold mb-4">
+                    <h1 className="text-[1.5625rem] xl:text-[1.675rem] font-archivo max-w-[19.3125rem] font-semibold mb-4">
                       {content.title}
                     </h1>
                     <p className="text-base  xl:text-lg font-archivo font-medium text-white/90 mb-8">

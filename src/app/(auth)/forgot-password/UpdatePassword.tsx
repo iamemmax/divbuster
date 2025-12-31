@@ -1,6 +1,7 @@
 import { useErrorModalState } from "@/hooks";
 import React, { useState } from "react";
-import { useLanguage } from "../sign-up/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
+import { translations } from "../sign-up/translations";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,7 +35,8 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
-  const { t } = useLanguage();
+  const { language } = useLanguage();
+  const t = translations[language] || translations.en;
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -66,11 +68,12 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
     defaultValues: {
       otp: "",
       password: "",
-      confirm_password: ""
+      confirm_password: "",
+      
     },
   });
 
-  const lang = localStorage.getItem("preferredLanguage");
+  const lang = language;
   const { mutate: resendverifyEmail, isLoading: isResending } =
     useResendVerifyEmail();
   const { mutate: handleUpdatePassword, isLoading } = useUpdatePassword();
@@ -81,6 +84,7 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
         email, 
         otp: data.otp, 
         password: data.password,
+        lang:language
       },
       {
         onSuccess: (data) => {
@@ -105,7 +109,7 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
       },
       {
         onSuccess: () => {
-          setSuccessMessage("Verification code sent to your email");
+          setSuccessMessage(t.forgotPassword?.successMessage || "Verification code sent to your email");
           setTimeout(() => setSuccessMessage(null), 3000);
         },
         onError: (error) => {
@@ -122,7 +126,7 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
 
   
   return (
-    <div className="md:px-[30px] px-6 py-[30px] h-full border xl:px-[9.125rem] xl:py-[7rem]">
+    <div className="md:px-[30px] px-6 py-[30px] h-full border 2xl:px-[9.125rem] xl:py-[7rem]">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full h-full flex flex-col items-center justify-center"
@@ -139,16 +143,16 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
           )}
         
         <div className="flex justify-center items-center py-3 flex-col">
-          <h2 className="font-archivo text-[1.2rem] 2xl:text-[1.5rem] font-semibold text-[#1E1B39]">
+          <h2 className="font-archivo text-[1.2rem] 2xl:text-[1.5rem] font-semibold text-[#1E1B39] dark:text-white">
             {t.verifyEmail?.title || "Update Password"}
           </h2>
         </div>
         
         {/* OTP Field */}
-        <div className="mb-6 w-full">
+        <div className="mb-5 w-full">
           <label
             htmlFor="otp"
-            className="block text-sm font-medium text-[#1E1B39] mb-2"
+            className="block text-sm font-medium text-[#1E1B39] dark:text-white mb-2"
           >
             {t.emailVerification.verificationCodeLabel}
           </label>
@@ -169,10 +173,10 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
         </div>
         
         {/* Password Field */}
-        <div className="mb-6 w-full">
+        <div className="mb-5 w-full">
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-[#1E1B39] mb-2"
+            className="block text-sm font-medium text-[#1E1B39] dark:text-white mb-2"
           >
             {t.emailVerification.passwordLabel}
           </label>
@@ -183,7 +187,7 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder={t.emailVerification.passwordPlaceholder}
-              className="w-full h-full px-3 py-2 border-none outline-none bg-transparent text-sm font-archivo rounded-lg"
+              className="w-full h-full px-3 py-2 border-none outline-none  text-sm font-archivo rounded-lg"
               {...register("password")}
             />
             <button
@@ -202,10 +206,10 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
         </div>
         
         {/* Confirm Password Field */}
-        <div className="mb-6 w-full">
+        <div className="mb-5 w-full">
           <label
             htmlFor="confirm_password"
-            className="block text-sm font-medium text-[#1E1B39] mb-2"
+            className="block text-sm font-medium text-[#1E1B39] dark:text-white mb-2"
           >
             {t.emailVerification.confirmPasswordLabel}
           </label>
@@ -216,7 +220,7 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
               id="confirm_password"
               type={showConfirmPassword ? "text" : "password"}
               placeholder={t.emailVerification.confirmPasswordPlaceholder}
-              className="w-full h-full px-3 py-2 border-none outline-none bg-transparent text-sm font-archivo rounded-lg"
+              className="w-full h-full px-3 py-2 border-none outline-none  text-sm font-archivo rounded-lg"
               {...register("confirm_password")}
             />
             <button
@@ -234,8 +238,8 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
           )}
         </div>
 
-        <div className="text-center mt-6">
-          <p className="text-[#1E1B39] text-sm inline-flex items-center">
+        <div className="text-end w-full mt-6">
+          <p className="text-[#1E1B39] dark:text-white text-sm inline-flex items-end">
             {t.emailVerification.noCodeText}{" "}
             <button
               type="button"
@@ -250,21 +254,26 @@ const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastSt
           </p>
         </div>
 
-        <Button
+<div className="grid w-full items-center sm:gap-4 sm:grid-cols-2">
+  
+        <div className="w-full">
+          <Button
           type="submit"
-          className="bg-[#F7931D] border flex items-center justify-center gap-x-3 border-[#F7931D] font-archivo font-semibold text-base mt-5 w-full h-[50px]"
+          className="bg-[#F7931D] border  flex items-center justify-center gap-x-3 border-[#F7931D] font-archivo font-semibold text-base mt-6 w-full h-[50px]"
         >
           {t.emailVerification.submitButton} {isLoading && <SmallSpinner color="#fff" />}
         </Button>
+        </div>
         <div className="mt-6 text-center w-full">
               <LinkButton
               variant={"outlined"}
                 href="/login"
-                className="text-[#F7931D] border border-[#F7931D] w-full hover:text-[#E8821A] font-archivo text-sm font-medium transition-colors"
+                className="text-[#F7931D] border border-[#F7931D] w-full hover:text-[#E8821A] font-archivo text-sm h-[50px] font-medium transition-colors"
               >
               {t.emailVerification.backToLoginButton}
               </LinkButton>
             </div>
+</div>
       </form>
 
       <ErrorModal

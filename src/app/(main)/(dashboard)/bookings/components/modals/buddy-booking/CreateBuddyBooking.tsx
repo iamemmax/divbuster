@@ -17,8 +17,9 @@ interface Props {
   setIsOpenCardModal: React.Dispatch<React.SetStateAction<boolean>>;
   user: User | null
   selectedBuddies:string
+  title?: string;
 }
-const CreateBuddyBooking = ({isOpen,setIsOpenCardModal,user,selectedBuddies}:Props) => {
+const CreateBuddyBooking = ({isOpen,setIsOpenCardModal,user,selectedBuddies,title}:Props) => {
         const [step, setStep] = useState(1)
         const {language}= useLanguage()
             const t = divePlanBuddiesTranslations[language] || divePlanBuddiesTranslations?.en;
@@ -53,7 +54,7 @@ const CreateBuddyBooking = ({isOpen,setIsOpenCardModal,user,selectedBuddies}:Pro
           <DialogBody className="w-full max-md:px-2 p-0 outline-none text-gray-900 dark:text-white">
                  <DialogHeader className="border-b flex items-center justify-between border-gray-200 dark:border-gray-700 pb-4">
                   <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    {t.DivePlan}
+                    {title || t.DivePlan}
                   </DialogTitle>
                   <DialogClose className="bg-transparent p-0 hover:bg-gray-100 dark:hover:bg-gray-800"
                       onClick={()=>setIsOpenCardModal(false)}>

@@ -5,7 +5,7 @@ interface VerifyEmailParams {
   email: string;
 otp:string;
 password:string;
-
+lang:string
 }
 
 /**
@@ -14,8 +14,8 @@ password:string;
  * @returns Promise with the API response
  */
 const UpdatePassword = async (params: VerifyEmailParams) => {
-  const { email, otp,password } = params;
-  const response = await adminAxios.post("reset-password", { email, otp,password });
+  const { email, otp,password,lang } = params;
+  const response = await adminAxios.post("reset-password", { email, otp,password, lang });
   return response.data;
 };
 

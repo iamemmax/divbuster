@@ -1,0 +1,25 @@
+// Example usage in notifications page:
+// Import the component and translation
+import CreateBuddyBooking from '../bookings/components/modals/buddy-booking/CreateBuddyBooking';
+import { notificationTranslations } from '@/app/(main)/translation/notificationTranslation';
+
+// In the component:
+const { language } = useLanguage();
+const t = notificationTranslations[language] || notificationTranslations.en;
+const [showCreateBuddy, setShowCreateBuddy] = useState(false);
+
+// Usage with custom title:
+{showCreateBuddy && (
+  <CreateBuddyBooking 
+    isOpen={showCreateBuddy} 
+    setIsOpenCardModal={setShowCreateBuddy} 
+    user={user} 
+    selectedBuddies=""
+    title={t.addNewBuddy}  // This will show "Add New Buddy" instead of "Create a Dive Plan"
+  />
+)}
+
+// Button to open:
+<button onClick={() => setShowCreateBuddy(true)}>
+  {t.addNewBuddy}
+</button>

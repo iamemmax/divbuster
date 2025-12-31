@@ -14,8 +14,13 @@ import { CustomDateRange } from '../../components/dashboard/MonthlySnapShot';
 import DateRangePicker from '@/components/core/DateRangePicker';
 import { useFetchBuddyRequest } from '../api/notification/buddyRequest';
 import moment from 'moment';
+import { useLanguage } from '@/hooks/useLanguage';
+import { notificationTranslations } from '@/app/(main)/translation/notificationTranslation';
 
 const NotificationOverview = () => {
+  const { language } = useLanguage();
+  const t = notificationTranslations[language] || notificationTranslations.en;
+  
   const [activeTab, setActiveTab] = useState('notifications');
   const [globalSearch, setGlobalSearch] = useState<string>("");
   const [showSettingPage, setShowSettingPage] = useState(false);
@@ -28,14 +33,15 @@ const NotificationOverview = () => {
   });
   
   const tabs: TabItem[] = [
-    { id: "notifications", label: "Notifications", href: '?tab=notifications' },
-    { id: "buddyRequests", label: "Buddy Requests", href: '?tab=buddyRequests' },
+    { id: "notifications", label: t.notifications, href: '?tab=notifications' },
+    { id: "buddyRequests", label: t.buddyRequests, href: '?tab=buddyRequests' },
   ];
 
   const filters = {
 date_from:moment(customDateRange?.startDate)?.subtract(10, 'days').calendar(),
 date_to:moment(customDateRange?.endDate)?.subtract(10, 'days').calendar(),
-search: globalSearch
+search: globalSearch,
+lang: language
 };
 const { data } = useFetchBuddyRequest("buddy-request", filters);
   const handleDateRangeApply = (startDate: Date, endDate: Date) => {
@@ -100,14 +106,14 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
-      <Header title="Notifications" subtitle="" />
+      <Header title={t.notifications} subtitle="" />
       
       {/* Mobile Sidebar Overlay */}
       {showMobileSidebar && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden">
           <div className="fixed right-0 top-0 h-full w-80 max-w-[85vw] bg-white dark:bg-gray-800 shadow-xl transform transition-transform duration-300">
             <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Activities</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.recentActivities}</h3>
               <button 
                 onClick={() => setShowMobileSidebar(false)}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
@@ -134,13 +140,13 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
               
               {/* Search Input */}
-              <div className="w-full sm:w-96">
+              <div className="w-full flex-1 sm:!w-[500px]">
                 <DebouncedSearchInput
-                  placeholder="Search for buddies, dive sites, dive plans"
+                  placeholder={t.searchPlaceholder}
                   onSearch={(value) => setGlobalSearch(value)}
                   debounceTime={30}
                   value={globalSearch}
-                  className="w-full"
+                  className="max-w-[500px] min-w-[300px] w-full "
                 />
               </div>
               
@@ -157,7 +163,7 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
                     {formatDateRange(customDateRange.startDate, customDateRange.endDate)}
                   </span>
                   <span className="text-gray-700 dark:text-gray-300 sm:hidden">
-                    Range
+                    {t.range}
                   </span>
                 </div>
                 
@@ -167,7 +173,7 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
                   onClick={() => setShowSettingPage(true)}
                 >
                   <Settings className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-                  <span className="hidden sm:inline">Settings</span>
+                  <span className="hidden sm:inline">{t.settings}</span>
                 </button>
                 
                 {/* Mobile Sidebar Toggle - Only visible on mobile/tablet */}
@@ -176,7 +182,7 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
                   onClick={() => setShowMobileSidebar(true)}
                 >
                   <Menu className="w-3 h-3 sm:w-4 sm:h-4" />
-                  <span className="hidden sm:inline">Activities</span>
+                  <span className="hidden sm:inline">{t.activities}</span>
                 </button>
                 
               </div>
@@ -191,10 +197,10 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
               {activeTab === "notifications" && (
                 <div>
                   <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-200">
-                    Notification Overview
+                    {t.notificationOverview}
                   </h1>
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 transition-colors duration-200">
-                    Your current account notifications and activity.
+                    {t.notificationOverviewDesc}
                   </p>
                 </div>
               )}
@@ -202,10 +208,10 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
               {activeTab === "buddyRequests" && (
                 <div>
                   <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
-                    Buddy Requests
+                    {t.buddyRequests}
                   </h2>
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                    Pending requests
+                    {t.pendingRequests}
                   </p>
                 </div>
               )}
@@ -225,7 +231,7 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
         </div>
 
         {/* Main Content Grid - Responsive Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] items-start gap-4 sm:gap-6 lg:gap-8 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] items-start gap-4 sm:gap-6 lg:gap-8 mt-6">
           
           {/* Left Column - Main Content */}
           <main className="w-full min-w-0"> {/* min-w-0 prevents overflow on mobile */}
@@ -278,7 +284,7 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
           </main>
           
           {/* Right Column - Desktop Sidebar (Hidden on Mobile/Tablet) */}
-          <aside className="hidden lg:block space-y-6">
+          {/* <aside className="hidden lg:block space-y-6">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/20 overflow-hidden sticky top-6 border border-gray-200 dark:border-gray-700 transition-colors duration-200">
               <div className="p-4 xl:p-6 border-b flex items-start justify-between border-gray-200 dark:border-gray-700">
                 <div>
@@ -299,7 +305,7 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
                 <NotificationSidebar />
               </div>
             </div>
-          </aside>
+          </aside> */}
           
         </div>
       </div>

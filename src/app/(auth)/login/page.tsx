@@ -24,6 +24,7 @@ import CaretDownIcon from "@/icons/core/CaretDown";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Check } from 'lucide-react'; // or use @phosphor-icons/react
 import { LoginLanguages, LoginTranslations } from ".";
+import DivebusterLogo from "@/components/icons/Logo";
 
 // import { useLanguage } from "../sign-up/contexts/LanguageContext";
 
@@ -158,10 +159,11 @@ const LoginPage = () => {
       "login": (
         <div className="md:px-[30px] px-6 py-[30px]  xl:px-[9.125rem] xl:py-[7rem]">
 
-          <div className="flex justify-center mt-5 mb-7 items-center lg:hidden ">
-            <DiveBusterBlackLogo />
+          <div className="flex justify-center z-[9999999999999] mt-[4rem] items-center md:hidden ">
+            <DivebusterLogo className="hidden dark:block"/>
+            <DiveBusterBlackLogo className="dark:hidden"/>
           </div>
-          <div className="flex justify-center items-center flex-col">
+          <div className="flex justify-center mt-[4rem] items-center flex-col">
             <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39] dark:text-white">
               {t.title}
             </h2>
@@ -267,7 +269,7 @@ const LoginPage = () => {
   return (
     <div className="w-full relative h-full">
 
-<div className="flex absolute right-6 md:right-[9rem] top-5 justify-end items-center">
+<div className="flex  absolute right-6 xl:right-[9rem] top-5 justify-end items-center">
   <Select
     value={language || ""}
     onValueChange={handleLanguageChange}
@@ -288,7 +290,7 @@ const LoginPage = () => {
                 alt="Selected language flag"
                 className="w-5 h-5 rounded-sm object-cover"
               />
-              <span>{LoginLanguages.find(lang => lang.value === language)?.label}</span>
+              <span className="dark:text-white">{LoginLanguages.find(lang => lang.value === language)?.label}</span>
             </>
           )}
         </div>
@@ -315,7 +317,7 @@ const LoginPage = () => {
                 alt={`${lang.label} flag`}
                 className="w-5 h-5 rounded-sm object-cover"
               />
-              <span className="dark:text-black">{lang.label}</span>
+              <span className="dark:text-white text-black">{lang.label}</span>
             </div>
             {language === lang.value && (
               <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center ml-auto">

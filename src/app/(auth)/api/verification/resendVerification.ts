@@ -12,10 +12,14 @@ interface VerifyEmailParams {
  * @param params Object containing email and verification code
  * @returns Promise with the API response
  */
+
+interface successProp {
+  detail: string;
+}
 const resendVerifyEmail = async (params: VerifyEmailParams) => {
   const { email, lang } = params;
   const response = await adminAxios.post("resend-verification", { email,lang:lang||"en" });
-  return response.data;
+  return response.data as successProp;
 };
 
 /**

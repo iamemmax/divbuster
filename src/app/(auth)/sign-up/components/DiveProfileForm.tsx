@@ -12,6 +12,35 @@ import DiveBusterBlackLogo from "@/components/icons/DiveBusterBlackLogo";
 import { useLanguage } from "@/hooks/useLanguage";
 import { translations } from "../translations";
 
+// Custom styles for dark mode phone input
+const phoneInputStyles = `
+  .dark .react-tel-input .form-control {
+    background-color: #374151 !important;
+    border-color: #4b5563 !important;
+    color: white !important;
+  }
+  .dark .react-tel-input .flag-dropdown {
+    background-color: #374151 !important;
+    border-color: #4b5563 !important;
+  }
+  .dark .react-tel-input .country-list {
+    background-color: #374151 !important;
+    border-color: #4b5563 !important;
+  }
+  .dark .react-tel-input .country-list .country {
+    background-color: #374151 !important;
+    color: white !important;
+  }
+  .dark .react-tel-input .country-list .country:hover {
+    background-color: #4b5563 !important;
+  }
+  .dark .react-tel-input .country-list .search {
+    background-color: #374151 !important;
+    border-color: #4b5563 !important;
+    color: white !important;
+  }
+`;
+
 type DiveProfileFormProps = {
   stepThreeData: thirdStepProps;
   setStepThreeData: React.Dispatch<React.SetStateAction<thirdStepProps>>;
@@ -83,13 +112,15 @@ const DiveProfileForm = ({
   };
 
   return (
-     <div className=" xl:px-[9.125rem] w-full md:px-[30px]  px-6 py-[30px] xl:py-[7rem]">
+    <>
+      <style dangerouslySetInnerHTML={{ __html: phoneInputStyles }} />
+      <div className=" xl:px-[9.125rem] w-full md:px-[30px]  px-6 py-[30px] xl:py-[7rem]">
       <div className="flex justify-center mb-7 items-center md:hidden">
         <DiveBusterBlackLogo />
       </div>
     
       <div className="flex justify-center items-center flex-col">
-        <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39]">
+        <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39] dark:text-white">
           {t.diveProfile.title}
         </h2>
         <p className="font-archivo text-[#8D9196] font-medium text-xs 2xl:text-base">
@@ -99,7 +130,7 @@ const DiveProfileForm = ({
 
       <form onSubmit={handleSubmit(onSubmit)} className="mt-[3.125rem]">
         <div className="mb-4">
-          <label htmlFor="phone_number" className="block text-gray-700 font-medium mb-2">
+          <label htmlFor="phone_number" className="block text-gray-700 font-medium dark:text-white mb-2">
             {t.diveProfile.phoneNumber}
           </label>
           <Controller
@@ -116,12 +147,10 @@ const DiveProfileForm = ({
                   placeholder: t.diveProfile.phoneNumberPlaceholder,
                 }}
                 containerClass="phone-input-container"
-                inputClass={`w-full px-3 py-2 border ${
-                  errors.phone_number ? 'border-red-500' : 'border-[#E2E8F0]'
-                } rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F7931D] h-[3rem] text-sm font-archivo`}
-                buttonClass="border-none bg-transparent rounded-l-lg "
-                dropdownClass="bg-white border-none rounded-lg shadow-lg"
-                searchClass="py-2 px-3 border-b border-[#E2E8F0]"
+                inputClass={`w-full px-3 py-2 border ${errors.phone_number ? 'border-red-500' : 'border-[#E2E8F0] dark:border-gray-600'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F7931D] h-[3rem] text-sm font-archivo bg-white dark:bg-gray-800 text-gray-900 dark:text-white`}
+                buttonClass="border-none bg-transparent dark:bg-gray-800 rounded-l-lg"
+                dropdownClass="bg-white dark:bg-gray-800 dark:text-white border-none rounded-lg shadow-lg"
+                searchClass="py-2 px-3 border-b border-[#E2E8F0] dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               />
             )}
           />
@@ -131,7 +160,7 @@ const DiveProfileForm = ({
         </div>
 
         <div className="mb-4">
-          <label htmlFor="password" className="block text-gray-700 font-medium mb-2">
+          <label htmlFor="password" className="block text-gray-700 font-medium dark:text-white mb-2">
             {t.diveProfile.password}
           </label>
           <div className="relative">
@@ -144,10 +173,17 @@ const DiveProfileForm = ({
             />
             <button
               type="button"
-              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-black dark:text-white"
               onClick={() => setShowPassword(!showPassword)}
             >
-              <EyeIcon />
+              {!showPassword ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              ) : (
+                <EyeIcon className="text-black dark:text-white" />
+              )}
             </button>
           </div>
           {errors.password && (
@@ -156,7 +192,7 @@ const DiveProfileForm = ({
         </div>
 
         <div className="mb-4">
-          <label htmlFor="confirm_password" className="block text-gray-700 font-medium mb-2">
+          <label htmlFor="confirm_password" className="block text-gray-700 font-medium dark:text-white mb-2">
             {t.diveProfile.confirmPassword}
           </label>
           <div className="relative">
@@ -169,10 +205,17 @@ const DiveProfileForm = ({
             />
             <button
               type="button"
-              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-black dark:text-white"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              <EyeIcon />
+              {!showConfirmPassword ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              ) : (
+                <EyeIcon className="text-black dark:text-white" />
+              )}
             </button>
           </div>
           {errors.confirm_password && (
@@ -183,7 +226,7 @@ const DiveProfileForm = ({
         <div className="mb-4">
           <label
             htmlFor="name"
-            className="block text-gray-700 font-medium mb-2"
+            className="block text-gray-700 font-medium dark:text-white mb-2"
           >
             {t.diveProfile.nickname}
           </label>
@@ -204,7 +247,7 @@ const DiveProfileForm = ({
         <div className="mb-4">
           <label
             htmlFor="dateOfBirth"
-            className="block text-gray-700 font-medium mb-2"
+            className="block text-gray-700 font-medium dark:text-white mb-2"
           >
             {t.diveProfile.dateOfBirth}
           </label>
@@ -240,6 +283,7 @@ const DiveProfileForm = ({
         </div>
       </form>
     </div>
+    </>
   );
 };
 

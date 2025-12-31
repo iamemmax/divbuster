@@ -193,7 +193,7 @@ const ProfilePictureForm = ({
   return (
     <div className="xl:px-[9.125rem] w-full md:px-[30px] px-6 py-[30px] xl:py-[7rem]">
       <div className="flex justify-center items-center flex-col">
-        <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39]">
+        <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39] dark:text-white">
           {t.profilePicture.title}
         </h2>
         <p className="font-archivo text-[#8D9196] font-medium text-xs 2xl:text-base">
@@ -259,6 +259,7 @@ const ProfilePictureForm = ({
         <div className="space-y-4">
           <div className="flex gap-4">
             <Button
+              disabled={isLoading}
               type="button"
               onClick={onBack}
               className="bg-white w-full md:flex-1 border max-sm:px-3 border-[#F7931D] text-[#F7931D] py-3 rounded-lg font-medium"
@@ -276,6 +277,7 @@ const ProfilePictureForm = ({
           
           <Button
             type="button"
+              disabled={isLoading}
             onClick={handleSkip}
             className="w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-lg font-medium"
           >
