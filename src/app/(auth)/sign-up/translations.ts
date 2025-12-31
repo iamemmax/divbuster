@@ -34,6 +34,14 @@ export interface Translations {
     connecting: string;
     google: string;
   };
+  socialSignups: {
+    reddit: string;
+    microsoft: string;
+    linkedin: string;
+    apple: string;
+    connecting: string;
+    google: string;
+  };
   // Add missing properties for login/registration
   googleLogin: string;
   googleConnecting: string;
@@ -278,6 +286,14 @@ title:"Kindly verify account to continue"
       connecting: "Connecting...",
       google: "Login with Google"
     },
+    socialSignups: {
+      reddit: "Sign up with Reddit",
+      microsoft: "Sign up with Microsoft 365",
+      linkedin: "Sign up with LinkedIn",
+      apple: "Sign up with Apple ID",
+      connecting: "Connecting...",
+      google: "Sign up with Google"
+    },
     googleLogin: "Login with Google",
     googleConnecting: "Connecting...",
     noAccount: "Don't have an account?",
@@ -490,6 +506,14 @@ title:"Por favor verifica tu cuenta para continuar"
       apple: "Iniciar sesión con Apple ID",
       connecting: "Conectando...",
       google: "Iniciar sesión con Google"
+    },
+    socialSignups: {
+      reddit: "Registrarse con Reddit",
+      microsoft: "Registrarse con Microsoft 365",
+      linkedin: "Registrarse con LinkedIn",
+      apple: "Registrarse con Apple ID",
+      connecting: "Conectando...",
+      google: "Registrarse con Google"
     },
     googleLogin: "Iniciar sesión con Google",
     googleConnecting: "Conectando...",
@@ -704,6 +728,14 @@ title:"Por favor verifica tu cuenta para continuar"
       connecting: "Connexion en cours...",
       google: "Se connecter avec Google"
     },
+    socialSignups: {
+      reddit: "S'inscrire avec Reddit",
+      microsoft: "S'inscrire avec Microsoft 365",
+      linkedin: "S'inscrire avec LinkedIn",
+      apple: "S'inscrire avec Apple ID",
+      connecting: "Connexion en cours...",
+      google: "S'inscrire avec Google"
+    },
     googleLogin: "Se connecter avec Google",
     googleConnecting: "Connexion en cours...",
     noAccount: "Vous n'avez pas de compte ?",
@@ -894,6 +926,14 @@ title:"Por favor verifica tu cuenta para continuar"
       apple: "Inloggen met Apple ID",
       connecting: "Verbinden...",
       google: "Inloggen met Google"
+    },
+    socialSignups: {
+      reddit: "Registreren met Reddit",
+      microsoft: "Registreren met Microsoft 365",
+      linkedin: "Registreren met LinkedIn",
+      apple: "Registreren met Apple ID",
+      connecting: "Verbinden...",
+      google: "Registreren met Google"
     },
     googleLogin: "Inloggen met Google",
     googleConnecting: "Verbinden...",

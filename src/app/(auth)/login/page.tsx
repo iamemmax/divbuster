@@ -231,7 +231,7 @@ const LoginPage = () => {
               </Button>
             </form>
 
-            <SocialAuth />
+            <SocialAuth mode="login" />
 
             <div className="mt-7">
               <Link

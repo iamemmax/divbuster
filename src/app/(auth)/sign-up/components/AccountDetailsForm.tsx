@@ -232,7 +232,7 @@ const t = translations[language] || translations.en
 
 
 
-      <SocialAuth />
+      <SocialAuth mode="signup" />
 
 
       <ErrorModal

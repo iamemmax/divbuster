@@ -24,7 +24,11 @@ import { Button, ErrorModal } from "@/components/core";
 import { useLanguage } from "@/hooks/useLanguage";
 import { translations } from "../sign-up/translations";
 
-const SocialAuth = () => {
+interface SocialAuthProps {
+  mode?: 'login' | 'signup';
+}
+
+const SocialAuth = ({ mode = 'login' }: SocialAuthProps) => {
   const {
     isErrorModalOpen,
     setErrorModalState,
@@ -33,7 +37,9 @@ const SocialAuth = () => {
   } = useErrorModalState();
 
   const {  language } = useLanguage();
-  const t = translations[language] || translations.en
+  const t = translations[language] || translations.en;
+  // Fallback for socialSignups if not available
+  const socialTexts = mode === 'signup' ? (t.socialSignups || t.socialLogins) : t.socialLogins;
   const { authState } = useAuth();
   const [linkedinLoading, setLinkedinLoading] = useState(false);
   const router = useRouter();
@@ -180,14 +186,14 @@ const SocialAuth = () => {
   const loginArray = [
     {
       id: 1,
-      name: t.socialLogins.google,
+      name: socialTexts.google,
       icon: <GoogleIcon />,
       onClick: handleGoogleClick,
       isLoading: isGoogleLoading,
     },
     {
       id: 2,
-      name: t.socialLogins.reddit,
+      name: socialTexts.reddit,
       icon: <ReditIcon />,
       onClick: () => {
         openErrorModalWithMessage("Reddit login is not implemented yet.");
@@ -195,7 +201,7 @@ const SocialAuth = () => {
     },
     {
       id: 3,
-      name: t.socialLogins.microsoft,
+      name: socialTexts.microsoft,
       icon: <MicroSoftIcon />,
       onClick: () => {
         openErrorModalWithMessage("Microsoft login is not implemented yet.");
@@ -203,7 +209,7 @@ const SocialAuth = () => {
     },
     {
       id: 4,
-      name: t.socialLogins.linkedin,
+      name: socialTexts.linkedin,
       icon: <LinkdIcon />,
       onClick: handleLinkedInClick,
       isLoading: linkedinLoading || isLinkedInLoading,
@@ -240,7 +246,7 @@ const SocialAuth = () => {
             >
               <div className="flex items-center justify-center gap-3">
                 {item.icon}
-                {item.isLoading ? t.socialLogins.connecting : item.name}
+                {item.isLoading ? socialTexts.connecting : item.name}
               </div>
             </Button>
           </div>
