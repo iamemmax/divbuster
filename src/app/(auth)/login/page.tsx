@@ -160,10 +160,10 @@ const LoginPage = () => {
         <div className="md:px-[30px] px-6 py-[30px]  xl:px-[9.125rem] xl:py-[7rem]">
 
           <div className="flex justify-center z-[9999999999999] mt-[4rem] items-center md:hidden ">
-            <DivebusterLogo className="hidden dark:block"/>
-            <DiveBusterBlackLogo className="dark:hidden"/>
+            <DiveBusterBlackLogo className="dark:"/>
+            {/* <DivebusterLogo className=" dark:block"/> */}
           </div>
-          <div className="flex justify-center mt-[4rem] items-center flex-col">
+          <div className="flex justify-center mt-[2rem] items-center flex-col">
             <h2 className="font-archivo text-[1.5rem] 2xl:text-[1.875rem] font-semibold text-[#1E1B39] dark:text-white">
               {t.title}
             </h2>
