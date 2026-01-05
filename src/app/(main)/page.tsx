@@ -1,8 +1,6 @@
 
-
-
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import Header from './components/shared/Header'
 import { useAuth } from '@/contexts/authentication'
 import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput';
@@ -18,23 +16,39 @@ import { DashboardTranslations } from './translation/dashboardTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 import AddCertificateTypeComp from './components/certifications/AddCertificateTypeComp';
 
-const Page = () => {
+import formatDate from '@/utils/dateFormat';
+
+const Page = React.memo(() => {
   const { authState } = useAuth();
   const { user } = authState;
-  const [showDiveLogModal, setShowDivelogModal] = useState(false)
-  const [showCertificationModal, setShowCertificationModal] = useState(false)
-  const [showScholBookingModal, setShowSchoolBookingModal] = useState(false)
-  const [showBookWithBuddy, setShowBookWithBuddy] = useState(false)
+  
+  const [modalStates, setModalStates] = useState({
+    diveLog: false,
+    certification: false,
+    schoolBooking: false,
+    buddyBooking: false
+  });
 
   const {language}= useLanguage()
   const t = DashboardTranslations[language] || DashboardTranslations.en;
+
+  const toggleModal = useCallback((modalName: keyof typeof modalStates) => {
+    setModalStates(prev => ({ ...prev, [modalName]: !prev[modalName] }));
+  }, []);
+
+  const actionItems = useMemo(() => [
+    { label: t.createDiveLog, onClick: () => toggleModal('diveLog') },
+    { label: t.createDivePlan, onClick: () => toggleModal('schoolBooking') },
+    { label: t.addBuddy, onClick: () => toggleModal('buddyBooking') },
+    { label: t.addCertification, onClick: () => toggleModal('certification') },
+  ], [t, toggleModal]);
 
   return (
     <div className='text-black dark:text-white'>
      
        <Header 
         title={`Welcome, ${user?.first_name}`}
-        subtitle='June 12, 2024' 
+        subtitle={formatDate.long(new Date())} 
       />
   
       
@@ -51,14 +65,7 @@ const Page = () => {
           </div>
           
           <div className="relative w-[230px] md:w-auto">
-            <ActionDropdown 
-              items={[
-                { label: t.createDiveLog,  onClick:() => setShowDivelogModal(true) },
-                { label: t.createDivePlan, onClick:()=>setShowSchoolBookingModal(true) },
-                { label: t.addBuddy, onClick:()=>setShowBookWithBuddy(true) },
-                { label: t.addCertification, onClick:()=>setShowCertificationModal(true)},
-              ]}
-            />
+            <ActionDropdown items={actionItems} />
           </div>
         </div>
         
@@ -71,12 +78,12 @@ const Page = () => {
         </div>
       </div>
 
-      {showDiveLogModal && <AddNewDiveLog isOpen={showDiveLogModal} onClose={()=>setShowDivelogModal(false)}/>}
-      {showScholBookingModal && <CreateSchoolPlan isOpen={showScholBookingModal} setIsOpenCardModal={setShowSchoolBookingModal}/>}
-      {showBookWithBuddy && <CreateBuddyBooking isOpen={showBookWithBuddy} setIsOpenCardModal={setShowBookWithBuddy} user={user} selectedBuddies='' title={t.addBuddy}/>}
-      {showCertificationModal && <AddCertificateTypeComp certificateData={{} as certificateResult} type="add" isOpen={showCertificationModal} setIsOpenCardModal={()=>setShowCertificationModal(false)}/>}
+      {modalStates.diveLog && <AddNewDiveLog isOpen={modalStates.diveLog} onClose={() => toggleModal('diveLog')}/>}
+      {modalStates.schoolBooking && <CreateSchoolPlan isOpen={modalStates.schoolBooking} setIsOpenCardModal={() => toggleModal('schoolBooking')}/>}
+      {modalStates.buddyBooking && <CreateBuddyBooking isOpen={modalStates.buddyBooking} setIsOpenCardModal={() => toggleModal('buddyBooking')} user={user} selectedBuddies='' title={t.addBuddy}/>}
+      {modalStates.certification && <AddCertificateTypeComp certificateData={{} as certificateResult} type="add" isOpen={modalStates.certification} setIsOpenCardModal={() => toggleModal('certification')}/>}
     </div>
   )
-}
+})
 
 export default Page

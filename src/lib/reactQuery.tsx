@@ -11,14 +11,14 @@ interface ReactQueryProviderProps {
 const ReactQueryProvider: React.FunctionComponent<ReactQueryProviderProps> = ({
   children,
 }) => {
-  const twentyFourHoursInMs = 1000 * 60 * 60 * 24;
+  const fiveMinutesInMs = 1000 * 60 * 5;
 
   const queryConfig: DefaultOptions = {
     queries: {
       refetchOnWindowFocus: false,
-      retry: 0,
-      // Globally default to 24 hrs
-      staleTime: twentyFourHoursInMs,
+      retry: 1,
+      staleTime: fiveMinutesInMs,
+      cacheTime: 1000 * 60 * 10, // 10 minutes cache
     },
   };
 

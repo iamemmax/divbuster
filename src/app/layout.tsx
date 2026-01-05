@@ -2,7 +2,7 @@
 import { DM_Sans, Wix_Madefor_Display, Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/utils/classNames";
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import ReactQueryProvider from "@/lib/reactQuery";
 import { AuthProvider } from "@/contexts/authentication";
 import { Toaster } from "react-hot-toast";
@@ -40,6 +40,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const contextValue = useMemo(() => ({
+    clientId: GOOGLE_CLIENT_ID as string,
+    onScriptLoadSuccess: () => console.log("Google OAuth script loaded successfully")
+  }), []);
   return (
     <html
       className={cn(sans.variable, display.variable, outfit.variable)}
@@ -57,11 +61,7 @@ export default function RootLayout({
             },
           }}
         />
-        <GoogleOAuthProvider 
-          clientId={GOOGLE_CLIENT_ID as string}
-          
-          onScriptLoadSuccess={() => console.log("Google OAuth script loaded successfully")}
-        >
+        <GoogleOAuthProvider {...contextValue}>
           <ReactQueryProvider>
             <AuthProvider>
               <LanguageProvider>

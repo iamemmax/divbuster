@@ -5,6 +5,8 @@ import Moonicon from '@/app/icons/(dashboard)/Moonicon';
 import SettingsIcon from '@/app/icons/(dashboard)/SettingsIcon';
 import { Switch } from '@/components/core';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useActivePath } from '@/utils/navigation';
+import { cn } from '@/utils/classNames';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 
@@ -51,6 +53,7 @@ const translations = {
 const SupportContainer = ({ user }: prop) => {
   const [darkMode, setDarkMode] = useState(false);
   const {language}= useLanguage()
+  const isActive = useActivePath();
   const t = translations[language] || translations.en;
 
   // Check for user's preference in localStorage on component mount
@@ -84,9 +87,17 @@ const SupportContainer = ({ user }: prop) => {
       </h2>
 
       <div className="flex flex-col gap-4 mt-3">
-        <Link href="/settings" className="flex items-center gap-4">
-          <SettingsIcon />
-          <p className="font-archivo font-medium text-[#4F4F4F] dark:text-white text-sm">
+        <Link href="/settings" className={cn(
+          "flex items-center gap-4 py-2 px-3 transition-all duration-200",
+          isActive("/settings") && "bg-[#F7931D]/10 text-[#F7931D] border-l-[4px] border-[#F7931D] rounded-[.25rem]"
+        )}>
+          <SettingsIcon className={cn(
+            isActive("/settings") ? "text-[#F7931D]" : "text-[#4F4F4F] dark:text-white"
+          )} />
+          <p className={cn(
+            "font-archivo font-medium text-sm",
+            isActive("/settings") ? "text-[#F7931D]" : "text-[#4F4F4F] dark:text-white"
+          )}>
             {t.settings}
           </p>
         </Link>

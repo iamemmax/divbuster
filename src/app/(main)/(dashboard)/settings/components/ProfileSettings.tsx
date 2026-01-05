@@ -80,7 +80,7 @@ const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
   
   return (
     <div>
-      <h3 className="md:text-lg  text-sm font-semibold text-gray-900 my-4">
+      <h3 className="md:text-lg  text-sm font-semibold text-gray-900 dark:text-white my-4">
        {t.profilePicture}
       </h3>
       <div className="flex flex-wrap  items-start  md:items-center gap-4">

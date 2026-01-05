@@ -28,7 +28,7 @@ interface prop {
   isLastStep?: boolean;
 }
 
-const UpdatePassword = ({ email, goToPreviousStep, isFirstStep = false, isLastStep = false }: prop) => {
+const UpdatePassword = ({ email }: prop) => {
   const {
     isErrorModalOpen,
     setErrorModalState,

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer, useMemo } from "react";
 import { tokenStorage } from "@/app/(auth)/utils";
 import { adminAxios, deleteAxiosDefaultToken, setAxiosDefaultToken } from "@/lib/axios";
 import { UserDataProp } from "./types";
@@ -108,34 +108,41 @@ case "REMOVE_SUGGESTED_DIVER":
 };
 
 // Provider component
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = React.memo(({ children }) => {
   const [authState, authDispatch] = useReducer(authReducer, initialState);
 
   // Check for token on mount
 
 useEffect(() => {
+  let isMounted = true;
+  
   const fetchUser = async () => {
     try {
       const token = tokenStorage.getToken();
 
       if (!token) {
-        authDispatch({ type: "STOP_LOADING" });
+        if (isMounted) authDispatch({ type: "STOP_LOADING" });
         return;
       }
 
       setAxiosDefaultToken(token, adminAxios);
 
       const user = await getAuthenticatedUser();
-      authDispatch({ type: "LOGIN", payload: user });
+      if (isMounted) authDispatch({ type: "LOGIN", payload: user });
     } catch (err) {
-      // If token invalid, clear and logout
-      tokenStorage.clearToken();
-      deleteAxiosDefaultToken();
-      authDispatch({ type: "LOGOUT" });
+      if (isMounted) {
+        tokenStorage.clearToken();
+        deleteAxiosDefaultToken();
+        authDispatch({ type: "LOGOUT" });
+      }
     }
   };
 
   fetchUser();
+  
+  return () => {
+    isMounted = false;
+  };
 }, []);
 
 
@@ -143,11 +150,11 @@ useEffect(() => {
   // console.log("Auth state updated:", authState);
 
   return (
-    <AuthContext.Provider value={{ authState, authDispatch }}>
+    <AuthContext.Provider value={useMemo(() => ({ authState, authDispatch }), [authState, authDispatch])}>
       {children}
     </AuthContext.Provider>
   );
-};
+});
 
 // Hook for using the auth context
 export const useAuth = () => {
@@ -156,4 +163,4 @@ export const useAuth = () => {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-}
+};

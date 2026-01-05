@@ -151,6 +151,7 @@ import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 import { sugestedDriverTranslations } from "../../translation/dashboardTranslation";
 import { Language } from "@/app/(auth)/sign-up/translations";
 import { useLanguage } from "@/hooks/useLanguage";
+import ComingSoon from "./ComingSoon";
 
 
 export interface TabItem {
@@ -215,11 +216,11 @@ const {language}= useLanguage()
       case "divers":
         return <SuggestedDivers />;
       case "spots":
-        return <div>{t.spots}</div>;
+        return <ComingSoon title={t.spots} />;
       case "products":
-        return <div>{t.products}</div>;
+        return <ComingSoon title={t.products} />;
       case "challenges":
-        return <div>{t.challenges}</div>;
+        return <ComingSoon title={t.challenges} />;
       default:
         return <div>Content not found</div>;
     }

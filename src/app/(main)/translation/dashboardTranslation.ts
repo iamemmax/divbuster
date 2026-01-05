@@ -1,6 +1,7 @@
 export const DashboardTranslations: Record<string, Record<string, string>> = {
   en: {
     search: "Search...",
+    searchPlaceholder: "Search...",
     createDiveLog: "Create Dive Log",
     createDivePlan: "Create a Dive Plan",
     addBuddy: "Add a new Buddy",
@@ -8,6 +9,7 @@ export const DashboardTranslations: Record<string, Record<string, string>> = {
   },
   es: {
     search: "Buscar...",
+    searchPlaceholder: "Buscar...",
     createDiveLog: "Crear registro de buceo",
     createDivePlan: "Crear un plan de buceo",
     addBuddy: "Agregar un nuevo compañero",
@@ -15,6 +17,7 @@ export const DashboardTranslations: Record<string, Record<string, string>> = {
   },
   fr: {
     search: "Rechercher...",
+    searchPlaceholder: "Rechercher...",
     createDiveLog: "Créer un journal de plongée",
     createDivePlan: "Créer un plan de plongée",
     addBuddy: "Ajouter un nouveau binôme",
@@ -22,10 +25,30 @@ export const DashboardTranslations: Record<string, Record<string, string>> = {
   },
   nl: {
     search: "Zoeken...",
+    searchPlaceholder: "Zoeken...",
     createDiveLog: "Duiklog maken",
     createDivePlan: "Een duikplan maken",
     addBuddy: "Nieuwe buddy toevoegen",
     addCertification: "Certificaat toevoegen",
+  },
+};
+
+export const ComingSoonTranslations: Record<string, Record<string, string>> = {
+  en: {
+    description: "We're working hard to bring you this feature. Stay tuned for updates!",
+    comingSoon: "Coming Soon",
+  },
+  es: {
+    description: "Estamos trabajando duro para traerte esta función. ¡Mantente atento a las actualizaciones!",
+    comingSoon: "Próximamente",
+  },
+  fr: {
+    description: "Nous travaillons dur pour vous apporter cette fonctionnalité. Restez à l'écoute pour les mises à jour !",
+    comingSoon: "Bientôt disponible",
+  },
+  nl: {
+    description: "We werken hard om je deze functie te brengen. Blijf op de hoogte voor updates!",
+    comingSoon: "Binnenkort beschikbaar",
   },
 };
 

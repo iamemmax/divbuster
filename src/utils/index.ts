@@ -2,9 +2,8 @@ import type { ToastNotification } from "@/types";
 
 import type { AxiosError } from "axios";
 
-import { format } from "date-fns";
-
 import toast from "react-hot-toast";
+import { formatDate } from './dateFormat';
 
 /**
  * @param string A user's (full, first or last) name.
@@ -126,17 +125,17 @@ export const formatAxiosErrorMessage = (
 /**
  * @param date The date to be formatted.
  * @param withTime A boolean determining whether or not the date is returned with a time value.
- * @returns The time (or time and date) formatted akin to 0/09/2021, 6 AM.
+ * @returns The time (or time and date) formatted akin to 09/09/2021, 6 AM.
  */
 export const formatShortDate = (
   date: string | Date,
   withTime: boolean
 ): string => {
   if (withTime) {
-    return format(new Date(date), "dd/MM/yyyy, h aaa");
+    return formatDate.dateTime(date);
   }
 
-  return format(new Date(date), "dd/MM/yyyy");
+  return formatDate.short(date);
 };
 
 const getNotificationColor = (notificationType: ToastNotification) => {
@@ -187,17 +186,17 @@ export const clampNumber = (number: number, min: number, max: number) =>
 /**
  * @param date The date to be formatted.
  * @param withTime A boolean determining whether or not the date is returned with a time value.
- * @returns The time (or time and date) formatted akin to 0/09/2021, 6 AM.
+ * @returns The time (or time and date) formatted akin to 09/09/2021, 6 AM.
  */
 export const formatShortDateTime = (
   date: string,
   withTime: boolean
 ): string => {
   if (withTime) {
-    return format(new Date(date), "dd/MM/yyyy, h aaa");
+    return formatDate.dateTime(date);
   }
 
-  return format(new Date(date), "dd/MM/yyyy");
+  return formatDate.short(date);
 };
 
 export const amountNumberFormat = (value: number | bigint) =>
@@ -285,3 +284,7 @@ export const convertStringFractionToPercentage = (value: string): number => {
 export function validatePhoneNumber(phoneNumber: string): string {
   return /^[0-9]*$/.test(phoneNumber) ? phoneNumber : ""; // Return empty string if non-numeric
 }
+
+// Export the new date formatting utility
+export { formatDate } from './dateFormat';
+export { formatShortDate as formatShortDateUtil } from './formatShortDate';
