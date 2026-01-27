@@ -10,6 +10,7 @@ import {
 } from "@/components/core";
 import CloseIcon from "@/app/icons/CloseIcon";
 import moment from "moment";
+import { selectedCardBg } from "../shared/CardContainer";
 import CardHeadIcon from "@/app/icons/(dashboard)/CardHeadIcon";
 
 interface Certificate {
@@ -19,6 +20,7 @@ interface Certificate {
   issuer: string;
   certification_no: string;
   issuer_name: string;
+  certificate_type?: string;
 }
 
 interface Props {
@@ -50,8 +52,8 @@ const CertificateModal = ({ isOpen, onClose, certificate }: Props) => {
             <div
               className="flex flex-col gap-4 rounded-[1.1944rem] px-[1.125rem] py-4 bg-cover bg-no-repeat"
               style={{
-                backgroundImage: `url(${certificate.image ?? ""})`,
-                backgroundColor: !certificate.image ? "#F7931D" : "",
+                backgroundImage: certificate.image ? `url(${certificate.image})` : undefined,
+                backgroundColor: !certificate.image ? selectedCardBg(certificate.certificate_type || "")?.bg || "#F7931D" : undefined,
               }}
             >
               <div className="flex justify-between items-start">

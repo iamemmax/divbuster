@@ -189,24 +189,54 @@ const CreateBuddyPlanMap = ({ buddyList, isLoading }: prop) => {
         }
 
         const L = require('leaflet')
+        
+        // Filter buddies with valid coordinates first
+        const validBuddies = buddies.filter(buddy => {
+            const lat = Number(buddy?.current_location?.lat)
+            const lng = Number(buddy?.current_location?.lon)
+            const isValid = buddy?.current_location?.lat !== null && 
+                           buddy?.current_location?.lon !== null && 
+                           !isNaN(lat) && !isNaN(lng) && 
+                           lat !== 0 && lng !== 0
+            console.log(`Buddy ${buddy.username}: lat=${lat}, lng=${lng}, valid=${isValid}`)
+            return isValid
+        })
+        
+        console.log('CreateBuddyPlanMap - Valid buddies with coordinates:', validBuddies.length)
 
-        buddies.forEach((buddy, index) => {
+        validBuddies.forEach((buddy, index) => {
             const lat = Number(buddy?.current_location?.lat)
             const lng = Number(buddy?.current_location?.lon)
             
-            console.log(`CreateBuddyPlanMap - Buddy ${index}:`, { lat, lng, buddy: buddy.username })
+            console.log(`CreateBuddyPlanMap - Creating marker for ${buddy.username} at [${lat}, ${lng}]`)
 
-            if (!isNaN(lat) && !isNaN(lng)) {
-                const marker = L.marker([lat, lng], { icon: createCustomMarkerIcon(buddy) })
+            try {
+                // Use standard marker first to test
+                const marker = L.marker([lat, lng])
                     .addTo(mapInstance.current)
-                    .bindPopup(createInfoWindowContent(buddy))
+                    .bindPopup(`${buddy.first_name} ${buddy.last_name} - ${buddy.username}`)
 
                 markersRef.current.push(marker)
-                console.log(`CreateBuddyPlanMap - Marker added for ${buddy.username} at [${lat}, ${lng}]`)
-            } else {
-                console.log(`CreateBuddyPlanMap - Invalid coordinates for ${buddy.username}:`, { lat, lng })
+                console.log(`CreateBuddyPlanMap - Standard marker successfully added for ${buddy.username}`)
+            } catch (error) {
+                console.error(`CreateBuddyPlanMap - Error creating marker for ${buddy.username}:`, error)
             }
         })
+        
+        // Always add a test marker to verify marker system works
+        console.log('Adding test marker at [6.6237432, 3.2905898]')
+        const testMarker = L.marker([6.6237432, 3.2905898])
+            .addTo(mapInstance.current)
+            .bindPopup('Test marker - Should always be visible')
+        markersRef.current.push(testMarker)
+        
+        if (validBuddies.length === 0) {
+            console.log('CreateBuddyPlanMap - No buddies with valid coordinates found')
+            // Add a placeholder marker to show the map is working
+            const placeholderMarker = L.marker([6.6237432, 3.2905898])
+                .addTo(mapInstance.current)
+                .bindPopup('No buddies with location data available')
+        }
     }, [createCustomMarkerIcon, createInfoWindowContent])
 
     useEffect(() => {
@@ -221,31 +251,60 @@ const CreateBuddyPlanMap = ({ buddyList, isLoading }: prop) => {
 
             const L = (await import('leaflet')).default
 
-            let centerLocation = [40.73061, -73.935242] as [number, number]
+            let centerLocation = [6.6237432, 3.2905898] as [number, number] // Default to Lagos, Nigeria
 
             if (buddyList && buddyList.length > 0) {
                 const validBuddies = buddyList.filter(buddy =>
-                    buddy?.current_location?.lat && buddy?.current_location?.lon &&
-                    !isNaN(Number(buddy.current_location?.lat)) && !isNaN(Number(buddy.current_location?.lon))
+                    buddy?.current_location?.lat !== null && buddy?.current_location?.lon !== null &&
+                    !isNaN(Number(buddy.current_location?.lat)) && !isNaN(Number(buddy.current_location?.lon)) &&
+                    Number(buddy.current_location?.lat) !== 0 && Number(buddy.current_location?.lon) !== 0
                 )
+
+                console.log('CreateBuddyPlanMap - Valid buddies for centering:', validBuddies.length)
 
                 if (validBuddies.length > 0) {
                     const avgLat = validBuddies.reduce((sum, buddy) => sum + Number(buddy?.current_location?.lat), 0) / validBuddies.length
                     const avgLng = validBuddies.reduce((sum, buddy) => sum + Number(buddy?.current_location?.lon), 0) / validBuddies.length
                     centerLocation = [avgLat, avgLng]
+                    console.log('CreateBuddyPlanMap - Centering map at:', centerLocation)
                 }
             }
 
-            const map = L.map(mapRef.current).setView(centerLocation, buddyList && buddyList.length > 1 ? 10 : 15)
+            const map = L.map(mapRef.current).setView(centerLocation, 12)
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map)
-
+            
             mapInstance.current = map
+            
+            // Add buddy markers immediately
+            console.log('Buddy list in map init:', buddyList?.length || 0)
+            if (buddyList && buddyList.length > 0) {
+                console.log('Calling addMarkers immediately')
+                // Process buddies directly here
+                buddyList.forEach((buddy, index) => {
+                    const lat = Number(buddy?.current_location?.lat)
+                    const lng = Number(buddy?.current_location?.lon)
+                    console.log(`Buddy ${buddy.username}: lat=${lat}, lng=${lng}`)
+                    
+                    if (buddy?.current_location?.lat !== null && 
+                        buddy?.current_location?.lon !== null && 
+                        !isNaN(lat) && !isNaN(lng) && 
+                        lat !== 0 && lng !== 0) {
+                        
+                        console.log(`Adding marker for ${buddy.username} at [${lat}, ${lng}]`)
+                        L.marker([lat, lng])
+                            .addTo(map)
+                            .bindPopup(`${buddy.first_name} ${buddy.last_name} - ${buddy.username}`)
+                    }
+                })
+            }
         }
 
-        initMap()
+        if (!isLoading) {
+            initMap()
+        }
 
         return () => {
             if (mapInstance.current) {
@@ -253,15 +312,9 @@ const CreateBuddyPlanMap = ({ buddyList, isLoading }: prop) => {
                 mapInstance.current = null
             }
         }
-    }, [])
+    }, [buddyList, isLoading, addMarkers])
 
-    useEffect(() => {
-        console.log('CreateBuddyPlanMap - Buddy list updated:', buddyList?.length || 0)
-        if (mapInstance.current && buddyList) {
-            clearMarkers()
-            addMarkers(buddyList)
-        }
-    }, [buddyList, addMarkers, clearMarkers])
+
 
 
 

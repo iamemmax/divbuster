@@ -102,11 +102,11 @@ const Header = ({ subtitle, title }: HeaderProps) => {
 
       <div className="flex items-center gap-6">
         <div className="hidden md:flex items-center gap-2 xl:gap-4">
-          <Button className="bg-transparent p-0">
+          {/* <Button className="bg-transparent p-0">
             <div className="border border-[#EEEEEE] flex justify-center items-center w-[2rem] xl:w-[2.5rem] h-[2rem] xl:h-[2.5rem] rounded-full ">
               <WarningIcon className="text-[#132346] dark:text-white"  />
             </div>
-          </Button>
+          </Button> */}
           <LinkButton href={"/messages"} className="bg-transparent p-0">
             <div className="border border-[#EEEEEE] flex justify-center items-center w-[2rem] xl:w-[2.5rem] h-[2rem] xl:h-[2.5rem] rounded-full ">
               <MessageIcon className="text-[#132346] dark:text-white" />

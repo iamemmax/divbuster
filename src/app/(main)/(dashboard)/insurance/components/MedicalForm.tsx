@@ -29,7 +29,7 @@ type MedicalFormData = {
   physicianPhone?: string
   hospitalName?: string
   physicianEmail?: string
-  diveInstructorId?: number
+  showPhysicianInfo?: boolean
   medicalCertification: boolean
 }
 
@@ -52,7 +52,7 @@ const MedicalForm = () => {
   const [isPhysicianSigned, setIsPhysicianSigned] = useState(false)
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>([])
   const [answers, setAnswers] = useState<Record<string, boolean>>({})
-  const [canvasWidth, setCanvasWidth] = useState(typeof window !== 'undefined' ? Math.min(window.innerWidth - 100, 800) : 800)
+  const [canvasWidth, setCanvasWidth] = useState(typeof window !== 'undefined' ? window.innerWidth - 100 : 800)
   const [signatureData, setSignatureData] = useState<string | null>(null)
   const [physicianSignatureData, setPhysicianSignatureData] = useState<string | null>(null)
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
@@ -64,7 +64,7 @@ const MedicalForm = () => {
       physicianName: medicalReport?.data?.physician_name || '',
       hospitalName: medicalReport?.data?.hospital_name || '',
       physicianEmail: medicalReport?.data?.physician_email || '',
-      diveInstructorId:  undefined,
+      showPhysicianInfo: false,
       medicalConditions: false,
       medicalCertification: false
     }
@@ -124,6 +124,7 @@ const MedicalForm = () => {
   
   const watchedValues = watch()
   const isCertified = watchedValues.medicalCertification
+  const showPhysicianInfo = watchedValues.showPhysicianInfo
 
  
 
@@ -170,7 +171,6 @@ const MedicalForm = () => {
         hospital_name: data.hospitalName || "",
         physician_email: data.physicianEmail || "",
         physician_signature: physicianSignature,
-        dive_instructor_id: data.diveInstructorId || 0,
         physician_report: doctorReportBase64,
         lang: language
       }
@@ -219,7 +219,6 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         hospital_name: data.hospitalName || "",
         physician_email: data.physicianEmail || "",
         physician_signature: physicianSignature,
-        dive_instructor_id: data.diveInstructorId || 0,
         physician_report: doctorReportBase64,
         lang: language
       }
@@ -262,7 +261,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
           setPhysicianSignatureData(physicianSigRef.current.toDataURL())
         }
         
-        const width = Math.min(window.innerWidth - 100, 800)
+        const width = window.innerWidth - 100
         setCanvasWidth(width)
       }, 300)
     }
@@ -322,57 +321,63 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
 
    
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            {t.physicianName}
-          </label>
+      <div>
+        <label className="flex items-center space-x-3 mb-4">
           <input
-            {...register('physicianName')}
-            type="text"
-            className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+            {...register('showPhysicianInfo')}
+            type="checkbox"
+            className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
           />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            {t.hospitalName}
-          </label>
-          <input
-            {...register('hospitalName')}
-            type="text"
-            className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
-          />
-        </div>
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Show Physician Information
+          </span>
+        </label>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            {t.physicianEmail}
-          </label>
-          <input
-            {...register('physicianEmail')}
-            type="email"
-            className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Dive Instructor ID
-          </label>
-          <input
-            {...register('diveInstructorId', { valueAsNumber: true })}
-            type="number"
-            className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
-          />
-        </div>
-      </div>
+      {showPhysicianInfo && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t.physicianName}
+              </label>
+              <input
+                {...register('physicianName')}
+                type="text"
+                className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t.hospitalName}
+              </label>
+              <input
+                {...register('hospitalName')}
+                type="text"
+                className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              {t.physicianEmail}
+            </label>
+            <input
+              {...register('physicianEmail')}
+              type="email"
+              className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+            />
+          </div>
+        </>
+      )}
 
       {/* File Upload Section */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          {t.uploadPhysicianReport}
-        </label>
+      {showPhysicianInfo && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            {t.uploadPhysicianReport}
+          </label>
         <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
           {uploadedFile || doctorReportBase64 ? (
             <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
@@ -450,43 +455,45 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
             </div>
           )}
         </div>
-      </div>
-
-            <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          {t.physicianSignature}
-        </label>
-        <div className="border rounded-md p-2 bg-white max-w-full overflow-hidden border-gray-300 dark:border-gray-600">
-           <SignatureCanvas
-    ref={physicianSigRef}
-    onEnd={() => {
-      const isEmpty = physicianSigRef.current?.isEmpty()
-      setIsSigned(!isEmpty)
-      if (!isEmpty && physicianSigRef.current) {
-        setSignatureData(physicianSigRef.current.toDataURL())
-      }
-    }}
-    canvasProps={{
-      width: canvasWidth,
-      height: 100,
-      className: 'signature-canvas',
-      style: { 
-        pointerEvents: canSign ? 'auto' : 'none',
-        border: '1px solid #ccc',
-        touchAction: 'none' // Important for mobile
-      }
-    }}
-    // penColor={canSign ? '#000000' : '#cccccc'}
-  />
         </div>
-        <Button
-          type="button"
-          onClick={clearPhysicianSignature}
-          className="mt-2 px-4 py-2 text-sm bg-gray-500 text-white rounded-md hover:bg-gray-600"
-        >
-          {t.clearSignature}
-        </Button>
-      </div>
+      )}
+
+      {showPhysicianInfo && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            {t.physicianSignature}
+          </label>
+          <div className="border rounded-md p-2 bg-white w-full overflow-hidden border-gray-300 dark:border-gray-600">
+            <SignatureCanvas
+              ref={physicianSigRef}
+              onEnd={() => {
+                const isEmpty = physicianSigRef.current?.isEmpty()
+                setIsSigned(!isEmpty)
+                if (!isEmpty && physicianSigRef.current) {
+                  setSignatureData(physicianSigRef.current.toDataURL())
+                }
+              }}
+              canvasProps={{
+                width: canvasWidth,
+                height: 100,
+                className: 'signature-canvas',
+                style: { 
+                  pointerEvents: canSign ? 'auto' : 'none',
+                  border: '1px solid #ccc',
+                  touchAction: 'none'
+                }
+              }}
+            />
+          </div>
+          <Button
+            type="button"
+            onClick={clearPhysicianSignature}
+            className="mt-2 px-4 py-2 text-sm bg-gray-500 text-white rounded-md hover:bg-gray-600"
+          >
+            {t.clearSignature}
+          </Button>
+        </div>
+      )}
 
       {/* Insurance Questions */}
       {isLoading ? (
@@ -587,7 +594,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
            
           </div>
         
-        <div className={`border rounded-md p-2 bg-white max-w-full overflow-hidden ${
+        <div className={`border rounded-md p-2 bg-white w-full overflow-hidden ${
           canSign ? 'border-gray-300 dark:border-gray-600' : 'border-gray-200 dark:border-gray-700 opacity-50'
         }`}>
           <SignatureCanvas

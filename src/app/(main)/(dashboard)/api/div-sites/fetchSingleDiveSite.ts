@@ -11,6 +11,7 @@ interface Data {
   id: number;
   average_rating: number;
   ranking: string;
+  dive_animals: Diveanimal[];
   title: string;
   slug: string;
   address: string;
@@ -33,6 +34,14 @@ interface Data {
   created_on: string;
   updated_on: string;
   country: number;
+}
+
+interface Diveanimal {
+  id: number;
+  slug: string;
+  name: string;
+  description: string;
+  image: string;
 }
 const fetchSingleDiveSite = async (slug: string):Promise<singlediveProp> => {
   // if (!slug) return null;

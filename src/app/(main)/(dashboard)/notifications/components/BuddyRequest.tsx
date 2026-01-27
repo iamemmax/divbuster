@@ -35,7 +35,8 @@ const BuddyRequest: React.FC<prop> = ({globalSearch,initialStartDate,initialEndD
 const { mutate: handleAddNewBuddy, isLoading:isUpdating } = useAddBuddy();
   const queryClient = useQueryClient();
 
- const [loadingDiverId, setLoadingDiverId] = useState<number | null>(null);
+ const [acceptingDiverId, setAcceptingDiverId] = useState<number | null>(null);
+ const [decliningDiverId, setDecliningDiverId] = useState<number | null>(null);
 
 const { data,
     fetchNextPage,
@@ -71,7 +72,7 @@ const { data,
   const rightColumnNotifications = allNotifications?.filter((_, index) => index % 2 === 1);
 
   const handleAccept = async (suggested:buddyRequestResult) => {
-     setLoadingDiverId(suggested.id);
+     setAcceptingDiverId(suggested.id);
     
     handleAddNewBuddy({
       invite_id: String(suggested?.request_from?.profile_details?.invite_id),
@@ -79,21 +80,12 @@ const { data,
       request_status:"approved"
     }, {
       onSuccess: () => {
-        // Remove this diver from the visible list
-        
-        // Clear the loading state
-        setLoadingDiverId(null);
-        
-        // Refetch user data to update the backend state
-             queryClient.invalidateQueries({queryKey:["user-details"]});
-
-        
+        setAcceptingDiverId(null);
+        queryClient.invalidateQueries({queryKey:["user-details"]});
         toast.success("Buddy added successfully", { id: "addBuddySuccess" });
       },
       onError: (error) => {
-        // Clear the loading state
-        setLoadingDiverId(null);
-        
+        setAcceptingDiverId(null);
         const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         openErrorModalWithMessage(String(errorMessage));
       }
@@ -101,27 +93,20 @@ const { data,
   };
 
   const handleDecline = async (suggested:buddyRequestResult) => {
+    setDecliningDiverId(suggested.id);
+    
     handleAddNewBuddy({
       invite_id: String(suggested?.request_from?.profile_details?.invite_id),
       user_id: suggested?.request_from?.profile_details?.id,
       request_status:"declined"
     }, {
       onSuccess: () => {
-        // Remove this diver from the visible list
-        
-        // Clear the loading state
-        setLoadingDiverId(null);
-        
-        // Refetch user data to update the backend state
-             queryClient.invalidateQueries({queryKey:["user-details"]});
-
-        
-        toast.success("Buddy added successfully", { id: "addBuddySuccess" });
+        setDecliningDiverId(null);
+        queryClient.invalidateQueries({queryKey:["user-details"]});
+        toast.success("Buddy declined successfully", { id: "declineBuddySuccess" });
       },
       onError: (error) => {
-        // Clear the loading state
-        setLoadingDiverId(null);
-        
+        setDecliningDiverId(null);
         const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         openErrorModalWithMessage(String(errorMessage));
       }
@@ -163,8 +148,8 @@ const { data,
           showDeclineBtn={true}
           onAccept={() => handleAccept(request)}
           onDecline={() => handleDecline(request)}
-          acceptLoading={loadingDiverId === request?.id || false}
-          declineLoading={loadingDiverId === request?.id || false}
+          acceptLoading={acceptingDiverId === request?.id}
+          declineLoading={decliningDiverId === request?.id}
 
         />
       ))}
@@ -186,8 +171,8 @@ const { data,
           showDeclineBtn={true}
           onAccept={() => handleAccept(request)}
           onDecline={() => handleDecline(request)}
-          acceptLoading={loadingDiverId === request?.id || false}
-          declineLoading={loadingDiverId === request?.id || false}
+          acceptLoading={acceptingDiverId === request?.id}
+          declineLoading={decliningDiverId === request?.id}
 
         />
       ))}

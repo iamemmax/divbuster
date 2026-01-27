@@ -2,11 +2,34 @@
 import React, { useRef, useCallback, useEffect } from "react";
 import { Button, Dialog, DialogContent } from "@/components/core";
 import { SmallSpinner } from "@/icons/core";
-import { useAuth } from "@/contexts/authentication";
 import CloseIcon from "@/app/icons/CloseIcon";
-import { buddyResult, useFetchBuddyList } from "../../../api/buddy/fetchBudies";
 import { useLanguage } from "@/hooks/useLanguage";
 import { startNewMessageTranslations } from "@/app/(main)/translation/chatMessagesTranslation";
+import { useInfiniteQuery } from "react-query";
+import { adminAxios } from "@/lib/axios";
+
+interface buddyListProp {
+  count: number;
+  next: null;
+  previous: null;
+  results: any[];
+}
+
+const fetchBuddyList = async (pageParam?: string, language?: string) => {
+  let url: string;
+  if (pageParam) {
+    try {
+      const urlObj = new URL(pageParam);
+      url = urlObj.pathname + urlObj.search;
+    } catch {
+      url = pageParam;
+    }
+  } else {
+    url = `buddies?lang=${language}`;
+  }
+  const response = await adminAxios.get(url);
+  return response.data as buddyListProp;
+};
 
 interface prop {
   isOpen: boolean;
@@ -22,16 +45,22 @@ export default function StartNewMessageModal({
   const { language } = useLanguage();
   const t = startNewMessageTranslations[language] || startNewMessageTranslations.en;
 
-  const { authState } = useAuth();
-  const { user } = authState;
-
   const {
     data: buddyList,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useFetchBuddyList(String(user?.profile_details?.language));
+  } = useInfiniteQuery({
+    queryKey: ["buddy-list-modal", language],
+    queryFn: ({ pageParam }) => fetchBuddyList(pageParam, language),
+    getNextPageParam: (lastPage) => lastPage.next,
+    getPreviousPageParam: (firstPage) => firstPage.previous,
+    keepPreviousData: false,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
+    cacheTime: 1000 * 60 * 10,
+  });
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
 

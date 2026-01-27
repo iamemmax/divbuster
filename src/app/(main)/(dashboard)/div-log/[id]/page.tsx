@@ -2,6 +2,8 @@
 import Header from '@/app/(main)/components/shared/Header'
 import { useParams } from 'next/navigation'
 import React, { useCallback, useEffect, useState, useRef } from 'react'
+import EditDiveLogModal from '../components/EditDiveLogModal';
+import toast from 'react-hot-toast';
 
 import Image from 'next/image'
 import { Button } from '@/components/core'
@@ -46,8 +48,23 @@ const DiveLogId = () => {
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const [updatingItems, setUpdatingItems] = useState<string[]>([]);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<any>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const mainContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleEditClick = (item: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingItem(item);
+    setEditModalOpen(true);
+  };
+
+  const handleEditSave = (data: { name: string; title: string }) => {
+    console.log('Saving edit:', data, 'for item:', editingItem?.id);
+    toast.success('Dive log updated successfully');
+    setEditModalOpen(false);
+    setEditingItem(null);
+  };
 
   // Add the getColorClasses function
   const getColorClasses = (color: string) => {
@@ -301,7 +318,10 @@ console.log(itemId);
                           <h2 className="text-sm md:text-xl font-archivo font-medium text-[#132346] dark:text-gray-200">
                             {data?.data?.dive_plan?.dive_site?.title}
                           </h2>
-                          <PenIcon />
+                          <PenIcon 
+                            className="cursor-pointer hover:text-orange-500 transition-colors"
+                            onClick={(e) => handleEditClick(data?.data, e)}
+                          />
                         </div>
                       </div>
 
@@ -589,7 +609,7 @@ console.log(itemId);
                             </div>
                           </div>
                         </div>
-                        <div className="w-full rounded-e-[1.25rem] bg-[#E4881C] dark:bg-orange-600 flex flex-col gap-5 justify-center items-center py-[2.125rem] px-5 lg:px-[2.3125rem]">
+                        {/* <div className="w-full rounded-e-[1.25rem] bg-[#E4881C] dark:bg-orange-600 flex flex-col gap-5 justify-center items-center py-[2.125rem] px-5 lg:px-[2.3125rem]">
                           <div className="">
                             <p className="text-xs lg:text-sm font-archivo text-white font-medium py-1">
                               {t?.labels?.pressureUsed}
@@ -602,13 +622,13 @@ console.log(itemId);
                               {cylinder?.pressureUsed?.psi}
                             </p>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <DiveLogCharts user={user} data={data} />
+                {/* <DiveLogCharts user={user} data={data} /> */}
 
              
               </div>
@@ -621,6 +641,16 @@ console.log(itemId);
           </div>
         </div>
       )}
+      
+      <EditDiveLogModal
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        onSave={handleEditSave}
+        initialData={{
+          name: editingItem?.name || '',
+          title: editingItem?.dive_plan?.dive_site?.title || ''
+        }}
+      />
     </div>
   )
 }

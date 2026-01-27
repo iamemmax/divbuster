@@ -75,7 +75,7 @@ const SettingsTab = () => {
     <div className="w-full">
       <Header title={t.manageToken} subtitle="" />
 
-      <div className="font-archivo w-full p-3 h-[90vh] overflow-y-auto">
+      <div className="font-archivo w-full md:p-3 h-[90vh] overflow-y-auto">
         {/* <div className="mb-3">
           <h1 className="text-base md:xl: lg:text-2xl font-medium  text-[#1D2939]">
           {t.header}

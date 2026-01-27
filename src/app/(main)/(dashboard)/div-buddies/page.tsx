@@ -12,7 +12,7 @@ import {
 import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput';
 import { Button, ErrorModal, LinkButton } from '@/components/core';
 import Header from '../../components/shared/Header';
-import { buddyResult, useFetchBuddyList } from '../api/buddy/fetchBudies';
+
 import AngleLeft from '@/app/icons/(dashboard)/AngleLeft';
 import AngleRight from '@/app/icons/(dashboard)/AngleRight';
 // import SuggestedBuddies from './SuggestedBuddies';
@@ -24,6 +24,51 @@ import { diverBuddiesTranslations } from '../../translation/diveBuddiesTranslati
 import { useLanguage } from '@/hooks/useLanguage';
 import { DiveBuddySkeleton } from '@/components/core';
 import SuggestedBuddies from './SuggestedBuddies';
+import { useRouter } from 'next/navigation';
+import { useInfiniteQuery } from 'react-query';
+import { adminAxios } from '@/lib/axios';
+
+interface buddyResult {
+  id: number;
+  profile_details: {
+    profile_picture: string | null;
+    language: string;
+  };
+  diver_profile: {
+    online: boolean;
+    dive_count: number;
+  };
+  first_name: string;
+  last_name: string;
+  email: string;
+  certificates: {
+    id: number;
+    issuer_name: string;
+  }[] | null;
+}
+
+interface buddyListProp {
+  count: number;
+  next: null;
+  previous: null;
+  results: buddyResult[];
+}
+
+const fetchBuddyList = async (pageParam?: string, language?: string) => {
+  let url: string;
+  if (pageParam) {
+    try {
+      const urlObj = new URL(pageParam);
+      url = urlObj.pathname + urlObj.search;
+    } catch {
+      url = pageParam;
+    }
+  } else {
+    url = `buddies?lang=${language}`;
+  }
+  const response = await adminAxios.get(url);
+  return response.data as buddyListProp;
+};
 
 const DiverBuddies = () => {
   const {
@@ -32,7 +77,7 @@ const DiverBuddies = () => {
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
-
+const router = useRouter()
   const [globalFilter, setGlobalFilter] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -51,7 +96,16 @@ const DiverBuddies = () => {
     hasPreviousPage,
     fetchPreviousPage,
     isFetchingPreviousPage
-  } = useFetchBuddyList(language);
+  } = useInfiniteQuery({
+    queryKey: ['buddy-list', language],
+    queryFn: ({ pageParam }) => fetchBuddyList(pageParam, language),
+    getNextPageParam: (lastPage) => lastPage.next,
+    getPreviousPageParam: (firstPage) => firstPage.previous,
+    keepPreviousData: false,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
+    cacheTime: 1000 * 60 * 10,
+  });
 
   const allBuddies = useMemo(() => {
     if (!buddyList?.pages) return [];
@@ -183,16 +237,16 @@ const DiverBuddies = () => {
       header: '',
       cell: ({ row }) => (
         <div className="text-right">
-          <LinkButton 
-            href={`/div-buddies/profile/${row?.original?.id}`}
+          <Button 
+            onClick={()=>router.push(`/div-buddies/profile/${row?.original?.id}`)}
             className="text-orange-500 dark:text-orange-400 font-archivo text-sm bg-transparent hover:text-orange-600 dark:hover:text-orange-300 font-medium whitespace-nowrap transition-colors duration-200"
           >
             {t.viewProfile}
-          </LinkButton>
+          </Button>
         </div>
       ),
     }),
-  ], [t]);
+  ], [t, router]);
 
   const table = useReactTable({
     data: allBuddies,
@@ -247,7 +301,7 @@ const DiverBuddies = () => {
             </div>
 
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-x-auto transition-colors duration-200">
-              {isLoading ? (
+              {isLoading && allBuddies.length === 0 ? (
                 <table className="w-full">
                   <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                     <tr>
@@ -296,7 +350,7 @@ const DiverBuddies = () => {
               )}
             </div>
 
-            {!isLoading && (
+            {!isLoading && allBuddies.length > 0 && (
               <div className="flex items-center justify-between py-6 gap-4">
                 <button
                   className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed justify-center text-gray-700 dark:text-gray-300"

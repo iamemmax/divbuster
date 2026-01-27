@@ -48,7 +48,7 @@ const LiabilityForm = () => {
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>([])
   const [answers, setAnswers] = useState<Record<string, boolean>>({})
   const [isSigned, setIsSigned] = useState(false)
-  const [canvasWidth, setCanvasWidth] = useState(800)
+  const [canvasWidth, setCanvasWidth] = useState(window.innerWidth - 100)
   const [signatureData, setSignatureData] = useState<string>('')
   
   const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<LiabilityFormData>({
@@ -194,7 +194,7 @@ const LiabilityForm = () => {
           setSignatureData(sigRef.current.toDataURL())
         }
         
-        const width = Math.min(window.innerWidth - 100, 800)
+        const width = window.innerWidth - 100
         setCanvasWidth(width)
       }, 300)
     }

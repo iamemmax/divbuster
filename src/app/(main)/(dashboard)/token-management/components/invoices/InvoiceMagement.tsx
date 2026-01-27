@@ -59,7 +59,7 @@ const MyInvoicesManagement = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-  const { data } = useFetchPaymentHistory();
+  const { data, isLoading } = useFetchPaymentHistory("payment");
 
   // Flatten paginated results into one array
   const transactions: TransHistoryResult[] =
@@ -174,7 +174,19 @@ const MyInvoicesManagement = () => {
       }),
       columnHelper.accessor("amount", {
         header: t.amount,
-        cell: (info) => `₦${info.getValue().toLocaleString()}`,
+        cell: (info) => `€${info.getValue().toLocaleString()}`,
+      }),
+      columnHelper.accessor("direction", {
+        header: t.direction,
+        cell: (info) =>(
+            <span 
+          className={`px-2 py-1 text-xs rounded-full ${
+              String(info.getValue()) === "credit"
+                ? " text-green-700  dark:text-green-400"
+                : "text-red-700  dark:text-red-400"
+            }`}
+          >{info.getValue()}</span>
+        )
       }),
       columnHelper.accessor("created_on", {
         header: t.date,
@@ -194,7 +206,7 @@ const MyInvoicesManagement = () => {
         cell: (info) => (
           <span
             className={`px-2 py-1 text-xs rounded-full ${
-              info.getValue() === "success"
+              info.getValue() === "completed"
                 ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                 : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
             }`}
@@ -204,7 +216,7 @@ const MyInvoicesManagement = () => {
         ),
       }),
     ],
-    [columnHelper, t]
+    [t]
   );
 
   const table = useReactTable({
@@ -225,7 +237,7 @@ const MyInvoicesManagement = () => {
       {/* Header */}
       <div className="flex flex-wrap gap-4 sm:justify-between mb-8">
         <h1 className="text-xl md:text-2xl font-medium text-[#101828] dark:text-gray-100">
-          {t.title}
+          {t.tokenTitle}
         </h1>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
@@ -298,7 +310,17 @@ const MyInvoicesManagement = () => {
               ))}
             </thead>
             <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-              {table.getRowModel().rows.length === 0 ? (
+              {isLoading ? (
+                Array.from({ length: 5 }).map((_, index) => (
+                  <tr key={index}>
+                    {columns.map((_, colIndex) => (
+                      <td key={colIndex} className="px-3 sm:px-6 py-4">
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              ) : table.getRowModel().rows.length === 0 ? (
                 <tr>
                   <td
                     colSpan={columns.length}

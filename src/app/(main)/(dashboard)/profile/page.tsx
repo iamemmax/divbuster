@@ -1,9 +1,9 @@
 import React from 'react'
-import DivingProfile from '../div-buddies/profile/[id]/page'
+import UserProfile from './components/UserProfile'
 
 const page = () => {
   return (
-    <div><DivingProfile/></div>
+    <div><UserProfile/></div>
   )
 }
 

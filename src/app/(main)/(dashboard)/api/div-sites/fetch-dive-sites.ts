@@ -24,6 +24,7 @@ import { adminAxios } from "@/lib/axios";
     ranking: string;
     title: string;
     slug: string;
+    dive_animals: Diveanimal[];
     address: string;
     lon: string;
     lag: string;
@@ -51,6 +52,20 @@ import { adminAxios } from "@/lib/axios";
     search: string;
     paginate:string
   }
+
+
+interface Diveanimal {
+  id: number;
+  slug: string;
+  name: string;
+  description: string;
+  image: string;
+}
+
+
+
+
+
 
 const fetchDiveSites = async ({
   lang,

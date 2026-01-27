@@ -80,7 +80,7 @@ const DivingProfile = () => {
     }
   }, [isError, error, openErrorModalWithMessage]);
 
-  const buddyProfile = data?.data || user;
+  const buddyProfile = data || user;
 
 
 
@@ -410,7 +410,7 @@ const DivingProfile = () => {
                     </div>
                   )}
 
-                  {buddyProfile && buddyProfile.certificates && buddyProfile.certificates.length > 0 && (
+                  {buddyProfile && buddyProfile.certificates && buddyProfile.certificates.length > 0 && user?.id === buddyProfile?.id && (
                     <div className="border-t border-[#EAECF0] dark:border-gray-700 flex justify-end items-center py-4 px-8 transition-colors duration-200">
                       <LinkButton
                         href={"/manage-certifications"}

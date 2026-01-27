@@ -337,8 +337,18 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   
   // Handle apply button click
   const handleApply = () => {
+    console.log('Apply button clicked', {
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      hasStartDate: !!dateRange.startDate,
+      hasEndDate: !!dateRange.endDate
+    });
+    
     if (dateRange.startDate && dateRange.endDate) {
+      console.log('Calling onApply with dates:', dateRange.startDate, dateRange.endDate);
       onApply(dateRange.startDate, dateRange.endDate);
+    } else {
+      console.log('Cannot apply: missing start or end date');
     }
   };
   
@@ -514,7 +524,10 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
           </Button>
           <Button
             className="flex-1 sm:flex-none bg-[#F7931D] text-white hover:bg-[#e88616] text-sm"
-            onClick={handleApply}
+            onClick={(e) => {
+              console.log('Apply button clicked event:', e);
+              handleApply();
+            }}
             disabled={!dateRange.startDate || !dateRange.endDate}
           >
             Apply

@@ -117,7 +117,7 @@ const t = navTranslations[language] || navTranslations.en;
     {
       name: t.buddyFinder,
       icon: <BuddyIcon className={cn(isActive("/div-finder") ? "text-[#F7931D] dark:text-[#F7931D]" : "text-[#4F4F4F] dark:text-white")} />,
-      link: "/dive-finder",
+      link: "/dive-finder/nearest",
       hasBarge: true,
       bargeText: t.new,
     },

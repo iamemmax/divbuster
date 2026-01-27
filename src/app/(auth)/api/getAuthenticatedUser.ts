@@ -1,4 +1,4 @@
-import { certificates, Lastdivedetail } from "@/app/(main)/(dashboard)/api/buddy/fetchBuddyProfile";
+import {  Lastdivedetail } from "@/app/(main)/(dashboard)/api/buddy/fetchBuddyProfile";
 import { adminAxios } from "@/lib/axios";
 import { useQuery } from "react-query";
 

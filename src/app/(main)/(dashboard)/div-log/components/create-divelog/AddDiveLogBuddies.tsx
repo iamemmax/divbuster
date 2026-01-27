@@ -3,11 +3,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from 'zod';
-import { useFetchBuddyList } from '../../../api/buddy/fetchBudies';
 import { SmallSpinner } from '@/icons/core';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { diveLogBuddiesTranslations } from '@/app/(main)/translation/diveLogTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useFetchBuddyList } from '../../../api/buddy/fetchBudies';
 
 
 interface prop {

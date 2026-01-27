@@ -147,7 +147,7 @@ const BuddiesAroundMe = () => {
 
 
   return (
-    <div className="relative w-full h-[83vh]">
+    <div className="relative w-full h-[83vh] mt-[4rem]">
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
       <style jsx global>{`
         .buddy-marker {

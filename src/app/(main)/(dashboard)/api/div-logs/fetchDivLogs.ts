@@ -5,10 +5,10 @@ export interface divLogsProp {
   count: number;
   next: null;
   previous: null;
-  results: Result[];
+  results: diveResult[];
 }
 
-interface Result {
+export interface diveResult {
   id: number;
   user: number;
   dive_equipment: Diveequipment | null;

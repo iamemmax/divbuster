@@ -14,7 +14,12 @@ import { RouteChangeLoader } from "@/components/core/RouteChangeLoader";
 import { LanguageProvider } from "@/hooks/useLanguage";
 
 // Updated Google Client ID from environment variables
-const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+
+const googleOAuthConfig = {
+  clientId: GOOGLE_CLIENT_ID as string,
+  onScriptLoadSuccess: () => console.log("Google OAuth script loaded successfully")
+};
 
 // Add this to get the current origin for redirect URIs
 
@@ -40,10 +45,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const contextValue = useMemo(() => ({
-    clientId: GOOGLE_CLIENT_ID as string,
-    onScriptLoadSuccess: () => console.log("Google OAuth script loaded successfully")
-  }), []);
   return (
     <html
       className={cn(sans.variable, display.variable, outfit.variable)}
@@ -61,7 +62,7 @@ export default function RootLayout({
             },
           }}
         />
-        <GoogleOAuthProvider {...contextValue}>
+        <GoogleOAuthProvider {...googleOAuthConfig}>
           <ReactQueryProvider>
             <AuthProvider>
               <LanguageProvider>

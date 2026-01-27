@@ -157,7 +157,8 @@ export const diveSiteDetailsTranslations = {
     underwaterMap: "Underwater Map",
     latitude: "Latitude",
     longitude: "Longitude",
-    rank: "Rank"
+    rank: "Rank",
+    diveAnimals: "Dive Animals"
   },
   es: {
     title: "Detalles del Sitio de Buceo",
@@ -167,6 +168,7 @@ export const diveSiteDetailsTranslations = {
     rating: "Calificación",
     maxDepth: "Profundidad Máxima",
     diveCount: "Número de Buceos",
+    diveAnimals: "Animales Marinos",
     entryType: "Tipo de Entrada",
     waterType: "Tipo de Agua",
     waterBody: "Cuerpo de Agua",
@@ -201,6 +203,7 @@ export const diveSiteDetailsTranslations = {
     notAvailable: "Non Disponible",
     yes: "Oui",
     no: "Non",
+     diveAnimals: "Animaux Sous-marins",
     description: "Description",
     conditions: "Conditions",
     additionalInfo: "Informations Supplémentaires",
@@ -224,8 +227,10 @@ export const diveSiteDetailsTranslations = {
     publicSite: "Openbare Locatie",
     available: "Beschikbaar",
     notAvailable: "Niet Beschikbaar",
+    diveAnimals: "Duikdieren",
     yes: "Ja",
     no: "Nee",
+
     description: "Beschrijving",
     conditions: "Omstandigheden",
     additionalInfo: "Aanvullende Informatie",

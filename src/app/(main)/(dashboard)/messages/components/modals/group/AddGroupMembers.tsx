@@ -1,9 +1,31 @@
 "use client";
 import { Button, Dialog, DialogContent } from "@/components/core";
 import CloseIcon from "@/app/icons/CloseIcon";
-import { useAddGroupMembers } from "../../../../api/chats/group/addGroupMember";
-import { useErrorModalState } from "@/hooks";
-import { useFetchBuddyList } from "@/app/(main)/(dashboard)/api/buddy/fetchBudies";
+import { useInfiniteQuery } from "react-query";
+import { adminAxios } from "@/lib/axios";
+
+interface buddyListProp {
+  count: number;
+  next: null;
+  previous: null;
+  results: any[];
+}
+
+const fetchBuddyList = async (pageParam?: string, language?: string) => {
+  let url: string;
+  if (pageParam) {
+    try {
+      const urlObj = new URL(pageParam);
+      url = urlObj.pathname + urlObj.search;
+    } catch {
+      url = pageParam;
+    }
+  } else {
+    url = `buddies?lang=${language}`;
+  }
+  const response = await adminAxios.get(url);
+  return response.data as buddyListProp;
+};
 import { SmallSpinner } from "@/icons/core";
 import { Othermember } from "@/app/(main)/(dashboard)/api/chats/group/fetchGroupChatList";
 
@@ -40,7 +62,16 @@ export default function AddNewGroupMembersModal({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage
-  } = useFetchBuddyList(String(user?.profile_details?.language));
+  } = useInfiniteQuery({
+    queryKey: ["buddy-list-group", user?.profile_details?.language],
+    queryFn: ({ pageParam }) => fetchBuddyList(pageParam, String(user?.profile_details?.language)),
+    getNextPageParam: (lastPage) => lastPage.next,
+    getPreviousPageParam: (firstPage) => firstPage.previous,
+    keepPreviousData: false,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
+    cacheTime: 1000 * 60 * 10,
+  });
 
   // Intersection Observer for infinite scroll
   const handleObserver = useCallback(

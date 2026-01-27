@@ -31,8 +31,8 @@ useEffect(() => {
 
   
   const [showNewMessageModal, setShowNewMessageModal] = useState(false);
-  const [selectedMessage, setSelectedMessage] = useState<resentChatProp>();
-  const [groupList, setGroupList] = useState<groupChatResult[]>();
+  const [selectedMessage, setSelectedMessage] = useState<resentChatProp | undefined>();
+  const [groupList, setGroupList] = useState<groupChatResult[] | undefined>();
   const [selectedGroup, setSelectedGroup] = useState<groupChatResult | null>(null);
   const [showAddGroupMemberModal, setShowAddGroupMemberModal] = useState(false);
   const [showCreateGroupChat, setShowCreateGroupChat] = useState(false);
@@ -48,8 +48,8 @@ useEffect(() => {
     if (userId && userProfile) {
       const chatData: resentChatProp = {
         user_id: userId,
-        name: `${userProfile?.data?.first_name} ${userProfile?.data?.last_name}`,
-        image: userProfile?.data?.profile_details?.profile_picture || null,
+        name: `${userProfile?.first_name} ${userProfile?.last_name}`,
+        image: userProfile?.profile_details?.profile_picture || null,
         last_message: "",
         date: null
       };
@@ -88,7 +88,7 @@ useEffect(() => {
             <div className="flex flex-wrap flex-row gap-4 md:space-x-4 md:space-y-0 items-start md:items-center">
               {activeTab === t.recent && (
                 <div className="flex justify-between w-full items-center gap-1">
-                  {selectedMessage !== null && (
+                  {selectedMessage && (
                     <Button
                       variant={"outlined"}
                       onClick={() => setSelectedMessage(undefined)}
@@ -112,7 +112,7 @@ useEffect(() => {
 
               {activeTab === t.groups && (
                 <div className="flex justify-between w-full items-center gap-1">
-                  {selectedGroup !== null && (
+                  {selectedGroup && (
                     <Button
                       variant={"outlined"}
                       onClick={() => setSelectedGroup(null)}

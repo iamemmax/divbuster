@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/core";
+import EditDiveLogModal from './EditDiveLogModal';
 import Image from "next/image";
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import LikeIcon from "@/app/icons/(dashboard)/LikeIcon";
@@ -24,10 +25,11 @@ import { useUpdateDiveLogVisibility } from "../../api/div-logs/update/updateDive
 import { Language } from "@/app/(auth)/sign-up/translations";
 import { diveLogContainerTranslations } from "@/app/(main)/translation/diveLogTranslation";
 import { capitalizeFirstLetter } from "@/utils";
-import { useFetchDiveLogs } from "../../api/div-logs/fetchDivLogs";
+import { diveResult, useFetchDiveLogs } from "../../api/div-logs/fetchDivLogs";
 import { useLanguage } from "@/hooks/useLanguage";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import DiveLogSkeleton from './DiveLogSkeleton';
+import toast from 'react-hot-toast';
 
 export interface VisibilityOption {
   value: string;
@@ -59,8 +61,23 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const [updatingItems, setUpdatingItems] = useState<string[]>([]);
   const [showBuddies, setShowBuddies] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<diveResult|null>(null);
 
   const { mutate: updateVisibility } = useUpdateDiveLogVisibility();
+
+  const handleEditClick = (item: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingItem(item);
+    setEditModalOpen(true);
+  };
+
+  const handleEditSave = (data: { name: string; title: string }) => {
+    console.log('Saving edit:', data, 'for item:', editingItem?.id);
+    toast.success('Dive log updated successfully');
+    setEditModalOpen(false);
+    setEditingItem(null);
+  };
 
   const { language } = useLanguage()
   const t = diveLogContainerTranslations[language] || diveLogContainerTranslations?.en;
@@ -294,7 +311,10 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                             <h2 className="text-sm md:text-xl font-archivo font-medium text-[#132346] dark:text-gray-100">
                               {item?.dive_plan?.dive_site?.title}
                             </h2>
-                            <PenIcon />
+                            <PenIcon 
+                              className="cursor-pointer hover:text-orange-500 transition-colors"
+                              onClick={(e) => handleEditClick(item, e)}
+                            />
                           </div>
                         </div>
 
@@ -494,7 +514,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                           </p>
                         </div>
                       </div>
-                      <div className="flex gap-x-4 items-start">
+                      {/* <div className="flex gap-x-4 items-start">
                         <div className="">
                           <BottleIcon />
                         </div>
@@ -509,7 +529,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                             {item?.maximum_pressure_of_oxygen}
                           </p>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
 {/* social icons */}
                     {/* <div className=" flex mt-1  justify-between flex-wrap gap-3 items-center">
@@ -562,6 +582,16 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
           </div>
         </div>
       )}
+      
+      <EditDiveLogModal
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        onSave={handleEditSave}
+        initialData={{
+          name: editingItem?.name || '',
+          title: editingItem?.dive_plan?.dive_site?.title || ''
+        }}
+      />
     </div>
   );
 };

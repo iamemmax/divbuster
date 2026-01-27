@@ -1,10 +1,5 @@
 import { adminAxios } from "@/lib/axios";
-import { useInfiniteQuery } from "react-query";
-
-interface historyProp {
-  detail: string;
-  data: Data;
-}
+import { useInfiniteQuery, QueryFunctionContext, QueryKey } from "react-query";
 
 interface Data {
   count: number;
@@ -29,29 +24,33 @@ interface TransHistoryResult {
   plan: number;
 }
 
-const fetchPaymentHistory = async ({ pageParam = 1 }): Promise<Data> => {
-  const response = await adminAxios.get(`payment-history?page=${pageParam}`);
-  return response.data.data; // since your API response has { detail, data }
+const fetchPaymentHistory = async ({
+  pageParam = 1,
+  queryKey,
+}: QueryFunctionContext<QueryKey>): Promise<Data> => {
+  const [, type] = queryKey as [string, string];
+
+  const response = await adminAxios.get(
+    `payment-history?page=${pageParam}&type=${type}`
+  );
+
+  return response.data.data;
 };
 
-export const useFetchPaymentHistory = () => {
-  return useInfiniteQuery<Data>({
-    queryKey: ["payment-history"],
-    queryFn: fetchPaymentHistory,
-    getNextPageParam: (lastPage, pages) => {
-      // if your API returns next page URL, extract page number
-      if (lastPage.next) {
-        const url = new URL(lastPage.next);
-        return url.searchParams.get("page"); // returns next page param
-      }
-      return undefined; // stop fetching when no next
-    },
-    getPreviousPageParam: (firstPage, pages) => {
-      if (firstPage.previous) {
-        const url = new URL(firstPage.previous);
-        return url.searchParams.get("page");
-      }
-      return undefined;
-    },
-  });
+export const useFetchPaymentHistory = (type: string) => {
+  return useInfiniteQuery<Data>(
+    ["payment-history", type],
+    fetchPaymentHistory,
+    {
+      getNextPageParam: (lastPage) =>
+        lastPage.next
+          ? Number(new URL(lastPage.next).searchParams.get("page"))
+          : undefined,
+
+      getPreviousPageParam: (firstPage) =>
+        firstPage.previous
+          ? Number(new URL(firstPage.previous).searchParams.get("page"))
+          : undefined,
+    }
+  );
 };

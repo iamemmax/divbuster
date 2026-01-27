@@ -2,21 +2,17 @@ import { adminAxios } from "@/lib/axios";
 import { useQuery } from "react-query";
 
 
+
+
+
 export interface BuddyProfile {
-
-  detail: string;
-  data: Data;
-}
-
-
-interface Data {
   id: number;
   profile_details: Profiledetails;
   diver_profile: Diverprofile;
   current_location: Currentlocation;
   wallet: Wallet;
   user_archievements: Userarchievement[];
-  certificates: Certificate[];
+  certificates: certificates[];
   active_subscription: Activesubscription;
   latest_transactions: Latesttransaction[];
   dashboard_analysis: Dashboardanalysis;
@@ -91,30 +87,30 @@ interface Activesubscription {
   subscription: number;
 }
 
-interface Certificate {
-  id: number;
-  image: string;
-  certification_no: string;
-  trainer_no: string;
-  full_name: string;
-  issuer: string;
-  issuer_name: string;
-  certificate_type: string;
-  issue_date: string;
-  date_of_birth: string;
-  school_name: string;
-  trainer_name: string;
-  created_on: string;
-}
+// interface Certificate {
+//   id: number;
+//   image: string;
+//   certification_no: string;
+//   trainer_no: string;
+//   full_name: string;
+//   issuer: string;
+//   issuer_name: string;
+//   certificate_type: string;
+//   issue_date: string;
+//   date_of_birth: string;
+//   school_name: string;
+//   trainer_name: string;
+//   created_on: string;
+// }
 
-interface Userarchievement {
+export interface Userarchievement {
   id: number;
   archievements: Archievement[];
   created_on: string;
   updated_on: string;
 }
 
-interface Archievement {
+export interface Archievement {
   id: number;
   image: string;
   title: string;

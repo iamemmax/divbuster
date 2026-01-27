@@ -1,7 +1,6 @@
 import { adminAxios } from "@/lib/axios";
 import { useInfiniteQuery, useQuery } from "react-query";
 
-
 export interface buddyListProp {
   count: number;
   next: null;
@@ -157,7 +156,7 @@ interface Diverprofile {
   created_on: string;
   updated_on: string;
   favourite_sites: any[];
-  diver_buddy:any[]
+  diver_buddy: any[];
 }
 
 interface Profiledetails {
@@ -180,46 +179,6 @@ interface Profiledetails {
   country: null | number;
   referred_by: null | number;
 }
-
-
-
-
-// const fetchBuddyList = async (pageParam?: string) => {
-//   let url: string;
-  
-//   if (pageParam) {
-//     // If pageParam is a full URL, extract just the path and query parameters
-//     try {
-//       const urlObj = new URL(pageParam);
-//       url = urlObj.pathname + urlObj.search;
-//     } catch {
-//       // If pageParam is not a full URL, use it as is
-//       url = pageParam;
-//     }
-//   } else {
-//     // Initial request
-//     url = `buddies?lang=${language}`;
-//   }
-  
-//   const response = await adminAxios.get(url);
-//   return response.data as buddyListProp;
-// };
-
-// export const useFetchBuddyList = () => {
-//   return useInfiniteQuery({
-//     queryKey: ["buddy-list"],
-//     queryFn: ({ pageParam }) => fetchBuddyList(pageParam),
-//     getNextPageParam: (lastPage) => {
-//       return lastPage.next;
-//     },
-//     getPreviousPageParam: (firstPage) => {
-//       return firstPage.previous;
-//     },
-//     keepPreviousData: true,
-//   });
-// };
-
-
 
 const fetchBuddyList = async (pageParam?: string, language?: string) => {
   let url: string;
@@ -261,7 +220,10 @@ export const useFetchBuddyList = (language: string) => {
     queryFn: ({ pageParam }) => fetchBuddyList(pageParam, language),
     getNextPageParam: (lastPage) => lastPage.next,
     getPreviousPageParam: (firstPage) => firstPage.previous,
-    keepPreviousData: true,
+    keepPreviousData: false,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
+    cacheTime: 1000 * 60 * 10,
   });
 };
 
@@ -269,6 +231,8 @@ export const useFetchAllBuddies = (language: string) => {
   return useQuery({
     queryKey: ["all-buddies", language],
     queryFn: () => fetchAllBuddies(language),
-    keepPreviousData: true,
+    keepPreviousData: false,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
   });
 };

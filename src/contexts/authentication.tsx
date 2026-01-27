@@ -111,6 +111,8 @@ case "REMOVE_SUGGESTED_DIVER":
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = React.memo(({ children }) => {
   const [authState, authDispatch] = useReducer(authReducer, initialState);
 
+  const contextValue = useMemo(() => ({ authState, authDispatch }), [authState]);
+
   // Check for token on mount
 
 useEffect(() => {
@@ -150,7 +152,7 @@ useEffect(() => {
   // console.log("Auth state updated:", authState);
 
   return (
-    <AuthContext.Provider value={useMemo(() => ({ authState, authDispatch }), [authState, authDispatch])}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );

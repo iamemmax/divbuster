@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from 'zod';
 import { SmallSpinner } from '@/icons/core';
-import { useFetchBuddyList } from '@/app/(main)/(dashboard)/api/buddy/fetchBudies';
+// import { useFetchBuddyList } from '@/app/(main)/(dashboard)/api/buddy/FetchBudies';
 import { diveLogTypes } from './DiveBuddyInfo';
 import { useCreateBookingWithBuddy } from '@/app/(main)/(dashboard)/api/bookings/addBookeWithBuddy';
 import { formatAxiosErrorMessage } from '@/utils';
@@ -17,6 +17,7 @@ import { createGearLogDetailsFormValues } from './CreateDrivePlanGear';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { diveLogBuddiesTranslations } from '@/app/(main)/translation/diveLogTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useFetchBuddyList } from '@/app/(main)/(dashboard)/api/buddy/fetchBudies';
 
 const advancedDetailsSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -91,7 +92,7 @@ const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData, selected
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useFetchBuddyList(user?.profile_details?.language as string);
+  } = useFetchBuddyList(language);
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
 

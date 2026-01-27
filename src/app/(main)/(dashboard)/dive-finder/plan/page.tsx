@@ -1,20 +1,20 @@
 "use client";
 import React from "react";
-import { useFetchAllBuddies } from "../../api/buddy/fetchBudies";
 import CreateBuddyPlanMap from "../components/CreateBuddyPlanMap";
 import { Language } from "@/app/(auth)/sign-up/translations";
 import { useAuth } from "@/contexts/authentication";
+import { useLanguage } from "@/hooks/useLanguage";
+import { useFetchAllBuddies } from "../../api/buddy/fetchBudies";
 
 export default function CreateDivePlan() {
-  const { authState } = useAuth();
-  const language: Language = (authState?.user?.profile_details?.language as Language);
+  const {language}=useLanguage()
 
   const { 
     data: buddyList,
     isLoading,
   } = useFetchAllBuddies(language);
 
-  const diveBuddirsData = buddyList?.results || [];
+  const diveBuddirsData = buddyList?.data || [];
 
   return (
     <CreateBuddyPlanMap 
