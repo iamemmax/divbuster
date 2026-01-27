@@ -171,6 +171,7 @@ const MedicalForm = () => {
         hospital_name: data.hospitalName || "",
         physician_email: data.physicianEmail || "",
         physician_signature: physicianSignature,
+        dive_instructor_id: 0,
         physician_report: doctorReportBase64,
         lang: language
       }
@@ -219,6 +220,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         hospital_name: data.hospitalName || "",
         physician_email: data.physicianEmail || "",
         physician_signature: physicianSignature,
+        dive_instructor_id: 0,
         physician_report: doctorReportBase64,
         lang: language
       }

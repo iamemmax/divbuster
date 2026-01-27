@@ -14,7 +14,7 @@ export default function CreateDivePlan() {
     isLoading,
   } = useFetchAllBuddies(language);
 
-  const diveBuddirsData = buddyList?.data || [];
+  const diveBuddirsData = buddyList?.results || [];
 
   return (
     <CreateBuddyPlanMap 
