@@ -11,6 +11,7 @@ export interface UserNotificationProp {
 export interface userNotificationResult {
   id: number;
   title: string;
+  sender_name: string;
   body: string;
   notification_type: string;
   read: boolean;

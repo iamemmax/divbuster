@@ -9,9 +9,7 @@ import Image from 'next/image'
 import { Button } from '@/components/core'
 import DiveTimeChart from '../components/TimeChart'
 import ThreeDot from '@/app/icons/(dashboard)/ThreeDot'
-import { Users } from 'lucide-react'
 import { CylinderIcon } from '@/app/icons/(dashboard)/CylinderIcon'
-import DiveLogCharts from '../components/DiveLogCharts'
 import SingleDIveLogSidebar from '../components/SingleDiveLogSidebar'
 import { usefetchSingleDivLog } from '../../api/div-logs/fetchSingleDivLog'
 import { useAuth } from '@/contexts/authentication'
@@ -20,10 +18,8 @@ import { useFetchCountry } from '../../api/fetchCountry'
 import { LocationDisplay } from '@/utils/GetLocationFromCordinate'
 import { SmallSpinner } from '@/icons/core'
 import PenIcon from '@/app/icons/(dashboard)/PenIcon'
-import ColorCheckIcon from '@/app/icons/(dashboard)/ColorCheckIcon'
 import CupIcon from '@/app/icons/(dashboard)/CupIcon'
 import InfoIcon from '@/app/icons/(dashboard)/InfoIcon'
-import { Language } from '@/app/(auth)/sign-up/translations'
 import { DiveLogDetailsTranslations } from '@/app/(main)/translation/diveLogTranslation'
 import { useLanguage } from '@/hooks/useLanguage'
 import { VisibilityOption } from '../components/DiveLogContainer'
@@ -59,7 +55,7 @@ const DiveLogId = () => {
     setEditModalOpen(true);
   };
 
-  const handleEditSave = (data: { name: string; title: string }) => {
+  const handleEditSave = (data: { name: string; start_date: string; end_date: string }) => {
     console.log('Saving edit:', data, 'for item:', editingItem?.id);
     toast.success('Dive log updated successfully');
     setEditModalOpen(false);
@@ -310,9 +306,9 @@ console.log(itemId);
                           {data?.data?.name}
                         </h2>
                         <p className="text-[#78828A] dark:text-gray-400 font-archivo font-medium text-xxs md:text-sm py-2">
-                          {moment(data?.data?.dive_plan?.created_on).format("dddd, MMMM D, YYYY")}
-                          <span className="px-2"> • </span>
-                          {moment(data?.data?.dive_plan?.created_on).format("hh:mm A")}
+                          {data?.data?.start_date && moment(data?.data?.start_date).format("dddd, MMMM D, YYYY")}
+                          {data?.data?.start_date && data?.data?.end_date && <span className="px-2"> • </span>}
+                          {data?.data?.end_date && moment(data?.data?.end_date).format("dddd, MMMM D, YYYY")}
                         </p>
                         <div className="mt-2 flex items-center gap-2">
                           <h2 className="text-sm md:text-xl font-archivo font-medium text-[#132346] dark:text-gray-200">
@@ -648,7 +644,9 @@ console.log(itemId);
         onSave={handleEditSave}
         initialData={{
           name: editingItem?.name || '',
-          title: editingItem?.dive_plan?.dive_site?.title || ''
+          start_date: editingItem?.start_date || '',
+          end_date: editingItem?.end_date || '',
+          id:editingItem?.id || ''
         }}
       />
     </div>

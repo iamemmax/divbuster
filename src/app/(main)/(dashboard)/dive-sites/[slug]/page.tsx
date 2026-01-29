@@ -168,40 +168,7 @@ const DiveSiteDetailsPage = () => {
                     </div>
                 </div>
                 
-                {/* Dive Animals */}
-                {site.dive_animals && site.dive_animals.length > 0 && (
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6 border border-gray-200 dark:border-gray-700">
-                        <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{t.diveAnimals || 'Marine Life'}</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {site.dive_animals.map((animal) => (
-                                <div key={animal.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow">
-                                    <div className="relative w-full h-40 xl:h-44 mb-3 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-600">
-                                        {animal.image ? (
-                                            <Image
-                                                src={animal.image}
-                                                alt={animal.name}
-                                                fill
-                                                className="object-cover"
-                                                onError={(e) => {
-                                                    const target = e.target as HTMLImageElement;
-                                                    target.src = '/images/placeholder-animal.png';
-                                                }}
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center">
-                                                <span className="text-4xl">🐠</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{animal.name}</h4>
-                                    {animal.description && (
-                                        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">{animal.description}</p>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
+            
                 
                 {/* Description */}
                 {site.description && (
@@ -239,6 +206,42 @@ const DiveSiteDetailsPage = () => {
                     </div>
                 )}
 
+
+    {/* Dive Animals */}
+                {site.dive_animals && site.dive_animals.length > 0 && (
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6 border border-gray-200 dark:border-gray-700">
+                        <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{t.diveAnimals || 'Marine Life'}</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {site.dive_animals.map((animal) => (
+                                <div key={animal.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                    <div className="relative w-full h-40 xl:h-44 mb-3 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-600">
+                                        {animal.image ? (
+                                            <Image
+                                                src={animal.image}
+                                                alt={animal.name}
+                                                fill
+                                                className="object-cover"
+                                                onError={(e) => {
+                                                    const target = e.target as HTMLImageElement;
+                                                    target.src = '/images/placeholder-animal.png';
+                                                }}
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center">
+                                                <span className="text-4xl">🐠</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{animal.name}</h4>
+                                    {animal.description && (
+                                        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">{animal.description}</p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                
                 {/* Reviews Section */}
                 {diveReviewData && diveReviewData.length > 0 && (
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">

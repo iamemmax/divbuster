@@ -9,12 +9,13 @@ interface prop{
     answers: Record<string, string>;
     signature: string;
     parent_or_guardian_signature: string;
-    physician_name: string;
-    hospital_name: string;
-    physician_email: string;
-    physician_signature: string;
+    physician_name?: string;
+    hospital_name?: string;
+    physician_email?: string;
+    physician_signature?: string;
     dive_instructor_id: number;
-    physician_report: string;
+    physician_report?: string;
+    show_physician_details?: boolean;
     lang: string;
 }
 }

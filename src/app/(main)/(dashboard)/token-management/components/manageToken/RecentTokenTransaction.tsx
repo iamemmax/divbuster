@@ -19,7 +19,7 @@ import { useFetchPaymentHistory } from "../../../api/payment/fetchPaymentHistory
 import { invoiceeTranslations } from "@/app/(main)/translation/tokenTranslation";
 import { useLanguage } from "@/hooks/useLanguage";
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+// import autoTable from 'jspdf-autotable';
 import ViewReceipt from "./ViewReceipt";
 
 export interface TransHistoryResult {
@@ -91,7 +91,7 @@ const RecentTokenTransaction = () => {
   const [pendingDownload, setPendingDownload] = useState(false);
 
   const handleView = (transaction: TransHistoryResult) => {
-    console.log('handleView called for id=', transaction?.id);
+    // console.log('handleView called for id=', transaction?.id);
     setSelectedTransaction(transaction);
     setShowModal(true);
   };
@@ -164,21 +164,7 @@ const downloadSinglePDF = async (transaction: TransHistoryResult) => {
         cell: (info) => info?.row?.index + 1,
         enableSorting: true,
       }),
-      // columnHelper.accessor("reference", {
-      //   header: ({ column }) => (
-      //     <button
-      //       className="flex items-center space-x-1 hover:text-gray-900 dark:hover:text-gray-100"
-      //       onClick={() =>
-      //         column.toggleSorting(column.getIsSorted() === "asc")
-      //       }
-      //     >
-      //       <span>{t.transactionId}</span>
-      //       <ArrowUpDown className="w-4 h-4" />
-      //     </button>
-      //   ),
-      //   cell: (info) => info.getValue(),
-      //   enableSorting: true,
-      // }),
+      
       columnHelper.accessor("narration", {
         header: t.recipient,
         cell: (info) => info.getValue(),
@@ -216,9 +202,11 @@ const downloadSinglePDF = async (transaction: TransHistoryResult) => {
         header: t.status,
         cell: (info) => (
           <span
-            className={`px-2 py-1 text-xs rounded-full ${
+            className={`px-2 py-1 capitalize text-xs rounded-full ${
               info.getValue() === "completed"
                 ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                : info.getValue() === "pending"
+                ? "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400"
                 : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
             }`}
           >

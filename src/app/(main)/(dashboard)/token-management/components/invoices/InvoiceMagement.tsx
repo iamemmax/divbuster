@@ -9,18 +9,18 @@ import {
   createColumnHelper,
   flexRender,
 } from "@tanstack/react-table";
-import {  ArrowUpDown, Download, FileText, ChevronDown } from "lucide-react";
-import AppleCardIcon from "@/app/icons/(dashboard)/card/AppleCardIcon";
-import MastercardIcon from "@/app/icons/(dashboard)/card/MatercardIcon";
-import PaypalIcon from "@/app/icons/(dashboard)/card/PaypalIcon";
-import StripeCardIcon from "@/app/icons/(dashboard)/card/StripeCardIcon";
-import VisaCardIcon from "@/app/icons/(dashboard)/card/VisaCardIcon";
+// import {  ArrowUpDown, Download, FileText, ChevronDown } from "lucide-react";
+// import AppleCardIcon from "@/app/icons/(dashboard)/card/AppleCardIcon";
+// import MastercardIcon from "@/app/icons/(dashboard)/card/MatercardIcon";
+// import PaypalIcon from "@/app/icons/(dashboard)/card/PaypalIcon";
+// import StripeCardIcon from "@/app/icons/(dashboard)/card/StripeCardIcon";
+// import VisaCardIcon from "@/app/icons/(dashboard)/card/VisaCardIcon";
 import { DebouncedSearchInput } from "@/components/core/DebouncedSearchInput";
 import { useFetchPaymentHistory } from "../../../api/payment/fetchPaymentHistory";
 import { invoiceeTranslations } from "@/app/(main)/translation/tokenTranslation";
 import { useLanguage } from "@/hooks/useLanguage";
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+// import jsPDF from 'jspdf';
+// import autoTable from 'jspdf-autotable';
 
 interface TransHistoryResult {
   id: number;
@@ -36,6 +36,7 @@ interface TransHistoryResult {
   created_on: string;
   updated_on: string;
   plan: number;
+  plan_name: string;
 }
 
 // 🔹 Translation object
@@ -65,84 +66,84 @@ const MyInvoicesManagement = () => {
   const transactions: TransHistoryResult[] =
     data?.pages.flatMap((page) => page.results) ?? [];
 
-  const getGatewayDisplay = (gateway: string) => {
-    switch (gateway) {
-      case "visa":
-        return <VisaCardIcon />;
-      case "mastercard":
-        return <MastercardIcon />;
-      case "stripe":
-        return <StripeCardIcon />;
-      case "paypal":
-        return <PaypalIcon />;
-      case "applepay":
-        return <AppleCardIcon />;
-      default:
-        return (
-          <span className="text-gray-500 dark:text-gray-400">{gateway}</span>
-        );
-    }
-  };
+  // const getGatewayDisplay = (gateway: string) => {
+  //   switch (gateway) {
+  //     case "visa":
+  //       return <VisaCardIcon />;
+  //     case "mastercard":
+  //       return <MastercardIcon />;
+  //     case "stripe":
+  //       return <StripeCardIcon />;
+  //     case "paypal":
+  //       return <PaypalIcon />;
+  //     case "applepay":
+  //       return <AppleCardIcon />;
+  //     default:
+  //       return (
+  //         <span className="text-gray-500 dark:text-gray-400">{gateway}</span>
+  //       );
+  //   }
+  // };
 
-  const downloadCSV = () => {
-    const headers = [t.sn, t.recipient, t.amount, t.date, t.gateway, t.status];
-    const csvData = transactions.map((transaction, index) => [
-      index + 1,
-      transaction.narration,
-      `₦${transaction.amount.toLocaleString()}`,
-      new Date(transaction.created_on).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }),
-      transaction.payment_gateway,
-      transaction.transaction_status
-    ]);
+  // const downloadCSV = () => {
+  //   const headers = [t.sn, t.recipient, t.amount, t.date, t.gateway, t.status];
+  //   const csvData = transactions.map((transaction, index) => [
+  //     index + 1,
+  //     transaction.narration,
+  //     `₦${transaction.amount.toLocaleString()}`,
+  //     new Date(transaction.created_on).toLocaleDateString("en-GB", {
+  //       day: "2-digit",
+  //       month: "short",
+  //       year: "numeric",
+  //     }),
+  //     transaction.payment_gateway,
+  //     transaction.transaction_status
+  //   ]);
     
-    const csvContent = [headers, ...csvData]
-      .map(row => row.map(field => `"${field}"`).join(","))
-      .join("\n");
+  //   const csvContent = [headers, ...csvData]
+  //     .map(row => row.map(field => `"${field}"`).join(","))
+  //     .join("\n");
     
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", `invoices_${new Date().toISOString().split('T')[0]}.csv`);
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setShowDownloadMenu(false);
-  };
+  //   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  //   const link = document.createElement("a");
+  //   const url = URL.createObjectURL(blob);
+  //   link.setAttribute("href", url);
+  //   link.setAttribute("download", `invoices_${new Date().toISOString().split('T')[0]}.csv`);
+  //   link.style.visibility = "hidden";
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  //   setShowDownloadMenu(false);
+  // };
 
-  const downloadPDF = () => {
-    const doc = new jsPDF();
+  // const downloadPDF = () => {
+  //   const doc = new jsPDF();
     
-    doc.setFontSize(18);
-    doc.text('Invoice History', 14, 22);
+  //   doc.setFontSize(18);
+  //   doc.text('Invoice History', 14, 22);
     
-    const tableData = transactions.map((transaction, index) => [
-      index + 1,
-      transaction.narration,
-      `₦${transaction.amount.toLocaleString()}`,
-      new Date(transaction.created_on).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }),
-      transaction.payment_gateway,
-      transaction.transaction_status
-    ]);
+  //   const tableData = transactions.map((transaction, index) => [
+  //     index + 1,
+  //     transaction.narration,
+  //     `₦${transaction.amount.toLocaleString()}`,
+  //     new Date(transaction.created_on).toLocaleDateString("en-GB", {
+  //       day: "2-digit",
+  //       month: "short",
+  //       year: "numeric",
+  //     }),
+  //     transaction.payment_gateway,
+  //     transaction.transaction_status
+  //   ]);
     
-    autoTable(doc, {
-      head: [[t.sn, t.recipient, t.amount, t.date, t.gateway, t.status]],
-      body: tableData,
-      startY: 30,
-    });
+  //   autoTable(doc, {
+  //     head: [[t.sn, t.recipient, t.amount, t.date, t.gateway, t.status]],
+  //     body: tableData,
+  //     startY: 30,
+  //   });
     
-    doc.save(`invoices_${new Date().toISOString().split('T')[0]}.pdf`);
-    setShowDownloadMenu(false);
-  };
+  //   doc.save(`invoices_${new Date().toISOString().split('T')[0]}.pdf`);
+  //   setShowDownloadMenu(false);
+  // };
 
   const columnHelper = createColumnHelper<TransHistoryResult>();
 
@@ -180,7 +181,7 @@ const MyInvoicesManagement = () => {
         header: t.direction,
         cell: (info) =>(
             <span 
-          className={`px-2 py-1 text-xs rounded-full ${
+          className={`px-2 py-1 text-xs capitalize rounded-full ${
               String(info.getValue()) === "credit"
                 ? " text-green-700  dark:text-green-400"
                 : "text-red-700  dark:text-red-400"
@@ -197,9 +198,9 @@ const MyInvoicesManagement = () => {
             year: "numeric",
           }),
       }),
-      columnHelper.accessor("payment_gateway", {
-        header: t.gateway,
-        cell: (info) => getGatewayDisplay(info.getValue()),
+      columnHelper.accessor("plan_name", {
+        header: t.plan,
+        cell: (info) => info.getValue(),
       }),
       columnHelper.accessor("transaction_status", {
         header: t.status,
@@ -254,7 +255,7 @@ const MyInvoicesManagement = () => {
           </div>
           
           {/* Download Dropdown */}
-          <div className="relative" ref={dropdownRef}>
+          {/* <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setShowDownloadMenu(!showDownloadMenu)}
               className="flex items-center gap-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors whitespace-nowrap"
@@ -282,7 +283,7 @@ const MyInvoicesManagement = () => {
                 </button>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
 

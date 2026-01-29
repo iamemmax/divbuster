@@ -49,6 +49,7 @@ export default function RootLayout({
     <html
       className={cn(sans.variable, display.variable, outfit.variable)}
       lang="en"
+      suppressHydrationWarning
     >
       <body className="font-sans">
         <Toaster

@@ -1,17 +1,13 @@
 "use client";
-import { Button } from "@/components/core";
 import EditDiveLogModal from './EditDiveLogModal';
 import Image from "next/image";
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
-import LikeIcon from "@/app/icons/(dashboard)/LikeIcon";
-import MessageIcon2 from "@/app/icons/(dashboard)/MessageIcon2";
-import ShareIcon2 from "@/app/icons/(dashboard)/ShareIcon2";
+
 import { useRouter } from "next/navigation";
 import slugify from "react-slugify";
 import PenIcon from "@/app/icons/(dashboard)/PenIcon";
 import CupIcon from "@/app/icons/(dashboard)/CupIcon";
 import InfoIcon from "@/app/icons/(dashboard)/InfoIcon";
-import BottleIcon from "@/app/icons/(dashboard)/BotleIcon";
 import ClockIcon from "@/app/icons/(dashboard)/ClockIcon";
 import CloudIcon2 from "@/app/icons/(dashboard)/CloudIcon2";
 import moment from "moment";
@@ -22,7 +18,6 @@ import { SmallSpinner } from "@/icons/core";
 import { useAuth } from "@/contexts/authentication";
 import SuggestedBuddies from "../../div-buddies/SuggestedBuddies";
 import { useUpdateDiveLogVisibility } from "../../api/div-logs/update/updateDivelogVisibility";
-import { Language } from "@/app/(auth)/sign-up/translations";
 import { diveLogContainerTranslations } from "@/app/(main)/translation/diveLogTranslation";
 import { capitalizeFirstLetter } from "@/utils";
 import { diveResult, useFetchDiveLogs } from "../../api/div-logs/fetchDivLogs";
@@ -72,7 +67,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
     setEditModalOpen(true);
   };
 
-  const handleEditSave = (data: { name: string; title: string }) => {
+  const handleEditSave = (data: { name: string; start_date: string; end_date: string }) => {
     console.log('Saving edit:', data, 'for item:', editingItem?.id);
     toast.success('Dive log updated successfully');
     setEditModalOpen(false);
@@ -298,15 +293,11 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                           <h2 className="text-sm md:text-lg font-medium text-[#1F2C37] dark:text-gray-100 font-archivo">
                             {item?.name}
                           </h2>
-                          <p className="text-[#78828A] dark:text-gray-400 font-archivo font-medium text-xs md:text-sm py-1">
-                            {moment(item?.dive_plan?.created_on).format(
-                              "dddd, MMMM D, YYYY"
-                            )}
-                            <span className="px-2"> • </span>
-                            {moment(item?.dive_plan?.created_on).format(
-                              "hh:mm A"
-                            )}
-                          </p>
+                           <p className="text-[#78828A] dark:text-gray-400 font-archivo font-medium text-xxs md:text-sm py-2">
+                                                   {item?.start_date && moment(item?.start_date).format("dddd, MMMM D, YYYY")}
+                                                   {item?.start_date && item?.end_date && <span className="px-2"> • </span>}
+                                                   {item?.end_date && moment(item?.end_date).format("dddd, MMMM D, YYYY")}
+                                                 </p>
                           <div className="flex items-center gap-2">
                             <h2 className="text-sm md:text-xl font-archivo font-medium text-[#132346] dark:text-gray-100">
                               {item?.dive_plan?.dive_site?.title}
@@ -589,7 +580,9 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
         onSave={handleEditSave}
         initialData={{
           name: editingItem?.name || '',
-          title: editingItem?.dive_plan?.dive_site?.title || ''
+          start_date: editingItem?.start_date || '',
+          end_date: editingItem?.end_date || '',
+          id:String(editingItem?.id) || '',
         }}
       />
     </div>

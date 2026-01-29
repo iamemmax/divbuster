@@ -29,7 +29,7 @@ type MedicalFormData = {
   physicianPhone?: string
   hospitalName?: string
   physicianEmail?: string
-  showPhysicianInfo?: boolean
+  show_physician_details?: boolean
   medicalCertification: boolean
 }
 
@@ -64,7 +64,7 @@ const MedicalForm = () => {
       physicianName: medicalReport?.data?.physician_name || '',
       hospitalName: medicalReport?.data?.hospital_name || '',
       physicianEmail: medicalReport?.data?.physician_email || '',
-      showPhysicianInfo: false,
+      show_physician_details: false,
       medicalConditions: false,
       medicalCertification: false
     }
@@ -76,6 +76,7 @@ const MedicalForm = () => {
       setValue('physicianName', medicalReport.data.physician_name || '')
       setValue('hospitalName', medicalReport.data.hospital_name || '')
       setValue('physicianEmail', medicalReport.data.physician_email || '')
+      setValue('show_physician_details', medicalReport.data.show_physician_details || false)
       // setValue('diveInstructorId', medicalReport.data.dive_instructor_id || undefined)
       
       // Load signatures if available
@@ -124,7 +125,7 @@ const MedicalForm = () => {
   
   const watchedValues = watch()
   const isCertified = watchedValues.medicalCertification
-  const showPhysicianInfo = watchedValues.showPhysicianInfo
+  const show_physician_details = watchedValues.show_physician_details
 
  
 
@@ -167,12 +168,15 @@ const MedicalForm = () => {
         answers: allAnswers,
         signature: signature,
         parent_or_guardian_signature: "",
-        physician_name: data.physicianName || "",
-        hospital_name: data.hospitalName || "",
-        physician_email: data.physicianEmail || "",
-        physician_signature: physicianSignature,
+        ...(data.show_physician_details && {
+          physician_name: data.physicianName || "",
+          hospital_name: data.hospitalName || "",
+          physician_email: data.physicianEmail || "",
+          physician_signature: physicianSignature,
+          physician_report: doctorReportBase64,
+        }),
         dive_instructor_id: 0,
-        physician_report: doctorReportBase64,
+        show_physician_details: data.show_physician_details || false,
         lang: language
       }
 
@@ -216,12 +220,15 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         answers: allAnswers,
         signature: signature,
         parent_or_guardian_signature: "",
-        physician_name: data.physicianName || "",
-        hospital_name: data.hospitalName || "",
-        physician_email: data.physicianEmail || "",
-        physician_signature: physicianSignature,
+        ...(data.show_physician_details && {
+          physician_name: data.physicianName || "",
+          hospital_name: data.hospitalName || "",
+          physician_email: data.physicianEmail || "",
+          physician_signature: physicianSignature,
+          physician_report: doctorReportBase64,
+        }),
         dive_instructor_id: 0,
-        physician_report: doctorReportBase64,
+        show_physician_details: data.show_physician_details || false,
         lang: language
       }
 
@@ -246,6 +253,18 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
   React.useEffect(() => {
     setCanSign(isCertified)
   }, [isCertified])
+
+  // Reset physician info when checkbox is unchecked
+  React.useEffect(() => {
+    if (!show_physician_details) {
+      setValue('physicianName', '')
+      setValue('hospitalName', '')
+      setValue('physicianEmail', '')
+      setUploadedFile(null)
+      setDoctorReportBase64('')
+      clearPhysicianSignature()
+    }
+  }, [show_physician_details, setValue])
 
   React.useEffect(() => {
     if (typeof window === 'undefined') return
@@ -326,7 +345,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
       <div>
         <label className="flex items-center space-x-3 mb-4">
           <input
-            {...register('showPhysicianInfo')}
+            {...register('show_physician_details')}
             type="checkbox"
             className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
           />
@@ -336,7 +355,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         </label>
       </div>
 
-      {showPhysicianInfo && (
+      {show_physician_details && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -375,7 +394,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
       )}
 
       {/* File Upload Section */}
-      {showPhysicianInfo && (
+      {show_physician_details && (
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             {t.uploadPhysicianReport}
@@ -460,7 +479,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         </div>
       )}
 
-      {showPhysicianInfo && (
+      {show_physician_details && (
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             {t.physicianSignature}

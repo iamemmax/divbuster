@@ -56,7 +56,7 @@ const NotificationList = () => {
             key={notification.id}
            avatar={notification.sender?.profile_picture?notification.sender?.profile_picture : "/images/profile.png"}
             
-            name={notification.sender?.name ?? "Unknown"}
+            name={notification.sender_name ?? "Unknown"}
             time={notification.created_on}
             action={notification.body}
             isOnline={true} // adjust if your API provides online status

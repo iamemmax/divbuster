@@ -22,6 +22,7 @@ interface TransHistoryResult {
   created_on: string;
   updated_on: string;
   plan: number;
+  plan_name: string;
 }
 
 const fetchPaymentHistory = async ({
