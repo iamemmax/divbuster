@@ -285,6 +285,29 @@ export function validatePhoneNumber(phoneNumber: string): string {
   return /^[0-9]*$/.test(phoneNumber) ? phoneNumber : ""; // Return empty string if non-numeric
 }
 
+/**
+ * Generates an array of strings with a specified length and optional prefix/suffix
+ * @param length The number of strings to generate
+ * @param prefix Optional prefix for each string (default: "item")
+ * @param startIndex Optional starting index (default: 0)
+ * @returns An array of generated strings
+ * @example
+ * generateStringArray(3) // ["item0", "item1", "item2"]
+ * generateStringArray(3, "user") // ["user0", "user1", "user2"]
+ * generateStringArray(3, "id", 1) // ["id1", "id2", "id3"]
+ */
+export function generateStringArray(
+  length: number,
+  prefix: string = "item",
+  startIndex: number = 0
+): string[] {
+  if (length < 0) {
+    throw new Error("Length must be a non-negative number");
+  }
+
+  return Array.from({ length }, (_, index) => `${prefix}${startIndex + index}`);
+}
+
 // Export the new date formatting utility
 export { formatDate } from './dateFormat';
 export { formatShortDate as formatShortDateUtil } from './formatShortDate';

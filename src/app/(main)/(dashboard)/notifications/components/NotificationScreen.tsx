@@ -47,7 +47,7 @@ const NotificationList = () => {
 
   return (
     <>
-   {isLoading?<div className="flex justify-center items-center py-6"><SmallSpinner/></div>: <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-3 bg-white dark:bg-transparent">
+   {isLoading?<div className="flex justify-center items-center py-6"><SmallSpinner/></div>: <div className="grid grid-cols-1 gap-8 py-3 bg-white dark:bg-transparent">
       {/* Left Column */}
       <div className="space-y-1">
         {leftColumnNotifications.map((notification, index) => (
@@ -55,7 +55,7 @@ const NotificationList = () => {
             id={String(notification.id)}
             key={notification.id}
            avatar={notification.sender?.profile_picture?notification.sender?.profile_picture : "/images/profile.png"}
-            
+            notification_type={notification?.notification_type}
             name={notification.sender_name ?? "Unknown"}
             time={notification.created_on}
             action={notification.body}
@@ -65,7 +65,7 @@ const NotificationList = () => {
         ))}
       </div>
 
-      {/* Right Column */}
+      {/* Right Column
       <div className="space-y-1">
         {rightColumnNotifications.map((notification, index) => (
           <NotificationItem
@@ -78,8 +78,8 @@ const NotificationList = () => {
             isOnline={true}
             isLast={index === rightColumnNotifications.length - 1}
           />
-        ))}
-      </div>
+        ))} */}
+      {/* </div> */}
     </div>}
     </>
   );

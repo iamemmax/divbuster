@@ -324,9 +324,9 @@ const fetchBuddyRequest = async ({
 
   const response = await adminAxios.get(relativeUrl, {
     params: {
-      date_to: dateTo,
-      date_from: dateFrom,
-      search: filters?.search || undefined,
+      // ...(dateTo && { date_to: dateTo }),
+      // ...(dateFrom && { date_from: dateFrom }),
+      ...(filters?.search && { search: filters.search }),
       lang: filters?.lang || 'en',
     },
   });

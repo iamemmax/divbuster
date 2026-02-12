@@ -30,12 +30,18 @@ const {language}=useLanguage()
     <div>
       <Button
         className="px-4 py-3 bg-[#F7931D] font-archivo text-white rounded-lg hover:bg-orange-600 transition-colors"
-        onClick={() => setShowBookingModal(true)}
+        onClick={() => setShowSchoolBookingModal(true)}
       >
         {t.createNewDivePlan}
       </Button>
 
-      {showBookingModal && (
+ {/* {showSchoolBookingModal && ( */}
+        <CreateSchoolPlan
+          isOpen={showSchoolBookingModal}
+          setIsOpenCardModal={setShowSchoolBookingModal}
+        />
+      {/* )} */}
+      {/* {showBookingModal && (
         <BookingActionModal
           isOpen={showBookingModal}
           setIsOpenCardModal={setShowBookingModal}
@@ -43,12 +49,7 @@ const {language}=useLanguage()
           setShowSchoolBookingModal={setShowSchoolBookingModal}
         />
       )}
-      {showSchoolBookingModal && (
-        <CreateSchoolPlan
-          isOpen={showSchoolBookingModal}
-          setIsOpenCardModal={setShowSchoolBookingModal}
-        />
-      )}
+     
       {showBookWithBuddy && (
         <CreateBuddyBooking
           isOpen={showBookWithBuddy}
@@ -56,7 +57,7 @@ const {language}=useLanguage()
           setIsOpenCardModal={setShowBookWithBuddy}
           selectedBuddies=""
         />
-      )}
+      )} */}
     </div>
   )
 }

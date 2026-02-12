@@ -48,7 +48,7 @@ const LiabilityForm = () => {
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>([])
   const [answers, setAnswers] = useState<Record<string, boolean>>({})
   const [isSigned, setIsSigned] = useState(false)
-  const [canvasWidth, setCanvasWidth] = useState(window.innerWidth - 100)
+  const [canvasWidth, setCanvasWidth] = useState(600)
   const [signatureData, setSignatureData] = useState<string>('')
   
   const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<LiabilityFormData>({
@@ -186,22 +186,23 @@ const LiabilityForm = () => {
 
   React.useEffect(() => {
     let resizeTimeout: NodeJS.Timeout
-    
+
     const updateCanvasWidth = () => {
       clearTimeout(resizeTimeout)
       resizeTimeout = setTimeout(() => {
         if (sigRef.current && !sigRef.current.isEmpty()) {
           setSignatureData(sigRef.current.toDataURL())
         }
-        
-        const width = window.innerWidth - 100
-        setCanvasWidth(width)
+
+        // Set canvas width based on window size
+        const width = Math.min(window.innerWidth - 80, 800)
+        setCanvasWidth(Math.max(width, 300))
       }, 300)
     }
-    
+
     updateCanvasWidth()
     window.addEventListener('resize', updateCanvasWidth)
-    
+
     return () => {
       clearTimeout(resizeTimeout)
       window.removeEventListener('resize', updateCanvasWidth)
@@ -361,36 +362,33 @@ const LiabilityForm = () => {
       </div>
 
       <div>
-      
-        
-        <div className={`border rounded-md p-2 bg-white w-full ${
+        <div className={`border rounded-md p-2 bg-white w-full overflow-hidden ${
           canSign ? 'border-gray-300 dark:border-gray-600' : 'border-gray-200 dark:border-gray-700 opacity-50'
         }`}>
-           
-
-
-
- <SignatureCanvas
-    ref={sigRef}
-    onEnd={() => {
-      const isEmpty = sigRef.current?.isEmpty()
-      setIsSigned(!isEmpty)
-      if (!isEmpty && sigRef.current) {
-        setSignatureData(sigRef.current.toDataURL())
-      }
-    }}
-    canvasProps={{
-      width: canvasWidth,
-      height: 100,
-      className: 'signature-canvas',
-      style: { 
-        pointerEvents: canSign ? 'auto' : 'none',
-        border: '1px solid #ccc',
-        touchAction: 'none' // Important for mobile
-      }
-    }}
-    penColor={canSign ? '#000000' : '#cccccc'}
-  />
+          <SignatureCanvas
+            ref={sigRef}
+            onEnd={() => {
+              const isEmpty = sigRef.current?.isEmpty()
+              setIsSigned(!isEmpty)
+              if (!isEmpty && sigRef.current) {
+                setSignatureData(sigRef.current.toDataURL())
+              }
+            }}
+            canvasProps={{
+              width: canvasWidth,
+              height: 100,
+              className: 'signature-canvas',
+              style: {
+                pointerEvents: canSign ? 'auto' : 'none',
+                border: '1px solid #ccc',
+                touchAction: 'none',
+                display: 'block',
+                maxWidth: '100%',
+                height: 'auto'
+              }
+            }}
+            penColor={canSign ? '#000000' : '#cccccc'}
+          />
         </div>
         <Button
           type="button"

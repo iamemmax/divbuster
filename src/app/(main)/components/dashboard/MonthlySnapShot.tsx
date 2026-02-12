@@ -135,7 +135,7 @@ const {language}= useLanguage()
           <div className="flex items-center gap-2 md:gap-[0.625rem]">
           <div className="">  <DashboardIcon width={20} height={20} color="#F04438" /></div>
             <p className={`text-xs md:text-sm font-medium font-archivo  flex items-center gap-1 ${
-              (user?.wallet?.balance ?? 0) > 5 ? 'text-orange-500' : 'text-[#F04438]'
+              (user?.wallet?.balance ?? 0) >= 50 ? 'text-orange-500' : 'text-[#F04438]'
             }`}>
               <span>{t.totalTokenBalance}</span>
               { user?.wallet?.balance ?? 0}

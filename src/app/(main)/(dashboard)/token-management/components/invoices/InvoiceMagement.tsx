@@ -66,84 +66,6 @@ const MyInvoicesManagement = () => {
   const transactions: TransHistoryResult[] =
     data?.pages.flatMap((page) => page.results) ?? [];
 
-  // const getGatewayDisplay = (gateway: string) => {
-  //   switch (gateway) {
-  //     case "visa":
-  //       return <VisaCardIcon />;
-  //     case "mastercard":
-  //       return <MastercardIcon />;
-  //     case "stripe":
-  //       return <StripeCardIcon />;
-  //     case "paypal":
-  //       return <PaypalIcon />;
-  //     case "applepay":
-  //       return <AppleCardIcon />;
-  //     default:
-  //       return (
-  //         <span className="text-gray-500 dark:text-gray-400">{gateway}</span>
-  //       );
-  //   }
-  // };
-
-  // const downloadCSV = () => {
-  //   const headers = [t.sn, t.recipient, t.amount, t.date, t.gateway, t.status];
-  //   const csvData = transactions.map((transaction, index) => [
-  //     index + 1,
-  //     transaction.narration,
-  //     `₦${transaction.amount.toLocaleString()}`,
-  //     new Date(transaction.created_on).toLocaleDateString("en-GB", {
-  //       day: "2-digit",
-  //       month: "short",
-  //       year: "numeric",
-  //     }),
-  //     transaction.payment_gateway,
-  //     transaction.transaction_status
-  //   ]);
-    
-  //   const csvContent = [headers, ...csvData]
-  //     .map(row => row.map(field => `"${field}"`).join(","))
-  //     .join("\n");
-    
-  //   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  //   const link = document.createElement("a");
-  //   const url = URL.createObjectURL(blob);
-  //   link.setAttribute("href", url);
-  //   link.setAttribute("download", `invoices_${new Date().toISOString().split('T')[0]}.csv`);
-  //   link.style.visibility = "hidden";
-  //   document.body.appendChild(link);
-  //   link.click();
-  //   document.body.removeChild(link);
-  //   setShowDownloadMenu(false);
-  // };
-
-  // const downloadPDF = () => {
-  //   const doc = new jsPDF();
-    
-  //   doc.setFontSize(18);
-  //   doc.text('Invoice History', 14, 22);
-    
-  //   const tableData = transactions.map((transaction, index) => [
-  //     index + 1,
-  //     transaction.narration,
-  //     `₦${transaction.amount.toLocaleString()}`,
-  //     new Date(transaction.created_on).toLocaleDateString("en-GB", {
-  //       day: "2-digit",
-  //       month: "short",
-  //       year: "numeric",
-  //     }),
-  //     transaction.payment_gateway,
-  //     transaction.transaction_status
-  //   ]);
-    
-  //   autoTable(doc, {
-  //     head: [[t.sn, t.recipient, t.amount, t.date, t.gateway, t.status]],
-  //     body: tableData,
-  //     startY: 30,
-  //   });
-    
-  //   doc.save(`invoices_${new Date().toISOString().split('T')[0]}.pdf`);
-  //   setShowDownloadMenu(false);
-  // };
 
   const columnHelper = createColumnHelper<TransHistoryResult>();
 
@@ -175,7 +97,7 @@ const MyInvoicesManagement = () => {
       }),
       columnHelper.accessor("amount", {
         header: t.amount,
-        cell: (info) => `€${info.getValue().toLocaleString()}`,
+        cell: (info) => `${info.getValue().toLocaleString()}`,
       }),
       columnHelper.accessor("direction", {
         header: t.direction,

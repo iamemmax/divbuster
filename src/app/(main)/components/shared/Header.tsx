@@ -71,7 +71,7 @@ const Header = ({ subtitle, title }: HeaderProps) => {
   
 
   return (
-    <div className="py-4 xl:py-6 md:px-[1.9375rem] px-3 w-full border-b border-[#E2E8F0] flex justify-between items-center">
+    <div className="py-4 xl:py-6 md:px-[1.9375rem] px-3 w-full border-b border-[#E2E8F0] dark:border-gray-700 bg-white dark:bg-gray-900 transition-colors duration-200 flex justify-between items-center">
       <div className="flex items-center gap-3 ">
         {isMobile && (
           <button 

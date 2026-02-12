@@ -36,6 +36,7 @@ export interface TransHistoryResult {
   created_on: string;
   updated_on: string;
   plan: number;
+  plan_value:number
 }
 
 // 🔹 Translation object
@@ -173,6 +174,10 @@ const downloadSinglePDF = async (transaction: TransHistoryResult) => {
         header: t.amount,
         cell: (info) => `€${info.getValue().toLocaleString()}`,
       }),
+      columnHelper.accessor("plan_value", {
+        header: t.tokenValue,
+        cell: (info) => `${info.getValue()}`,
+      }),
       columnHelper.accessor("direction", {
         header: t.direction,
         cell: (info) =>(
@@ -246,7 +251,7 @@ const downloadSinglePDF = async (transaction: TransHistoryResult) => {
         ),
       }),
     ],
-    [t]
+    [t, columnHelper]
   );
 
   const table = useReactTable({

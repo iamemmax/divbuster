@@ -5,6 +5,7 @@ import Image from "next/image";
 import moment from "moment";
 import { useLanguage } from "@/hooks/useLanguage";
 import { notificationTranslations } from "@/app/(main)/translation/notificationTranslation";
+import { convertKebabAndSnakeToTitleCase } from "@/utils/strings";
 
 export interface NotificationItemProps {
   id?: string;
@@ -18,6 +19,7 @@ export interface NotificationItemProps {
   showAcceptBtn?: boolean;
   showDeclineBtn?: boolean;
   showModifyBtn?: boolean;
+  notification_type?:string;
   // Button functions
   onAccept?: (id?: string) => void;
   onDecline?: (id?: string) => void;
@@ -45,6 +47,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   acceptLoading = false,
   declineLoading = false,
   modifyLoading = false,
+  notification_type
 }) => {
   const { language } = useLanguage();
   const t = notificationTranslations[language] || notificationTranslations.en;
@@ -68,8 +71,8 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
       {/* Timeline Line - positioned to connect avatars */}
       {!isLast && (
         <div 
-          className="absolute left-[20px] top-[40px] w-[2px] bg-gray-200 dark:bg-gray-700" 
-          style={{height: 'calc(100% - 40px)'}} 
+          className="absolute left-[20px] top-[25px] w-[2px] bg-gray-200 dark:bg-gray-700" 
+          style={{height: 'calc(100% - 35px)'}} 
         />
       )}
 
@@ -97,6 +100,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
           )}
         </div>
         <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{action}</p>
+       {notification_type&& <p className="text-xs text-gray-600 italic dark:text-gray-300 leading-relaxed">{convertKebabAndSnakeToTitleCase(notification_type)}</p>}
 
         {/* Action Buttons */}
         {hasButtons && (

@@ -144,7 +144,7 @@ const {language} = useLanguage()
 
   return (
     <Dialog modal={true} open={isOpen}>
-      <DialogContent className="!max-w-[917px] !max-h-[95vh] bg-white dark:bg-gray-900">
+      <DialogContent className="!max-w-[817px] !max-h-[95vh] bg-white dark:bg-gray-900">
         <DialogBody className="w-full max-md:px-2 outline-none text-gray-900 dark:text-white">
           {/* Header */}
           <div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">

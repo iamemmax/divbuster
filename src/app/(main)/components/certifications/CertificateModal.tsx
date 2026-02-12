@@ -50,10 +50,9 @@ const CertificateModal = ({ isOpen, onClose, certificate }: Props) => {
           
           <div className="p-6">
             <div
-              className="flex flex-col gap-4 rounded-[1.1944rem] px-[1.125rem] py-4 bg-cover bg-no-repeat"
+              className="flex flex-col gap-4 rounded-[1.1944rem] px-[1.125rem] py-4"
               style={{
-                backgroundImage: certificate.image ? `url(${certificate.image})` : undefined,
-                backgroundColor: !certificate.image ? selectedCardBg(certificate.certificate_type || "")?.bg || "#F7931D" : undefined,
+                backgroundColor: selectedCardBg(certificate.certificate_type || "")?.bg || "#F7931D",
               }}
             >
               <div className="flex justify-between items-start">

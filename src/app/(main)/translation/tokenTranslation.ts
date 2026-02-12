@@ -196,6 +196,7 @@ export const invoiceeTranslations = {
     actions: "Actions",
     plan: "Plan",
     view: "View",
+    tokenValue: "Token value",
   },
   es: {
     walletTitle: "Mis Facturas",
@@ -224,6 +225,7 @@ export const invoiceeTranslations = {
     plan: "Plan",
     actions: "Acciones",
     view: "Ver",
+    tokenValue: "Valor del token",
   },
   fr: {
     walletTitle: "Mes Factures",
@@ -252,6 +254,7 @@ export const invoiceeTranslations = {
     plan: "Plan",
     actions: "Actions",
     view: "Voir",
+    tokenValue: "Valeur du jeton",
   },
   nl: {
     walletTitle: "Mijn Facturen",
@@ -280,5 +283,6 @@ export const invoiceeTranslations = {
     plan: "Plan",
     actions: "Acties",
     view: "Bekijken",
+    tokenValue: "Tokenwaarde",
   },
 } as const;

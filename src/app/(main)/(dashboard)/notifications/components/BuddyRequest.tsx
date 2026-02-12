@@ -68,8 +68,6 @@ const { data,
     
   
   // Split notifications into two columns
-  const leftColumnNotifications = allNotifications?.filter((_, index) => index % 2 === 0);
-  const rightColumnNotifications = allNotifications?.filter((_, index) => index % 2 === 1);
 
   const handleAccept = async (suggested:buddyRequestResult) => {
      setAcceptingDiverId(suggested.id);
@@ -129,10 +127,10 @@ const { data,
  <div className="bg-white dark:bg-transparent rounded-lg py-3">
   {
     isLoading?<div className="flex justify-center items-center py-6"><SmallSpinner/></div>:
-  <div className="grid grid-cols-1 xl:grid-cols-2 gap-y-8">
+  <div className="grid grid-cols-1 ">
     {/* Left column with border-right on desktop */}
-    <div className="md:border-r md:border-gray-200 dark:md:border-gray-700 md:pr-8">
-      {leftColumnNotifications?.map((request, index: number) => (
+    <div className="md:border-r md:border-gray-200 dark:md:border-gray-700 gap-y-3 md:pr-8">
+      {allNotifications?.map((request, index: number) => (
         <NotificationItem
           key={request.id}
           id={String(request?.id )}
@@ -143,7 +141,7 @@ const { data,
           time={request?.request_date}
           action={"Want to be your Dive buddy"}
           isOnline={request?.request_from?.diver_profile?.online}
-          isLast={index === Number(leftColumnNotifications?.length) - 1}
+          // isLast={index === Number(leftColumnNotifications?.length) - 1}
           showAcceptBtn={true}
           showDeclineBtn={true}
           onAccept={() => handleAccept(request)}
@@ -155,29 +153,7 @@ const { data,
       ))}
     </div>
 
-    {/* Right column */}
-    <div className="3xl:pl-16 sm:pl-6">
-      {rightColumnNotifications?.map((request, index) => (
-        <NotificationItem
-          key={request.id}
-          id={String(request?.id )}
-          avatar={request?.request_from?.profile_details?.profile_picture ? request?.request_from?.profile_details?.profile_picture:"/images/profile.png"}
-          name={`${request.request_from?.first_name??""} ${request.request_from?.last_name??""}`}
-          time={request?.request_date}
-          action={"Want to be your Dive buddy"}
-          isOnline={request?.request_from?.diver_profile?.online}
-          isLast={index === Number(leftColumnNotifications?.length) - 1}
-          showAcceptBtn={true}
-          showDeclineBtn={true}
-          onAccept={() => handleAccept(request)}
-          onDecline={() => handleDecline(request)}
-          acceptLoading={acceptingDiverId === request?.id}
-          declineLoading={decliningDiverId === request?.id}
-
-        />
-      ))}
-      
-    </div>
+  
   </div>
   }
 </div>

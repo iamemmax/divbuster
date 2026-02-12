@@ -52,7 +52,7 @@ const MedicalForm = () => {
   const [isPhysicianSigned, setIsPhysicianSigned] = useState(false)
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>([])
   const [answers, setAnswers] = useState<Record<string, boolean>>({})
-  const [canvasWidth, setCanvasWidth] = useState(typeof window !== 'undefined' ? window.innerWidth - 100 : 800)
+  const [canvasWidth, setCanvasWidth] = useState(600)
   const [signatureData, setSignatureData] = useState<string | null>(null)
   const [physicianSignatureData, setPhysicianSignatureData] = useState<string | null>(null)
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
@@ -268,9 +268,9 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
 
   React.useEffect(() => {
     if (typeof window === 'undefined') return
-    
+
     let resizeTimeout: NodeJS.Timeout
-    
+
     const updateCanvasWidth = () => {
       clearTimeout(resizeTimeout)
       resizeTimeout = setTimeout(() => {
@@ -281,15 +281,16 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         if (physicianSigRef.current && !physicianSigRef.current.isEmpty()) {
           setPhysicianSignatureData(physicianSigRef.current.toDataURL())
         }
-        
-        const width = window.innerWidth - 100
-        setCanvasWidth(width)
+
+        // Set canvas width based on window size
+        const width = Math.min(window.innerWidth - 80, 800)
+        setCanvasWidth(Math.max(width, 300))
       }, 300)
     }
-    
+
     updateCanvasWidth()
     window.addEventListener('resize', updateCanvasWidth)
-    
+
     return () => {
       clearTimeout(resizeTimeout)
       window.removeEventListener('resize', updateCanvasWidth)
@@ -484,7 +485,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             {t.physicianSignature}
           </label>
-          <div className="border rounded-md p-2 bg-white w-full overflow-hidden border-gray-300 dark:border-gray-600">
+          <div className="border rounded-md p-2 bg-white w-full border-gray-300 dark:border-gray-600 overflow-hidden">
             <SignatureCanvas
               ref={physicianSigRef}
               onEnd={() => {
@@ -498,12 +499,16 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
                 width: canvasWidth,
                 height: 100,
                 className: 'signature-canvas',
-                style: { 
+                style: {
                   pointerEvents: canSign ? 'auto' : 'none',
                   border: '1px solid #ccc',
-                  touchAction: 'none'
+                  touchAction: 'none',
+                  display: 'block',
+                  maxWidth: '100%',
+                  height: 'auto'
                 }
               }}
+              penColor={canSign ? '#000000' : '#cccccc'}
             />
           </div>
           <Button
@@ -619,26 +624,29 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
           canSign ? 'border-gray-300 dark:border-gray-600' : 'border-gray-200 dark:border-gray-700 opacity-50'
         }`}>
           <SignatureCanvas
-    ref={sigRef}
-    onEnd={() => {
-      const isEmpty = sigRef.current?.isEmpty()
-      setIsSigned(!isEmpty)
-      if (!isEmpty && sigRef.current) {
-        setSignatureData(sigRef.current.toDataURL())
-      }
-    }}
-    canvasProps={{
-      width: canvasWidth,
-      height: 100,
-      className: 'signature-canvas',
-      style: { 
-        pointerEvents: canSign ? 'auto' : 'none',
-        border: '1px solid #ccc',
-        touchAction: 'none' // Important for mobile
-      }
-    }}
-    penColor={canSign ? '#000000' : '#cccccc'}
-  />
+            ref={sigRef}
+            onEnd={() => {
+              const isEmpty = sigRef.current?.isEmpty()
+              setIsSigned(!isEmpty)
+              if (!isEmpty && sigRef.current) {
+                setSignatureData(sigRef.current.toDataURL())
+              }
+            }}
+            canvasProps={{
+              width: canvasWidth,
+              height: 100,
+              className: 'signature-canvas',
+              style: {
+                pointerEvents: canSign ? 'auto' : 'none',
+                border: '1px solid #ccc',
+                touchAction: 'none',
+                display: 'block',
+                maxWidth: '100%',
+                height: 'auto'
+              }
+            }}
+            penColor={canSign ? '#000000' : '#cccccc'}
+          />
         </div>
         <Button
           type="button"

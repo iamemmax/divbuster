@@ -15,6 +15,7 @@ import { profileTranslations } from "@/app/(main)/translation/diveBuddiesTransla
 import { useLanguage } from "@/hooks/useLanguage";
 import CertificateModal from "@/app/(main)/components/certifications/CertificateModal";
 import { selectedCardBg } from "@/app/(main)/components/shared/CardContainer";
+import DashboardAnalysisCard from "@/app/(main)/components/dashboard/DashboardAnalysisCard";
 
 const UserProfile = () => {
   const router = useRouter();
@@ -38,7 +39,7 @@ const UserProfile = () => {
       if (user?.current_location?.lat && user?.current_location?.lon) {
         try {
           const response = await fetch(
-            `https://api.opencagedata.com/geocode/v1/json?q=${user.current_location.lat}+${user.current_location.lon}&key=YOUR_API_KEY`
+            `https://api.opencagedata.com/geocode/v1/json?q=${user.current_location.lat}+${user.current_location.lon}&limit=1`
           );
           const data = await response.json();
           if (data.results && data.results.length > 0) {
@@ -68,6 +69,9 @@ const UserProfile = () => {
     }
   }, []);
 
+
+  // console.log(user?.diver_profile?.last_dive_detail,"detail");
+  
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
       <Header title={t.title} subtitle="" />
@@ -121,83 +125,158 @@ const UserProfile = () => {
 
         <div className="mt-[6.125rem] px-3 md:px-6 py-6">
           <div className="space-y-6 pb-12 border border-[#EAECF0] dark:border-gray-700 rounded-lg shadow-sm dark:shadow-gray-700/20 transition-colors duration-200 overflow-y-auto h-full">
+            {/* Dashboard Analysis Card */}
+            {user?.dashboard_analysis && (
+              <DashboardAnalysisCard
+                overallData={{
+                  totalDives: user.dashboard_analysis.dives || 0,
+                  totalDepth: `${user.dashboard_analysis.max_depth || 0}m`,
+                  totalBottomTime: `${user.dashboard_analysis.bottom_time || 0}h`,
+                  // averageDepth: `${user.diver_profile?.dive_count ? Math.round((user.dashboard_analysis.max_depth || 0) / user.diver_profile.dive_count) : 0}m`,
+                  maxDepth: `${user.dashboard_analysis.max_depth || 0}m`,
+                  // diveCount: user.dashboard_analysis.dives || 0,
+                }}
+                thisMonthData={{
+                  totalDives: user.dashboard_analysis.dives_this_month || 0,
+                  totalDepth: `${user.dashboard_analysis.max_depth_this_month || 0}m`,
+                  totalBottomTime: `${user.dashboard_analysis.bottom_time_this_month || 0}h`,
+                  // averageDepth: `${user.diver_profile?.dive_count ? Math.round((user.dashboard_analysis.max_depth_this_month || 0) / user.diver_profile.dive_count) : 0}m`,
+                  maxDepth: `${user.dashboard_analysis.max_depth_this_month || 0}m`,
+                  // diveCount: user.dashboard_analysis.dives_this_month || 0,
+                }}
+                lastMonthData={{
+                  totalDives: user.dashboard_analysis.dives_last_month || 0,
+                  totalDepth: `${user.dashboard_analysis.max_depth_last_month || 0}m`,
+                  totalBottomTime: `${user.dashboard_analysis.bottom_time_last_month || 0}h`,
+                  // averageDepth: `${user.diver_profile?.dive_count ? Math.round((user.dashboard_analysis.max_depth_last_month || 0) / user.diver_profile.dive_count) : 0}m`,
+                  maxDepth: `${user.dashboard_analysis.max_depth_last_month || 0}m`,
+                  // diveCount: user.dashboard_analysis.dives_last_month || 0,
+                }}
+              />
+            )}
+
             {/* Profile Details */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg pb-8 transition-colors duration-200">
-              <div className="p-7 border-b border-[#EAECF0] dark:border-gray-700 transition-colors duration-200">
+            <div className="bg-white dark:bg-gray-800 rounded-lg border border-[#EAECF0] dark:border-gray-700 transition-colors duration-200">
+              <div className="p-6 border-b border-[#EAECF0] dark:border-gray-700 transition-colors duration-200">
                 <div className="flex items-center flex-wrap justify-between">
                   <h2 className="text-xl font-medium text-[#101828] dark:text-gray-100 font-archivo transition-colors duration-200">
                     {t.profileDetails}
                   </h2>
-                  <div className="flex items-center space-x-4">
-                    <Button className="flex items-center bg-transparent space-x-2 px-4 py-[.625rem] rounded-lg border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200" onClick={() => handleShare("profile")}>
-                      <ShareIcon />
-                      <span>{t.shareProfile}</span>
-                    </Button>
-                  </div>
+                  <Button className="flex items-center bg-transparent space-x-2 px-4 py-[.625rem] rounded-lg border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200" onClick={() => handleShare("profile")}>
+                    <ShareIcon />
+                    <span>{t.shareProfile}</span>
+                  </Button>
                 </div>
               </div>
 
-              <div className="md:px-[1.875rem] mt-4">
-                <div
-                  className="relative rounded-lg overflow-hidden"
-                  style={{ height: "210px" }}
-                >
-                  <div
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{
-                      backgroundImage:
-                        "url(/images/dashboard/profile-Location.png)"
-                    }}
-                  ></div>
-                  <div className="absolute inset-0 bg-black bg-opacity-40 dark:bg-opacity-60 transition-colors duration-200"></div>
-
-                  <div className="absolute flex justify-center items-center -bottom-4 left-4 right-4">
-                    <div
-                      className="bg-white dark:bg-gray-800 max-w-[500px] w-full rounded-[1.25rem] py-[1.45rem] px-[3.9375rem] transition-colors duration-200"
-                      style={{
-                        boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.06)"
-                      }}
-                    >
-                      <div className="flex items-start space-x-3">
-                        <div className="w-16 h-16 flex items-center justify-center relative overflow-hidden rounded">
-                          {user?.profile_details?.country && getCountry(user.profile_details.country)?.alpha2code ? (
-                            <img
-                              src={`https://flagcdn.com/w40/${getCountry(user.profile_details.country)?.alpha2code?.toLowerCase()}.png`}
-                              alt={`${getCountry(user.profile_details.country)?.name} flag`}
-                              className="w-full h-full object-cover rounded"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = '/images/placeholder-flag.png';
-                              }}
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-gray-300 rounded flex items-center justify-center">
-                              <span className="text-xs text-gray-600">?</span>
-                            </div>
+              <div className="p-6">
+                {/* Last Dive Location Card */}
+                {user?.diver_profile?.last_dive_detail && (
+                  <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg transition-colors duration-200">
+                    <div className="flex items-start gap-4">
+                      <div className="w-14 h-14 flex items-center justify-center relative overflow-hidden rounded-lg flex-shrink-0 bg-white dark:bg-gray-700">
+                        {user?.profile_details?.country && getCountry(user.profile_details.country)?.alpha2code ? (
+                          <img
+                            src={`https://flagcdn.com/w40/${getCountry(user.profile_details.country)?.alpha2code?.toLowerCase()}.png`}
+                            alt={`${getCountry(user.profile_details.country)?.name} flag`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = '/images/placeholder-flag.png';
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                            <span className="text-xs text-gray-600 dark:text-gray-300">?</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 uppercase tracking-wide">Last Dive Location</p>
+                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1 transition-colors duration-200">
+                          {user.diver_profile.last_dive_detail.name || 'No dive location'}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 transition-colors duration-200">
+                          {user.diver_profile.last_dive_detail.latitude && user.diver_profile.last_dive_detail.longitude
+                            ? `${user.diver_profile.last_dive_detail.latitude}, ${user.diver_profile.last_dive_detail.longitude}`
+                            : user?.profile_details?.country ? getCountry(user.profile_details.country)?.name : 'Location not available'}
+                        </p>
+                        <div className="flex gap-2 items-center flex-wrap mb-3">
+                          {user.diver_profile.last_dive_detail.water_type && (
+                            <span className="text-[#6941C6] bg-[#F9F5FF] dark:bg-purple-900/30 dark:text-purple-300 px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200">
+                              {user.diver_profile.last_dive_detail.water_type}
+                            </span>
+                          )}
+                          {user.diver_profile.last_dive_detail.water_body && (
+                            <span className="bg-[#EFF8FF] dark:bg-blue-900/30 text-[#175CD3] dark:text-blue-300 px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200">
+                              {user.diver_profile.last_dive_detail.water_body}
+                            </span>
+                          )}
+                          {user.diver_profile.last_dive_detail.entry_type && (
+                            <span className="bg-[#EFF8FF] dark:bg-blue-900/30 text-[#175CD3] dark:text-blue-300 px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200">
+                              {user.diver_profile.last_dive_detail.entry_type}
+                            </span>
                           )}
                         </div>
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-1">
-                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 transition-colors duration-200">
-                              {user?.diver_profile?.last_dive_detail?.name || 'No dive location'}
-                            </h3>
-                          </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 transition-colors duration-200">
-                            {user?.profile_details?.country ? getCountry(user.profile_details.country)?.name : 'Location not available'}
-                          </p>
-                          <div className="flex gap-x-2 items-center">
-                            {user?.diver_profile?.last_dive_detail?.water_type && <div className="text-[#6941C6] bg-[#F9F5FF] dark:bg-purple-900/30 dark:text-purple-300 px-[.8125rem] py-1 rounded-2xl text-xs font-medium cursor-pointer transition-colors duration-200">
-                              {user.diver_profile.last_dive_detail.water_type}
-                            </div>}
-                            {user?.diver_profile?.last_dive_detail?.water_body && <div className="px-[.8125rem] py-1 rounded-2xl text-xs bg-[#EFF8FF] dark:bg-blue-900/30 text-[#175CD3] dark:text-blue-300 cursor-pointer transition-colors duration-200">
-                              {user.diver_profile.last_dive_detail.water_body}
-                            </div>}
-                            {user?.diver_profile?.last_dive_detail?.entry_type && <div className="px-[.8125rem] py-1 rounded-2xl text-xs bg-[#EFF8FF] dark:bg-blue-900/30 text-[#175CD3] dark:text-blue-300 cursor-pointer transition-colors duration-200">
-                              {user.diver_profile.last_dive_detail.entry_type}
-                            </div>}
-                          </div>
+                        <div className="flex gap-4 text-xs text-gray-600 dark:text-gray-400">
+                          {user.diver_profile.last_dive_detail.max_depth && (
+                            <span className="font-medium">Max Depth: <span className="text-gray-900 dark:text-gray-100">{user.diver_profile.last_dive_detail.max_depth}m</span></span>
+                          )}
+                          {user.diver_profile.last_dive_detail.dive_count && (
+                            <span className="font-medium">Dives: <span className="text-gray-900 dark:text-gray-100">{user.diver_profile.last_dive_detail.dive_count}</span></span>
+                          )}
                         </div>
                       </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Profile Info Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Email */}
+                  <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg transition-colors duration-200">
+                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 uppercase tracking-wide">Email</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 break-all transition-colors duration-200">{user?.email || 'N/A'}</p>
+                  </div>
+
+                  {/* Phone */}
+                  <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg transition-colors duration-200">
+                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 uppercase tracking-wide">Phone</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 transition-colors duration-200">{user?.profile_details?.phone_number || 'N/A'}</p>
+                  </div>
+
+                  {/* Date of Birth */}
+                  <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg transition-colors duration-200">
+                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 uppercase tracking-wide">Date of Birth</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 transition-colors duration-200">
+                      {user?.profile_details?.dob ? moment(user.profile_details.dob).format('MMM DD, YYYY') : 'N/A'}
+                    </p>
+                  </div>
+
+                  {/* Country */}
+                  <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg transition-colors duration-200">
+                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 uppercase tracking-wide">Country</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 transition-colors duration-200">
+                      {user?.profile_details?.country ? getCountry(user.profile_details.country)?.name : 'N/A'}
+                    </p>
+                  </div>
+
+                  {/* Account Type */}
+                  <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg transition-colors duration-200">
+                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 uppercase tracking-wide">Account Type</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 capitalize transition-colors duration-200">
+                      {user?.profile_details?.account_type || 'N/A'}
+                    </p>
+                  </div>
+
+                  {/* Verification Status */}
+                  <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg transition-colors duration-200">
+                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 uppercase tracking-wide">Verification</p>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${user?.profile_details?.verified ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100 transition-colors duration-200">
+                        {user?.profile_details?.verified ? 'Verified' : 'Not Verified'}
+                      </p>
                     </div>
                   </div>
                 </div>

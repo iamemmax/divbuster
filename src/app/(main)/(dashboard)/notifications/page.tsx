@@ -154,7 +154,7 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
               <div className="flex items-center flex-wrap w-full gap-2 sm:gap-3 flex-shrink-0">
                 
                 {/* Date Range Picker - Responsive */}
-                <div 
+                {/* <div 
                   className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg text-xs sm:text-sm transition-colors duration-200 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600"
                   onClick={() => setShowDatePicker(true)}
                 >
@@ -165,16 +165,16 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
                   <span className="text-gray-700 dark:text-gray-300 sm:hidden">
                     {t.range}
                   </span>
-                </div>
+                </div> */}
                 
                 {/* Settings Button */}
-                <button 
+                {/* <button 
                   className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg text-xs sm:text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-200"
                   onClick={() => setShowSettingPage(true)}
                 >
                   <Settings className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
                   <span className="hidden sm:inline">{t.settings}</span>
-                </button>
+                </button> */}
                 
                 {/* Mobile Sidebar Toggle - Only visible on mobile/tablet */}
                 <button 
@@ -310,28 +310,9 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
         </div>
       </div>
 
-      {/* Settings Modal */}
-      {showSettingPage && (
-        <NotificationSettings 
-          isOpen={showSettingPage} 
-          onClose={() => setShowSettingPage(false)} 
-        />
-      )}
-
+   
       {/* Date Picker Modal - Responsive */}
-      {showDatePicker && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 sm:p-4">
-          <div className="w-full max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto">
-            <DateRangePicker
-              initialStartDate={customDateRange.startDate}
-              initialEndDate={customDateRange.endDate}
-              onApply={handleDateRangeApply}
-              onCancel={() => setShowDatePicker(false)}
-            />
-          </div>
-        </div>
-      )}
-
+    
       {/* Custom Styles for Scrollbar Hide */}
       <style jsx>{`
         .scrollbar-hide {

@@ -19,6 +19,7 @@ import { useErrorModalState } from "@/hooks";
 import { formatAxiosErrorMessage } from "@/utils";
 import { useAuth } from "@/contexts/authentication";
 import { useFetchCountry } from "../../../api/fetchCountry";
+import { getLocationFromCoordinates } from "@/utils/getLocationfromCordinates";
 
 import MyBuddyList from "../MyBuddyList";
 import { profileTranslations } from "@/app/(main)/translation/diveBuddiesTranslation";
@@ -26,6 +27,7 @@ import CreateBuddyBooking from "../../../bookings/components/modals/buddy-bookin
 import { useLanguage } from "@/hooks/useLanguage";
 import CertificateModal from "@/app/(main)/components/certifications/CertificateModal";
 import { selectedCardBg } from "@/app/(main)/components/shared/CardContainer";
+import DashboardAnalysisCard from "@/app/(main)/components/dashboard/DashboardAnalysisCard";
 
 const DivingProfile = () => {
   
@@ -88,15 +90,12 @@ const DivingProfile = () => {
     const getLocationName = async () => {
       if (buddyProfile?.current_location?.lat && buddyProfile?.current_location?.lon) {
         try {
-          const response = await fetch(
-            `https://api.opencagedata.com/geocode/v1/json?q=${buddyProfile.current_location.lat}+${buddyProfile.current_location.lon}&key=YOUR_API_KEY`
+          const result = await getLocationFromCoordinates(
+            String(buddyProfile.current_location.lat),
+            String(buddyProfile.current_location.lon)
           )
-          const data = await response.json()
-          if (data.results && data.results.length > 0) {
-            const result = data.results[0]
-            const city = result.components.city || result.components.town || result.components.village
-            const country = result.components.country
-            setLocationName(city ? `${city}, ${country}` : country)
+          if (result.success) {
+            setLocationName(result.location)
           }
         } catch (error) {
           console.error('Error fetching location:', error)
@@ -216,6 +215,35 @@ const DivingProfile = () => {
               </button>       
               {/* Left Column */}
               <div className="space-y-6 pb-12 border border-[#EAECF0] dark:border-gray-700 rounded-lg shadow-sm dark:shadow-gray-700/20 transition-colors duration-200 overflow-y-auto h-full">
+                {/* Dashboard Analysis */}
+                {buddyProfile?.dashboard_analysis && (
+                  <div className="bg-white dark:bg-gray-800 rounded-lg border border-[#EAECF0] dark:border-gray-700 transition-colors duration-200">
+                    <div className="p-6 border-b border-[#EAECF0] dark:border-gray-700">
+                      <h2 className="text-xl font-medium text-[#101828] dark:text-gray-100 font-archivo">Diving Analysis</h2>
+                    </div>
+                    <div className="p-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Total Dives</span>
+                          <span className="text-3xl font-bold text-[#101828] dark:text-gray-100">{buddyProfile.dashboard_analysis.dives || 0}</span>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Dive Spots</span>
+                          <span className="text-3xl font-bold text-[#101828] dark:text-gray-100">{buddyProfile.dashboard_analysis.dive_spots || 0}</span>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Total Bottom Time</span>
+                          <span className="text-3xl font-bold text-[#101828] dark:text-gray-100">{buddyProfile.dashboard_analysis.bottom_time || 0}h</span>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Max Depth</span>
+                          <span className="text-3xl font-bold text-[#101828] dark:text-gray-100">{buddyProfile.dashboard_analysis.max_depth || 0}m</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Profile Details */}
                 <div className="bg-white dark:bg-gray-800 rounded-lg pb-8 transition-colors duration-200">
                   <div className="p-7 border-b border-[#EAECF0] dark:border-gray-700 transition-colors duration-200">
@@ -238,107 +266,70 @@ const DivingProfile = () => {
                     </div>
                   </div>
 
-                  <div className="md:px-[1.875rem] mt-4">
-                    <div
-                      className="relative rounded-lg overflow-hidden"
-                      style={{ height: "210px" }}
-                    >
-                      <div
-                        className="absolute inset-0 bg-cover bg-center"
-                        style={{
-                          backgroundImage:
-                            "url(/images/dashboard/profile-Location.png)"
-                        }}
-                      ></div>
-                      <div className="absolute inset-0 bg-black bg-opacity-40 dark:bg-opacity-60 transition-colors duration-200"></div>
-
-                      {/* <div className="absolute top-4 left-4 text-white py-8 px-[2.75rem]">
-                        <div className="grid grid-cols-2 gap-12">
-                          <div>
-                            <p className="text-sm text-white font-archivo font-medium">
-                              {t.latitude}
-                            </p>
-                            <p className="text-lg md:text-[1.625rem] text-white font-semibold font-archivo">
-                              {buddyProfile?.current_location?.lat ?? ""}
-                            </p>
+                  
+                    {buddyProfile?.diver_profile?.last_dive_detail && (
+                  <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg transition-colors duration-200">
+                    <div className="flex items-start gap-4">
+                      <div className="w-14 h-14 flex items-center justify-center relative overflow-hidden rounded-lg flex-shrink-0 bg-white dark:bg-gray-700">
+                        {buddyProfile?.profile_details?.country && getCountry(buddyProfile.profile_details.country)?.alpha2code ? (
+                          <img
+                            src={`https://flagcdn.com/w40/${getCountry(buddyProfile.profile_details.country)?.alpha2code?.toLowerCase()}.png`}
+                            alt={`${getCountry(buddyProfile.profile_details.country)?.name} flag`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = '/images/placeholder-flag.png';
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                            <span className="text-xs text-gray-600 dark:text-gray-300">?</span>
                           </div>
-                          <div>
-                            <p className="text-sm text-white font-archivo font-medium">
-                              {t.longitude}
-                            </p>
-                            <p className="text-lg md:text-[1.625rem] text-white font-semibold font-archivo">
-                              {buddyProfile?.current_location?.lon ?? ""}
-                            </p>
-                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 uppercase tracking-wide">Last Dive Location</p>
+                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1 transition-colors duration-200">
+                          {buddyProfile.diver_profile.last_dive_detail.name || 'No dive location'}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 transition-colors duration-200">
+                          {buddyProfile.diver_profile.last_dive_detail.latitude && buddyProfile.diver_profile.last_dive_detail.longitude
+                            ? `${buddyProfile.diver_profile.last_dive_detail.latitude}, ${buddyProfile.diver_profile.last_dive_detail.longitude}`
+                            : buddyProfile?.profile_details?.country ? getCountry(buddyProfile.profile_details.country)?.name : 'Location not available'}
+                        </p>
+                        <div className="flex gap-2 items-center flex-wrap mb-3">
+                          {buddyProfile.diver_profile.last_dive_detail.water_type && (
+                            <span className="text-[#6941C6] bg-[#F9F5FF] dark:bg-purple-900/30 dark:text-purple-300 px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200">
+                              {buddyProfile.diver_profile.last_dive_detail.water_type}
+                            </span>
+                          )}
+                          {buddyProfile.diver_profile.last_dive_detail.water_body && (
+                            <span className="bg-[#EFF8FF] dark:bg-blue-900/30 text-[#175CD3] dark:text-blue-300 px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200">
+                              {buddyProfile.diver_profile.last_dive_detail.water_body}
+                            </span>
+                          )}
+                          {buddyProfile.diver_profile.last_dive_detail.entry_type && (
+                            <span className="bg-[#EFF8FF] dark:bg-blue-900/30 text-[#175CD3] dark:text-blue-300 px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200">
+                              {buddyProfile.diver_profile.last_dive_detail.entry_type}
+                            </span>
+                          )}
                         </div>
-                      </div> */}
-
-                      <div className="absolute flex justify-center items-center -bottom-4 left-4 right-4">
-                        <div
-                          className="bg-white dark:bg-gray-800 max-w-[500px] w-full rounded-[1.25rem] py-[1.45rem] px-[3.9375rem] transition-colors duration-200"
-                          style={{
-                            boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.06)"
-                          }}
-                        >
-                          <div className="flex items-start space-x-3">
-                            <div className="w-16 h-16 flex items-center justify-center relative overflow-hidden rounded">
-                              {buddyProfile?.profile_details?.country && getCountry(buddyProfile.profile_details.country)?.alpha2code ? (
-                                <img
-                                  src={`https://flagcdn.com/w40/${getCountry(buddyProfile.profile_details.country)?.alpha2code?.toLowerCase()}.png`}
-                                  alt={`${getCountry(buddyProfile.profile_details.country)?.name} flag`}
-                                  className="w-full h-full object-cover rounded"
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = '/images/placeholder-flag.png';
-                                  }}
-                                />
-                              ) : (
-                                <div className="w-full h-full bg-gray-300 rounded flex items-center justify-center">
-                                  <span className="text-xs text-gray-600">?</span>
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center space-x-2 mb-1">
-                                <h3 className="font-semibold text-gray-900 dark:text-gray-100 transition-colors duration-200">
-                                  {buddyProfile?.diver_profile?.last_dive_detail?.name}
-                                </h3>
-                                {/* <div className="flex items-center">
-                                  <Rating
-                                    initialValue={4}
-                                    readonly
-                                    allowFraction={false}
-                                    size={18}
-                                    SVGstyle={{ display: "inline-block" }}
-                                    fillColor="#f59e0b"
-                                    emptyColor="#e5e7eb"
-                                  />
-                                </div> */}
-                              </div>
-                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 transition-colors duration-200">
-                                {buddyProfile?.profile_details?.country ? getCountry(buddyProfile.profile_details.country)?.name : 'Location not available'}
-                              </p>
-                              <div className="flex gap-x-2 items-center">
-                               {buddyProfile?.diver_profile?.last_dive_detail?.water_type&& <div className="text-[#6941C6] bg-[#F9F5FF] dark:bg-purple-900/30 dark:text-purple-300 px-[.8125rem] py-1 rounded-2xl text-xs font-medium cursor-pointer transition-colors duration-200">
-                                    {buddyProfile?.diver_profile?.last_dive_detail?.water_type}
-                                </div>}
-                               {buddyProfile?.diver_profile?.last_dive_detail?.water_body&& <div className="px-[.8125rem] py-1 rounded-2xl text-xs bg-[#EFF8FF] dark:bg-blue-900/30 text-[#175CD3] dark:text-blue-300 cursor-pointer transition-colors duration-200">
-                                   {buddyProfile?.diver_profile?.last_dive_detail?.water_body}
-                                </div>}
-                               {buddyProfile?.diver_profile?.last_dive_detail?.entry_type&& <div className="px-[.8125rem] py-1 rounded-2xl text-xs bg-[#EFF8FF] dark:bg-blue-900/30 text-[#175CD3] dark:text-blue-300 cursor-pointer transition-colors duration-200">
-                                 {buddyProfile?.diver_profile?.last_dive_detail?.entry_type}
-                                </div>}
-                              </div>
-                            </div>
-                          </div>
+                        <div className="flex gap-4 text-xs text-gray-600 dark:text-gray-400">
+                          {buddyProfile.diver_profile.last_dive_detail.max_depth && (
+                            <span className="font-medium">Max Depth: <span className="text-gray-900 dark:text-gray-100">{buddyProfile.diver_profile.last_dive_detail.max_depth}m</span></span>
+                          )}
+                          {buddyProfile.diver_profile.last_dive_detail.dive_count && (
+                            <span className="font-medium">Dives: <span className="text-gray-900 dark:text-gray-100">{buddyProfile.diver_profile.last_dive_detail.dive_count}</span></span>
+                          )}
                         </div>
                       </div>
                     </div>
                   </div>
+                )}
                 </div>
 
                 {/* Certifications */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg mt-[4rem] border border-[#EAECF0] dark:border-gray-700 transition-colors duration-200">
+              {buddyProfile && buddyProfile.certificates && buddyProfile.certificates.length > 0 && <div className="bg-white dark:bg-gray-800 rounded-lg mt-[4rem] border border-[#EAECF0] dark:border-gray-700 transition-colors duration-200">
                   <div className="p-4">
                     <div className="flex items-center py-2 justify-between">
                       <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 transition-colors duration-200">
@@ -421,10 +412,10 @@ const DivingProfile = () => {
                       </LinkButton>
                     </div>
                   )}
-                </div>
+                </div>}
 
                 {/* Achievements */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg border border-[#EAECF0] dark:border-gray-700 transition-colors duration-200">
+                {buddyProfile?.user_archievements && buddyProfile.user_archievements.length > 0 && <div className="bg-white dark:bg-gray-800 rounded-lg border border-[#EAECF0] dark:border-gray-700 transition-colors duration-200">
                   <div className="p-4">
                     <div className="flex items-center py-2 justify-between">
                       <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 transition-colors duration-200">
@@ -492,7 +483,7 @@ const DivingProfile = () => {
                       </p>
                     </div>
                   )}
-                </div>
+                </div>}
               </div>
 
               {/* Right Sidebar */}

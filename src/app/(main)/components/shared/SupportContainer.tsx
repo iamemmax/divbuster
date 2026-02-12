@@ -8,7 +8,8 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { useActivePath } from '@/utils/navigation';
 import { cn } from '@/utils/classNames';
 import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useDarkMode } from '@/contexts/darkMode';
 
 
 interface prop {
@@ -51,34 +52,10 @@ const translations = {
 };
 
 const SupportContainer = ({ user }: prop) => {
-  const [darkMode, setDarkMode] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const {language}= useLanguage()
   const isActive = useActivePath();
   const t = translations[language] || translations.en;
-
-  // Check for user's preference in localStorage on component mount
-  useEffect(() => {
-    const savedMode = localStorage.getItem("darkMode");
-    if (savedMode === "true") {
-      setDarkMode(true);
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
-
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-
-    // Save preference to localStorage
-    localStorage.setItem("darkMode", newMode.toString());
-
-    // Toggle dark class on html element
-    if (newMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  };
 
   return (
     <div>
@@ -106,7 +83,7 @@ const SupportContainer = ({ user }: prop) => {
           <p className="font-archivo font-medium text-[#4F4F4F] text-sm dark:text-white">
             {t.darkMode}
           </p>
-          <Switch checked={darkMode} onCheckedChange={toggleDarkMode} />
+          <Switch checked={isDarkMode} onCheckedChange={toggleDarkMode} />
         </div>
       </div>
 

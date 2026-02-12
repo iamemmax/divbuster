@@ -63,16 +63,6 @@ interface Coordinate {
   lat: string;
 }
 
-interface Dashboardanalysis {
-  dives: number;
-  dives_last_month: number;
-  dive_spots: number;
-  dive_spots_last_month: number;
-  bottom_time: number;
-  bottom_time_last_month: number;
-  max_depth: number;
-  max_depth_last_month: number;
-}
 
 interface Latesttransaction {
   id: number;
@@ -120,6 +110,19 @@ interface Userarchievement {
   archievements: Archievement[];
   created_on: string;
   updated_on: string;
+}interface Dashboardanalysis {
+  dives: number;
+  dive_spots: number;
+  bottom_time: number;
+  max_depth: number;
+  dives_this_month: number;
+  dive_spots_this_month: number;
+  bottom_time_this_month: number;
+  max_depth_this_month: number;
+  dives_last_month: number;
+  dive_spots_last_month: number;
+  bottom_time_last_month: number;
+  max_depth_last_month: number;
 }
 
 interface Archievement {
@@ -193,6 +196,10 @@ interface Downline {
   username: string;
   date_joined: string;
 }
+
+
+
+
 
 
 
