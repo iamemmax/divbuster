@@ -9,6 +9,8 @@ interface Data {
 }
 
 interface TransHistoryResult {
+  full_name: string;
+email: string;
   id: number;
   amount: number;
   direction: string;

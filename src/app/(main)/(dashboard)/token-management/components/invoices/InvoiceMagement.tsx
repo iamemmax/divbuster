@@ -9,12 +9,7 @@ import {
   createColumnHelper,
   flexRender,
 } from "@tanstack/react-table";
-// import {  ArrowUpDown, Download, FileText, ChevronDown } from "lucide-react";
-// import AppleCardIcon from "@/app/icons/(dashboard)/card/AppleCardIcon";
-// import MastercardIcon from "@/app/icons/(dashboard)/card/MatercardIcon";
-// import PaypalIcon from "@/app/icons/(dashboard)/card/PaypalIcon";
-// import StripeCardIcon from "@/app/icons/(dashboard)/card/StripeCardIcon";
-// import VisaCardIcon from "@/app/icons/(dashboard)/card/VisaCardIcon";
+
 import { DebouncedSearchInput } from "@/components/core/DebouncedSearchInput";
 import { useFetchPaymentHistory } from "../../../api/payment/fetchPaymentHistory";
 import { invoiceeTranslations } from "@/app/(main)/translation/tokenTranslation";
@@ -176,36 +171,7 @@ const MyInvoicesManagement = () => {
           />
           </div>
           
-          {/* Download Dropdown */}
-          {/* <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={() => setShowDownloadMenu(!showDownloadMenu)}
-              className="flex items-center gap-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors whitespace-nowrap"
-            >
-              <Download className="w-4 h-4" />
-              Download
-              <ChevronDown className="w-4 h-4" />
-            </button>
-            
-            {showDownloadMenu && (
-              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10">
-                <button
-                  onClick={downloadCSV}
-                  className="w-full flex items-center gap-2 px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 first:rounded-t-lg"
-                >
-                  <Download className="w-4 h-4" />
-                  Download CSV
-                </button>
-                <button
-                  onClick={downloadPDF}
-                  className="w-full flex items-center gap-2 px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 last:rounded-b-lg"
-                >
-                  <FileText className="w-4 h-4" />
-                  Download PDF
-                </button>
-              </div>
-            )}
-          </div> */}
+       
         </div>
       </div>
 
