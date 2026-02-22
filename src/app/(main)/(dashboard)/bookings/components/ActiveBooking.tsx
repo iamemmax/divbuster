@@ -43,17 +43,7 @@ const {language} = useLanguage()
     );
   }, [data?.pages, globalSearch]);
 
-  const handleShare = useCallback((title: string): void => {
-    if (navigator.share) {
-      navigator.share({
-        title: `Dive Plan: ${title}`,
-        text: 'Check out this dive plan!',
-        url: window.location.href,
-      }).catch((err) => console.log('Error sharing:', err));
-    } else {
-      navigator.clipboard?.writeText(window.location.href);
-    }
-  }, []);
+ 
 
   const handleReadMore = useCallback((dive: bookingResult) => {
     setBookingDetails(dive);
@@ -150,15 +140,7 @@ const {language} = useLanguage()
             
             {/* Action Buttons */}
             <div className="flex items-center gap-3">
-              <Button 
-                variant="outlined"
-                className="flex items-center font-archivo gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-gray-900 dark:text-white"
-                onClick={() => handleShare('Dive Plan')}
-                disabled={filteredBookings.length === 0}
-              >
-                <Share2 size={18} />
-                <span>{t.sharePlan}</span>
-              </Button>
+             
               <AddBookingButton />
              
             </div>

@@ -21,10 +21,18 @@ export const DebouncedSearchInput = React.forwardRef<HTMLInputElement, Debounced
     iconPosition = 'right', // 👈 default to 'right'
     containerClassName,
     inputClassName,
+    value: externalValue,
     ...props
   }, ref) => {
-    const [searchTerm, setSearchTerm] = React.useState('');
+    const [searchTerm, setSearchTerm] = React.useState(externalValue || '');
     const debouncedSearchTerm = useDebounce(searchTerm, debounceTime);
+
+    // Update internal state when external value changes
+    React.useEffect(() => {
+      if (externalValue !== undefined) {
+        setSearchTerm(externalValue as string);
+      }
+    }, [externalValue]);
 
     React.useEffect(() => {
       onSearch(debouncedSearchTerm);

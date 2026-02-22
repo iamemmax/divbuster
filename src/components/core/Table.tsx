@@ -1,19 +1,88 @@
 import * as React from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { cn } from '@/utils/classNames';
 
+interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
+  showScrollButtons?: boolean;
+}
+
 const Table = React.forwardRef<
   HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement>
->(({ className, ...props }, ref) => (
-  <div className="w-full overflow-auto">
-    <table
-      className={cn('w-full caption-bottom text-sm', className)}
-      ref={ref}
-      {...props}
-    />
-  </div>
-));
+  TableProps
+>(({ className, showScrollButtons = true, ...props }, ref) => {
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+  const [canScrollRight, setCanScrollRight] = React.useState(false);
+
+  const checkScroll = React.useCallback(() => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    checkScroll();
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+      return () => {
+        container.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', checkScroll);
+      };
+    }
+  }, [checkScroll]);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 300;
+      scrollContainerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  return (
+    <div className="relative w-full">
+      <div
+        ref={scrollContainerRef}
+        className="w-full overflow-x-hidden"
+      >
+        <table
+          className={cn('w-full caption-bottom text-sm', className)}
+          ref={ref}
+          {...props}
+        />
+      </div>
+      {showScrollButtons && (canScrollLeft || canScrollRight) && (
+        <div className="absolute right-0 top-0 bottom-0 flex items-center gap-2 pr-2 pointer-events-none">
+          {canScrollLeft && (
+            <button
+              onClick={() => scroll('left')}
+              className="pointer-events-auto p-1 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft size={18} className="text-gray-600 dark:text-gray-300" />
+            </button>
+          )}
+          {canScrollRight && (
+            <button
+              onClick={() => scroll('right')}
+              className="pointer-events-auto p-1 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
+              aria-label="Scroll right"
+            >
+              <ChevronRight size={18} className="text-gray-600 dark:text-gray-300" />
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+});
 Table.displayName = 'Table';
 
 const TableHeader = React.forwardRef<

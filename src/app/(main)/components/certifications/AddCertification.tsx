@@ -423,7 +423,7 @@ useEffect(() => {
 
                         <div className="py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-2">
 
-                            <Button
+                            {/* <Button
                             variant={"outlined"}
                                 size={"lg"}
                                 type="submit"
@@ -431,7 +431,7 @@ useEffect(() => {
                             onClick={()=>setStep(1)}
                             >
                                 {t.back}
-                            </Button>
+                            </Button> */}
                             <Button
                                 size={"lg"}
                                 type="submit"

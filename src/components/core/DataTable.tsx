@@ -120,7 +120,7 @@ export default function DataTable<TData, TValue>({
 
       <div
         className={cn(
-          'overflow-auto rounded-10 bg-white',
+          'rounded-10 bg-white',
           hasOuterPadding && 'p-3 md:p-6 md:pt-0 lg:pb-8',
           tableContainerClassName
         )}

@@ -41,10 +41,7 @@ const Page = React.memo(() => {
     setModalStates(prev => ({ ...prev, [modalName]: !prev[modalName] }));
   }, []);
 
-  const handleSearch = useCallback((value: string) => {
-    // TODO: Implement search functionality
-    console.log('Search:', value);
-  }, []);
+
 
   const actionItems = useMemo(() => [
     { label: t.createDiveLog, onClick: () => toggleModal('diveLog') },
@@ -67,11 +64,11 @@ const Page = React.memo(() => {
         {/* Search and action bar */}
         <div className="flex flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div className="relative w-full md:w-96">
-            <DebouncedSearchInput 
+            {/* <DebouncedSearchInput 
               placeholder={t.searchPlaceholder} 
               onSearch={handleSearch}
               debounceTime={300}
-            />
+            /> */}
           </div>
           
           <div className="relative w-[230px] md:w-auto">

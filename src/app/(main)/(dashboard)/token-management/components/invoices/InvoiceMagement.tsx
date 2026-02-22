@@ -9,6 +9,7 @@ import {
   createColumnHelper,
   flexRender,
 } from "@tanstack/react-table";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { DebouncedSearchInput } from "@/components/core/DebouncedSearchInput";
 import { useFetchPaymentHistory } from "../../../api/payment/fetchPaymentHistory";
@@ -44,6 +45,9 @@ const MyInvoicesManagement = () => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [showDownloadMenu, setShowDownloadMenu] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const tableScrollRef = React.useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+  const [canScrollRight, setCanScrollRight] = React.useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -150,6 +154,41 @@ const MyInvoicesManagement = () => {
     initialState: { pagination: { pageSize: 10 } },
   });
 
+  const checkScroll = React.useCallback(() => {
+    if (tableScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tableScrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    checkScroll();
+    const container = tableScrollRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+      return () => {
+        container.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', checkScroll);
+      };
+    }
+  }, [checkScroll]);
+
+  React.useEffect(() => {
+    checkScroll();
+  }, [transactions.length, isLoading, checkScroll]);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (tableScrollRef.current) {
+      const scrollAmount = 300;
+      tableScrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   return (
     <div className="py-6 w-full px-4 md:px-6">
       {/* Header */}
@@ -176,9 +215,9 @@ const MyInvoicesManagement = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[900px]">
+      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden relative">
+        <div ref={tableScrollRef} className="overflow-x-auto scrollbar-hide">
+          <table className="w-full min-w-max">
             <thead className="bg-gray-50 dark:bg-gray-800">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
@@ -239,6 +278,29 @@ const MyInvoicesManagement = () => {
           </table>
         </div>
       </div>
+
+      {(canScrollLeft || canScrollRight) && (
+        <div className="mt-3 flex justify-end gap-2">
+          {canScrollLeft && (
+            <button
+              onClick={() => scroll('left')}
+              className="p-1 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft size={18} className="text-gray-600 dark:text-gray-300" />
+            </button>
+          )}
+          {canScrollRight && (
+            <button
+              onClick={() => scroll('right')}
+              className="p-1 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
+              aria-label="Scroll right"
+            >
+              <ChevronRight size={18} className="text-gray-600 dark:text-gray-300" />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

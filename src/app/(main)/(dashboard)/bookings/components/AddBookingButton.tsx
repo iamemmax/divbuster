@@ -9,10 +9,10 @@ import { useLanguage } from "@/hooks/useLanguage"
 
 // Translation object
 const translations = {
-  en: { createNewDivePlan: "Create New Dive Plan" },
-  es: { createNewDivePlan: "Crear nuevo plan de buceo" },
-  fr: { createNewDivePlan: "Créer un nouveau plan de plongée" },
-  nl: { createNewDivePlan: "Nieuw duikplan maken" },
+  en: { createBooking: "Create Booking" },
+  es: { createBooking: "Crear reserva" },
+  fr: { createBooking: "Créer une réservation" },
+  nl: { createBooking: "Boeking maken" },
 }
 
 type Lang = keyof typeof translations
@@ -32,7 +32,7 @@ const {language}=useLanguage()
         className="px-4 py-3 bg-[#F7931D] font-archivo text-white rounded-lg hover:bg-orange-600 transition-colors"
         onClick={() => setShowSchoolBookingModal(true)}
       >
-        {t.createNewDivePlan}
+        {t.createBooking}
       </Button>
 
  {/* {showSchoolBookingModal && ( */}

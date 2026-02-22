@@ -8,6 +8,7 @@ import { cn } from '@/utils/classNames'
 import CardHeadIcon from '@/app/icons/(dashboard)/CardHeadIcon'
 import EditIcon from '@/app/icons/(dashboard)/EditIcon'
 import AddCertificateTypeComp from '../../components/certifications/AddCertificateTypeComp'
+import { useSetDefaultCertification } from '../certifications/setDefaultCertification';
 import { certificationTranslations } from '../../translation/certificationTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 import CertificateModal from '../../components/certifications/CertificateModal';
@@ -24,6 +25,7 @@ const ManageCertifications= () => {
   const [certificateData, setCertificateData] = useState<certificateResult>()
   const [selectedCertificate, setSelectedCertificate] = useState<certificateResult | null>(null)
   const [showCertificateModal, setShowCertificateModal] = useState(false)
+  const [showAddCertificate, setshowAddCertificate] = useState(false)
   const {
     data,
     hasNextPage,
@@ -38,7 +40,7 @@ const ManageCertifications= () => {
   return (
     <div>
       <Header title={t.pageTitle} subtitle="" />
-      <div>
+      <div className='px-4 sm:px-6 lg:px-[1.875rem] '>
         <div className="bg-white dark:bg-gray-800 rounded-lg mt-[4rem] !z-10 border border-[#EAECF0] dark:border-gray-700 transition-colors duration-200">
 
           {isLoading ? (
@@ -48,10 +50,11 @@ const ManageCertifications= () => {
           ) : (
             <>
               <div className="p-4">
-                <div className="flex items-center py-2 justify-between">
+                <div className="flex items-center py-2 gap-4">
                   <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 transition-colors duration-200">
                     {t.certifications}
                   </h2>
+                  <Button className="bg-[#f7931d] text-white py-3" onClick={()=>setshowAddCertificate(true)}>{t.addCertificate}</Button>
                 </div>
               </div>
 
@@ -97,8 +100,8 @@ const ManageCertifications= () => {
                           </p>
                           <div className="flex justify-between  w-full item-center">
                             <div>
-                              <p className="text-white text-xl font-semibold font-archivo">
-                                {card.issuer_name}
+                              <p className="text-white text-base font-medium font-archivo">
+                                {t.issuedDate}: {moment(card.issue_date).format("ll")}
                               </p>
                             </div>
                             <div
@@ -109,10 +112,18 @@ const ManageCertifications= () => {
                                 setShowEditModal(true);
                               }}
                             >
-                              <Button className="h-[2.1437rem] bg-transparent p-0 flex items-center justify-center w-[2.1437rem] border border-white rounded-full">
-                                <EditIcon color="#fff" />
-                              </Button>
+                              <div className="flex items-center gap-2">
+                                <Button className="h-[2.1437rem] bg-transparent p-0 flex items-center justify-center w-[2.1437rem] border border-white rounded-full">
+                                  <EditIcon color="#fff" />
+                                </Button>
+                                {/* Set default button */}
+                              </div>
                             </div>
+                          </div>
+                          <div className="mt-4 flex  items-center gap-4">
+
+                                <SetDefaultButton id={card.id} t={t}/>
+                                <CheckoutCertificate id={card.id} t={t} />
                           </div>
                         </div>
                       </div>
@@ -162,8 +173,58 @@ const ManageCertifications= () => {
         onClose={() => setShowCertificateModal(false)}
         certificate={selectedCertificate}
       />
+
+   {showAddCertificate&&   <AddCertificateTypeComp certificateData={{} as certificateResult} type="add" isOpen={showAddCertificate} setIsOpenCardModal={setshowAddCertificate}/>}
     </div>
   );
 };
 
 export default ManageCertifications;
+
+// Small inline component placed at bottom so page imports remain tidy
+const SetDefaultButton = ({ id,t }: { id: number,t:any }) => {
+  const { mutateAsync, isLoading } = useSetDefaultCertification();
+
+  const handleSetDefault = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      await mutateAsync(id);
+      // Optionally show a toast / notification here
+    } catch (err) {
+      // swallow or handle error (could open error modal)
+      console.error('Failed to set default certificate', err);
+    }
+  };
+
+
+ 
+
+  return (
+      <button
+      onClick={handleSetDefault}
+      disabled={isLoading}
+      className="text-xs px-3 py-2 rounded-md bg-white/20 text-white hover:bg-white/30 transition-colors disabled:opacity-60"
+    >
+      {isLoading ? t.setting : t.setDefault}
+    </button>
+  );
+};
+
+
+ const CheckoutCertificate = ({ id,t }: { id: number,t:any }) => {
+  // const { mutateAsync, isLoading } = useSetDefaultCertification();
+
+  const handleSetDefault = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+  }
+return(
+  <button
+      onClick={handleSetDefault}
+      // disabled={"isLoading"}
+      className="text-xs px-3 py-2 bg-black rounded-md  text-black dark:bg-white dark:text-black hover:bg-white/30 transition-colors disabled:opacity-60"
+    >
+      {t.checkout}
+    </button>
+)
+
+  };

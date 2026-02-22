@@ -39,15 +39,15 @@ const AddCertificateTypeComp = ({
 
   const renderForm = (step: number) => {
     switch (step) {
+      // case 1:
+      //   return (
+      //     <SelectCertificationType
+      //       setStep={setStep}
+      //       selectedCard={selectedCard}
+      //       setSelectedCard={setSelectedCard}
+      //     />
+      //   );
       case 1:
-        return (
-          <SelectCertificationType
-            setStep={setStep}
-            selectedCard={selectedCard}
-            setSelectedCard={setSelectedCard}
-          />
-        );
-      case 2:
         return (
           <AddCertification
             setStep={setStep}

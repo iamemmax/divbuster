@@ -27,6 +27,9 @@ interface Invoice {
 
 const MyOrderMangement = () => {
   const [globalFilter, setGlobalFilter] = useState('');
+  const tableScrollRef = React.useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+  const [canScrollRight, setCanScrollRight] = React.useState(false);
 
   const data: Invoice[] = useMemo(() => [
     { id: 1, transactionId: '009573828', recipientDetails: '2700 token for 300 Euro', date: '23/09/23, 09:11:04', gateway: 'visa' },
@@ -50,6 +53,41 @@ const MyOrderMangement = () => {
     { id: 19, transactionId: '009573846', recipientDetails: '4800 token for 480 Euro', date: '11/10/23, 12:55:30', gateway: 'mastercard' },
     { id: 20, transactionId: '009573847', recipientDetails: '3500 token for 350 Euro', date: '12/10/23, 15:40:15', gateway: 'stripe' }
   ], []);
+
+  const checkScroll = React.useCallback(() => {
+    if (tableScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tableScrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    checkScroll();
+    const container = tableScrollRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+      return () => {
+        container.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', checkScroll);
+      };
+    }
+  }, [checkScroll]);
+
+  React.useEffect(() => {
+    checkScroll();
+  }, [data.length, checkScroll]);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (tableScrollRef.current) {
+      const scrollAmount = 300;
+      tableScrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   const getGatewayDisplay = (gateway: string) => {
     switch (gateway) {
@@ -181,10 +219,10 @@ const MyOrderMangement = () => {
           </div>
         </div>
 
-        {/* Responsive Table with Horizontal Scroll */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px]">
+        {/* Responsive Table with Scroll Buttons */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden relative">
+          <div ref={tableScrollRef} className="overflow-x-auto scrollbar-hide">
+            <table className="w-full min-w-max">
               <thead className="bg-gray-50">
                 {table.getHeaderGroups().map(headerGroup => (
                   <tr key={headerGroup.id}>
@@ -225,6 +263,31 @@ const MyOrderMangement = () => {
               </tbody>
             </table>
           </div>
+          )}
+        </div>
+
+        {(canScrollLeft || canScrollRight) && (
+          <div className="mt-3 flex justify-end gap-2">
+            {canScrollLeft && (
+              <button
+                onClick={() => scroll('left')}
+                className="p-1 rounded-md bg-white border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft size={18} className="text-gray-600" />
+              </button>
+            )}
+            {canScrollRight && (
+              <button
+                onClick={() => scroll('right')}
+                className="p-1 rounded-md bg-white border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
+                aria-label="Scroll right"
+              >
+                <ChevronRight size={18} className="text-gray-600" />
+              </button>
+            )}
+          </div>
+        )}
         </div>
 
         {/* Pagination */}

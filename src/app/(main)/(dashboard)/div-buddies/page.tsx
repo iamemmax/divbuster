@@ -9,6 +9,7 @@ import {
   createColumnHelper,
   flexRender,
 } from '@tanstack/react-table'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput';
 import { Button, ErrorModal, LinkButton } from '@/components/core';
 import Header from '../../components/shared/Header';
@@ -54,7 +55,7 @@ interface buddyListProp {
   results: buddyResult[];
 }
 
-const fetchBuddyList = async (pageParam?: string, language?: string) => {
+const fetchBuddyList = async (pageParam?: string, language?: string, search: string = '') => {
   let url: string;
   if (pageParam) {
     try {
@@ -64,7 +65,7 @@ const fetchBuddyList = async (pageParam?: string, language?: string) => {
       url = pageParam;
     }
   } else {
-    url = `buddies?lang=${language}`;
+    url = `buddies?lang=${language}&search=${search}`;
   }
   const response = await adminAxios.get(url);
   return response.data as buddyListProp;
@@ -77,16 +78,19 @@ const DiverBuddies = () => {
     openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
-const router = useRouter()
+  const router = useRouter()
   const [globalFilter, setGlobalFilter] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const tableScrollRef = React.useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+  const [canScrollRight, setCanScrollRight] = React.useState(false);
 
   // ✅ Get language from user profile
-   const {language}=useLanguage()
+  const { language } = useLanguage()
   const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
 
-  const { 
-    data: buddyList, 
+  const {
+    data: buddyList,
     isLoading,
     error,
     isError,
@@ -97,8 +101,8 @@ const router = useRouter()
     fetchPreviousPage,
     isFetchingPreviousPage
   } = useInfiniteQuery({
-    queryKey: ['buddy-list', language],
-    queryFn: ({ pageParam }) => fetchBuddyList(pageParam, language),
+    queryKey: ['buddy-list', language,globalFilter],
+    queryFn: ({ pageParam }) => fetchBuddyList(pageParam, language, globalFilter),
     getNextPageParam: (lastPage) => lastPage.next,
     getPreviousPageParam: (firstPage) => firstPage.previous,
     keepPreviousData: false,
@@ -146,6 +150,42 @@ const router = useRouter()
     }
   };
 
+  const checkScroll = React.useCallback(() => {
+    if (tableScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tableScrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    checkScroll();
+    const container = tableScrollRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+      return () => {
+        container.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', checkScroll);
+      };
+    }
+  }, [checkScroll]);
+
+  // Re-run scroll check when data or loading state changes so buttons update
+  React.useEffect(() => {
+    checkScroll();
+  }, [allBuddies.length, isLoading, checkScroll]);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (tableScrollRef.current) {
+      const scrollAmount = 300;
+      tableScrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   useEffect(() => {
     if (isError && error) {
       const errorMessage = formatAxiosErrorMessage(error as AxiosError);
@@ -165,23 +205,23 @@ const router = useRouter()
       ),
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
-         <div className="relative shrink-0">
-  {row.original.profile_details?.profile_picture ? (
-    <img
-      src={String(row.original.profile_details.profile_picture)}
-      alt={row.original.first_name}
-      className="w-12 h-12 shrink-0 rounded-full object-cover"
-    />
-  ) : (
-    <div className="w-12 h-12 shrink-0 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-semibold text-sm uppercase">
-      {`${row.original.first_name?.[0] || ''}${row.original.last_name?.[0] || ''}`}
-    </div>
-  )}
+          <div className="relative shrink-0">
+            {row.original.profile_details?.profile_picture ? (
+              <img
+                src={String(row.original.profile_details.profile_picture)}
+                alt={row.original.first_name}
+                className="w-12 h-12 shrink-0 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-12 h-12 shrink-0 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-semibold text-sm uppercase">
+                {`${row.original.first_name?.[0] || ''}${row.original.last_name?.[0] || ''}`}
+              </div>
+            )}
 
-  {row.original?.diver_profile?.online && (
-    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
-  )}
-</div>
+            {row.original?.diver_profile?.online && (
+              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+            )}
+          </div>
 
           <div className="min-w-0">
             <div className="font-medium text-[#101828] dark:text-gray-100 text-sm font-archivo truncate transition-colors duration-200">
@@ -195,26 +235,7 @@ const router = useRouter()
       ),
       enableSorting: false,
     }),
-    // columnHelper.accessor('diver_profile.dive_count', {
-    //   id: 'diveBuddies',
-    //   header: () => (
-    //     <div className="text-left font-medium text-gray-700 dark:text-gray-300">
-    //       {t.diveBuddies}
-    //     </div>
-    //   ),
-    //   cell: ({ row }) => (
-    //     <div className="flex items-center gap-2">
-    //       <div className="flex -space-x-1">
-    //         {Number(row?.original?.diver_profile?.dive_count) > 4 && (
-    //           <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 border border-white dark:border-gray-700 flex items-center justify-center text-xs text-gray-600 dark:text-gray-300 transition-colors duration-200">
-    //             +{Number(row?.original?.diver_profile?.dive_count) - 4}
-    //           </div>
-    //         )}
-    //       </div>
-    //     </div>
-    //   ),
-    //   enableSorting: false,
-    // }),
+
     columnHelper.accessor('certificates', {
       id: 'certificates',
       header: t.certificate,
@@ -237,8 +258,8 @@ const router = useRouter()
       header: '',
       cell: ({ row }) => (
         <div className="text-right">
-          <Button 
-            onClick={()=>router.push(`/div-buddies/profile/${row?.original?.id}`)}
+          <Button
+            onClick={() => router.push(`/div-buddies/profile/${row?.original?.id}`)}
             className="text-orange-500 dark:text-orange-400 font-archivo text-sm bg-transparent hover:text-orange-600 dark:hover:text-orange-300 font-medium whitespace-nowrap transition-colors duration-200"
           >
             {t.viewProfile}
@@ -266,22 +287,23 @@ const router = useRouter()
 
   return (
     <div>
-      <Header 
+      <Header
         title={t?.myBuddies}
-        subtitle='' 
+        subtitle=''
       />
-      
+
       <div className="w-full bg-white dark:bg-gray-900 min-h-screen px-4 sm:px-6 lg:px-[1.875rem] transition-colors duration-200">
         <div className="bg-white dark:bg-gray-900 py-4 border-gray-200 dark:border-gray-700 transition-colors duration-200">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="relative w-full sm:flex-1 sm:max-w-md">
-              <DebouncedSearchInput 
-                placeholder={t.searchPlaceholder} 
+              <DebouncedSearchInput
+                placeholder={t.searchPlaceholder}
                 onSearch={(value) => setGlobalFilter(value)}
                 value={globalFilter}
               />
             </div>
             <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+              <LinkButton href="/public-users" className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-black dark:bg-white text-white dark:text-black  rounded-lg transition-colors duration-200 font-medium text-sm">View public users</LinkButton>
               <LinkButton href="/notifications?tab=notifications" className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-orange-500 dark:bg-orange-600 text-white rounded-lg hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-200 font-medium text-sm">
                 {t.buddyRequests}
               </LinkButton>
@@ -300,55 +322,83 @@ const router = useRouter()
               </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-x-auto transition-colors duration-200">
-              {isLoading && allBuddies.length === 0 ? (
-                <table className="w-full">
-                  <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-                    <tr>
-                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-300">{t.name}</th>
-                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-300">{t.diveBuddies}</th>
-                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-300">{t.certificate}</th>
-                      <th className="px-6 py-4"></th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {Array.from({ length: 5 }).map((_, idx) => (
-                      <DiveBuddySkeleton key={idx} />
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <table className="w-full">
-                  <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-                    {table.getHeaderGroups()?.map(headerGroup => (
-                      <tr key={headerGroup.id}>
-                        {headerGroup.headers.map(header => (
-                          <th key={header.id} className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-200">
-                            {header.isPlaceholder
-                              ? null
-                              : flexRender(
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden relative transition-colors duration-200">
+              <div ref={tableScrollRef} className="overflow-x-auto scrollbar-hide">
+                {isLoading && allBuddies.length === 0 ? (
+                  <table className="w-full min-w-max">
+                    <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+                      <tr>
+                        <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-300">{t.name}</th>
+                        <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-300">{t.diveBuddies}</th>
+                        <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-300">{t.certificate}</th>
+                        <th className="px-6 py-4"></th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                      {Array.from({ length: 5 }).map((_, idx) => (
+                        <DiveBuddySkeleton key={idx} />
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <table className="w-full min-w-max">
+                    <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+                      {table.getHeaderGroups()?.map(headerGroup => (
+                        <tr key={headerGroup.id}>
+                          {headerGroup.headers.map(header => (
+                            <th key={header.id} className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-200">
+                              {header.isPlaceholder
+                                ? null
+                                : flexRender(
                                   header.column.columnDef.header,
                                   header.getContext()
                                 )}
-                          </th>
-                        ))}
-                      </tr>
-                    ))}
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {table.getRowModel().rows.map(row => (
-                      <tr key={row.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200">
-                        {row.getVisibleCells().map(cell => (
-                          <td key={cell.id} className="px-6 py-4">
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
+                            </th>
+                          ))}
+                        </tr>
+                      ))}
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                      {table.getRowModel().rows.map(row => (
+                        <tr key={row.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200">
+                          {row.getVisibleCells().map(cell => (
+                            <td key={cell.id} className="px-6 py-4">
+                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+
             </div>
+
+            {(canScrollLeft || canScrollRight) && (
+              <div className="mt-3 flex justify-end gap-2">
+                {canScrollLeft && (
+                  <button
+                    onClick={() => scroll('left')}
+                    className="p-1 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
+                    aria-label="Scroll left"
+                  >
+
+                    <ChevronLeft size={18} className="text-gray-600 dark:text-gray-300" />
+                  </button>
+                )}
+                {canScrollRight && (
+                  <button
+                    onClick={() => scroll('right')}
+                    className="p-1 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
+                    aria-label="Scroll right"
+                  >
+
+                    <ChevronRight size={18} className="text-gray-600 dark:text-gray-300" />
+                  </button>
+                )}
+              </div>
+            )}
 
             {!isLoading && allBuddies.length > 0 && (
               <div className="flex items-center justify-between py-6 gap-4">

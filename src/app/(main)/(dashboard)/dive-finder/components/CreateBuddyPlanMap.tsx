@@ -1,8 +1,8 @@
 "use client"
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { buddyResult } from '../../api/buddy/fetchBudies'
 import CreateBuddyBooking from '../../bookings/components/modals/buddy-booking/CreateBuddyBooking'
 import { useAuth } from '@/contexts/authentication'
+import { buddyResult } from '../../api/types/buddies/buddyType'
 
 interface prop {
     buddyList: buddyResult[]
@@ -242,12 +242,13 @@ const CreateBuddyPlanMap = ({ buddyList, isLoading }: prop) => {
     useEffect(() => {
         const initMap = async () => {
             if (!mapRef.current) return
-            
+
             // Clean up existing map
             if (mapInstance.current) {
                 mapInstance.current.remove()
                 mapInstance.current = null
             }
+            markersRef.current = []
 
             const L = (await import('leaflet')).default
 
@@ -275,9 +276,9 @@ const CreateBuddyPlanMap = ({ buddyList, isLoading }: prop) => {
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map)
-            
+
             mapInstance.current = map
-            
+
             // Add buddy markers immediately
             console.log('Buddy list in map init:', buddyList?.length || 0)
             if (buddyList && buddyList.length > 0) {
@@ -287,16 +288,17 @@ const CreateBuddyPlanMap = ({ buddyList, isLoading }: prop) => {
                     const lat = Number(buddy?.current_location?.lat)
                     const lng = Number(buddy?.current_location?.lon)
                     console.log(`Buddy ${buddy.username}: lat=${lat}, lng=${lng}`)
-                    
-                    if (buddy?.current_location?.lat !== null && 
-                        buddy?.current_location?.lon !== null && 
-                        !isNaN(lat) && !isNaN(lng) && 
+
+                    if (buddy?.current_location?.lat !== null &&
+                        buddy?.current_location?.lon !== null &&
+                        !isNaN(lat) && !isNaN(lng) &&
                         lat !== 0 && lng !== 0) {
-                        
+
                         console.log(`Adding marker for ${buddy.username} at [${lat}, ${lng}]`)
-                        L.marker([lat, lng])
+                        const marker = L.marker([lat, lng])
                             .addTo(map)
                             .bindPopup(`${buddy.first_name} ${buddy.last_name} - ${buddy.username}`)
+                        markersRef.current.push(marker)
                     }
                 })
             }
@@ -311,8 +313,9 @@ const CreateBuddyPlanMap = ({ buddyList, isLoading }: prop) => {
                 mapInstance.current.remove()
                 mapInstance.current = null
             }
+            markersRef.current = []
         }
-    }, [buddyList, isLoading, addMarkers])
+    }, [buddyList, isLoading])
 
 
 

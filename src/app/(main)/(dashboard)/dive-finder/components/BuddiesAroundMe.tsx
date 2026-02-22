@@ -1,34 +1,19 @@
 "use client"
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 import { useFetchNearestUser } from '../../api/buddy/nearestUserAround'
 import { useAddBuddy } from '../../api/buddy/addBuddy'
 import { useRouter } from 'next/navigation'
 import { useUser } from '@/app/(auth)/api/getAuthenticatedUser'
 import toast from 'react-hot-toast'
 
-interface NearestUser {
-  user_id: number;
-  profile_picture: null | string;
-  nickname: string;
-  invite_id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  total_dives: number;
-  total_max_depth: number;
-  total_bottom_time: number;
-  total_reviews: number;
-  distance: number;
-  buddies_count: number;
-  buddies_pictures: string[];
-  longitude: number;
-  latitude: number;
-  is_buddy: boolean;
+interface BuddiesAroundMeProps {
+  search?: string;
 }
 
-const BuddiesAroundMe = () => {
+const BuddiesAroundMe = ({ search = "" }: BuddiesAroundMeProps) => {
   const mapRef = useRef<HTMLDivElement>(null)
   const mapInstance = useRef<any>(null)
+  const markersRef = useRef<any[]>([])
 
   const [mapReady, setMapReady] = useState(false)
   const router = useRouter()
@@ -38,7 +23,19 @@ const BuddiesAroundMe = () => {
   console.log('Nearest users data:', nearestUsers)
   console.log('Is loading:', isLoading)
   console.log('Error:', error)
-  const { mutate: addBuddy, isLoading: isAddingBuddy } = useAddBuddy()
+  const { mutate: addBuddy } = useAddBuddy()
+
+  // Filter nearest users based on search term
+  const filteredUsers = useMemo(() => {
+    if (!search.trim()) return nearestUsers || [];
+
+    const searchLower = search.toLowerCase();
+    return (nearestUsers || []).filter(user =>
+      `${user.first_name} ${user.last_name}`.toLowerCase().includes(searchLower) ||
+      user.nickname?.toLowerCase().includes(searchLower) ||
+      user.email?.toLowerCase().includes(searchLower)
+    );
+  }, [nearestUsers, search]);
 
   useEffect(() => {
     if (!mapRef.current) return
@@ -80,19 +77,30 @@ const BuddiesAroundMe = () => {
       })
     }
 
-    if (!mapReady || !mapInstance.current || !nearestUsers?.length) {
-      console.log('Marker conditions not met:', { mapReady, hasMap: !!mapInstance.current, usersLength: nearestUsers?.length })
+    if (!mapReady || !mapInstance.current) {
+      console.log('Marker conditions not met:', { mapReady, hasMap: !!mapInstance.current })
       return
     }
 
-    console.log('Adding markers for users:', nearestUsers)
-    
+    // Clear existing markers
+    markersRef.current.forEach(marker => {
+      mapInstance.current?.removeLayer(marker)
+    })
+    markersRef.current = []
+
+    if (!filteredUsers?.length) {
+      console.log('No filtered users to display')
+      return
+    }
+
+    console.log('Adding markers for users:', filteredUsers)
+
     import('leaflet').then(({ default: L }) => {
-      nearestUsers.forEach((user) => {
+      filteredUsers.forEach((user) => {
         if (!user.latitude || !user.longitude) return
 
         const icon = L.divIcon({
-          html: user.profile_picture 
+          html: user.profile_picture
             ? `<div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 3px solid #f97316; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"><img src="${user.profile_picture}" style="width: 100%; height: 100%; object-fit: cover;"/></div>`
             : `<div style="width: 40px; height: 40px; border-radius: 50%; background: #f97316; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">${user.first_name?.[0] || ''}${user.last_name?.[0] || ''}</div>`,
           className: 'buddy-marker',
@@ -106,8 +114,8 @@ const BuddiesAroundMe = () => {
         const popup = `
           <div style="padding: 12px; min-width: 250px; font-family: Arial, sans-serif;">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-              ${user.profile_picture 
-                ? `<img src="${user.profile_picture}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"/>` 
+              ${user.profile_picture
+                ? `<img src="${user.profile_picture}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"/>`
                 : `<div style="width: 40px; height: 40px; border-radius: 50%; background: #f97316; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">${user.first_name?.[0] || ''}</div>`
               }
               <div>
@@ -122,7 +130,7 @@ const BuddiesAroundMe = () => {
             </div>
             <div style="display: flex; gap: 8px;">
               <button onclick="viewProfile(${user.user_id})" style="flex: 1; background: #f97316; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;">View Profile</button>
-              ${!user.is_buddy 
+              ${!user.is_buddy
                 ? `<button onclick="addBuddyAction(${user.user_id}, '${user.invite_id}')" style="flex: 1; background: #10b981; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;">Add Buddy</button>`
                 : `<span style="flex: 1; background: #6b7280; color: white; padding: 8px 12px; border-radius: 6px; font-size: 12px; text-align: center;">Already Buddy</span>`
               }
@@ -131,10 +139,11 @@ const BuddiesAroundMe = () => {
         `
 
         marker.bindPopup(popup)
+        markersRef.current.push(marker)
       })
 
-      if (nearestUsers[0]?.latitude && nearestUsers[0]?.longitude) {
-        mapInstance.current.setView([nearestUsers[0].latitude, nearestUsers[0].longitude], 12)
+      if (filteredUsers[0]?.latitude && filteredUsers[0]?.longitude) {
+        mapInstance.current.setView([filteredUsers[0].latitude, filteredUsers[0].longitude], 12)
       }
     })
 
@@ -142,7 +151,7 @@ const BuddiesAroundMe = () => {
       delete (window as any).viewProfile
       delete (window as any).addBuddyAction
     }
-  }, [nearestUsers, router, addBuddy, user, mapReady])
+  }, [filteredUsers, router, addBuddy, user, mapReady])
 
 
 
@@ -156,7 +165,20 @@ const BuddiesAroundMe = () => {
         }
       `}</style>
       <div ref={mapRef} className="w-full h-full" />
-      
+
+      {!isLoading && filteredUsers.length === 0 && search.trim() && (
+        <div className="absolute inset-0 flex items-center justify-center z-[100] bg-white dark:bg-gray-900 bg-opacity-90 dark:bg-opacity-90">
+          <div className="text-center">
+            <p className="text-gray-600 dark:text-gray-300 text-lg font-medium">
+              No buddies found for "{search}"
+            </p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
+              Try searching with different keywords
+            </p>
+          </div>
+        </div>
+      )}
+
       {isLoading && (
         <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-2 z-[1000]">
           <div className="flex items-center gap-2">

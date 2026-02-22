@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, useMemo, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import Header from "../../components/shared/Header";
 import { useUser } from "@/app/(auth)/api/getAuthenticatedUser";
@@ -20,9 +20,22 @@ export default function DiveFinderLayout({
   const { data: user, isLoading } = useUser();
   const [search, setSearch] = useState("");
   const pathname = usePathname();
-  
+
   const language: Language = (user?.data?.profile_details?.language as Language);
   const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
+
+  // Clear search when switching tabs
+  useEffect(() => {
+    setSearch("");
+  }, [pathname]);
+
+  // Memoize the search context value to prevent unnecessary re-renders
+  const searchContextValue = useMemo(() => search, [search]);
+
+  // Wrap setSearch in useCallback to prevent unnecessary re-renders of DebouncedSearchInput
+  const handleSearch = useCallback((value: string) => {
+    setSearch(value);
+  }, []);
 
   const getActiveTab = () => {
     if (pathname?.includes('/nearest')) return 'nearest';
@@ -40,13 +53,14 @@ export default function DiveFinderLayout({
       <div className="flex gap-4 px-4 pb-5 md:p-4 bg-white dark:bg-gray-900 flex-wrap absolute top-[6rem] inset-x-0 z-30 shadow-md">
           <div className="relative flex-1 w-full">
             <DebouncedSearchInput
+              key={pathname}
               placeholder="Search for buddy, dive location, etc."
-              onSearch={setSearch}
+              onSearch={handleSearch}
               debounceTime={300}
               value={search}
               className="py-3"
               icon={<Search size={18} />}
-            />           
+            />
           </div>
           <div className="flex items-center gap-4">
             <Link
@@ -83,7 +97,7 @@ export default function DiveFinderLayout({
         </div>
 
       <div className="mt-4">
-        <SearchContext.Provider value={search}>
+        <SearchContext.Provider value={searchContextValue}>
           {children}
         </SearchContext.Provider>
       </div>
