@@ -1,6 +1,7 @@
 "use client"
 import Header from '@/app/(main)/components/shared/Header'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useLanguage } from '@/hooks/useLanguage'
 import { publicUsersTranslations } from '@/app/(main)/translation/publicUsersTranslation'
 import { publicUserProp, useFetchPulicUsers } from '../../api/public-users/fetchPublicUsers'
@@ -66,30 +67,28 @@ function UserAvatar({ u }: { u: publicUserProp }) {
   )
 }
 
-/* ─── User Card ──────────────────────────────────────────────────── */
-function UserCard({ u, index }: { u: any; index: number }) {
+/* ─── User Table Row ──────────────────────────────────────────────── */
+function UserTableRow({ u }: { u: any }) {
   const { language } = useLanguage()
   const t = publicUsersTranslations[language] || publicUsersTranslations.en
-     const {
-        isErrorModalOpen,
-        setErrorModalState,
-        openErrorModalWithMessage,
-        errorModalMessage,
-      } = useErrorModalState();
-  const [hovered, setHovered] = useState(false)
-    const [loadingDiverId, setLoadingDiverId] = useState<number | null>(null);
-    const [removedDivers, setRemovedDivers] = useState<Set<number>>(new Set());
+  const {
+    isErrorModalOpen,
+    setErrorModalState,
+    openErrorModalWithMessage,
+    errorModalMessage,
+  } = useErrorModalState();
+  const [loadingDiverId, setLoadingDiverId] = useState<number | null>(null);
   const { mutate: handleAddNewBuddy } = useAddBuddy();
   const queryClient = useQueryClient()
-   const handleAddBuddy = (suggested: publicUserProp) => {
+
+  const handleAddBuddy = (suggested: publicUserProp) => {
     setLoadingDiverId(suggested.id);
-    
+
     handleAddNewBuddy({
       invite_id: String(suggested?.invite_id),
       user_id: suggested?.id,
     }, {
       onSuccess: () => {
-        setRemovedDivers(prev => new Set(prev).add(suggested.id));
         setLoadingDiverId(null);
         queryClient.invalidateQueries({ queryKey: ["user-details"] });
         queryClient.invalidateQueries({ queryKey: ["public-user-around"] });
@@ -104,83 +103,76 @@ function UserCard({ u, index }: { u: any; index: number }) {
   };
 
   return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className={`
-        group flex flex-col gap-4 rounded-2xl p-5 border cursor-default
-        transition-all duration-200 ease-out
-        bg-white dark:bg-[#161618]
-        border-zinc-200 dark:border-zinc-800
-        shadow-sm dark:shadow-[0_2px_8px_rgba(0,0,0,0.35)]
-        hover:-translate-y-1
-        hover:border-amber-400/40 dark:hover:border-amber-400/25
-        hover:shadow-[0_16px_48px_rgba(0,0,0,0.10)] dark:hover:shadow-[0_16px_48px_rgba(0,0,0,0.55)]
-        hover:bg-white dark:hover:bg-zinc-900
-      `}
-      style={{ animationDelay: `${index * 55}ms`, animation: "cardIn 0.4s ease both" }}
-    >
-      {/* Row 1 — Avatar + status */}
-      <div className="flex items-center justify-between">
-        <UserAvatar u={u} />
+    <>
+      <tr className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+        {/* Avatar + Status */}
+        <td className="px-6 py-4 whitespace-nowrap">
+          <div className="flex items-center gap-3">
+            <UserAvatar u={u} />
+            <div>
+              <p className="text-sm font-medium text-gray-900 dark:text-white">
+                {u.first_name} {u.last_name}
+              </p>
+              {u.nickname && (
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  @{u.nickname}
+                </p>
+              )}
+            </div>
+          </div>
+        </td>
 
-        <span
-          className={`
-            flex items-center gap-1.5 text-[11px] font-medium tracking-widest uppercase
-            ${u.online
-              ? "text-green-500"
-              : "text-zinc-400 dark:text-zinc-600"
-            }
-          `}
-        >
+        {/* Email */}
+        <td className="px-6 py-4 whitespace-nowrap">
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            {u.email}
+          </p>
+        </td>
+
+        {/* Status */}
+        <td className="px-6 py-4 whitespace-nowrap">
           <span
             className={`
-              inline-block h-1.5 w-1.5 rounded-full
+              inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium
               ${u.online
-                ? "bg-green-400 shadow-[0_0_0_2px_rgba(74,222,128,0.2)]"
-                : "bg-zinc-300 dark:bg-zinc-600"
+                ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400"
               }
             `}
-          />
-          {u.online ? t.statusLive : t.statusAway}
-        </span>
-      </div>
+          >
+            <span
+              className={`
+                inline-block h-1.5 w-1.5 rounded-full
+                ${u.online
+                  ? "bg-green-400"
+                  : "bg-gray-400"
+                }
+              `}
+            />
+            {u.online ? t.statusLive : t.statusAway}
+          </span>
+        </td>
 
-      {/* Row 2 — Name + email */}
-      <div>
-        <p className="text-[15px] font-semibold leading-tight mb-1 text-zinc-900 dark:text-zinc-100">
-          {u.first_name} {u.last_name}
-          {u.nickname && (
-            <span className="text-[12px] font-normal ml-1.5 text-black/80 dark:text-zinc-500">
-              @{u.nickname}
-            </span>
+        {/* Action */}
+        <td className="px-6 py-4 whitespace-nowrap text-right">
+          {loadingDiverId === u?.id ? (
+            <SmallSpinner color='#F7931D' />
+          ) : (
+            <Button
+              className={`
+                px-3 py-1.5 text-xs font-semibold tracking-wider rounded-lg border
+                transition-all duration-150
+                bg-transparent border-amber-400/50 text-amber-500
+                dark:border-amber-400/40 dark:text-amber-400
+                hover:bg-amber-400 hover:text-zinc-900 hover:border-amber-400
+              `}
+              onClick={() => handleAddBuddy(u)}
+            >
+              {t.addBuddy}
+            </Button>
           )}
-        </p>
-        <p className="text-[12px] truncate text-black dark:text-zinc-500">
-          {u.email}
-        </p>
-      </div>
-
-      {/* Row 3 — CTA */}
-
-       {/* Add button or loading spinner */}
-                    {loadingDiverId === u?.id ? (
-                      <SmallSpinner color='#F7931D' />
-                    ) : (
-      <div className="flex items-center justify-end pt-3 mt-auto border-t border-zinc-100 dark:border-zinc-800">
-        <Button
-          className={`
-            px-3.5 py-1.5 text-xs font-semibold tracking-wider rounded-lg border
-            transition-all duration-150
-            bg-transparent border-amber-400/50 text-amber-500
-            dark:border-amber-400/40 dark:text-amber-400
-            hover:bg-amber-400 hover:text-zinc-900 hover:border-amber-400
-          `}
-          onClick={()=>handleAddBuddy(u)}
-        >
-          {t.addBuddy}
-        </Button>
-      </div>)}
+        </td>
+      </tr>
       <ErrorModal
         isErrorModalOpen={isErrorModalOpen}
         setErrorModalState={() => {
@@ -190,7 +182,7 @@ function UserCard({ u, index }: { u: any; index: number }) {
           errorModalMessage || t.pleaseCheck
         }
       />
-    </div>
+    </>
   )
 }
 
@@ -199,98 +191,171 @@ const PublicUsers = () => {
   const [globalFilter, setGlobalFilter] = useState("")
   const { language } = useLanguage()
   const t = publicUsersTranslations[language] || publicUsersTranslations.en
+  const tableScrollRef = useRef<HTMLDivElement>(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(false)
 
   const { data, isLoading, isError } = useFetchPulicUsers(globalFilter)
   const users: publicUserProp[] = data ?? []
   const onlineCount = users.filter((u) => u.online).length
 
+  const checkScroll = React.useCallback(() => {
+    if (tableScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tableScrollRef.current
+      setCanScrollLeft(scrollLeft > 0)
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    checkScroll()
+    const container = tableScrollRef.current
+    if (container) {
+      container.addEventListener('scroll', checkScroll)
+      window.addEventListener('resize', checkScroll)
+      return () => {
+        container.removeEventListener('scroll', checkScroll)
+        window.removeEventListener('resize', checkScroll)
+      }
+    }
+  }, [checkScroll])
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (tableScrollRef.current) {
+      const scrollAmount = 300
+      tableScrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      })
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-[#0E0E10] transition-colors duration-300">
+    <div className=" bg-zinc-50 dark:bg-[#0E0E10] transition-colors duration-300">
 
       <style>{`
-        @keyframes cardIn {
-          from { opacity: 0; transform: translateY(14px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
         @keyframes fadeDown {
           from { opacity: 0; transform: translateY(-10px); }
           to   { opacity: 1; transform: translateY(0); }
         }
       `}</style>
 
-      <div className="w-full mx-auto ">
+      <div className="w-full mx-auto">
 
         {/* ── Header ── */}
         <div style={{ animation: "fadeDown 0.4s ease both" }}>
           <Header title={t.pageTitle} subtitle="" />
         </div>
-<div className='px-4 sm:px-6 lg:px-[1.875rem] '>
-        {/* ── Controls row ── */}
-        <div
-          className="flex flex-wrap items-center justify-between gap-3  w-fullmt-7 mb-8 "
-          style={{ animation: "fadeDown 0.4s 0.08s ease both" }}
-        >
-          <div className="w-full max-w-sm my-3">
-            <DebouncedSearchInput
-              placeholder={t.searchPlaceholder}
-              onSearch={(value) => setGlobalFilter(value)}
-              value={globalFilter}
-            />
-          </div>
-          <div className="max-h-[80vh] w-full overflow-y-auto">
-          {!isLoading && !isError && (
-            <div className="flex items-center gap-4 mb-5">
-              <span className="text-[12px] tracking-wider text-zinc-400 dark:text-zinc-500">
-                {users.length} {t.members}
-              </span>
-              <span className="h-3 w-px bg-zinc-300 dark:bg-zinc-700" />
-              <span className="flex items-center gap-1.5 text-[12px] text-green-500 tracking-wider">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-400 shadow-[0_0_0_2px_rgba(74,222,128,0.2)]" />
-                {onlineCount} {t.online}
-              </span>
-            </div>
-          )}
-        {/* ── Content states ── */}
-        {isLoading ? (
-          <div className="pt-12 flex justify-center items-center">
-            <Spinner color='#f7931d' />
-          </div>
-        ) : isError ? (
-            <div className="py-20 text-center text-[13px] tracking-wide text-zinc-400 dark:text-zinc-600">
-              {t.loadError}
-            </div>
-        ) : users.length === 0 ? (
-          <div className="py-20 text-center text-[13px] tracking-wide text-zinc-400 dark:text-zinc-600">
-            {t.noUsers}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            {users.map((u: any, i: number) => (
-              <UserCard key={u.id} u={u} index={i} />
-            ))}
-          </div>
-        )}
 
-        {/* ── Footer ── */}
-        {!isLoading && !isError && users.length > 0 && (
-          <div className="flex flex-wrap justify-between gap-2 mt-12 pt-5 border-t border-zinc-200 dark:border-zinc-900">
-              <span className="text-[11px] tracking-wider text-zinc-400 dark:text-zinc-700">
-                {t.showing} {users.length} {t.profiles}
-              </span>
-              <span className="text-[11px] tracking-wider text-zinc-400 dark:text-zinc-700">
-                {t.updatedRealtime}
-              </span>
+        <div className='px-4 sm:px-6 lg:px-[1.875rem] max-h-[80vh]'>
+          {/* ── Controls row ── */}
+          <div
+            className="flex flex-wrap items-center justify-between gap-3 w-full mt-7 mb-8"
+            style={{ animation: "fadeDown 0.4s 0.08s ease both" }}
+          >
+            <div className="w-full max-w-sm my-3">
+              <DebouncedSearchInput
+                placeholder={t.searchPlaceholder}
+                onSearch={(value) => setGlobalFilter(value)}
+                value={globalFilter}
+              />
+            </div>
+
+            {/* Stats */}
+            {!isLoading && !isError && (
+              <div className="flex items-center gap-4 mb-5">
+                <span className="text-[12px] tracking-wider text-zinc-400 dark:text-zinc-500">
+                  {users.length} {t.members}
+                </span>
+                <span className="h-3 w-px bg-zinc-300 dark:bg-zinc-700" />
+                <span className="flex items-center gap-1.5 text-[12px] text-green-500 tracking-wider">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-400 shadow-[0_0_0_2px_rgba(74,222,128,0.2)]" />
+                  {onlineCount} {t.online}
+                </span>
+              </div>
+            )}
+
+            {/* ── Content states ── */}
+            {isLoading ? (
+              <div className="pt-12 flex justify-center items-center w-full">
+                <Spinner color='#f7931d' />
+              </div>
+            ) : isError ? (
+              <div className="py-20 text-center text-[13px] tracking-wide text-zinc-400 dark:text-zinc-600 w-full">
+                {t.loadError}
+              </div>
+            ) : users.length === 0 ? (
+              <div className="py-20 text-center text-[13px] tracking-wide text-zinc-400 dark:text-zinc-600 w-full">
+                {t.noUsers}
+              </div>
+            ) : (
+              <div className="w-full space-y-3">
+                {/* Table */}
+                <div ref={tableScrollRef} className="bg-white dark:bg-gray-800 max-h-[70vh] rounded-lg border border-gray-200 dark:border-gray-700 overflow-x-auto overflow-y-auto scrollbar-hide">
+                  <table className="w-full">
+                    <thead className='sticky top-0 z-10'>
+                      <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                          Name
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                          Email
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                          Status
+                        </th>
+                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                      {users.map((u: any) => (
+                        <UserTableRow key={u.id} u={u} />
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Scroll Buttons */}
+                {(canScrollLeft || canScrollRight) && (
+                  <div className="flex gap-2 justify-center pt-3">
+                    {canScrollLeft && (
+                      <button
+                        onClick={() => scroll('left')}
+                        className="p-2 rounded-md bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm"
+                        aria-label="Scroll table left"
+                      >
+                        <ChevronLeft size={20} className="text-gray-600 dark:text-gray-300" />
+                      </button>
+                    )}
+                    {canScrollRight && (
+                      <button
+                        onClick={() => scroll('right')}
+                        className="p-2 rounded-md bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm"
+                        aria-label="Scroll table right"
+                      >
+                        <ChevronRight size={20} className="text-gray-600 dark:text-gray-300" />
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── Footer ──
+            {!isLoading && !isError && users.length > 0 && (
+              <div className="flex flex-wrap justify-between gap-2 mt-12 pt-5 border-t border-zinc-200 dark:border-zinc-900 w-full">
+                <span className="text-[11px] tracking-wider text-zinc-400 dark:text-zinc-700">
+                  {t.showing} {users.length} {t.profiles}
+                </span>
+                <span className="text-[11px] tracking-wider text-zinc-400 dark:text-zinc-700">
+                  {t.updatedRealtime}
+                </span>
+              </div>
+            )} */}
           </div>
-        )}
         </div>
-
-
-          </div>
-
-</div>
-
-      
       </div>
     </div>
   )
