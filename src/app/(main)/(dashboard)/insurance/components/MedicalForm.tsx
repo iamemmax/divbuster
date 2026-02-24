@@ -25,11 +25,6 @@ type MedicalFormData = {
   medications?: string
   allergies?: string
   lastPhysical?: string
-  physicianName?: string
-  physicianPhone?: string
-  hospitalName?: string
-  physicianEmail?: string
-  show_physician_details?: boolean
   medicalCertification: boolean
 }
 
@@ -46,25 +41,16 @@ const MedicalForm = () => {
   const {user}=authState
   const {data:questionData, isLoading}=useFetchInsuranceQuestions("medical",String(language))
   const sigRef = useRef<SignatureCanvas>(null)
-  const physicianSigRef = useRef<SignatureCanvas>(null)
   const [canSign, setCanSign] = useState(false)
   const [isSigned, setIsSigned] = useState(false)
-  const [isPhysicianSigned, setIsPhysicianSigned] = useState(false)
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>([])
   const [answers, setAnswers] = useState<Record<string, boolean>>({})
   const [canvasWidth, setCanvasWidth] = useState(600)
   const [signatureData, setSignatureData] = useState<string | null>(null)
-  const [physicianSignatureData, setPhysicianSignatureData] = useState<string | null>(null)
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
-  const [doctorReportBase64, setDoctorReportBase64] = useState<string>("")
   
   const {data:medicalReport}=useFetchMedicalReport()
   const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<MedicalFormData>({
     defaultValues: {
-      physicianName: medicalReport?.data?.physician_name || '',
-      hospitalName: medicalReport?.data?.hospital_name || '',
-      physicianEmail: medicalReport?.data?.physician_email || '',
-      show_physician_details: false,
       medicalConditions: false,
       medicalCertification: false
     }
@@ -73,12 +59,6 @@ const MedicalForm = () => {
   // Populate form with medical report data when it loads
   React.useEffect(() => {
     if (medicalReport?.data) {
-      setValue('physicianName', medicalReport.data.physician_name || '')
-      setValue('hospitalName', medicalReport.data.hospital_name || '')
-      setValue('physicianEmail', medicalReport.data.physician_email || '')
-      setValue('show_physician_details', medicalReport.data.show_physician_details || false)
-      // setValue('diveInstructorId', medicalReport.data.dive_instructor_id || undefined)
-      
       // Load signatures if available
       if (medicalReport.data.signature && sigRef.current) {
         sigRef.current.fromDataURL(medicalReport.data.signature)
@@ -86,26 +66,16 @@ const MedicalForm = () => {
         setIsSigned(true)
         setValue('medicalCertification', true)
       }
-      if (medicalReport.data.physician_signature && physicianSigRef.current) {
-        physicianSigRef.current.fromDataURL(medicalReport.data.physician_signature)
-        setPhysicianSignatureData(medicalReport.data.physician_signature)
-        setIsPhysicianSigned(true)
-      }
-      
-      // Load physician report if available
-      if (medicalReport.data.physician_report) {
-        setDoctorReportBase64(medicalReport.data.physician_report)
-      }
-      
+
       // Load answers if available
       if (medicalReport.data.answers && questionData?.data) {
         const answersObj: Record<string, boolean> = {}
         const selectedIds: number[] = []
-        
+
         Object.entries(medicalReport.data.answers).forEach(([key, value]) => {
           const isTrue = value === 'true'
           answersObj[key] = isTrue
-          
+
           // Find question ID by slug and add to selectedQuestions if answer is true
           if (isTrue) {
             const question = questionData.data.find(q => q.question_slug === key)
@@ -114,7 +84,7 @@ const MedicalForm = () => {
             }
           }
         })
-        
+
         setAnswers(answersObj)
         setSelectedQuestions(selectedIds)
       }
@@ -125,22 +95,11 @@ const MedicalForm = () => {
   
   const watchedValues = watch()
   const isCertified = watchedValues.medicalCertification
-  const show_physician_details = watchedValues.show_physician_details
-
- 
-
-
 
   const clearSignature = () => {
     sigRef.current?.clear()
     setIsSigned(false)
     setSignatureData(null)
-  }
-
-  const clearPhysicianSignature = () => {
-    physicianSigRef.current?.clear()
-    setIsPhysicianSigned(false)
-    setPhysicianSignatureData(null)
   }
   const queryClient = useQueryClient()
   const {mutate:handleSubmitMedical, isLoading:isSubmitting}=useSubmitMedalReport()
@@ -148,104 +107,75 @@ const MedicalForm = () => {
   const onSubmit = (data: MedicalFormData) => {
     if (!data.medicalCertification) {
       openErrorModalWithMessage(String("You must certify your medical fitness"));
-
       return
     }
     if (sigRef.current && !sigRef.current.isEmpty()) {
       const signature = sigRef.current.toDataURL()
-      const physicianSignature = physicianSigRef.current && !physicianSigRef.current.isEmpty() 
-        ? physicianSigRef.current.toDataURL() 
-        : ""
-      
+
       // Include all questions with their answers (true/false)
       const allAnswers: Record<string, string> = {}
       questionData?.data?.forEach(question => {
         allAnswers[question.question_slug] = (answers[question.question_slug] || false).toString()
       })
-      
+
       const payload = {
         question_ids: questionData?.data?.map(q => q.id) || [],
         answers: allAnswers,
         signature: signature,
         parent_or_guardian_signature: "",
-        ...(data.show_physician_details && {
-          physician_name: data.physicianName || "",
-          hospital_name: data.hospitalName || "",
-          physician_email: data.physicianEmail || "",
-          physician_signature: physicianSignature,
-          physician_report: doctorReportBase64,
-        }),
         dive_instructor_id: 0,
-        show_physician_details: data.show_physician_details || false,
         lang: language
       }
 
       handleSubmitMedical({payload},{
         onSuccess:(data)=> {
           toast.success('Medical form submitted successfully')
-          queryClient.invalidateQueries({queryKey:['user-details']})  
+          queryClient.invalidateQueries({queryKey:['user-details']})
         },
         onError:(error)=>{
-const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+          const errorMessage = formatAxiosErrorMessage(error as AxiosError);
           openErrorModalWithMessage(String(errorMessage));
         }
       })
-      // Handle form submission
     } else {
-   
       openErrorModalWithMessage(String("Please provide your signature"));
     }
   }
   const onUpdate = (data: MedicalFormData) => {
     if (!data.medicalCertification) {
       openErrorModalWithMessage(String("You must certify your medical fitness"));
-
       return
     }
     if (sigRef.current && !sigRef.current.isEmpty()) {
       const signature = sigRef.current.toDataURL()
-      const physicianSignature = physicianSigRef.current && !physicianSigRef.current.isEmpty() 
-        ? physicianSigRef.current.toDataURL() 
-        : ""
-      
+
       // Include all questions with their answers (true/false)
       const allAnswers: Record<string, string> = {}
       questionData?.data?.forEach(question => {
         allAnswers[question.question_slug] = (answers[question.question_slug] || false).toString()
       })
-      
+
       const payload = {
         id:String(medicalReport?.data?.id),
         question_ids: questionData?.data?.map(q => q.id) || [],
         answers: allAnswers,
         signature: signature,
         parent_or_guardian_signature: "",
-        ...(data.show_physician_details && {
-          physician_name: data.physicianName || "",
-          hospital_name: data.hospitalName || "",
-          physician_email: data.physicianEmail || "",
-          physician_signature: physicianSignature,
-          physician_report: doctorReportBase64,
-        }),
         dive_instructor_id: 0,
-        show_physician_details: data.show_physician_details || false,
         lang: language
       }
 
       handleUpdateMedical({payload}, {
         onSuccess:()=> {
-         toast.success('Medical form Updated successfully')
-          queryClient.invalidateQueries({queryKey:['user-details']})  
-          
+          toast.success('Medical form Updated successfully')
+          queryClient.invalidateQueries({queryKey:['user-details']})
         },
         onError:(error: any)=>{
           const errorMessage = formatAxiosErrorMessage(error as AxiosError);
           openErrorModalWithMessage(String(errorMessage));
         }
       })
-      // Handle form submission
     } else {
-   
       openErrorModalWithMessage(String("Please provide your signature"));
     }
   }
@@ -253,18 +183,6 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
   React.useEffect(() => {
     setCanSign(isCertified)
   }, [isCertified])
-
-  // Reset physician info when checkbox is unchecked
-  React.useEffect(() => {
-    if (!show_physician_details) {
-      setValue('physicianName', '')
-      setValue('hospitalName', '')
-      setValue('physicianEmail', '')
-      setUploadedFile(null)
-      setDoctorReportBase64('')
-      clearPhysicianSignature()
-    }
-  }, [show_physician_details, setValue])
 
   React.useEffect(() => {
     if (typeof window === 'undefined') return
@@ -277,9 +195,6 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         // Save current signature data before resize
         if (sigRef.current && !sigRef.current.isEmpty()) {
           setSignatureData(sigRef.current.toDataURL())
-        }
-        if (physicianSigRef.current && !physicianSigRef.current.isEmpty()) {
-          setPhysicianSignatureData(physicianSigRef.current.toDataURL())
         }
 
         // Set canvas width based on window size
@@ -301,9 +216,6 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
   React.useEffect(() => {
     if (signatureData && sigRef.current) {
       sigRef.current.fromDataURL(signatureData)
-    }
-    if (physicianSignatureData && physicianSigRef.current) {
-      physicianSigRef.current.fromDataURL(physicianSignatureData)
     }
   }, [canvasWidth])
 
@@ -341,185 +253,7 @@ const errorMessage = formatAxiosErrorMessage(error as AxiosError);
         </div>
       </div>
 
-   
 
-      <div>
-        <label className="flex items-center space-x-3 mb-4">
-          <input
-            {...register('show_physician_details')}
-            type="checkbox"
-            className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
-          />
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Show Physician Information
-          </span>
-        </label>
-      </div>
-
-      {show_physician_details && (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {t.physicianName}
-              </label>
-              <input
-                {...register('physicianName')}
-                type="text"
-                className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {t.hospitalName}
-              </label>
-              <input
-                {...register('hospitalName')}
-                type="text"
-                className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {t.physicianEmail}
-            </label>
-            <input
-              {...register('physicianEmail')}
-              type="email"
-              className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
-            />
-          </div>
-        </>
-      )}
-
-      {/* File Upload Section */}
-      {show_physician_details && (
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            {t.uploadPhysicianReport}
-          </label>
-        <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
-          {uploadedFile || doctorReportBase64 ? (
-            <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                  <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="text-left">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {uploadedFile ? uploadedFile.name : 'Physician Report'}
-                  </p>
-                  {uploadedFile && (
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{(uploadedFile.size / 1024 / 1024).toFixed(2)} MB</p>
-                  )}
-                  {!uploadedFile && doctorReportBase64 && (
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Previously uploaded</p>
-                  )}
-                </div>
-              </div>
-              <div className="flex gap-2">
-                {doctorReportBase64 && (
-                  <a
-                    href={doctorReportBase64}
-                    download="physician-report"
-                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm"
-                  >
-                    {t.download || 'Download'}
-                  </a>
-                )}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setUploadedFile(null)
-                    setDoctorReportBase64("")
-                  }}
-                  className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                >
-                  {t.removeFile}
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <input
-                type="file"
-                accept=".pdf,.jpg,.jpeg,.png"
-                onChange={(e) => {
-                  const file = e.target.files?.[0]
-                  if (file && file.size <= 10 * 1024 * 1024) {
-                    setUploadedFile(file)
-                    
-                    // Convert to base64
-                    const reader = new FileReader()
-                    reader.onload = () => {
-                      const base64 = reader.result as string
-                      setDoctorReportBase64(base64)
-                    }
-                    reader.readAsDataURL(file)
-                  }
-                }}
-                className="hidden"
-                id="physician-report-upload"
-              />
-              <label htmlFor="physician-report-upload" className="cursor-pointer">
-                <div className="w-12 h-12 mx-auto mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{t.dragDropFile}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">{t.supportedFormats}</p>
-              </label>
-            </div>
-          )}
-        </div>
-        </div>
-      )}
-
-      {show_physician_details && (
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            {t.physicianSignature}
-          </label>
-          <div className="border rounded-md p-2 bg-white w-full border-gray-300 dark:border-gray-600 overflow-hidden">
-            <SignatureCanvas
-              ref={physicianSigRef}
-              onEnd={() => {
-                const isEmpty = physicianSigRef.current?.isEmpty()
-                setIsSigned(!isEmpty)
-                if (!isEmpty && physicianSigRef.current) {
-                  setSignatureData(physicianSigRef.current.toDataURL())
-                }
-              }}
-              canvasProps={{
-                width: canvasWidth,
-                height: 100,
-                className: 'signature-canvas',
-                style: {
-                  pointerEvents: canSign ? 'auto' : 'none',
-                  border: '1px solid #ccc',
-                  touchAction: 'none',
-                  display: 'block',
-                  maxWidth: '100%',
-                  height: 'auto'
-                }
-              }}
-              penColor={canSign ? '#000000' : '#cccccc'}
-            />
-          </div>
-          <Button
-            type="button"
-            onClick={clearPhysicianSignature}
-            className="mt-2 px-4 py-2 text-sm bg-gray-500 text-white rounded-md hover:bg-gray-600"
-          >
-            {t.clearSignature}
-          </Button>
-        </div>
-      )}
 
       {/* Insurance Questions */}
       {isLoading ? (

@@ -2,7 +2,8 @@
 import React from "react";
 import LeafletMap from "./LeafletMap";
 import { diveSiteResult } from "../../api/div-sites/fetch-dive-sites";
-import { buddyResult } from "../../api/buddy/fetchBudies";
+import { buddyResult } from "../../api/types/buddies/buddyType";
+// import { buddyResult } from "../../api/buddy/fetchBudies";
 
 interface BuddyPlanMapProps {
   diveSites: diveSiteResult[];

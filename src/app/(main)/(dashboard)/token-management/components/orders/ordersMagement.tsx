@@ -263,31 +263,28 @@ const MyOrderMangement = () => {
               </tbody>
             </table>
           </div>
+          {(canScrollLeft || canScrollRight) && (
+            <div className="absolute right-0 top-0 bottom-0 flex items-center gap-2 pr-2 pointer-events-none">
+              {canScrollLeft && (
+                <button
+                  onClick={() => scroll('left')}
+                  className="pointer-events-auto p-1 rounded-md bg-white border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
+                  aria-label="Scroll left"
+                >
+                  <ChevronLeft size={18} className="text-gray-600" />
+                </button>
+              )}
+              {canScrollRight && (
+                <button
+                  onClick={() => scroll('right')}
+                  className="pointer-events-auto p-1 rounded-md bg-white border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
+                  aria-label="Scroll right"
+                >
+                  <ChevronRight size={18} className="text-gray-600" />
+                </button>
+              )}
+            </div>
           )}
-        </div>
-
-        {(canScrollLeft || canScrollRight) && (
-          <div className="mt-3 flex justify-end gap-2">
-            {canScrollLeft && (
-              <button
-                onClick={() => scroll('left')}
-                className="p-1 rounded-md bg-white border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
-                aria-label="Scroll left"
-              >
-                <ChevronLeft size={18} className="text-gray-600" />
-              </button>
-            )}
-            {canScrollRight && (
-              <button
-                onClick={() => scroll('right')}
-                className="p-1 rounded-md bg-white border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
-                aria-label="Scroll right"
-              >
-                <ChevronRight size={18} className="text-gray-600" />
-              </button>
-            )}
-          </div>
-        )}
         </div>
 
         {/* Pagination */}
