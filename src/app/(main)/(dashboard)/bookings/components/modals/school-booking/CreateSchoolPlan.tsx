@@ -3,31 +3,27 @@
 
 "use client"
 import React, { useEffect, useState } from "react"
-import { useForm, Controller } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Dialog, DialogBody, DialogContent } from "@/components/core"
 import SchoolBookingInfo from "./SchoolBookingInfo"
 import SchoolDriverContact, { BookingDriverFormValues } from "./SchoolDriverContact"
-import SelectField from "@/components/core/SelectField"
 import SchoolParticipantForm from "./SchoolParticipant"
-import { useFetchDiveSchools } from "@/app/(main)/(dashboard)/api/bookings/fetchDivingSchools"
-import { useFetchDiveSites } from "@/app/(main)/(dashboard)/api/bookings/fetchDiveLocations"
-import { useFetchDiveEvent } from "@/app/(main)/(dashboard)/api/bookings/fetchDiveEvent"
-import moment from "moment"
+import { DiveEventCalendar } from "@/app/(main)/(dashboard)/manage-certifications/components/DiveEventCalendar"
 import { CreateDivePlantranslations } from "@/app/(main)/translation/bookingTranslation"
 import { useLanguage } from "@/hooks/useLanguage"
 
 // ---------------------- TRANSLATIONS --------------------------------------------------------------------------
 
-// Validation schema
+// Validation schema for booking steps
 const createDivePlanSchema = z.object({
   dive_level: z.string().min(1, "Please select a dive level"),
-  location: z.string().min(1, "Please select a dive location"),
   instructor_id: z.string().min(1, "Please select a dive instructor"),
   event_date_id: z.string().min(1, "Please select a dive event date"),
   dive_event_id: z.string().min(1, "Please select a dive event"),
   div_school: z.string().min(1, "Please select a dive school"),
+  location: z.string().min(1, "Location is required"),
 })
 
 export type CreateDivePlanFormData = z.infer<typeof createDivePlanSchema>
@@ -69,76 +65,14 @@ const {language} = useLanguage()
     setActiveStep("book")
   }
 
-  const diveLevels = [
-    { value: "beginner", label: t.beginner },
-    { value: "intermediate", label: t.intermediate },
-    { value: "advanced", label: t.advanced },
-  ]
-
-  // Fetch hooks
-  const watchSchool = createForm?.watch("div_school")
-  const watchEventDateId = createForm.watch("dive_event_id")
-  const watchLocation = createForm.watch("location")
-  
-  const {
-    data: diveSitesData,
-    fetchNextPage: fetchNextPageDiveSites,
-    hasNextPage: hasNextPageDiveSite,
-    isLoading: isLoadingDiveSites,
-    isFetchingNextPage: isFetchingNextPageDiveSite,
-  } = useFetchDiveSites()
-  
-  // Get selected location address for filtering diving schools
-  const selectedLocationAddress = diveSitesData?.pages
-    .flatMap(page => page.data?.results || [])
-    .find(site => String(site?.id) === watchLocation)?.address
-  
-  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } = useFetchDiveSchools(selectedLocationAddress)
-  const {
-    data: diveEventData,
-    fetchNextPage: fetchNextPageDiveEvent,
-    hasNextPage: hasNextPageDiveEvent,
-    isLoading: isLoadingDiveEvent,
-    isFetchingNextPage: isFetchingNextPageDiveEvent,
-  } = useFetchDiveEvent(watchSchool)
-
-  // Data transformations
-  const diveSchools =
-    data?.pages.flatMap((page) =>
-      page.results.map((school) => ({ label: school.name, value: String(school.id) }))
-    ) ?? []
-
-  const diveLocation =
-    diveSitesData?.pages.flatMap((page) =>
-      page.data?.results.map((site) => ({ label: site?.title, value: String(site?.id) }))
-    ) ?? []
-
-  const diveDateId =
-    diveEventData?.pages.flatMap((page) =>
-      page.data?.results.map((event) => ({ label: event?.name, value: String(event?.id) }))
-    ) ?? []
-
-  const diveEvent =
-    diveEventData?.pages.flatMap((page) =>
-      page.data?.results
-        .filter((event) => String(event?.id) === String(watchEventDateId))
-        .flatMap((event) =>
-          event?.event_dates?.map((date) => ({
-            value: String(date?.id),
-            label: moment(date?.event_date)?.format("lll"),
-          })) ?? []
-        )
-    ) ?? []
-
-  const getDiveInstructorsBySchool = (schoolId: number) => {
-    const school = data?.pages.flatMap((page) => page.results).find((site) => site.id === schoolId)
-    return (
-      school?.dive_instructors?.map((instruct) => ({
-        label: instruct.full_name,
-        value: String(instruct.dive_instructor_id),
-      })) ?? []
-    )
+  const handleEventSelect = (formData: CreateDivePlanFormData) => {
+    // Populate form with selected event data from calendar
+    setSchoolBookingDataInfo(formData)
+    createForm.reset(formData)
+    setActiveStep("book")
   }
+
+
 
   if (!isOpen) return null
 
@@ -160,113 +94,9 @@ const {language} = useLanguage()
           <div className="p-3">
             {activeStep === "create" && (
               <div className="">
-                <div className="space-y-6 px-3 overflow-y-auto max-h-[calc(88vh-160px)]">
-                  {/* Dive Level */}
-                  <Controller
-                    name="dive_level"
-                    control={createForm.control}
-                    render={({ field }) => (
-                      <SelectField
-                        field={field}
-                        label={t.chooseDiveLevel}
-                        placeholder={t.beginner}
-                        options={diveLevels}
-                        error={createForm?.formState?.errors?.dive_level}
-                      />
-                    )}
-                  />
-
-                  {/* Location */}
-                  <Controller
-                    name="location"
-                    control={createForm.control}
-                    render={({ field }) => (
-                      <SelectField
-                        field={field}
-                        label={t.selectLocation}
-                        placeholder="Eden Beach"
-                        options={diveLocation}
-                        onReachEnd={() => {
-                          if (hasNextPageDiveSite && !isFetchingNextPageDiveSite) {
-                            fetchNextPageDiveSites()
-                          }
-                        }}
-                        loading={isFetchingNextPageDiveSite || isLoadingDiveSites}
-                        error={createForm?.formState?.errors?.location}
-                      />
-                    )}
-                  />
-
-                  {/* Dive School */}
-                  <Controller
-                    name="div_school"
-                    control={createForm.control}
-                    render={({ field }) => (
-                      <SelectField
-                        field={field}
-                        label={t.selectSchool}
-                        placeholder="WannaDive"
-                        options={diveSchools}
-                        onReachEnd={() => {
-                          if (hasNextPage && !isFetchingNextPage) fetchNextPage()
-                        }}
-                        loading={isFetchingNextPage || isLoading}
-                        error={createForm?.formState?.errors?.div_school}
-                      />
-                    )}
-                  />
-
-                  {/* Dive Event */}
-                  <Controller
-                    name="dive_event_id"
-                    control={createForm.control}
-                    render={({ field }) => (
-                      <SelectField
-                        field={field}
-                        label={t.selectEvent}
-                        placeholder=""
-                        options={diveDateId}
-                        loading={isFetchingNextPageDiveEvent || isLoadingDiveEvent}
-                        error={createForm?.formState?.errors?.dive_event_id}
-                      />
-                    )}
-                  />
-
-                  {/* Event Date */}
-                  {watchEventDateId && (
-                    <Controller
-                      name="event_date_id"
-                      control={createForm.control}
-                      render={({ field }) => (
-                        <SelectField
-                          field={field}
-                          label={t.selectEventDate}
-                          placeholder=""
-                          options={diveEvent}
-                          loading={isFetchingNextPageDiveEvent || isLoadingDiveEvent}
-                          error={createForm?.formState?.errors?.event_date_id}
-                        />
-                      )}
-                    />
-                  )}
-
-                  {/* Instructors */}
-                  {watchSchool && (
-                    <Controller
-                      name="instructor_id"
-                      control={createForm.control}
-                      render={({ field }) => (
-                        <SelectField
-                          field={field}
-                          label={t.selectInstructor}
-                          placeholder="Dive instructors"
-                          options={getDiveInstructorsBySchool(Number(watchSchool))}
-                          loading={isFetchingNextPage || isLoading}
-                          error={createForm?.formState?.errors?.instructor_id}
-                        />
-                      )}
-                    />
-                  )}
+                <div className="px-3 overflow-y-auto max-h-[calc(88vh-160px)]">
+                  {/* Dive Event Calendar */}
+                  <DiveEventCalendar onEventSelect={handleEventSelect} />
                 </div>
 
                 {/* Footer */}
@@ -290,7 +120,12 @@ const {language} = useLanguage()
             )}
 
             {activeStep === "book" && (
-              <SchoolBookingInfo back={() => setActiveStep("create")} next={() => setActiveStep("stage1")} />
+              <SchoolBookingInfo
+                back={() => setActiveStep("create")}
+                next={() => setActiveStep("stage1")}
+                schoolBookingData={schoolBookingDataInfo}
+                onUpdateBookingData={(data) => setSchoolBookingDataInfo(data)}
+              />
             )}
             {activeStep === "stage1" && (
               <SchoolDriverContact

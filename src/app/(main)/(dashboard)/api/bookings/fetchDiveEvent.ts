@@ -1,20 +1,16 @@
 import { adminAxios } from "@/lib/axios";
-import { useInfiniteQuery } from "react-query";
+import { useQuery } from "react-query";
 interface DiveEventProp {
   detail: string;
-  data: Data;
-}
-
-interface Data {
-  count: number;
-  next: null;
-  previous: null;
-  results: Result[];
+  data: Result[];
 }
 
 interface Result {
   id: number;
   event_dates: Eventdate[];
+  dive_school_name: string;
+  dive_site_name: string;
+  dive_instructors: Diveinstructor[];
   name: string;
   description: string;
   amount: string;
@@ -25,6 +21,11 @@ interface Result {
   dive_site: number;
 }
 
+interface Diveinstructor {
+  id: number;
+  name: string;
+}
+
 interface Eventdate {
   id: number;
   event_date: string;
@@ -32,22 +33,14 @@ interface Eventdate {
   remaining_slots: number;
 }
 
-
-
-const fetchDiveEvent = async (
-  id: string,
-  { pageParam = `dive/dive-event` }
-) => {
-  // Strip domain if next is a full URL
-  const relativeUrl = pageParam.replace(/^https?:\/\/[^/]+/, "");
-  const response = await adminAxios.get(relativeUrl);
+const fetchDiveEvent = async () => {
+  const response = await adminAxios.get(`dive/dive-event?no_paginate=yes`);
   return response.data as DiveEventProp;
 };
 
-export const useFetchDiveEvent = (id?: string) => {
-  return useInfiniteQuery({
-    queryKey: ["dive-Event", id], // cache per dive school
-    queryFn: ({ pageParam }) => fetchDiveEvent(String(id), { pageParam }),
-    getNextPageParam: (lastPage) => lastPage.data?.next ?? undefined,
+export const useFetchDiveEvent = () => {
+  return useQuery({
+    queryKey: ["dive-Event"],
+    queryFn: fetchDiveEvent,
   });
 };

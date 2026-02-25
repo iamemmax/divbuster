@@ -7,18 +7,82 @@ interface Props {
   next: () => void;
   back: () => void;
   lang?: "en" | "es" | "fr" | "nl";
+  schoolBookingData?: {
+    dive_level: string;
+    instructor_id: string;
+    event_date_id: string;
+    dive_event_id: string;
+    div_school: string;
+    location: string;
+  };
+  onUpdateBookingData?: (data: any) => void;
 }
 
-const SchoolBookingInfo = ({ back, next, lang = "en" }: Props) => {
+const SchoolBookingInfo = ({ back, next, schoolBookingData, onUpdateBookingData }: Props) => {
   const {language}=useLanguage()
   const t = schoolBookingInfoTranslations[language] ||schoolBookingInfoTranslations.en;
   const [selectedPlan, setSelectedPlan] = useState<string>("1");
+  const [bookingData, setBookingData] = useState<any>(schoolBookingData || {});
 
   const selected = t.divePlans.find((plan) => plan?.id === selectedPlan);
 
   return (
     <div className="bg-transparent h-full p-6 rounded-lg shadow">
       <div className="overflow-y-auto max-h-[calc(84vh-160px)]">
+        {/* Event Details Input Fields */}
+        {schoolBookingData && (
+          <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 rounded-lg">
+            <h3 className="text-sm font-bold text-blue-900 dark:text-blue-300 mb-4 uppercase tracking-widest">Event Details</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {/* Dive School - Read Only */}
+              <div>
+                <label className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-widest mb-2 block">Dive School</label>
+                <div className="w-full px-3 py-2 text-sm border border-blue-300 dark:border-blue-600 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-900 dark:text-blue-100 font-medium">
+                  {bookingData.div_school || "—"}
+                </div>
+              </div>
+              {/* Dive Site / Location - Read Only */}
+              <div>
+                <label className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-widest mb-2 block">Dive Site</label>
+                <div className="w-full px-3 py-2 text-sm border border-blue-300 dark:border-blue-600 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-900 dark:text-blue-100 font-medium">
+                  {bookingData.location || "—"}
+                </div>
+              </div>
+              {/* Dive Level */}
+              <div>
+                <label className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-widest mb-2 block">Dive Level</label>
+                <select
+                  value={bookingData.dive_level || ""}
+                  onChange={(e) => {
+                    const updated = { ...bookingData, dive_level: e.target.value };
+                    setBookingData(updated);
+                    onUpdateBookingData?.(updated);
+                  }}
+                  className="w-full px-3 py-2 text-sm border border-blue-300 dark:border-blue-600 rounded-lg bg-white dark:bg-[#192c5b] text-blue-900 dark:text-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath fill='%23666' d='M8.357 5.522a3.333 3.333 0 0 1-4.581.126l-.133-.126L.41 2.089A.833.833 0 0 1 1.51.84l.078.07L4.82 4.342c.617.617 1.597.65 2.251.098l.106-.098L10.411.91a.833.833 0 0 1 1.248 1.1l-.07.079-3.232 3.433Z'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 0.75rem center',
+                    backgroundSize: '12px',
+                    paddingRight: '2.5rem',
+                  }}
+                >
+                  <option value="">Select a dive level</option>
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </div>
+              {/* Instructor ID - Read Only */}
+              <div>
+                <label className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-widest mb-2 block">Instructor ID</label>
+                <div className="w-full px-3 py-2 text-sm border border-blue-300 dark:border-blue-600 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-900 dark:text-blue-100 font-medium">
+                  {bookingData.instructor_id || "—"}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-[10px] mb-6">
           {t.divePlans.map((plan) => (
             <div

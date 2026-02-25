@@ -1,6 +1,6 @@
 "use client"
 import Header from '@/app/(main)/components/shared/Header'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useLanguage } from '@/hooks/useLanguage'
 import { publicUsersTranslations } from '@/app/(main)/translation/publicUsersTranslation'
@@ -14,6 +14,7 @@ import { formatAxiosErrorMessage } from '@/utils'
 import toast from 'react-hot-toast'
 import { AxiosError } from 'axios'
 import { useErrorModalState } from '@/hooks'
+import { DiveEventCalendar } from './DiveEventCalendar'
 
 
 /* ─── Avatar swatch colors ───────────────────────────────────────── */
@@ -247,11 +248,19 @@ const PublicUsers = () => {
           <Header title={t.pageTitle} subtitle="" />
         </div>
 
-        <div className='px-4 sm:px-6 lg:px-[1.875rem] max-h-[80vh]'>
+        <div className='px-4 sm:px-6 lg:px-[1.875rem]'>
+          {/* ── Dive Event Calendar ── */}
+          <div
+            className="mb-8"
+            style={{ animation: "fadeDown 0.4s 0.08s ease both" }}
+          >
+            <DiveEventCalendar />
+          </div>
+
           {/* ── Controls row ── */}
           <div
             className="flex flex-wrap items-center justify-between gap-3 w-full mt-7 mb-8"
-            style={{ animation: "fadeDown 0.4s 0.08s ease both" }}
+            style={{ animation: "fadeDown 0.4s 0.16s ease both" }}
           >
             <div className="w-full max-w-sm my-3">
               <DebouncedSearchInput

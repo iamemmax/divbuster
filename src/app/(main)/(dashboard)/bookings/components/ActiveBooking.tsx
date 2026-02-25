@@ -118,10 +118,10 @@ const {language} = useLanguage()
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-      {/* Header */}
-      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-        <div className="py-4">
+    <div className="h-full bg-white dark:bg-gray-900 flex flex-col">
+      {/* Fixed Header */}
+      <header className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+        <div className="py-4 px-4">
           <div className="relative flex-1 w-full">
             <DebouncedSearchInput
               placeholder={t.searchPlaceholder}
@@ -130,26 +130,26 @@ const {language} = useLanguage()
               value={globalSearch}
               className="py-3"
               icon={<Search size={18} />}
-            />           
+            />
           </div>
-          
+
           <div className="flex gap-y-3 flex-wrap items-center justify-between py-3">
             <h1 className="font-archivo text-base md:text-xl text-[#101828] dark:text-white font-medium">
               {t.recentPlans}
             </h1>
-            
+
             {/* Action Buttons */}
             <div className="flex items-center gap-3">
-             
+
               <AddBookingButton />
-             
+
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="bg-white dark:bg-gray-900 p-4">
+      {/* Main Content - Scrollable */}
+      <main className="flex-1 bg-white dark:bg-gray-900 p-4 overflow-y-auto">
         {filteredBookings.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">

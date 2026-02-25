@@ -1,85 +1,14 @@
 "use client"
-import React, { useEffect, useState, useRef } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import React, { useState } from 'react'
 import Header from '../../components/shared/Header'
 import ActiveBookings from './components/ActiveBooking'
 import BookingSideBar from './components/BookingSideBar'
 
-interface TabItem {
-  id: string
-  label: string
-  href: string
-}
-
 const BookingPage = () => {
-  const [activeTab, setActiveTab] = useState<string>('activeBookings')
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false)
-  const tabsScrollRef = useRef<HTMLDivElement>(null)
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(false)
-
-  const tabs: TabItem[] = [
-    { id: 'activeBookings', label: 'Active Bookings', href: '?tab=activeBookings' },
-    { id: 'recentDivePlanWithBuddy', label: 'Recent Dive Plan with Buddy', href: '?tab=recentDivePlanWithBuddy' },
-    { id: 'recentDivePlanWithSchoolCommunity', label: 'Recent Dive Plan with School/Community', href: '?tab=recentDivePlanWithSchoolCommunity' },
-  ]
-
-  useEffect(() => {
-    const updateFromURL = () => {
-      const urlParams = new URLSearchParams(window.location.search)
-      const tabFromURL = urlParams.get('tab')
-      if (tabFromURL && tabs.some(tab => tab.id === tabFromURL)) {
-        setActiveTab(tabFromURL)
-      }
-    }
-
-    updateFromURL()
-    window.addEventListener('popstate', updateFromURL)
-    return () => window.removeEventListener('popstate', updateFromURL)
-  }, [])
-
-  
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
-  }
-
-  const handleTabClick = (tabId: string): void => {
-    const url = new URL(window.location.href)
-    url.searchParams.set('tab', tabId)
-    window.history.pushState({}, '', url.toString())
-    setActiveTab(tabId)
-  }
-
-  const checkScroll = React.useCallback(() => {
-    if (tabsScrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = tabsScrollRef.current
-      setCanScrollLeft(scrollLeft > 0)
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
-    }
-  }, [])
-
-  React.useEffect(() => {
-    checkScroll()
-    const container = tabsScrollRef.current
-    if (container) {
-      container.addEventListener('scroll', checkScroll)
-      window.addEventListener('resize', checkScroll)
-      return () => {
-        container.removeEventListener('scroll', checkScroll)
-        window.removeEventListener('resize', checkScroll)
-      }
-    }
-  }, [checkScroll])
-
-  const scroll = (direction: 'left' | 'right') => {
-    if (tabsScrollRef.current) {
-      const scrollAmount = 300
-      tabsScrollRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth',
-      })
-    }
   }
 
   return (
@@ -100,64 +29,8 @@ const BookingPage = () => {
                 </svg>
               </button>
 
-              {/* Responsive Tabs with Scroll Buttons */}
-              <div className="flex items-center gap-2 mb-4">
-                <div ref={tabsScrollRef} className="flex border-b border-gray-200 dark:border-gray-700 overflow-x-hidden scrollbar-hide flex-1">
-                  {tabs.map((tab) => (
-                    <button
-                      key={tab.id}
-                      id={`tab-${tab.id}`}
-                      onClick={() => handleTabClick(tab.id)}
-                      className={`px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-xs sm:text-sm md:text-base font-medium border-b-2 transition-all duration-200 whitespace-nowrap flex-shrink-0 ${
-                        activeTab === tab.id
-                          ? 'border-orange-500 dark:border-orange-400 text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20'
-                          : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
-                      }`}
-                      role="tab"
-                      aria-selected={activeTab === tab.id}
-                      aria-controls={`tabpanel-${tab.id}`}
-                    >
-                      {tab.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Scroll Buttons */}
-                {(canScrollLeft || canScrollRight) && (
-                  <div className="flex gap-2 flex-shrink-0">
-                    {canScrollLeft && (
-                      <button
-                        onClick={() => scroll('left')}
-                        className="p-1 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
-                        aria-label="Scroll tabs left"
-                      >
-                        <ChevronLeft size={18} className="text-gray-600 dark:text-gray-300" />
-                      </button>
-                    )}
-                    {canScrollRight && (
-                      <button
-                        onClick={() => scroll('right')}
-                        className="p-1 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
-                        aria-label="Scroll tabs right"
-                      >
-                        <ChevronRight size={18} className="text-gray-600 dark:text-gray-300" />
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <main className="w-full" role="main">
-                <div
-                  id={`tabpanel-${activeTab}`}
-                  role="tabpanel"
-                  aria-labelledby={`tab-${activeTab}`}
-                >
-                 <ActiveBookings/>
-                </div>
-              </main>
-
-              {/* Main Content */}
+              {/* Active Bookings Component */}
+              <ActiveBookings/>
               
             </div>
 
