@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { Button, Dialog, DialogBody, DialogClose, DialogContent, DialogHeader, DialogTitle, ErrorModal, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/core";
 import CloseIcon from '@/app/icons/CloseIcon';
 import { Controller, useForm } from 'react-hook-form';
@@ -8,17 +8,19 @@ import CaretDownIcon from '@/icons/core/CaretDown';
 import { capitalizeFirstLetter, formatAxiosErrorMessage } from '@/utils';
 import CloudIcon from '@/app/icons/(dashboard)/CloudIcon';
 import { useErrorModalState } from '@/hooks';
-import { useAddCertification } from '../../(dashboard)/certifications/addCertification';
+import { useAddCertification } from '../../(dashboard)/api/certifications/addCertification';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { useUser } from '@/app/(auth)/api/getAuthenticatedUser';
 import { SmallSpinner } from '@/icons/core';
 import { useQueries, useQueryClient } from 'react-query';
-import { certificateResult } from '../../(dashboard)/certifications/fetchCertifications';
-import { useUpdateCertification } from '../../(dashboard)/certifications/editCertification';
+import { certificateResult } from '../../(dashboard)/api/certifications/fetchCertifications';
+import { useUpdateCertification } from '../../(dashboard)/api/certifications/editCertification';
 import { convertKebabAndSnakeToTitleCase } from '@/utils/strings';
 import { useLanguage } from '@/hooks/useLanguage';
 import { addCertificationFormtranslations } from '../../translation/certificationTranslation';
+import { useFetchDiveSchools } from '../../(dashboard)/api/bookings/fetchDivingSchools';
+import { Search, ChevronDown } from 'lucide-react';
 interface Props {
     setIsOpenCardModal: React.Dispatch<React.SetStateAction<boolean>>;
     certificateData: certificateResult | undefined
@@ -40,6 +42,15 @@ const AddCertification = ({ setIsOpenCardModal,certificateData,type,selectedCard
         } = useErrorModalState();
     const [dragOver, setDragOver] = useState(false);
     const [imagePreview, setImagePreview] = useState("");
+
+    // Dive school dropdown state
+    const [searchQuery, setSearchQuery] = useState('')
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+    const [selectedSchool, setSelectedSchool] = useState<any>(null)
+    const dropdownRef = useRef<HTMLDivElement>(null)
+    const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+    const { data: diveSchoolsData, isLoading: isLoadingSchools, hasNextPage, fetchNextPage, isFetchingNextPage } = useFetchDiveSchools(undefined, searchQuery)
     const {
   register,
   handleSubmit,
@@ -65,6 +76,7 @@ const AddCertification = ({ setIsOpenCardModal,certificateData,type,selectedCard
     issue_date: certificateData?.issue_date
       ? certificateData.issue_date.split("T")[0]
       : "",
+    default: false,
   },
   mode: "onChange",
 });
@@ -82,6 +94,41 @@ useEffect(() => {
 
 }, [selectedCard, setValue])
 
+// Initialize selected school from certificateData
+useEffect(() => {
+  if (certificateData?.school_name) {
+    setSelectedSchool({ name: certificateData.school_name })
+  }
+}, [certificateData])
+
+// Handle infinite scroll for dive schools
+const handleScroll = useCallback(() => {
+  if (!scrollContainerRef.current) return
+
+  const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current
+  const isNearBottom = scrollHeight - scrollTop - clientHeight < 100
+
+  if (isNearBottom && hasNextPage && !isFetchingNextPage) {
+    fetchNextPage()
+  }
+}, [hasNextPage, isFetchingNextPage, fetchNextPage])
+
+// Close dropdown when clicking outside
+React.useEffect(() => {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setIsDropdownOpen(false)
+    }
+  }
+
+  document.addEventListener('mousedown', handleClickOutside)
+  return () => document.removeEventListener('mousedown', handleClickOutside)
+}, [])
+
+// Get all schools from all pages
+const allSchools = React.useMemo(() => {
+  return diveSchoolsData?.pages?.flatMap(page => page.results) || []
+}, [diveSchoolsData])
 
     const handleImageUpload = useCallback(
         (file: File) => {
@@ -136,14 +183,15 @@ useEffect(() => {
         const { mutate: handleUpdate, isLoading:isUpdating } = useUpdateCertification();
     const queryclient = useQueryClient()
 
-    const onSubmit = ({certificate_no,certificate_type,dob,full_name,image,issue_date,issuer,issuer_name,school_name,trainer_name,trainer_phone}: Certificate) => {
-      
+    const onSubmit = ({certificate_no,certificate_type,dob,full_name,image,issue_date,issuer,issuer_name,school_name,trainer_name,trainer_phone,default: isDefault}: Certificate) => {
+
       if(type==="add"){
           handleCreate({
           certificate_no,certificate_type,
           dob:String(dob),
           full_name,image,issue_date:String(issue_date),issuer,issuer_name:String(issuer_name),
-          lang:String(user?.data?.data?.profile_details?.language),school_name,trainer_name,trainer_phone
+          lang:String(user?.data?.data?.profile_details?.language),school_name,trainer_name,trainer_phone,
+          default: isDefault
         }, {
               onSuccess: () => {
                   toast.success("Dive Certificate created successfully")
@@ -163,7 +211,8 @@ useEffect(() => {
           certificate_no,certificate_type,
           dob:String(dob),
           full_name,image,issue_date:String(issue_date),issuer,issuer_name:String(issuer_name),
-          lang:String(user?.data?.data?.profile_details?.language),school_name,trainer_name,trainer_phone
+          lang:String(user?.data?.data?.profile_details?.language),school_name,trainer_name,trainer_phone,
+          default: Boolean(isDefault)
         }, {
               onSuccess: () => {
                   toast.success("Dive Certificate updated successfully")
@@ -299,8 +348,16 @@ useEffect(() => {
                                    {t.certNo}
                                 </label>
                                 <input
+                                    type="text"
+                                    inputMode="numeric"
                                     {...register('certificate_no')}
                                     placeholder=""
+                                    maxLength={11}
+                                    onKeyDown={(e) => {
+                                      if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+                                        e.preventDefault()
+                                      }
+                                    }}
                                     className={`border relative ${errors.certificate_no ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
                                         } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}
                                 />
@@ -370,13 +427,91 @@ useEffect(() => {
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
                                    {t.school}
                                 </label>
-                                <input
-                                    type='text'
-                                    {...register('school_name')}
-                                    placeholder=""
-                                    className={`border relative ${errors.school_name ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
-                                        } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}
-                                />
+                                <div ref={dropdownRef} className="relative">
+                                  {/* Search Input */}
+                                  <div className="relative">
+                                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                      <Search size={18} />
+                                    </div>
+                                    <input
+                                      type="text"
+                                      placeholder="Search dive schools..."
+                                      value={isDropdownOpen ? searchQuery : (selectedSchool?.name || '')}
+                                      onChange={(e) => {
+                                        setSearchQuery(e.target.value)
+                                        setIsDropdownOpen(true)
+                                      }}
+                                      onFocus={() => setIsDropdownOpen(true)}
+                                      className={`border relative ${errors.school_name ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
+                                        } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg pl-10 pr-10 focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}
+                                    />
+                                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+                                      <ChevronDown size={18} />
+                                    </div>
+                                  </div>
+
+                                  {/* Dropdown Menu */}
+                                  {isDropdownOpen && (
+                                    <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg z-50">
+                                      {/* Loading State */}
+                                      {isLoadingSchools && allSchools.length === 0 ? (
+                                        <div className="p-4 text-center">
+                                          <div className="inline-block">
+                                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500"></div>
+                                          </div>
+                                        </div>
+                                      ) : allSchools.length === 0 ? (
+                                        <div className="p-4 text-center text-gray-500 dark:text-gray-400">
+                                          No dive schools found
+                                        </div>
+                                      ) : (
+                                        <div
+                                          ref={scrollContainerRef}
+                                          onScroll={handleScroll}
+                                          className="max-h-64 overflow-y-auto"
+                                        >
+                                          {allSchools.map((school: any) => (
+                                            <button
+                                              key={school.id}
+                                              type="button"
+                                              onClick={() => {
+                                                setSelectedSchool(school)
+                                                setValue('school_name', school.name)
+                                                setIsDropdownOpen(false)
+                                                setSearchQuery('')
+                                              }}
+                                              className={`w-full text-left px-4 py-3 border-b border-gray-100 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors ${
+                                                selectedSchool?.id === school.id
+                                                  ? 'bg-orange-50 dark:bg-orange-900/20 border-l-4 border-l-orange-500'
+                                                  : ''
+                                              }`}
+                                            >
+                                              <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                                {school.name}
+                                              </p>
+                                              <p className="text-xs text-gray-600 dark:text-gray-400">
+                                                {school.address}
+                                              </p>
+                                              {school.contact_info && (
+                                                <p className="text-xs text-gray-500 dark:text-gray-500">
+                                                  {school.contact_info}
+                                                </p>
+                                              )}
+                                            </button>
+                                          ))}
+                                          {/* Loading spinner when fetching more schools */}
+                                          {isFetchingNextPage && (
+                                            <div className="p-4 text-center">
+                                              <div className="inline-block">
+                                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-orange-500"></div>
+                                              </div>
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
                                 {errors.school_name && (
                                     <p className="text-red-500 dark:text-red-400 text-xs mt-1">
                                         {errors.school_name.message}
@@ -407,8 +542,15 @@ useEffect(() => {
                                 </label>
                                 <input
                                     type='text'
+                                    inputMode="numeric"
                                     {...register('trainer_phone')}
                                     placeholder=""
+                                    maxLength={11}
+                                    onKeyDown={(e) => {
+                                      if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+                                        e.preventDefault()
+                                      }
+                                    }}
                                     className={`border relative ${errors.trainer_phone ? "border-red-500 dark:border-red-400" : "border-[#E2E8F0] dark:border-gray-600"
                                         } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-800 font-archivo h-[48px] rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 dark:focus:ring-[#F7931D]/30 transition-colors`}
                                 />
@@ -417,6 +559,22 @@ useEffect(() => {
                                         {errors.trainer_phone.message}
                                     </p>
                                 )}
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] border-b border-[#EAECF0] border-opacity-50 py-2 items-center gap-2 sm:gap-5">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mb-1">
+                                    Set as Default
+                                </label>
+                                <div className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        {...register('default')}
+                                        className="w-4 h-4 text-orange-500 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-500 cursor-pointer"
+                                    />
+                                    <label className="ml-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+                                        Make this your default certificate
+                                    </label>
+                                </div>
                             </div>
 
                         </div>
@@ -433,6 +591,7 @@ useEffect(() => {
                                 {t.back}
                             </Button> */}
                             <Button
+                            disabled={isLoading || isUpdating}
                                 size={"lg"}
                                 type="submit"
                                 className="bg-orange-500 flex justify-center items-center gap-x-3 hover:bg-orange-600 text-white"

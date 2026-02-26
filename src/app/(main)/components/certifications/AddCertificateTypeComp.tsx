@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/core";
-import { certificateResult } from "../../(dashboard)/certifications/fetchCertifications";
+import { certificateResult } from "../../(dashboard)/api/certifications/fetchCertifications";
 import CloseIcon from "@/app/icons/CloseIcon";
 import AddCertification from "./AddCertification";
 import SelectCertificationType from "./SelectCertificationType";

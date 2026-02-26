@@ -15,6 +15,7 @@ interface Data {
   created_on: string;
   updated_on: string;
   questions: number[];
+  dive_school:null
 }
 
 interface Answers {

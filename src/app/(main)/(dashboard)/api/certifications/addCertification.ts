@@ -14,6 +14,7 @@ interface certificateProp {
   trainer_name: string;
   trainer_phone: string;
   lang: string;
+  default?: boolean;
 }
 
 const toISODate = (date: string) => {
@@ -35,6 +36,7 @@ const addCertification = async ({
   trainer_name,
   trainer_phone,
   lang,
+  default: isDefault,
 }: certificateProp) => {
   const formData = new FormData();
 
@@ -49,6 +51,9 @@ const addCertification = async ({
   formData.append("trainer_name", trainer_name);
   formData.append("trainer_phone", trainer_phone);
   formData.append("lang", lang);
+  if (isDefault !== undefined) {
+    formData.append("default", String(isDefault));
+  }
 
   if (image) {
     if (image instanceof File) {

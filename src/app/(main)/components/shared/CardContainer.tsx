@@ -1,41 +1,53 @@
 
 
 "use client"
-import { User } from '@/app/(auth)/api/getAuthenticatedUser'
 import { LinkButton } from '@/components/core'
-import React, { useState } from 'react'
-import { CERTIFICATE_TYPE_CHOICES_WITH_BG } from '../certifications'
+import React, { useState, useMemo } from 'react'
+import { ISSUER_COLORS } from '../certifications'
 import { cardContainerTranslations } from '../../translation/certificationTranslation'
 import { useLanguage } from '@/hooks/useLanguage'
-import { useRouter } from 'next/navigation'
 import CertificateModal from '../certifications/CertificateModal'
-import { certificates } from '../../(dashboard)/api/buddy/fetchBuddyProfile'
+import { useFetchCertifications, certificateResult } from '../../(dashboard)/api/certifications/fetchCertifications'
 
 interface prop {
-  user: User | null
-
+  user?: any
 }
 
-export const selectedCardBg = (selectedCard: string) => {
-  const myCard = CERTIFICATE_TYPE_CHOICES_WITH_BG.find(
-    (card) => String(card?.value) === String(selectedCard)
-  )
-  return myCard
+export const selectedCardBg = (issuer: string) => {
+  const colors = ISSUER_COLORS[issuer as keyof typeof ISSUER_COLORS] || ISSUER_COLORS.others
+  return colors
 }
 
-const CardContainer = ({ user }: prop) => {
+const CardContainer = ({}: prop) => {
   const {language} = useLanguage()
   const t = cardContainerTranslations[language]|| cardContainerTranslations.en
-  const [selectedCertificate, setSelectedCertificate] = useState<certificates |null>(null)
+  const [selectedCertificate, setSelectedCertificate] = useState<certificateResult |null>(null)
   const [showCertificateModal, setShowCertificateModal] = useState(false)
 
-  // Sort certificates by issue_date
-  const sortedCertificates =
-    user?.certificates?.slice().sort(
-      (a, b) =>
+  // Fetch certificates from the endpoint
+  const { data: certificationsData } = useFetchCertifications()
+
+  // Get all certificates from paginated data
+  const allCertificates = useMemo(() => {
+    return certificationsData?.pages?.flatMap(page => page.results) || []
+  }, [certificationsData])
+
+  // Sort certificates: default first, then by issue_date
+  // Only show the first 2 certificates in sidebar to save space
+  const sortedCertificates = useMemo(() => {
+    const sorted = allCertificates.slice().sort((a, b) => {
+      // Default certificate comes first
+      if (a.default && !b.default) return -1
+      if (!a.default && b.default) return 1
+      // Then sort by issue_date (newest first)
+      return (
         new Date(b.issue_date).getTime() -
         new Date(a.issue_date).getTime()
-    ) || []
+      )
+    })
+    // Limit to 2 certificates in sidebar
+    return sorted.slice(0, 2)
+  }, [allCertificates])
 
   return (
     <div className="relative w-full">
@@ -49,7 +61,9 @@ const CardContainer = ({ user }: prop) => {
           return (
             <div
               key={card?.id}
-              className="absolute w-[220px] cursor-pointer rounded-[10px] top-0 left-0 right-0 transition-all duration-300 hover:scale-105"
+              className={`absolute w-[220px] cursor-pointer rounded-[10px] top-0 left-0 right-0 transition-all duration-300 hover:scale-105 ${
+                card.default ? '' : ''
+              }`}
               style={{
                 transform: `translateY(${offsetY}px)  translateX(${offsetX}px) scale(${scale})`,
                 zIndex: zIndex,
@@ -60,12 +74,13 @@ const CardContainer = ({ user }: prop) => {
               }}
             >
               <div
-                className="flex w-full flex-col gap-4 bg-[url('/images/card-parttern3.svg')] bg-cover bg-center bg-no-repeat rounded-[10px] px-[1.125rem] py-4 shadow-lg"
+                className="flex w-full flex-col gap-4 bg-[url('/images/card-parttern3.svg')] bg-cover bg-center bg-no-repeat rounded-[10px] px-[1.125rem] py-4 shadow-lg relative"
                 style={{
-                  backgroundColor: selectedCardBg(card?.certificate_type)?.bg,
-                  color: selectedCardBg(card?.certificate_type)?.text,
+                  backgroundColor: selectedCardBg(card?.issuer)?.bg,
+                  color: selectedCardBg(card?.issuer)?.text,
                 }}
               >
+               
                 <div className='w-full'>
                   <p className="text-white flex flex-nowrap text-xs font-medium font-archivo">
                     {t.dateAdded}: {new Date(card?.issue_date).toLocaleDateString()}
@@ -107,7 +122,7 @@ const CardContainer = ({ user }: prop) => {
         <LinkButton
           href={"/manage-certifications"}
           variant="outlined"
-          className="bg-transparent text-[#344054] font-medium text-sm dark:text-white font-archivo border border-gray-300 hover:bg-gray-50 transition-colors"
+          className="bg-transparent text-[#344054] font-medium text-sm dark:text-white font-archivo border border-gray-300 hover:bg-gray-50 hover:text-black transition-colors"
         >
           {t.manageCerts}
         </LinkButton>

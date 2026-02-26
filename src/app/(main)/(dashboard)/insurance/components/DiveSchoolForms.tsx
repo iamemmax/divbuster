@@ -1,131 +1,119 @@
 "use client"
 import React, { useState } from 'react'
+import DiveSchoolLiabilityForm from './DiveSchoolLiabilityForm'
+import { useFetchSchoolLiabilityReport } from '../../api/insurance/school-liability/getAllDiveSchoolLiability'
 import { Button } from '@/components/core'
-
-interface DiveSchool {
-  id: number
-  name: string
-  address: string
-}
-
-interface SchoolFormData {
-  schoolId: number
-  schoolName: string
-  medicalCompleted: boolean
-  liabilityCompleted: boolean
-}
+import moment from 'moment'
+import DiveSchoolLiabilityModal from './DiveSchoolLiabilityModal'
 
 const DiveSchoolForms = () => {
-  const [schoolForms, setSchoolForms] = useState<SchoolFormData[]>([])
-
-  const diveSchools: DiveSchool[] = [
-    { id: 1, name: 'Ocean Divers Academy', address: '123 Beach St, Miami, FL' },
-    { id: 2, name: 'Deep Blue Diving', address: '456 Ocean Ave, San Diego, CA' },
-    { id: 3, name: 'Coral Reef Divers', address: '789 Reef Rd, Hawaii, HI' },
-  ]
-
-  const handleMedicalComplete = (schoolId: number) => {
-    const existing = schoolForms.find(f => f.schoolId === schoolId)
-    if (existing) {
-      setSchoolForms(schoolForms.map(f =>
-        f.schoolId === schoolId ? { ...f, medicalCompleted: true } : f
-      ))
-    } else {
-      const school = diveSchools.find(s => s.id === schoolId)
-      if (school) {
-        setSchoolForms([...schoolForms, {
-          schoolId,
-          schoolName: school.name,
-          medicalCompleted: true,
-          liabilityCompleted: false
-        }])
-      }
-    }
-  }
-
-  const handleLiabilityComplete = (schoolId: number) => {
-    const existing = schoolForms.find(f => f.schoolId === schoolId)
-    if (existing) {
-      setSchoolForms(schoolForms.map(f =>
-        f.schoolId === schoolId ? { ...f, liabilityCompleted: true } : f
-      ))
-    } else {
-      const school = diveSchools.find(s => s.id === schoolId)
-      if (school) {
-        setSchoolForms([...schoolForms, {
-          schoolId,
-          schoolName: school.name,
-          medicalCompleted: false,
-          liabilityCompleted: true
-        }])
-      }
-    }
-  }
+  const [showForm, setShowForm] = useState(false)
+  const [selectedLiability, setSelectedLiability] = useState<any>(null)
+  const [showModal, setShowModal] = useState(false)
+  const { data: liabilityReports, isLoading } = useFetchSchoolLiabilityReport()
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Dive School Forms
-        </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-          Complete medical and liability forms for each dive school
-        </p>
-      </div>
-
-      <div className="space-y-3">
-        {diveSchools.map((school) => {
-          const formData = schoolForms.find(f => f.schoolId === school.id)
-          return (
-            <div
-              key={school.id}
-              className="border rounded-lg p-4 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
-            >
-              <div className="mb-3">
-                <h3 className="font-medium text-gray-900 dark:text-white">{school.name}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{school.address}</p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <span className="text-sm text-gray-700 dark:text-gray-300">Medical Form</span>
-                  {formData?.medicalCompleted ? (
-                    <span className="text-xs font-medium text-green-600 dark:text-green-400">✓ Completed</span>
-                  ) : (
-                    <Button
-                      onClick={() => handleMedicalComplete(school.id)}
-                      className="text-xs px-3 py-1 bg-orange-500 text-white hover:bg-orange-600"
-                    >
-                      Complete
-                    </Button>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <span className="text-sm text-gray-700 dark:text-gray-300">Liability Form</span>
-                  {formData?.liabilityCompleted ? (
-                    <span className="text-xs font-medium text-green-600 dark:text-green-400">✓ Completed</span>
-                  ) : (
-                    <Button
-                      onClick={() => handleLiabilityComplete(school.id)}
-                      className="text-xs px-3 py-1 bg-orange-500 text-white hover:bg-orange-600"
-                    >
-                      Complete
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
-
-      {schoolForms.length > 0 && (
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <p className="text-sm text-blue-900 dark:text-blue-200">
-            {schoolForms.filter(f => f.medicalCompleted && f.liabilityCompleted).length} of {diveSchools.length} schools completed
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Dive School Liability
+          </h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+            Manage your dive school liability forms
           </p>
         </div>
+        <Button
+          onClick={() => setShowForm(!showForm)}
+          className="bg-orange-500 text-white hover:bg-orange-600 px-4 py-2 rounded-md"
+        >
+          {showForm ? 'Hide Form' : 'Create New Liability'}
+        </Button>
+      </div>
+
+      {/* Show form when button is clicked */}
+      {showForm && (
+        <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-gray-50 dark:bg-gray-900">
+          <DiveSchoolLiabilityForm onSuccess={() => setShowForm(false)} />
+        </div>
+      )}
+
+      {/* Display existing liability cards */}
+      {!isLoading && liabilityReports && liabilityReports.length > 0 && (
+        <div>
+          <h3 className="text-md font-semibold text-gray-900 dark:text-white mb-4">
+            Your Dive School Liability Forms
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {liabilityReports.map((liability) => (
+              <div
+                key={liability.id}
+                onClick={() => {
+                  setSelectedLiability(liability)
+                  setShowModal(true)
+                }}
+                className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 hover:shadow-lg hover:border-orange-500 dark:hover:border-orange-500 transition-all cursor-pointer"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h4 className="text-base font-semibold text-gray-900 dark:text-white">
+                      {liability.dive_school.name}
+                    </h4>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                      {liability.dive_school.address}
+                    </p>
+                  </div>
+                </div>
+
+                {liability.dive_school.contact_info && (
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
+                    📞 {liability.dive_school.contact_info}
+                  </p>
+                )}
+
+                <div className="space-y-2 mb-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    <span className="font-medium">Signed:</span> {moment(liability.last_signed_on).format('ll')}
+                  </p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    <span className="font-medium">Created:</span> {moment(liability.created_on).format('ll')}
+                  </p>
+                </div>
+
+                <button className="w-full py-2 px-3 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 rounded text-sm font-medium hover:bg-orange-100 dark:hover:bg-orange-900/40 transition-colors">
+                  View Details
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Empty state */}
+      {!isLoading && (!liabilityReports || liabilityReports.length === 0) && !showForm && (
+        <div className="text-center py-8">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            No dive school liability forms yet
+          </p>
+          <Button
+            onClick={() => setShowForm(true)}
+            className="bg-orange-500 text-white hover:bg-orange-600 px-4 py-2 rounded-md"
+          >
+            Create Your First Liability Form
+          </Button>
+        </div>
+      )}
+
+      {/* Modal for viewing/editing details */}
+      {selectedLiability && (
+        <DiveSchoolLiabilityModal
+          isOpen={showModal}
+          onClose={() => {
+            setShowModal(false)
+            setSelectedLiability(null)
+          }}
+          liability={selectedLiability}
+        />
       )}
     </div>
   )

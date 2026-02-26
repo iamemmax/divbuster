@@ -46,6 +46,13 @@ const imageSchema = z.union([
   z.string().url().min(1),
 ]);
 
+// ✅ Number validation (digits only, max 11)
+const numberField = z
+  .string()
+  .regex(/^\d+$/, "Must contain only numbers")
+  .max(11, "Maximum 11 digits allowed")
+  .min(1, "This field is required");
+
 // ----------------------
 // Certificate Schema
 // ----------------------
@@ -57,14 +64,35 @@ export const certificateSchema = z.object({
   image: z.any(),
   dob: dateString,
   issue_date: dateString,
-  certificate_no: z.string().min(1, "certificate_no is required"),
+  certificate_no: numberField,
   school_name: z.string().min(1, "school_name is required"),
   trainer_name: z.string().min(1, "trainer_name is required"),
-  trainer_phone: z.string().min(1, "trainer_phone is required"),
+  trainer_phone: numberField,
+  default: z.boolean().optional(),
 });
 
 export type Certificate = z.infer<typeof certificateSchema>;
 
+
+// ✅ Issuer colors mapping
+export const ISSUER_COLORS = {
+  padi: { bg: "#1B3A8A", text: "#E8EEFF" },      // Blue
+  ssi: { bg: "#7A1030", text: "#F7E8EC" },       // Red
+  naui: { bg: "#0D3D2E", text: "#E8F7F2" },      // Green
+  sdi: { bg: "#5C3A0A", text: "#F7F0E8" },       // Brown
+  tdi: { bg: "#252070", text: "#E8E8F7" },       // Purple
+  cmas: { bg: "#0A3352", text: "#E8F2F7" },      // Dark Blue
+  raid: { bg: "#45106A", text: "#F0E8F7" },      // Dark Purple
+  iantd: { bg: "#2E3540", text: "#DDE3EB" },     // Gray
+  bsac: { bg: "#0C4840", text: "#E8F5F4" },      // Teal
+  nase: { bg: "#5C2010", text: "#F7EEE8" },      // Dark Brown
+  andi: { bg: "#600F30", text: "#F5E8EE" },      // Maroon
+  utd: { bg: "#0B5C55", text: "#E8F6F5" },       // Cyan
+  psai: { bg: "#3D1B6E", text: "#EEE8F7" },      // Indigo
+  idda: { bg: "#1B4A3A", text: "#E8F5F0" },      // Dark Green
+  acuc: { bg: "#2C3E50", text: "#ECF0F1" },      // Slate
+  others: { bg: "#4A5568", text: "#E2E8F0" },    // Gray
+} as const;
 
 export const CERTIFICATE_TYPE_CHOICES_WITH_BG = [
   { value: "intro",               label: "Intro",                   bg: "#1B3A5C", text: "#E8F0F7" },

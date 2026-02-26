@@ -311,10 +311,17 @@ const UserProfile = () => {
                       }}
                     >
                       <div className="flex justify-between items-start">
-                        <p className="text-white text-base font-medium font-archivo">
-                          {t.dateAdded}:{" "}
-                          {moment(card.created_on).format("ll")}
-                        </p>
+                        <div className="flex flex-col gap-2">
+                          <p className="text-white text-base font-medium font-archivo">
+                            {t.dateAdded}:{" "}
+                            {moment(card.created_on).format("ll")}
+                          </p>
+                          {card.default && (
+                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/30 text-white text-xs font-semibold w-fit">
+                              ⭐ Default
+                            </span>
+                          )}
+                        </div>
                         <div className="h-[2.1437rem] mt-4 flex items-center justify-center w-[2.1437rem] border border-white rounded-full">
                           <CardHeadIcon />
                         </div>

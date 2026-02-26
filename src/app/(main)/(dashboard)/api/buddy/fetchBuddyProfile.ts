@@ -209,6 +209,7 @@ export interface certificates {
   school_name: string;
   trainer_name: string;
   created_on: string;
+  default: boolean;
 }
 const fetchBuddyProfile = async (id: string): Promise<BuddyProfile | null> => {
   if (!id) return null;

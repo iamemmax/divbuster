@@ -14,7 +14,8 @@ interface certificateProp {
   trainer_name: string;
   trainer_phone: string;
   lang: string;
-  id:string
+  id:string;
+  default: boolean;
 }
 
 const toISODate = (date: string) => {
@@ -36,7 +37,8 @@ const updateCertification = async ({
   trainer_name,
   trainer_phone,
   lang,
-  id
+  id,
+  default: isDefault
 }: certificateProp) => {
   const formData = new FormData();
 
@@ -51,13 +53,12 @@ const updateCertification = async ({
   formData.append("trainer_name", trainer_name);
   formData.append("trainer_phone", trainer_phone);
   formData.append("lang", lang);
+  if (isDefault !== undefined) {
+    formData.append("default", String(isDefault));
+  }
 
-  if (image) {
-    if (image instanceof File) {
-      formData.append("image", image);
-    } else {
-      formData.append("image", image);
-    }
+  if (image && image instanceof File) {
+    formData.append("image", image);
   }
 
   const response = await adminAxios.put(`/certificates/edit/${id}`, formData, {

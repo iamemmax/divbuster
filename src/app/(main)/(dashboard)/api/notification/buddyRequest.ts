@@ -228,6 +228,7 @@ interface Certificate {
   school_name: string;
   trainer_name: string;
   created_on: string;
+  default: boolean;
 }
 
 interface Archievement {

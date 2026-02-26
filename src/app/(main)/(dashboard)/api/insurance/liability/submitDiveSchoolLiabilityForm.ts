@@ -1,10 +1,8 @@
 import { adminAxios } from "@/lib/axios";
 import { useMutation } from "react-query";
 
-
-
-interface prop{
-     payload: {
+interface prop {
+  payload: {
     question_ids: number[];
     answers: Record<string, string>;
     signature: string;
@@ -12,19 +10,17 @@ interface prop{
     dive_instructor_id: number;
     dive_school_id: number;
     lang: string;
-}
-}
-
-
-
-const submitLiabilityReport = async ({payload}:prop) => {
- const response = await adminAxios.post(`/liability-form-answer`,payload);
-    return response.data ;
+  };
 }
 
-export const useSubmitLiabilityReport = () => {
+const submitDiveSchoolLiabilityReport = async ({ payload }: prop) => {
+  const response = await adminAxios.post(`/liability-form-answer`, payload);
+  return response.data;
+};
+
+export const useSubmitDiveSchoolLiabilityReport = () => {
   return useMutation({
-    mutationFn: submitLiabilityReport,
-   
+    mutationFn: submitDiveSchoolLiabilityReport,
   });
 };
+

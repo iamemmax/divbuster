@@ -84,6 +84,7 @@ const LiabilityForm = () => {
         signature: signature,
         parent_or_guardian_signature: data.parent_or_guardian_signature || "",
         dive_instructor_id: data.dive_instructor_id ? parseInt(data.dive_instructor_id) : 0,
+        dive_school_id: 0,
         lang: language
       }
 
@@ -123,6 +124,7 @@ const LiabilityForm = () => {
           signature: signature,
          parent_or_guardian_signature: data.parent_or_guardian_signature || "",
         dive_instructor_id: data.dive_instructor_id ? parseInt(data.dive_instructor_id) : 0,
+        dive_school_id: 0,
           lang: language
         }
   

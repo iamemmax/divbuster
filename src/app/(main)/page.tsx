@@ -7,14 +7,14 @@ import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput';
 import { ActionDropdown } from '@/components/core/ActionDropdown';
 import MonthlySnapShot from './components/dashboard/MonthlySnapShot'
 import SuggestedDIverTabs from './components/dashboard/SuggestedDIverTabs'
-import { certificateResult } from './(dashboard)/certifications/fetchCertifications'
+import { certificateResult } from './(dashboard)/api/certifications/fetchCertifications'
 import { DashboardTranslations } from './translation/dashboardTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 import formatDate from '@/utils/dateFormat';
 
 // Lazy load heavy modal components
 const AddNewDiveLog = lazy(() => import('./(dashboard)/div-log/components/AddNewDiveLog'));
-const CreateSchoolPlan = lazy(() => import('./(dashboard)/bookings/components/modals/school-booking/CreateSchoolPlan'));
+const CreateDivePlan = lazy(() => import('./(dashboard)/bookings/components/modals/buddy-booking/CreateBuddyBooking'));
 const CreateBuddyBooking = lazy(() => import('./(dashboard)/bookings/components/modals/buddy-booking/CreateBuddyBooking'));
 const AddCertificateTypeComp = lazy(() => import('./components/certifications/AddCertificateTypeComp'));
 
@@ -87,7 +87,7 @@ const Page = React.memo(() => {
 
       <Suspense fallback={<div>Loading...</div>}>
         {modalStates.diveLog && <AddNewDiveLog isOpen={modalStates.diveLog} onClose={() => toggleModal('diveLog')}/>}
-        {modalStates.schoolBooking && <CreateSchoolPlan isOpen={modalStates.schoolBooking} setIsOpenCardModal={() => toggleModal('schoolBooking')}/>}
+        {modalStates.schoolBooking && <CreateBuddyBooking isOpen={modalStates.schoolBooking} setIsOpenCardModal={() => toggleModal('schoolBooking')}/>}
         {modalStates.buddyBooking && <CreateBuddyBooking isOpen={modalStates.buddyBooking} setIsOpenCardModal={() => toggleModal('buddyBooking')} user={user} selectedBuddies='' title={t.addBuddy}/>}
         {modalStates.certification && <AddCertificateTypeComp certificateData={{} as certificateResult} type="add" isOpen={modalStates.certification} setIsOpenCardModal={() => toggleModal('certification')}/>}
       </Suspense>

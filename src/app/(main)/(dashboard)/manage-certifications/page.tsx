@@ -1,18 +1,23 @@
 "use client";
 import Header from '@/app/(main)/components/shared/Header'
 import React, { useState } from 'react'
-import { certificateResult, useFetchCertifications } from '../certifications/fetchCertifications'
+import { certificateResult, useFetchCertifications } from '../api/certifications/fetchCertifications'
 import { Button, LoaderModal } from '@/components/core'
 import moment from 'moment'
 import { cn } from '@/utils/classNames'
 import CardHeadIcon from '@/app/icons/(dashboard)/CardHeadIcon'
 import EditIcon from '@/app/icons/(dashboard)/EditIcon'
 import AddCertificateTypeComp from '../../components/certifications/AddCertificateTypeComp'
-import { useSetDefaultCertification } from '../certifications/setDefaultCertification';
 import { certificationTranslations } from '../../translation/certificationTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 import CertificateModal from '../../components/certifications/CertificateModal';
 import { selectedCardBg } from '../../components/shared/CardContainer';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+
+import { formatAxiosErrorMessage } from '@/utils';
+import { AxiosError } from 'axios';
+import { useUpdateCertification } from '../api/certifications/editCertification';
 
 // 🔹 Translations
 
@@ -59,7 +64,7 @@ const ManageCertifications= () => {
               </div>
 
               {certifications.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 py-6 px-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-5 py-6 px-8">
                   {certifications.map((card) => (
                     <div
                       key={card.id}
@@ -67,8 +72,8 @@ const ManageCertifications= () => {
                         "flex flex-col z-50 relative gap-4 rounded-[1.1944rem] px-[1.125rem] py-4 bg-cover bg-no-repeat cursor-pointer hover:opacity-90 transition-opacity"
                       )}
                       style={{
-                        backgroundColor: selectedCardBg(card?.certificate_type)?.bg,
-                        color: selectedCardBg(card?.certificate_type)?.text,
+                        backgroundColor: selectedCardBg(card?.issuer)?.bg,
+                        color: selectedCardBg(card?.issuer)?.text,
                       }}
                       onClick={() => {
                         setSelectedCertificate(card)
@@ -76,9 +81,16 @@ const ManageCertifications= () => {
                       }}
                     >
                       <div className="flex justify-between items-start">
-                        <p className="text-white text-base font-medium font-archivo">
-                          {t.dateAdded}: {moment(card.created_on).format("ll")}
-                        </p>
+                        <div className="flex flex-col gap-2">
+                          <p className="text-white text-base font-medium font-archivo">
+                            {t.dateAdded}: {moment(card.created_on).format("ll")}
+                          </p>
+                          {card.default && (
+                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/30 text-white text-xs font-semibold w-fit">
+                              ⭐ Default
+                            </span>
+                          )}
+                        </div>
                         <div className="h-[2.1437rem] mt-4 flex items-center justify-center w-[2.1437rem] border border-white rounded-full">
                           <CardHeadIcon />
                         </div>
@@ -122,8 +134,7 @@ const ManageCertifications= () => {
                           </div>
                           <div className="mt-4 flex  items-center gap-4">
 
-                                <SetDefaultButton id={card.id} t={t}/>
-                                <CheckoutCertificate id={card.id} t={t} />
+                                <SetDefaultButton card={card} isDefault={card.default} t={t}/>
                           </div>
                         </div>
                       </div>
@@ -182,49 +193,53 @@ const ManageCertifications= () => {
 export default ManageCertifications;
 
 // Small inline component placed at bottom so page imports remain tidy
-const SetDefaultButton = ({ id,t }: { id: number,t:any }) => {
-  const { mutateAsync, isLoading } = useSetDefaultCertification();
+const SetDefaultButton = ({ card, isDefault, t }: { card: certificateResult; isDefault: boolean; t: any }) => {
+  const { mutateAsync, isLoading } = useUpdateCertification();
+  const queryClient = useQueryClient();
+  const { language } = useLanguage();
 
   const handleSetDefault = async (e: React.MouseEvent) => {
     e.stopPropagation();
     try {
-      await mutateAsync(id);
-      // Optionally show a toast / notification here
-    } catch (err) {
-      // swallow or handle error (could open error modal)
-      console.error('Failed to set default certificate', err);
+      // Pass all certificate data with default: true
+      await mutateAsync({
+        id: String(card.id),
+        full_name: card.full_name,
+        issuer: card.issuer,
+        issuer_name: card.issuer_name,
+        certificate_type: card.certificate_type,
+        image: card.image,
+        dob: card.date_of_birth,
+        issue_date: card.issue_date,
+        certificate_no: card.certification_no,
+        school_name: card.school_name,
+        trainer_name: card.trainer_name,
+        trainer_phone: card.trainer_no,
+        lang: language,
+        default: true,
+      });
+      toast.success('Certificate set as default successfully!');
+      // Invalidate fetch-certifications to update both sidebar and manage certifications page
+      await queryClient.invalidateQueries({ queryKey: ["fetch-certifications"] });
+    } catch (error) {
+      const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+      toast.error(String(errorMessage));
     }
   };
 
-
- 
-
   return (
-      <button
+    <button
       onClick={handleSetDefault}
-      disabled={isLoading}
-      className="text-xs px-3 py-2 rounded-md bg-white/20 text-white hover:bg-white/30 transition-colors disabled:opacity-60"
+      disabled={isLoading || isDefault}
+      className={cn(
+        "text-xs px-3 py-2 rounded-md font-medium transition-colors",
+        isDefault
+          ? "bg-white/40 text-white cursor-not-allowed opacity-70"
+          : "bg-white/20 text-white hover:bg-white/30"
+      )}
     >
-      {isLoading ? t.setting : t.setDefault}
+      {isLoading ? `${t.setting}...` : isDefault ? `✓ ${t.setDefault}` : `⭐ ${t.setDefault}`}
     </button>
   );
 };
 
-
- const CheckoutCertificate = ({ id,t }: { id: number,t:any }) => {
-  // const { mutateAsync, isLoading } = useSetDefaultCertification();
-
-  const handleSetDefault = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-  }
-return(
-  <button
-      onClick={handleSetDefault}
-      // disabled={"isLoading"}
-      className="text-xs px-3 py-2 bg-black rounded-md  text-black dark:bg-white dark:text-black hover:bg-white/30 transition-colors disabled:opacity-60"
-    >
-      {t.checkout}
-    </button>
-)
-
-  };
