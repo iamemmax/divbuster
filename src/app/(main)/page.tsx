@@ -11,6 +11,7 @@ import { certificateResult } from './(dashboard)/api/certifications/fetchCertifi
 import { DashboardTranslations } from './translation/dashboardTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 import formatDate from '@/utils/dateFormat';
+// import CreateBuddyBooking from './(dashboard)/bookings/components/modals/buddy-booking/CreateBuddyBooking';
 
 // Lazy load heavy modal components
 const AddNewDiveLog = lazy(() => import('./(dashboard)/div-log/components/AddNewDiveLog'));
@@ -87,7 +88,7 @@ const Page = React.memo(() => {
 
       <Suspense fallback={<div>Loading...</div>}>
         {modalStates.diveLog && <AddNewDiveLog isOpen={modalStates.diveLog} onClose={() => toggleModal('diveLog')}/>}
-        {modalStates.schoolBooking && <CreateBuddyBooking isOpen={modalStates.schoolBooking} setIsOpenCardModal={() => toggleModal('schoolBooking')}/>}
+        {modalStates.schoolBooking && <CreateDivePlan selectedBuddies='' user={user} isOpen={modalStates.schoolBooking} setIsOpenCardModal={() => toggleModal('schoolBooking')}/>}
         {modalStates.buddyBooking && <CreateBuddyBooking isOpen={modalStates.buddyBooking} setIsOpenCardModal={() => toggleModal('buddyBooking')} user={user} selectedBuddies='' title={t.addBuddy}/>}
         {modalStates.certification && <AddCertificateTypeComp certificateData={{} as certificateResult} type="add" isOpen={modalStates.certification} setIsOpenCardModal={() => toggleModal('certification')}/>}
       </Suspense>
