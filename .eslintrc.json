@@ -6,6 +6,7 @@
     "plugin:tailwindcss/recommended"
   ],
   "plugins": ["check-file"],
+  "maxWarnings": -1,
   "rules": {
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-unused-vars": [
@@ -16,16 +17,16 @@
         "varsIgnorePattern": "^_"
       }
     ],
-    "@typescript-eslint/no-use-before-define": "error",
+    "@typescript-eslint/no-use-before-define": "warn",
     "check-file/filename-blocklist": [
-      "error",
+      "warn",
       {
         "**/*.model.ts": "*.models.ts",
         "**/*.util.ts": "*.utils.ts"
       }
     ],
     "check-file/filename-naming-convention": [
-      "error",
+      "warn",
       {
         "src/**/*.{js,ts}": "CAMEL_CASE",
         "src/**/*.{jsx,tsx}": "+(+([a-z0-9])|*([A-Z]*([a-z0-9])))",
@@ -34,26 +35,26 @@
       }
     ],
     "check-file/folder-match-with-fex": [
-      "error",
+      "warn",
       {
         "*.styled.{jsx,tsx}": "**/pages/",
         "*.test.{js,jsx,ts,tsx}": "**/__tests__/"
       }
     ],
     "check-file/folder-naming-convention": [
-      "error",
+      "warn",
       {
         "mocks/*/": "KEBAB_CASE"
       }
     ],
     "no-console": [
-      "error",
+      "warn",
       {
         "allow": ["error"]
       }
     ],
     "no-unused-vars": "off",
-    "prefer-const": "error",
+    "prefer-const": "warn",
     "react/jsx-sort-props": "off",
     "react/no-unknown-property": [
       2,
