@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { forgetPasswordUserSchema } from "../schema";
 import { Button, ErrorModal, LinkButton } from "@/components/core";
-import Link from "next/link";
 import { useAuth } from "@/contexts/authentication";
 import { useErrorModalState } from "@/hooks";
 import { SmallSpinner } from "@/icons/core";
@@ -37,14 +36,9 @@ const ForgetPasswordPage = () => {
   const [currentStep, setCurrentStep] = useState<LoginStep>("forget-password");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const { language: contextLanguage, setLanguage: updateLanguage } = useLanguage();
+  const {  setLanguage: updateLanguage } = useLanguage();
 
-  const languages = [
-    { value: 'en', label: 'English', flag: '/flags/us.svg' },
-    { value: 'es', label: 'Español', flag: '/flags/es.svg' },
-    { value: 'fr', label: 'Français', flag: '/flags/fr.svg' },
-    { value: 'nl', label: 'Nederlands', flag: '/flags/nl.svg' }
-  ];
+  
 
   const {
     isErrorModalOpen,
