@@ -17,7 +17,6 @@ import { AxiosError } from 'axios';
 import { SmallSpinner } from '@/icons/core';
 import toast from 'react-hot-toast';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
-import { Language } from '@/app/(auth)/sign-up/translations';
 import { diveNotesTranslations } from '@/app/(main)/translation/diveLogTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 
@@ -36,7 +35,7 @@ interface prop {
 
 
 
-const AddDiveLogNotes = ({ setStep, buddyMembers, onClose,user, diveGearData, diveLogData, diveLogDetails, evironmentalData }: prop) => {
+const AddDiveLogNotes = ({ setStep, buddyMembers, onClose, diveGearData, diveLogData, diveLogDetails, evironmentalData }: prop) => {
    const {language}= useLanguage()
     const t = diveNotesTranslations[language] || diveNotesTranslations?.en;
     const diveNotesSchema = z.object({

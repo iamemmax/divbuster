@@ -120,9 +120,11 @@ const PersonalQRCode = ({isModalOpen,setIsModalOpen, userData}:prop) => {
                       </div>
                     </div>
                   ) : qrCodeDataURL ? (
-                    <img 
-                      src={qrCodeDataURL} 
+                    <Image
+                      src={qrCodeDataURL}
                       alt="QR Code for Bart000134"
+                      width={240}
+                      height={240}
                       className="max-w-full max-h-full"
                       style={{ imageRendering: 'pixelated' }}
                     />

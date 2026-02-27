@@ -1,7 +1,7 @@
 "use client"
 import React, { useRef, useState } from 'react'
 import SignatureCanvas from 'react-signature-canvas'
-import { Button } from '@/components/core'
+import { Button, ErrorModal } from '@/components/core'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -89,7 +89,7 @@ const LiabilityForm = () => {
       }
 
       handleSubmitLiability({payload},{
-        onSuccess:(responseData)=> {
+        onSuccess:()=> {
          
           toast.success('Liability form submitted successfully')
           queryClient.invalidateQueries({queryKey:['user-details']})
@@ -129,7 +129,7 @@ const LiabilityForm = () => {
         }
   
         handleUpdateMedical({payload}, {
-          onSuccess:(responseData)=> {
+          onSuccess:()=> {
             toast.success('Liability form Updated successfully')
           queryClient.invalidateQueries({queryKey:['user-details']})
             
@@ -220,6 +220,7 @@ const LiabilityForm = () => {
 
 
   return (
+    <>
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -227,13 +228,11 @@ const LiabilityForm = () => {
             {t.firstName} & {t.lastName} *
           </label>
           <input
-          disabled
-           value={`${user?.first_name} ${user?.last_name}`}
-            type="text"
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white 
-             
-              
+          className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white 
             `}
+            type="text"
+            value={`${user?.first_name} ${user?.last_name}`}
+            disabled
           />
         </div>
           <div>
@@ -241,11 +240,11 @@ const LiabilityForm = () => {
              {t.phoneNumber}
           </label>
           <input
-          disabled
-          value={`${user?.profile_details?.phone_number}`}
-            type="tel"
-            className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white $border-gray-300 dark:border-gray-600
+          className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white $border-gray-300 dark:border-gray-600
             `}
+            type="tel"
+          value={`${user?.profile_details?.phone_number}`}
+          disabled
           />
         </div>
       </div>
@@ -434,7 +433,16 @@ const LiabilityForm = () => {
             </Button>}
 
 </div>
+
+
     </form>
+
+      <ErrorModal
+            isErrorModalOpen={isErrorModalOpen}
+            setErrorModalState={() => setErrorModalState(false)}
+            subheading={errorModalMessage || "Please check your inputs and try again."}
+          />
+    </>
   )
 }
 

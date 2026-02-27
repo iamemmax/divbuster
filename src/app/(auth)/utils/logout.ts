@@ -1,9 +1,6 @@
-import { tokenStorage } from "./index";
-import { deleteAxiosDefaultToken } from "@/lib/axios";
 
 export const performLogout = () => {
   try {
-    console.log("Performing logout...");
     
     // Explicitly clear DIVBUSTER tokens with correct capitalization
     localStorage.removeItem("DIVBUSTERTOKEN");
@@ -13,7 +10,6 @@ export const performLogout = () => {
     
     return true;
   } catch (error) {
-    console.error("Error during logout:", error);
     return false;
   }
 };

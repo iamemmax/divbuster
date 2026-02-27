@@ -1,17 +1,16 @@
 "use client"
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
   ErrorModal,
-  Input,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Textarea,
 } from "@/components/core";
 import { CaretDown } from "@/components/icons";
 import { useAuth } from "@/contexts/authentication";
@@ -86,10 +85,11 @@ const ProfilePictureSection: React.FC<ProfilePictureSectionProps> = ({
       <div className="flex flex-wrap  items-start  md:items-center gap-4">
         <div className="flex items-center gap-3">
           <div className="relative shrink-0">
-            <img
+            <Image
               src={profileImage}
               alt="Profile"
-              className="w-12 h-12 md:w-20 md:h-20 shrink-0 rounded-full object-cover border-1 border-gray-200"
+              width={80}
+              height={80}
             />
           </div>
           <div className="">

@@ -36,9 +36,9 @@ const {user}= authState
                   <Image
                     src="/images/dashboard/map3.png"
                     alt={bookingDetails?.created_on as string}
-                    fill
                     className="object-cover"
                     sizes="100vw"
+                    fill
                     priority
                   />
                 </div>
@@ -81,7 +81,7 @@ const {user}= authState
                   </h4>
                   <ul className="text-gray-600 dark:text-white">
                     <li className="flex items-center gap-2">
-                      <div className="w-[6px] h-[6px] bg-[#667085] dark:text-white rounded-full"></div>
+                      <div className="size-[6px] bg-[#667085] dark:text-white rounded-full"></div>
                      {t.gear}
                     </li>
                   </ul>
@@ -94,15 +94,15 @@ const {user}= authState
                   </h4>
                   <ul className="text-gray-600 dark:text-white space-y-2">
                     <li className="flex items-center gap-2">
-                      <div className="w-[6px] h-[6px] bg-[#667085] rounded-full "></div>
+                      <div className="size-[6px] bg-[#667085] rounded-full "></div>
                       {t.towel}
                     </li>
                     <li className="flex items-center gap-2">
-                      <div className="w-[6px] h-[6px] bg-[#667085] rounded-full "></div>
+                      <div className="size-[6px] bg-[#667085] rounded-full "></div>
                       {t.swimwear}
                     </li>
                     <li className="flex items-center gap-2">
-                      <div className="w-[6px] h-[6px] bg-[#667085] rounded-full "></div>
+                      <div className="size-[6px] bg-[#667085] rounded-full "></div>
                       {t.goodMood}
                     </li>
                   </ul>
@@ -115,9 +115,9 @@ const {user}= authState
                       {t.price}
                     </span>
                     <input
-                      readOnly
-                      className="w-full px-4 py-2 border outline-none dark:border-gray-600 rounded-lg bg-white-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400"
+                      className="w-full px-4 py-2 border outline-none dark:border-gray-600 rounded-lg bg-white-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400"
                       value={bookingDetails?.event.amount}
+                      readOnly
                     />
                   </div>
 
@@ -126,9 +126,9 @@ const {user}= authState
                       {t.serviceFee}
                     </span>
                     <input
-                      readOnly
-                      className="w-full px-4 py-2 border outline-none dark:border-gray-600 rounded-lg bg-white-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400"
+                      className="w-full px-4 py-2 border outline-none dark:border-gray-600 rounded-lg bg-white-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400"
                       value={bookingDetails?.event?.service_charge}
+                      readOnly
                     />
                   </div>
 
@@ -137,9 +137,9 @@ const {user}= authState
                       {t.totalFee}
                     </span>
                     <input
-                      readOnly
-                      className="w-full px-4 py-2 border outline-none dark:border-gray-600 rounded-lg bg-white-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400"
+                      className="w-full px-4 py-2 border outline-none dark:border-gray-600 rounded-lg bg-white-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400"
                       value={bookingDetails?.amount}
+                      readOnly
                     />
                   </div>
                 </div>

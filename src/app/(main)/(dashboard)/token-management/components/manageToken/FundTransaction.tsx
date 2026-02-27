@@ -1,5 +1,4 @@
 import React from 'react';
-import { CreditCard } from 'lucide-react';
 import CardIcon from '@/app/icons/(dashboard)/CardIcon';
 
 interface FundTransaction {
@@ -117,13 +116,13 @@ const RecentFundTransactions = () => {
           <div key={date} className="space-y-4">
             {/* Date Header */}
                 <div className="flex items-center w-full ">
-        <div className="flex-grow h-px bg-gray-300"></div>
+        <div className="grow h-px bg-gray-300"></div>
         <div className="px-4">
           <span className="text-gray-500 text-base font-medium whitespace-nowrap">
             {date}
           </span>
         </div>
-        <div className="flex-grow h-px bg-gray-300"></div>
+        <div className="grow h-px bg-gray-300"></div>
       </div>
             {/* Transactions for this date */}
             <div className="space-y-4">
@@ -131,7 +130,7 @@ const RecentFundTransactions = () => {
                 <div key={transaction.id} className="flex items-center justify-between py-4 border-b border-gray-100 last:border-b-0">
                   <div className="flex items-center space-x-4">
                     {/* Icon */}
-                    <div className="w-[2.1875rem] h-[2.1875rem] bg-[#132346] rounded-10 flex items-center justify-center">
+                    <div className="size-[2.1875rem] bg-[#132346] rounded-10 flex items-center justify-center">
                       <CardIcon />
                     </div>
                     

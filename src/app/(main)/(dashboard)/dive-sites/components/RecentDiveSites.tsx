@@ -1,18 +1,16 @@
 "use client";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   diveSiteResult,
   divSitesProp,
-  useFetchDiveSites,
-} from "../../api/div-sites/fetch-dive-sites";
+} from "../../api/div-sites/fetchdivesites";
 import Image from "next/image";
 import { Button, ErrorModal } from "@/components/core";
 import { useFetchCountry } from "../../api/fetchCountry";
 import HeartIcon from "@/app/icons/(dashboard)/HeartIcon";
 import ShareIcon2 from "@/app/icons/(dashboard)/ShareIcon2";
 import MessageIcon2 from "@/app/icons/(dashboard)/MessageIcon2";
-import LikeIcon from "@/app/icons/(dashboard)/LikeIcon";
-import { useAddFouriteDivSIte } from "../../api/div-sites/add-favorite-dive-site";
+import { useAddFouriteDivSIte } from "../../api/div-sites/addFavoriteDiveSite";
 import { useAuth } from "@/contexts/authentication";
 import { SmallSpinner } from "@/icons/core";
 import {
@@ -146,7 +144,6 @@ const RecentDiveSites = ({
       try {
         await navigator.share(shareData);
       } catch (error) {
-        console.log('Error sharing:', error);
       }
     } else {
       await navigator.clipboard.writeText(shareUrl);
@@ -208,14 +205,14 @@ const router = useRouter()
                 <div
                   key={`${item.id}-${idx}`}
                   onClick={()=>router.push(`/dive-sites/${item?.slug}`)}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-2 px-2 md:px-4 border border-gray-200 dark:border-gray-700"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-2 md:px-4 border border-gray-200 dark:border-gray-700"
                 >
                   <div 
                     className="relative rounded-lg overflow-hidden min-h-[250px] bg-cover bg-center "
                     style={{ backgroundImage: "url('/images/dashboard/profile-Location.png')" }}
                   >
                     <div className="absolute inset-0 bg-black bg-opacity-40" />
-                    <div className="absolute top-0 text-white py-4 px-3 md:px-2 2xl:px-[0.75rem] w-full  flex justify-center flex-col  h-full">
+                    <div className="absolute top-0 text-white py-4 px-3 md:px-2 2xl:px-3 size-full  flex justify-center flex-col">
                       <div>
                         <div className="flex items-center flex-wrap gap-[10px] md:gap-[20px]">
                           <div className="relative h-[30px] xl:h-[40px] w-[40px] xl:w-[52px] overflow-hidden rounded">
@@ -223,15 +220,15 @@ const router = useRouter()
                               <Image
                                 src={`https://flagcdn.com/w40/${getCountry(item?.country)?.alpha2code?.toLowerCase()}.png`}
                                 alt={`${getCountry(item?.country)?.name} flag`}
-                                fill
                                 className="object-cover rounded"
                                 onError={(e) => {
                                   const target = e.target as HTMLImageElement;
                                   target.src = '/images/placeholder-flag.png';
                                 }}
+                                fill
                               />
                             ) : (
-                              <div className="w-full h-full bg-gray-300 rounded flex items-center justify-center">
+                              <div className="size-full bg-gray-300 rounded flex items-center justify-center">
                                 <span className="text-xs text-gray-600">?</span>
                               </div>
                             )}
@@ -281,7 +278,7 @@ const router = useRouter()
                         className={`${myFavourite?.includes(item?.id)
                             ? "bg-[#F7931D] text-white"
                             : "bg-white text-[#4D5869]"
-                          } h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-2xl shrink-0 p-0 font-archivo text-xs font-medium flex items-center gap-[.3125rem]`}
+                          } h-[2.2rem] w-8 md:h-[2.8125rem] md:w-[3.75rem] rounded-2xl shrink-0 p-0 font-archivo text-xs font-medium flex items-center gap-[.3125rem]`}
                         onClick={(e) => {
                           e.stopPropagation();
                           handleSave(item);
@@ -302,7 +299,7 @@ const router = useRouter()
                           e.stopPropagation();
                           handleRatingClick(item);
                         }}
-                        className="bg-[#F9FAFB] hover:bg-gray-100 relative h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center"
+                        className="bg-[#F9FAFB] hover:bg-gray-100 relative h-[2.2rem] w-8 md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center"
                       >
                         <div className="relative">
                           <MessageIcon2 />
@@ -314,7 +311,7 @@ const router = useRouter()
                       <Button 
                         title={t.share} 
                         onClick={(e) => handleShare(item, e)}
-                        className="bg-[#F9FAFB] hover:bg-gray-100 p-0 h-[2.2rem] w-[2rem] md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center"
+                        className="bg-[#F9FAFB] hover:bg-gray-100 p-0 h-[2.2rem] w-8 md:h-[2.8125rem] md:w-[3.75rem] rounded-xl flex justify-center items-center"
                       >
                         <ShareIcon2 />
                       </Button>

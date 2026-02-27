@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
-import { diveSiteResult } from '../../api/div-sites/fetch-dive-sites'
+import type L from 'leaflet'
+import { diveSiteResult } from '../../api/div-sites/fetchdivesites'
 import { useRouter } from 'next/navigation'
 import RatingModal from '../../dive-sites/components/RatingModal'
 
@@ -11,7 +12,8 @@ interface DiveSiteLeafletMapProps {
 
 const DiveSiteLeafletMap = ({ diveSites, isLoading }: DiveSiteLeafletMapProps) => {
     const mapRef = useRef<HTMLDivElement>(null)
-    const mapInstance = useRef<any>(null)
+    const mapInstance = useRef<L.Map | null>(null)
+    const LRef = useRef<typeof L | null>(null)
     const router = useRouter()
     const [ratingModalOpen, setRatingModalOpen] = useState(false)
     const [selectedDiveSite, setSelectedDiveSite] = useState<diveSiteResult | null>(null)
@@ -21,6 +23,7 @@ const DiveSiteLeafletMap = ({ diveSites, isLoading }: DiveSiteLeafletMapProps) =
             if (!mapRef.current || mapInstance.current) return
 
             const L = (await import('leaflet')).default
+            LRef.current = L
 
             const map = L.map(mapRef.current).setView([40.73061, -73.935242], 10)
 
@@ -54,17 +57,17 @@ const DiveSiteLeafletMap = ({ diveSites, isLoading }: DiveSiteLeafletMapProps) =
             }
         }
 
-        console.log('Dive sites data:', diveSites?.length || 0, diveSites)
-        
-        if (!mapInstance.current || !diveSites?.length) {
-            console.log('Map not ready or no dive sites')
+
+        if (!mapInstance.current || !diveSites?.length || !LRef.current) {
             return
         }
 
-        const L = require('leaflet')
-        
+        const L = LRef.current
+
+        if (!mapInstance.current) return
+
         mapInstance.current.eachLayer((layer: any) => {
-            if (layer instanceof L.Marker) {
+            if (layer instanceof L.Marker && mapInstance.current) {
                 mapInstance.current.removeLayer(layer)
             }
         })
@@ -74,12 +77,10 @@ const DiveSiteLeafletMap = ({ diveSites, isLoading }: DiveSiteLeafletMapProps) =
             const lng = Number(site?.lon)
             const isValid = site?.lag && site?.lon && !isNaN(lat) && !isNaN(lng)
             if (!isValid) {
-                console.log('Invalid site coordinates:', site.title, { lat: site.lag, lng: site.lon })
             }
             return isValid
         })
         
-        console.log('Valid dive sites:', validSites.length, validSites)
 
         if (validSites.length > 0) {
             const createCustomIcon = () => {
@@ -108,7 +109,6 @@ const DiveSiteLeafletMap = ({ diveSites, isLoading }: DiveSiteLeafletMapProps) =
                 const lat = Number(site.lag)
                 const lng = Number(site.lon)
                 
-                console.log(`Creating marker ${index} for ${site.title} at [${lat}, ${lng}]`)
                 
                 try {
                     const rating = site.average_rating || 0
@@ -135,38 +135,36 @@ const DiveSiteLeafletMap = ({ diveSites, isLoading }: DiveSiteLeafletMapProps) =
                         </div>
                     `
                     
-                    const marker = L.marker([lat, lng], { icon: createCustomIcon() })
-                        .addTo(mapInstance.current)
+                    const _marker = L.marker([lat, lng], { icon: createCustomIcon() })
+                        .addTo(mapInstance.current!)
                         .bindPopup(tooltipContent)
                     
-                    console.log(`Marker ${index} added successfully for ${site.title}`)
                 } catch (error) {
                     console.error(`Error creating marker ${index} for ${site.title}:`, error)
                 }
             })
 
-            const group = new L.featureGroup(
-                validSites.map(site => L.marker([Number(site.lag), Number(site.lon)]))
-            )
-            mapInstance.current.fitBounds(group.getBounds().pad(0.1))
+            const markers = validSites.map(site => L.marker([Number(site.lag), Number(site.lon)]))
+            const group = L.featureGroup(markers)
+            mapInstance.current!.fitBounds(group.getBounds().pad(0.1))
         }
     }, [diveSites])
 
     return (
-        <div className="relative w-full h-[83vh] mt-[4rem]">
+        <div className="relative w-full h-[83vh] mt-16">
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-            <style jsx global>{`
+            <style jsx>{`
                 .custom-dive-icon {
                     background: transparent !important;
                     border: none !important;
                 }
             `}</style>
-            <div ref={mapRef} className="w-full h-full" id={`dive-map-${Math.random().toString(36).substr(2, 9)}`} />
+            <div ref={mapRef} className="size-full" id={`dive-map-${Math.random().toString(36).substr(2, 9)}`} />
             
             {isLoading && (
                 <div className="absolute inset-0 bg-white bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 flex items-center justify-center z-[1000]">
                     <div className="text-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+                        <div className="animate-spin rounded-full size-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
                         <p className="text-gray-600 dark:text-gray-300">Loading nearest dive sites...</p>
                     </div>
                 </div>

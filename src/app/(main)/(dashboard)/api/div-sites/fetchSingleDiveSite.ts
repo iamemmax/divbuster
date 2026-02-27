@@ -54,7 +54,7 @@ const fetchSingleDiveSite = async (slug: string):Promise<singlediveProp> => {
 };
 
 
-// export const usefetchBuddyProfile = (id:string) => {
+// export const useFetchBuddyProfile = (id:string) => {
 //   return useQuery({
 //     queryKey: ["buddy-profile",id],
 //     queryFn: ()=>fetchBuddyProfile(id),

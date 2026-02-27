@@ -20,9 +20,6 @@ export default function LinkedInCallback() {
         const code = urlParams.get('code');
         const state = urlParams.get('state');
         const error = urlParams.get('error');
-
-        console.log('LinkedIn callback params:', { code, state, error });
-
         if (error) {
           console.error('LinkedIn OAuth error:', error);
           setProcessed(true);

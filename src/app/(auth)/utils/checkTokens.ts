@@ -11,18 +11,7 @@ export const checkTokens = () => {
     const healaCredentials = localStorage.getItem("HEALA_SAVED_LOGIN_CREDENTIALS");
     
     // Log the results
-    console.log("Token check results:", {
-      divbuster: {
-        token: divbusterToken ? "exists" : "not found",
-        tokens: divbusterTokens ? "exists" : "not found",
-        credentials: divbusterCredentials ? "exists" : "not found"
-      },
-      heala: {
-        token: healaToken ? "exists" : "not found",
-        tokens: healaTokens ? "exists" : "not found",
-        credentials: healaCredentials ? "exists" : "not found"
-      }
-    });
+
     
     // Return the results
     return {
@@ -38,7 +27,6 @@ export const checkTokens = () => {
       }
     };
   } catch (error) {
-    console.error("Error checking tokens:", error);
     return null;
   }
 };

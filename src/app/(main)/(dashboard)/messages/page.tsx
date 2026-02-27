@@ -13,7 +13,7 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/core";
 import { chatMessagestranslations } from "../../translation/chatMessagesTranslation";
 import { useLanguage } from "@/hooks/useLanguage";
-import { usefetchBuddyProfile } from "../api/buddy/fetchBuddyProfile";
+import { useFetchBuddyProfile } from "../api/buddy/fetchBuddyProfile";
 
 
 
@@ -32,7 +32,7 @@ useEffect(() => {
   
   const [showNewMessageModal, setShowNewMessageModal] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState<resentChatProp | undefined>();
-  const [groupList, setGroupList] = useState<groupChatResult[] | undefined>();
+  const [_groupList, setGroupList] = useState<groupChatResult[] | undefined>();
   const [selectedGroup, setSelectedGroup] = useState<groupChatResult | null>(null);
   const [showAddGroupMemberModal, setShowAddGroupMemberModal] = useState(false);
   const [showCreateGroupChat, setShowCreateGroupChat] = useState(false);
@@ -41,7 +41,7 @@ useEffect(() => {
   const tabs = [t.recent, t.groups];
 
   const { data: recentChatList, isLoading } = useFetchSingleChatList(String(language));
-  const { data: userProfile } = usefetchBuddyProfile(userId);
+  const { data: userProfile } = useFetchBuddyProfile(userId);
 
   // Handle userId parameter to start conversation
   useEffect(() => {
@@ -73,7 +73,7 @@ useEffect(() => {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`whitespace-nowrap text-sm md:text-base py-[0.625rem] px-6 transition-colors duration-200 ${
+                  className={`whitespace-nowrap text-sm md:text-base py-2.5 px-6 transition-colors duration-200 ${
                     activeTab === tab
                       ? "bg-white dark:bg-gray-700 text-[#F7931D] dark:text-orange-400 font-semibold rounded-lg shadow-sm font-archivo"
                       : "border-transparent font-medium text-[#667085] dark:text-gray-400 hover:border-gray-300 dark:hover:text-gray-200"
@@ -95,7 +95,7 @@ useEffect(() => {
                       className="flex lg:hidden items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                       aria-label={t.back}
                     >
-                      <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                      <ArrowLeft className="size-5 text-gray-600 dark:text-gray-300" />
                       <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
                         {t.back}
                       </span>
@@ -119,7 +119,7 @@ useEffect(() => {
                       className="flex lg:hidden items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                       aria-label={t.back}
                     >
-                      <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                      <ArrowLeft className="size-5 text-gray-600 dark:text-gray-300" />
                       <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
                         {t.back}
                       </span>

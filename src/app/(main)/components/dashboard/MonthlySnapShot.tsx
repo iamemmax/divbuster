@@ -1,10 +1,6 @@
 "use client"
-import React, { useState, useEffect, useMemo } from "react";
-import { MonthlyTabs } from "@/components/core/MonthlyTabs";
-import DateRangePicker from "@/components/core/DateRangePicker";
-import { useAuth } from "@/contexts/authentication";
+import React, { useState, useMemo } from "react";
 import DashboardIcon from "@/app/icons/(dashboard)/Dashbaordicon";
-import { ToggleSwitch } from "@/components/core/Toggle";
 import Link from "next/link";
 import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 import { MonthlySnapShotTranslations } from "../../translation/dashboardTranslation";
@@ -18,64 +14,16 @@ export interface CustomDateRange {
 interface prop{
    user: User | null
 }
-type Language = "en" | "es" | "fr" | "nl";
 
 const MonthlySnapShot = ({user}:prop) => {
-  const [activeTab, setActiveTab] = useState<"this-month" | "last-month" | "custom">("this-month");
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [customDateRange, setCustomDateRange] = useState<CustomDateRange>({
+  const [activeTab] = useState<"this-month" | "last-month" | "custom">("this-month");
+  const [customDateRange] = useState<CustomDateRange>({
     startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     endDate: new Date(),
   });
-  // const [toggle, setToggle] = useState(false);
-
-  const handleTabChange = (tab: "this-month" | "last-month" | "custom") => {
-    console.log('Tab changed to:', tab);
-    setActiveTab(tab);
-    if (tab === 'custom') {
-      setShowDatePicker(true);
-    } else {
-      // TODO: Fetch filtered data based on tab
-      console.log('Should fetch data for:', tab);
-    }
-  };
-
-  // Calculate date ranges for filtering
-  const getDateRange = () => {
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth();
-    
-    switch (activeTab) {
-      case 'this-month':
-        return {
-          start: new Date(currentYear, currentMonth, 1),
-          end: now
-        };
-      case 'last-month':
-        return {
-          start: new Date(currentYear, currentMonth - 1, 1),
-          end: new Date(currentYear, currentMonth, 0)
-        };
-      case 'custom':
-        return {
-          start: customDateRange.startDate,
-          end: customDateRange.endDate
-        };
-      default:
-        return {
-          start: new Date(currentYear, currentMonth, 1),
-          end: now
-        };
-    }
-  };
 
   // Get filtered stats based on active tab
   const getFilteredStats = () => {
-    // For now, return the same data but with debug info
-    // TODO: Replace with actual API call to fetch filtered data
-    const dateRange = getDateRange();
-    
     return {
       dives: user?.dashboard_analysis?.dives || 0,
       bottom_time: user?.dashboard_analysis?.bottom_time || 0,

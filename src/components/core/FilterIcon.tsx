@@ -12,8 +12,8 @@ interface FilterIconProps {
 }
 
 export const FilterIcon: React.FunctionComponent<FilterIconProps> =
-  React.forwardRef((props, _ref: any) => {
-    const { id, className, height, width, isDark } = props;
+  React.forwardRef<SVGSVGElement, FilterIconProps>((props, _ref) => {
+    const {  } = props;
     return (
       <svg
         className={cn("")}

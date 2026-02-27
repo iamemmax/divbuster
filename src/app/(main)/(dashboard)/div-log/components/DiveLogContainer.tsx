@@ -1,7 +1,7 @@
 "use client";
 import EditDiveLogModal from './EditDiveLogModal';
 import Image from "next/image";
-import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import React, { useEffect,  useState, useCallback } from "react";
 
 import { useRouter } from "next/navigation";
 import slugify from "react-slugify";
@@ -20,11 +20,11 @@ import SuggestedBuddies from "../../div-buddies/SuggestedBuddies";
 import { useUpdateDiveLogVisibility } from "../../api/div-logs/update/updateDivelogVisibility";
 import { diveLogContainerTranslations } from "@/app/(main)/translation/diveLogTranslation";
 import { capitalizeFirstLetter } from "@/utils";
-import { diveResult, useFetchDiveLogs } from "../../api/div-logs/fetchDivLogs";
+import {  useFetchDiveLogs } from "../../api/div-logs/fetchDivLogs";
 import { useLanguage } from "@/hooks/useLanguage";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import DiveLogSkeleton from './DiveLogSkeleton';
-import toast from 'react-hot-toast';
+import { diveResult } from '../../api/types/buddies/diveLogTypes';
 
 export interface VisibilityOption {
   value: string;
@@ -67,9 +67,7 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
     setEditModalOpen(true);
   };
 
-  const handleEditSave = (data: { name: string; start_date: string; end_date: string }) => {
-    console.log('Saving edit:', data, 'for item:', editingItem?.id);
-    toast.success('Dive log updated successfully');
+  const handleEditSave = (_data: { name: string; start_date: string; end_date: string }) => {
     setEditModalOpen(false);
     setEditingItem(null);
   };
@@ -274,10 +272,10 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                       <div className="relative shrink-0 md:h-[60px] md:w-[60px] h-[40px] w-[40px] rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
                         {user?.profile_details?.profile_picture ? (
                           <Image
-                            src={user.profile_details.profile_picture}
-                            alt="Profile"
-                            fill
-                            className="object-cover rounded-full"
+                          alt="Profile"
+                          className="object-cover rounded-full"
+                          src={user.profile_details.profile_picture}
+                          fill
                           />
                         ) : (
                           <span className="text-white text-base font-semibold font-archivo">
@@ -312,15 +310,15 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                            {/* Visibility Dropdown */}
                         <div className="relative" data-dropdown>
                           <button
+                          className={`flex items-center space-x-2 px-4 py-2 border rounded-lg cursor-pointer hover:opacity-80 transition-opacity focus:outline-none disabled:opacity-50 ${
+                            getColorClasses(currentOption.color).bg
+                          } ${getColorClasses(currentOption.color).border}`}
                             data-dropdown
+                            disabled={isItemUpdating}
                             onClick={(e) => {
                               e.stopPropagation();
                               handleToggle(itemId);
                             }}
-                            disabled={isItemUpdating}
-                            className={`flex items-center space-x-2 px-4 py-2 border rounded-lg cursor-pointer hover:opacity-80 transition-opacity focus:outline-none disabled:opacity-50 ${
-                              getColorClasses(currentOption.color).bg
-                            } ${getColorClasses(currentOption.color).border}`}
                           >
                             {isItemUpdating ? (
                               <SmallSpinner
@@ -362,17 +360,17 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                             <div className="absolute top-full -left-3 mt-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg py-1 z-50">
                               {visibilityOptions.map((option) => (
                                 <button
-                                  key={option.value}
-                                  data-dropdown
+                                className={`w-full flex items-center space-x-2 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 ${
+                                  currentVisibility === option.value
+                                  ? "bg-gray-50 dark:bg-gray-700"
+                                  : ""
+                                }`}
+                                data-dropdown
+                                key={option.value}
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     handleSelect({ id: item.id, option });
                                   }}
-                                  className={`w-full flex items-center space-x-2 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 ${
-                                    currentVisibility === option.value
-                                      ? "bg-gray-50 dark:bg-gray-700"
-                                      : ""
-                                  }`}
                                 >
                                   <div className={getColorClasses(option.color).icon}>
                                     {option.icon}
@@ -414,16 +412,10 @@ const DiveLogContainer = ({ data_type, date_from, date_to }: Prop) => {
                             <div className="flex items-center flex-wrap gap-[10px] xl:gap-[20px] pr-3">
                             <div className="relative h-[30px] w-[42px] md:h-[40px] rounded md:w-[52px]">
                               <Image
-                                src={`https://flagcdn.com/${getCountry(item?.dive_plan?.dive_site?.country)?.alpha2code?.toLowerCase()}.svg`}
-                                alt="img"
-                                fill
+                                alt={`${getCountry(item?.dive_plan?.dive_site?.country)?.name} flag`}
                                 className="object-cover rounded"
-                              />
-
-                              <img
                                 src={`https://flagcdn.com/${getCountry(item?.dive_plan?.dive_site?.country)?.alpha2code?.toLowerCase()}.svg`}
-                                alt={`${getCountry(item?.id)?.name} flag`}
-                                className="w-5 h-5 rounded-sm object-cover"
+                                fill
                               />
                             </div>
                               <p className="text-white font-archivo max-w-[220px]  md:max-w-[600px] font-semibold text-xxs md:text-base 2xl:text-xl">

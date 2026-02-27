@@ -7,13 +7,12 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
+import Image from "next/image";
 import EmptyMessage from "../EmptyMessage";
 import {
-  Archive,
-  Paperclip,
+
   Smile,
-  ArrowLeft,
-  Image,
+
   Video,
   FileTextIcon,
   ImageIcon,
@@ -67,11 +66,11 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
   const [showViewGroupMemberModal, setShowViewNewGroupModal] = useState(false);
   const [optimisticMessages, setOptimisticMessages] = useState<OptimisticMessage[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<FileUpload[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
+  const [_isTyping, setIsTyping] = useState(false);
 
   // Refs
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const _fileInputRef = useRef<HTMLInputElement>(null);
+  const _containerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -89,7 +88,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
     error,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage,
+    // isFetchingNextPage,
   } = useFetchGroupChatMessages(groupId);
 
   const { mutate: handleSendMessages, isLoading: isSending } = useSendGroupChatMessage();
@@ -201,11 +200,11 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
           upload: uploadFiles,
         },
         {
-          onSuccess: (response) => {
+          onSuccess: () => {
             setOptimisticMessages((prev) => prev.filter((msg) => msg.id !== optimisticId));
             setSelectedFiles([])
           },
-          onError: (error) => {
+          onError: () => {
             setOptimisticMessages((prev) => prev.filter((msg) => msg.id !== optimisticId));
             setMessage(messageToSend);
             setSelectedFiles(filesToUpload);
@@ -476,15 +475,15 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
   return (
     <div className="flex flex-col h-full border rounded-lg bg-[#F9FAFB] dark:bg-gray-900 dark:border-gray-700 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-white dark:bg-gray-800 dark:border-gray-700 flex-shrink-0">
+      <div className="flex items-center justify-between p-4 border-b bg-white dark:bg-gray-800 dark:border-gray-700 shrink-0">
         <div className="flex items-center space-x-3">
           <div className="relative">
             <img
               src={selectedGroup?.group?.image}
               alt={selectedGroup?.group?.name}
-              className="w-10 h-10 rounded-full object-cover"
+              className="size-10 rounded-full object-cover"
             />
-            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
+            <div className="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
           </div>
           <div>
             <h2 className="font-semibold text-gray-900 dark:text-gray-100">
@@ -515,7 +514,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
       <div className="flex-1 overflow-hidden bg-white dark:bg-gray-900">
         {isLoading ? (
           <div className="flex justify-center items-center h-32">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+            <div className="animate-spin rounded-full size-8 border-b-2 border-orange-500"></div>
           </div>
         ) : error ? (
           <div className="text-center text-red-500 py-8">
@@ -534,7 +533,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
               hasMore={hasNextPage || false}
               loader={
                 <div className="flex justify-center py-2">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500"></div>
+                  <div className="animate-spin rounded-full size-6 border-b-2 border-orange-500"></div>
                 </div>
               }
               scrollableTarget="group-messages-container"
@@ -565,7 +564,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                     className={`flex ${isCurrentUser ? "justify-end" : "items-start space-x-3"}`}
                   >
                     {!isCurrentUser && (
-                      <div className="w-10 h-10 uppercase rounded-full bg-gray-300 flex items-center justify-center text-black font-semibold">
+                      <div className="size-10 uppercase rounded-full bg-gray-300 flex items-center justify-center text-black font-semibold">
                         {`${selectedGroup?.user?.first_name?.[0] || ""}${selectedGroup?.user?.last_name?.[0] || ""}`}
                       </div>
                     )}
@@ -615,7 +614,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                             ) : /* Handle optimistic document placeholders */
                             msg.attachment.startsWith("document:") ? (
                               <div className="flex items-center space-x-2 p-2 bg-gray-100 dark:bg-gray-700 rounded">
-                                <FileTextIcon className="h-4 w-4 text-blue-500" />
+                                <FileTextIcon className="size-4 text-blue-500" />
                                 <span className="text-sm text-gray-700 dark:text-gray-300">
                                   {msg.attachment.replace("document:", "")}
                                 </span>
@@ -624,25 +623,26 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                             msg.attachment.match(/\.(jpeg|jpg|png|gif|webp)$/i) ||
                               msg.attachment.includes("/image/") ||
                               msg.attachment.startsWith("data:image/") ? (
-                              <img
-                                src={msg.attachment}
-                                alt="attachment"
-                                className="max-w-xs rounded-lg cursor-pointer"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = "none";
-                                }}
-                              />
+                              <div className="relative max-w-xs rounded-lg overflow-hidden cursor-pointer">
+                                <Image
+                                  src={msg.attachment}
+                                  alt="attachment"
+                                  width={300}
+                                  height={300}
+                                  className="rounded-lg object-cover"
+                                />
+                              </div>
                             ) : /* Handle video files from API */
                             msg.attachment.match(/\.(mp4|webm|ogg|avi|mov)$/i) ||
                               msg.attachment.includes("/video/") ||
                               msg.attachment.startsWith("data:video/") ? (
                               <video
                                 src={msg.attachment}
-                                controls
                                 className="max-w-xs rounded-lg"
                                 onError={(e) => {
                                   e.currentTarget.style.display = "none";
                                 }}
+                                controls
                               />
                             ) : /* Handle document files from API */
                             msg.attachment.match(/\.(pdf|docx?|xlsx?|pptx?|txt|zip|rtf)$/i) ||
@@ -653,19 +653,19 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                               <div className="flex items-center space-x-2 p-2 bg-gray-100 dark:bg-gray-700 rounded">
                                 {/* File type icons */}
                                 {(msg.attachment.match(/\.pdf$/i) || msg.attachment.includes("application/pdf")) && (
-                                  <PdfLogo className="h-4 w-4 text-red-500" />
+                                  <PdfLogo className="size-4 text-red-500" />
                                 )}
                                 {(msg.attachment.match(/\.docx?$/i) || msg.attachment.includes("application/msword") || msg.attachment.includes("application/vnd.openxmlformats-officedocument.wordprocessingml")) && (
-                                  <WordLogo className="h-4 w-4 text-blue-600" />
+                                  <WordLogo className="size-4 text-blue-600" />
                                 )}
                                 {(msg.attachment.match(/\.xlsx?$/i) || msg.attachment.includes("application/vnd.openxmlformats-officedocument.spreadsheetml") || msg.attachment.includes("application/vnd.ms-excel")) && (
-                                  <ExcelLogo className="h-4 w-4 text-green-600" />
+                                  <ExcelLogo className="size-4 text-green-600" />
                                 )}
                                 {(msg.attachment.match(/\.pptx?$/i) || msg.attachment.includes("application/vnd.openxmlformats-officedocument.presentationml") || msg.attachment.includes("application/vnd.ms-powerpoint")) && (
-                                  <ExcelLogo className="h-4 w-4 text-orange-500" />
+                                  <ExcelLogo className="size-4 text-orange-500" />
                                 )}
                                 {!msg.attachment.match(/\.(pdf|docx?|xlsx?|pptx?)$/i) && (
-                                  <FileTextIcon className="h-4 w-4 text-blue-500" />
+                                  <FileTextIcon className="size-4 text-blue-500" />
                                 )}
 
                                 <a
@@ -685,7 +685,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                                 rel="noopener noreferrer"
                                 className="text-sm underline text-blue-500 hover:text-blue-600 flex items-center space-x-2"
                               >
-                                <FileTextIcon className="h-4 w-4" />
+                                <FileTextIcon className="size-4" />
                                 <span>📎 {t.downloadFile}</span>
                               </a>
                             ) : null}
@@ -695,7 +695,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                         {/* Loading overlay only for pending optimistic messages */}
                         {isMessageSending && (
                           <div className="absolute inset-0 bg-black bg-opacity-10 rounded-2xl flex items-center justify-center">
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                            <div className="animate-spin rounded-full size-4 border-b-2 border-white"></div>
                           </div>
                         )}
                       </div>
@@ -721,19 +721,21 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                 className="relative bg-white dark:bg-gray-700 rounded-lg p-2 border"
               >
                 {fileUpload.preview ? (
-                  <img
+                  <Image
                     src={fileUpload.preview}
                     alt="Preview"
-                    className="w-16 h-16 object-cover rounded"
+                    width={64}
+                    height={64}
+                    className="size-16 object-cover rounded"
                   />
                 ) : (
-                  <div className="w-16 h-16 flex items-center justify-center bg-gray-100 dark:bg-gray-600 rounded">
-                    <FileTextIcon className="h-8 w-8 text-gray-500" />
+                  <div className="size-16 flex items-center justify-center bg-gray-100 dark:bg-gray-600 rounded">
+                    <FileTextIcon className="size-8 text-gray-500" />
                   </div>
                 )}
                 <button
                   onClick={() => removeFile(index)}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full size-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
                   aria-label="Remove file"
                 >
                   ×
@@ -751,7 +753,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
       )}
 
       {/* Message Input Section */}
-      <div className="border-t p-4 bg-white dark:bg-gray-800 dark:border-gray-700 flex-shrink-0">
+      <div className="border-t p-4 bg-white dark:bg-gray-800 dark:border-gray-700 shrink-0">
         <div className="flex items-end space-x-2">
           <div className="flex-1 flex items-center relative">
             <textarea
@@ -760,7 +762,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
               placeholder="Send a message"
-              className="w-full px-4 py-3 pr-20 border border-gray-200 dark:border-gray-700 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent overflow-hidden bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 disabled:opacity-50"
+              className="w-full px-4 py-3 pr-20 border border-gray-200 dark:border-gray-700 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent overflow-hidden bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 disabled:opacity-50"
               style={{ minHeight: "44px", maxHeight: "120px" }}
               rows={1}
               disabled={isSending}
@@ -774,7 +776,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                 aria-label="Add emoji"
                 data-emoji-picker-trigger
               >
-                <Smile className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+                <Smile className="size-4 text-gray-500 dark:text-gray-300" />
               </button>
 
               <div className="relative" ref={attachmentMenuRef}>
@@ -796,7 +798,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                       className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-3 transition-colors"
                       onClick={openImageDialog}
                     >
-                      <ImageIcon className="h-4 w-4 text-purple-500" />
+                      <ImageIcon className="size-4 text-purple-500" />
                       <span>{t.image}</span>
                     </button>
                     <button
@@ -804,7 +806,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                       className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-3 transition-colors"
                       onClick={openVideoDialog}
                     >
-                      <Video className="h-4 w-4 text-purple-500" />
+                      <Video className="size-4 text-purple-500" />
                       <span>{t.video}</span>
                     </button>
                     <button
@@ -812,7 +814,7 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
                       className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-3 transition-colors"
                       onClick={openDocumentDialog}
                     >
-                      <FileTextIcon className="h-4 w-4 text-blue-500" />
+                      <FileTextIcon className="size-4 text-blue-500" />
                       <span>{t.document}</span>
                     </button>
                   </div>
@@ -848,9 +850,9 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
             aria-label="Send message"
           >
             {isSending ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+              <div className="animate-spin rounded-full size-4 border-b-2 border-current"></div>
             ) : (
-              <Send className="h-4 w-4" />
+              <Send className="size-4" />
             )}
             <span className="hidden sm:inline">{t.send}</span>
           </button>
@@ -861,25 +863,25 @@ const GroupMessageBox = ({ selectedGroup, groupMembers, setGroupMembers }: Messa
           ref={imageInputRef}
           type="file"
           accept="image/*"
-          multiple
           className="hidden"
           onChange={(e) => handleFileChange(e, "image")}
+          multiple
         />
         <input
           ref={videoInputRef}
           type="file"
           accept="video/*"
-          multiple
           className="hidden"
           onChange={(e) => handleFileChange(e, "video")}
+          multiple
         />
         <input
           ref={documentInputRef}
           type="file"
           accept=".pdf,.doc,.docx,.txt,.rtf"
-          multiple
           className="hidden"
           onChange={(e) => handleFileChange(e, "document")}
+          multiple
         />
       </div>
 

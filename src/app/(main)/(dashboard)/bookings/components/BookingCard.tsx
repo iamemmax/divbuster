@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Share2, ArrowRight } from 'lucide-react';
+// import { Search, Share2, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
 // Type definitions
@@ -16,14 +16,14 @@ interface DiveCardProps {
   onViewPlan?: () => void;
 }
 
-interface DiveData {
-  image: string;
-  location: string;
-  date: string;
-  hostedBy: string;
-  title: string;
-  description: string;
-}
+// interface DiveData {
+//   image: string;
+//   location: string;
+//   date: string;
+//   hostedBy: string;
+//   title: string;
+//   description: string;
+// }
 
 // Reusable Dive Card Component
 export const BookingCard: React.FC<DiveCardProps> = ({ 
@@ -49,9 +49,9 @@ export const BookingCard: React.FC<DiveCardProps> = ({
         <Image
           src={image}
           alt={location}
-          fill
           className="object-cover"
           sizes="100vw"
+          fill
           priority
         />
       </div>

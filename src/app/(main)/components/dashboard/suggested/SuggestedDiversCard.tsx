@@ -1,5 +1,5 @@
 "use client"
-import { Button, LinkButton } from "@/components/core"
+import { Button } from "@/components/core"
 import { SmallSpinner } from "@/icons/core"
 import { cn } from "@/utils/classNames"
 import moment from "moment"
@@ -30,7 +30,7 @@ export function SuggestedDiverCard({
   id,
   name, 
   location, 
-  date, 
+  // date, 
   profileImage, 
   backgroundImage, 
   stats, 
@@ -53,16 +53,16 @@ export function SuggestedDiverCard({
       
       {/* Profile Section */}
       <div className="flex items-start gap-[.625rem] relative">
-        <div className="relative shrink-0 xl:h-[2.4375rem] xl:w-[2.4375rem] w-[2rem] h-[2rem] rounded-full overflow-hidden bg-[#F7931D] flex items-center justify-center ">
+        <div className="relative shrink-0 xl:size-[2.4375rem] size-8 rounded-full overflow-hidden bg-[#F7931D] flex items-center justify-center ">
           {profileImage ? (
             <Image
               alt=""
               src={profileImage}
-              fill
               className="object-cover"
+              fill
             />
           ) : (
-            <span className="text-[#fff] text-base font-semibold font-archivo">
+            <span className="text-white text-base font-semibold font-archivo">
               {name
                 ?.split(" ")
                 .filter(Boolean)
@@ -82,11 +82,11 @@ export function SuggestedDiverCard({
 
       {/* Background Image Card */}
       <div
-        className="relative bg-[#F7931D] h-[240px] mt-1  w-full rounded-[1rem] bg-no-repeat bg-cover"
+        className="relative bg-[#F7931D] h-[240px] mt-1  w-full rounded-2xl bg-no-repeat bg-cover"
         style={{ backgroundImage: backgroundImage ? `url("${backgroundImage}")` : undefined }}
       >
         {/* Black overlay */}
-        <div className="absolute inset-0 bg-black/40 dark:bg-black/80 rounded-[1rem] z-0 transition-colors duration-200" />
+        <div className="absolute inset-0 bg-black/40 dark:bg-black/80 rounded-2xl z-0 transition-colors duration-200" />
 
         {/* Content */}
         <div className="relative flex flex-col items-start justify-between h-full z-10">

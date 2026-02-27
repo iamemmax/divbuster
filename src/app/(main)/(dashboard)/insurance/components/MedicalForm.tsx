@@ -128,7 +128,7 @@ const MedicalForm = () => {
       }
 
       handleSubmitMedical({payload},{
-        onSuccess:(data)=> {
+        onSuccess:()=> {
           toast.success('Medical form submitted successfully')
           queryClient.invalidateQueries({queryKey:['user-details']})
         },
@@ -229,13 +229,13 @@ const MedicalForm = () => {
             {t.firstName} & {t.lastName} *
           </label>
           <input
-          disabled
-           value={`${user?.first_name} ${user?.last_name}`}
-            type="text"
+          value={`${user?.first_name} ${user?.last_name}`}
+           type="text"
             className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white 
              
               
             `}
+            disabled
           />
         </div>
           <div>
@@ -243,11 +243,11 @@ const MedicalForm = () => {
              {t.phoneNumber}
           </label>
           <input
-          disabled
           value={`${user?.profile_details?.phone_number}`}
-            type="tel"
+          type="tel"
             className={`w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white $border-gray-300 dark:border-gray-600
             `}
+            disabled
           />
           {errors.emergencyPhone && <p className="text-red-500 text-sm mt-1">{errors.emergencyPhone.message}</p>}
         </div>
@@ -258,7 +258,7 @@ const MedicalForm = () => {
       {/* Insurance Questions */}
       {isLoading ? (
         <div className="text-center py-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto"></div>
+          <div className="animate-spin rounded-full size-8 border-b-2 border-orange-500 mx-auto"></div>
         </div>
       ) : (
         questionData?.data?.map((question) => (
@@ -282,13 +282,13 @@ const MedicalForm = () => {
                     }}
                     className="sr-only"
                   />
-                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                  <div className={`size-4 rounded-full border-2 flex items-center justify-center ${
                     answers[question?.question_slug] === true 
                       ? 'border-green-500 bg-green-500' 
                       : 'border-gray-300 bg-white'
                   }`}>
                     {answers[question?.question_slug] === true && (
-                      <div className="w-2 h-2 rounded-full bg-white"></div>
+                      <div className="size-2 rounded-full bg-white"></div>
                     )}
                   </div>
                 </div>
@@ -309,13 +309,13 @@ const MedicalForm = () => {
                     }}
                     className="sr-only"
                   />
-                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                  <div className={`size-4 rounded-full border-2 flex items-center justify-center ${
                     answers[question?.question_slug] === false 
                       ? 'border-red-500 bg-red-500' 
                       : 'border-gray-300 bg-white'
                   }`}>
                     {answers[question?.question_slug] === false && (
-                      <div className="w-2 h-2 rounded-full bg-white"></div>
+                      <div className="size-2 rounded-full bg-white"></div>
                     )}
                   </div>
                 </div>

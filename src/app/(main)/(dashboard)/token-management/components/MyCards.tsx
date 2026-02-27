@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
-  MoreHorizontal,
   RefreshCw,
-  Plus,
-  Wifi,
 } from "lucide-react";
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
 import { Button } from "@/components/core";
@@ -16,7 +13,6 @@ import PaypalIcon from "@/app/icons/(dashboard)/card/PaypalIcon";
 import StripeCardIcon from "@/app/icons/(dashboard)/card/StripeCardIcon";
 import AddNewCardForm from "./modals/AddCard";
 import ViewCardDetails from "./modals/ViewCardDetails";
-import AddTokenModal from "./modals/AddTokenModal";
 import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 
 interface prop {
@@ -142,7 +138,7 @@ const CardManagement = ({ user }: prop) => {
             {/* Action Buttons */}
             <div className="flex gap-3">
               <button className="flex items-center gap-2 px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors bg-white">
-                <RefreshCw className="w-4 h-4" />
+                <RefreshCw className="size-4" />
                 Refresh
               </button>
               <button className="flex items-center gap-2 px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors" onClick={()=>setIsOpenCardModal(true)}>
@@ -157,12 +153,12 @@ const CardManagement = ({ user }: prop) => {
                   Recent Deposits
                 </h2>
                 <Button className="text-gray-400 bg-transparent p-0">
-                  <ThreeDot className="w-5 h-5" />
+                  <ThreeDot className="size-5" />
                 </Button>
               </div>
 
               <div className="space-y-4">
-                {deposits.map((deposit, index) => (
+                {deposits.map((deposit) => (
                   <div
                     key={deposit.id}
                     className="flex items-center border-b  p-2 justify-between"
@@ -202,7 +198,7 @@ const CardManagement = ({ user }: prop) => {
                 Your cards
               </h2>
               <button className="text-gray-400 hover:text-gray-600">
-                <ThreeDot className="w-5 h-5" />
+                <ThreeDot className="size-5" />
               </button>
             </div>
 
@@ -214,7 +210,7 @@ const CardManagement = ({ user }: prop) => {
                   {cards?.map((card, idx) => (
                     <div
                       key={idx}
-                      className={`bg-gradient-to-br flex flex-col justify-between from-white/55 to-white/0 rounded-2xl p-6 text-white h-48 relative shadow-xl transition-all duration-300 flex-shrink-0 ${
+                      className={`bg-gradient-to-br flex flex-col justify-between from-white/55 to-white/0 rounded-2xl p-6 text-white h-48 relative shadow-xl transition-all duration-300 shrink-0 ${
                         idx === currentCard
                           ? "w-80 opacity-100"
                           : "w-40 opacity-60"
@@ -246,8 +242,8 @@ const CardManagement = ({ user }: prop) => {
                             <path
                               d="M16.9392 2.07715C18.9866 5.60902 20.0645 9.61543 20.0645 13.6937C20.0645 17.7719 18.9866 21.7784 16.9392 25.3102M11.8072 4.63279C13.4042 7.38765 14.2449 10.5126 14.2449 13.6937C14.2449 16.8747 13.4042 19.9997 11.8072 22.7546M6.9085 6.97933C8.06323 8.9925 8.67115 11.2762 8.67115 13.6008C8.67115 15.9254 8.06323 18.209 6.9085 20.2222M2.00977 9.51174C2.84197 10.7661 3.28317 12.2151 3.28317 13.6937C3.28317 15.1723 2.84197 16.6212 2.00977 17.8756"
                               stroke="white"
-                              stroke-width="2.79928"
-                              stroke-linecap="round"
+                              strokeWidth="2.79928"
+                              strokeLinecap="round"
                             />
                           </svg>
                         )}
@@ -286,18 +282,18 @@ const CardManagement = ({ user }: prop) => {
                 {currentCard > 0 && (
                   <button
                     onClick={prevCard}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors z-10"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 size-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors z-10"
                   >
-                    <ChevronLeft className="w-4 h-4 text-white" />
+                    <ChevronLeft className="size-4 text-white" />
                   </button>
                 )}
 
                 {currentCard < cards.length - 1 && (
                   <button
                     onClick={nextCard}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors z-10"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 size-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors z-10"
                   >
-                    <ChevronRight className="w-4 h-4 text-white" />
+                    <ChevronRight className="size-4 text-white" />
                   </button>
                 )}
               </div>
@@ -327,7 +323,7 @@ const CardManagement = ({ user }: prop) => {
                   <button
                     key={index}
                     onClick={() => goToCard(index)}
-                    className={`w-2 h-2 rounded-full transition-colors ${
+                    className={`size-2 rounded-full transition-colors ${
                       index === currentCard
                         ? "bg-white"
                         : "bg-orange-400"

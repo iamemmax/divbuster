@@ -14,7 +14,6 @@ import { SmallSpinner } from '@/icons/core';
 import { UnsavedChangesModal } from '@/app/(main)/components/shared/modal/UnsavedChangeModal';
 import { DiveLogUpdatedModal } from './DiveLogUpdatedModal';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
-import { Language } from '@/app/(auth)/sign-up/translations';
 import { environmentalConditionTranslations } from '@/app/(main)/translation/diveLogTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 
@@ -64,7 +63,6 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
   isOpen,
   onClose,
   initialData,
-  user
 }) => {
   const {
     isErrorModalOpen,
@@ -157,7 +155,7 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
       : "border-[#E2E8F0] dark:border-gray-600"
   } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem]
   focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors
-  placeholder-gray-400 dark:placeholder-gray-500`}
+  placeholder:text-gray-400 dark:placeholder:text-gray-500`}
 />
 
             {errors.min_water_temperature && (
@@ -186,7 +184,7 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
                   : "border-[#E2E8F0] dark:border-gray-600"
               } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem] 
               focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors 
-              placeholder-gray-400 dark:placeholder-gray-500`}
+              placeholder:text-gray-400 dark:placeholder:text-gray-500`}
             />
             {errors.max_water_temperature && (
               <p className="text-red-500 dark:text-red-400 text-xs mt-1">
@@ -214,7 +212,7 @@ const EnvironmentalCondition: React.FC<EnvironmentalConditionProps> = ({
                   : "border-[#E2E8F0] dark:border-gray-600"
               } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem] 
               focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors 
-              placeholder-gray-400 dark:placeholder-gray-500`}
+              placeholder:text-gray-400 dark:placeholder:text-gray-500`}
             />
             {errors.avg_water_temperature && (
               <p className="text-red-500 dark:text-red-400 text-xs mt-1">

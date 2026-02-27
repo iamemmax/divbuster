@@ -2,7 +2,6 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { singleDiveProp } from '../../api/div-logs/fetchSingleDivLog';
 import moment from 'moment';
-import TrapeziumShape from '@/app/icons/(dashboard)/TrapeziumShape';
 
 interface prop{
   data: singleDiveProp | undefined
@@ -47,22 +46,22 @@ const DiveTimeChart:React.FC<prop> = ({data}) => {
         </div>
 
         {/* Average depth - positioned in the center top area */}
-        <div className="absolute top-28 left-1/2 transform -translate-x-1/2 text-center">
+        <div className="absolute top-28 left-1/2 -translate-x-1/2 text-center">
           <div className="text-base font-semibold text-orange-500 dark:text-orange-400">{data?.data?.dive_depth??0} m</div>
           <div className="text-sm text-orange-500 dark:text-orange-400">Average Depth</div>
         </div>
 
         {/* Dive time - positioned in the center of the flat bottom section */}
-        <div className="absolute top-48 left-1/2 transform -translate-x-1/2 text-center">
+        <div className="absolute top-48 left-1/2 -translate-x-1/2 text-center">
           <div className="text-xl font-bold text-gray-700 dark:text-gray-200">{data?.data?.bottom_time??0}</div>
           <div className="text-sm text-gray-500 dark:text-gray-400">Dive Time</div>
         </div>
 
         {/* Orange surface line */}
-        <div className="absolute top-40  left-4 md:left-20 right-4 md:right-20 h-[2px] bg-orange-400 dark:bg-orange-500"></div>
+        <div className="absolute top-40  inset-x-4 md:inset-x-20 h-[2px] bg-orange-400 dark:bg-orange-500"></div>
 
         {/* Main chart area */}
-        <div className="absolute top-16  left-4 md:left-20 right-4 md:right-20 bottom-16">
+        <div className="absolute inset-y-16  inset-x-4 md:inset-x-20">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={diveData} margin={{ top: 20, right: 10, left: 10, bottom: 20 }}>
               <XAxis 
@@ -91,7 +90,7 @@ const DiveTimeChart:React.FC<prop> = ({data}) => {
         </div>
 
         {/* Create the trapezoid shape manually using CSS */}
-        <div className="absolute top-16 left-4 md:left-20 right-4 md:right-20 bottom-16">
+        <div className="absolute inset-y-16 inset-x-4 md:inset-x-20">
          {/* <TrapeziumShape/> */}
         </div>
       </div>

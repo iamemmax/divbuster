@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
-import AdvancedDetailsModal from './unused/AdvancedDetailsModal';
+import React from 'react';
 import LogSummaryModal from './LogSummaryModal';
-import MoreLogDetailsModal from './unused/MoreLogDetailsModal';
 import { singleDiveProp } from '../../../api/div-logs/fetchSingleDivLog';
 import { Dialog, DialogContent } from "@/components/core";
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
-import { Language } from '@/app/(auth)/sign-up/translations';
 import { diveLogSidebarTranslations } from '@/app/(main)/translation/diveLogTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 
@@ -25,14 +22,14 @@ const EditDiveStatisticsModal: React.FC<EditDiveStatisticsModalProps> = ({
 }) => {
   // const [activeTab, setActiveTab] = useState('log-summary');
 
+  const {language}= useLanguage()
+     const t = diveLogSidebarTranslations[language] || diveLogSidebarTranslations?.en;
+  
   if (!isOpen) return null;
 
   // const handleTabChange = (value: string) => {
   //   setActiveTab(value);
   // };
- const {language}= useLanguage()
-    const t = diveLogSidebarTranslations[language] || diveLogSidebarTranslations?.en;
- 
   return (
    <Dialog open={isOpen}>
       <DialogContent className="sm:max-w-[50.25rem] bg-[#F9FAFB] dark:bg-[#1A1D21] rounded-lg">

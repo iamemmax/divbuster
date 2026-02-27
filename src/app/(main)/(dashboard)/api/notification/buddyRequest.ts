@@ -1,5 +1,5 @@
 import { adminAxios } from "@/lib/axios";
-import moment from "moment";
+// import moment from "moment";
 import { QueryFunctionContext, useInfiniteQuery } from "react-query";
 
 export interface buddyRequest {
@@ -316,12 +316,12 @@ const fetchBuddyRequest = async ({
   }
 
   // Format dates with moment (default: YYYY-MM-DD)
-  const dateTo = filters?.date_to
-    ? moment(filters.date_to).format("YYYY-MM-DD")
-    : undefined;
-  const dateFrom = filters?.date_from
-    ? moment(filters.date_from).format("YYYY-MM-DD")
-    : undefined;
+  // const dateTo = filters?.date_to
+  //   ? moment(filters.date_to).format("YYYY-MM-DD")
+  //   : undefined;
+  // const dateFrom = filters?.date_from
+  //   ? moment(filters.date_from).format("YYYY-MM-DD")
+  //   : undefined;
 
   const response = await adminAxios.get(relativeUrl, {
     params: {

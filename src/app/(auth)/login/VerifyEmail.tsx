@@ -1,5 +1,5 @@
 import { useErrorModalState } from "@/hooks";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useLanguage } from "../sign-up/contexts/LanguageContext";
 import { z } from "zod";
@@ -29,14 +29,14 @@ const VerifyEmail = ({ email, goToPreviousStep }: prop) => {
     errorModalMessage,
   } = useErrorModalState();
   const { t } = useLanguage();
-  const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // const router = useRouter();
+  const [_errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<VerificationFormValues>({
     resolver: zodResolver(verificationSchema),
     defaultValues: {
@@ -103,21 +103,21 @@ const VerifyEmail = ({ email, goToPreviousStep }: prop) => {
     );
   };
   return (
-    <div className="md:px-[30px] px-6 py-[30px] h-full border  xl:px-[9.125rem] xl:py-[7rem]">
+    <div className="md:px-[30px] px-6 py-[30px] h-full border  xl:px-[9.125rem] xl:py-28">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full h-full   flex flex-col items-center justify-center "
+        className="size-full flex   flex-col items-center justify-center "
       >
         {successMessage && (
           <div className="mb-4 w-full">
             <div className="bg-green-100 border w-full border-green-400 text-green-700 px-4 py-3 rounded relative">
               <span className="block sm:inline">{successMessage}</span>
               <span
-                className="absolute top-0 bottom-0 right-0 px-4 py-3"
+                className="absolute inset-y-0 right-0 px-4 py-3"
                 onClick={() => setSuccessMessage(null)}
               >
                 <svg
-                  className="fill-current h-6 w-6 text-green-500"
+                  className="fill-current size-6 text-green-500"
                   role="button"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
@@ -147,7 +147,7 @@ const VerifyEmail = ({ email, goToPreviousStep }: prop) => {
             placeholder={t.emailVerification.verificationCodePlaceholder}
             className={`w-full px-3 py-2 border ${
               errors.token ? "border-red-500" : "border-[#E2E8F0]"
-            } rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F7931D] h-[3rem] text-sm font-archivo`}
+            } rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F7931D] h-12 text-sm font-archivo`}
             {...register("token")}
           />
           {errors.token && (

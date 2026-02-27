@@ -50,7 +50,7 @@ const AdvancedDetailsModal: React.FC<AdvancedDetailsModalProps> = ({
     },
   });
 
-  const onSubmit = (data: AdvancedDetailsFormValues) => {
+  const onSubmit = () => {
     // onSave(data);
     // onClose();
   };

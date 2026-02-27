@@ -1,5 +1,4 @@
 import React from 'react';
-import { Lock } from 'lucide-react';
 import BookingIcon from '@/app/icons/(dashboard)/BookingIcon';
 
 interface TokenSpentTransaction {
@@ -117,13 +116,13 @@ const TokenSpent = () => {
           <div key={date} className="space-y-4">
             {/* Date Header */}
               <div className="flex items-center w-full ">
-        <div className="flex-grow h-px bg-gray-300"></div>
+        <div className="grow h-px bg-gray-300"></div>
         <div className="px-4">
           <span className="text-gray-500 text-base font-medium whitespace-nowrap">
             {date}
           </span>
         </div>
-        <div className="flex-grow h-px bg-gray-300"></div>
+        <div className="grow h-px bg-gray-300"></div>
       </div>
             
             {/* Transactions for this date */}
@@ -132,8 +131,8 @@ const TokenSpent = () => {
                 <div key={transaction.id} className="flex items-center justify-between py-4 border-b border-gray-100 last:border-b-0">
                   <div className="flex items-center space-x-4">
                     {/* Icon */}
-                    <div className="w-12 h-12 bg-orange-400 rounded-lg flex items-center justify-center">
-                      <BookingIcon className="w-6 h-6 text-white" />
+                    <div className="size-12 bg-orange-400 rounded-lg flex items-center justify-center">
+                      <BookingIcon className="size-6 text-white" />
                     </div>
                     
                     {/* Transaction Details */}

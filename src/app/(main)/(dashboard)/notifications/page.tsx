@@ -1,18 +1,13 @@
 "use client"
-import React, { useEffect, useMemo, useState } from 'react';
-import { Calendar, Settings, Menu, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Menu, X } from 'lucide-react';
 import Header from '../../components/shared/Header';
 import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput';
 import { TabItem } from '../../components/dashboard/SuggestedDIverTabs';
 import NotificationScreen from './components/NotificationScreen';
 import BuddyRequest from './components/BuddyRequest';
 import NotificationSidebar from './components/NotificationSidebar';
-import NotificationSettings from './components/NotificationSettingsPage';
-import ThreeDot from '@/app/icons/(dashboard)/ThreeDot';
-import { Button } from '@/components/core';
 import { CustomDateRange } from '../../components/dashboard/MonthlySnapShot';
-import DateRangePicker from '@/components/core/DateRangePicker';
-import { useFetchBuddyRequest } from '../api/notification/buddyRequest';
 import moment from 'moment';
 import { useLanguage } from '@/hooks/useLanguage';
 import { notificationTranslations } from '@/app/(main)/translation/notificationTranslation';
@@ -23,11 +18,9 @@ const NotificationOverview = () => {
   
   const [activeTab, setActiveTab] = useState('notifications');
   const [globalSearch, setGlobalSearch] = useState<string>("");
-  const [showSettingPage, setShowSettingPage] = useState(false);
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   
- const [customDateRange, setCustomDateRange] = useState<CustomDateRange>({
+ const [customDateRange] = useState<CustomDateRange>({
     startDate: new Date(new Date().getFullYear() - 4, 0, 1), // 4 years ago, January 1st
     endDate: new Date(),
   });
@@ -36,18 +29,6 @@ const NotificationOverview = () => {
     { id: "notifications", label: t.notifications, href: '?tab=notifications' },
     { id: "buddyRequests", label: t.buddyRequests, href: '?tab=buddyRequests' },
   ];
-
-  const filters = {
-date_from:moment(customDateRange?.startDate)?.subtract(10, 'days').calendar(),
-date_to:moment(customDateRange?.endDate)?.subtract(10, 'days').calendar(),
-search: globalSearch,
-lang: language
-};
-const { data } = useFetchBuddyRequest("buddy-request", filters);
-  const handleDateRangeApply = (startDate: Date, endDate: Date) => {
-    setCustomDateRange({ startDate, endDate });
-    setShowDatePicker(false);
-  };
 
   // Sync with browser URL on mount and handle browser back/forward
   useEffect(() => {
@@ -88,20 +69,6 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
       default:
         return <div className="text-gray-500 dark:text-gray-400">Content not found</div>;
     }
-  };
-
-  const buddyRequestData = useMemo(() => {
-    if (!data) return [];
-    return data.pages.flatMap((page) => page?.data?.count);
-  }, [data]);
-
-  const formatDateRange = (startDate: Date, endDate: Date): string => {
-    const options: Intl.DateTimeFormatOptions = { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    };
-    return `${startDate.toLocaleDateString('en-US', options)} – ${endDate.toLocaleDateString('en-US', options)}`;
   };
 
   return (
@@ -260,7 +227,7 @@ const { data } = useFetchBuddyRequest("buddy-request", filters);
                       {/* Notification Badge */}
                       {tab.id === 'buddyRequests' && (
                         <span className="inline-flex items-center justify-center px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold leading-none text-[#027A48] bg-[#ECFDF3] dark:bg-white rounded-full min-w-[18px] sm:min-w-[20px]">
-                          {buddyRequestData[0] ?? 0}
+                          0
                         </span>
                       )}
                     </span>

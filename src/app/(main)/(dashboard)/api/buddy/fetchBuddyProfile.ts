@@ -223,7 +223,7 @@ const fetchBuddyProfile = async (id: string): Promise<BuddyProfile | null> => {
 };
 
 
-// export const usefetchBuddyProfile = (id:string) => {
+// export const useFetchBuddyProfile = (id:string) => {
 //   return useQuery({
 //     queryKey: ["buddy-profile",id],
 //     queryFn: ()=>fetchBuddyProfile(id),
@@ -231,7 +231,7 @@ const fetchBuddyProfile = async (id: string): Promise<BuddyProfile | null> => {
 //   });
 // };
 
-export const usefetchBuddyProfile = (id: string | null) => {
+export const useFetchBuddyProfile = (id: string | null) => {
   return useQuery({
     queryKey: ["buddy-profile", id],
     queryFn: () => {

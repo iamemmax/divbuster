@@ -5,7 +5,7 @@ import DiveBuddyInfo, { diveLogTypes } from './DiveBuddyInfo';
 import CloseIcon from '@/app/icons/CloseIcon';
 import CreateDivePlanBuddyBooking, { addBuddyMember } from './CreateDivePlanBuddyBooking';
 import CreateDrivePlanGear, { createGearLogDetailsFormValues } from './CreateDrivePlanGear';
-import { Language } from '@/app/(auth)/sign-up/translations';
+// import { Language } from '@/app/(auth)/sign-up/translations';
 import { divePlanBuddiesTranslations } from '@/app/(main)/translation/diveLogTranslation';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { useLanguage } from '@/hooks/useLanguage';

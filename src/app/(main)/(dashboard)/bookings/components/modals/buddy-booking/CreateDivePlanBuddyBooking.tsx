@@ -70,7 +70,7 @@ const setBuddiesString = (buddiesSet: Set<number>): string => {
   return Array.from(buddiesSet).join(',');
 };
 
-const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData, selectedBuddies:selectedBuddyEmail,onClose,stepOneLogDetails,user}:prop) => {
+const CreateDivePlanBuddyBooking = ({setStep,buddyMembers,planGearData, selectedBuddies:selectedBuddyEmail,onClose,stepOneLogDetails}:prop) => {
    const {language}= useLanguage()
     const t = diveLogBuddiesTranslations[language] || diveLogBuddiesTranslations?.en;
       const {

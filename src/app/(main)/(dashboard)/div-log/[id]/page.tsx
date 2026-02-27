@@ -11,7 +11,7 @@ import DiveTimeChart from '../components/TimeChart'
 import ThreeDot from '@/app/icons/(dashboard)/ThreeDot'
 import { CylinderIcon } from '@/app/icons/(dashboard)/CylinderIcon'
 import SingleDIveLogSidebar from '../components/SingleDiveLogSidebar'
-import { usefetchSingleDivLog } from '../../api/div-logs/fetchSingleDivLog'
+import { useFetchSingleDivLog } from '../../api/div-logs/fetchSingleDivLog'
 import { useAuth } from '@/contexts/authentication'
 import moment from 'moment'
 import { useFetchCountry } from '../../api/fetchCountry'
@@ -33,7 +33,7 @@ const DiveLogId = () => {
   const { authState } = useAuth();
   const { user } = authState;
   const { data: fetchCountry } = useFetchCountry();
-  const queryResult = usefetchSingleDivLog(params?.id as string)
+  const queryResult = useFetchSingleDivLog(params?.id as string)
   const { data, isLoading: loading } = queryResult
   const { mutate: updateVisibility } = useUpdateDiveLogVisibility();
   const { language } = useLanguage()
@@ -55,8 +55,7 @@ const DiveLogId = () => {
     setEditModalOpen(true);
   };
 
-  const handleEditSave = (data: { name: string; start_date: string; end_date: string }) => {
-    console.log('Saving edit:', data, 'for item:', editingItem?.id);
+  const handleEditSave = (_data: { name: string; start_date: string; end_date: string }) => {
     toast.success('Dive log updated successfully');
     setEditModalOpen(false);
     setEditingItem(null);
@@ -93,7 +92,7 @@ const DiveLogId = () => {
       value: "public",
       label: capitalizeFirstLetter(t?.public || "Public"),
       icon: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+        <svg viewBox="0 0 24 24" fill="currentColor" className="size-4">
           <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
         </svg>
       ),
@@ -175,7 +174,6 @@ const DiveLogId = () => {
       setUpdatingItems((prev) => [...prev, itemId]);
       setItemVisibilities((prev) => ({ ...prev, [itemId]: option.value }));
       setOpenDropdownId(null);
-console.log(itemId);
 
       updateVisibility(
         { id: itemId, isPublic: option.value === "public" },
@@ -260,7 +258,7 @@ console.log(itemId);
               `}</style>
               <div className="xl:hidden absolute inset-0 z-50 animate-fade-in">
                 <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setShowSidebar(false)} />
-                <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl max-h-[80vh] overflow-hidden animate-slide-up">
+                <div className="absolute bottom-0 inset-x-0 bg-white dark:bg-gray-800 rounded-t-2xl max-h-[80vh] overflow-hidden animate-slide-up">
                   <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Dive Details</h3>
@@ -280,22 +278,22 @@ console.log(itemId);
             </>
           )}
 
-          <div className="2xl:mt-[1.125rem] py-6 grid gap-6 w-full h-full grid-cols-1 xl:grid-cols-[3fr_1fr]">
+          <div className="2xl:mt-[1.125rem] py-6 grid gap-6 size-full grid-cols-1 xl:grid-cols-[3fr_1fr]">
             {/* Main content with independent scroll */}
             <div ref={mainContainerRef} className="overflow-y-auto h-full">
               <div className="bg-white dark:bg-gray-800 rounded-lg cursor-pointer p-[1.875rem] px-4 md:px-[2.2813rem]">
                 <div className="flex items-center justify-between w-full mb-6">
                   <div className="flex items-start space-x-4 w-full">
-                    <div className="relative shrink-0 md:h-[60px] md:w-[60px] h-[40px] w-[40px] rounded-full">
+                    <div className="relative shrink-0 md:size-[60px] size-[40px] rounded-full">
                       {user?.profile_details?.profile_picture ? (
                         <Image
                           src={(user?.profile_details?.profile_picture as string) ?? "/"}
                           alt="img"
-                          fill
                           className="object-cover rounded-full"
+                          fill
                         />
                       ) : (
-                        <span className="text-[#fff] text-base font-semibold font-archivo">
+                        <span className="text-white text-base font-semibold font-archivo">
                           {user?.first_name[0]}{user?.last_name[0]}
                         </span>
                       )}
@@ -324,13 +322,13 @@ console.log(itemId);
                       {/* Visibility Dropdown */}
                       <div className="relative" data-dropdown>
                         <button
-                          data-dropdown
                           onClick={(e) => {
                             e.stopPropagation();
                             handleToggle(itemId);
                           }}
                           disabled={isItemUpdating}
                           className={`flex items-center space-x-2 px-4 py-2 border rounded-lg cursor-pointer hover:opacity-80 transition-opacity focus:outline-none disabled:opacity-50 ${getColorClasses(currentOption.color).bg} ${getColorClasses(currentOption.color).border}`}
+                          data-dropdown
                         >
                           {isItemUpdating ? (
                             <SmallSpinner color={currentOption.color === "green" ? "#027A48" : "#FF0000"} />
@@ -365,12 +363,12 @@ console.log(itemId);
                             {visibilityOptions.map((option) => (
                               <button
                                 key={option.value}
-                                data-dropdown
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleSelect({ id: Number(data?.data?.id), option });
                                 }}
                                 className={`w-full flex items-center space-x-2 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 ${currentVisibility === option.value ? "bg-gray-50 dark:bg-gray-700" : ""}`}
+                                data-dropdown
                               >
                                 <div className={getColorClasses(option.color).icon}>
                                   {option.icon}
@@ -398,7 +396,7 @@ console.log(itemId);
                   <div className="absolute inset-0 bg-black bg-opacity-40 dark:bg-opacity-60"></div>
 
                   {/* Coordinates Overlay */}
-                  <div className="absolute top-2 left-4 max-md:left-2 text-white  md:py-4 px-3 md:px-[2.75rem] w-full">
+                  <div className="absolute top-2 left-4 max-md:left-2 text-white  md:py-4 px-3 md:px-11 w-full">
                     <div className="flex justify-end max-md:pr-2 items-center w-full">
                       <Button className="bg-transparent border-none py-[.5206rem] rounded-2xl text-[#F7931D] dark:text-[#F7931D] text-xs md:text-sm font-medium flex items-center gap-[.3125rem] border dark:border-gray-600">
                         {/* <ColorCheckIcon /> */}
@@ -410,15 +408,9 @@ console.log(itemId);
                           <div className="relative h-[30px] w-[42px] md:h-[40px] rounded md:w-[52px]">
                             <Image
                               src={`https://flagcdn.com/${getCountry(Number(data?.data?.dive_plan?.dive_site?.country))?.alpha2code?.toLowerCase()}.svg`}
-                              alt="img"
-                              fill
+                              alt={`${getCountry(Number(data?.data?.dive_plan?.dive_site?.country))?.name} flag`}
                               className="object-cover rounded"
-                            />
-
-                            <img
-                              src={`https://flagcdn.com/${getCountry(Number(data?.data?.dive_plan?.dive_site?.country))?.alpha2code?.toLowerCase()}.svg`}
-                              alt={`${getCountry(Number(data?.data?.id))?.name} flag`}
-                              className="w-5 h-5 rounded-sm object-cover"
+                              fill
                             />
                           </div>
                           <p className="text-white font-archivo max-w-[220px]  md:max-w-[600px] font-semibold text-xxs md:text-base 2xl:text-xl">
@@ -465,7 +457,7 @@ console.log(itemId);
                 </div>
 
                 {/* Desktop Layout */}
-                <div className=" divide-x grid grid-cols-2 sm:grid-cols-3 gap-5 lg:grid-cols-5 py-4 px-4 md:px-8 divide-gray-200 dark:divide-gray-600 border border-[#EAECF0] dark:border-gray-700 rounded-lg mt-5">
+                <div className=" divide-x grid grid-cols-2 sm:grid-cols-3 gap-5 lg:grid-cols-5 p-4 md:px-8 divide-gray-200 dark:divide-gray-600 border border-[#EAECF0] dark:border-gray-700 rounded-lg mt-5">
                   {metrics.map((metric, index) => (
                     <div key={index} className="flex-1 px-4 first:pl-8 last:pr-8">
                       <div className="text-gray-400 dark:text-gray-500 text-base font-normal mb-4">
@@ -502,20 +494,20 @@ console.log(itemId);
                               <Image
                                 src={fileUrl}
                                 alt={`Dive media ${index + 1}`}
-                                fill
                                 className="object-cover hover:scale-105 transition-transform duration-200"
+                                fill
                               />
                             ) : isVideo ? (
-                              <div className="relative w-full h-full">
+                              <div className="relative size-full">
                                 <video
-                                  className="w-full h-full object-cover"
+                                  className="size-full object-cover"
                                   preload="metadata"
                                 >
                                   <source src={fileUrl} />
                                 </video>
                                 <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                                  <div className="w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-gray-800 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                  <div className="size-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                    <svg className="size-6 text-gray-800 ml-1" fill="currentColor" viewBox="0 0 24 24">
                                       <path d="M8 5v14l11-7z"/>
                                     </svg>
                                   </div>

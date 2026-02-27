@@ -11,7 +11,7 @@ import {
 import { certificateResult } from "../../(dashboard)/api/certifications/fetchCertifications";
 import CloseIcon from "@/app/icons/CloseIcon";
 import AddCertification from "./AddCertification";
-import SelectCertificationType from "./SelectCertificationType";
+// import SelectCertificationType from "./SelectCertificationType";
 import { useLanguage } from "@/hooks/useLanguage";
 import { addCertificationHeadertranslations } from "../../translation/certificationTranslation";
 
@@ -32,7 +32,7 @@ const AddCertificateTypeComp = ({
   type,
 
 }: Props) => {
-  const [selectedCard, setSelectedCard] = useState<string | null>(
+  const [selectedCard, _setSelectedCard] = useState<string | null>(
     certificateData?.certificate_type || null
   );
   const [step, setStep] = useState<number>(1);

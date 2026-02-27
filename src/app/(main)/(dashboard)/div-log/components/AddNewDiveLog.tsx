@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import { Button, Dialog, DialogContent } from "@/components/core";
+import {  Dialog, DialogContent } from "@/components/core";
 import CreateDiveLog, { diveLogTypes } from './create-divelog/CreateDiveLog';
 import CreateDiveLogDetails, { diveLogDetailsTypes } from './create-divelog/CreateDiveLogDetails';
 import CreateDriveLogGear, { createGearLogDetailsFormValues } from './create-divelog/CreateDriveLogGear';
@@ -8,7 +8,6 @@ import CreateDiveLogEnvironmental, { diveEnvironmentalFormValues } from './creat
 import AddDiveLogBuddies, { addBuddyMember } from './create-divelog/AddDiveLogBuddies';
 import AddDiveLogNotes from './create-divelog/AddDiveLogNotes';
 import { useAuth } from '@/contexts/authentication';
-import { Language } from '@/app/(auth)/sign-up/translations';
 import InsuranceModal from '@/components/modals/InsuranceModal';
 
 

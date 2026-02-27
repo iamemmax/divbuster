@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
-import { Button, Dialog, DialogBody, DialogClose, DialogContent, DialogHeader, DialogTitle, ErrorModal, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/core";
-import CloseIcon from '@/app/icons/CloseIcon';
+import Image from 'next/image'
+import { Button, ErrorModal, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/core";
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Certificate, CERTIFICATE_ISSUER_CHOICES, CERTIFICATE_TYPE_CHOICES, certificateSchema } from '.';
 import CaretDownIcon from '@/icons/core/CaretDown';
-import { capitalizeFirstLetter, formatAxiosErrorMessage } from '@/utils';
+import {  formatAxiosErrorMessage } from '@/utils';
 import CloudIcon from '@/app/icons/(dashboard)/CloudIcon';
 import { useErrorModalState } from '@/hooks';
 import { useAddCertification } from '../../(dashboard)/api/certifications/addCertification';
@@ -13,7 +13,7 @@ import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { useUser } from '@/app/(auth)/api/getAuthenticatedUser';
 import { SmallSpinner } from '@/icons/core';
-import { useQueries, useQueryClient } from 'react-query';
+import {  useQueryClient } from 'react-query';
 import { certificateResult } from '../../(dashboard)/api/certifications/fetchCertifications';
 import { useUpdateCertification } from '../../(dashboard)/api/certifications/editCertification';
 import { convertKebabAndSnakeToTitleCase } from '@/utils/strings';
@@ -30,7 +30,7 @@ interface Props {
 }
 
 
-const AddCertification = ({ setIsOpenCardModal,certificateData,type,selectedCard,setStep }: Props) => {
+const AddCertification = ({ setIsOpenCardModal,certificateData,type,selectedCard }: Props) => {
     const user = useUser()
     const {language} =useLanguage()
     const t = addCertificationFormtranslations[language] || addCertificationFormtranslations.en
@@ -56,7 +56,6 @@ const AddCertification = ({ setIsOpenCardModal,certificateData,type,selectedCard
   handleSubmit,
   control,
   setValue,
-  reset,
   formState: { errors },
 } = useForm<Certificate>({
   resolver: zodResolver(certificateSchema),
@@ -247,9 +246,11 @@ const allSchools = React.useMemo(() => {
                                 >
                                     {imagePreview ? (
                                         <div className="relative inline-block">
-                                            <img
+                                            <Image
                                                 src={imagePreview}
                                                 alt="Preview"
+                                                width={160}
+                                                height={160}
                                                 className="max-h-40 rounded-md"
                                             />
                                             <button

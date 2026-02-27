@@ -18,36 +18,26 @@ export default function SessionExpiredModal({ isOpen, onClose }: SessionExpiredM
   const { authDispatch } = useAuth();
 
   const handleLoginRedirect = () => {
-    console.log("SessionExpiredModal: handleLoginRedirect called");
-    
     // Close the modal
     onClose();
-    
-    // Log tokens before clearing
-    const divbusterToken = localStorage.getItem("DIVBUSTERTOKEN");
-    console.log("DIVBUSTERTOKEN before clearing:", divbusterToken ? "exists" : "not found");
-    
+
     // Clear token from localStorage
     tokenStorage.clearToken();
     tokenStorage.clearAll();
-    
+
     // Explicitly clear DIVBUSTER tokens
     localStorage.removeItem("DIVBUSTERTOKEN");
     localStorage.removeItem("DIVBUSTERTOKENS");
     localStorage.removeItem("DIVBUSTERSAVED_LOGIN_CREDENTIALS");
-    
-    // Log tokens after clearing
-    const divbusterTokenAfter = localStorage.getItem("DIVBUSTERTOKEN");
-    console.log("DIVBUSTERTOKEN after clearing:", divbusterTokenAfter ? "still exists" : "successfully removed");
-    
+
     // Remove token from axios headers
     deleteAxiosDefaultToken();
-    
+
     // Logout the user
     if (authDispatch) {
       authDispatch({ type: "LOGOUT" });
     }
-    
+
     // Redirect to login page
     router.push("/login");
   };

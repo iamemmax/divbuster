@@ -44,6 +44,15 @@ const nextConfig = {
         },
       ],
     },
+    experimental: {
+      missingSuspenseWithCSRBailout: true,
+    },
+    eslint: {
+      ignoreDuringBuilds: false,
+    },
+    typescript: {
+      tsconfigPath: './tsconfig.json',
+    },
     async headers() {
       return [
         {

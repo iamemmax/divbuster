@@ -69,7 +69,7 @@ const {mutate:handleRate,isLoading}=useRateDiveSite()
     },
     
    {
-        onSuccess: (data) => {
+        onSuccess: () => {
 
           toast.success("Dive site rated successfully")
           onClose();

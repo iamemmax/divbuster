@@ -31,7 +31,7 @@ const addCertification = async ({
   image,
   issue_date,
   issuer,
-  issuer_name,
+  // issuer_name,
   school_name,
   trainer_name,
   trainer_phone,

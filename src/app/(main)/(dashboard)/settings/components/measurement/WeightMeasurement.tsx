@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Layers, Zap, Check } from 'lucide-react';
+import { Layers } from 'lucide-react';
 
 // Types
 interface PlanOption {
@@ -25,51 +25,51 @@ const planOptions: PlanOption[] = [
   {
     id: 'xxs',
     name: 'XX-Small',
-    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    icon: <Layers className="size-5 text-orange-500" />,
     description: 'Extra Extra Small size for petite builds',
     isDefault: false,
   },
   {
     id: 'xs',
     name: 'X-Small',
-    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    icon: <Layers className="size-5 text-orange-500" />,
     description: 'Extra Small size for smaller builds',
   },
   {
     id: 's',
     name: 'Small',
-    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    icon: <Layers className="size-5 text-orange-500" />,
     description: 'Small size for compact builds',
   },
   {
     id: 'm',
     name: 'Medium',
-    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    icon: <Layers className="size-5 text-orange-500" />,
     description: 'Medium size for average builds',
     isDefault: true,
   },
   {
     id: 'l',
     name: 'Large',
-    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    icon: <Layers className="size-5 text-orange-500" />,
     description: 'Large size for bigger builds',
   },
   {
     id: 'xl',
     name: 'X-Large',
-    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    icon: <Layers className="size-5 text-orange-500" />,
     description: 'Extra Large size for extended builds',
   },
   {
     id: 'xxl',
     name: 'XX-Large',
-    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    icon: <Layers className="size-5 text-orange-500" />,
     description: 'Extra Extra Large size for maximum builds',
   },
   {
     id: 'xxxl',
     name: 'XXX-Large',
-    icon: <Layers className="w-5 h-5 text-orange-500" />,
+    icon: <Layers className="size-5 text-orange-500" />,
     description: 'Triple Extra Large size for the largest builds',
   },
 ];
@@ -89,10 +89,7 @@ const WeightMeasurement: React.FC = () => {
 
   const selectedPlan = watch('selectedPlan');
 
-  const onSubmit = (data: AccountPlanFormData) => {
-    console.log('Form submitted:', data);
-    const selectedPlanDetails = planOptions.find(plan => plan.id === data.selectedPlan);
-    console.log('Selected plan details:', selectedPlanDetails);
+  const onSubmit = () => {
   };
 
   return (
@@ -125,7 +122,7 @@ const WeightMeasurement: React.FC = () => {
                   }`}>
                     <div className="flex items-center gap-4">
                       {/* Icon */}
-                      <div className="w-10 h-10 rounded-full bg-[#F7F7F7] flex items-center justify-center flex-shrink-0">
+                      <div className="size-10 rounded-full bg-[#F7F7F7] flex items-center justify-center shrink-0">
                         {plan.icon}
                       </div>
                       
@@ -136,13 +133,13 @@ const WeightMeasurement: React.FC = () => {
                     </div>
 
                     {/* Radio Button */}
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                    <div className={`size-5 rounded-full border-2 flex items-center justify-center transition-colors ${
                       field.value === plan.id
                         ? 'border-orange-500 bg-orange-500'
                         : 'border-orange-500'
                     }`}>
                       {field.value === plan.id && (
-                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                        <div className="size-2 bg-white rounded-full"></div>
                       )}
                     </div>
                   </div>
@@ -155,7 +152,7 @@ const WeightMeasurement: React.FC = () => {
                       </p>
                       
                       {plan.isDefault && (
-                        <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full flex-shrink-0">
+                        <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full shrink-0">
                           Default
                         </span>
                       )}

@@ -14,14 +14,14 @@ const MyBuddyList = () => {
   const {
     data: buddyList,
     isLoading,
-    error,
-    isError,
+    // error,
+    // isError,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    hasPreviousPage,
-    fetchPreviousPage,
-    isFetchingPreviousPage
+    // hasPreviousPage,
+    // fetchPreviousPage,
+    // isFetchingPreviousPage
   } = useFetchBuddyList(language);
 
   // Extract all buddies from infinite query pages
@@ -32,19 +32,8 @@ const MyBuddyList = () => {
   }, [buddyList]);
 
   // Get total count from the first page (assuming it's consistent across pages)
-  const totalCount = useMemo(() => {
-    return buddyList?.pages?.[0]?.count || 0;
-  }, [buddyList]);
 
   // Get current page info for display
-  const currentPageInfo = useMemo(() => {
-    const totalResults = allBuddies.length;
-    return {
-      start: totalResults > 0 ? 1 : 0,
-      end: totalResults,
-      total: totalCount
-    };
-  }, [allBuddies.length, totalCount]);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-700/20 transition-colors duration-200">
@@ -69,15 +58,15 @@ const MyBuddyList = () => {
               )}
 
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="relative z-10 flex-shrink-0">
+                <div className="relative z-10 shrink-0">
                   {buddy?.profile_details?.profile_picture ?<img
                     src={ buddy?.profile_details?.profile_picture}
                     alt={buddy.first_name || buddy.last_name || 'Buddy'}
-                    className="w-10 h-10 rounded-full object-cover"
-                  /> : <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs text-gray-600 dark:text-gray-300 transition-colors duration-200">
+                    className="size-10 rounded-full object-cover"
+                  /> : <div className="size-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs text-gray-600 dark:text-gray-300 transition-colors duration-200">
                     {buddy?.first_name?.[0]?.toUpperCase() || buddy?.last_name?.[0]?.toUpperCase() || ""}
                   </div>}
-                  <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white dark:border-gray-800"></div>
+                  <div className="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full border border-white dark:border-gray-800"></div>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-gray-900 dark:text-gray-100 text-sm truncate transition-colors duration-200">

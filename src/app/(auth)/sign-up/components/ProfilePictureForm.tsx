@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 import { Button, ErrorModal } from "@/components/core";
 import { firstStepProps, fourthStepProps, secondStepProps, thirdStepProps } from ".";
 import { useSignup, SignupPayload } from "@/app/(auth)/api/signup";
-import { useRouter } from "next/navigation";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { useErrorModalState } from "@/hooks";
@@ -39,13 +38,11 @@ const ProfilePictureForm = ({
   const { language } = useLanguage();
     const t = translations[language] || translations.en;
   
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [_successMessage, setSuccessMessage] = useState<string | null>(null);
     
   const [profilePicture, setProfilePicture] = useState<File | null>(formData.profile_picture || null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
   
   // Use the signup mutation
   const { mutate: signupMutate, isLoading, isError, error } = useSignup();
@@ -126,7 +123,6 @@ const ProfilePictureForm = ({
       actionType:"withImg"
     };
 
-    console.log("Submitting registration data:", payload);
     
     // Use React Query mutation to submit the form
     signupMutate(payload, {
@@ -171,7 +167,6 @@ const ProfilePictureForm = ({
       actionType:"skip"
     };
 
-    console.log("Submitting registration data:", payload);
     
     // Use React Query mutation to submit the form
     signupMutate(payload, {

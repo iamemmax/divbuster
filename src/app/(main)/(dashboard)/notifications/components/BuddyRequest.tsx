@@ -32,7 +32,7 @@ const BuddyRequest: React.FC<prop> = ({globalSearch,initialStartDate,initialEndD
   search: globalSearch
 };
   // const [loadingStates, setLoadingStates] = useState<{[key: string]: {accept: boolean, decline: boolean}}>({});
-const { mutate: handleAddNewBuddy, isLoading:isUpdating } = useAddBuddy();
+const { mutate: handleAddNewBuddy } = useAddBuddy();
   const queryClient = useQueryClient();
 
  const [acceptingDiverId, setAcceptingDiverId] = useState<number | null>(null);
@@ -111,11 +111,6 @@ const { data,
     });
   };
 
-  const handleMarkAsRead = (id: string) => {
-    console.log(`Marked notification ${id} as read`);
-    // Update read status logic here
-  };
-
   return (
     <div className="w-full">
       {/* Header */}
@@ -130,7 +125,7 @@ const { data,
   <div className="grid grid-cols-1 ">
     {/* Left column with border-right on desktop */}
     <div className="md:border-r md:border-gray-200 dark:md:border-gray-700 gap-y-3 md:pr-8">
-      {allNotifications?.map((request, index: number) => (
+      {allNotifications?.map((request) => (
         <NotificationItem
           key={request.id}
           id={String(request?.id )}
@@ -166,8 +161,8 @@ const { data,
       {/* Empty State (when no requests) */}
       {!isLoading&&allNotifications?.length === 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
-          <div className="mx-auto w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
-            <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="mx-auto size-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+            <svg className="size-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
           </div>
@@ -175,7 +170,7 @@ const { data,
             No Buddy Requests
           </h3>
           <p className="text-gray-500 dark:text-gray-400">
-            You don't have any pending buddy requests at the moment.
+            You don&apos;t have any pending buddy requests at the moment.
           </p>
         </div>
       )}

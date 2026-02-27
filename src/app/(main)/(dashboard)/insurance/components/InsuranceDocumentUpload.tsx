@@ -1,13 +1,13 @@
 "use client"
 import React, { useState } from 'react'
 import { Button } from '@/components/core'
-import { useLanguage } from '@/hooks/useLanguage'
-import { insuranceTranslations } from '@/app/(main)/translation/insuranceTranslation'
+// import { useLanguage } from '@/hooks/useLanguage'
+// import { insuranceTranslations } from '@/app/(main)/translation/insuranceTranslation'
 import toast from 'react-hot-toast'
 
 const InsuranceDocumentUpload = () => {
-  const { language } = useLanguage()
-  const t = insuranceTranslations[language] || insuranceTranslations.en
+  // const { language } = useLanguage()
+  // const t = insuranceTranslations[language] || insuranceTranslations.en
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
   const [documentBase64, setDocumentBase64] = useState<string>("")
 

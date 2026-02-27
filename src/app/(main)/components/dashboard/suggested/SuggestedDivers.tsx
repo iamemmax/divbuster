@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { SuggestedDiverCard } from './SuggestedDiversCard'
-import { Diver } from './types'
 import { useAuth } from '@/contexts/authentication'
 import { LocationDisplay } from '@/utils/GetLocationFromCordinate'
 import { useAddBuddy } from '@/app/(main)/(dashboard)/api/buddy/addBuddy'
@@ -25,7 +24,7 @@ const SuggestedDivers = () => {
 
   const { user } = authState;
   const userData = user as User;
-  const { mutate: handleAddNewBuddy, isLoading } = useAddBuddy();
+  const { mutate: handleAddNewBuddy } = useAddBuddy();
   const queryClient = useQueryClient();
 
   

@@ -1,5 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import moment from "moment";
 
@@ -23,7 +24,7 @@ const UserProfile = () => {
   const { user } = authState;
   const [selectedCertificate, setSelectedCertificate] = useState<certificates | null>(null);
   const [showCertificateModal, setShowCertificateModal] = useState(false);
-  const [locationName, setLocationName] = useState<string>('');
+  const [_locationName, setLocationName] = useState<string>('');
 
   const { language } = useLanguage();
   const t = profileTranslations[language] || profileTranslations?.en;
@@ -49,7 +50,7 @@ const UserProfile = () => {
             setLocationName(city ? `${city}, ${country}` : country);
           }
         } catch (error) {
-          console.error('Error fetching location:', error);
+          // Error fetching location
         }
       }
     };
@@ -62,10 +63,9 @@ const UserProfile = () => {
         title: `Dive Profile: ${title}`,
         text: 'Check out this dive plan!',
         url: window.location.href,
-      }).catch((err) => console.log('Error sharing:', err));
+      })
     } else {
       navigator.clipboard?.writeText(window.location.href);
-      console.log('Link copied to clipboard');
     }
   }, []);
 
@@ -176,10 +176,12 @@ const UserProfile = () => {
                     <div className="flex items-start gap-4">
                       <div className="w-14 h-14 flex items-center justify-center relative overflow-hidden rounded-lg flex-shrink-0 bg-white dark:bg-gray-700">
                         {user?.profile_details?.country && getCountry(user.profile_details.country)?.alpha2code ? (
-                          <img
+                          <Image
                             src={`https://flagcdn.com/w40/${getCountry(user.profile_details.country)?.alpha2code?.toLowerCase()}.png`}
                             alt={`${getCountry(user.profile_details.country)?.name} flag`}
-                            className="w-full h-full object-cover"
+                            width={56}
+                            height={56}
+                            className="size-full object-cover"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
                               target.src = '/images/placeholder-flag.png';
@@ -397,11 +399,13 @@ const UserProfile = () => {
                           </p>
                         </div>
                         {achievement.image && (
-                          <div className="w-12 h-12 rounded-full overflow-hidden ml-3">
-                            <img
+                          <div className="size-12 rounded-full overflow-hidden ml-3">
+                            <Image
                               src={achievement.image}
                               alt={achievement.title}
-                              className="w-full h-full object-cover"
+                              width={48}
+                              height={48}
+                              className="size-full object-cover"
                             />
                           </div>
                         )}

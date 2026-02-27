@@ -17,7 +17,7 @@ export default function DiveFinderLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { data: user, isLoading } = useUser();
+  const { data: user } = useUser();
   const [search, setSearch] = useState("");
   const pathname = usePathname();
 
@@ -50,7 +50,7 @@ export default function DiveFinderLayout({
     <div className="flex relative flex-col h-screen">
       <Header title="Find Buddy" subtitle="" />
       
-      <div className="flex gap-4 px-4 pb-5 md:p-4 bg-white dark:bg-gray-900 flex-wrap absolute top-[6rem] inset-x-0 z-30 shadow-md">
+      <div className="flex gap-4 px-4 pb-5 md:p-4 bg-white dark:bg-gray-900 flex-wrap absolute top-24 inset-x-0 z-30 shadow-md">
           <div className="relative flex-1 w-full">
             <DebouncedSearchInput
               key={pathname}
@@ -65,7 +65,7 @@ export default function DiveFinderLayout({
           <div className="flex items-center gap-4">
             <Link
               href="/dive-finder/nearest"
-              className={`md:px-4 px-2 py-2 rounded transition-colors text-xs md:text-base ${
+              className={`md:px-4 p-2 rounded transition-colors text-xs md:text-base ${
                 activeTab === 'nearest'
                   ? "bg-orange-500 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
@@ -75,7 +75,7 @@ export default function DiveFinderLayout({
             </Link>
             <Link
               href="/dive-finder/plan"
-              className={`md:px-4 px-2 py-2 rounded transition-colors text-xs md:text-base ${
+              className={`md:px-4 p-2 rounded transition-colors text-xs md:text-base ${
                 activeTab === 'plan'
                   ? "bg-orange-500 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
@@ -85,7 +85,7 @@ export default function DiveFinderLayout({
             </Link>
             <Link
               href="/dive-finder/buddy"
-              className={`md:px-4 px-2 py-2 rounded transition-colors text-xs md:text-base ${
+              className={`md:px-4 p-2 rounded transition-colors text-xs md:text-base ${
                 activeTab === 'buddy'
                   ? "bg-orange-500 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"

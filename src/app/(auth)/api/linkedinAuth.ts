@@ -20,7 +20,6 @@ const linkedinAuth = async (token: string, language: string = "english") => {
     access_token: token,
     lang: language
   };
-  console.log(payload);
   
   return adminAxios.post("/social", payload);
 };
@@ -36,34 +35,27 @@ export const useLinkedInAuth = () => {
       const token = data?.access_token;
       
         
-        console.log("LinkedIn auth successful, token received:", token);
 
         // Store the token
         tokenStorage.setToken(token);
-        console.log("Token saved to localStorage");
         
         // Set the token for future requests
         setAxiosDefaultToken(token, adminAxios);
-        console.log("Token set for axios requests");
 
         try {
           // Fetch user data after successful login
-          console.log("Fetching user data after LinkedIn login");
           const user = await getAuthenticatedUser();
                
           
           if (authDispatch) {
             // Update auth state with user data
             authDispatch({ type: "LOGIN", payload: user });
-            console.log("Auth state updated with user data");
           }
         } catch (error) {
-          console.error("Error fetching user data:", error);
           authDispatch?.({ type: "STOP_LOADING" });
         }
       },
-      onError: (error) => {
-        console.error("LinkedIn auth error:", error);
+      onError: () => {
         authDispatch?.({ type: "STOP_LOADING" });
       }
     }

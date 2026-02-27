@@ -8,7 +8,6 @@ import { CaretDown } from '@/components/icons';
 import { convertKebabAndSnakeToTitleCase } from '@/utils/strings';
 import { capitalizeFirstLetter } from '@/utils';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
-import { Language } from '@/app/(auth)/sign-up/translations';
 import { gearLogTranslations } from '@/app/(main)/translation/diveLogTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 
@@ -31,7 +30,7 @@ const advancedDetailsSchema = z.object({
 export type createGearLogDetailsFormValues = z.infer<typeof advancedDetailsSchema>;
 
 
-const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep, user }) => {
+const CreateDrivePlanGear: React.FC<prop> = ({ setPlanGearData, setStep }) => {
    const {language}= useLanguage()
     const t = gearLogTranslations[language] || gearLogTranslations?.en;
     const {

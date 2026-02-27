@@ -18,7 +18,7 @@ interface prop{
    user: User | null
 }
 const SingleDiveLogSidebar:React.FC<prop> = ({data,user}) => {
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [_currentTime, setCurrentTime] = useState(new Date());
   const [logSummaryModalOpen, setLogSummaryModalOpen] = useState(false);
 const [showBuddyGearModalOpen, setShowBuddyGearModalOpen] = useState(false)
 const [showEnvironmentalModalOpen, setShowEnvironmentalModalOpen] = useState(false)
@@ -67,7 +67,7 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
   ];
 
   return (
-   <div className="xl:max-w-md w-full mx-auto h-full  overflow-x-hidden ">
+   <div className="xl:max-w-md size-full mx-auto overflow-x-hidden ">
       {/* Watch Display */}
       <div className="relative bg-white dark:bg-gray-800 p-4 2xl:p-8 flex justify-center" onClick={()=>setShowdiveComputer(true)}>
         <div className="relative">
@@ -80,7 +80,7 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
       {/* Connection Status */}
       <div className="px-6 py-4 flex justify-center items-center">
         <div className="bg-[#ECFDF3] dark:bg-green-900/20 rounded-full px-4 py-2 flex items-center gap-2 w-fit">
-          <div className="w-2 h-2 bg-[#027A48] dark:bg-green-400 rounded-full"></div>
+          <div className="size-2 bg-[#027A48] dark:bg-green-400 rounded-full"></div>
           <span className="text-[#027A48] dark:text-green-400 font-archivo text-sm font-semibold">{t?.deviceConnected}</span>
         </div>
       </div>
@@ -90,11 +90,11 @@ const [showDiveUploaderModal, setShowDiveUploaderModal] = useState(false)
         {menuItems.map((item, index) => (
           <div key={index} className="bg-white dark:bg-gray-800 rounded-lg mb-3 border border-gray-200 dark:border-gray-700">
             <button 
-              className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               onClick={item.onClick}
             >
               <span className="text-[#101828] dark:text-white font-archivo text-xs font-semibold">{item.title}</span>
-              <ChevronRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+              <ChevronRight className="size-5 text-gray-400 dark:text-gray-500" />
             </button>
           </div>
         ))}

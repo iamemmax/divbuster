@@ -20,7 +20,56 @@ import { AxiosError } from 'axios';
 import { useUpdateCertification } from '../api/certifications/editCertification';
 
 // 🔹 Translations
+// Small inline component placed at bottom so page imports remain tidy
+const SetDefaultButton = ({ card, isDefault, t }: { card: certificateResult; isDefault: boolean; t: any }) => {
+  const { mutateAsync, isLoading } = useUpdateCertification();
+  const queryClient = useQueryClient();
+  const { language } = useLanguage();
 
+  const handleSetDefault = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      // Pass all certificate data with default: true
+      await mutateAsync({
+        id: String(card.id),
+        full_name: card.full_name,
+        issuer: card.issuer,
+        issuer_name: card.issuer_name,
+        certificate_type: card.certificate_type,
+        image: card.image,
+        dob: card.date_of_birth,
+        issue_date: card.issue_date,
+        certificate_no: card.certification_no,
+        school_name: card.school_name,
+        trainer_name: card.trainer_name,
+        trainer_phone: card.trainer_no,
+        lang: language,
+        default: true,
+      });
+      toast.success('Certificate set as default successfully!');
+      // Invalidate fetch-certifications to update both sidebar and manage certifications page
+      await queryClient.invalidateQueries({ queryKey: ["fetch-certifications"] });
+    } catch (error) {
+      const errorMessage = formatAxiosErrorMessage(error as AxiosError);
+      toast.error(String(errorMessage));
+    }
+  };
+
+  return (
+    <button
+      onClick={handleSetDefault}
+      disabled={isLoading || isDefault}
+      className={cn(
+        "text-xs px-3 py-2 rounded-md font-medium transition-colors",
+        isDefault
+          ? "bg-white/40 text-white cursor-not-allowed opacity-70"
+          : "bg-white/20 text-white hover:bg-white/30"
+      )}
+    >
+      {isLoading ? `${t.setting}...` : isDefault ? `✓ ${t.setDefault}` : `⭐ ${t.setDefault}`}
+    </button>
+  );
+};
 
 // selectedCardBg
 const ManageCertifications= () => {
@@ -36,7 +85,6 @@ const ManageCertifications= () => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-    isFetching,
     isLoading,
   } = useFetchCertifications()
 
@@ -192,54 +240,5 @@ const ManageCertifications= () => {
 
 export default ManageCertifications;
 
-// Small inline component placed at bottom so page imports remain tidy
-const SetDefaultButton = ({ card, isDefault, t }: { card: certificateResult; isDefault: boolean; t: any }) => {
-  const { mutateAsync, isLoading } = useUpdateCertification();
-  const queryClient = useQueryClient();
-  const { language } = useLanguage();
 
-  const handleSetDefault = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    try {
-      // Pass all certificate data with default: true
-      await mutateAsync({
-        id: String(card.id),
-        full_name: card.full_name,
-        issuer: card.issuer,
-        issuer_name: card.issuer_name,
-        certificate_type: card.certificate_type,
-        image: card.image,
-        dob: card.date_of_birth,
-        issue_date: card.issue_date,
-        certificate_no: card.certification_no,
-        school_name: card.school_name,
-        trainer_name: card.trainer_name,
-        trainer_phone: card.trainer_no,
-        lang: language,
-        default: true,
-      });
-      toast.success('Certificate set as default successfully!');
-      // Invalidate fetch-certifications to update both sidebar and manage certifications page
-      await queryClient.invalidateQueries({ queryKey: ["fetch-certifications"] });
-    } catch (error) {
-      const errorMessage = formatAxiosErrorMessage(error as AxiosError);
-      toast.error(String(errorMessage));
-    }
-  };
-
-  return (
-    <button
-      onClick={handleSetDefault}
-      disabled={isLoading || isDefault}
-      className={cn(
-        "text-xs px-3 py-2 rounded-md font-medium transition-colors",
-        isDefault
-          ? "bg-white/40 text-white cursor-not-allowed opacity-70"
-          : "bg-white/20 text-white hover:bg-white/30"
-      )}
-    >
-      {isLoading ? `${t.setting}...` : isDefault ? `✓ ${t.setDefault}` : `⭐ ${t.setDefault}`}
-    </button>
-  );
-};
 

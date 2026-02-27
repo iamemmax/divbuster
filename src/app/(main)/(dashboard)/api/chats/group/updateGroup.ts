@@ -12,7 +12,6 @@ interface Prop {
 }
 
 const updateGroupChat = async ({ description, image, lang, members, name, id }: Prop) => {
-  console.log(image);
 
   const formData = new FormData();
 

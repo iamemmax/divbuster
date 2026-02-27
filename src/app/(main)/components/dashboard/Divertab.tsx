@@ -2,11 +2,6 @@ import React, { useState, useEffect } from 'react';
 import DiveActivityCard from './DIveActivityCard';
 import DiveActivitySideBar from './DiveActivitySideBar';
 
-interface DiveStat {
-  label: string;
-  value: string;
-}
-
 interface TabItem {
   id: string;
   label: string;

@@ -23,7 +23,7 @@ const fetchDiveReview = async (slug: string):Promise<diveReview[]> => {
 };
 
 
-// export const usefetchBuddyProfile = (id:string) => {
+// export const useFetchBuddyProfile = (id:string) => {
 //   return useQuery({
 //     queryKey: ["buddy-profile",id],
 //     queryFn: ()=>fetchBuddyProfile(id),

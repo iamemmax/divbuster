@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import React, { useRef, useCallback, useEffect } from "react";
 import { Button, Dialog, DialogContent } from "@/components/core";
 import { SmallSpinner } from "@/icons/core";
@@ -129,13 +130,15 @@ export default function StartNewMessageModal({
                         onClose();
                       }}
                     >
-                      <img
+                      <Image
                         src={
                           buddy?.profile_details?.profile_picture !== null
                             ? buddy?.profile_details?.profile_picture
                             : "/images/profile.png"
                         }
                         alt={buddy.first_name}
+                        width={54}
+                        height={54}
                         className="md:w-[3.375rem] md:h-[3.375rem] shrink-0 w-7 h-7 rounded-full object-cover"
                       />
                       <div>

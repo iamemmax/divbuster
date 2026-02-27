@@ -1,26 +1,6 @@
 // Types and Interfaces
-interface Coordinate {
-  lon: string;
-  lat: string;
-}
 
-interface RecentDiveInfo {
-  start_date: string | null;
-  end_date: string | null;
-  bottom_time: string | null;
-  depth: string | null;
-  other_divers: string | null;
-  dive_image: string | null;
-}
 
-interface SuggestedDiver {
-  id: number;
-  full_name: string;
-  profile_picture: string | null;
-  coordinate: Coordinate;
-  invite_id: string;
-  recent_dive_info: RecentDiveInfo;
-}
 
 interface LocationResponse {
   success: boolean;
@@ -33,9 +13,7 @@ interface LocationResponse {
   placeId?: string;
 }
 
-interface DiverWithLocation extends SuggestedDiver {
-  locationInfo: LocationResponse;
-}
+
 
 // OpenCage API Response Types
 interface OpenCageComponents {
@@ -57,30 +35,10 @@ interface OpenCageResponse {
 }
 
 // Google Maps API Response Types
-interface GoogleMapsResult {
-  formatted_address: string;
-  place_id: string;
-}
 
-interface GoogleMapsResponse {
-  status: string;
-  results: GoogleMapsResult[];
-}
 
-// Nominatim (OpenStreetMap) Response Types
-interface NominatimAddress {
-  city?: string;
-  town?: string;
-  village?: string;
-  state?: string;
-  country?: string;
-  country_code?: string;
-}
 
-interface NominatimResponse {
-  display_name: string;
-  address: NominatimAddress;
-}
+
 
 // Option 1: Using OpenCage Geocoding API (Recommended - has free tier)
 export const getLocationFromCoordinates = async (

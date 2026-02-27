@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useCallback, lazy, Suspense } from 'react'
 import Header from './components/shared/Header'
 import { useAuth } from '@/contexts/authentication'
-import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput';
+// import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput';
 import { ActionDropdown } from '@/components/core/ActionDropdown';
 import MonthlySnapShot from './components/dashboard/MonthlySnapShot'
 import SuggestedDIverTabs from './components/dashboard/SuggestedDIverTabs'
@@ -22,10 +22,10 @@ const AddCertificateTypeComp = lazy(() => import('./components/certifications/Ad
 const MemoizedMonthlySnapShot = React.memo(MonthlySnapShot);
 const MemoizedSuggestedDIverTabs = React.memo(SuggestedDIverTabs);
 
-const Page = React.memo(() => {
+const DashboardComponent = () => {
   const { authState } = useAuth();
   const { user } = authState;
-  
+
   const [modalStates, setModalStates] = useState({
     diveLog: false,
     certification: false,
@@ -34,7 +34,7 @@ const Page = React.memo(() => {
   });
 
   const currentDate = useMemo(() => formatDate.long(new Date()), []);
-  
+
   const {language}= useLanguage()
   const t = DashboardTranslations[language] || DashboardTranslations.en;
 
@@ -53,30 +53,26 @@ const Page = React.memo(() => {
 
   return (
     <div className='text-black dark:text-white'>
-     
-       <Header 
+
+       <Header
         title={`Welcome, ${user?.first_name}`}
-        subtitle={currentDate} 
+        subtitle={currentDate}
       />
-  
-      
+
+
       {/* Dashboard content */}
       <div className=" px-3 lg:px-[1.875rem] mt-5 h-[85vh] overflow-y-auto">
         {/* Search and action bar */}
         <div className="flex flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div className="relative w-full md:w-96">
-            {/* <DebouncedSearchInput 
-              placeholder={t.searchPlaceholder} 
-              onSearch={handleSearch}
-              debounceTime={300}
-            /> */}
+
           </div>
-          
+
           <div className="relative w-[230px] md:w-auto">
             <ActionDropdown items={actionItems} />
           </div>
         </div>
-        
+
         {/* Monthly Snapshot section */}
         <div className="">
           <MemoizedMonthlySnapShot user={user}/>
@@ -94,6 +90,9 @@ const Page = React.memo(() => {
       </Suspense>
     </div>
   )
-})
+}
 
-export default Page
+const Dashbaord = React.memo(DashboardComponent)
+Dashbaord.displayName = 'Dashbaord'
+
+export default Dashbaord

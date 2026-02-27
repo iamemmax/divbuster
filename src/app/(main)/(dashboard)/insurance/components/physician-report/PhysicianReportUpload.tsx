@@ -2,8 +2,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import SignatureCanvas from 'react-signature-canvas'
 import { Button } from '@/components/core'
-import { useLanguage } from '@/hooks/useLanguage'
-import { insuranceTranslations } from '@/app/(main)/translation/insuranceTranslation'
 import toast from 'react-hot-toast'
 import { useSubmitPhysicianReport } from '../../../api/insurance/physician/createPhysicianReport'
 import { useFetchPhysicianReport } from '../../../api/insurance/physician/fetchPhysicianReport'
@@ -39,7 +37,7 @@ const physicianReportSchema = z.object({
 type PhysicianReportFormData = z.infer<typeof physicianReportSchema>
 
 const PhysicianReportUpload = () => {
-  const { language } = useLanguage()
+  // const { language } = useLanguage()
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
   const physicianSigRef = useRef<SignatureCanvas>(null)
   const [physicianSignatureData, setPhysicianSignatureData] = useState<string | null>(null)
@@ -125,21 +123,22 @@ const PhysicianReportUpload = () => {
 
   // Prefill form with existing physician report data
   useEffect(() => {
-    if (physicianReportData) {
-      setValue('physicianName', physicianReportData.physician_name || "")
-      setValue('physicianEmail', physicianReportData.physician_email || "")
-      setValue('hospitalName', physicianReportData.hospital_name || "")
-      setValue('licenseNumber', physicianReportData.physician_license_number || "")
-      setValue('physicianPhone', physicianReportData.physician_phone || "")
-      setValue('reportBase64', physicianReportData.physician_report || "")
+    if (physicianReportData && physicianReportData.data && physicianReportData.data.length > 0) {
+      const reportData = physicianReportData.data[0]
+      setValue('physicianName', reportData.physician_name || "")
+      setValue('physicianEmail', reportData.physician_email || "")
+      setValue('hospitalName', reportData.hospital_name || "")
+      setValue('licenseNumber', reportData.physician_license_number || "")
+      setValue('physicianPhone', reportData.physician_phone || "")
+      setValue('reportBase64', reportData.physician_report || "")
 
       // Format dates from API response (issued_on and expires_on)
-      if (physicianReportData.issued_on) {
-        const issuedDate = new Date(physicianReportData.issued_on).toISOString().split('T')[0]
+      if (reportData.issued_on) {
+        const issuedDate = new Date(reportData.issued_on).toISOString().split('T')[0]
         setValue('dateIssued', issuedDate)
       }
-      if (physicianReportData.expires_on) {
-        const expiresDate = new Date(physicianReportData.expires_on).toISOString().split('T')[0]
+      if (reportData.expires_on) {
+        const expiresDate = new Date(reportData.expires_on).toISOString().split('T')[0]
         setValue('dateExpires', expiresDate)
       }
     }
@@ -194,7 +193,7 @@ const PhysicianReportUpload = () => {
           Upload Physician Report
         </h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-          Upload your physician's medical report or clearance
+          Upload your physician&apos;s medical report or clearance
         </p>
       </div>
 

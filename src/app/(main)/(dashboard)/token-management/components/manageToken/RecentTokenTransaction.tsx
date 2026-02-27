@@ -50,7 +50,7 @@ const RecentTokenTransaction = () => {
   const {language}= useLanguage()
   const t = invoiceeTranslations[language] || invoiceeTranslations.en;
   const [globalFilter, setGlobalFilter] = useState("");
-  const [showDownloadMenu, setShowDownloadMenu] = useState(false);
+  const [_showDownloadMenu, setShowDownloadMenu] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const tableScrollRef = React.useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = React.useState(false);
@@ -108,6 +108,95 @@ const RecentTokenTransaction = () => {
     setSelectedTransaction(null);
   };
 
+  const downloadSinglePDF = async (transaction: TransHistoryResult) => {
+    setIsDownloading(true);
+    setCurrentDownloadingId(transaction.id);
+    try {
+      const el = document.getElementById('receipt-screenshot');
+      if (el) {
+        const html2canvas = (await import('html2canvas')).default;
+        const canvas = await html2canvas(el as HTMLElement, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#ffffff',
+          logging: false
+        });
+
+        // Crop whitespace from canvas
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Could not get canvas context');
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        // Find the bounding box of non-white pixels
+        let minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
+
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const a = data[i + 3];
+
+          // Check if pixel is not white (or transparent)
+          if (a > 128 && !(r > 240 && g > 240 && b > 240)) {
+            const pixelIndex = i / 4;
+            const x = pixelIndex % canvas.width;
+            const y = Math.floor(pixelIndex / canvas.width);
+
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
+          }
+        }
+
+        // Add small padding around content
+        const padding = 10;
+        minX = Math.max(0, minX - padding);
+        minY = Math.max(0, minY - padding);
+        maxX = Math.min(canvas.width, maxX + padding);
+        maxY = Math.min(canvas.height, maxY + padding);
+
+        const croppedWidth = maxX - minX;
+        const croppedHeight = maxY - minY;
+
+        // Create a new canvas with cropped content
+        const croppedCanvas = document.createElement('canvas');
+        croppedCanvas.width = croppedWidth;
+        croppedCanvas.height = croppedHeight;
+        const croppedCtx = croppedCanvas.getContext('2d');
+        if (!croppedCtx) throw new Error('Could not get cropped canvas context');
+
+        croppedCtx.drawImage(canvas, minX, minY, croppedWidth, croppedHeight, 0, 0, croppedWidth, croppedHeight);
+
+        // Convert to JPEG for smaller file size
+        const imgData = croppedCanvas.toDataURL('image/jpeg', 0.85);
+        const pdf = new jsPDF('p', 'pt', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (croppedHeight * pdfWidth) / croppedWidth;
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`transaction_${transaction.id}_${new Date().toISOString().split('T')[0]}.pdf`);
+        return;
+      }
+    } catch (err) {
+      console.error('capture failed', err);
+    } finally {
+      setIsDownloading(false);
+      setPendingDownload(false);
+      setCurrentDownloadingId(null);
+    }
+
+    // Fallback textual PDF
+    const doc = new jsPDF();
+    doc.setFontSize(12);
+    doc.text('Transaction Receipt', 14, 22);
+    doc.text(`ID: ${transaction.id}`, 14, 40);
+    doc.text(`Amount: ₦${transaction.amount.toLocaleString()}`, 14, 56);
+    doc.save(`transaction_${transaction.id}_${new Date().toISOString().split('T')[0]}.pdf`);
+  };
+
   useEffect(() => {
     if (showModal && pendingDownload && selectedTransaction) {
       const id = setTimeout(() => {
@@ -121,94 +210,6 @@ const RecentTokenTransaction = () => {
 
 
 
-const downloadSinglePDF = async (transaction: TransHistoryResult) => {
-  setIsDownloading(true);
-  setCurrentDownloadingId(transaction.id);
-  try {
-    const el = document.getElementById('receipt-screenshot');
-    if (el) {
-      const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(el as HTMLElement, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
-        logging: false
-      });
-
-      // Crop whitespace from canvas
-      const ctx = canvas.getContext('2d');
-      if (!ctx) throw new Error('Could not get canvas context');
-
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-
-      // Find the bounding box of non-white pixels
-      let minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
-
-      for (let i = 0; i < data.length; i += 4) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
-        const a = data[i + 3];
-
-        // Check if pixel is not white (or transparent)
-        if (a > 128 && !(r > 240 && g > 240 && b > 240)) {
-          const pixelIndex = i / 4;
-          const x = pixelIndex % canvas.width;
-          const y = Math.floor(pixelIndex / canvas.width);
-
-          minX = Math.min(minX, x);
-          minY = Math.min(minY, y);
-          maxX = Math.max(maxX, x);
-          maxY = Math.max(maxY, y);
-        }
-      }
-
-      // Add small padding around content
-      const padding = 10;
-      minX = Math.max(0, minX - padding);
-      minY = Math.max(0, minY - padding);
-      maxX = Math.min(canvas.width, maxX + padding);
-      maxY = Math.min(canvas.height, maxY + padding);
-
-      const croppedWidth = maxX - minX;
-      const croppedHeight = maxY - minY;
-
-      // Create a new canvas with cropped content
-      const croppedCanvas = document.createElement('canvas');
-      croppedCanvas.width = croppedWidth;
-      croppedCanvas.height = croppedHeight;
-      const croppedCtx = croppedCanvas.getContext('2d');
-      if (!croppedCtx) throw new Error('Could not get cropped canvas context');
-
-      croppedCtx.drawImage(canvas, minX, minY, croppedWidth, croppedHeight, 0, 0, croppedWidth, croppedHeight);
-
-      // Convert to JPEG for smaller file size
-      const imgData = croppedCanvas.toDataURL('image/jpeg', 0.85);
-      const pdf = new jsPDF('p', 'pt', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (croppedHeight * pdfWidth) / croppedWidth;
-      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`transaction_${transaction.id}_${new Date().toISOString().split('T')[0]}.pdf`);
-      return;
-    }
-  } catch (err) {
-    console.error('capture failed', err);
-  } finally {
-    setIsDownloading(false);
-    setPendingDownload(false);
-    setCurrentDownloadingId(null);
-  }
-
-  // Fallback textual PDF
-  const doc = new jsPDF();
-  doc.setFontSize(12);
-  doc.text('Transaction Receipt', 14, 22);
-  doc.text(`ID: ${transaction.id}`, 14, 40);
-  doc.text(`Amount: ₦${transaction.amount.toLocaleString()}`, 14, 56);
-  doc.save(`transaction_${transaction.id}_${new Date().toISOString().split('T')[0]}.pdf`);
-};
 
 
 
@@ -286,7 +287,7 @@ const downloadSinglePDF = async (transaction: TransHistoryResult) => {
               onMouseDown={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('View button clicked for:', info.row.original.id);
+                // console.log('View button clicked for:', info.row.original.id);
                 handleView(info.row.original);
               }}
               className="px-3 py-1 text-xs bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 cursor-pointer"

@@ -177,7 +177,6 @@ const SignupPage = () => {
   // Prevent authenticated users from accessing signup
   useEffect(() => {
     if (!isLoading && authState.isAuthenticated) {
-      console.log("User already authenticated, redirecting to home");
       router.push('/');
     }
   }, [authState.isAuthenticated, isLoading, router]);
@@ -186,7 +185,14 @@ const SignupPage = () => {
   const updateFormData = (data: Partial<typeof formData>) => {
     setFormData(prev => ({ ...prev, ...data }));
   };
-
+// Handle final form submission
+  const handleFinalSubmit = async () => {
+    try {
+      router.push('/login');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
   // Fast navigation with minimal transition guards
   const goToNextStep = () => {
     if (isTransitioning) return; // Prevent multiple rapid transitions
@@ -222,15 +228,7 @@ const SignupPage = () => {
     }
   };
 
-  // Handle final form submission
-  const handleFinalSubmit = async () => {
-    try {
-      console.log('Submitting form data:', formData);
-      router.push('/login');
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
-  };
+  
 
   // Show loading state
   if (isLoading) {

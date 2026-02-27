@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Search, Edit3, Trash2, Archive, MoreVertical } from "lucide-react";
-import { messageProp, resentChatProp } from "./RecentMessages";
+import { Search, Edit3 } from "lucide-react";
+import {  resentChatProp } from "./RecentMessages";
 import StartNewMessageModal from "./modals/StartNewMessageModal";
 import { chatListProp } from "../../api/chats/single-chat/fetchChatList";
 import moment from "moment";
@@ -11,32 +11,20 @@ interface ChatMessagesSidebarProps {
   // messages: resentChatProp[];
   selectedMessage: resentChatProp | undefined;
   onSelectMessage: (message: resentChatProp) => void;
-  onDelete: (messageId: string) => void;
-  onArchive: (messageId: string) => void;
-  title?: string;
   recentChatList: chatListProp | undefined;
   isLoading: boolean;
 }
 
 export default function ChatMessagesSidebar({
-  // messages,
   selectedMessage,
   onSelectMessage,
-  onDelete,
-  onArchive,
   recentChatList,
   isLoading,
-  title = "Messages",
 }: ChatMessagesSidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [showNewMessageModal, setShowNewMessageModal] = useState(false);
   const {language}=useLanguage()
   const t = chatMessagestranslations[language] || chatMessagestranslations.en
-
-  // const handleMenuToggle = (messageId: string) => {
-  //   setOpenMenuId(openMenuId === messageId ? null : messageId);
-  // };
 
   return (
     <div className="bg-white dark:bg-gray-900 shadow-sm px-4 sm:px-6 lg:px-8 py-3 flex flex-col transition-colors duration-200">

@@ -139,41 +139,9 @@ const DiveActivityCard = () => {
   const [huggedPosts, setHuggedPosts] = useState<Set<number>>(new Set());
   const [thumbsUpPosts, setThumbsUpPosts] = useState<Set<number>>(new Set());
 
-  const toggleLike = (activityId: number) => {
-    setLikedPosts((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(activityId)) {
-        newSet.delete(activityId);
-      } else {
-        newSet.add(activityId);
-      }
-      return newSet;
-    });
-  };
 
-  const toggleHug = (activityId: number) => {
-    setHuggedPosts((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(activityId)) {
-        newSet.delete(activityId);
-      } else {
-        newSet.add(activityId);
-      }
-      return newSet;
-    });
-  };
 
-  const toggleThumbsUp = (activityId: number) => {
-    setThumbsUpPosts((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(activityId)) {
-        newSet.delete(activityId);
-      } else {
-        newSet.add(activityId);
-      }
-      return newSet;
-    });
-  };
+
 
    const toggleReaction = (activityId: number, setter: React.Dispatch<React.SetStateAction<Set<number>>>) => {
     setter((prev) => {
@@ -196,16 +164,16 @@ const DiveActivityCard = () => {
       {/* User Profile Header */}
       <div className="flex items-center justify-between p-4 pb-3">
         <div className="flex items-start gap-3 w-full">
-          <div className="relative xl:h-[3.4375rem] shrink-0 xl:w-[3.4375rem] w-[2rem] h-[2rem] rounded-full overflow-hidden bg-[#F7931D] flex items-center justify-center ">
+          <div className="relative xl:size-[3.4375rem] shrink-0 size-8 rounded-full overflow-hidden bg-[#F7931D] flex items-center justify-center ">
             {activity?.avatar ? (
               <Image
                 alt="img"
                 src={activity?.avatar}
-                fill
                 className="object-cover"
+                fill
               />
             ) : (
-              <span className="text-[#fff] text-xl font-semibold font-archivo">
+              <span className="text-white text-xl font-semibold font-archivo">
                 {activity?.name
                   ?.split(" ")
                   .map((n) => n[0])
@@ -224,8 +192,8 @@ const DiveActivityCard = () => {
                     {activity.name}
                   </h3>
                   {activity.isOnline && (
-                    <div className="bg-[#ECFDF3] dark:bg-green-900/30 rounded-2xl gap-x-[.4375rem] px-[1rem] flex items-center  py-[.2188rem] transition-colors duration-200">
-                      <div className="w-[6px] h-[6px] rounded-full bg-[#12B76A]" />
+                    <div className="bg-[#ECFDF3] dark:bg-green-900/30 rounded-2xl gap-x-[.4375rem] px-4 flex items-center  py-[.2188rem] transition-colors duration-200">
+                      <div className="size-[6px] rounded-full bg-[#12B76A]" />
                       <p className="text-sm font-medium font-archivo text-[#027A48] dark:text-green-400">
                         Online
                       </p>
@@ -334,8 +302,8 @@ const DiveActivityCard = () => {
         <Image
           src={activity.image}
           alt={`Dive at ${activity.location}`}
-          fill
           className="object-cover rounded-2xl"
+          fill
         />
       </div>
 
@@ -347,18 +315,20 @@ const DiveActivityCard = () => {
             {activity.likers.slice(0, 3).map((liker) => (
               <div
                 key={liker.id}
-                className="w-8 h-8 rounded-full overflow-hidden border-2 border-white dark:border-gray-700 transition-colors duration-200"
+                className="size-8 rounded-full overflow-hidden border-2 border-white dark:border-gray-700 transition-colors duration-200"
                 title={liker.name}
               >
-                <img
+                <Image
                   src={liker.avatar}
                   alt={liker.name}
-                  className="w-full h-full object-cover"
+                  width={32}
+                  height={32}
+                  className="size-full object-cover"
                 />
               </div>
             ))}
             {activity.likers.length > 3 && (
-              <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-600 border-2 border-white dark:border-gray-700 flex items-center justify-center transition-colors duration-200">
+              <div className="size-8 rounded-full bg-gray-100 dark:bg-gray-600 border-2 border-white dark:border-gray-700 flex items-center justify-center transition-colors duration-200">
                 <span className="text-xs text-gray-600 dark:text-gray-300 font-medium">
                   +{activity.likers.length - 3}
                 </span>

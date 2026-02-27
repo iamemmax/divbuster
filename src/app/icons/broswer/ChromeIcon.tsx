@@ -141,4 +141,3 @@ const ChromeIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 export default ChromeIcon;
-import { forwardRef } from "react";

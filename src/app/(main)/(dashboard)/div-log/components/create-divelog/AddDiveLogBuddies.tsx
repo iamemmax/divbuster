@@ -51,7 +51,7 @@ const setBuddiesString = (buddiesSet: Set<number>): string => {
   return Array.from(buddiesSet).join(',');
 };
 
-const AddDiveLogBuddies = ({ setStep, buddyMembers, setBuddyMembers, user }: prop) => {
+const AddDiveLogBuddies = ({ setStep, buddyMembers, setBuddyMembers }: prop) => {
   // Fix: Initialize with empty array if buddyMembers?.email is undefined
   const [selectedBuddies, setSelectedBuddies] = useState<Set<number>>(() =>
     parseBuddiesString(buddyMembers?.buddies || '')
@@ -163,12 +163,12 @@ const AddDiveLogBuddies = ({ setStep, buddyMembers, setBuddyMembers, user }: pro
             placeholder={t.emailPlaceholder}
             className={`border outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem]
               focus:border-[#F7931D] border-[#E2E8F0] dark:border-gray-600 focus:ring-2 focus:ring-[#F7931D]/20 transition-colors 
-              placeholder-gray-400 dark:placeholder-gray-500`}
+              placeholder:text-gray-400 dark:placeholder:text-gray-500`}
           />
           <Button
             size={"lg"}
             type="submit"
-            className="bg-[#F7931D] py-[1rem] hover:bg-[#E8841A] text-white"
+            className="bg-[#F7931D] py-4 hover:bg-[#E8841A] text-white"
           >
             {t.addButton}
           </Button>
@@ -240,10 +240,10 @@ const AddDiveLogBuddies = ({ setStep, buddyMembers, setBuddyMembers, user }: pro
                         : "/images/profile.png"
                     }
                     alt={buddy.first_name}
-                    className="md:w-[2.375rem] md:h-[2.375rem] shrink-0 w-9 h-9 rounded-full object-cover"
+                    className="md:size-[2.375rem] shrink-0 size-9 rounded-full object-cover"
                   />
                   {selectedBuddies.has(buddy.id) && (
-                    <div className="absolute top-1 -right-1 w-4 h-4  bg-[#F7931D] rounded-full flex items-center justify-center">
+                    <div className="absolute top-1 -right-1 size-4 bg-[#F7931D]  rounded-full flex items-center justify-center">
                       <span className="text-white text-xs">✓</span>
                     </div>
                   )}

@@ -71,7 +71,6 @@ const fetchDiveSites = async ({
   lang,
   favorite,
   search,
-  paginate,
   pageParam = 1,
 }: filter & { pageParam?: number }) => {
   try {

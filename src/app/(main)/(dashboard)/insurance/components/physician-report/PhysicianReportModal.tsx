@@ -1,6 +1,6 @@
 "use client"
-import React, { useState, useRef, useEffect } from 'react'
-import SignatureCanvas from 'react-signature-canvas'
+import React, { useState, useEffect } from 'react'
+// import SignatureCanvas from 'react-signature-canvas'
 import { Button } from '@/components/core'
 import toast from 'react-hot-toast'
 import { useSubmitPhysicianReport } from '../../../api/insurance/physician/createPhysicianReport'
@@ -40,8 +40,8 @@ const PhysicianReportModal: React.FC<PhysicianReportModalProps> = ({
   onSuccess
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
-  const physicianSigRef = useRef<SignatureCanvas>(null)
-  const [canvasWidth, setCanvasWidth] = useState(600)
+  // const physicianSigRef = useRef<SignatureCanvas>(null)
+  // const [canvasWidth, setCanvasWidth] = useState(600)
   const { mutate: submitReport, isLoading: isSubmitting } = useSubmitPhysicianReport()
   const { mutate: updateReport, isLoading: isUpdating } = useUpdatePhysicianReport()
     const queryClient = useQueryClient()

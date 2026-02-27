@@ -95,7 +95,7 @@ const DiveProfileForm = ({
     mode: "onChange",
   });
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDateChange = () => {
     // Additional date handling logic if needed
   };
 

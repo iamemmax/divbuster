@@ -3,8 +3,8 @@
 import React, { createContext, useContext, useEffect, useReducer, useMemo } from "react";
 import { tokenStorage } from "@/app/(auth)/utils";
 import { adminAxios, deleteAxiosDefaultToken, setAxiosDefaultToken } from "@/lib/axios";
-import { UserDataProp } from "./types";
-import { certificates } from "@/app/(main)/(dashboard)/api/buddy/fetchBuddyProfile";
+// import { UserDataProp } from "./types";
+// import { certificates } from "@/app/(main)/(dashboard)/api/buddy/fetchBuddyProfile";
 import { getAuthenticatedUser, User, userDetails } from "@/app/(auth)/api/getAuthenticatedUser";
 
 
@@ -66,12 +66,12 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
           localStorage.removeItem("DIVBUSTERSAVED_LOGIN_CREDENTIALS");
           
           // Log tokens after clearing
-          const divbusterTokenAfter = localStorage.getItem("DIVBUSTERTOKEN");
+          // const divbusterTokenAfter = localStorage.getItem("DIVBUSTERTOKEN");
           
           // Remove token from axios headers
           deleteAxiosDefaultToken();
         } catch (error) {
-          console.error("Error during logout:", error);
+        
         }
         
         return {
@@ -108,7 +108,7 @@ case "REMOVE_SUGGESTED_DIVER":
 };
 
 // Provider component
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = React.memo(({ children }) => {
+const AuthProviderComponent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [authState, authDispatch] = useReducer(authReducer, initialState);
 
   const contextValue = useMemo(() => ({ authState, authDispatch }), [authState]);
@@ -117,7 +117,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = React.memo(
 
 useEffect(() => {
   let isMounted = true;
-  
+
   const fetchUser = async () => {
     try {
       const token = tokenStorage.getToken();
@@ -141,22 +141,21 @@ useEffect(() => {
   };
 
   fetchUser();
-  
+
   return () => {
     isMounted = false;
   };
 }, []);
-
-
- 
-  // console.log("Auth state updated:", authState);
 
   return (
     <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
-});
+};
+
+export const AuthProvider = React.memo(AuthProviderComponent);
+AuthProvider.displayName = "AuthProvider";
 
 // Hook for using the auth context
 export const useAuth = () => {

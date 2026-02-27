@@ -28,7 +28,6 @@ interface EditDiveLogModalProps {
 const EditDiveLogModal: React.FC<EditDiveLogModalProps> = ({
   isOpen,
   onClose,
-  onSave,
   initialData
 }) => {
   const {
@@ -103,6 +102,7 @@ const EditDiveLogModal: React.FC<EditDiveLogModalProps> = ({
     }
   }, [isOpen, initialData, setValue]);
 
+  const {mutate:handleUpdate,isLoading}=useUpdateDiveLogHeader()
  const handleSave = (data: { name: string; start_date: string; end_date: string }) => {
   const payload = {
     id:initialData.id,
@@ -128,7 +128,6 @@ const EditDiveLogModal: React.FC<EditDiveLogModalProps> = ({
        );
    
   };
-  const {mutate:handleUpdate,isLoading}=useUpdateDiveLogHeader()
   const handleClose = () => {
     reset();
     onClose()

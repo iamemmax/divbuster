@@ -1,4 +1,5 @@
 import { Button, Dialog, DialogContent, ErrorModal } from "@/components/core";
+import Image from "next/image";
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -66,7 +67,7 @@ const CreateGroupChatForm = ({
     errorModalMessage,
   } = useErrorModalState();
   const [previewURL, setPreviewURL] = useState<string | null>(null);
-  const [dragActive, setDragActive] = useState(false);
+  const [_dragActive, setDragActive] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [uploading, setUploading] = useState(false);
   const { mutate: handleUpdateGroup, isLoading: isUpdating } = useUpdateGroupChat();
@@ -93,6 +94,18 @@ const CreateGroupChatForm = ({
       setPreviewURL(group?.group?.image)
     }
   }, [group])
+   const simulateUpload = () => {
+    setUploading(true);
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 10;
+      setUploadProgress(progress);
+      if (progress >= 100) {
+        clearInterval(interval);
+        setUploading(false);
+      }
+    }, 100);
+  };
 
   const handleFile = useCallback(
     (file: File) => {
@@ -139,18 +152,7 @@ const CreateGroupChatForm = ({
     fileInputRef.current?.click();
   };
 
-  const simulateUpload = () => {
-    setUploading(true);
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 10;
-      setUploadProgress(progress);
-      if (progress >= 100) {
-        clearInterval(interval);
-        setUploading(false);
-      }
-    }, 100);
-  };
+ 
 
   const handleRemoveImage = () => {
     setValue("image", undefined, { shouldValidate: true });
@@ -266,8 +268,8 @@ const CreateGroupChatForm = ({
                     onClick={handleUploadClick}
                     className="cursor-pointer border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                   >
-                    <div className="h-10 w-10 mx-auto mb-2 border-4 border-[#F9FAFB] dark:border-gray-700 rounded-full flex justify-center items-center bg-[#F2F4F7] dark:bg-gray-700">
-                      <CloudIcon className="w-6 h-6 text-gray-400 dark:text-gray-300" />
+                    <div className="size-10 mx-auto mb-2 border-4 border-[#F9FAFB] dark:border-gray-700 rounded-full flex justify-center items-center bg-[#F2F4F7] dark:bg-gray-700">
+                      <CloudIcon className="size-6 text-gray-400 dark:text-gray-300" />
                     </div>
                     <p>
                       <span className="text-orange-500 font-archivo text-sm font-medium">
@@ -290,11 +292,13 @@ const CreateGroupChatForm = ({
 
                 {/* Image Preview with Remove */}
                 {previewURL && (
-                  <div className="relative w-40 h-40 rounded overflow-hidden">
-                    <img
+                  <div className="relative size-40 rounded overflow-hidden">
+                    <Image
                       src={previewURL}
                       alt="Preview"
-                      className="object-cover w-full h-full"
+                      width={160}
+                      height={160}
+                      className="object-cover size-full"
                     />
                     <button
                       type="button"
@@ -399,16 +403,15 @@ const CreateGroupChatForm = ({
                     <div className="flex items-start gap-1">
                       <div className="shrink-0">
                         {buddy?.image ? (
-                          <img
+                          <Image
                             src={buddy?.image}
                             alt={buddy.first_name}
-                            className="md:w-[4.375rem] md:h-[4.375rem] shrink-0 w-9 h-9 rounded-full object-cover"
-                            onError={(e) => {
-                              e.currentTarget.src = "/images/profile.png"; // optional backup image
-                            }}
+                            width={70}
+                            height={70}
+                            className="md:size-[4.375rem] shrink-0 size-9 rounded-full object-cover"
                           />
                         ) : (
-                          <div className="md:w-[4.375rem] md:h-[4.375rem] w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-white font-semibold">
+                          <div className="md:size-[4.375rem] size-9 rounded-full bg-gray-300 flex items-center justify-center text-white font-semibold">
                             {`${buddy?.first_name?.[0] ?? ""}${buddy?.last_name?.[0] ?? ""}`}
                           </div>
                         )}

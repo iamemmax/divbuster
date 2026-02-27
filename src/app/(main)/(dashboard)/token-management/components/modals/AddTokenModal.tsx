@@ -103,7 +103,6 @@ const {language}=useLanguage()
                     name="plan_id"
                     control={control}
                     render={({ field }) => {
-                      const [isOpen, setIsOpen] = React.useState(false)
                       const selectedPkg = data?.find(pkg => String(pkg.id) === field.value)
                       
                       return (
@@ -116,7 +115,7 @@ const {language}=useLanguage()
                             <span className={selectedPkg ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}>
                               {selectedPkg ? `EUR ${selectedPkg.amount} - ${selectedPkg.coin_value} tokens` : 'Select a package'}
                             </span>
-                            <ChevronDown className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                            <ChevronDown className={`size-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
                           </button>
                           
                           {isOpen && (
@@ -125,7 +124,7 @@ const {language}=useLanguage()
                                 className="fixed inset-0 z-10" 
                                 onClick={() => setIsOpen(false)}
                               />
-                              <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-2xl overflow-hidden z-20 animate-in slide-in-from-top-2 duration-200">
+                              <div className="absolute top-full inset-x-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-2xl overflow-hidden z-20 animate-in slide-in-from-top-2 duration-200">
                                 <div className="max-h-60 overflow-y-auto">
                                   {data?.map((pkg) => (
                                     <button
@@ -139,7 +138,7 @@ const {language}=useLanguage()
                                     >
                                       <span>{`EUR ${pkg.amount} - ${pkg.coin_value} tokens`}</span>
                                       {String(pkg.id) === field.value && (
-                                        <Check className="w-4 h-4 text-orange-500 dark:text-orange-400" />
+                                        <Check className="size-4 text-orange-500 dark:text-orange-400" />
                                       )}
                                     </button>
                                   ))}

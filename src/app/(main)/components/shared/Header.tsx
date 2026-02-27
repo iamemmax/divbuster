@@ -1,7 +1,7 @@
 "use client"
 import MessageIcon from "@/app/icons/(dashboard)/MessageIcon";
 import NotificationIcon from "@/app/icons/(dashboard)/NotificationIcon";
-import WarningIcon from "@/app/icons/(dashboard)/WarningIcon";
+// import WarningIcon from "@/app/icons/(dashboard)/WarningIcon";
 import LogoutIcon from "@/app/icons/(dashboard)/LogoutIcon";
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, LinkButton } from "@/components/core";
 import React, { useState, useEffect, useRef } from "react";
@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { tokenStorage } from "@/app/(auth)/utils";
 import { deleteAxiosDefaultToken } from "@/lib/axios";
 import Link from "next/link";
+import Image from "next/image";
 
 interface HeaderProps {
   title?: string;
@@ -108,12 +109,12 @@ const Header = ({ subtitle, title }: HeaderProps) => {
             </div>
           </Button> */}
           <LinkButton href={"/messages"} className="bg-transparent p-0">
-            <div className="border border-[#EEEEEE] flex justify-center items-center w-[2rem] xl:w-[2.5rem] h-[2rem] xl:h-[2.5rem] rounded-full ">
+            <div className="border border-[#EEEEEE] flex justify-center items-center size-8 xl:size-10 rounded-full ">
               <MessageIcon className="text-[#132346] dark:text-white" />
             </div>
           </LinkButton>
           <LinkButton href={"/notifications"} className="bg-transparent p-0">
-            <div className="border border-[#EEEEEE] flex justify-center items-center w-[2rem] xl:w-[2.5rem] h-[2rem] xl:h-[2.5rem] rounded-full ">
+            <div className="border border-[#EEEEEE] flex justify-center items-center size-8 xl:size-10 rounded-full ">
               <NotificationIcon className="text-[#132346] dark:text-white" />
             </div>
           </LinkButton>
@@ -125,15 +126,17 @@ const Header = ({ subtitle, title }: HeaderProps) => {
             aria-label="User profile"
           >
           <div className="relative">
-  <div className="xl:w-10 xl:h-10 w-8 h-8 rounded-full overflow-hidden border-2 border-white dark:border-gray-700">
+  <div className="xl:size-10 size-8 rounded-full overflow-hidden border-2 border-white dark:border-gray-700">
     {userData?.profile_details?.profile_picture ? (
-      <img
+      <Image
         src={userData.profile_details.profile_picture}
         alt="Diver profile"
-        className="w-full h-full object-cover"
+        className="size-full object-cover"
+        sizes="(max-width: 1280px) 32px, 40px"
+        fill
       />
     ) : (
-      <div className="w-full h-full bg-gray-400 dark:bg-gray-600 flex items-center justify-center">
+      <div className="size-full bg-gray-400 dark:bg-gray-600 flex items-center justify-center">
         <span className="text-white dark:text-gray-100 text-base font-semibold font-archivo uppercase">
           {userData?.first_name?.charAt(0) || ""}
           {userData?.last_name?.charAt(0) || ""}
@@ -142,12 +145,12 @@ const Header = ({ subtitle, title }: HeaderProps) => {
       </div>
     )}
   </div>
-  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 dark:bg-green-400 rounded-full border-2 border-white dark:border-gray-700"></div>
+  <div className="absolute bottom-0 right-0 size-3 bg-green-500 dark:bg-green-400 rounded-full border-2 border-white dark:border-gray-700"></div>
 </div>
             {/* Dropdown icon for mobile */}
             {isMobile && (
               <svg 
-                className="ml-1 w-4 h-4 text-gray-500 dark:text-gray-400" 
+                className="ml-1 size-4 text-gray-500 dark:text-gray-400" 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24" 
@@ -177,7 +180,7 @@ const Header = ({ subtitle, title }: HeaderProps) => {
                     {userData?.email ??""} 
                   </p>
                   <svg 
-                className="ml-1 w-4 h-4 text-gray-500 dark:text-gray-400" 
+                className="ml-1 size-4 text-gray-500 dark:text-gray-400" 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24" 
@@ -200,7 +203,7 @@ const Header = ({ subtitle, title }: HeaderProps) => {
                   className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer flex items-center gap-2"
                   onClick={handleLogout}
                 >
-                  <LogoutIcon className="w-4 h-4" />
+                  <LogoutIcon className="size-4" />
                   <span>Sign Out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -220,13 +223,13 @@ const Header = ({ subtitle, title }: HeaderProps) => {
               </div>
               <div className="p-2">
                 <Link href={"/messages"} className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
-                  <div className="border border-[#EEEEEE] dark:border-gray-600 flex justify-center items-center w-8 h-8 rounded-full">
+                  <div className="border border-[#EEEEEE] dark:border-gray-600 flex justify-center items-center size-8 rounded-full">
                     <MessageIcon className="text-[#132346] dark:text-white"/>
                   </div>
                   <span className="text-sm font-medium text-gray-700 dark:text-white/70">Messages</span>
                 </Link>
                 <Link href={"/notifications"} className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
-                  <div className="border border-[#EEEEEE] dark:border-gray-600 flex justify-center items-center w-8 h-8 rounded-full">
+                  <div className="border border-[#EEEEEE] dark:border-gray-600 flex justify-center items-center size-8 rounded-full">
                     <NotificationIcon className="text-[#132346] dark:text-white"/>
                   </div>
                   <span className="text-sm font-medium text-gray-700 dark:text-white/70">Notifications</span>
@@ -239,7 +242,7 @@ const Header = ({ subtitle, title }: HeaderProps) => {
                   className="bg-transparent p-2 cursor-pointer flex gap-3 text-sm font-medium text-gray-700 dark:text-white/70"
                   onClick={handleLogout}
                 >
-                <div className="border border-[#EEEEEE] dark:border-gray-600  flex justify-center items-center w-8 h-8 rounded-full">
+                <div className="border border-[#EEEEEE] dark:border-gray-600  flex justify-center items-center size-8 rounded-full">
                     <LogoutIcon />
                   </div>  Sign Out
                 </Button>

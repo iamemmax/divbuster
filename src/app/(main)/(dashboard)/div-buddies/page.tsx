@@ -5,7 +5,6 @@ import {
   useReactTable,
   getCoreRowModel,
   getFilteredRowModel,
-  getSortedRowModel,
   createColumnHelper,
   flexRender,
 } from '@tanstack/react-table'
@@ -20,7 +19,6 @@ import AngleRight from '@/app/icons/(dashboard)/AngleRight';
 import { useErrorModalState } from '@/hooks';
 import { formatAxiosErrorMessage } from '@/utils';
 import { AxiosError } from 'axios';
-import { SmallSpinner } from '@/icons/core';
 import { diverBuddiesTranslations } from '../../translation/diveBuddiesTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { DiveBuddySkeleton } from '@/components/core';

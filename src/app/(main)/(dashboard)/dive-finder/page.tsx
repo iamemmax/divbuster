@@ -1,40 +1,33 @@
 "use client";
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Header from "../../components/shared/Header";
 import { useUser } from "@/app/(auth)/api/getAuthenticatedUser";
-import { diveSiteResult, divSitesProp, useFetchDiveSites } from "../api/div-sites/fetch-dive-sites";
-import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query";
 import { DebouncedSearchInput } from "@/components/core/DebouncedSearchInput";
 import { Search } from "lucide-react";
-import { useAuth } from "@/contexts/authentication";
+// import { useAuth } from "@/contexts/authentication";
 import { diverBuddiesTranslations } from "../../translation/diveBuddiesTranslation";
 import { Language } from "../../translation/dashboardTranslation";
-import { buddyListProp, buddyResult, useFetchBuddyList } from "../api/buddy/fetchBudies";
+// import {  useFetchBuddyList } from "../api/buddy/fetchBudies";
 
 // Lazy load heavy components
-const DiveSiteLeafletMap = lazy(() => import("./components/DiveSiteLeafletMap"));
-const CreateBuddyPlanMap = lazy(() => import("./components/CreateBuddyPlanMap"));
-const BuddiesAroundMe = lazy(() => import("./components/BuddiesAroundMe"));
+// const DiveSiteLeafletMap = lazy(() => import("./components/DiveSiteLeafletMap"));
+// const CreateBuddyPlanMap = lazy(() => import("./components/CreateBuddyPlanMap"));
+// const BuddiesAroundMe = lazy(() => import("./components/BuddiesAroundMe"));
 
-// Loading component
-const MapLoader = () => (
-  <div className="flex items-center justify-center h-96 bg-gray-100 dark:bg-gray-800 rounded-lg">
-    <div className="text-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-2"></div>
-      <p className="text-gray-600 dark:text-gray-400">Loading map...</p>
-    </div>
-  </div>
-);
+// // Loading component
+// const MapLoader = () => (
+//   <div className="flex items-center justify-center h-96 bg-gray-100 dark:bg-gray-800 rounded-lg">
+//     <div className="text-center">
+//       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-2"></div>
+//       <p className="text-gray-600 dark:text-gray-400">Loading map...</p>
+//     </div>
+//   </div>
+// );
 
 
-interface prop {
-  diveSites: diveSiteResult[]
-  hasNextPage: boolean | undefined;
-  isFetchingNextPage: boolean
-  fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<divSitesProp, unknown>>
-}
+
 
 // Main DiveMap Component
 export default function DiveMap() {
@@ -46,24 +39,24 @@ export default function DiveMap() {
   const language: Language = (user?.data?.profile_details?.language as Language);
   const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
   
-  const apiParams = {
-    lang: user?.data?.profile_details?.language || "en",
-    favorite: "",
-    search,
-    paginate: "no"
-  };
+  // const apiParams = {
+  //   lang: user?.data?.profile_details?.language || "en",
+  //   favorite: "",
+  //   search,
+  //   paginate: "no"
+  // };
 
-  const {
-    data,
+  // const {
+  //   data,
    
-  } = useFetchDiveSites(apiParams);
+  // } = useFetchDiveSites(apiParams);
 
-  const { 
-    data: buddyList, 
-    fetchNextPage: FetchBuddyNextPage,
-    hasNextPage: hasNextBuddyPage,
-    isFetchingNextPage: isFetchBuddyNextPage,
-  } = useFetchBuddyList(language);
+  // const { 
+  //   data: buddyList, 
+  //   fetchNextPage: FetchBuddyNextPage,
+  //   hasNextPage: hasNextBuddyPage,
+  //   isFetchingNextPage: isFetchBuddyNextPage,
+  // } = useFetchBuddyList(language);
 
  
 

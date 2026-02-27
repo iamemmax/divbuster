@@ -41,10 +41,7 @@ const dateString = z
   );
 
 // ✅ Image schema (File | URL)
-const imageSchema = z.union([
-  z.instanceof(File),
-  z.string().url().min(1),
-]);
+
 
 // ✅ Number validation (digits only, max 11)
 const numberField = z

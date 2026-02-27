@@ -2,7 +2,8 @@
 
 
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import Image from "next/image";
 import * as Select from "@radix-ui/react-select";
 import { ChevronDown, Check } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
@@ -87,7 +88,6 @@ const LanguageComponent: React.FC<Props> = ({ user,language,setLanguage }) => {
     control,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm<LanguageSettingsForm>({
     resolver: zodResolver(languageSettingsSchema),
@@ -169,9 +169,12 @@ const LanguageComponent: React.FC<Props> = ({ user,language,setLanguage }) => {
                         >
                           <div className="flex items-center gap-2">
                             {country.alpha2code ? (
-                              <img
+                              <Image
                                 src={`https://flagcdn.com/${country.alpha2code.toLowerCase()}.svg`}
-                                className="w-5 h-5"
+                                alt={country.name}
+                                width={20}
+                                height={20}
+                                className="size-5"
                               />
                             ) : (
                               unicodeToEmoji(country.flag_link)
@@ -219,7 +222,7 @@ const LanguageComponent: React.FC<Props> = ({ user,language,setLanguage }) => {
                       {languages.map((lang) => (
                         <SelectItem key={lang.value} value={lang.value}>
                           <div className="flex items-center gap-2">
-                            <img src={lang.flag} className="w-5 h-5" />
+                            <Image src={lang.flag} alt={lang.label} width={20} height={20} className="size-5" />
                             <span>{lang.label}</span>
                           </div>
                         </SelectItem>

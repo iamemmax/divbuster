@@ -38,10 +38,9 @@ const MFAVerificationForm = ({ activeTab }: MFAVerificationFormProps) => {
     },
   });
 
-  const onSubmit = async (data: MFAFormValues) => {
+  const onSubmit = async () => {
     try {
       // Here you would verify the MFA code with your API
-      console.log('Verifying MFA code:', data.mfa_code);
       
      
     } catch (error) {
@@ -53,7 +52,6 @@ const MFAVerificationForm = ({ activeTab }: MFAVerificationFormProps) => {
     setIsRegenerating(true);
     try {
       // Here you would call your API to regenerate the QR code
-      console.log('Regenerating QR code');
       
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));

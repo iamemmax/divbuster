@@ -1,10 +1,10 @@
 "use client"
 import React, { useState } from "react"
-import BookingActionModal from "./modals/BookingActionModal"
+// import BookingActionModal from "./modals/BookingActionModal"
 import { Button } from "@/components/core"
 import CreateSchoolPlan from "./modals/school-booking/CreateSchoolPlan"
-import CreateBuddyBooking from "./modals/buddy-booking/CreateBuddyBooking"
-import { useAuth } from "@/contexts/authentication"
+// import CreateBuddyBooking from "./modals/buddy-booking/CreateBuddyBooking"
+// import { useAuth } from "@/contexts/authentication"
 import { useLanguage } from "@/hooks/useLanguage"
 
 // Translation object
@@ -15,14 +15,14 @@ const translations = {
   nl: { createBooking: "Boeking maken" },
 }
 
-type Lang = keyof typeof translations
+// type Lang = keyof typeof translations
 
 const AddBookingButton = () => {
-  const [showBookingModal, setShowBookingModal] = useState(false)
+  // const [showBookingModal, setShowBookingModal] = useState(false)
   const [showSchoolBookingModal, setShowSchoolBookingModal] = useState(false)
-  const [showBookWithBuddy, setShowBookWithBuddy] = useState(false)
-  const { authState } = useAuth()
-  const { user } = authState
+  // const [showBookWithBuddy, setShowBookWithBuddy] = useState(false)
+  // const { authState } = useAuth()
+  // const { user } = authState
 const {language}=useLanguage()
   const t = translations[language] || translations.en
 

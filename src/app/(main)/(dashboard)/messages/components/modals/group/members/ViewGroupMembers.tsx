@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Button, Dialog, DialogContent } from "@/components/core";
 import AddMembersToGroupModal from "./AddMembersToGroup";
@@ -69,9 +70,11 @@ export default function ViewGroupMembersModal({
                 className="flex items-center space-x-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-md transition-colors"
               >
                 {buddy?.image ? (
-                  <img
+                  <Image
                     src={buddy.image}
                     alt={buddy.first_name}
+                    width={54}
+                    height={54}
                     className="md:w-[3.375rem] md:h-[3.375rem] w-7 h-7 rounded-full object-cover"
                   />
                 ) : (

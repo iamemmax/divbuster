@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import GroupSidebar from "./Group/GroupSidebar";
 import GroupMessageBox from "./Group/GroupMessageBox";
 import {
-  groupChatListProp,
   groupChatResult,
   Othermember,
   useFetchGroupChatList,
@@ -40,24 +39,6 @@ const GroupMessages = ({
   } = useFetchGroupChatList();
   const [groupMembers, setGroupMembers] = useState<Othermember[]>();
 
-  const handleDeleteGroup = (groupId: number) => {
-    setGroupList((prevGroups) =>
-      prevGroups?.filter((group) => group.id !== groupId)
-    );
-    if (selectedGroup?.id === groupId) {
-      setSelectedGroup(null);
-    }
-  };
-
-  const handleArchiveGroup = (groupId: number) => {
-    setGroupList((prevGroups) =>
-      prevGroups?.filter((group) => group.id !== groupId)
-    );
-    if (selectedGroup?.id === groupId) {
-      setSelectedGroup(null);
-    }
-  };
-
   const handleSelectGroup = (group: groupChatResult) => {
     setSelectedGroup(group);
     // Mark as read when selected
@@ -80,8 +61,6 @@ const GroupMessages = ({
             groupList={groupChatList}
             selectedGroup={selectedGroup}
             onSelectGroup={handleSelectGroup}
-            onDelete={handleDeleteGroup}
-            onArchive={handleArchiveGroup}
             setGroupMembers={setGroupMembers}
             fetchNextPage={fetchNextPage}
             hasNextPage={hasNextPage}
@@ -112,8 +91,6 @@ const GroupMessages = ({
           groupList={groupChatList}
           selectedGroup={selectedGroup}
           onSelectGroup={handleSelectGroup}
-          onDelete={handleDeleteGroup}
-          onArchive={handleArchiveGroup}
           isLoadingGroup={isLoadingGroup}
           setGroupMembers={setGroupMembers}
           fetchNextPage={fetchNextPage}

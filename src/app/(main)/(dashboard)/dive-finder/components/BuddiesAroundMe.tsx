@@ -18,11 +18,8 @@ const BuddiesAroundMe = ({ search = "" }: BuddiesAroundMeProps) => {
   const [mapReady, setMapReady] = useState(false)
   const router = useRouter()
   const { data: user } = useUser()
-  const { data: nearestUsers, isLoading, error } = useFetchNearestUser()
+  const { data: nearestUsers, isLoading } = useFetchNearestUser()
 
-  console.log('Nearest users data:', nearestUsers)
-  console.log('Is loading:', isLoading)
-  console.log('Error:', error)
   const { mutate: addBuddy } = useAddBuddy()
 
   // Filter nearest users based on search term
@@ -78,7 +75,6 @@ const BuddiesAroundMe = ({ search = "" }: BuddiesAroundMeProps) => {
       }
 
     if (!mapReady || !mapInstance.current) {
-      console.log('Marker conditions not met:', { mapReady, hasMap: !!mapInstance.current })
       return
     }
 
@@ -89,17 +85,16 @@ const BuddiesAroundMe = ({ search = "" }: BuddiesAroundMeProps) => {
     markersRef.current = []
 
     if (!filteredUsers?.length) {
-      console.log('No filtered users to display')
-      return
+           return
     }
 
-    console.log('Adding markers for users:', filteredUsers)
 
     import('leaflet').then(({ default: L }) => {
       filteredUsers.forEach((user) => {
         if (!user.latitude || !user.longitude) return
 
         const icon = L.divIcon({
+          // eslint-disable-next-line @next/next/no-img-element
           html: user.profile_picture
             ? `<div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 3px solid #f97316; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"><img src="${user.profile_picture}" style="width: 100%; height: 100%; object-fit: cover;"/></div>`
             : `
@@ -193,21 +188,21 @@ const BuddiesAroundMe = ({ search = "" }: BuddiesAroundMeProps) => {
 
 
   return (
-    <div className="relative w-full h-[83vh] mt-[4rem]">
+    <div className="relative w-full h-[83vh] mt-16">
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-      <style jsx global>{`
+      <style jsx>{`
         .buddy-marker {
           background: transparent !important;
           border: none !important;
         }
       `}</style>
-      <div ref={mapRef} className="w-full h-full" />
+      <div ref={mapRef} className="size-full" />
 
       {!isLoading && filteredUsers.length === 0 && search.trim() && (
         <div className="absolute inset-0 flex items-center justify-center z-[100] bg-white dark:bg-gray-900 bg-opacity-90 dark:bg-opacity-90">
           <div className="text-center">
             <p className="text-gray-600 dark:text-gray-300 text-lg font-medium">
-              No buddies found for "{search}"
+              No buddies found for &ldquo;{search}&ldquo;
             </p>
             <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
               Try searching with different keywords
@@ -219,7 +214,7 @@ const BuddiesAroundMe = ({ search = "" }: BuddiesAroundMeProps) => {
       {isLoading && (
         <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-2 z-[1000]">
           <div className="flex items-center gap-2">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500"></div>
+            <div className="animate-spin rounded-full size-4 border-b-2 border-orange-500"></div>
             <span className="text-sm">Loading buddies...</span>
           </div>
         </div>

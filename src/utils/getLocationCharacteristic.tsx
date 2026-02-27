@@ -414,22 +414,3 @@ export function generateLogoCSS(logo: DiveSiteLogo): string {
   return `${baseStyles[shape]} ${background}`;
 }
 
-// Example usage and testing
-/*
-const coords = { latitude: 12.1542, longitude: -68.2905 };
-
-// Get all information
-const fullInfo = getDiveSiteInfo(coords);
-
-// Get specific parts
-const name = getDiveSiteName(coords);           // "Coral Reef"
-const rating = getDiveSiteRating(coords);       // 4
-const location = getDiveLocation(coords);       // Full location object
-const logo = getDiveSiteLogo(coords);          // Logo configuration
-const logoCSS = generateLogoCSS(logo);         // CSS string for styling
-
-console.log('Name:', name);
-console.log('Rating:', rating);
-console.log('Location:', location.region);
-console.log('Logo Colors:', logo.colors);
-*/

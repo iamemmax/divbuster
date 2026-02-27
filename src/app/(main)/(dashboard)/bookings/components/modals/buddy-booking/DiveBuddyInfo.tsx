@@ -41,7 +41,7 @@ const DiveBuddyInfo: React.FC<prop> = ({setStep, setStepOneLogDetails,stepOneLog
         startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
         endDate: new Date(),
     });
-    const [selectedMeetupPlace, setSelectedMeetupPlace] = useState<PlaceData | null>(null);
+    const [_selectedMeetupPlace, setSelectedMeetupPlace] = useState<PlaceData | null>(null);
 
     const {
         register,

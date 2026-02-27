@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent } from 'react';
+import {  KeyboardEvent } from 'react';
 
 // Type definitions
 type ToggleSize = 'small' | 'medium' | 'large';
@@ -100,7 +100,7 @@ function ToggleSwitch({
       >
         <div
           className={`
-            inline-block transform rounded-full shadow-md transition-all duration-300 ease-in-out
+            inline-block rounded-full shadow-md transition-all duration-300 ease-in-out
             ${currentSize.thumb}
             ${isOn ? activeColor : inactiveColor}
             ${isOn ? currentSize.translateOn : currentSize.translateOff}

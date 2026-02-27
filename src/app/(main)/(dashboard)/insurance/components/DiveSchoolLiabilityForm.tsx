@@ -61,7 +61,7 @@ const DiveSchoolLiabilityForm = ({ onSuccess }: DiveSchoolLiabilityFormProps) =>
   const [isParentSigned, setIsParentSigned] = useState(false)
   const [canvasWidth, setCanvasWidth] = useState(600)
   const [signatureData, setSignatureData] = useState<string>('')
-  const [parentSignatureData, setParentSignatureData] = useState<string>('')
+  const [_parentSignatureData, setParentSignatureData] = useState<string>('')
 
   const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<DiveSchoolLiabilityFormData>({
     resolver: zodResolver(diveSchoolLiabilitySchema),
@@ -305,10 +305,10 @@ const DiveSchoolLiabilityForm = ({ onSuccess }: DiveSchoolLiabilityFormProps) =>
             {t.firstName} & {t.lastName} *
           </label>
           <input
-            disabled
-            value={`${user?.first_name} ${user?.last_name}`}
-            type="text"
             className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            type="text"
+            value={`${user?.first_name} ${user?.last_name}`}
+            disabled
           />
         </div>
         <div>
@@ -316,10 +316,10 @@ const DiveSchoolLiabilityForm = ({ onSuccess }: DiveSchoolLiabilityFormProps) =>
             {t.phoneNumber}
           </label>
           <input
-            disabled
-            value={`${user?.profile_details?.phone_number}`}
-            type="tel"
             className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+            type="tel"
+            value={`${user?.profile_details?.phone_number}`}
+            disabled
           />
         </div>
       </div>

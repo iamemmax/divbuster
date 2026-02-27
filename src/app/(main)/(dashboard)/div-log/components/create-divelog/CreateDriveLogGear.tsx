@@ -1,15 +1,13 @@
 import React from 'react'
-import { Button, Dialog, DialogBody, DialogContent, DialogHeader, ErrorModal, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core';
+import { Button, DialogHeader, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretDown } from '@/components/icons';
 import { convertKebabAndSnakeToTitleCase } from '@/utils/strings';
-import { capitalizeFirstLetter } from '@/utils';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { gearLogTranslations } from '@/app/(main)/translation/diveLogTranslation';
-import { Language } from '@/app/(auth)/sign-up/translations';
 import { useLanguage } from '@/hooks/useLanguage';
 
 interface prop {
@@ -32,7 +30,7 @@ const advancedDetailsSchema = z.object({
 export type createGearLogDetailsFormValues = z.infer<typeof advancedDetailsSchema>;
 
 
-const CreateDriveLogGear: React.FC<prop> = ({ diveGearData, setDiveGearData, setStep,user }) => {
+const CreateDriveLogGear: React.FC<prop> = ({ diveGearData, setDiveGearData, setStep }) => {
     const {
         handleSubmit,
         control,

@@ -1,11 +1,7 @@
 import { adminAxios } from "@/lib/axios";
 import { useInfiniteQuery } from "react-query";
 
-interface Instructor {
-  id: string;
-  name: string;
-  // add more fields based on API response
-}
+
 
 
 

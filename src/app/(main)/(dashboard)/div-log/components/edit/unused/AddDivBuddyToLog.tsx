@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -61,7 +62,6 @@ export default function AddDiveBuddyToLogModal({isOpen,onClose}:AdvancedDetailsM
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
   } = useForm<DiveBuddyFormData>({
     resolver: zodResolver(diveBuddySchema),
     defaultValues: {
@@ -76,8 +76,7 @@ export default function AddDiveBuddyToLogModal({isOpen,onClose}:AdvancedDetailsM
     },
   });
 
-  const onSubmit = (data: DiveBuddyFormData) => {
-    console.log('Form submitted:', data);
+  const onSubmit = () => {
   };
 
   const handleCancel = () => {
@@ -147,7 +146,7 @@ export default function AddDiveBuddyToLogModal({isOpen,onClose}:AdvancedDetailsM
               <Button
                 type="button"
                 onClick={() => setShowNewBuddyForm(!showNewBuddyForm)}
-                className="flex items-center gap-2 text-[#A7A7A7] p-0 bg-transparent px-0 mt-3 text-sm"
+                className="flex items-center gap-2 text-[#A7A7A7] p-0 bg-transparent mt-3 text-sm"
               >
                 <Plus size={16} />
                 Add New Dive buddy
@@ -162,14 +161,16 @@ export default function AddDiveBuddyToLogModal({isOpen,onClose}:AdvancedDetailsM
                 {suggestedBuddies.map((buddy) => (
                   <div
                     key={buddy.name}
-                    className="flex flex-col items-center cursor-pointer hover:opacity-75 flex-shrink-0"
+                    className="flex flex-col items-center cursor-pointer hover:opacity-75 shrink-0"
                     onClick={() => selectSuggestedBuddy(buddy)}
                   >
                     <div className="relative">
-                      <img
+                      <Image
                         src={buddy.image}
                         alt={buddy.name}
-                        className="md:w-20 md:h-20 w-10 h-10 rounded-full object-cover"
+                        width={80}
+                        height={80}
+                        className="md:size-20 size-10 rounded-full object-cover"
                       />
                       <button
                         type="button"

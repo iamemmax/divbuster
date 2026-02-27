@@ -1,9 +1,10 @@
 
 "use client"
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
+import Image from "next/image"
 import type { resentChatProp } from "../RecentMessages"
 import EmptyMessage from "../EmptyMessage"
-import { Smile, ArrowLeft, ImageIcon, Video, FileTextIcon, Send } from "lucide-react"
+import { Smile,ImageIcon, Video, FileTextIcon, Send } from "lucide-react"
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot"
 import { formatDateLabel } from "@/utils/formatDateLabel"
 import EmojiPicker, { type EmojiClickData } from "emoji-picker-react"
@@ -48,7 +49,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
   const [optimisticMessages, setOptimisticMessages] = useState<OptimisticMessage[]>([])
 
   // Refs
-  const containerRef = useRef<HTMLDivElement>(null)
+  // const containerRef = useRef<HTMLDivElement>(null)
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const imageInputRef = useRef<HTMLInputElement>(null)
@@ -65,7 +66,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
     error,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage
+    // isFetchingNextPage
   } = useFetchSingleChatMessages(selectedMessage?.user_id ? String(selectedMessage.user_id) : "")
 
   const { mutate: handleSendMessages, isLoading: isSending } = useSendSingleChatMessage()
@@ -185,7 +186,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
           lang:language
         },
         {
-          onSuccess: (response) => {
+          onSuccess: () => {
 
             // Use setTimeout to ensure state updates are processed
             setOptimisticMessages((prev) => prev.filter((msg) => msg.id !== optimisticId));
@@ -196,7 +197,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
             //   URL.revokeObjectURL(attachmentPreview);
             // }
           },
-          onError: (error) => {
+          onError: () => {
 
             // Remove failed optimistic message
             setOptimisticMessages((prev) => prev.filter((msg) => msg.id !== optimisticId));
@@ -381,7 +382,6 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
         hour12: true,
       })
     } catch (error) {
-      console.error("Error formatting time:", error)
       return ""
     }
   }, [])
@@ -447,7 +447,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
           try {
             URL.revokeObjectURL(file.preview)
           } catch (error) {
-            console.error("Error revoking object URL:", error)
+            // Error revoking object URL
           }
         }
       })
@@ -458,7 +458,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
           try {
             URL.revokeObjectURL(msg.attachment)
           } catch (error) {
-            console.error("Error revoking optimistic attachment URL:", error)
+            // Error revoking optimistic attachment URL
           }
         }
       })
@@ -478,15 +478,14 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
         <div className="flex items-center space-x-3">
           
           <div className="relative">
-            <img
+            <Image
               src={selectedMessage?.image ? selectedMessage?.image : "/images/profile.png" as string}
               alt={selectedMessage?.name || "User"}
-              className="w-10 h-10 rounded-full object-cover"
-              onError={(e) => {
-                e.currentTarget.src = "/default-avatar.png"
-              }}
+              width={40}
+              height={40}
+              className="size-10 rounded-full object-cover"
             />
-            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
+            <div className="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center space-x-2">
@@ -514,7 +513,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
       <div className="flex-1 overflow-hidden bg-white dark:bg-gray-900">
         {isLoading ? (
           <div className="flex justify-center items-center h-32">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+            <div className="animate-spin rounded-full size-8 border-b-2 border-orange-500"></div>
           </div>
         ) : error ? (
           <div className="text-center text-red-500 py-8">
@@ -533,7 +532,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
               hasMore={hasNextPage || false}
               loader={
                 <div className="flex justify-center py-2">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500"></div>
+                  <div className="animate-spin rounded-full size-6 border-b-2 border-orange-500"></div>
                 </div>
               }
               scrollableTarget="messages-container"
@@ -560,13 +559,12 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                   )}
                   <div className={`flex ${isCurrentUser ? "justify-end" : "items-start space-x-3"}`}>
                     {!isCurrentUser && (
-                      <img
+                      <Image
                         src={selectedMessage?.image || "/placeholder.svg"}
                         alt="Sender"
-                        className="w-8 h-8 rounded-full object-cover flex-shrink-0"
-                        onError={(e) => {
-                          e.currentTarget.src = "/default-avatar.png"
-                        }}
+                        width={32}
+                        height={32}
+                        className="size-8 rounded-full object-cover shrink-0"
                       />
                     )}
                     <div className={`flex-1 max-w-[80%] ${isCurrentUser ? "flex flex-col items-end" : ""}`}>
@@ -602,18 +600,19 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                           <div className="mt-2">
                             {/* Handle optimistic blob URLs for images */}
                             {msg.attachment.startsWith("blob:") ? (
-                              <img
-                                src={msg.attachment}
-                                alt="attachment"
-                                className="max-w-xs rounded-lg cursor-pointer"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = "none";
-                                }}
-                              />
+                              <div className="relative max-w-xs rounded-lg overflow-hidden cursor-pointer">
+                                <Image
+                                  src={msg.attachment}
+                                  alt="attachment"
+                                  width={300}
+                                  height={300}
+                                  className="rounded-lg object-cover"
+                                />
+                              </div>
                             ) : /* Handle optimistic document placeholders */
                               msg.attachment.startsWith("document:") ? (
                                 <div className="flex items-center space-x-2 p-2 bg-gray-100 dark:bg-gray-700 rounded">
-                                  <FileTextIcon className="h-4 w-4 text-blue-500" />
+                                  <FileTextIcon className="size-4 text-blue-500" />
                                   <span className="text-sm text-gray-700 dark:text-gray-300">
                                     {msg.attachment.replace("document:", "")}
                                   </span>
@@ -622,25 +621,29 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                                 msg.attachment.match(/\.(jpeg|jpg|png|gif|webp)$/i) ||
                                   msg.attachment.includes("/image/") ||
                                   msg.attachment.startsWith("data:image/") ? (
-                                  <img
-                                    src={msg.attachment}
-                                    alt="attachment"
-                                    className="max-w-xs rounded-lg cursor-pointer"
-                                    onError={(e) => {
-                                      e.currentTarget.style.display = "none";
-                                    }}
-                                  />
+                                  <div className="relative max-w-xs rounded-lg overflow-hidden cursor-pointer">
+                                    <Image
+                                      src={msg.attachment}
+                                      alt="attachment"
+                                      width={300}
+                                      height={300}
+                                      className="rounded-lg object-cover"
+                                      onError={() => {
+                                        // Handle error by showing nothing
+                                      }}
+                                    />
+                                  </div>
                                 ) : /* Handle video files from API */
                                   msg.attachment.match(/\.(mp4|webm|ogg|avi|mov)$/i) ||
                                     msg.attachment.includes("/video/") ||
                                     msg.attachment.startsWith("data:video/") ? (
                                     <video
                                       src={msg.attachment}
-                                      controls
                                       className="max-w-xs rounded-lg"
                                       onError={(e) => {
                                         e.currentTarget.style.display = "none";
                                       }}
+                                      controls
                                     />
                                   ) : /* Handle document files from API */
                                     msg.attachment.match(/\.(pdf|docx?|xlsx?|pptx?|txt|zip|rtf)$/i) ||
@@ -651,19 +654,19 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                                       <div className="flex items-center space-x-2 p-2 bg-gray-100 dark:bg-gray-700 rounded">
                                         {/* File type icons */}
                                         {(msg.attachment.match(/\.pdf$/i) || msg.attachment.includes("application/pdf")) && (
-                                          <PdfLogo className="h-4 w-4 text-red-500" />
+                                          <PdfLogo className="size-4 text-red-500" />
                                         )}
                                         {(msg.attachment.match(/\.docx?$/i) || msg.attachment.includes("application/msword") || msg.attachment.includes("application/vnd.openxmlformats-officedocument.wordprocessingml")) && (
-                                          <WordLogo className="h-4 w-4 text-blue-600" />
+                                          <WordLogo className="size-4 text-blue-600" />
                                         )}
                                         {(msg.attachment.match(/\.xlsx?$/i) || msg.attachment.includes("application/vnd.openxmlformats-officedocument.spreadsheetml") || msg.attachment.includes("application/vnd.ms-excel")) && (
-                                          <ExcelLogo className="h-4 w-4 text-green-600" />
+                                          <ExcelLogo className="size-4 text-green-600" />
                                         )}
                                         {(msg.attachment.match(/\.pptx?$/i) || msg.attachment.includes("application/vnd.openxmlformats-officedocument.presentationml") || msg.attachment.includes("application/vnd.ms-powerpoint")) && (
-                                          <ExcelLogo className="h-4 w-4 text-orange-500" />
+                                          <ExcelLogo className="size-4 text-orange-500" />
                                         )}
                                         {!msg.attachment.match(/\.(pdf|docx?|xlsx?|pptx?)$/i) && (
-                                          <FileTextIcon className="h-4 w-4 text-blue-500" />
+                                          <FileTextIcon className="size-4 text-blue-500" />
                                         )}
 
                                         <a
@@ -683,7 +686,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                                           rel="noopener noreferrer"
                                           className="text-sm underline text-blue-500 hover:text-blue-600 flex items-center space-x-2"
                                         >
-                                          <FileTextIcon className="h-4 w-4" />
+                                          <FileTextIcon className="size-4" />
                                           <span>📎 {t.downloadFile}</span>
                                         </a>
                                       ) : null}
@@ -694,7 +697,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                         {/* Loading overlay for optimistic messages */}
                         {isSending && isOptimisticMessage && (
                           <div className="absolute inset-0 bg-black bg-opacity-10 rounded-2xl flex items-center justify-center">
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                            <div className="animate-spin rounded-full size-4 border-b-2 border-white"></div>
                           </div>
                         )}
                       </div>
@@ -720,19 +723,21 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                 className="relative bg-white dark:bg-gray-700 rounded-lg p-2 border"
               >
                 {fileUpload.preview ? (
-                  <img
+                  <Image
                     src={fileUpload.preview}
                     alt={t.preview}
-                    className="w-16 h-16 object-cover rounded"
+                    width={64}
+                    height={64}
+                    className="size-16 object-cover rounded"
                   />
                 ) : (
-                  <div className="w-16 h-16 flex items-center justify-center bg-gray-100 dark:bg-gray-600 rounded">
-                    <FileTextIcon className="h-8 w-8 text-gray-500" />
+                  <div className="size-16 flex items-center justify-center bg-gray-100 dark:bg-gray-600 rounded">
+                    <FileTextIcon className="size-8 text-gray-500" />
                   </div>
                 )}
                 <button
                   onClick={() => removeFile(index)}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full size-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
                   aria-label={t.removeFile}
                 >
                   ×
@@ -750,7 +755,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
       )}
 
       {/* Input */}
-      <div className="border-t p-4 bg-white dark:bg-gray-800 dark:border-gray-700 flex-shrink-0">
+      <div className="border-t p-4 bg-white dark:bg-gray-800 dark:border-gray-700 shrink-0">
         <div className="flex items-end space-x-2">
           <div className="flex-1 flex items-center relative">
             <textarea
@@ -759,7 +764,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
               placeholder={t.sendMessagePlaceholder}
-              className="w-full px-4 py-3 pr-20 border border-gray-200 dark:border-gray-700 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent overflow-hidden bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 disabled:opacity-50"
+              className="w-full px-4 py-3 pr-20 border border-gray-200 dark:border-gray-700 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent overflow-hidden bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 disabled:opacity-50"
               style={{ minHeight: "44px", maxHeight: "120px" }}
               rows={1}
               disabled={isSending}
@@ -772,7 +777,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                 disabled={isSending}
                 aria-label="Add emoji"
               >
-                <Smile className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+                <Smile className="size-4 text-gray-500 dark:text-gray-300" />
               </button>
 
               {/* Attachment menu */}
@@ -794,7 +799,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                       className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-3 transition-colors"
                       onClick={openImageDialog}
                     >
-                      <ImageIcon className="h-4 w-4 text-purple-500" />
+                      <ImageIcon className="size-4 text-purple-500" />
                       <span>{t.image}</span>
                     </button>
                     <button
@@ -802,7 +807,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                       className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-3 transition-colors"
                       onClick={openVideoDialog}
                     >
-                      <Video className="h-4 w-4 text-purple-500" />
+                      <Video className="size-4 text-purple-500" />
                       <span>{t.video}</span>
                     </button>
                     <button
@@ -810,7 +815,7 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
                       className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-3 transition-colors"
                       onClick={openDocumentDialog}
                     >
-                      <FileTextIcon className="h-4 w-4 text-blue-500" />
+                      <FileTextIcon className="size-4 text-blue-500" />
                       <span>{t.document}</span>
                     </button>
                   </div>
@@ -842,9 +847,9 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
             aria-label="Send message"
           >
             {isSending ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+              <div className="animate-spin rounded-full size-4 border-b-2 border-current"></div>
             ) : (
-              <Send className="h-4 w-4" />
+              <Send className="size-4" />
             )}
             <span className="hidden sm:inline">{t.send}</span>
           </button>
@@ -855,25 +860,25 @@ const MessageBox = ({ selectedMessage }: MessageBoxProps) => {
           ref={imageInputRef}
           type="file"
           accept="image/*"
-          multiple
           className="hidden"
           onChange={(e) => handleFileChange(e, "image")}
+          multiple
         />
         <input
           ref={videoInputRef}
           type="file"
           accept="video/*"
-          multiple
           className="hidden"
           onChange={(e) => handleFileChange(e, "video")}
+          multiple
         />
         <input
           ref={documentInputRef}
           type="file"
           accept=".pdf,.doc,.docx,.txt,.rtf"
-          multiple
           className="hidden"
           onChange={(e) => handleFileChange(e, "document")}
+          multiple
         />
       </div>
     </div>

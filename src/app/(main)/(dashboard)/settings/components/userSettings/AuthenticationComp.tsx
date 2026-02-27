@@ -227,7 +227,6 @@ import { useErrorModalState } from "@/hooks";
 import { AxiosError } from "axios";
 import { ErrorModal } from "@/components/core";
 import toast from "react-hot-toast";
-import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 import { Language } from "@/app/(auth)/sign-up/translations";
 import { authenticationTranslations } from "@/app/(main)/translation/profileTranslation";
 

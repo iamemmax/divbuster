@@ -1,5 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { Button, Dialog, DialogContent, ErrorModal } from "@/components/core";
 import CloseIcon from "@/app/icons/CloseIcon";
 import { useErrorModalState } from "@/hooks";
@@ -127,11 +128,12 @@ export default function AddMembersToGroupModal({
                     <div key={index} className="flex flex-col items-center relative">
                       <div className="relative">
                         {buddy?.image ? (
-                          <img
+                          <Image
                             src={buddy.image}
                             alt={buddy.first_name}
+                            width={54}
+                            height={54}
                             className="md:w-[3.375rem] md:h-[3.375rem] w-7 h-7 rounded-full object-cover"
-                            onError={(e) => (e.currentTarget.src = "/images/profile.png")}
                           />
                         ) : (
                           <div className="md:w-[3.375rem] md:h-[3.375rem] w-7 h-7 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-white font-semibold">
@@ -207,11 +209,12 @@ export default function AddMembersToGroupModal({
 
                   >
                     {buddy?.diver_profile?.dive_image ? (
-                      <img
+                      <Image
                         src={buddy?.diver_profile?.dive_image}
                         alt={buddy.first_name}
+                        width={54}
+                        height={54}
                         className="md:w-[3.375rem] md:h-[3.375rem] w-7 h-7 rounded-full object-cover"
-                        onError={(e) => (e.currentTarget.src = "/images/profile.png")}
                       />
                     ) : (
                       <div className="md:w-[3.375rem] md:h-[3.375rem] w-7 h-7 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-white font-semibold">

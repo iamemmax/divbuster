@@ -34,7 +34,6 @@ const NotificationSettings = ({ isOpen = true, onClose, onSave }: NotificationSe
   })
 
   const onSubmit = (data: NotificationFormData) => {
-    console.log('Form submitted:', data)
     onSave?.(data)
     onClose?.()
   }

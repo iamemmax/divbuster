@@ -1,6 +1,8 @@
 import { adminAxios } from "@/lib/axios";
 import { useInfiniteQuery, useQuery } from "react-query";
-import { buddyListProp } from "../types/buddies/buddyType";
+import { buddyListProp, buddyResult } from "../types/buddies/buddyType";
+
+export type { buddyListProp, buddyResult };
 
 
 const fetchBuddyList = async (pageParam?: string, language?: string, search?:string) => {

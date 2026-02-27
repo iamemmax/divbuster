@@ -62,7 +62,7 @@ const UpdatePassword = ({ email }: prop) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<UpdatePasswordFormValues>({
     resolver: zodResolver(updatePasswordSchema),
     defaultValues: {

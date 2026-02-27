@@ -59,7 +59,7 @@ const DiveSiteDetailsPage = () => {
                         style={{ backgroundImage: "url('/images/dashboard/profile-Location.png')" }}
                     >
                         <div className="absolute inset-0 bg-black bg-opacity-40" />
-                        <div className="absolute top-0 text-white py-6 px-6 w-full flex justify-center flex-col h-full">
+                        <div className="absolute top-0 text-white p-6 size-full flex justify-center flex-col">
                             <div>
                                 <div className="flex items-center flex-wrap gap-5 mb-4">
                                     <div className="relative h-[50px] w-[65px] overflow-hidden rounded">
@@ -67,15 +67,15 @@ const DiveSiteDetailsPage = () => {
                                             <Image
                                                 src={`https://flagcdn.com/w40/${getCountry(site?.country)?.alpha2code?.toLowerCase()}.png`}
                                                 alt={`${getCountry(site?.country)?.name} flag`}
-                                                fill
                                                 className="object-cover rounded"
                                                 onError={(e) => {
                                                     const target = e.target as HTMLImageElement
                                                     target.src = '/images/placeholder-flag.png'
                                                 }}
+                                                fill
                                             />
                                         ) : (
-                                            <div className="w-full h-full bg-gray-300 rounded flex items-center justify-center">
+                                            <div className="size-full bg-gray-300 rounded flex items-center justify-center">
                                                 <span className="text-xs text-gray-600">?</span>
                                             </div>
                                         )}
@@ -219,15 +219,15 @@ const DiveSiteDetailsPage = () => {
                                             <Image
                                                 src={animal.image}
                                                 alt={animal.name}
-                                                fill
                                                 className="object-cover"
                                                 onError={(e) => {
                                                     const target = e.target as HTMLImageElement;
                                                     target.src = '/images/placeholder-animal.png';
                                                 }}
+                                                fill
                                             />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center">
+                                            <div className="size-full flex items-center justify-center">
                                                 <span className="text-4xl">🐠</span>
                                             </div>
                                         )}
@@ -255,7 +255,7 @@ const DiveSiteDetailsPage = () => {
                                                 {[1, 2, 3, 4, 5].map((star) => (
                                                     <svg
                                                         key={star}
-                                                        className={`w-4 h-4 ${
+                                                        className={`size-4 ${
                                                             star <= review.score
                                                                 ? 'text-yellow-400 fill-current'
                                                                 : 'text-gray-300 dark:text-gray-600'

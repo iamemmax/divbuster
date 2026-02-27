@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from 'react-query'
-
+import L from 'leaflet'
 import CreateBuddyBooking from '../../bookings/components/modals/buddy-booking/CreateBuddyBooking'
 import { useAuth } from '@/contexts/authentication'
 import { buddyListProp, buddyResult } from '../../api/types/buddies/buddyType'
@@ -30,7 +30,7 @@ const BuddyLeafletMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingNext
     }, [])
 
     const createInfoWindowContent = useCallback((buddy: buddyResult) => {
-        const profilePicture = buddy.profile_details?.profile_picture || '/default-avatar.png'
+        // const profilePicture = buddy.profile_details?.profile_picture || '/default-avatar.png'
         const fullName = `${buddy.first_name} ${buddy.last_name}`.trim() || buddy.username
 
         return `
@@ -125,7 +125,6 @@ const BuddyLeafletMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingNext
     }, [handleCreatePlan])
 
     const createCustomMarkerIcon = useCallback((buddy: buddyResult) => {
-        const L = require('leaflet')
         const profilePicture = buddy.profile_details?.profile_picture
         const fullName = `${buddy.first_name} ${buddy.last_name}`.trim() || buddy.username
         const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
@@ -145,14 +144,11 @@ const BuddyLeafletMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingNext
     const addMarkers = useCallback(async (buddies: buddyResult[]) => {
         if (!buddies || buddies.length === 0 || !mapInstance.current) return
 
-        console.log('Adding markers for buddies:', buddies.length)
-        const L = require('leaflet')
 
-        buddies.forEach((buddy, index) => {
+        buddies.forEach((buddy) => {
             const lat = Number(buddy?.current_location?.lat)
             const lng = Number(buddy?.current_location?.lon)
             
-            console.log(`Buddy ${index}:`, { lat, lng, buddy: buddy.username })
 
             if (!isNaN(lat) && !isNaN(lng)) {
                 const marker = L.marker([lat, lng], { icon: createCustomMarkerIcon(buddy) })
@@ -160,10 +156,7 @@ const BuddyLeafletMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingNext
                     .bindPopup(createInfoWindowContent(buddy))
 
                 markersRef.current.push(marker)
-                console.log(`Marker added for ${buddy.username} at [${lat}, ${lng}]`)
-            } else {
-                console.log(`Invalid coordinates for ${buddy.username}:`, { lat, lng })
-            }
+            } 
         })
     }, [createCustomMarkerIcon, createInfoWindowContent])
 
@@ -208,7 +201,6 @@ const BuddyLeafletMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingNext
     }, [])
 
     useEffect(() => {
-        console.log('Buddy list updated:', buddyList?.length || 0)
         if (mapInstance.current && buddyList) {
             clearMarkers()
             addMarkers(buddyList)
@@ -224,7 +216,7 @@ const BuddyLeafletMap = ({ fetchNextPage, buddyList, hasNextPage, isFetchingNext
     return (
         <div className="relative w-full h-[83vh] mt-[4rem] dark:bg-gray-900">
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-            <style jsx global>{`
+            <style jsx>{`
                 .custom-buddy-icon {
                     background: transparent !important;
                     border: none !important;

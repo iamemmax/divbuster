@@ -8,16 +8,18 @@ import { useDeletePhysicianReport } from '../../../api/insurance/physician/delet
 import PhysicianReportModal from './PhysicianReportModal'
 import ConfirmDeleteModal from './ConfirmDeleteModal'
 import { useQueryClient } from 'react-query'
+import type { Datum } from '../../../api/insurance/physician/fetchPhysicianReport'
+import type { AxiosError } from 'axios'
 
 const PhysicianReportList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingReport, setEditingReport] = useState<any>(null)
+  const [editingReport, setEditingReport] = useState<Datum | null>(null)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
   const [reportToDelete, setReportToDelete] = useState<number | null>(null)
   const tableScrollRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
-  const { data: reportData, isLoading, refetch } = useFetchPhysicianReport()
+  const { data: reportData, isLoading } = useFetchPhysicianReport()
   const { mutate: deleteReport, isLoading: isDeleting } = useDeletePhysicianReport()
   const queryClient = useQueryClient()
 
@@ -54,7 +56,7 @@ const PhysicianReportList = () => {
 
   const reports = reportData?.data || []
 
-  const handleEdit = (report: any) => {
+  const handleEdit = (report: Datum) => {
     setEditingReport(report)
     setIsModalOpen(true)
   }
@@ -73,8 +75,10 @@ const PhysicianReportList = () => {
           setIsDeleteConfirmOpen(false)
           setReportToDelete(null)
         },
-        onError: (error: any) => {
-          toast.error(error?.response?.data?.message || 'Failed to delete physician report')
+        onError: (error: unknown) => {
+          const axiosError = error as AxiosError<{ message?: string }>
+          const message = axiosError?.response?.data?.message || 'Failed to delete physician report'
+          toast.error(message)
           setIsDeleteConfirmOpen(false)
           setReportToDelete(null)
         }
@@ -96,7 +100,7 @@ const PhysicianReportList = () => {
     queryClient.invalidateQueries(['user-physician-report'])
   }
 
-  const handleDownload = (report: any) => {
+  const handleDownload = (report: Datum) => {
     try {
       const base64String = report.physician_report
 
@@ -196,7 +200,7 @@ const PhysicianReportList = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {reports.map((report: any) => (
+              {reports.map((report: Datum) => (
                 <tr
                   key={report.id}
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"

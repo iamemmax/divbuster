@@ -26,8 +26,7 @@ export default function GoogleCallback() {
     }
     
     if (code) {
-      console.log("Google OAuth code received, exchanging for token");
-      
+       
       // Exchange code for token and authenticate
       handleGoogleAuth(
         { 
@@ -36,8 +35,7 @@ export default function GoogleCallback() {
         },
         {
           onSuccess: () => {
-            console.log("Google auth API success, redirecting to home");
-            router.push("/");
+                       router.push("/");
           },
           onError: (error) => {
             console.error("Google auth API error:", error);
@@ -61,7 +59,7 @@ export default function GoogleCallback() {
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Processing Google Login</h2>
         <p className="text-gray-600 mb-6">Please wait while we complete your authentication...</p>
         <div className="flex justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F7931D]"></div>
+          <div className="animate-spin rounded-full size-12 border-b-2 border-[#F7931D]"></div>
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@ export interface physicianReportTypes {
   data: Datum[];
 }
 
-interface Datum {
+export interface Datum {
   id: number;
   hospital_name: string;
   physician_name: string;

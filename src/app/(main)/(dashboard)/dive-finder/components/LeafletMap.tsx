@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
-import { diveSiteResult } from '../../api/div-sites/fetch-dive-sites'
+import type L from 'leaflet'
+import { diveSiteResult } from '../../api/div-sites/fetchdivesites'
 import { useRouter } from 'next/navigation'
 import RatingModal from '../../dive-sites/components/RatingModal'
 
@@ -10,7 +11,8 @@ interface LeafletMapProps {
 
 const LeafletMap = ({ diveSites }: LeafletMapProps) => {
     const mapRef = useRef<HTMLDivElement>(null)
-    const mapInstance = useRef<any>(null)
+    const mapInstance = useRef<L.Map | null>(null)
+    const LRef = useRef<typeof L | null>(null)
     const router = useRouter()
     const [ratingModalOpen, setRatingModalOpen] = useState(false)
     const [selectedDiveSite, setSelectedDiveSite] = useState<diveSiteResult | null>(null)
@@ -25,6 +27,7 @@ const LeafletMap = ({ diveSites }: LeafletMapProps) => {
 
             // Dynamically import Leaflet
             const L = (await import('leaflet')).default
+            LRef.current = L
 
             // Initialize map
             const map = L.map(mapRef.current).setView([40.73061, -73.935242], 10)
@@ -52,29 +55,30 @@ const LeafletMap = ({ diveSites }: LeafletMapProps) => {
         ;(window as any).viewSite = (slug: string) => {
             router.push(`/dive-sites/${slug}`)
         }
-        
+
         ;(window as any).rateSite = (siteId: string) => {
-            console.log('rateSite called with ID:', siteId)
             const site = diveSites?.find(s => s.id === Number(siteId))
-            console.log('Found site:', site)
             if (site) {
                 setSelectedDiveSite(site)
                 setRatingModalOpen(true)
             }
         }
 
-        if (!mapInstance.current || !diveSites?.length) {
+        if (!mapInstance.current || !diveSites?.length || !LRef.current) {
             return
         }
 
-        const L = require('leaflet')
-        
+        const L = LRef.current
+
+
         // Clear existing markers
-        mapInstance.current.eachLayer((layer: any) => {
-            if (layer instanceof L.Marker) {
-                mapInstance.current.removeLayer(layer)
-            }
-        })
+        if (mapInstance.current) {
+            mapInstance.current.eachLayer((layer: any) => {
+                if (layer instanceof L.Marker) {
+                    mapInstance.current!.removeLayer(layer)
+                }
+            })
+        }
 
         // Add new markers
         const validSites = diveSites.filter(site => 
@@ -141,7 +145,7 @@ const LeafletMap = ({ diveSites }: LeafletMapProps) => {
                 
                 
                 const marker = L.marker([lat, lng], { icon: createCustomIcon() })
-                    .addTo(mapInstance.current)
+                    .addTo(mapInstance.current!)
                 
                 // Create star rating display
                 const rating = site.average_rating || 0
@@ -173,17 +177,17 @@ const LeafletMap = ({ diveSites }: LeafletMapProps) => {
             })
 
             // Center map on markers
-            const group = new L.featureGroup(
+            const group = L.featureGroup(
                 validSites.map(site => L.marker([Number(site.lag), Number(site.lon)]))
             )
-            mapInstance.current.fitBounds(group.getBounds().pad(0.1))
+            mapInstance.current!.fitBounds(group.getBounds().pad(0.1))
         }
     }, [diveSites])
 
     return (
         <div className="relative w-full h-[83vh] mt-[4rem]">
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-            <style jsx global>{`
+            <style jsx>{`
                 .custom-div-icon {
                     background: transparent !important;
                     border: none !important;

@@ -40,9 +40,7 @@ const NotificationList = () => {
   const leftColumnNotifications = allNotifications.filter(
     (_, index) => index % 2 === 0
   );
-  const rightColumnNotifications = allNotifications.filter(
-    (_, index) => index % 2 === 1
-  );
+  
 
 
   return (

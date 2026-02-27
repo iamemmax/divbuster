@@ -11,8 +11,7 @@ export default function Error({
   reset: () => void
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service
-    console.error('Error caught in dive-finder:', error)
+    // Error caught by error boundary
   }, [error])
 
   return (

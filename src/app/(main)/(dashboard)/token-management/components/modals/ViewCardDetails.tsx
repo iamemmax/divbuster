@@ -2,8 +2,7 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Check, HelpCircle, ChevronDown } from 'lucide-react';
-import MastercardIcon from '@/app/icons/(dashboard)/card/MatercardIcon';
+import {  HelpCircle, ChevronDown } from 'lucide-react';
 import { Dialog, DialogBody, DialogContent } from '@/components/core';
 import { cardProp, getGatewayDisplay } from '../MyCards';
 
@@ -93,11 +92,8 @@ const ViewCardDetails: React.FC<Props> = ({ isOpen, setIsOpenCardModal,selectedC
     return formattedValue;
   };
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async () => {
     try {
-      console.log('Form submitted:', data);
-      // Handle form submission here
-      // e.g., API call to save card
       setIsOpenCardModal(false);
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -249,7 +245,7 @@ const ViewCardDetails: React.FC<Props> = ({ isOpen, setIsOpenCardModal,selectedC
                               />
                             )}
                           />
-                          <HelpCircle className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                          <HelpCircle className="absolute right-4 top-1/2 -translate-y-1/2 size-5 text-gray-400" />
                         </div>
                         {errors.cvv && (
                           <p className="text-red-500 text-sm mt-1">{errors.cvv.message}</p>
@@ -285,7 +281,7 @@ const ViewCardDetails: React.FC<Props> = ({ isOpen, setIsOpenCardModal,selectedC
                               </select>
                             )}
                           />
-                          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 size-5 text-gray-400 pointer-events-none" />
                         </div>
                         {errors.country && (
                           <p className="text-red-500 text-sm mt-1">{errors.country.message}</p>
@@ -306,7 +302,7 @@ const ViewCardDetails: React.FC<Props> = ({ isOpen, setIsOpenCardModal,selectedC
                               onChange={onChange}
                               onBlur={onBlur}
                               name={name}
-                              className="w-5 h-5 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-transparent focus:ring-2"
+                              className="size-5 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-transparent focus:ring-2"
                             />
                           )}
                         />

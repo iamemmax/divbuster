@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core';
 import { Switch } from '@/components/core';
-import { Clock } from 'lucide-react';
 import { CaretDown } from '@/components/icons';
 
 // Define the validation schema with Zod
@@ -66,7 +65,7 @@ const MoreLogDetailsModal: React.FC<MoreLogDetailsModalProps> = ({
     );
   };
 
-  const onSubmit = (data: MoreLogDetailsFormValues) => {
+  const onSubmit = () => {
     // onSave(data);
     // onClose();
   };

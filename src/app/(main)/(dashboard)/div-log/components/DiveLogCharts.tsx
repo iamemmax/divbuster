@@ -1,5 +1,4 @@
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
-import { Language } from '@/app/(auth)/sign-up/translations';
 import { divLogChat } from '@/app/(main)/translation/diveLogTranslation';
 import ThreeDot from '@/app/icons/(dashboard)/ThreeDot';
 import { useLanguage } from '@/hooks/useLanguage';

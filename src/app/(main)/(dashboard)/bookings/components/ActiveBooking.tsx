@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useCallback, useMemo } from 'react';
-import { Search, Share2, ArrowRight, Loader2 } from 'lucide-react';
+import { Search,  ArrowRight, Loader2 } from 'lucide-react';
 import { BookingCard } from './BookingCard';
 import { DebouncedSearchInput } from '@/components/core/DebouncedSearchInput';
 import { Button } from '@/components/core';

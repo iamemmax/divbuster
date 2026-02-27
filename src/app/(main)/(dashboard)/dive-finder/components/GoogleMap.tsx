@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
-import { diveSiteResult, divSitesProp } from '../../api/div-sites/fetch-dive-sites'
+import { diveSiteResult, divSitesProp } from '../../api/div-sites/fetchdivesites'
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from 'react-query'
 
 interface prop {

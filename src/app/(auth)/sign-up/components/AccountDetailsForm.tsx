@@ -31,10 +31,10 @@ const AccountDetailsForm = ({
   const {
     isErrorModalOpen,
     setErrorModalState,
-    openErrorModalWithMessage,
+    // openErrorModalWithMessage,
     errorModalMessage,
   } = useErrorModalState();
-  const { language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
   const { authState } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -106,7 +106,7 @@ const t = translations[language] || translations.en
 
 
   return (
-    <div className=" xl:px-[9.125rem] w-full md:px-[30px]  px-6 py-[30px] xl:py-[7rem]">
+    <div className=" xl:px-[9.125rem] w-full md:px-[30px]  px-6 py-[30px] xl:py-28">
       <div className="flex justify-center mb-7 items-center md:hidden">
         <DiveBusterBlackLogo />
       </div>
@@ -134,7 +134,7 @@ const t = translations[language] || translations.en
             placeholder={t.accountDetails.firstNamePlaceholder}
             {...register("first_name")}
             className={`border ${errors.first_name ? "border-red-500" : "border-[#E2E8F0] dark:border-gray-600"
-              } w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] bg-white dark:bg-gray-800 text-black dark:text-white`}
+              } w-full outline-none h-12 text-sm font-archivo rounded-lg px-[.875rem] bg-white dark:bg-gray-800 text-black dark:text-white`}
           />
           {errors.first_name && (
             <p className="text-red-500 text-xs mt-1">
@@ -156,7 +156,7 @@ const t = translations[language] || translations.en
             placeholder={t.accountDetails.lastNamePlaceholder}
             {...register("last_name")}
             className={`border ${errors.last_name ? "border-red-500" : "border-[#E2E8F0] dark:border-gray-600"
-              } w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] bg-white dark:bg-gray-800 text-black dark:text-white`}
+              } w-full outline-none h-12 text-sm font-archivo rounded-lg px-[.875rem] bg-white dark:bg-gray-800 text-black dark:text-white`}
           />
           {errors.last_name && (
             <p className="text-red-500 text-xs mt-1">
@@ -178,7 +178,7 @@ const t = translations[language] || translations.en
             placeholder={t.accountDetails.emailPlaceholder}
             {...register("email")}
             className={`border ${errors.email ? "border-red-500" : "border-[#E2E8F0] dark:border-gray-600"
-              } w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] bg-white dark:bg-gray-800 text-black dark:text-white`}
+              } w-full outline-none h-12 text-sm font-archivo rounded-lg px-[.875rem] bg-white dark:bg-gray-800 text-black dark:text-white`}
           />
           {errors.email && (
             <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
@@ -198,7 +198,7 @@ const t = translations[language] || translations.en
               id="referral_code"
               placeholder="Enter referral code"
               {...register("referral_code")}
-              className="border border-[#E2E8F0] dark:border-gray-600 w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] bg-white dark:bg-gray-800 text-black dark:text-white"
+              className="border border-[#E2E8F0] dark:border-gray-600 w-full outline-none h-12 text-sm font-archivo rounded-lg px-[.875rem] bg-white dark:bg-gray-800 text-black dark:text-white"
             />
           </div>
         )}

@@ -11,8 +11,7 @@ export default function Error({
   reset: () => void
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service
-    console.error('Error caught in auth layout:', error)
+    // Error caught by error boundary
   }, [error])
 
   // Check if error message contains specific text to provide better guidance

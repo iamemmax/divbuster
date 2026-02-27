@@ -34,7 +34,7 @@ export default function CreateDivePlan() {
         <div className="absolute inset-0 flex items-center justify-center z-[100] bg-white dark:bg-gray-900 bg-opacity-90 dark:bg-opacity-90">
           <div className="text-center">
             <p className="text-gray-600 dark:text-gray-300 text-lg font-medium">
-              No buddies found for "{search}"
+              No buddies found for {search}
             </p>
             <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
               Try searching with different keywords

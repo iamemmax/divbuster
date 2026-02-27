@@ -31,7 +31,7 @@ const advancedDetailsSchema = z.object({
 
 export type diveLogTypes = z.infer<typeof advancedDetailsSchema>;
 
-const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData,user }: prop) => {
+const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData }: prop) => {
     const {language}= useLanguage()
     const t = createdivePlanTranslations[language] || createdivePlanTranslations?.en;
 
@@ -144,7 +144,7 @@ const CreateDiveLog = ({ setStep, onClose,diveLogData,setDiveLogData,user }: pro
                         placeholder={t?.namePlaceholder}
                         {...register("name")}
                         className={`w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 
-              text-gray-900 dark:text-white placeholder-gray-400 
+              text-gray-900 dark:text-white placeholder:text-gray-400 
               transition-colors outline-none
               border ${errors.name ? "border-red-500" : "border-gray-300 dark:border-gray-600"}`}
                     />

@@ -1,7 +1,4 @@
-interface RootObject {
-  detail: string;
-  data: UserDataProp;
-}
+
 
 export interface UserDataProp {
   id: string;

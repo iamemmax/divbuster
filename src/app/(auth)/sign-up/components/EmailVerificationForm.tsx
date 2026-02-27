@@ -12,7 +12,6 @@ import { SmallSpinner } from '@/icons/core';
 import { useResendVerifyEmail } from '../../api/verification/resendVerification';
 import { formatAxiosErrorMessage } from '@/utils';
 import { AxiosError } from 'axios';
-import { ErrorAlert } from '@/components/core/ErrorAlert';
 import { useErrorModalState } from '@/hooks';
 import { useLanguage } from '@/hooks/useLanguage';
 import { translations } from '../translations';
@@ -42,13 +41,13 @@ const EmailVerificationForm = ({ email, lang }: EmailVerificationFormProps) => {
   const t = translations[language] || translations.en
   const [activeTab, setActiveTab] = useState<'email' | 'qr'>('email');
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [_errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<VerificationFormValues>({
     resolver: zodResolver(verificationSchema),
     defaultValues: {

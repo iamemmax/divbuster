@@ -2,7 +2,7 @@
 import { DM_Sans, Wix_Madefor_Display, Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/utils/classNames";
-import { Suspense, useMemo } from "react";
+import { Suspense } from "react";
 import ReactQueryProvider from "@/lib/reactQuery";
 import { AuthProvider } from "@/contexts/authentication";
 import { Toaster } from "react-hot-toast";
@@ -18,7 +18,6 @@ const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
 const googleOAuthConfig = {
   clientId: GOOGLE_CLIENT_ID as string,
-  onScriptLoadSuccess: () => console.log("Google OAuth script loaded successfully")
 };
 
 // Add this to get the current origin for redirect URIs

@@ -99,9 +99,7 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
       };
       
       onPlaceSelected(placeData);
-    } else {
-      console.warn('Invalid place selected:', place);
-    }
+    } 
   }, [onPlaceSelected]);
 
   // Initialize Google Maps Autocomplete
@@ -279,13 +277,13 @@ const GoogleAutocomplete = forwardRef<HTMLInputElement, GoogleAutocompleteProps>
         aria-busy={isLoading}
       />
       {isLoading && (
-        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          <div className="animate-spin rounded-full size-4 border-b-2 border-blue-500"></div>
         </div>
       )}
       
       {/* Global styles for Google Places dropdown - injected once */}
-      <style jsx global>{`
+      <style jsx>{`
         .pac-container {
           z-index: 99999999999999999999 !important;
           border-radius: 8px;

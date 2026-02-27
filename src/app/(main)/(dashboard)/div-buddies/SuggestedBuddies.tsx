@@ -1,5 +1,6 @@
 "use client"
-import { Button, ErrorModal } from '@/components/core';
+import Image from 'next/image'
+import {  ErrorModal } from '@/components/core';
 import { useAuth } from '@/contexts/authentication';
 import { useErrorModalState } from '@/hooks';
 import React, { useState } from 'react'
@@ -12,8 +13,8 @@ import { SmallSpinner } from '@/icons/core';
 import { useQueryClient } from 'react-query';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { SuggestedBuddySkeleton } from '@/components/core';
-import { useLanguage } from '@/hooks/useLanguage';
-import { diverBuddiesTranslations } from '../../translation/diveBuddiesTranslation';
+// import { useLanguage } from '@/hooks/useLanguage';
+// import { diverBuddiesTranslations } from '../../translation/diveBuddiesTranslation';
 
 const SuggestedBuddies = () => {
   const {
@@ -27,8 +28,8 @@ const SuggestedBuddies = () => {
   const { user } = authState;
   const userData = user as User;
   const { mutate: handleAddNewBuddy } = useAddBuddy();
-  const { language } = useLanguage();
-  const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
+  // const { language } = useLanguage();
+  // const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
   
   const [loadingDiverId, setLoadingDiverId] = useState<number | null>(null);
   const [removedDivers, setRemovedDivers] = useState<Set<number>>(new Set());
@@ -104,20 +105,14 @@ const SuggestedBuddies = () => {
               
               <div className="flex  items-center gap-3 flex-1 w-full min-w-0">
                 {/* Avatar */}
-                <div className="flex items-center justify-center w-10 h-10 flex-shrink-0 rounded-full bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100 text-sm font-medium overflow-hidden">
+                <div className="flex items-center justify-center size-10 shrink-0 rounded-full bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100 text-sm font-medium overflow-hidden">
                   {buddy?.profile_picture ? (
-                    <img
+                    <Image
                       src={buddy.profile_picture}
                       alt={buddy.full_name || "User"}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        // Fallback if image fails to load
-                        e.currentTarget.style.display = 'none';
-                        const parent = e.currentTarget.parentElement;
-                        if (parent) {
-                          parent.textContent = getInitials(buddy.full_name);
-                        }
-                      }}
+                      width={40}
+                      height={40}
+                      className="size-full object-cover"
                     />
                   ) : (
                     <span>
@@ -139,7 +134,7 @@ const SuggestedBuddies = () => {
                 <SmallSpinner color='#F7931D' />
               ) : (
                 <button 
-                  className="flex items-center justify-center hover:border-orange-500 dark:hover:border-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/30 transition-colors duration-200 p-1 flex-shrink-0"
+                  className="flex items-center justify-center hover:border-orange-500 dark:hover:border-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/30 transition-colors duration-200 p-1 shrink-0"
                   onClick={() => handleAddBuddy(buddy)}
                   aria-label={`Add ${buddy.full_name || "buddy"}`}
                 >

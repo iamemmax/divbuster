@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button, ErrorModal, } from '@/components/core';
@@ -35,7 +35,7 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
   onClose,
   // initialData = {},
   data,
-  user
+  
 }) => {
  const {language}= useLanguage()
       const t = logSummaryTranslations[language] || logSummaryTranslations?.en;
@@ -57,7 +57,7 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
   const {
     register,
     handleSubmit,
-    control,
+    
     formState: { errors },
   } = useForm<LogSummaryFormValues>({
     resolver: zodResolver(logSummarySchema),
@@ -108,7 +108,7 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
                   {...register('bottom_time')}
                   placeholder="0"
                   className={`border ${errors.bottom_time ? "border-red-500" : "border-[#E2E8F0] dark:border-gray-600"
-                    } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors placeholder-gray-400 dark:placeholder-gray-500`}
+                    } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500`}
                 />
                 {errors.bottom_time && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.bottom_time.message}</p>}
               </div>
@@ -121,7 +121,7 @@ const LogSummaryModal: React.FC<LogSummaryModalProps> = ({
                   {...register('max_depth')}
                   placeholder="0"
                   className={`border ${errors.max_depth ? "border-red-500" : "border-[#E2E8F0] dark:border-gray-600"
-                    } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors placeholder-gray-400 dark:placeholder-gray-500`}
+                    } outline-none py-[.8125rem] w-full text-black dark:text-white text-sm flex-1 bg-white dark:bg-gray-700 font-archivo rounded-lg px-[.875rem] focus:border-[#F7931D] focus:ring-2 focus:ring-[#F7931D]/20 transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500`}
                 />
                 {errors.max_depth && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.max_depth.message}</p>}
               </div>

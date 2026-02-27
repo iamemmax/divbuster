@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { Button, Dialog, DialogContent } from "@/components/core";
 import CloseIcon from "@/app/icons/CloseIcon";
 import { useInfiniteQuery } from "react-query";
@@ -47,7 +48,7 @@ interface Prop {
 export default function AddNewGroupMembersModal({
   isOpen,
   onClose,
-  groupId,
+  
   setShowCreateGroupChat,
   setSuggestedMembers,
   suggestedMembers
@@ -130,22 +131,21 @@ export default function AddNewGroupMembersModal({
                       className="flex flex-col items-center relative"
                     >
                       {buddy?.image ? (
-                        <img
+                        <Image
                           src={buddy?.image}
                           alt={buddy.first_name}
-                          className="md:w-[4.375rem] md:h-[4.375rem] shrink-0 w-9 h-9 rounded-full object-cover"
-                          onError={(e) => {
-                            e.currentTarget.src = "/default-avatar.png"
-                          }}
+                          width={70}
+                          height={70}
+                          className="md:size-[4.375rem] shrink-0 size-9 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="md:w-[4.375rem] md:h-[4.375rem] w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-white font-semibold">
+                        <div className="md:size-[4.375rem] size-9 rounded-full bg-gray-300 flex items-center justify-center text-white font-semibold">
                           {`${buddy?.first_name?.[0] ?? ""}${buddy?.last_name?.[0] ?? ""}`}
                         </div>
                       )}
 
                       <Button
-                        className="absolute bottom-5 right-0 h-[1.3625rem] w-[1.3625rem] flex justify-center items-center -mt-2 -mr-2 bg-[#EEEFF0] dark:bg-gray-700 border rounded-full p-0.5 hover:bg-gray-100 dark:hover:bg-gray-600"
+                        className="absolute bottom-5 right-0 size-[1.3625rem] flex justify-center items-center -mt-2 -mr-2 bg-[#EEEFF0] dark:bg-gray-700 border rounded-full p-0.5 hover:bg-gray-100 dark:hover:bg-gray-600"
                         onClick={() => handleRemoveMember(buddy?.user_id?.toString())}
                       >
                         <CloseIcon color="#A9B0C2" />
@@ -197,10 +197,12 @@ export default function AddNewGroupMembersModal({
                       }
                     }}
                   >
-                    <img
+                    <Image
                       src={buddy?.profile_details?.profile_picture !== null ? buddy?.profile_details?.profile_picture : "/images/profile.png"}
                       alt={buddy.first_name}
-                      className="md:w-[4.375rem] md:h-[4.375rem] shrink-0 w-9 h-9 rounded-full object-cover"
+                      width={70}
+                      height={70}
+                      className="md:size-[4.375rem] shrink-0 size-9 rounded-full object-cover"
                     />
                     <div>
                       <p className="md:text-lg text-base font-archivo font-medium text-[#101828] dark:text-gray-100">

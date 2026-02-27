@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Search, MoreVertical, Archive, Trash2, PenIcon } from "lucide-react";
+import { Search, MoreVertical, Trash2, PenIcon } from "lucide-react";
 import {
   groupChatListProp,
   groupChatResult,
@@ -10,9 +10,7 @@ import { useErrorModalState } from "@/hooks";
 import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import { ErrorModal } from "@/components/core";
-import { ConfirmSaveModal } from "@/app/(main)/components/shared/modal/ConfirmSave";
 import { UnsavedChangesModal } from "@/app/(main)/components/shared/modal/UnsavedChangeModal";
-import { useAuth } from "@/contexts/authentication";
 import { FetchPreviousPageOptions, InfiniteData, InfiniteQueryObserverResult, useQueryClient } from "react-query";
 import moment from "moment";
 import CreateGroupChatForm from "../modals/group/CreateGroupChat";
@@ -34,8 +32,6 @@ const GroupSidebar = ({
   groupList: InfiniteData<groupChatListProp> | undefined
   selectedGroup: groupChatResult | null;
   onSelectGroup: (group: groupChatResult) => void;
-  onDelete: (groupId: number) => void;
-  onArchive: (groupId: number) => void;
   isLoadingGroup: boolean;
   setGroupMembers: React.Dispatch<
     React.SetStateAction<Othermember[] | undefined>
@@ -155,10 +151,7 @@ const t = groupSidebarTranslations[language] ||groupSidebarTranslations.en;
     // Generate placeholder avatar with group name
   };
 
-  // Get member count including current user
-  const getMemberCount = (group: groupChatResult): number => {
-    return (group.other_members?.length || 0) + 1; // +1 for current user
-  };
+
 
   // Get formatted member list for preview
   const getMemberPreview = (group: groupChatResult): string => {
@@ -179,29 +172,7 @@ const t = groupSidebarTranslations[language] ||groupSidebarTranslations.en;
     return memberNames;
   };
 
-  // Format date helper
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
 
-    if (diffInHours < 24) {
-      return date.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    } else if (diffInHours < 168) {
-      // Less than a week
-      return date.toLocaleDateString([], {
-        weekday: "short",
-      });
-    } else {
-      return date.toLocaleDateString([], {
-        month: "short",
-        day: "numeric",
-      });
-    }
-  };
   const queryClient = useQueryClient();
 
   const { mutate: handleExistGroup, isLoading } = useExistGroup();
@@ -245,14 +216,14 @@ const t = groupSidebarTranslations[language] ||groupSidebarTranslations.en;
             {t.searchPlaceholder}
           </label>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400 dark:text-gray-500" />
             <input
               id="group-search"
               type="text"
               placeholder={t.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -263,7 +234,7 @@ const t = groupSidebarTranslations[language] ||groupSidebarTranslations.en;
       <div className="flex-1 max-h-[66vh] md:max-h-[65vh] overflow-y-auto mt-4">
         {isLoadingGroup ? (
           <div className="flex justify-center items-center h-32">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+            <div className="animate-spin rounded-full size-8 border-b-2 border-orange-500"></div>
           </div>
         ) : !filteredGroupChats.length ? (
           <p className="text-center text-gray-400 dark:text-gray-500 mt-8">
@@ -273,7 +244,7 @@ const t = groupSidebarTranslations[language] ||groupSidebarTranslations.en;
           </p>
         ) : (
           <>
-            {filteredGroupChats.map((group, idx: number) => {
+            {filteredGroupChats.map((group) => {
               const isSelected = selectedGroup?.id === group.id;
 
               return (
@@ -296,22 +267,22 @@ const t = groupSidebarTranslations[language] ||groupSidebarTranslations.en;
                   }}
                 >
                   {/* Admin indicator */}
-                  <div className="flex flex-col items-center justify-center mt-1 mr-3 flex-shrink-0">
+                  <div className="flex flex-col items-center justify-center mt-1 mr-3 shrink-0">
                     {group.is_admin && (
                       <div
-                        className="w-2 h-2 bg-green-500 rounded-full"
+                        className="size-2 bg-green-500 rounded-full"
                         title={t.youAreAdmin}
                       ></div>
                     )}
                   </div>
 
                   {/* Group Avatar */}
-                  <div className="relative flex-shrink-0">
+                  <div className="relative shrink-0">
                     <img
                       src={getAvatarUrl(group)}
                       alt={group.group?.name || "Group"}
                       title={group.group?.name || "Group"}
-                      className="h-12 w-12 rounded-full object-cover ring-2 ring-white dark:ring-gray-900"
+                      className="size-12 rounded-full object-cover ring-2 ring-white dark:ring-gray-900"
                       onError={(e) => {
                         // Fallback to placeholder if image fails to load
                         const target = e.target as HTMLImageElement;
@@ -365,7 +336,7 @@ const t = groupSidebarTranslations[language] ||groupSidebarTranslations.en;
                             aria-label="Open options menu"
                             className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors duration-200"
                           >
-                            <MoreVertical className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                            <MoreVertical className="size-4 text-gray-500 dark:text-gray-400" />
                           </button>
 
                           {/* Dropdown menu */}
@@ -386,10 +357,10 @@ const t = groupSidebarTranslations[language] ||groupSidebarTranslations.en;
                                       setGroup(group)
                                       setOpenMenuId(null);
                                     }}
-                                    className="flex items-center w-full px-2 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                    className="flex items-center w-full p-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                     role="menuitem"
                                   >
-                                    <PenIcon className="h-4 w-4 mr-1 text-yellow-600" />
+                                    <PenIcon className="size-4 mr-1 text-yellow-600" />
                                     {t.editGroup}
                                   </button>
                                 )}
@@ -400,10 +371,10 @@ const t = groupSidebarTranslations[language] ||groupSidebarTranslations.en;
                                     setShowConfirmSaveModal(true);
                                     setOpenMenuId(null);
                                   }}
-                                  className="flex items-center w-full px-2 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/40 transition-colors"
+                                  className="flex items-center w-full p-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/40 transition-colors"
                                   role="menuitem"
                                 >
-                                  <Trash2 className="h-4 w-4 mr-1" />
+                                  <Trash2 className="size-4 mr-1" />
                                  {t.exitGroup}
                                 </button>
                               </div>
@@ -420,7 +391,7 @@ const t = groupSidebarTranslations[language] ||groupSidebarTranslations.en;
             {/* Infinite scroll loader */}
             {isFetchingNextPage && (
               <div className="flex justify-center py-4">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500"></div>
+                <div className="animate-spin rounded-full size-6 border-b-2 border-orange-500"></div>
               </div>
             )}
 

@@ -1,19 +1,16 @@
 "use client";
 import Header from "@/app/(main)/components/shared/Header";
-import AddIcon from "@/app/icons/(dashboard)/AddIcon";
 import AngleLeft from "@/app/icons/(dashboard)/AngleLeft";
 import { CylinderIcon } from "@/app/icons/(dashboard)/CylinderIcon";
 import GreenCheckMark from "@/app/icons/(dashboard)/GreenCheckMark";
-import LoveIcon from "@/app/icons/(dashboard)/LoveIcon";
 import PlusIcon from "@/app/icons/(dashboard)/PlusIcon";
 import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
 import { Button } from "@/components/core";
-import { Camera, HeartIcon, Star } from "lucide-react";
-import Image from "next/image";
+import {  Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, XAxis, ResponsiveContainer } from 'recharts';
 
 
 
@@ -272,11 +269,11 @@ const gearData: GearItem[] = [
   const CustomLegend = () => (
     <div className="flex justify-end items-center gap-6 mb-4">
       <div className="flex items-center gap-2">
-        <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+        <div className="size-3 bg-orange-500 rounded-full"></div>
         <span className="text-gray-500 text-sm">Previous Weight</span>
       </div>
       <div className="flex items-center gap-2">
-        <div className="w-3 h-3 bg-orange-300 rounded-full"></div>
+        <div className="size-3 bg-orange-300 rounded-full"></div>
         <span className="text-gray-500 text-sm">Present Weight</span>
       </div>
     </div>
@@ -294,7 +291,7 @@ const gearData: GearItem[] = [
             <div className="relative h-60 overflow-hidden">
               {/* Plant background image */}
               <div
-                className="absolute top-0 left-0 right-0 h-full bg-cover bg-center"
+                className="absolute top-0 inset-x-0 h-full bg-cover bg-center"
                 style={{
                   backgroundImage: "url(/images/onboarding/auth-layout-bg.svg)",
                 }}
@@ -302,9 +299,9 @@ const gearData: GearItem[] = [
 
               {/* Underwater overlay with reduced opacity */}
               <div className="">
-                <div className="absolute px-[1.875rem] py-[1.3125rem] top-0 left-0 w-full h-full bg-black/50 z-[99999]">
+                <div className="absolute px-[1.875rem] py-[1.3125rem] top-0 left-0 size-full bg-black/50 z-[99999]">
                   <Button
-                    className="w-12 h-12 rounded-full p-0 bg-white flex justify-center items-center"
+                    className="size-12 rounded-full p-0 bg-white flex justify-center items-center"
                     onClick={() => router.back()}
                   >
                     <AngleLeft />
@@ -317,9 +314,9 @@ const gearData: GearItem[] = [
             <div className="relative px-8 pb-3 bg-white">
               {/* Profile image positioned over the header */}
               <div className="absolute -top-1.5 xl:-top-16 left-8 flex items-center flex-wrap gap-5">
-                <div className="w-20 h-20 shrink-0 xl:h-28 xl:w-28 rounded-full border-4 border-white shadow-lg overflow-hidden">
+                <div className="size-20 shrink-0 xl:size-28 rounded-full border-4 border-white shadow-lg overflow-hidden">
                   <div
-                    className="w-full h-full bg-cover bg-center"
+                    className="size-full bg-cover bg-center"
                     style={{
                       backgroundImage:
                         "url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=128&h=128&q=80')",
@@ -335,7 +332,7 @@ const gearData: GearItem[] = [
                         Timothy Blackwell
                       </h1>
                       <div className="bg-[#ECFDF3] rounded-2xl flex items-center py-[.3125rem] px-4 gap-1 justify-center">
-                        <div className="w-2 h-2 rounded-full bg-[#12B76A]" />
+                        <div className="size-2 rounded-full bg-[#12B76A]" />
                         <p className="font-archivo font-medium text-sm text-[#027A48]">
                           Online
                         </p>
@@ -353,37 +350,37 @@ const gearData: GearItem[] = [
                           <path
                             d="M17 9C18.2426 9 19.25 7.99264 19.25 6.75C19.25 5.50736 18.2426 4.5 17 4.5C15.7574 4.5 14.75 5.50736 14.75 6.75C14.75 7.99264 15.7574 9 17 9Z"
                             stroke="#4F4F4F"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M4.25 18.151C11 12.555 14 23.445 20.75 17.8491"
                             stroke="#4F4F4F"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M4.25 14.401C11 8.80502 14 19.695 20.75 14.0991"
                             stroke="#4F4F4F"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M18.2731 15.5231L12.8862 10.1363C11.1985 8.4484 8.90941 7.50011 6.5225 7.5H4.25"
                             stroke="#4F4F4F"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M7.99609 12.7537L11.6477 9.10217"
                             stroke="#4F4F4F"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </div>
@@ -425,8 +422,8 @@ const gearData: GearItem[] = [
                     <path
                       d="M15.7182 2.32846C13.4834 0.957691 11.533 1.51009 10.3613 2.39001C9.88089 2.7508 9.64068 2.93119 9.49935 2.93119C9.35802 2.93119 9.11781 2.7508 8.63739 2.39001C7.4657 1.51009 5.51525 0.957691 3.28055 2.32846C0.347739 4.12745 -0.315884 10.0624 6.44896 15.0695C7.73745 16.0232 8.38169 16.5 9.49935 16.5C10.617 16.5 11.2613 16.0232 12.5497 15.0695C19.3146 10.0624 18.651 4.12745 15.7182 2.32846Z"
                       stroke="#344054"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
                     />
                   </svg>
                   Add to Favourite
@@ -439,7 +436,7 @@ const gearData: GearItem[] = [
           </div>
 
          
-        <div className="mt-[13rem] 2xl:mt-[6.125rem] px-6 py-6 grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-6">
+        <div className="mt-52 2xl:mt-[6.125rem] p-6 grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-6">
               {/* Main Content - 8 columns */}
               <div className="border border-[#EAECF0] rounded-lg  p-[1.875rem]">
                 {/* Navigation Tabs */}
@@ -473,7 +470,7 @@ const gearData: GearItem[] = [
                   <div className="absolute inset-0 bg-black bg-opacity-40"></div>
 
                   {/* Coordinates Overlay */}
-                  <div className="absolute top-4 left-4 text-white py-4 px-[2.75rem] w-full">
+                  <div className="absolute top-4 left-4 text-white py-4 px-11 w-full">
                     <div className="flex justify-end items-center w-full">
                       <Button className="bg-white px-[1.0688rem] py-[.5206rem] rounded-2xl text-[#F7931D] text-sm font-medium flex items-center gap-[.3125rem]">
                         <svg
@@ -486,18 +483,18 @@ const gearData: GearItem[] = [
                           <path
                             d="M5.16602 12C3.94673 12.2745 3.16602 12.6962 3.16602 13.1691C3.16602 13.9962 5.55383 14.6667 8.49935 14.6667C11.4449 14.6667 13.8327 13.9962 13.8327 13.1691C13.8327 12.6962 13.052 12.2745 11.8327 12"
                             stroke="#F7931D"
-                            stroke-width="1.2"
-                            stroke-linecap="round"
+                            strokeWidth="1.2"
+                            strokeLinecap="round"
                           />
                           <path
                             d="M10.1654 6.00004C10.1654 6.92052 9.41917 7.66671 8.4987 7.66671C7.57822 7.66671 6.83203 6.92052 6.83203 6.00004C6.83203 5.07957 7.57822 4.33337 8.4987 4.33337C9.41917 4.33337 10.1654 5.07957 10.1654 6.00004Z"
                             stroke="#F7931D"
-                            stroke-width="1.2"
+                            strokeWidth="1.2"
                           />
                           <path
                             d="M9.33697 11.6624C9.11211 11.879 8.81157 12 8.4988 12C8.18602 12 7.88549 11.879 7.66063 11.6624C5.60157 9.66723 2.84216 7.4384 4.18784 4.20253C4.91543 2.45292 6.66199 1.33337 8.4988 1.33337C10.3356 1.33337 12.0822 2.45292 12.8098 4.20253C14.1537 7.43432 11.4011 9.67411 9.33697 11.6624Z"
                             stroke="#F7931D"
-                            stroke-width="1.2"
+                            strokeWidth="1.2"
                           />
                         </svg>
                         Locate site
@@ -633,9 +630,9 @@ const gearData: GearItem[] = [
                                   <path
                                     d="M12 9.5V13.5L14.5 15M12 5C7.30558 5 3.5 8.80558 3.5 13.5C3.5 18.1944 7.30558 22 12 22C16.6944 22 20.5 18.1944 20.5 13.5C20.5 8.80558 16.6944 5 12 5ZM12 5V2M10 2H14M20.329 5.59204L18.829 4.09204L19.579 4.84204M3.67102 5.59204L5.17102 4.09204L4.42102 4.84204"
                                     stroke="#132346"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                   />
                                 </svg>
                                 Duration
@@ -685,9 +682,9 @@ const gearData: GearItem[] = [
                                 <path
                                   d="M20.5 8L19.8839 7.3839C19.3179 6.8179 18.5504 6.5 17.75 6.5C16.9496 6.5 16.1821 6.8179 15.6161 7.3839L15.3839 7.6161C14.8179 8.1821 14.0504 8.5 13.25 8.5C12.4496 8.5 11.6821 8.1821 11.1161 7.6161L10.8839 7.3839C10.3179 6.8179 9.5504 6.5 8.75 6.5C7.9496 6.5 7.1821 6.8179 6.6161 7.3839L6.3839 7.6161C5.8179 8.1821 5.0504 8.5 4.25 8.5C3.4496 8.5 2.6821 8.1821 2.1161 7.6161L1.5 7M20.5 3L19.8839 2.3839C19.3179 1.8179 18.5504 1.5 17.75 1.5C16.9496 1.5 16.1821 1.8179 15.6161 2.3839L15.3839 2.6161C14.8179 3.1821 14.0504 3.5 13.25 3.5C12.4496 3.5 11.6821 3.1821 11.1161 2.6161L10.8839 2.3839C10.3179 1.8179 9.5504 1.5 8.75 1.5C7.9496 1.5 7.1821 1.8179 6.6161 2.3839L6.3839 2.6161C5.8179 3.1821 5.0504 3.5 4.25 3.5C3.4496 3.5 2.6821 3.1821 2.1161 2.6161L1.5 2M11 11.5L11 19.5M11 19.5L14 16.5M11 19.5L8 16.5"
                                   stroke="#132346"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
                                 />
                               </svg>{" "}
                             <p className=" text-xs lg:text-sm font-archivo text-[#132346] font-medium py-1">
@@ -827,14 +824,14 @@ const gearData: GearItem[] = [
                              )}
                              
                              <div className="flex items-center gap-3 flex-1 min-w-0">
-                               <div className="relative z-10 flex-shrink-0">
+                               <div className="relative z-10 shrink-0">
                                  <img
                                    src={buddy.img}
                                    alt={buddy.name}
-                                   className="w-10 h-10 rounded-full object-cover"
+                                   className="size-10 rounded-full object-cover"
                                  />
                                  
-                                   <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white"></div>
+                                   <div className="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full border border-white"></div>
                                 
                                </div>
                                <div className="flex-1 min-w-0">
@@ -843,7 +840,7 @@ const gearData: GearItem[] = [
                                      {[...Array(5)].map((_, i) => (
                                        <Star
                                          key={i}
-                                         className={`w-3 h-3 ${i < buddy.rating ? "text-orange-400 fill-current" : "text-gray-300"}`}
+                                         className={`size-3 ${i < buddy.rating ? "text-orange-400 fill-current" : "text-gray-300"}`}
                                        />
                                      ))}
                                      <span className="text-xs text-gray-500 ml-1">
@@ -852,7 +849,7 @@ const gearData: GearItem[] = [
                                    </div>
                                </div>
                              </div>
-                             <button className="flex items-center justify-center hover:border-orange-500 hover:bg-orange-50 transition-colors p-1 flex-shrink-0">
+                             <button className="flex items-center justify-center hover:border-orange-500 hover:bg-orange-50 transition-colors p-1 shrink-0">
                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                  <path d="M9 15H11V11H15V9H11V5H9V9H5V11H9V15ZM10 20C8.61667 20 7.31667 19.7417 6.1 19.225C4.88333 18.6917 3.825 17.975 2.925 17.075C2.025 16.175 1.30833 15.1167 0.775 13.9C0.258333 12.6833 0 11.3833 0 10C0 8.61667 0.258333 7.31667 0.775 6.1C1.30833 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.31667 6.1 0.799999C7.31667 0.266666 8.61667 0 10 0C11.3833 0 12.6833 0.266666 13.9 0.799999C15.1167 1.31667 16.175 2.025 17.075 2.925C17.975 3.825 18.6833 4.88333 19.2 6.1C19.7333 7.31667 20 8.61667 20 10C20 11.3833 19.7333 12.6833 19.2 13.9C18.6833 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6917 13.9 19.225C12.6833 19.7417 11.3833 20 10 20ZM10 18C12.2333 18 14.125 17.225 15.675 15.675C17.225 14.125 18 12.2333 18 10C18 7.76667 17.225 5.875 15.675 4.325C14.125 2.775 12.2333 2 10 2C7.76667 2 5.875 2.775 4.325 4.325C2.775 5.875 2 7.76667 2 10C2 12.2333 2.775 14.125 4.325 15.675C5.875 17.225 7.76667 18 10 18Z" fill="#A9B0C2"/>
                                </svg>

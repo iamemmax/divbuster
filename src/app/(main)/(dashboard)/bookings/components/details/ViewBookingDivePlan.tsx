@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Dialog, DialogTitle, DialogBody, DialogContent } from '@/components/core';
 import { bookingResult } from '../../../api/bookings/fetchSchoolBooking';
 import moment from 'moment';
@@ -15,7 +15,7 @@ interface prop {
 
 
 
-const ViewBookingDivePlan = ({ isOpen, setIsOpen, type, title, bookingDetails }: prop) => {
+const ViewBookingDivePlan = ({ isOpen, setIsOpen, title, bookingDetails }: prop) => {
 const {language}= useLanguage()
   const t = bookingDetailstranslations[language] || bookingDetailstranslations.en;
 
@@ -48,7 +48,7 @@ const {language}= useLanguage()
                 <div className="grid grid-cols-6 gap-2 md:gap-4">
                   {bookingDetails?.participants?.map((buddy) => (
                     <div key={buddy.id} className="text-center shrink-0">
-                      <div className="md:w-16 md:h-16 rounded-full bg-gray-100 text-gray-800 font-medium flex items-center justify-center mx-auto">
+                      <div className="md:size-16 rounded-full bg-gray-100 text-gray-800 font-medium flex items-center justify-center mx-auto">
                         {`${buddy?.first_name ?? ""} ${buddy?.last_name ?? ""}`
                           .trim()
                           .split(" ")
@@ -86,9 +86,9 @@ const {language}= useLanguage()
                         {detail.label}
                       </span>
                       <input
-                        readOnly
-                        className="w-full px-4 py-2 border outline-none dark:border-gray-600 rounded-lg bg-white-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none transition-colors"
+                        className="w-full px-4 py-2 border outline-none dark:border-gray-600 rounded-lg bg-white-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none transition-colors"
                         value={detail?.value ?? ""}
+                        readOnly
                       />
                     </div>
                   ))}

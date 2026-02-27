@@ -98,7 +98,6 @@ import { ChevronRight } from "lucide-react";
 import AccountSubscription from "./subscription/AccountSubscription";
 import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 import { Language } from "@/app/(auth)/sign-up/translations";
-import CloseIcon from "@/app/icons/CloseIcon";
 import { subscriptionSranslations } from "@/app/(main)/translation/profileTranslation";
 
 // ✅ Translations in one object
@@ -175,7 +174,7 @@ const SubscriptionSettings = ({ user, language }: Props) => {
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                <ChevronRight className="size-5 text-gray-400 dark:text-gray-500" />
               </div>
             </div>
           ))}
@@ -195,12 +194,12 @@ const SubscriptionSettings = ({ user, language }: Props) => {
       {/* Mobile Modal Sidebar */}
       {isMobileMenuOpen && (
         <div className="xl:hidden fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)}>
-          <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-900 rounded-t-lg max-h-[70vh] overflow-hidden animate-in slide-in-from-bottom duration-300" onClick={(e) => e.stopPropagation()}>
+          <div className="absolute bottom-0 inset-x-0 bg-white dark:bg-gray-900 rounded-t-lg max-h-[70vh] overflow-hidden animate-in slide-in-from-bottom duration-300" onClick={(e) => e.stopPropagation()}>
             <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-archivo">Subscription Menu</h3>
               <button 
                 onClick={() => setIsMobileMenuOpen(false)} 
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                className="size-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                   <path d="M12.854 4.854a.5.5 0 0 0-.708-.708L8 8.293 3.854 4.146a.5.5 0 1 0-.708.708L7.293 9l-4.147 4.146a.5.5 0 0 0 .708.708L8 9.707l4.146 4.147a.5.5 0 0 0 .708-.708L8.707 9l4.147-4.146z"/>
@@ -226,7 +225,7 @@ const SubscriptionSettings = ({ user, language }: Props) => {
                       <h3 className="font-medium text-gray-900 dark:text-white">{item.title}</h3>
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{item.subtitle}</p>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-gray-400" />
+                    <ChevronRight className="size-4 text-gray-400" />
                   </div>
                 </div>
               ))}

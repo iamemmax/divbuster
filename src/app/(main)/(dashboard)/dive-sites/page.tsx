@@ -2,13 +2,10 @@
 import React, { useEffect, useState } from "react"
 import Header from "../../components/shared/Header"
 import RecentDiveSites from "./components/RecentDiveSites"
-import { Button } from "@/components/core"
-import DiveSitesSidebar from "./components/DiveSitesSidebar"
-import { useFetchDiveSites } from "../api/div-sites/fetch-dive-sites"
+import { useFetchDiveSites } from "../api/div-sites/fetchdivesites"
 import { useUser } from "@/app/(auth)/api/getAuthenticatedUser"
 import { DebouncedSearchInput } from "@/components/core/DebouncedSearchInput"
 import { diveSiteTranslations } from "../../translation/diveSitesTranslation"
-import { Language } from "../../translation/dashboardTranslation"
 import { useLanguage } from "@/hooks/useLanguage"
 import { DiveSiteSkeleton } from "@/components/core"
 
@@ -23,7 +20,7 @@ interface TabItem {
 const DiveSites = () => {
   const [activeTab, setActiveTab] = useState<string>("recentDiveSites")
   // const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
-  const { data: user, isLoading: userLoading } = useUser()
+  const { data: user, isLoading: _userLoading } = useUser()
   const [search, setSearch] = useState("")
  const {language}= useLanguage()
 
@@ -132,7 +129,7 @@ const DiveSites = () => {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 max-h-[100vh]">
+    <div className="bg-white dark:bg-gray-900 max-h-screen">
       {/* Language Selector */}
   
       <Header title={t.header} subtitle="" />
@@ -163,7 +160,7 @@ const DiveSites = () => {
                   key={tab.id}
                   href={tab.href}
                   onClick={(e) => handleTabClick(e, tab.id)}
-                  className={`flex-shrink-0 whitespace-nowrap px-6 py-3 text-xs sm:text-sm font-medium transition-colors duration-200 ${
+                  className={`shrink-0 whitespace-nowrap px-6 py-3 text-xs sm:text-sm font-medium transition-colors duration-200 ${
                     activeTab === tab.id
                       ? "text-orange-500 border-b-2 border-orange-500"
                       : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white"
@@ -176,7 +173,7 @@ const DiveSites = () => {
                 </a>
               ))}
             </nav>
-              <div className="w-full xl:max-w-md pt-3 xl:flex-shrink-0">
+              <div className="w-full xl:max-w-md pt-3 xl:shrink-0">
                 <DebouncedSearchInput
                   placeholder={t.searchPlaceholder}
                   onSearch={(value) => setSearch(value)}

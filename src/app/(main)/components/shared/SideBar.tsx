@@ -8,7 +8,7 @@ import SupportContainer from './SupportContainer'
 import DiveBusterLogo from '@/components/icons/DiveBusterLogo'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 // import SimpleLogoutButton from "@/components/SimpleLogoutButton";
-import { useUser } from '@/app/(auth)/api/getAuthenticatedUser'
+// import { useUser } from '@/app/(auth)/api/getAuthenticatedUser'
 // import { useLanguage } from '@/hooks/useLanguage'
 import { useAuth } from '@/contexts/authentication'
 

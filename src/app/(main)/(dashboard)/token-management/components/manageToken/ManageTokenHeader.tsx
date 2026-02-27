@@ -2,9 +2,7 @@
 
 
 import React from 'react';
-import { Download } from 'lucide-react';
 import WalletIcon2 from '@/app/icons/(dashboard)/Walleticon2';
-import CircleArrow from '@/app/icons/(dashboard)/ArrowCircle';
 import InfoColorIcon from '@/app/icons/(dashboard)/InfoColorIcon';
 import { tokenHeaderTranslations } from '@/app/(main)/translation/tokenTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
@@ -20,9 +18,7 @@ interface TokenBalanceCardProps {
 
 const ManageTokenHeader: React.FC<TokenBalanceCardProps> = ({
   balance,
-  onAddTokens,
-  onInvoice,
-  onDownload,
+  onAddTokens
 }) => {
   const {language}= useLanguage()
   const t = tokenHeaderTranslations[language] || tokenHeaderTranslations.en ;
@@ -50,7 +46,7 @@ const ManageTokenHeader: React.FC<TokenBalanceCardProps> = ({
           className="flex items-center gap-2 md:gap-[11px] bg-[#F7F9FC] dark:bg-gray-700 rounded-lg px-4 md:px-[1.3125rem] py-[.6875rem] text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-600 dark:hover:text-gray-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-opacity-50"
           aria-label={t.addTokens}
         >
-          <WalletIcon2 className="w-6 h-6 text-[#292D32] dark:text-gray-300 transition-colors" />
+          <WalletIcon2 className="size-6 text-[#292D32] dark:text-gray-300 transition-colors" />
           <span className="text-xs md:text-sm font-semibold whitespace-nowrap">{t.addTokens}</span>
         </button>
           </div>

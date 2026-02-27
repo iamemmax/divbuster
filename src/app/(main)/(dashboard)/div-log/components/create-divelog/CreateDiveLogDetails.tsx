@@ -1,9 +1,8 @@
 "use client"
 import { User } from '@/app/(auth)/api/getAuthenticatedUser'
-import { Language } from '@/app/(auth)/sign-up/translations'
 import { creatediveLogDetailsTranslations } from '@/app/(main)/translation/diveLogTranslation'
 // import CloseIcon from '@/app/icons/CloseIcon'
-import { Button, DialogClose, DialogHeader, DialogTitle } from '@/components/core'
+import { Button,  DialogHeader, DialogTitle } from '@/components/core'
 import { useLanguage } from '@/hooks/useLanguage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
@@ -25,7 +24,7 @@ const advancedDetailsSchema = z.object({
 });
 export type diveLogDetailsTypes = z.infer<typeof advancedDetailsSchema>;
 
-const CreateDiveLogDetails = ({ setStep, diveLogDetails, setDiveLogDetails, user }: prop) => {
+const CreateDiveLogDetails = ({ setStep, diveLogDetails, setDiveLogDetails }: prop) => {
    const {language}= useLanguage()
     const t = creatediveLogDetailsTranslations[language] || creatediveLogDetailsTranslations?.en;
     const {
@@ -69,7 +68,7 @@ const CreateDiveLogDetails = ({ setStep, diveLogDetails, setDiveLogDetails, user
                         placeholder={t?.bottomTimePlaceholder}
                         {...register("bottom_time")}
                         className={`w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 
-              text-gray-900 dark:text-white placeholder-gray-400 
+              text-gray-900 dark:text-white placeholder:text-gray-400 
               transition-colors outline-none
               border ${errors.bottom_time ? "border-red-500" : "border-gray-300 dark:border-gray-600"}`}
                     />
@@ -89,7 +88,7 @@ const CreateDiveLogDetails = ({ setStep, diveLogDetails, setDiveLogDetails, user
                         placeholder={t?.depthPlaceholder}
                         {...register("dive_depth")}
                         className={`w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 
-              text-gray-900 dark:text-white placeholder-gray-400 
+              text-gray-900 dark:text-white placeholder:text-gray-400 
               transition-colors outline-none
               border ${errors.dive_depth ? "border-red-500" : "border-gray-300 dark:border-gray-600"}`}
                     />

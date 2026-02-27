@@ -1,6 +1,6 @@
 import { adminAxios } from "@/lib/axios";
 import { useQuery } from "react-query";
-import { Diveequipment } from "./fetchDivLogs";
+import { Diveequipment } from "../types/buddies/diveLogTypes";
 
 
 
@@ -103,7 +103,7 @@ const fetchSingleDivLog = async (id:string):Promise<singleDiveProp> => {
     return response.data as singleDiveProp;
 }
 
-export const usefetchSingleDivLog = (id:string) => {
+export const useFetchSingleDivLog = (id:string) => {
   return useQuery({
     queryKey: ["single-div-log",id],
     queryFn: ()=>fetchSingleDivLog(id),

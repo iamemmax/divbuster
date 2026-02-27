@@ -3,7 +3,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button, Dialog, DialogBody, DialogContent, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/core';
-import { Clock } from 'lucide-react';
 import { CaretDown } from '@/components/icons';
 
 // Define the validation schema with Zod
@@ -34,7 +33,6 @@ const AddAirUsage: React.FC<AdvancedDetailsModalProps> = ({
   // onSave,
 }) => {
   const {
-    register,
     handleSubmit,
     control,
     formState: { errors },
@@ -52,7 +50,7 @@ const AddAirUsage: React.FC<AdvancedDetailsModalProps> = ({
     },
   });
 
-  const onSubmit = (data: GearLogDetailsFormValues) => {
+  const onSubmit = () => {
     // onSave(data);
     // onClose();
   };

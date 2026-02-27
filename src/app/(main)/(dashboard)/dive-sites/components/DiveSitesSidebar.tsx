@@ -1,6 +1,7 @@
 import AddIcon from '@/app/icons/(dashboard)/AddIcon';
+import Image from 'next/image';
 import { Button } from '@/components/core';
-import React, { useState } from 'react'
+import React, {  } from 'react'
   interface DiveBuddy {
     id: number;
     name: string;
@@ -107,21 +108,23 @@ const DiveSitesSidebar = () => {
           )}
           
           <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="relative z-10 flex-shrink-0">
-              <img
+            <div className="relative z-10 shrink-0">
+              <Image
                 src={buddy.avatar}
                 alt={buddy.name}
-                className="w-10 h-10 rounded-full object-cover"
+                width={40}
+                height={40}
+                className="size-10 rounded-full object-cover"
               />
               {buddy.isOnline && (
-                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white dark:border-gray-800"></div>
+                <div className="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full border border-white dark:border-gray-800"></div>
               )}
             </div>
             <div className="flex-1 min-w-0">
               <div className="font-medium text-gray-900 dark:text-white text-sm truncate">{buddy.name}</div>
             </div>
           </div>
-          <button className="flex items-center justify-center hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors p-1 flex-shrink-0">
+          <button className="flex items-center justify-center hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors p-1 shrink-0">
             <AddIcon/>
           </button>
         </div>

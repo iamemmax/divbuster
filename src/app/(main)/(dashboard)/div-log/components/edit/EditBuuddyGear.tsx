@@ -17,7 +17,6 @@ import {
 } from '@/components/core';
 import { CaretDown } from '@/components/icons';
 import { DiveLogUpdatedModal } from './DiveLogUpdatedModal';
-import { capitalizeFirstLetter, formatAxiosErrorMessage } from '@/utils';
 import { convertKebabAndSnakeToTitleCase } from '@/utils/strings';
 import { useUpdateLogGearDetails } from '../../../api/div-logs/update/updateLogGearDetails';
 import { useQueryClient } from 'react-query';
@@ -27,9 +26,9 @@ import { AxiosError } from 'axios';
 import { SmallSpinner } from '@/icons/core';
 import { UnsavedChangesModal } from '@/app/(main)/components/shared/modal/UnsavedChangeModal';
 import { User } from '@/app/(auth)/api/getAuthenticatedUser';
-import { Language } from '@/app/(auth)/sign-up/translations';
 import { gearLogTranslations } from '@/app/(main)/translation/diveLogTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
+import { formatAxiosErrorMessage } from '@/utils';
 
 // Validation schema
 const advancedDetailsSchema = z.object({
@@ -55,7 +54,7 @@ const EditBuuddyGear: React.FC<AdvancedDetailsModalProps> = ({
   isOpen,
   onClose,
   initialData,
-  user
+  
 }) => {
   const {
     isErrorModalOpen,

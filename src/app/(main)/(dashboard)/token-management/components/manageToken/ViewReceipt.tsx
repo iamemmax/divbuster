@@ -4,7 +4,6 @@ import React from 'react'
 import type { TransHistoryResult } from './RecentTokenTransaction'
 import { invoiceeTranslations } from '@/app/(main)/translation/tokenTranslation';
 import { Language } from '@/app/(auth)/sign-up/translations';
-import { capitalizeFirstLetter } from '@/utils';
 
 interface prop{
   selectedTransaction: TransHistoryResult;
@@ -25,11 +24,11 @@ const ViewReceipt = ({selectedTransaction,handleCloseModal,downloadSinglePDF,lan
         <div id={rootId} className="bg-white dark:bg-gray-50">
         
         {/* Invoice Header */}
-        <div className="px-8 py-8 border-b-4 border-gray-800 dark:border-gray-700">
+        <div className="p-8 border-b-4 border-gray-800 dark:border-gray-700">
           <div className="flex justify-between items-start">
             {/* Logo and Company Name */}
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gray-800 dark:bg-gray-700 rounded-full flex items-center justify-center">
+              <div className="size-16 bg-gray-800 dark:bg-gray-700 rounded-full flex items-center justify-center">
                 <DivebusterLogo/>
               </div>
               <div>
@@ -46,7 +45,7 @@ const ViewReceipt = ({selectedTransaction,handleCloseModal,downloadSinglePDF,lan
         </div>
 
         {/* Billing Information */}
-        <div className="px-8 py-8 grid grid-cols-2 gap-8">
+        <div className="p-8 grid grid-cols-2 gap-8">
           {/* Billed To */}
           <div>
             <h3 className="text-lg font-bold text-gray-800 dark:text-gray-900 mb-4 border-b-2 border-gray-300 dark:border-gray-400 pb-2">
@@ -87,14 +86,14 @@ const ViewReceipt = ({selectedTransaction,handleCloseModal,downloadSinglePDF,lan
             </thead>
             <tbody>
               <tr className="border-b border-gray-200 dark:border-gray-300">
-                <td className="py-4 px-4 text-gray-800 dark:text-gray-900">
+                <td className="p-4 text-gray-800 dark:text-gray-900">
                   {selectedTransaction.narration || 'Transaction'}
                 </td>
-                <td className="text-center py-4 px-4 text-gray-800 dark:text-gray-900">{selectedTransaction.payment_gateway}</td>
-                <td className="text-right py-4 px-4 text-gray-800 dark:text-gray-900">
+                <td className="text-center p-4 text-gray-800 dark:text-gray-900">{selectedTransaction.payment_gateway}</td>
+                <td className="text-right p-4 text-gray-800 dark:text-gray-900">
                   €{selectedTransaction.amount.toFixed(2)}
                 </td>
-                <td className="text-right py-4 px-4 text-gray-800 dark:text-gray-900 font-semibold">
+                <td className="text-right p-4 text-gray-800 dark:text-gray-900 font-semibold">
                   €{selectedTransaction.amount.toFixed(2)}
                 </td>
               </tr>
@@ -187,12 +186,11 @@ const ViewReceipt = ({selectedTransaction,handleCloseModal,downloadSinglePDF,lan
           <div className="px-8 pb-8 flex gap-3">
             <button 
               onClick={() => { 
-                console.log('modal download clicked id=', selectedTransaction?.id); 
                 downloadSinglePDF(selectedTransaction); 
               }} 
               className="flex-1 px-6 py-3 bg-gray-800 hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-800 text-white rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center gap-2"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               {t.download}

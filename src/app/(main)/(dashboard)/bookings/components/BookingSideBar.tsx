@@ -5,15 +5,15 @@ import { useFetchNearestUser } from '../../api/buddy/nearestUserAround';
 import { useAddBuddy } from '../../api/buddy/addBuddy';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { useLanguage } from '@/hooks/useLanguage';
-import { diverBuddiesTranslations } from '@/app/(main)/translation/diveBuddiesTranslation';
+// import { useLanguage } from '@/hooks/useLanguage';
+// import { diverBuddiesTranslations } from '@/app/(main)/translation/diveBuddiesTranslation';
 const BookingSideBar = () => {
-  const { data: nearestUsers, isLoading } = useFetchNearestUser();
-  const { mutate: addBuddy, isLoading: isAddingBuddy } = useAddBuddy();
+  const { data: nearestUsers } = useFetchNearestUser();
+  const { mutate: addBuddy, isLoading } = useAddBuddy();
   const [displayCount, setDisplayCount] = useState(6);
   const [addingBuddyId, setAddingBuddyId] = useState<number | null>(null);
-  const { language } = useLanguage();
-  const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
+  // const { language } = useLanguage();
+  // const t = diverBuddiesTranslations[language] || diverBuddiesTranslations.en;
   
   const suggestedBuddies = nearestUsers?.slice(0, displayCount) || [];
   const hasMoreUsers = (nearestUsers?.length || 0) > displayCount;
@@ -31,7 +31,7 @@ const BookingSideBar = () => {
         queryClient.invalidateQueries('fetchNearestUser');
         setAddingBuddyId(null);
       },
-      onError: (error: any) => {
+      onError: () => {
         toast.error('Failed to send buddy request');
         setAddingBuddyId(null);
       }
@@ -56,13 +56,13 @@ const BookingSideBar = () => {
         Array.from({ length: 4 }).map((_, idx) => (
           <div key={idx} className="flex items-center justify-between py-3 animate-pulse">
             <div className="flex items-center gap-3 flex-1">
-              <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+              <div className="size-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
               <div className="flex-1">
                 <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-1"></div>
                 <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
               </div>
             </div>
-            <div className="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="size-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
           </div>
         ))
       ) : (
@@ -78,20 +78,20 @@ const BookingSideBar = () => {
               )}
               
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="relative z-10 flex-shrink-0">
+                <div className="relative z-10 shrink-0">
                   {buddy.profile_picture ? (
                     <img
                       src={buddy.profile_picture}
                       alt={fullName}
-                      className="w-10 h-10 rounded-full object-cover"
+                      className="size-10 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-semibold text-sm">
+                    <div className="size-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-semibold text-sm">
                       {initials}
                     </div>
                   )}
                   {buddy.is_buddy && (
-                    <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white dark:border-gray-800"></div>
+                    <div className="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full border border-white dark:border-gray-800"></div>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -102,7 +102,7 @@ const BookingSideBar = () => {
               <button 
                 onClick={() => handleAddBuddy(buddy)}
                 disabled={addingBuddyId === buddy.user_id || buddy.is_buddy}
-                className={`flex items-center justify-center transition-colors p-1 flex-shrink-0 ${
+                className={`flex items-center justify-center transition-colors p-1 shrink-0 ${
                   buddy.is_buddy 
                     ? 'text-green-500 cursor-not-allowed' 
                     : addingBuddyId === buddy.user_id 
@@ -111,9 +111,9 @@ const BookingSideBar = () => {
                 }`}
               >
                 {addingBuddyId === buddy.user_id ? (
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500"></div>
+                  <div className="animate-spin rounded-full size-4 border-b-2 border-orange-500"></div>
                 ) : buddy.is_buddy ? (
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="size-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                 ) : (

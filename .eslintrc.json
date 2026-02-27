@@ -28,7 +28,9 @@
       "error",
       {
         "src/**/*.{js,ts}": "CAMEL_CASE",
-        "src/**/*.{jsx,tsx}": "+(+([a-z0-9])|*([A-Z]*([a-z0-9])))" // Lowercase or pascal case
+        "src/**/*.{jsx,tsx}": "+(+([a-z0-9])|*([A-Z]*([a-z0-9])))",
+        "src/**/+(error|layout|page|global-error|not-found).tsx": "KEBAB_CASE",
+        "src/**/*.d.ts": "KEBAB_CASE"
       }
     ],
     "check-file/folder-match-with-fex": [
@@ -52,16 +54,7 @@
     ],
     "no-unused-vars": "off",
     "prefer-const": "error",
-    "react/jsx-sort-props": [
-      2,
-      {
-        "callbacksLast": false,
-        "ignoreCase": true,
-        "noSortAlphabetically": true,
-        "shorthandFirst": false,
-        "shorthandLast": true
-      }
-    ],
+    "react/jsx-sort-props": "off",
     "react/no-unknown-property": [
       2,
       {
@@ -69,6 +62,6 @@
       }
     ],
     "tailwindcss/classnames-order": "off",
-    "tailwindcss/no-custom-classname": "off",
+    "tailwindcss/no-custom-classname": "off"
   }
 }

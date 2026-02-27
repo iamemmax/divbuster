@@ -24,9 +24,7 @@ import { useState } from "react";
 import { DiveLogUpdatedModal } from "./DiveLogUpdatedModal";
 import { UnsavedChangesModal } from "@/app/(main)/components/shared/modal/UnsavedChangeModal";
 import { User } from "@/app/(auth)/api/getAuthenticatedUser";
-import { Language } from "@/app/(auth)/sign-up/translations";
 import { diveNotesTranslations } from "@/app/(main)/translation/diveLogTranslation";
-import CloseIcon from "@/app/icons/CloseIcon";
 import { useLanguage } from "@/hooks/useLanguage";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -43,7 +41,6 @@ export default function AddDiveNotes({
   isOpen,
   onClose,
   data,
-  user,
   
 }: AdvancedDetailsModalProps) {
   const {language}= useLanguage()
@@ -82,7 +79,6 @@ export default function AddDiveNotes({
 
   const [showDiscardModal, setShowDiscardModal] = useState(false);
   const [showUpdatedModal, setShowUpdatedModal] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const { mutate: handleUpdate, isLoading } = useUpdateLogNote();
   const public_note = watch("public_note");
@@ -157,7 +153,7 @@ export default function AddDiveNotes({
                     }`}
                   >
                     <div
-                      className={`w-6 h-6 bg-white dark:bg-gray-200 rounded-full shadow-md transform transition-transform duration-200 mt-1 ${
+                      className={`size-6 bg-white dark:bg-gray-200 rounded-full shadow-md transition-transform duration-200 mt-1${
                         field.value ? "translate-x-9" : "translate-x-1"
                       }`}
                     />

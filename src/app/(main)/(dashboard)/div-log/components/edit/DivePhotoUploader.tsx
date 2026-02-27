@@ -1,11 +1,9 @@
 import { useRef, useState } from "react";
-import { Upload, Trash2, CheckCircle } from "lucide-react";
-import { Button, Dialog, DialogBody, DialogContent, ErrorModal, Switch } from "@/components/core";
+import {  Dialog, DialogBody, DialogContent, ErrorModal } from "@/components/core";
 import CloudIcon from "@/app/icons/(dashboard)/CloudIcon";
 import TrashIcon from "@/app/icons/(dashboard)/Trashcon";
 import VideoIcon from "@/app/icons/(dashboard)/VideoIcon";
 import FileIcon from "@/app/icons/(dashboard)/FileIcon";
-import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
 import { DiveLogUpdatedModal } from "./DiveLogUpdatedModal";
 import { z } from "zod";
 import { useErrorModalState } from "@/hooks";
@@ -18,7 +16,6 @@ import { formatAxiosErrorMessage } from "@/utils";
 import { AxiosError } from "axios";
 import CheckColorIcon2 from "@/app/icons/(dashboard)/CheckColorIcon2";
 import { User } from "@/app/(auth)/api/getAuthenticatedUser";
-import { Language } from "@/app/(auth)/sign-up/translations";
 import { divePhotoUploaderTranslations } from "@/app/(main)/translation/diveLogTranslation";
 import { UnsavedChangesModal } from "@/app/(main)/components/shared/modal/UnsavedChangeModal";
 import { SmallSpinner } from "@/icons/core";
@@ -50,7 +47,6 @@ export default function DivePhotoUploader({
   isOpen,
   onClose,
   data,
-  user
 }: AdvancedDetailsModalProps) {
   const {
     isErrorModalOpen,
@@ -70,8 +66,7 @@ const {language}= useLanguage()
   const {
     control,
     handleSubmit,
-    formState: { errors },
-    watch,
+   
   } = useForm<DiveImageFormData>({
     resolver: zodResolver(diveImageSchema),
     defaultValues: {
@@ -155,7 +150,7 @@ const {language}= useLanguage()
     <Dialog modal={true} open={isOpen}>
       <DialogContent className="w-full !max-w-[57.3125rem] bg-[#f9fafb] dark:bg-gray-800">
         <DialogBody className="p-0 px-2 md:px-8 pt-8 w-full !max-h-[95vh] md:!max-h-[90vh] flex flex-col">
-          <form onSubmit={handleFormSubmit} className="p-6 rounded-xl shadow-sm space-y-6 text-gray-800 dark:text-gray-200 flex flex-col flex-grow">
+          <form onSubmit={handleFormSubmit} className="p-6 rounded-xl shadow-sm space-y-6 text-gray-800 dark:text-gray-200 flex flex-col grow">
             {/* Header */}
             <div className="border-gray-200 dark:border-gray-600 flex justify-between items-center border-b border-opacity-55 pb-4">
               <h2 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
@@ -186,7 +181,7 @@ const {language}= useLanguage()
                         }`}
                       >
                         <div
-                          className={`w-6 h-6 bg-white dark:bg-gray-200 rounded-full shadow-md transform transition-transform duration-200 mt-1 ${
+                          className={`size-6 bg-white dark:bg-gray-200 rounded-full shadow-md transition-transform duration-200 mt-1${
                             field.value ? "translate-x-9" : "translate-x-1"
                           }`}
                         />
@@ -228,8 +223,8 @@ const {language}= useLanguage()
                     className="rounded-[1.75rem] flex flex-col items-center bg-white dark:bg-gray-700 justify-center p-6 text-center text-sm text-gray-500 dark:text-gray-400 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-600 border-2 border-dashed border-gray-300 dark:border-gray-600"
                     onClick={() => fileInputRef.current?.click()}
                   >
-                    <div className="h-[2.5rem] w-[2.5rem] border-[0.375rem] border-[#F9FAFB] dark:border-gray-600 rounded-full flex justify-center items-center bg-[#F2F4F7] dark:bg-gray-600 mb-2">
-                      <CloudIcon className="w-6 h-6 text-gray-400 dark:text-gray-300" />
+                    <div className="size-10 border-[0.375rem] border-[#F9FAFB] dark:border-gray-600 rounded-full flex justify-center items-center bg-[#F2F4F7] dark:bg-gray-600 mb-2">
+                      <CloudIcon className="size-6 text-gray-400 dark:text-gray-300" />
                     </div>
                     <p>
                       <span className="text-orange-500 font-archivo text-sm font-medium">
@@ -242,11 +237,11 @@ const {language}= useLanguage()
                     </p>
                     <input
                       type="file"
-                      multiple
                       accept="image/*,video/*"
                       ref={fileInputRef}
                       onChange={(e) => handleFiles(e.target.files)}
                       className="hidden"
+                      multiple
                     />
                   </div>
 
@@ -268,7 +263,7 @@ const {language}= useLanguage()
                         >
                           <div className="flex-1 grid grid-cols-[30px_1fr_auto] gap-4 items-start w-full">
                             {/* Left icon */}
-                            <div className="flex items-center w-7 h-7 bg-[#FEF6F4] dark:bg-orange-900/20 justify-center rounded-full">
+                            <div className="flex items-center size-7 bg-[#FEF6F4] dark:bg-orange-900/20 justify-center rounded-full">
                               {file.progress < 100 ? (
                                 <CloudIcon color="#F7931D" />
                               ) : isVideo ? (
@@ -313,7 +308,7 @@ const {language}= useLanguage()
                                   className="text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400"
                                   aria-label="Delete file"
                                 >
-                                  <TrashIcon className="w-4 h-4" />
+                                  <TrashIcon className="size-4" />
                                 </button>
                               ) : (
                                 <CheckColorIcon2 />

@@ -35,7 +35,7 @@ export const DebouncedSearchInput = React.forwardRef<HTMLInputElement, Debounced
     }, [externalValue]);
 
     React.useEffect(() => {
-      onSearch(debouncedSearchTerm);
+      onSearch(debouncedSearchTerm as string);
     }, [debouncedSearchTerm, onSearch]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

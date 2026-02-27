@@ -1,6 +1,6 @@
 import { adminAxios } from "@/lib/axios";
 import { useQuery } from "react-query";
-import { noPaginateData } from "./fetch-dive-sites";
+import { noPaginateData } from "./fetchdivesites";
 import { useDebounce } from "@/hooks";
 
  interface filter {

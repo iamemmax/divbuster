@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { loginUserSchema } from "../schema";
-import { Button, ErrorModal, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/core";
+import { Button, ErrorModal, Select, SelectContent, SelectItem, SelectTrigger } from "@/components/core";
 import EyeIcon from "@/app/icons/EyeIcon";
 import Link from "next/link";
 import { useLogin } from "../api/login";
@@ -24,7 +24,7 @@ import CaretDownIcon from "@/icons/core/CaretDown";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Check } from 'lucide-react'; // or use @phosphor-icons/react
 import { LoginLanguages, LoginTranslations } from ".";
-import DivebusterLogo from "@/components/icons/Logo";
+// import DivebusterLogo from "@/components/icons/Logo";
 
 // import { useLanguage } from "../sign-up/contexts/LanguageContext";
 
@@ -92,8 +92,8 @@ const LoginPage = () => {
     handleSubmit,
     register,
     watch,
-    setValue,
-    formState: { errors, isValid },
+    // setValue,
+    formState: { errors },
   } = useForm<LoginDetailsValue>({
     resolver: zodResolver(loginUserSchema),
     defaultValues: {

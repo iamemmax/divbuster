@@ -110,7 +110,7 @@ const BasicInfoForm = ({
  
 
   return (
-     <div className=" xl:px-[9.125rem] w-full md:px-[30px]  px-6 py-[30px] xl:py-[7rem]">
+     <div className=" xl:px-[9.125rem] w-full md:px-[30px]  px-6 py-[30px] xl:py-28">
   <div className="flex justify-center mb-7 items-center md:hidden">
         <DiveBusterBlackLogo />
       </div>
@@ -141,7 +141,7 @@ const BasicInfoForm = ({
             <div className="relative">
               <SelectTrigger
                 id="language"
-                className={`border bg-transparent text-black dark:text-white ${errors.lang ? "border-red-500" : "border-[#E2E8F0] dark:border-gray-600"} w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
+                className={`border bg-transparent text-black dark:text-white ${errors.lang ? "border-red-500" : "border-[#E2E8F0] dark:border-gray-600"} w-full outline-none h-12 text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
               >
                 <SelectValue
                   placeholder={t.basicInfo.selectLanguage}
@@ -150,7 +150,7 @@ const BasicInfoForm = ({
               </SelectTrigger>
               <CaretDown 
                 color="#8D9196" 
-                className={`absolute right-3 top-1/2 transform dark:hidden -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                className={`absolute right-3 top-1/2 dark:hidden -translate-y-1/2 pointer-events-none transition-transform duration-200${
                   isOpen ? 'rotate-180' : ''
                 }`}
               />
@@ -158,8 +158,8 @@ const BasicInfoForm = ({
             <SelectContent>
               <SelectItem
                 className="hidden"
-                disabled
                 value=""
+                disabled
               >
                 {t.basicInfo.selectLanguage}
               </SelectItem>
@@ -173,7 +173,7 @@ const BasicInfoForm = ({
                     <img
                       src={lang.flag}
                       alt={`${lang.label} flag`}
-                      className="w-5 h-5 rounded-sm object-cover"
+                      className="size-5 rounded-sm object-cover"
                     />
                     <span className="text-black dark:text-white">{lang.label}</span>
                   </div>

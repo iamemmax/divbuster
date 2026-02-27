@@ -1,20 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Header from "../../components/shared/Header";
 import { useAuth } from "@/contexts/authentication";
 import ManageToken from "./components/ManageToken";
-import MyInvoicesNamagement from "./components/invoices/InvoiceMagement";
-import CardManagement from "./components/MyCards";
-import MyOrderMangement from "./components/orders/ordersMagement";
 import { tokenTranslations } from "../../translation/tokenTranslation";
-import { Language } from "../../translation/dashboardTranslation";
 import { useLanguage } from "@/hooks/useLanguage";
 
-interface TabItem {
-  id: string;
-  label: string;
-  href: string;
-}
+
 const SettingsTab = () => {
   // const [activeTab, setActiveTab] = useState<string>("manage-token");
 
@@ -76,14 +68,7 @@ const SettingsTab = () => {
       <Header title={t.manageToken} subtitle="" />
 
       <div className="font-archivo w-full md:p-3 h-[90vh] overflow-y-auto">
-        {/* <div className="mb-3">
-          <h1 className="text-base md:xl: lg:text-2xl font-medium  text-[#1D2939]">
-          {t.header}
-          </h1>
-          <p className="text-[#475467] font-medium text-xs sm:text-sm">
-         {t.description}
-          </p>
-        </div> */}
+      
    
 
         {/* Main Content */}

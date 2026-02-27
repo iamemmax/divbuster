@@ -1,5 +1,5 @@
 import { adminAxios } from "@/lib/axios";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 
 
 interface divSitesProp {

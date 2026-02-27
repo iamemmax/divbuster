@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Header from "../../components/shared/Header";
 import ProfileSettings from "./components/ProfileSettings";
 import UserSetting from "./components/UserSetting";
@@ -7,7 +7,7 @@ import SubscriptionSettings from "./components/Subscription";
 import { useAuth } from "@/contexts/authentication";
 import UnitAndMeasurement from "./components/UnitAndMeasurement";
 import DivingComputer from "./components/DIvingComputer";
-import { Language } from "../../translation/dashboardTranslation";
+// import { Language } from "../../translation/dashboardTranslation";
 import { Profiletranslations } from "../../translation/profileTranslation";
 import { useLanguage } from "@/hooks/useLanguage";
 
@@ -28,13 +28,13 @@ const SettingsTab = () => {
 
   const [activeTab, setActiveTab] = useState<string>("profile");
 
-  const tabs: TabItem[] = [
+  const tabs = useMemo<TabItem[]>(() => [
     { id: "profile", label: t.tabs.profile, href: "?tab=profile" },
     { id: "UserSettings", label: t.tabs.user_settings, href: "?tab=userSettings" },
     { id: "MySubscription", label: t.tabs.my_subscription, href: "?tab=mySubscription" },
     { id: "Units & Measurement", label: t.tabs.units_measurement, href: "?tab=unit&measurement" },
     { id: "DivingComputer", label: t.tabs.diving_computer, href: "?tab=divingComputer" },
-  ];
+  ], [t]);
 
   useEffect(() => {
     const updateFromURL = () => {
@@ -81,7 +81,7 @@ const SettingsTab = () => {
   };
 
   return (
-    <div className="h-[100vh]">
+    <div className="h-screen">
       <div className="h-[10vh]">
         <Header title={t.title} subtitle="" />
       </div>
@@ -105,7 +105,7 @@ const SettingsTab = () => {
               key={tab.id}
               href={tab.href}
               onClick={(e) => handleTabClick(e, tab.id)}
-              className={`flex-shrink-0 whitespace-nowrap px-8 py-[10px] text-xs sm:text-sm font-medium transition-colors duration-200
+              className={`shrink-0 whitespace-nowrap px-8 py-[10px] text-xs sm:text-sm font-medium transition-colors duration-200
               ${
                 activeTab === tab.id
                   ? "text-white bg-[#F7931D] dark:bg-[#F7931D]"
@@ -121,7 +121,7 @@ const SettingsTab = () => {
 
           <a
             href={"/token-management"}
-            className={`flex-shrink-0 whitespace-nowrap px-8 py-[10px] text-xs sm:text-sm font-medium transition-colors duration-200
+            className={`shrink-0 whitespace-nowrap px-8 py-[10px] text-xs sm:text-sm font-medium transition-colors duration-200
             ${
               activeTab === "token-management"
                 ? "text-white bg-[#F7931D] dark:bg-[#F7931D]"

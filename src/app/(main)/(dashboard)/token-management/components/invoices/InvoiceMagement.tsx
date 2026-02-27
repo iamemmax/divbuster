@@ -43,7 +43,7 @@ const MyInvoicesManagement = () => {
   const {language}= useLanguage()
   const t = invoiceeTranslations[language] || invoiceeTranslations.en;
   const [globalFilter, setGlobalFilter] = useState("");
-  const [showDownloadMenu, setShowDownloadMenu] = useState(false);
+  const [_showDownloadMenu, setShowDownloadMenu] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const tableScrollRef = React.useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = React.useState(false);

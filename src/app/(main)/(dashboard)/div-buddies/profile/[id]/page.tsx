@@ -10,11 +10,9 @@ import { AxiosError } from "axios";
 import Header from "@/app/(main)/components/shared/Header";
 import ShareIcon from "@/app/icons/(dashboard)/ShareIcon";
 import { Button,  LinkButton } from "@/components/core";
-import { Rating } from "react-simple-star-rating";
 import CardHeadIcon from "@/app/icons/(dashboard)/CardHeadIcon";
 import { cn } from "@/utils/classNames";
-import ThreeDot from "@/app/icons/(dashboard)/ThreeDot";
-import { certificates, usefetchBuddyProfile } from "../../../api/buddy/fetchBuddyProfile";
+import { certificates, useFetchBuddyProfile } from "../../../api/buddy/fetchBuddyProfile";
 import { useErrorModalState } from "@/hooks";
 import { formatAxiosErrorMessage } from "@/utils";
 import { useAuth } from "@/contexts/authentication";
@@ -27,7 +25,6 @@ import CreateBuddyBooking from "../../../bookings/components/modals/buddy-bookin
 import { useLanguage } from "@/hooks/useLanguage";
 import CertificateModal from "@/app/(main)/components/certifications/CertificateModal";
 import { selectedCardBg } from "@/app/(main)/components/shared/CardContainer";
-import DashboardAnalysisCard from "@/app/(main)/components/dashboard/DashboardAnalysisCard";
 
 const DivingProfile = () => {
   
@@ -40,14 +37,14 @@ const DivingProfile = () => {
   const [selectedCertificate, setSelectedCertificate] = useState<certificates |null>(null)
   const [showCertificateModal, setShowCertificateModal] = useState(false)
   const [showBuddyList, setShowBuddyList] = useState(false)
-  const [locationName, setLocationName] = useState<string>('')
+  const [_locationName, setLocationName] = useState<string>('')
   
 
   const {
-    isErrorModalOpen,
-    setErrorModalState,
+    // isErrorModalOpen,
+    // setErrorModalState,
     openErrorModalWithMessage,
-    errorModalMessage
+    // errorModalMessage
   } = useErrorModalState();
 
   // language state — replace with context or prop if you have
@@ -65,7 +62,7 @@ const DivingProfile = () => {
     }
   }, [params?.id, router]);
 
-  const { data, error, isError, isLoading } = usefetchBuddyProfile(
+  const { data, error, isError, isLoading } = useFetchBuddyProfile(
     String(params?.id ?? user?.id ?? "")
   );
 
@@ -98,7 +95,6 @@ const DivingProfile = () => {
             setLocationName(result.location)
           }
         } catch (error) {
-          console.error('Error fetching location:', error)
         }
       }
     }
@@ -111,12 +107,11 @@ const DivingProfile = () => {
           title: `Dive Profile: ${title}`,
           text: 'Check out this dive plan!',
           url: window.location.href,
-        }).catch((err) => console.log('Error sharing:', err));
+        }).catch((err) => err);
       } else {
         // Fallback for browsers without Web Share API
         navigator.clipboard?.writeText(window.location.href);
         // You might want to show a toast notification here
-        console.log('Link copied to clipboard');
       }
     }, []);
   

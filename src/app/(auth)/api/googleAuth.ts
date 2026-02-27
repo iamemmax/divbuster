@@ -16,7 +16,6 @@ interface GoogleAuthPayload {
 
 // Function to handle Google authentication
 const googleAuth = async (token: string, language: string = "english") => {
-  console.log("Google auth called with token:", token ? "Token exists" : "No token");
   
   // Determine if this is an access token or authorization code
   const isAuthCode = token.length < 100; // Authorization codes are typically shorter

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import LeafletMap from "./LeafletMap";
-import { diveSiteResult } from "../../api/div-sites/fetch-dive-sites";
+import { diveSiteResult } from "../../api/div-sites/fetchdivesites";
 import { buddyResult } from "../../api/types/buddies/buddyType";
 // import { buddyResult } from "../../api/buddy/fetchBudies";
 

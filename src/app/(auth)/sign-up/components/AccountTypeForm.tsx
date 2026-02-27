@@ -144,7 +144,7 @@ const AccountTypeForm = ({
   const { data: fetchCountry } = useFetchCountry();
 
   return (
-    <div className="xl:px-[9.125rem] w-full md:px-[30px] px-6 py-[30px] xl:py-[7rem]">
+    <div className="xl:px-[9.125rem] w-full md:px-[30px] px-6 py-[30px] xl:py-28">
       <div className="flex justify-center mb-7 items-center md:hidden">
         <DiveBusterBlackLogo />
       </div>
@@ -171,7 +171,7 @@ const AccountTypeForm = ({
             <div className="relative">
               <SelectTrigger
                 id="unit_of_measure"
-                className={`border ${errors.unit_of_measure ? 'border-red-500' : 'border-[#E2E8F0]'} w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
+                className={`border ${errors.unit_of_measure ? 'border-red-500' : 'border-[#E2E8F0]'} w-full outline-none h-12 text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
               >
                 <SelectValue 
                   placeholder={t.accountType.selectUnit}
@@ -180,7 +180,7 @@ const AccountTypeForm = ({
               </SelectTrigger>
               <CaretDown 
                 color="#8D9196"
-                className={`absolute dark:hidden right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                className={`absolute dark:hidden right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200${
                   openDropdowns.unitOfMeasure ? 'rotate-180' : ''
                 }`}
               />
@@ -188,7 +188,6 @@ const AccountTypeForm = ({
             <SelectContent>
               <SelectItem
                 className="hidden"
-                disabled
                 value=""
                 style={{
                   color: "red",
@@ -196,6 +195,7 @@ const AccountTypeForm = ({
                   fontFamily: "Archivo",
                   fontSize: "12px",
                 }}
+                disabled
               >
                 {t.accountType.selectUnit}
               </SelectItem>
@@ -227,7 +227,7 @@ const AccountTypeForm = ({
             <div className="relative">
               <SelectTrigger
                 id="temperature"
-                className={`border ${errors.temperature ? 'border-red-500' : 'border-[#E2E8F0]'} w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
+                className={`border ${errors.temperature ? 'border-red-500' : 'border-[#E2E8F0]'} w-full outline-none h-12 text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
               >
                 <SelectValue 
                   placeholder={t.accountType.selectTemperature}
@@ -236,7 +236,7 @@ const AccountTypeForm = ({
               </SelectTrigger>
               <CaretDown 
                 color="#8D9196"
-                className={`absolute dark:hidden right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                className={`absolute dark:hidden right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200${
                   openDropdowns.temperature ? 'rotate-180' : ''
                 }`}
               />
@@ -244,7 +244,6 @@ const AccountTypeForm = ({
             <SelectContent>
               <SelectItem
                 className="hidden text-[#8D9196]"
-                disabled
                 value=""
                 style={{
                   color: "#8D9196",
@@ -252,6 +251,7 @@ const AccountTypeForm = ({
                   fontFamily: "Archivo",
                   fontSize: "12px",
                 }}
+                disabled
               >
                 {t.accountType.selectTemperature}
               </SelectItem>
@@ -283,7 +283,7 @@ const AccountTypeForm = ({
     <div className="relative">
       <SelectTrigger
         id="body_size"
-        className={`border ${errors.body_size ? 'border-red-500' : 'border-[#E2E8F0] dark:border-gray-600'} w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] pr-10 dark:text-gray-100`}
+        className={`border ${errors.body_size ? 'border-red-500' : 'border-[#E2E8F0] dark:border-gray-600'} w-full outline-none h-12 text-sm font-archivo rounded-lg px-[.875rem] pr-10 dark:text-gray-100`}
       >
         <SelectValue 
           placeholder={t.accountType.selectBodySize}
@@ -292,7 +292,7 @@ const AccountTypeForm = ({
       </SelectTrigger>
       <CaretDown 
         color="#8D9196"
-        className={`absolute dark:hidden right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+        className={`absolute dark:hidden right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200${
           openDropdowns.bodySize ? 'rotate-180' : ''
         }`}
       />
@@ -300,7 +300,6 @@ const AccountTypeForm = ({
     <SelectContent>
       <SelectItem
         className="hidden"
-        disabled
         value=""
         style={{
           color: "#8D9196",
@@ -308,6 +307,7 @@ const AccountTypeForm = ({
           fontFamily: "Archivo",
           fontSize: "12px",
         }}
+        disabled
       >
         {t.accountType.selectBodySize}
       </SelectItem>
@@ -339,7 +339,7 @@ const AccountTypeForm = ({
             <div className="relative">
               <SelectTrigger
                 id="shoe_size"
-                className={`border ${errors.shoe_size ? 'border-red-500' : 'border-[#E2E8F0]'} w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
+                className={`border ${errors.shoe_size ? 'border-red-500' : 'border-[#E2E8F0]'} w-full outline-none h-12 text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
               >
                 <SelectValue 
                   placeholder={t.accountType.selectShoeSize}
@@ -348,7 +348,7 @@ const AccountTypeForm = ({
               </SelectTrigger>
               <CaretDown 
                 color="#8D9196"
-                className={`absolute dark:hidden right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                className={`absolute dark:hidden right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200${
                   openDropdowns.shoeSize ? 'rotate-180' : ''
                 }`}
               />
@@ -356,7 +356,6 @@ const AccountTypeForm = ({
             <SelectContent>
               <SelectItem
                 className="hidden"
-                disabled
                 value=""
                 style={{
                   color: "#8D9196",
@@ -364,6 +363,7 @@ const AccountTypeForm = ({
                   fontFamily: "Archivo",
                   fontSize: "12px",
                 }}
+                disabled
               >
                 {t.accountType.selectShoeSize}
               </SelectItem>
@@ -395,7 +395,7 @@ const AccountTypeForm = ({
             <div className="relative">
               <SelectTrigger
                 id="country"
-                className={`border ${errors.country ? 'border-red-500' : 'border-[#E2E8F0]'} w-full outline-none h-[3rem] text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
+                className={`border ${errors.country ? 'border-red-500' : 'border-[#E2E8F0]'} w-full outline-none h-12 text-sm font-archivo rounded-lg px-[.875rem] pr-10`}
               >
                 <SelectValue 
                   placeholder={t.accountType.selectCountry}
@@ -404,7 +404,7 @@ const AccountTypeForm = ({
               </SelectTrigger>
               <CaretDown 
                 color="#8D9196"
-                className={`absolute dark:hidden right-3 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                className={`absolute dark:hidden right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200${
                   openDropdowns.country ? 'rotate-180' : ''
                 }`}
               />
@@ -412,7 +412,6 @@ const AccountTypeForm = ({
             <SelectContent>
               <SelectItem
                 className="hidden"
-                disabled
                 value=""
                 style={{
                   color: "#8D9196",
@@ -420,6 +419,7 @@ const AccountTypeForm = ({
                   fontFamily: "Archivo",
                   fontSize: "12px",
                 }}
+                disabled
               >
                 {t.accountType.selectCountry}
               </SelectItem>
@@ -434,7 +434,7 @@ const AccountTypeForm = ({
                       <img
                         src={`https://flagcdn.com/${option.alpha2code.toLowerCase()}.svg`}
                         alt={`${option.name} flag`}
-                        className="w-5 h-5 rounded-sm object-cover"
+                        className="size-5 rounded-sm object-cover"
                       />
                     ) : option.flag_link.includes('U+') ? (
                       <span className="text-xl">{unicodeToEmoji(option.flag_link)}</span>
@@ -442,7 +442,7 @@ const AccountTypeForm = ({
                       <img
                         src={option.flag_link}
                         alt={`${option.name} flag`}
-                        className="w-5 h-5 rounded-sm object-cover"
+                        className="size-5 rounded-sm object-cover"
                       />
                     )}
                     {option.name}

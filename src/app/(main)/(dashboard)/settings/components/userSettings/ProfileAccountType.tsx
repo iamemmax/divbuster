@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretDown } from '@/components/icons';
-import { useLanguage } from '@/app/(auth)/sign-up/contexts/LanguageContext';
 import CheckIcon from '@/app/icons/(dashboard)/CheckIcon';
 import DiamondIcon from '@/app/icons/(dashboard)/DiamondIcon';
 import { acctType, useUpdateAccountType } from '../../../api/settings/updateAccountType';
@@ -124,7 +123,7 @@ setValue("diver_type", userData?.diver_profile?.diver_type)
           <div className="relative">
             <button
               type="button"
-              className="border border-[#ECEFF3] dark:border-gray-700 w-full bg-[#F6F8FA] dark:bg-gray-800 text-[#09090B] dark:text-gray-100 text-left outline-none h-[3rem] text-sm rounded-lg px-4 pr-5 flex items-center justify-between"
+              className="border border-[#ECEFF3] dark:border-gray-700 w-full bg-[#F6F8FA] dark:bg-gray-800 text-[#09090B] dark:text-gray-100 text-left outline-none h-12 text-sm rounded-lg px-4 pr-5 flex items-center justify-between"
               onClick={() => setDiverTypeOpen(!diverTypeOpen)}
             >
               {diverType === 'scuba'
@@ -214,7 +213,7 @@ setValue("diver_type", userData?.diver_profile?.diver_type)
                     </span>
                   )}
                   {selectedAccountType === item.id && (
-                    <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
+                    <div className="size-5 bg-orange-500 rounded-full flex items-center justify-center">
                       <CheckIcon />
                     </div>
                   )}
