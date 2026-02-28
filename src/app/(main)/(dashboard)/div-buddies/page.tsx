@@ -99,20 +99,25 @@ const DiverBuddies = () => {
     fetchPreviousPage,
     isFetchingPreviousPage
   } = useInfiniteQuery({
-    queryKey: ['buddy-list', language,globalFilter],
-    queryFn: ({ pageParam }) => fetchBuddyList(pageParam, language, globalFilter),
-    getNextPageParam: (lastPage) => lastPage.next,
-    getPreviousPageParam: (firstPage) => firstPage.previous,
+    queryKey: ['buddy-list', language, globalFilter],
+    queryFn: ({ pageParam }) => fetchBuddyList(pageParam as string | undefined, language, globalFilter),
+    getNextPageParam: (lastPage) => lastPage.next ?? undefined,
+    getPreviousPageParam: (firstPage) => firstPage.previous ?? undefined,
     keepPreviousData: false,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 10,
+    staleTime: 0, // 👈 change this to 0
+    cacheTime: 0, // 👈 change this to 0
   });
 
-  const allBuddies = useMemo(() => {
+const allBuddies = useMemo(() => {
     if (!buddyList?.pages) return [];
+    // When filtering, only show current page results, not accumulated pages
+    if (globalFilter) {
+      const lastPage = buddyList.pages[buddyList.pages.length - 1];
+      return lastPage?.results || [];
+    }
     return buddyList.pages.flatMap(page => page?.results || []);
-  }, [buddyList]);
+  }, [buddyList, globalFilter]);
 
   const totalCount = useMemo(() => {
     return buddyList?.pages?.[0]?.count || 0;
@@ -212,7 +217,7 @@ const DiverBuddies = () => {
               />
             ) : (
               <div className="w-12 h-12 shrink-0 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-semibold text-sm uppercase">
-                {`${row.original.first_name?.[0] || ''}${row.original.last_name?.[0] || ''}`}
+                {`${row.original.first_name?.[0] || ''}${row.original.last_name?.[0] || ''} ddd`}
               </div>
             )}
 
@@ -223,7 +228,7 @@ const DiverBuddies = () => {
 
           <div className="min-w-0">
             <div className="font-medium text-[#101828] dark:text-gray-100 text-sm font-archivo truncate transition-colors duration-200">
-              {row.original.first_name}
+              {row.original.first_name??"Nil"}
             </div>
             <div className="text-sm text-[#667085] dark:text-gray-400 font-archivo truncate transition-colors duration-200">
               {row.original.email}
@@ -271,16 +276,16 @@ const DiverBuddies = () => {
     data: allBuddies,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     manualPagination: false,
+      globalFilterFn: 'includesString',
     state: {
       globalFilter,
     },
     onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: (row, value) => {
-      const searchableValue = `${row?.original.first_name} ${row.original.email} ${row?.original.certificates?.map(c => c.issuer_name).join(' ')}`
-      return searchableValue.toLowerCase().includes(value.toLowerCase())
-    },
+    // globalFilterFn: (row, value) => {
+    //   const searchableValue = `${row?.original.first_name} ${row.original.email} ${row?.original.certificates?.map(c => c.issuer_name).join(' ')}`
+    //   return searchableValue.toLowerCase().includes(value.toLowerCase())
+    // },
   });
 
   return (

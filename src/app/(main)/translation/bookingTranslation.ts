@@ -223,7 +223,7 @@ export const bookingActionTranslations = {
 
 export const CreateDivePlantranslations = {
   en: {
-    createPlan: "Create a Dive Plan",
+    createPlan: "Create Dive Booking",
     bookPlan: "Book a Dive Plan",
     completeBooking: "Complete your Booking",
     chooseDiveLevel: "Choose your Dive Level",
@@ -239,7 +239,7 @@ export const CreateDivePlantranslations = {
     proceed: "Proceed",
   },
   es: {
-    createPlan: "Crear un plan de buceo",
+    createPlan: "Crear reserva de buceo",
     bookPlan: "Reservar un plan de buceo",
     completeBooking: "Completa tu reserva",
     chooseDiveLevel: "Elige tu nivel de buceo",
@@ -255,7 +255,7 @@ export const CreateDivePlantranslations = {
     proceed: "Continuar",
   },
   fr: {
-    createPlan: "Créer un plan de plongée",
+    createPlan: "Créer une réservation de plongée",
     bookPlan: "Réserver un plan de plongée",
     completeBooking: "Complétez votre réservation",
     chooseDiveLevel: "Choisissez votre niveau de plongée",
@@ -265,13 +265,13 @@ export const CreateDivePlantranslations = {
     selectLocation: "Sélectionnez un site de plongée",
     selectSchool: "Sélectionnez une école de plongée",
     selectEvent: "Sélectionnez un événement de plongée",
-    selectEventDate: "Sélectionnez une date d’événement",
+    selectEventDate: "Sélectionnez une date d'événement",
     selectInstructor: "Sélectionnez un instructeur de plongée",
     cancel: "Annuler",
     proceed: "Continuer",
   },
   nl: {
-    createPlan: "Maak een duikplan",
+    createPlan: "Duikboeking aanmaken",
     bookPlan: "Boek een duikplan",
     completeBooking: "Voltooi je boeking",
     chooseDiveLevel: "Kies je duikniveau",
@@ -287,7 +287,6 @@ export const CreateDivePlantranslations = {
     proceed: "Doorgaan",
   },
 }
-
 
 
 export  const schoolDiverTranslations = {

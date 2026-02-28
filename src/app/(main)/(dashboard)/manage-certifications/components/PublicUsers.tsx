@@ -14,7 +14,6 @@ import { formatAxiosErrorMessage } from '@/utils'
 import toast from 'react-hot-toast'
 import { AxiosError } from 'axios'
 import { useErrorModalState } from '@/hooks'
-import { DiveEventCalendar } from './DiveEventCalendar'
 
 
 /* ─── Avatar swatch colors ───────────────────────────────────────── */
@@ -69,7 +68,7 @@ function UserAvatar({ u }: { u: publicUserProp }) {
 }
 
 /* ─── User Table Row ──────────────────────────────────────────────── */
-function UserTableRow({ u }: { u: any }) {
+function UserTableRow({ u }: { u: publicUserProp }) {
   const { language } = useLanguage()
   const t = publicUsersTranslations[language] || publicUsersTranslations.en
   const {
@@ -159,18 +158,33 @@ function UserTableRow({ u }: { u: any }) {
           {loadingDiverId === u?.id ? (
             <SmallSpinner color='#F7931D' />
           ) : (
-            <Button
+            <>
+            {!u?.is_requested&& !u?.is_buddy&&<Button
               className={`
                 px-3 py-1.5 text-xs font-semibold tracking-wider rounded-lg border
                 transition-all duration-150
                 bg-transparent border-amber-400/50 text-amber-500
-                dark:border-amber-400/40 dark:text-amber-400
-                hover:bg-amber-400 hover:text-zinc-900 hover:border-amber-400
+                dark:border-amber-400/40 dark:text-amber-400 
+                 hover:text-zinc-900 hover:border-amber-400
               `}
               onClick={() => handleAddBuddy(u)}
             >
               {t.addBuddy}
-            </Button>
+            </Button>}
+            {u?.is_requested&& !u?.is_buddy&&<p
+              className={`
+                px-3 py-1.5 text-xs  tracking-wider rounded-lg border-none
+                transition-all duration-150
+                bg-transparent  text-orange-400
+               
+                
+              `}
+             
+            >
+              Pending Request
+            </p>}
+            
+            </>
           )}
         </td>
       </tr>
@@ -250,12 +264,7 @@ const PublicUsers = () => {
 
         <div className='px-4 sm:px-6 lg:px-[1.875rem]'>
           {/* ── Dive Event Calendar ── */}
-          <div
-            className="mb-8"
-            style={{ animation: "fadeDown 0.4s 0.08s ease both" }}
-          >
-            <DiveEventCalendar />
-          </div>
+         
 
           {/* ── Controls row ── */}
           <div

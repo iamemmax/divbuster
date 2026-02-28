@@ -11,6 +11,8 @@ export interface publicUserProp {
   invite_id: string;
   nickname: null | string;
   online: boolean;
+  is_buddy: boolean;
+  is_requested: boolean;
 }
 
 const fetchPublicUser = async (search:string) => {

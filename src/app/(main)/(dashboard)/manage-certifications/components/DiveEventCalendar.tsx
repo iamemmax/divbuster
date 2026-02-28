@@ -209,7 +209,7 @@ export const DiveEventCalendar: React.FC<DiveEventCalendarProps> = ({ onEventSel
                   "relative min-h-[56px] p-1 flex flex-col transition-all duration-150",
                   hasEvent ? "cursor-pointer" : "cursor-default",
                   selected
-                    ? "bg-blue-600 dark:bg-blue-600"
+                    ? "bg-[#f97316] dark:bg-[#f97316]"
                     : hasEvent
                       ? "bg-white dark:bg-zinc-900 hover:bg-blue-50 dark:hover:bg-blue-500/10"
                       : "bg-white dark:bg-zinc-900",
@@ -223,7 +223,7 @@ export const DiveEventCalendar: React.FC<DiveEventCalendarProps> = ({ onEventSel
                       selected
                         ? "text-white"
                         : todayFlag
-                          ? "bg-blue-600 text-white"
+                          ? "bg-[#f97316] text-white"
                           : hasEvent
                             ? "text-zinc-900 dark:text-zinc-100"
                             : "text-zinc-300 dark:text-zinc-700",
@@ -233,7 +233,7 @@ export const DiveEventCalendar: React.FC<DiveEventCalendarProps> = ({ onEventSel
                   </span>
                   {/* Slot count badge for days with events */}
                   {hasEvent && !selected && (
-                    <span className="text-[8px] font-bold px-1 py-0.5 rounded-full bg-blue-100 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400">
+                    <span className="text-[8px] font-bold px-1 py-0.5 rounded-full bg-blue-100 dark:bg-blue-500/15 text-[#f97316] dark:text-blue-400">
                       {dayEvents.reduce((acc, e) => acc + e.remaining_slots, 0)}
                     </span>
                   )}
@@ -248,7 +248,7 @@ export const DiveEventCalendar: React.FC<DiveEventCalendarProps> = ({ onEventSel
                         "text-[8px] font-medium px-1 py-0.5 rounded truncate leading-tight",
                         selected
                           ? "bg-white/20 text-white"
-                          : "bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300",
+                          : "bg-blue-100 dark:bg-[#f97316] text-white dark:text-blue-300",
                       ].join(" ")}
                       title={ev.eventName}
                     >
@@ -269,15 +269,15 @@ export const DiveEventCalendar: React.FC<DiveEventCalendarProps> = ({ onEventSel
         {/* Legend */}
         <div className="flex items-center gap-3 px-4 py-2 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50">
           <div className="flex items-center gap-1">
-            <div className="w-2.5 h-2.5 rounded bg-blue-100 dark:bg-blue-500/20 border border-blue-300 dark:border-blue-500/40" />
+            <div className="w-2.5 h-2.5 rounded bg-blue-100 dark:bg-[#f97316]/20 border border-blue-300 dark:border-blue-500/40" />
             <span className="text-[9px] text-zinc-500 dark:text-zinc-400">Available</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-2.5 h-2.5 rounded bg-blue-600" />
+            <div className="w-2.5 h-2.5 rounded bg-[#f97316]" />
             <span className="text-[9px] text-zinc-500 dark:text-zinc-400">Selected</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#f97316]" />
             <span className="text-[9px] text-zinc-500 dark:text-zinc-400">Today</span>
           </div>
         </div>
@@ -306,7 +306,7 @@ export const DiveEventCalendar: React.FC<DiveEventCalendarProps> = ({ onEventSel
             <p className="text-xs font-bold text-blue-700 dark:text-blue-300 uppercase tracking-widest">
               {moment(selectedDate).format("dddd, MMMM D, YYYY")}
             </p>
-            <p className="text-[10px] text-blue-600 dark:text-blue-400 mt-0.5">
+            <p className="text-[10px] text-[#f97316] dark:text-blue-400 mt-0.5">
               {selectedDateEvents.length} event{selectedDateEvents.length > 1 ? "s" : ""} available
             </p>
           </div>
