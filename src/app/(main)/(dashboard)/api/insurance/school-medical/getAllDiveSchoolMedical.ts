@@ -26,15 +26,15 @@ interface Answers {
 
 
 
-const fetchSchoolLiabilityReport = async () => {
-  const response = await adminAxios.get<SchoolliabilityForm[]>(`/dive-school-liability-form`);
+const fetchSchoolMediacalReport = async () => {
+  const response = await adminAxios.get(`/dive-school-medical-form`);
   return response.data;
 }
 
-export const useFetchSchoolLiabilityReport = () => {
+export const useFetchSchoolMediacalReport = () => {
   return useQuery({
-    queryKey: ["user-School-liability-report"],
-    queryFn: fetchSchoolLiabilityReport,
+    queryKey: ["user-School-Mediacal-report"],
+    queryFn: fetchSchoolMediacalReport,
   });
 };
 

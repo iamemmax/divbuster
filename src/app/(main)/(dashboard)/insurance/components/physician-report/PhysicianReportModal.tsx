@@ -12,7 +12,7 @@ import { useQueryClient } from 'react-query'
 
 const physicianReportSchema = z.object({
   physicianName: z.string().min(2, 'Physician name must be at least 2 characters').max(100, 'Physician name must be less than 100 characters'),
-  physicianEmail: z.string().email('Invalid email address'),
+  physicianEmail: z.string().email('Invalid email address').optional(),
   hospitalName: z.string().min(2, 'Hospital name must be at least 2 characters').max(100, 'Hospital name must be less than 100 characters'),
   physicianPhone: z.string().regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/, 'Invalid phone number format'),
   licenseNumber: z.string().min(2, 'License number must be at least 2 characters').max(50, 'License number must be less than 50 characters'),
@@ -24,7 +24,7 @@ const physicianReportSchema = z.object({
   path: ['dateExpires']
 })
 
-type PhysicianReportFormData = z.infer<typeof physicianReportSchema>
+export type PhysicianReportFormData = z.infer<typeof physicianReportSchema>
 
 interface PhysicianReportModalProps {
   isOpen: boolean

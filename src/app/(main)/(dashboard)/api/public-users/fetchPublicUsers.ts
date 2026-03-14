@@ -31,7 +31,8 @@ const fetchPublicUser = async (search:string) => {
 export const useFetchPulicUsers = (search:string) => {
   return useQuery({
     queryKey: ["public-user-around",search],
-    queryFn: ()=> fetchPublicUser(search)
+    queryFn: ()=> fetchPublicUser(search),
+    enabled:!!search
 
   });
 };

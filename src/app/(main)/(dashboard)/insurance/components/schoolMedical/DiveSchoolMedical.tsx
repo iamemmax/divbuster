@@ -1,22 +1,22 @@
 "use client"
 import React, { useState } from 'react'
-import DiveSchoolLiabilityForm from './DiveSchoolLiabilityForm'
-import { useFetchSchoolLiabilityReport } from '../../api/insurance/school-liability/getAllDiveSchoolLiability'
 import { Button } from '@/components/core'
 import moment from 'moment'
-import DiveSchoolLiabilityModal from './DiveSchoolLiabilityModal'
 import { useLanguage } from '@/hooks/useLanguage'
-import { diveSchoolLiabilityTranslations } from '@/app/(main)/translation/diveSchoolInsuranceTranlation'
+import { diveSchoolMedicalTranslations } from '@/app/(main)/translation/diveSchoolInsuranceTranlation'
+import { useFetchSchoolMediacalReport } from '../../../api/insurance/school-medical/getAllDiveSchoolMedical'
+import DiveSchoolMedicalModal from './DiveSchoolMedicalModall'
+import DiveSchoolMedicalForm from './DiveSchoolMedicalForm'
 import { SmallSpinner } from '@/icons/core'
 
-const DiveSchoolForms = () => {
+const DiveSchoolMedicalForms = () => {
   const { language } = useLanguage()
-  const t = diveSchoolLiabilityTranslations[language] || diveSchoolLiabilityTranslations.en
+  const t = diveSchoolMedicalTranslations[language] || diveSchoolMedicalTranslations.en
 
   const [showForm, setShowForm] = useState(false)
   const [selectedLiability, setSelectedLiability] = useState<any>(null)
   const [showModal, setShowModal] = useState(false)
-  const { data: liabilityReports, isLoading } = useFetchSchoolLiabilityReport()
+  const { data: liabilityReports, isLoading } = useFetchSchoolMediacalReport()
 
   return (
     <div className="space-y-6">
@@ -39,19 +39,20 @@ const DiveSchoolForms = () => {
 
       {showForm && (
         <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-gray-50 dark:bg-gray-900">
-          <DiveSchoolLiabilityForm onSuccess={() => setShowForm(false)} />
+          <DiveSchoolMedicalForm onSuccess={() => setShowForm(false)} />
         </div>
       )}
- {
+      {
         isLoading && <div className='flex justify-center items-center w-full h-full'> <SmallSpinner className='text-2xl'/></div>
       }
+
       {!isLoading && liabilityReports && liabilityReports.length > 0 && (
         <div>
           <h3 className="text-md font-semibold text-gray-900 dark:text-white mb-4">
             {t.yourForms}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {liabilityReports.map((liability) => {
+            {liabilityReports.map((liability: any) => {
               const isExpired = liability.expires_on
                 ? moment(liability.expires_on).isBefore(moment())
                 : false
@@ -137,7 +138,7 @@ const DiveSchoolForms = () => {
       )}
 
       {selectedLiability && (
-        <DiveSchoolLiabilityModal
+        <DiveSchoolMedicalModal
           isOpen={showModal}
           onClose={() => {
             setShowModal(false)
@@ -150,4 +151,4 @@ const DiveSchoolForms = () => {
   )
 }
 
-export default DiveSchoolForms
+export default DiveSchoolMedicalForms

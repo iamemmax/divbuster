@@ -7,9 +7,10 @@ import LiabilityForm from './components/LiabilityForm'
 import InsuranceDocumentList from './components/insurance-document/InsuranceDocumentList'
 import PhysicianReportList from './components/physician-report/PhysicianReportList'
 import DiveSchoolForms from './components/DiveSchoolForms'
+import DiveSchoolMedicalForms from './components/schoolMedical/DiveSchoolMedical'
 
 const InsurancePage = () => {
-  const [activeTab, setActiveTab] = useState<'medical' | 'liability' | 'insurance-doc' | 'physician-report' | 'dive-school'>('medical')
+  const [activeTab, setActiveTab] = useState<'medical' | 'liability' | 'insurance-doc' | 'physician-report' | 'dive-school' | 'dive-school-medical-form'>('medical')
   const tabsScrollRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
@@ -107,6 +108,16 @@ const InsurancePage = () => {
                 >
                   Dive School Liability
                 </button>
+                <button
+                  onClick={() => setActiveTab('dive-school-medical-form')}
+                  className={`px-3 sm:px-4 md:px-6 py-3 font-medium text-xs sm:text-sm md:text-base border-b-2 transition-colors whitespace-nowrap flex-shrink-0 ${
+                    activeTab === 'dive-school-medical-form'
+                      ? 'border-orange-500 text-orange-600 dark:text-orange-400'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                  }`}
+                >
+                  Dive School Medical
+                </button>
               </div>
 
               {/* Scroll Buttons */}
@@ -144,6 +155,7 @@ const InsurancePage = () => {
             {activeTab === 'insurance-doc' && <InsuranceDocumentList />}
             {activeTab === 'physician-report' && <PhysicianReportList />}
             {activeTab === 'dive-school' && <DiveSchoolForms />}
+            {activeTab === 'dive-school-medical-form' && <DiveSchoolMedicalForms />}
           </div>
         </div>
       </div>

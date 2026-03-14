@@ -5,7 +5,7 @@ interface UpdatePhysicianReportPayload {
   id: number;
   hospital_name: string;
   physician_name: string;
-  physician_email: string;
+  physician_email?: string;
   physician_report: string;
   physician_license_number: string;
   physician_phone: string;

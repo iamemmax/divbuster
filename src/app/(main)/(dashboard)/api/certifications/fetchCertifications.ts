@@ -9,7 +9,7 @@ interface certificationProp {
 }
 
 export interface certificateResult {
-  id: number;
+   id: number;
   image: string;
   certification_no: string;
   trainer_no: string;
@@ -18,12 +18,17 @@ export interface certificateResult {
   issuer_name: string;
   certificate_type: string;
   issue_date: string;
+  expiry_date: null;
   date_of_birth: string;
   school_name: string;
   trainer_name: string;
-  created_on: string;
   default: boolean;
+  created_on: string;
 }
+
+
+
+
 
 const fetchCertifications = async ({
   pageParam = "/certificates", // default first page

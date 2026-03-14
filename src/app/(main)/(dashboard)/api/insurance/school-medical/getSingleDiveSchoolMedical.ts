@@ -9,8 +9,6 @@ export interface SchoolliabilityForm {
   last_signed_on: string;
   created_on: string;
   updated_on: string;
-  expires_on: string;
-
   dive_school: {
       id: number;
   name: string;
@@ -23,18 +21,16 @@ export interface SchoolliabilityForm {
 interface Answers {
   [key: string]: string;
 }
-
-
-
-const fetchSchoolLiabilityReport = async () => {
-  const response = await adminAxios.get<SchoolliabilityForm[]>(`/dive-school-liability-form`);
+const fetchSingleSchoolMedicalReport = async (id:string) => {
+  const response = await adminAxios.get(`/dive-school-medical-form/${id}`);
   return response.data;
 }
 
-export const useFetchSchoolLiabilityReport = () => {
+export const useFetchSingleSchoolMedicalReport = (id:string) => {
   return useQuery({
-    queryKey: ["user-School-liability-report"],
-    queryFn: fetchSchoolLiabilityReport,
+    queryKey: ["single-School-Medical-report",id],
+    queryFn: ()=>fetchSingleSchoolMedicalReport(id),
+    enabled:!!id
   });
 };
 

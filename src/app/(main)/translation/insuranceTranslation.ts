@@ -2,24 +2,17 @@ import { Language } from "@/app/(auth)/sign-up/translations";
 
 export const insuranceTranslations: Record<Language, any> = {
   en: {
-    // Page titles
     insuranceForms: "Insurance Forms",
     medicalForm: "Medical Form",
     liabilityForm: "Liability Form",
-    
-    // Modal
     insuranceFormsRequired: "Insurance Forms Required",
     completeFormsDescription: "You must complete your insurance forms before proceeding. This ensures your safety and compliance with diving regulations.",
     completeForms: "Complete Forms",
     cancel: "Cancel",
-    
-    // Form sections
     personalInformation: "Personal Information",
     medicalHistory: "Medical History",
     physicianInformation: "Physician Information",
     signatures: "Signatures",
-    
-    // Form fields
     firstName: "First Name",
     lastName: "Last Name",
     dateOfBirth: "Date of Birth",
@@ -27,84 +20,57 @@ export const insuranceTranslations: Record<Language, any> = {
     emergencyContact: "Emergency Contact",
     emergencyPhone: "Emergency Phone",
     physicianName: "Physician Name",
-    hospitalName: "Hospital Name",
+    hospitalName: "Medical Center Name",       // ← changed
     physicianEmail: "Physician Email",
-    
-    // Medical questions
     medicalQuestions: "Medical Questions",
     answerAllQuestions: "Please answer all medical questions honestly",
-    
-    // Liability waiver
     liabilityWaiver: "Liability Waiver",
     liabilityQuestions: "Liability Questions",
     readAndAccept: "I have read and accept all terms and conditions",
-    
-    // Signatures
     participantSignature: "Participant Signature",
     physicianSignature: "Physician Signature (if required)",
     parentGuardianSignature: "Parent/Guardian Signature",
     signHere: "Sign here",
     clearSignature: "Clear",
-    
-    // Medical certification
     medicalCertification: "Medical Certification",
     certifyMedicalFitness: "I certify that I am medically fit to participate in diving activities",
-    
-    // Buttons
     submit: "Submit",
     update: "Update",
     next: "Next",
     previous: "Previous",
     save: "Save",
-    
-    // Status messages
     formSubmitted: "Form submitted successfully",
     formUpdated: "Form updated successfully",
     pleaseCompleteAllFields: "Please complete all required fields",
     signatureRequired: "Signature is required",
-    
-    // Validation
     required: "This field is required",
     invalidEmail: "Please enter a valid email address",
     invalidPhone: "Please enter a valid phone number",
-    
-    // Form status
     completed: "Completed",
     pending: "Pending",
     notStarted: "Not Started",
-    
-    // Yes/No options
     yes: "Yes",
     no: "No",
-    
-    // Upload
     uploadPhysicianReport: "Upload Physician Report",
     uploadFile: "Upload File",
     dragDropFile: "Drag and drop your file here, or click to browse",
     supportedFormats: "Supported formats: PDF, JPG, PNG (Max 10MB)",
     fileUploaded: "File uploaded successfully",
-    removeFile: "Remove File"
+    removeFile: "Remove File",
   },
-  
+
   es: {
-    // Page titles
     insuranceForms: "Formularios de Seguro",
     medicalForm: "Formulario Médico",
     liabilityForm: "Formulario de Responsabilidad",
-    
-    // Modal
     insuranceFormsRequired: "Formularios de Seguro Requeridos",
     completeFormsDescription: "Debe completar sus formularios de seguro antes de continuar. Esto garantiza su seguridad y el cumplimiento de las regulaciones de buceo.",
     completeForms: "Completar Formularios",
     cancel: "Cancelar",
-    
-    // Form sections
     personalInformation: "Información Personal",
     medicalHistory: "Historial Médico",
     physicianInformation: "Información del Médico",
     signatures: "Firmas",
-    
-    // Form fields
     firstName: "Nombre",
     lastName: "Apellido",
     dateOfBirth: "Fecha de Nacimiento",
@@ -112,84 +78,57 @@ export const insuranceTranslations: Record<Language, any> = {
     emergencyContact: "Contacto de Emergencia",
     emergencyPhone: "Teléfono de Emergencia",
     physicianName: "Nombre del Médico",
-    hospitalName: "Nombre del Hospital",
+    hospitalName: "Nombre del Centro Médico",  // ← changed
     physicianEmail: "Email del Médico",
-    
-    // Medical questions
     medicalQuestions: "Preguntas Médicas",
     answerAllQuestions: "Por favor responda todas las preguntas médicas honestamente",
-    
-    // Liability waiver
     liabilityWaiver: "Exención de Responsabilidad",
     liabilityQuestions: "Preguntas de Responsabilidad",
     readAndAccept: "He leído y acepto todos los términos y condiciones",
-    
-    // Signatures
     participantSignature: "Firma del Participante",
     physicianSignature: "Firma del Médico (si es requerida)",
     parentGuardianSignature: "Firma del Padre/Tutor",
     signHere: "Firme aquí",
     clearSignature: "Limpiar",
-    
-    // Medical certification
     medicalCertification: "Certificación Médica",
     certifyMedicalFitness: "Certifico que estoy médicamente apto para participar en actividades de buceo",
-    
-    // Buttons
     submit: "Enviar",
     update: "Actualizar",
     next: "Siguiente",
     previous: "Anterior",
     save: "Guardar",
-    
-    // Status messages
     formSubmitted: "Formulario enviado exitosamente",
     formUpdated: "Formulario actualizado exitosamente",
     pleaseCompleteAllFields: "Por favor complete todos los campos requeridos",
     signatureRequired: "Se requiere firma",
-    
-    // Validation
     required: "Este campo es requerido",
     invalidEmail: "Por favor ingrese un email válido",
     invalidPhone: "Por favor ingrese un número de teléfono válido",
-    
-    // Form status
     completed: "Completado",
     pending: "Pendiente",
     notStarted: "No Iniciado",
-    
-    // Yes/No options
     yes: "Sí",
     no: "No",
-    
-    // Upload
     uploadPhysicianReport: "Subir Informe Médico",
     uploadFile: "Subir Archivo",
     dragDropFile: "Arrastra y suelta tu archivo aquí, o haz clic para explorar",
     supportedFormats: "Formatos soportados: PDF, JPG, PNG (Máx 10MB)",
     fileUploaded: "Archivo subido exitosamente",
-    removeFile: "Eliminar Archivo"
+    removeFile: "Eliminar Archivo",
   },
-  
+
   fr: {
-    // Page titles
     insuranceForms: "Formulaires d'Assurance",
     medicalForm: "Formulaire Médical",
     liabilityForm: "Formulaire de Responsabilité",
-    
-    // Modal
     insuranceFormsRequired: "Formulaires d'Assurance Requis",
     completeFormsDescription: "Vous devez compléter vos formulaires d'assurance avant de continuer. Cela garantit votre sécurité et la conformité aux réglementations de plongée.",
     completeForms: "Compléter les Formulaires",
     cancel: "Annuler",
-    
-    // Form sections
     personalInformation: "Informations Personnelles",
     medicalHistory: "Antécédents Médicaux",
     physicianInformation: "Informations du Médecin",
     signatures: "Signatures",
-    
-    // Form fields
     firstName: "Prénom",
     lastName: "Nom de Famille",
     dateOfBirth: "Date de Naissance",
@@ -197,84 +136,57 @@ export const insuranceTranslations: Record<Language, any> = {
     emergencyContact: "Contact d'Urgence",
     emergencyPhone: "Téléphone d'Urgence",
     physicianName: "Nom du Médecin",
-    hospitalName: "Nom de l'Hôpital",
+    hospitalName: "Nom du Centre Médical",     // ← changed
     physicianEmail: "Email du Médecin",
-    
-    // Medical questions
     medicalQuestions: "Questions Médicales",
     answerAllQuestions: "Veuillez répondre honnêtement à toutes les questions médicales",
-    
-    // Liability waiver
     liabilityWaiver: "Décharge de Responsabilité",
     liabilityQuestions: "Questions de Responsabilité",
     readAndAccept: "J'ai lu et j'accepte tous les termes et conditions",
-    
-    // Signatures
     participantSignature: "Signature du Participant",
     physicianSignature: "Signature du Médecin (si requise)",
     parentGuardianSignature: "Signature du Parent/Tuteur",
     signHere: "Signez ici",
     clearSignature: "Effacer",
-    
-    // Medical certification
     medicalCertification: "Certification Médicale",
     certifyMedicalFitness: "Je certifie que je suis médicalement apte à participer aux activités de plongée",
-    
-    // Buttons
     submit: "Soumettre",
     update: "Mettre à Jour",
     next: "Suivant",
     previous: "Précédent",
     save: "Sauvegarder",
-    
-    // Status messages
     formSubmitted: "Formulaire soumis avec succès",
     formUpdated: "Formulaire mis à jour avec succès",
     pleaseCompleteAllFields: "Veuillez compléter tous les champs requis",
     signatureRequired: "Signature requise",
-    
-    // Validation
     required: "Ce champ est requis",
     invalidEmail: "Veuillez entrer une adresse email valide",
     invalidPhone: "Veuillez entrer un numéro de téléphone valide",
-    
-    // Form status
     completed: "Terminé",
     pending: "En Attente",
     notStarted: "Non Commencé",
-    
-    // Yes/No options
     yes: "Oui",
     no: "Non",
-    
-    // Upload
     uploadPhysicianReport: "Télécharger Rapport Médical",
     uploadFile: "Télécharger Fichier",
     dragDropFile: "Glissez et déposez votre fichier ici, ou cliquez pour parcourir",
     supportedFormats: "Formats supportés: PDF, JPG, PNG (Max 10MB)",
     fileUploaded: "Fichier téléchargé avec succès",
-    removeFile: "Supprimer Fichier"
+    removeFile: "Supprimer Fichier",
   },
-  
+
   nl: {
-    // Page titles
     insuranceForms: "Verzekeringformulieren",
     medicalForm: "Medisch Formulier",
     liabilityForm: "Aansprakelijkheidsformulier",
-    
-    // Modal
     insuranceFormsRequired: "Verzekeringformulieren Vereist",
     completeFormsDescription: "U moet uw verzekeringformulieren invullen voordat u verder kunt gaan. Dit zorgt voor uw veiligheid en naleving van duikreglementen.",
     completeForms: "Formulieren Invullen",
     cancel: "Annuleren",
-    
-    // Form sections
     personalInformation: "Persoonlijke Informatie",
     medicalHistory: "Medische Geschiedenis",
     physicianInformation: "Artsinformatie",
     signatures: "Handtekeningen",
-    
-    // Form fields
     firstName: "Voornaam",
     lastName: "Achternaam",
     dateOfBirth: "Geboortedatum",
@@ -282,54 +194,42 @@ export const insuranceTranslations: Record<Language, any> = {
     emergencyContact: "Noodcontact",
     emergencyPhone: "Noodtelefoon",
     physicianName: "Naam Arts",
-    hospitalName: "Ziekenhuis Naam",
+    hospitalName: "Naam Medisch Centrum",      // ← changed
     physicianEmail: "Arts Email",
-    
-    // Medical questions
     medicalQuestions: "Medische Vragen",
     answerAllQuestions: "Beantwoord alle medische vragen eerlijk",
-    
-    // Liability waiver
     liabilityWaiver: "Aansprakelijkheidsverklaring",
     liabilityQuestions: "Aansprakelijkheidsvragen",
     readAndAccept: "Ik heb alle voorwaarden gelezen en geaccepteerd",
-    
-    // Signatures
     participantSignature: "Deelnemer Handtekening",
     physicianSignature: "Arts Handtekening (indien vereist)",
     parentGuardianSignature: "Ouder/Voogd Handtekening",
     signHere: "Teken hier",
     clearSignature: "Wissen",
-    
-    // Medical certification
     medicalCertification: "Medische Certificering",
     certifyMedicalFitness: "Ik certificeer dat ik medisch geschikt ben om deel te nemen aan duikactiviteiten",
-    
-    // Buttons
     submit: "Verzenden",
     update: "Bijwerken",
     next: "Volgende",
     previous: "Vorige",
     save: "Opslaan",
-    
-    // Status messages
     formSubmitted: "Formulier succesvol verzonden",
     formUpdated: "Formulier succesvol bijgewerkt",
     pleaseCompleteAllFields: "Vul alle verplichte velden in",
     signatureRequired: "Handtekening vereist",
-    
-    // Validation
     required: "Dit veld is verplicht",
     invalidEmail: "Voer een geldig emailadres in",
     invalidPhone: "Voer een geldig telefoonnummer in",
-    
-    // Form status
     completed: "Voltooid",
     pending: "In Behandeling",
     notStarted: "Niet Gestart",
-    
-    // Yes/No options
     yes: "Ja",
-    no: "Nee"
-  }
+    no: "Nee",
+    uploadPhysicianReport: "Arts Rapport Uploaden",
+    uploadFile: "Bestand Uploaden",
+    dragDropFile: "Sleep uw bestand hier naartoe of klik om te bladeren",
+    supportedFormats: "Ondersteunde formaten: PDF, JPG, PNG (Max 10MB)",
+    fileUploaded: "Bestand succesvol geüpload",
+    removeFile: "Bestand Verwijderen",
+  },
 };

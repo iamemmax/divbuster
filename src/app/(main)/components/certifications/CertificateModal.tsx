@@ -13,26 +13,30 @@ import moment from "moment";
 import { selectedCardBg } from "../shared/CardContainer";
 import CardHeadIcon from "@/app/icons/(dashboard)/CardHeadIcon";
 import Image from "next/image";
+import { useLanguage } from "@/hooks/useLanguage";
+import { certificationTranslations } from "../../translation/certificationTranslation";
+import { certificateResult } from "../../(dashboard)/api/certifications/fetchCertifications";
 
-interface Certificate {
-  id: number;
-  image?: string;
-  created_on: string;
-  issuer: string;
-  certification_no: string;
-  issuer_name: string;
-  certificate_type?: string;
-}
+// interface Certificate {
+//   id: number;
+//   image?: string;
+//   created_on: string;
+//   issuer: string;
+//   certification_no: string;
+//   issuer_name: string;
+//   certificate_type?: string;
+// }
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  certificate: Certificate | null;
+  certificate: certificateResult | null;
 }
 
 const CertificateModal = ({ isOpen, onClose, certificate }: Props) => {
   if (!certificate) return null;
-
+  const { language } = useLanguage()
+  const t = certificationTranslations[language] || certificationTranslations.en;
   const cardStyle = selectedCardBg(certificate.certificate_type || "");
   const bgColor = cardStyle?.bg || "#1B3A5C";
   const textColor = cardStyle?.text || "#E8F0F7";
@@ -88,7 +92,7 @@ const CertificateModal = ({ isOpen, onClose, certificate }: Props) => {
                     className="text-[11px] font-mono uppercase tracking-widest opacity-60"
                     style={{ color: textColor }}
                   >
-                    Date Added
+                    {t?.dateAdded}
                   </p>
                   <p
                     className="text-sm font-semibold mt-0.5"
@@ -114,7 +118,7 @@ const CertificateModal = ({ isOpen, onClose, certificate }: Props) => {
                   className="text-[11px] font-mono uppercase tracking-widest opacity-60"
                   style={{ color: textColor }}
                 >
-                  Issuer
+                  {t?.issuer}
                 </p>
                 <p
                   className="text-base font-semibold mt-0.5 tracking-tight"
@@ -123,20 +127,47 @@ const CertificateModal = ({ isOpen, onClose, certificate }: Props) => {
                   {certificate.issuer}
                 </p>
               </div>
+              <p className="text-white text-base font-medium font-archivo">
+                {t.dateCertified}: {moment(certificate.issue_date).format("ll")}
+              </p>
+              {certificate.expiry_date ? (
+                <div className="flex justify-between items-center">
+                  <p className={`text-[11.47px] font-medium font-archivo ${moment(certificate.expiry_date).isBefore(moment()) ? "text-red-300" : "text-white"
+                    }`}>
+                    {t.expiryDate}: {moment(certificate.expiry_date).format("ll")}
+                    {moment(certificate.expiry_date).isBefore(moment()) && ` (${t.expired})`}
+                  </p>
 
+                  <p
+                    className="text-[11px]  font-mono uppercase tracking-widest opacity-60"
+                    style={{ color: textColor }}
+                  >
+                    {t?.diverNo}:{certificate.certification_no}
+
+                  </p>
+                </div>
+              ) : (
+                <div className="flex justify-between items-center">
+                  <p className="text-white/60 text-[11.47px] font-medium font-archivo">
+                    {t.expiryDate}: {t.noExpiry}
+                  </p>
+                  <p
+                    className="text-[11px]  font-mono uppercase tracking-widest opacity-60"
+                    style={{ color: textColor }}
+                  >
+                    {t?.diverNo}:{certificate.certification_no}
+
+                  </p>
+                </div>
+              )}
               {/* Diver info */}
               <div className="relative flex flex-col gap-0.5">
-                <p
-                  className="text-[11px] font-mono uppercase tracking-widest opacity-60"
-                  style={{ color: textColor }}
-                >
-                  Diver No.
-                </p>
+
                 <p
                   className="text-[13px] font-mono opacity-80"
                   style={{ color: textColor }}
                 >
-                  {certificate.certification_no}
+                  {t?.issuer}
                 </p>
                 <p
                   className="text-xl font-bold tracking-tight mt-1"

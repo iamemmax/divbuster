@@ -152,6 +152,24 @@ const ManageCertifications= () => {
                           {card.issuer}
                         </p>
                       </div>
+{/* // on the card — after the issued date line */}
+<p className="text-white text-base font-medium font-archivo">
+  {t.dateCertified}: {moment(card.issue_date).format("ll")}
+</p>
+{card.expiry_date ? (
+  <p className={`text-[11.47px] font-medium font-archivo ${
+    moment(card.expiry_date).isBefore(moment()) ? "text-red-300" : "text-white"
+  }`}>
+    {t.expiryDate}: {moment(card.expiry_date).format("ll")}
+    {moment(card.expiry_date).isBefore(moment()) && ` (${t.expired})`}
+  </p>
+) : (
+  <p className="text-white/60 text-[11.47px] font-medium font-archivo">
+    {t.expiryDate}: {t.noExpiry}
+  </p>
+)}
+
+                      
 
                       <div className="flex justify-between items-center">
                         <div className="w-full">
