@@ -57,9 +57,15 @@ export const insuranceTranslations: Record<Language, any> = {
     supportedFormats: "Supported formats: PDF, JPG, PNG (Max 10MB)",
     fileUploaded: "File uploaded successfully",
     removeFile: "Remove File",
+  diveSchoolLiability: "Dive School Liability",
+diveSchoolMedical: "Dive School Medical",
   },
 
+
+
   es: {
+    diveSchoolLiability: "Responsabilidad de la Escuela de Buceo",
+diveSchoolMedical: "Médico de la Escuela de Buceo",
     insuranceForms: "Formularios de Seguro",
     medicalForm: "Formulario Médico",
     liabilityForm: "Formulario de Responsabilidad",
@@ -118,6 +124,8 @@ export const insuranceTranslations: Record<Language, any> = {
   },
 
   fr: {
+    diveSchoolLiability: "Responsabilité de l'École de Plongée",
+diveSchoolMedical: "Médical de l'École de Plongée",
     insuranceForms: "Formulaires d'Assurance",
     medicalForm: "Formulaire Médical",
     liabilityForm: "Formulaire de Responsabilité",
@@ -176,6 +184,8 @@ export const insuranceTranslations: Record<Language, any> = {
   },
 
   nl: {
+    diveSchoolLiability: "Aansprakelijkheid Duikschool",
+diveSchoolMedical: "Medisch Duikschool",
     insuranceForms: "Verzekeringformulieren",
     medicalForm: "Medisch Formulier",
     liabilityForm: "Aansprakelijkheidsformulier",

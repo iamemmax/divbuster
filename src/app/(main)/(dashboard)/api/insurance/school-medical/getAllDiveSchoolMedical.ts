@@ -33,7 +33,7 @@ const fetchSchoolMediacalReport = async () => {
 
 export const useFetchSchoolMediacalReport = () => {
   return useQuery({
-    queryKey: ["user-School-Mediacal-report"],
+    queryKey: ["user-School-Medical-report"],
     queryFn: fetchSchoolMediacalReport,
   });
 };
