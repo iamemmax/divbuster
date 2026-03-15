@@ -28,7 +28,10 @@ const participantSchema = z.object({
         email: z.string().email("Invalid email"),
         dob: z.string().min(1, "Date of Birth is required"),
         contact_info: z.object({
-          phone_number: z.string().min(1, { message: "Phone number is required" }),
+          phone_number: z.string()
+            .min(1, { message: "Phone number is required" })
+            .max(11, { message: "Phone number must be at most 11 digits" })
+            .regex(/^[0-9]+$/, { message: "Phone number must contain only numbers" }),
         }),
       })
     )
@@ -198,10 +201,16 @@ const t = divPlanParticipantranslations[language] || divPlanParticipantranslatio
                   </label>
                   <input
                     type="text"
+                    inputMode="numeric"
                     placeholder={t.enterPhone}
+                    maxLength={11}
                     {...register(`other_participants.${index}.contact_info.phone_number`)}
-                                     className={`w-full px-4 py-3 border-[0.5px] outline-none rounded-lg ${errors.other_participants&&errors.other_participants[index]?.contact_info?.phone_number?.message ?"border-red-900":""} bg-gray-50 dark:bg-gray-800`}
-
+                    onKeyDown={(e) => {
+                      if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+                        e.preventDefault()
+                      }
+                    }}
+                    className={`w-full px-4 py-3 border-[0.5px] outline-none rounded-lg ${errors.other_participants&&errors.other_participants[index]?.contact_info?.phone_number?.message ?"border-red-900":""} bg-gray-50 dark:bg-gray-800`}
                   />
                 </div>
                 {/* DOB */}

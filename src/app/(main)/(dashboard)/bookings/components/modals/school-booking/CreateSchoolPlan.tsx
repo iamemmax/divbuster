@@ -10,7 +10,7 @@ import { Dialog, DialogBody, DialogContent } from "@/components/core"
 import SchoolBookingInfo from "./SchoolBookingInfo"
 import SchoolDriverContact, { BookingDriverFormValues } from "./SchoolDriverContact"
 import SchoolParticipantForm from "./SchoolParticipant"
-import { DiveEventCalendar } from "@/app/(main)/(dashboard)/manage-certifications/components/DiveEventCalendar"
+import { DiveEventCalendar, CalendarSelectionState } from "@/app/(main)/(dashboard)/manage-certifications/components/DiveEventCalendar"
 import { CreateDivePlantranslations } from "@/app/(main)/translation/bookingTranslation"
 import { useLanguage } from "@/hooks/useLanguage"
 
@@ -60,15 +60,23 @@ const {language} = useLanguage()
     defaultValues: schoolBookingDataInfo,
   })
 
-  const onCreateSubmit = (data: CreateDivePlanFormData) => {
-    setSchoolBookingDataInfo(data)
-    setActiveStep("book")
+  const [calendarState, setCalendarState] = useState<CalendarSelectionState>({
+    currentDate: new Date(),
+    selectedDate: null,
+    selectedCountry: "",
+    selectedEvent: null,
+    selectedInstructor: "",
+  })
+
+  const handleEventChange = (formData: CreateDivePlanFormData | null) => {
+    if (formData) {
+      createForm.reset(formData)
+      setSchoolBookingDataInfo(formData)
+    }
   }
 
-  const handleEventSelect = (formData: CreateDivePlanFormData) => {
-    // Populate form with selected event data from calendar
-    setSchoolBookingDataInfo(formData)
-    createForm.reset(formData)
+  const onCreateSubmit = (data: CreateDivePlanFormData) => {
+    setSchoolBookingDataInfo(data)
     setActiveStep("book")
   }
 
@@ -96,7 +104,11 @@ const {language} = useLanguage()
               <div className="">
                 <div className="px-3 overflow-y-auto max-h-[calc(88vh-160px)]">
                   {/* Dive Event Calendar */}
-                  <DiveEventCalendar onEventSelect={handleEventSelect} />
+                  <DiveEventCalendar
+                    onChange={handleEventChange}
+                    savedState={calendarState}
+                    onStateChange={setCalendarState}
+                  />
                 </div>
 
                 {/* Footer */}
