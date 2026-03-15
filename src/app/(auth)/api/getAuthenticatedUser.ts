@@ -99,6 +99,7 @@ interface Certificate {
   issuer_name: string;
   certificate_type: string;
   issue_date: string;
+  expiry_date: string | null;
   date_of_birth: string;
   school_name: string;
   trainer_name: string;
