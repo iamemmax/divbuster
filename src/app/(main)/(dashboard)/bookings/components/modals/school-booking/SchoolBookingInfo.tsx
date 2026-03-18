@@ -3,28 +3,36 @@ import { schoolBookingInfoTranslations } from "@/app/(main)/translation/bookingT
 import { useLanguage } from "@/hooks/useLanguage";
 import React, { useState } from "react";
 
+import { CalendarSelectionState } from "@/app/(main)/(dashboard)/manage-certifications/components/DiveEventCalendar";
+
 interface Props {
   next: () => void;
   back: () => void;
   lang?: "en" | "es" | "fr" | "nl";
   schoolBookingData?: {
     dive_level: string;
-    instructor_id: string;
+    instructor_id?: string;
     event_date_id: string;
     dive_event_id: string;
     div_school: string;
     location: string;
   };
   onUpdateBookingData?: (data: any) => void;
+  calendarState?: CalendarSelectionState;
 }
 
-const SchoolBookingInfo = ({ back, next, schoolBookingData, onUpdateBookingData }: Props) => {
+const SchoolBookingInfo = ({ back, next, schoolBookingData, onUpdateBookingData, calendarState }: Props) => {
   const {language}=useLanguage()
   const t = schoolBookingInfoTranslations[language] ||schoolBookingInfoTranslations.en;
   const [selectedPlan, setSelectedPlan] = useState<string>("1");
   const [bookingData, setBookingData] = useState<any>(schoolBookingData || {});
 
   const selected = t.divePlans.find((plan) => plan?.id === selectedPlan);
+
+  const schoolName = calendarState?.selectedEvent?.dive_school_name || bookingData.div_school || "—";
+  const instructorName = calendarState?.selectedEvent?.dive_instructors?.find(
+    (i: any) => String(i.id) === calendarState?.selectedInstructor
+  )?.name || "—";
 
   return (
     <div className="bg-transparent h-full p-6 rounded-lg shadow">
@@ -38,7 +46,7 @@ const SchoolBookingInfo = ({ back, next, schoolBookingData, onUpdateBookingData 
               <div>
                 <label className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-widest mb-2 block">Dive School</label>
                 <div className="w-full px-3 py-2 text-sm border border-blue-300 dark:border-blue-600 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-900 dark:text-blue-100 font-medium">
-                  {bookingData.div_school || "—"}
+                  {schoolName}
                 </div>
               </div>
               {/* Dive Site / Location - Read Only */}
@@ -75,9 +83,9 @@ const SchoolBookingInfo = ({ back, next, schoolBookingData, onUpdateBookingData 
               </div>
               {/* Instructor ID - Read Only */}
               <div>
-                <label className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-widest mb-2 block">Instructor ID</label>
+                <label className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-widest mb-2 block">Instructor</label>
                 <div className="w-full px-3 py-2 text-sm border border-blue-300 dark:border-blue-600 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-900 dark:text-blue-100 font-medium">
-                  {bookingData.instructor_id || "—"}
+                  {instructorName}
                 </div>
               </div>
             </div>

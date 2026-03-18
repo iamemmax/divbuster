@@ -19,7 +19,7 @@ import { useLanguage } from "@/hooks/useLanguage"
 // Validation schema for booking steps
 const createDivePlanSchema = z.object({
   dive_level: z.string().min(1, "Please select a dive level"),
-  instructor_id: z.string().min(1, "Please select a dive instructor"),
+  instructor_id: z.string().optional(),
   event_date_id: z.string().min(1, "Please select a dive event date"),
   dive_event_id: z.string().min(1, "Please select a dive event"),
   div_school: z.string().min(1, "Please select a dive school"),
@@ -137,6 +137,7 @@ const {language} = useLanguage()
                 next={() => setActiveStep("stage1")}
                 schoolBookingData={schoolBookingDataInfo}
                 onUpdateBookingData={(data) => setSchoolBookingDataInfo(data)}
+                calendarState={calendarState}
               />
             )}
             {activeStep === "stage1" && (

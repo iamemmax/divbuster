@@ -197,7 +197,7 @@ export const DiveEventCalendar: React.FC<DiveEventCalendarProps> = ({ onEventSel
         </div>
 
         <div className="grid grid-cols-7 gap-px bg-zinc-100 dark:bg-zinc-800 border-t border-zinc-100 dark:border-zinc-800">
-          {emptyDays.map((_, i) => <div key={`e-${i}`} className="bg-white dark:bg-zinc-900 min-h-[56px]" />)}
+          {emptyDays.map((_, i) => <div key={`e-${i}`} className="bg-white dark:bg-zinc-900 min-h-[64px]" />)}
           {days.map((day) => {
             const hasEvent  = daysWithEvents.has(day)
             const selected  = isSelectedDay(day)
@@ -207,42 +207,48 @@ export const DiveEventCalendar: React.FC<DiveEventCalendarProps> = ({ onEventSel
                 key={day}
                 onClick={() => handleDateClick(day)}
                 className={[
-                  "relative min-h-[56px] p-1 flex flex-col transition-all duration-150",
-                  hasEvent ? "cursor-pointer" : "cursor-default",
-                  selected ? "bg-[#f97316]"
-                    : hasEvent ? "bg-white dark:bg-zinc-900 hover:bg-orange-50 dark:hover:bg-orange-500/10"
-                    : "bg-white dark:bg-zinc-900",
+                  "relative min-h-[64px] p-1.5 flex flex-col items-center justify-start transition-all duration-150",
+                  hasEvent && !selected ? "cursor-pointer ring-inset ring-1 ring-orange-300 dark:ring-orange-500/50 bg-orange-50 dark:bg-orange-500/10 hover:bg-orange-100 dark:hover:bg-orange-500/20 hover:ring-orange-400" : "",
+                  selected ? "cursor-pointer bg-[#f97316] ring-inset ring-2 ring-orange-600" : "",
+                  !hasEvent && !selected ? "cursor-default bg-white dark:bg-zinc-900" : "",
                 ].join(" ")}
               >
                 <span className={[
-                  "text-[11px] font-bold w-5 h-5 flex items-center justify-center rounded-full",
+                  "text-[12px] font-bold w-6 h-6 flex items-center justify-center rounded-full",
                   selected ? "text-white"
                     : todayFlag ? "bg-[#f97316] text-white"
-                    : hasEvent ? "text-zinc-900 dark:text-zinc-100"
+                    : hasEvent ? "text-orange-700 dark:text-orange-300"
                     : "text-zinc-300 dark:text-zinc-700",
                 ].join(" ")}>
                   {day}
                 </span>
                 {hasEvent && !selected && (
-                  <span className="mt-0.5 w-1 h-1 rounded-full bg-[#f97316] self-center" />
+                  <span className="mt-1 px-1.5 py-0.5 rounded bg-orange-400 dark:bg-orange-500 text-white text-[8px] font-bold leading-none tracking-wide">
+                    DIVE
+                  </span>
+                )}
+                {selected && (
+                  <span className="mt-1 px-1.5 py-0.5 rounded bg-white/30 text-white text-[8px] font-bold leading-none tracking-wide">
+                    DIVE
+                  </span>
                 )}
               </div>
             )
           })}
         </div>
 
-        <div className="flex items-center gap-3 px-4 py-2 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50">
-          <div className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#f97316]" />
-            <span className="text-[9px] text-zinc-500 dark:text-zinc-400">Has events</span>
+        <div className="flex items-center gap-4 px-4 py-2.5 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50">
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded bg-orange-50 dark:bg-orange-500/10 ring-1 ring-orange-300 dark:ring-orange-500/50" />
+            <span className="text-[10px] text-zinc-500 dark:text-zinc-400">Available</span>
           </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2.5 h-2.5 rounded bg-[#f97316]" />
-            <span className="text-[9px] text-zinc-500 dark:text-zinc-400">Selected</span>
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded bg-[#f97316]" />
+            <span className="text-[10px] text-zinc-500 dark:text-zinc-400">Selected</span>
           </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#f97316]" />
-            <span className="text-[9px] text-zinc-500 dark:text-zinc-400">Today</span>
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-[#f97316]" />
+            <span className="text-[10px] text-zinc-500 dark:text-zinc-400">Today</span>
           </div>
         </div>
       </div>
