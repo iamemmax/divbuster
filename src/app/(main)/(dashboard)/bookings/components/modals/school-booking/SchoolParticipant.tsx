@@ -92,6 +92,7 @@ const t = divPlanParticipantranslations[language] || divPlanParticipantranslatio
     const payload = {
       ...diverInfo,
       ...schoolBookingDataInfo,
+      instructor_id: schoolBookingDataInfo.instructor_id ?? "",
       other_participants,
       book_now: true,
       lang:user?.data?.data?.profile_details?.language,
