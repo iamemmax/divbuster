@@ -15,15 +15,9 @@ const translations = {
   nl: { createBooking: "Boeking maken" },
 }
 
-// type Lang = keyof typeof translations
-
 const AddBookingButton = () => {
-  // const [showBookingModal, setShowBookingModal] = useState(false)
   const [showSchoolBookingModal, setShowSchoolBookingModal] = useState(false)
-  // const [showBookWithBuddy, setShowBookWithBuddy] = useState(false)
-  // const { authState } = useAuth()
-  // const { user } = authState
-const {language}=useLanguage()
+  const { language } = useLanguage()
   const t = translations[language] || translations.en
 
   return (
@@ -35,31 +29,13 @@ const {language}=useLanguage()
         {t.createBooking}
       </Button>
 
- {/* {showSchoolBookingModal && ( */}
-        <CreateSchoolPlan
-          isOpen={showSchoolBookingModal}
-          setIsOpenCardModal={setShowSchoolBookingModal}
-        />
-      {/* )} */}
-      {/* {showBookingModal && (
-        <BookingActionModal
-          isOpen={showBookingModal}
-          setIsOpenCardModal={setShowBookingModal}
-          setShowBookWithBuddy={setShowBookWithBuddy}
-          setShowSchoolBookingModal={setShowSchoolBookingModal}
-        />
-      )}
-     
-      {showBookWithBuddy && (
-        <CreateBuddyBooking
-          isOpen={showBookWithBuddy}
-          user={user}
-          setIsOpenCardModal={setShowBookWithBuddy}
-          selectedBuddies=""
-        />
-      )} */}
+      <CreateSchoolPlan
+        isOpen={showSchoolBookingModal}
+        setIsOpenCardModal={setShowSchoolBookingModal}
+      />
     </div>
   )
 }
+
 
 export default AddBookingButton

@@ -93,6 +93,7 @@ const t = divPlanParticipantranslations[language] || divPlanParticipantranslatio
       ...diverInfo,
       ...schoolBookingDataInfo,
       instructor_id: schoolBookingDataInfo.instructor_id ?? "",
+      event_type: schoolBookingDataInfo.event_type ?? "booking",
       other_participants,
       book_now: true,
       lang:user?.data?.data?.profile_details?.language,

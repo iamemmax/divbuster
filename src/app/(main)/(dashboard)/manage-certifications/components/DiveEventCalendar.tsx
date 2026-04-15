@@ -35,17 +35,29 @@ interface DiveEventCalendarProps {
   } | null) => void;
   savedState?: CalendarSelectionState
   onStateChange?: (state: CalendarSelectionState) => void
+  eventType?: "booking" | "event"
 }
 
-export const DiveEventCalendar: React.FC<DiveEventCalendarProps> = ({ onEventSelect, onChange, savedState, onStateChange }) => {
+export const DiveEventCalendar: React.FC<DiveEventCalendarProps> = ({ onEventSelect, onChange, savedState, onStateChange, eventType }) => {
   const [currentDate, setCurrentDate]               = useState(savedState?.currentDate ?? new Date())
   const [selectedDate, setSelectedDate]             = useState<Date | null>(savedState?.selectedDate ?? null)
   const [selectedCountry, setSelectedCountry]       = useState(savedState?.selectedCountry ?? "")
   const [selectedEvent, setSelectedEvent]           = useState<any>(savedState?.selectedEvent ?? null)
   const [selectedInstructor, setSelectedInstructor] = useState(savedState?.selectedInstructor ?? "")
 
+  // Sync with savedState changes
+  React.useEffect(() => {
+    if (savedState) {
+      setCurrentDate(savedState.currentDate)
+      setSelectedDate(savedState.selectedDate)
+      setSelectedCountry(savedState.selectedCountry)
+      setSelectedEvent(savedState.selectedEvent)
+      setSelectedInstructor(savedState.selectedInstructor)
+    }
+  }, [savedState])
+
   // ── Step 1: fetch all events to highlight available dates ──
-  const { data: allEventsData } = useFetchDiveEvent()
+  const { data: allEventsData } = useFetchDiveEvent(eventType)
 
   const availableDates = useMemo(() => {
     const set = new Set<string>()
@@ -121,8 +133,13 @@ export const DiveEventCalendar: React.FC<DiveEventCalendarProps> = ({ onEventSel
     onStateChange?.({ currentDate: d, selectedDate, selectedCountry, selectedEvent, selectedInstructor })
   }
 
+  const isPastDate = (day: number) => {
+    const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
+    return date < today
+  }
+
   const handleDateClick = (day: number) => {
-    if (!daysWithEvents.has(day)) return
+    if (!daysWithEvents.has(day) || isPastDate(day)) return
     const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
     if (!selectedDate || newDate.toDateString() !== selectedDate.toDateString()) {
       setSelectedDate(newDate)
@@ -202,27 +219,29 @@ export const DiveEventCalendar: React.FC<DiveEventCalendarProps> = ({ onEventSel
             const hasEvent  = daysWithEvents.has(day)
             const selected  = isSelectedDay(day)
             const todayFlag = isToday(day)
+            const past      = isPastDate(day)
             return (
               <div
                 key={day}
                 onClick={() => handleDateClick(day)}
                 className={[
                   "relative min-h-[64px] p-1.5 flex flex-col items-center justify-start transition-all duration-150",
-                  hasEvent && !selected ? "cursor-pointer ring-inset ring-1 ring-orange-300 dark:ring-orange-500/50 bg-orange-50 dark:bg-orange-500/10 hover:bg-orange-100 dark:hover:bg-orange-500/20 hover:ring-orange-400" : "",
+                  hasEvent && !selected && !past ? "cursor-pointer ring-inset ring-1 ring-orange-300 dark:ring-orange-500/50 bg-orange-50 dark:bg-orange-500/10 hover:bg-orange-100 dark:hover:bg-orange-500/20 hover:ring-orange-400" : "",
                   selected ? "cursor-pointer bg-[#f97316] ring-inset ring-2 ring-orange-600" : "",
-                  !hasEvent && !selected ? "cursor-default bg-white dark:bg-zinc-900" : "",
+                  !hasEvent && !selected && !past ? "cursor-default bg-white dark:bg-zinc-900" : "",
+                  past ? "cursor-not-allowed opacity-50 bg-gray-100 dark:bg-gray-800" : "",
                 ].join(" ")}
               >
                 <span className={[
                   "text-[12px] font-bold w-6 h-6 flex items-center justify-center rounded-full",
                   selected ? "text-white"
                     : todayFlag ? "bg-[#f97316] text-white"
-                    : hasEvent ? "text-orange-700 dark:text-orange-300"
+                    : hasEvent && !past ? "text-orange-700 dark:text-orange-300"
                     : "text-zinc-300 dark:text-zinc-700",
                 ].join(" ")}>
                   {day}
                 </span>
-                {hasEvent && !selected && (
+                {hasEvent && !selected && !past && (
                   <span className="mt-1 px-1.5 py-0.5 rounded bg-orange-400 dark:bg-orange-500 text-white text-[8px] font-bold leading-none tracking-wide">
                     DIVE
                   </span>

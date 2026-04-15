@@ -33,14 +33,17 @@ interface Eventdate {
   remaining_slots: number;
 }
 
-const fetchDiveEvent = async () => {
-  const response = await adminAxios.get(`dive/dive-event?no_paginate=yes`);
+const fetchDiveEvent = async (event_type?: string) => {
+  const params = new URLSearchParams();
+  if (event_type) params.append('event_type', event_type);
+  const query = params.toString() ? `?${params.toString()}&no_paginate=yes` : '?no_paginate=yes';
+  const response = await adminAxios.get(`dive/dive-event${query}`);
   return response.data as DiveEventProp;
 };
 
-export const useFetchDiveEvent = () => {
+export const useFetchDiveEvent = (event_type?: string) => {
   return useQuery({
-    queryKey: ["dive-Event"],
-    queryFn: fetchDiveEvent,
+    queryKey: ["dive-Event", event_type],
+    queryFn: () => fetchDiveEvent(event_type),
   });
 };

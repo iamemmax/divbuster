@@ -16,6 +16,7 @@ interface bookindProp {
     other_participants: Otherparticipant[];
     book_now: boolean;
     lang?: string;
+    event_type?: string;
   }
 }
 
@@ -30,11 +31,21 @@ interface Otherparticipant {
 
 
 
-const addBooking = async ({ data: { book_now, dive_event_id, dive_level, location, email, event_date_id, first_name, instructor_id, last_name, other_participants, lang } }: bookindProp) => {
+const addBooking = async ({ data: { book_now, dive_event_id, dive_level, location, email, event_date_id, first_name, instructor_id, last_name, other_participants, lang, event_type } }: bookindProp) => {
   const response = await adminAxios.post(`/dive/dive-booking/add`, {
-    book_now, dive_event_id, dive_level, email, event_date_id, first_name, instructor_id, last_name, other_participants, lang,
+    book_now,
+    dive_event_id,
+    dive_level,
+    email,
+    event_date_id,
+    first_name,
+    instructor_id,
+    last_name,
+    other_participants,
+    lang,
+    event_type,
     contact_info: {
-      location
+      location,
     },
     // book_now:"true",
   });
