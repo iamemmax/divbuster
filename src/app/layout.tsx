@@ -67,7 +67,9 @@ export default function RootLayout({
             <AuthProvider>
               <LanguageProvider>
                 <ProtectedRouteGuard>
-                  <RouteChangeLoader />
+                  <Suspense fallback={null}>
+                    <RouteChangeLoader />
+                  </Suspense>
                   <Suspense fallback={<FullPageLoader />}>
                     <Wrapper>{children}</Wrapper>
                   </Suspense>
