@@ -116,9 +116,6 @@ const nextConfig = {
         },
       ],
     },
-    experimental: {
-      missingSuspenseWithCSRBailout: true,
-    },
     eslint: {
       ignoreDuringBuilds: true,
     },
