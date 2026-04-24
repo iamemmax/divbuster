@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import "react-quill/dist/quill.snow.css";
+import "react-quill-new/dist/quill.snow.css";
 import { diveLogTypes } from './CreateDiveLog';
 import { diveLogDetailsTypes } from './CreateDiveLogDetails';
 import { createGearLogDetailsFormValues } from './CreateDriveLogGear';
@@ -20,7 +20,7 @@ import { User } from '@/app/(auth)/api/getAuthenticatedUser';
 import { diveNotesTranslations } from '@/app/(main)/translation/diveLogTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
 
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 interface prop {
     setStep: React.Dispatch<React.SetStateAction<number>>

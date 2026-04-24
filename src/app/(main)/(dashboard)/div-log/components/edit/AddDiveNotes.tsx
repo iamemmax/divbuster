@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css";
+import "react-quill-new/dist/quill.snow.css";
 import {
   Button,
   Dialog,
@@ -27,7 +27,7 @@ import { User } from "@/app/(auth)/api/getAuthenticatedUser";
 import { diveNotesTranslations } from "@/app/(main)/translation/diveLogTranslation";
 import { useLanguage } from "@/hooks/useLanguage";
 
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 
 interface AdvancedDetailsModalProps {
